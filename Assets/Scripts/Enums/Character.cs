@@ -54,7 +54,7 @@ namespace Simulation.Enums.Character
         S, 
         M, 
         L, 
-        Xl 
+        XL
     }
 
     public enum PortraitSize 
