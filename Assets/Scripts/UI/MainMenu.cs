@@ -21,6 +21,7 @@ public class MainMenu : MonoBehaviour
     }
 
     private void HandleButton1() {
+        SceneLoader.UnloadMainMenu();
         SceneLoader.LoadBattle();
     }
 }

@@ -8,7 +8,9 @@ public class CSVFormationImporter
     [MenuItem("Tools/Import CSV/Formation")]
     public static void ImportFormationsFromCSV()
     {
-        string defaultPath = Application.dataPath + "/Csv";
+        string assetFolder = "Assets/Resources/ScriptableObjects/Formation";
+        string csvFolder = "Csv";
+        string defaultPath = Path.Combine(Application.dataPath, csvFolder);
         string path = EditorUtility.OpenFilePanel("Select Formation CSV File", defaultPath, "csv");
         if (string.IsNullOrEmpty(path))
         {
@@ -16,19 +18,7 @@ public class CSVFormationImporter
             return;
         }
 
-        string assetFolder = "Assets/Resources/ScriptableObjects/Formation";
-        if (!AssetDatabase.IsValidFolder("Assets/Resources"))
-        {
-            AssetDatabase.CreateFolder("Assets", "Resources");
-        }
-        if (!AssetDatabase.IsValidFolder("Assets/Resources/ScriptableObjects"))
-        {
-            AssetDatabase.CreateFolder("Assets/Resources", "ScriptableObjects");
-        }
-        if (!AssetDatabase.IsValidFolder(assetFolder))
-        {
-            AssetDatabase.CreateFolder("Assets/Resources/ScriptableObjects", "Formation");
-        }
+        AssetDatabaseManager.CreateFolderFromPath(assetFolder);
 
         string[] lines = File.ReadAllLines(path);
         if (lines.Length < 2)

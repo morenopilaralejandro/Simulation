@@ -10,7 +10,9 @@ public class CSVMoveImporter
     [MenuItem("Tools/Import CSV/Move")]
     public static void ImportMovesFromCSV()
     {
-        string defaultPath = Application.dataPath + "/Csv";
+        string assetFolder = "Assets/Resources/ScriptableObjects/Move";
+        string csvFolder = "Csv";
+        string defaultPath = Path.Combine(Application.dataPath, csvFolder);
         string path = EditorUtility.OpenFilePanel("Select Move CSV File", defaultPath, "csv");
         if (string.IsNullOrEmpty(path))
         {
@@ -18,14 +20,7 @@ public class CSVMoveImporter
             return;
         }
 
-        // Ensure folder exists
-        string assetFolder = "Assets/Resources/ScriptableObjects/Move";
-        if (!AssetDatabase.IsValidFolder("Assets/Resources"))
-            AssetDatabase.CreateFolder("Assets", "Resources");
-        if (!AssetDatabase.IsValidFolder("Assets/Resources/ScriptableObjects"))
-            AssetDatabase.CreateFolder("Assets/Resources", "ScriptableObjects");
-        if (!AssetDatabase.IsValidFolder(assetFolder))
-            AssetDatabase.CreateFolder("Assets/Resources/ScriptableObjects", "Move");
+        AssetDatabaseManager.CreateFolderFromPath(assetFolder);
 
         string[] lines = File.ReadAllLines(path);
         if (lines.Length < 2)
