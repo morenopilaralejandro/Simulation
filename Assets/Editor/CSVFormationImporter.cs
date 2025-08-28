@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using System.Collections.Generic;
 using Simulation.Enums.Character;
 
 public class CSVFormationImporter
@@ -63,8 +64,8 @@ public class CSVFormationImporter
             string[] values = lines[i].Split(',');
             FormationData formationData = ScriptableObject.CreateInstance<FormationData>();
 
-            formationData.FormationId   = values[formationIdIndex].Trim();
-            formationData.CoordIds = new string[11]
+            formationData.FormationId = values[formationIdIndex].Trim();
+            formationData.CoordIds = new List<string>
             {
                 values[c0Index].Trim(),
                 values[c1Index].Trim(),
@@ -78,7 +79,7 @@ public class CSVFormationImporter
                 values[c9Index].Trim(),
                 values[c10Index].Trim()
             };
-            formationData.Positions = new Position[11]
+            formationData.Positions = new List<Position>
             {
                 EnumManager.StringToEnum<Position>(values[p0Index].Trim()),
                 EnumManager.StringToEnum<Position>(values[p1Index].Trim()),
