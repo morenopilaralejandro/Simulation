@@ -31,6 +31,7 @@ public class CSVCharacterImporter
         string[] headers = lines[0].Split(',');
 
         int characterIdIndex        = System.Array.IndexOf(headers, "CharacterId");
+        int bodyIdIndex        = System.Array.IndexOf(headers, "BodyId");
         int portraitSizeIndex       = System.Array.IndexOf(headers, "PortraitSize");
         int characterSizeIndex      = System.Array.IndexOf(headers, "CharacterSize");
         int genderIndex             = System.Array.IndexOf(headers, "Gender");
@@ -67,6 +68,7 @@ public class CSVCharacterImporter
             CharacterData characterData = ScriptableObject.CreateInstance<CharacterData>();
 
             characterData.CharacterId   = values[characterIdIndex].Trim();
+            characterData.BodyId   = values[bodyIdIndex].Trim();
             characterData.PortraitSize  = EnumManager.StringToEnum<PortraitSize>(values[portraitSizeIndex].Trim());
             characterData.CharacterSize = EnumManager.StringToEnum<CharacterSize>(values[characterSizeIndex].Trim());
             characterData.Gender        = EnumManager.StringToEnum<Gender>(values[genderIndex].Trim());

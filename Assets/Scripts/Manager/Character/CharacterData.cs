@@ -5,6 +5,7 @@ using Simulation.Enums.Character;
 public class CharacterData : ScriptableObject
 {
     public string CharacterId;
+    public string BodyId;
     public PortraitSize PortraitSize;
     public CharacterSize CharacterSize;
     public Gender Gender;
@@ -25,4 +26,3 @@ public class CharacterData : ScriptableObject
     public string[] MoveIds = new string[4];
     public int[] MoveLvs = new int[4];
 }
-
