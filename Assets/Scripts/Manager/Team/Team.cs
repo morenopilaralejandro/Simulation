@@ -4,7 +4,7 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
 
-public class Team : MonoBehaviour
+public class Team
 {
     [SerializeField] private string teamId;
     public string TeamId => teamId;
@@ -31,10 +31,11 @@ public class Team : MonoBehaviour
     [SerializeField] private string stringTableNameLocalized = "TeamNamesLocalized";
     [SerializeField] private string stringTableNameRomanized = "TeamNamesRomanized"; 
 
-    /*
+
     public void Initialize(TeamData teamData)
     {
         teamId = teamData.TeamId;
+    /*
         formation = TeamManager.Instance.GetFormationById(teamData.FormationId);
         kit = KitManager.Instance.GetKitById(teamData.KitId);
         lv = teamData.Lv;
@@ -46,10 +47,10 @@ public class Team : MonoBehaviour
             if (characterData != null)
                 characterDataList.Add(characterData);
             else
-                LogManager.Warning($"CharacterData not found for ID: {characterId}", this);
+                LogManager.Warning($"[Team] CharacterData not found for ID: {characterId}", this);
         }
-    }
     */
+    }
 
     private void SetName()
     {

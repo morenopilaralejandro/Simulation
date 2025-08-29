@@ -8,7 +8,7 @@ using UnityEngine.Localization.Settings;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
 
-public class Move : MonoBehaviour
+public class Move
 {
     #region Identification
     [Header("Identification")]

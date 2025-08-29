@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "TeamData", menuName = "ScriptableObject/TeamData")]
 public class TeamData : ScriptableObject
@@ -7,5 +8,5 @@ public class TeamData : ScriptableObject
     public string FormationId;
     public string KitId;
     public int Lv;
-    public string[] CharacterIds = new string[16];
+    public List<string> CharacterIds = new List<string>();
 }

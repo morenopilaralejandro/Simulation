@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using System.Collections.Generic;
 
 public class CSVTeamImporter
 {
@@ -62,7 +63,7 @@ public class CSVTeamImporter
             teamData.FormationId    = values[formationIdIndex].Trim();
             teamData.KitId          = values[kitIdIndex].Trim();
             teamData.Lv             = int.Parse(values[lvIndex].Trim());
-            teamData.CharacterIds   = new string[16]
+            teamData.CharacterIds   = new List<string>
             {
                 values[characterId0Index].Trim(),
                 values[characterId1Index].Trim(),

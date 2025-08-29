@@ -11,16 +11,12 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentAttribute attributeComponent;
     [SerializeField] private CharacterComponentLocalization localizationComponent;
     [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
+    [SerializeField] private CharacterComponentKeeper keeperComponent;
     #endregion
 
 
 
     /*
-    character atrribute : element, ControlType; ... 
-    character team member component
-    character keeper component
-    character control window
-    character kick window
     [SerializeField] private CharacterStatsComponent stats;
     [SerializeField] private HealthComponent health;
     [SerializeField] private SpiritComponent spirit;
@@ -28,9 +24,11 @@ public class Character : MonoBehaviour
         character leveling
         character training
 
+    character control window
+    character kick window
     [SerializeField] private CharacterStatusController status; //stun
-    [SerializeField] private MovementComponent movement;
     [SerializeField] private CharacterSpeedComponent speedDebuff;
+    [SerializeField] private MovementComponent movement;
     [SerializeField] private CharacterAppearanceComponent appearance; //include PortraitSize BodyId
     [SerializeField] private SecretLearning secrets; //change to character move component
     [SerializeField] private CharacterPersistenceComponent persistence; //
@@ -63,21 +61,21 @@ public class Character : MonoBehaviour
     #endregion
 
     #region API
-    //api-attributeComponent
+    //attributeComponent
     public string GetCharacterId() => attributeComponent.GetCharacterId();
     public CharacterSize GetCharacterSize() => attributeComponent.GetCharacterSize();
     public Gender GetGender() => attributeComponent.GetGender();
     public Element GetElement() => attributeComponent.GetElement();
     public Position GetPosition() => attributeComponent.GetPosition();
     public ControlType GetControlType() => attributeComponent.GetControlType();
-    //api-localizationComponent
+    //localizationComponent
     public LocalizedString GetLocalizedName() => localizationComponent.GetLocalizedName();
     public LocalizedString GetLocalizedDescription() => localizationComponent.GetLocalizedDescription();
-    //api-teamMemberComponent
+    //teamMemberComponent
     public int GetTeamIndex() => teamMemberComponent.GetTeamIndex();
     public FormationCoord GetFormationCoord() => teamMemberComponent.GetFormationCoord();
-
-
+    //keeperComponent
+    public bool IsKeeper() => keeperComponent.IsKeeper();
 
     //public void ApplyStun(float duration) => status.ApplyStun(duration);
     //public void ClearStun() => status.ClearStun();

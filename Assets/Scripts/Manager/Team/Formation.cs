@@ -7,7 +7,7 @@ using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
 using Simulation.Enums.Character;
 
-public class Formation : MonoBehaviour
+public class Formation
 {
     [SerializeField] private string formationId;
     public string FormationId => formationId;
@@ -15,7 +15,7 @@ public class Formation : MonoBehaviour
     [SerializeField] private LocalizedString localizedName;
     public LocalizedString LocalizedName => localizedName;
 
-    [SerializeField] private List<FormationCoord> formationCoords;
+    [SerializeField] private List<FormationCoord> formationCoords = new();
     public List<FormationCoord> FormationCoords => formationCoords;
 
     [SerializeField] private int kickoff0;
@@ -35,15 +35,16 @@ public class Formation : MonoBehaviour
     
         for (int i = 0; i < formationData.CoordIds.Count; i++) 
         {
-            //FormationCoordData formationCoordData  = TeamManager.Instance.GetFormationCoordDataById(formationData.CoordIds[i]);
-            FormationCoordData formationCoordData = null;
-            formationCoords.Add(
-                new FormationCoord (
-                    formationData.CoordIds[i],
-                    new Vector3 (formationCoordData.X, formationCoordData.Y, formationCoordData.Z),
-                    formationData.Positions[i]
-                )
-            );
+            if (formationData.CoordIds[i] != null) {
+                FormationCoordData formationCoordData = FormationCoordManager.Instance.GetFormationCoordData(formationData.CoordIds[i]);
+                formationCoords.Add(
+                    new FormationCoord (
+                        formationData.CoordIds[i],
+                        new Vector3 (formationCoordData.X, formationCoordData.Y, formationCoordData.Z),
+                        formationData.Positions[i]
+                    )
+                );
+            }
         }
 
         kickoff0 = formationData.Kickoff0;

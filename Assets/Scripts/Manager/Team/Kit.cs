@@ -6,7 +6,7 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
 
-public class Kit : MonoBehaviour
+public class Kit
 {
     [SerializeField] private string kitId;
     public string KitId => kitId;
