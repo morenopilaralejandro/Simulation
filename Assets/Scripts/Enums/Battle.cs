@@ -3,7 +3,7 @@ namespace Simulation.Enums.Battle
     public enum BattlePhase
     {
         Battle,
-        Duel,
+        Selection,
         Cutscene,
         Kickoff
     }

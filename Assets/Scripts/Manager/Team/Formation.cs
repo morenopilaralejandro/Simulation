@@ -2,9 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.Localization;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.Settings;
 using Simulation.Enums.Character;
 using Simulation.Enums.Localization;
 
@@ -13,8 +10,7 @@ public class Formation
     [SerializeField] private string formationId;
     public string FormationId => formationId;
 
-    [SerializeField] private LocalizedString localizedName;
-    public LocalizedString LocalizedName => localizedName;
+    [SerializeField] private ComponentLocalization localizationComponent;
 
     [SerializeField] private List<FormationCoord> formationCoords = new();
     public List<FormationCoord> FormationCoords => formationCoords;
@@ -28,6 +24,13 @@ public class Formation
     public void Initialize(FormationData formationData)
     {
         formationId = formationData.FormationId;
+
+        localizationComponent = new ComponentLocalization();
+        localizationComponent.Initialize(
+            LocalizationEntity.Formation,
+            formationData.FormationId,
+            new [] { LocalizationField.Name }
+        );
     
         for (int i = 0; i < formationData.CoordIds.Count; i++) 
         {
@@ -45,15 +48,7 @@ public class Formation
 
         kickoff0 = formationData.Kickoff0;
         kickoff1 = formationData.Kickoff1;
-
-        SetName();
     }
 
-    private void SetName()
-    {
-        localizedName = new LocalizedString(
-            LocalizationManager.Instance.GetTableReference(LocalizationEntity.Formation, LocalizationField.Name),
-            formationId
-        );
-    }
+    public string GetFormationName() => localizationComponent.GetString(LocalizationField.Name);
 }

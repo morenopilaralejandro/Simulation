@@ -15,9 +15,9 @@ public class BattleManager : MonoBehaviour
     public bool IsMovementFrozen { get; private set; } = false;
     public bool IsTimeFrozen { get; private set; } = false;
 
+    [SerializeField] private List<Team> teams = new List<Team>();
     public List<Team> Teams => teams;
 
-    [SerializeField] private List<Team> teams;
 
     [SerializeField] private float topOffset    = 1f;
     [SerializeField] private float bottomOffset = 1f;
@@ -40,12 +40,15 @@ public class BattleManager : MonoBehaviour
         BoundManager.BottomOffset = bottomOffset;
         BoundManager.LeftOffset = leftOffset;
         BoundManager.RightOffset = rightOffset;
+
+        BattleArgs.TeamId0 = "Faith";
+        BattleArgs.TeamId0 = "Crimson";
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        BattleBallManager.Instance.Spawn();
+        //BattleBallManager.Instance.Spawn();
+        //StartBattle();
     }
     /*
     // Update is called once per frame
@@ -54,15 +57,12 @@ public class BattleManager : MonoBehaviour
         
     }
 
-    public void AddCharacterToTeam(Character character, int teamIndex) 
+    public void StartBattle()
     {
-        teams[teamIndex].characters.Add(character);
-    }
-
-    private void Reset()
-    {
-        ResetDefaultPositions();
-        //Reset timers
+        Reset();
+        teams.Add(TeamManager.Instance.GetTeam(BattleArgs.TeamId0));
+        teams.Add(TeamManager.Instance.GetTeam(BattleArgs.TeamId1));
+        //StartKickoff(teams[0]);
     }
 
     private void SetCameraForMyTeam(int myTeamIndex)
@@ -70,16 +70,16 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    private void StartBattle()
-    {
-        Reset();
-        BoundManager.Setup();
-        //StartKickoff(teams[0]);
-    }
-
     private void OfflineSpawn() 
     {
         SpawnCharacters_Singleplayer();
+        BattleBallManager.Instance.Spawn();
+        InitializeTeamCharacters();
+    }
+
+    public void AddCharacterToTeam(Character character, int teamIndex) 
+    {
+        teams[teamIndex].characters.Add(character);
     }
 
     private void SpawnCharacters_Singleplayer()
@@ -93,7 +93,7 @@ public class BattleManager : MonoBehaviour
 
             for (int j = 0; j < team.PlayerDataList.Count; j++)
             {
-                BattleBallManager.Instance.SpawnCharacter_Singleplayer(teamIndex, controlType, team.Formation.FormationCoords[j]);
+                BattleCharacterManager.Instance.SpawnCharacter_Singleplayer(teamIndex, controlType, team.Formation.FormationCoords[j]);
             }
         }
     }
@@ -108,6 +108,8 @@ public class BattleManager : MonoBehaviour
                 Character character = team.characters[charIndex];
                 CharacterData characterData = team.CharacterDataList[charIndex];
                 bool isKeeper = (charIndex == 0);
+                
+                //call event here OnAssignToTeamBattle
                 BattleCharacterManager.Instance.InitializeCharacter(
                     character,
                     characterData,
@@ -117,6 +119,13 @@ public class BattleManager : MonoBehaviour
                 );
             }
         }
+    }
+
+    private void ResetBattle()
+    {
+        BoundManager.Setup();
+        teams.Clear();
+        //Reset timers
     }
 
     private void ResetDefaultPositions()

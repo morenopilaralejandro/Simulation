@@ -16,11 +16,7 @@ public class Move
     [SerializeField] private string moveId;
     public string MoveId => moveId;
 
-    [SerializeField] private LocalizedString localizedName;
-    public LocalizedString LocalizedName => localizedName;
-
-    [SerializeField] private LocalizedString localizedDescription;
-    public LocalizedString LocalizedDescription => localizedDescription;
+    [SerializeField] private ComponentLocalization localizationComponent;
     #endregion
 
     #region Core Attributes
@@ -89,6 +85,13 @@ public class Move
     {
         moveId = moveData.MoveId;
 
+        localizationComponent = new ComponentLocalization();
+        localizationComponent.Initialize(
+            LocalizationEntity.Move,
+            moveData.MoveId,
+            new [] { LocalizationField.Name, LocalizationField.Description }
+        );
+
         category = moveData.Category;
         element = moveData.Element;
         trait = moveData.Trait;
@@ -110,25 +113,8 @@ public class Move
 
         requiredParticipantElements = new List<Element>(moveData.RequiredParticipantElements);
         requiredParticipantMoves = new List<string>(moveData.RequiredParticipantMoves);
-
-        SetName();
-        SetDescription();
     }
 
-    private void SetName()
-    {
-        localizedName = new LocalizedString(
-            LocalizationManager.Instance.GetTableReference(LocalizationEntity.Move, LocalizationField.Name),
-            moveId
-        );
-    }
-
-    private void SetDescription()
-    {
-        localizedDescription = new LocalizedString(
-            LocalizationManager.Instance.GetTableReference(LocalizationEntity.Move, LocalizationField.Description),
-            moveId
-        );
-    }
-
+    public string GetMoveName() => localizationComponent.GetString(LocalizationField.Name);
+    public string GetMoveDescription() => localizationComponent.GetString(LocalizationField.Description);
 }

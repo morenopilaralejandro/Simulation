@@ -9,9 +9,9 @@ public class CharacterComponentLocalization : MonoBehaviour
     [SerializeField] private LocalizedString localizedNickName;
     [SerializeField] private LocalizedString localizedDescription;
 
-    public LocalizedString GetLocalizedFullName() => localizedFullName;
-    public LocalizedString GetLocalizedNickName() => localizedNickName;
-    public LocalizedString GetLocalizedDescription() => localizedDescription;
+    public string GetStringFullName() => localizedFullName.GetLocalizedString();
+    public string GetStringNickName() => localizedNickName.GetLocalizedString();
+    public string GetStringDescription() => localizedDescription.GetLocalizedString();
 
     public void Initialize(CharacterData characterData)
     {

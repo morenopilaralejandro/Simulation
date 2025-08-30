@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Localization;
-using UnityEngine.Localization.Components;
-using UnityEngine.Localization.Settings;
 using Simulation.Enums.Localization;
 
 public class Team
@@ -10,8 +7,7 @@ public class Team
     [SerializeField] private string teamId;
     public string TeamId => teamId;
 
-    [SerializeField] private LocalizedString localizedName;
-    public LocalizedString LocalizedName => localizedName;
+    [SerializeField] private ComponentLocalization localizationComponent;
 
     [SerializeField] private Formation formation;
     public Formation Formation => formation;
@@ -31,6 +27,14 @@ public class Team
     public void Initialize(TeamData teamData)
     {
         teamId = teamData.TeamId;
+
+        localizationComponent = new ComponentLocalization();
+        localizationComponent.Initialize(
+            LocalizationEntity.Team,
+            teamData.TeamId,
+            new [] { LocalizationField.Name }
+        );
+
         formation = FormationManager.Instance.GetFormation(teamData.FormationId);
         kit = KitManager.Instance.GetKit(teamData.KitId);
         lv = teamData.Lv;
@@ -47,15 +51,7 @@ public class Team
                     LogManager.Warning($"[Team] CharacterData not found for ID: {characterId}");
             }
         }
-
-        SetName();
     }
 
-    private void SetName()
-    {
-        localizedName = new LocalizedString(
-            LocalizationManager.Instance.GetTableReference(LocalizationEntity.Team, LocalizationField.Name),
-            teamId
-        );
-    }
+    public string GetTeamName() => localizationComponent.GetString(LocalizationField.Name);
 }

@@ -8,4 +8,14 @@ public static class TeamEvents
     {
         OnAssignToTeam?.Invoke(character, team, teamIndex, formationCoord);
     }
+
+    /*
+        OnAssignToTeamBattle
+Character
+Team
+TeamIndex
+FormationCoord
+ControlType
+IsKeeper
+    */
 }

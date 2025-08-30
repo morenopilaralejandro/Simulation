@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.Localization;
 using Simulation.Enums.Character;
+using Simulation.Enums.Localization;
 
 public class Character : MonoBehaviour
 {
@@ -9,12 +9,10 @@ public class Character : MonoBehaviour
     public string CharacterId => characterId;
 
     [SerializeField] private CharacterComponentAttribute attributeComponent;
-    [SerializeField] private CharacterComponentLocalization localizationComponent;
+    [SerializeField] private ComponentLocalization localizationComponent;
     [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
     [SerializeField] private CharacterComponentKeeper keeperComponent;
     #endregion
-
-
 
     /*
     [SerializeField] private CharacterStatsComponent stats;
@@ -39,7 +37,14 @@ public class Character : MonoBehaviour
     public void Initialize(CharacterData characterData, bool isSave = false)
     {
         attributeComponent.Initialize(characterData);
-        localizationComponent.Initialize(characterData);
+
+        localizationComponent = new ComponentLocalization();
+        localizationComponent.Initialize(
+            LocalizationEntity.Character,
+            characterData.CharacterId,
+            new [] { LocalizationField.FullName, LocalizationField.NickName, LocalizationField.Description }
+        );
+
         /*
         stats.Initialize(def);
         health.Initialize(stats);
@@ -70,9 +75,9 @@ public class Character : MonoBehaviour
     public Position GetPosition() => attributeComponent.GetPosition();
     public ControlType GetControlType() => attributeComponent.GetControlType();
     //localizationComponent
-    public LocalizedString GetLocalizedFullName() => localizationComponent.GetLocalizedFullName();
-    public LocalizedString GetLocalizedNickName() => localizationComponent.GetLocalizedNickName();
-    public LocalizedString GetLocalizedDescription() => localizationComponent.GetLocalizedDescription();
+    public string GetCharacterFullName() => localizationComponent.GetString(LocalizationField.FullName);
+    public string GetCharacterNickName() => localizationComponent.GetString(LocalizationField.NickName);
+    public string GetCharacterDescription() => localizationComponent.GetString(LocalizationField.Description);
     //teamMemberComponent
     public int GetTeamIndex() => teamMemberComponent.GetTeamIndex();
     public FormationCoord GetFormationCoord() => teamMemberComponent.GetFormationCoord();
