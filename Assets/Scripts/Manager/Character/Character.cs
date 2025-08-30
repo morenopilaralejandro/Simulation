@@ -5,9 +5,6 @@ using Simulation.Enums.Localization;
 public class Character : MonoBehaviour
 {
     #region Components
-    [SerializeField] private string characterId;
-    public string CharacterId => characterId;
-
     [SerializeField] private CharacterComponentAttribute attributeComponent;
     [SerializeField] private ComponentLocalization localizationComponent;
     [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
@@ -37,7 +34,6 @@ public class Character : MonoBehaviour
     public void Initialize(CharacterData characterData, bool isSave = false)
     {
         attributeComponent.Initialize(characterData);
-
         localizationComponent = new ComponentLocalization();
         localizationComponent.Initialize(
             LocalizationEntity.Character,

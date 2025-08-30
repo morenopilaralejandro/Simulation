@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Simulation.Enums.Battle;
+using Simulation.Enums.Character;
 
 public class BattleManager : MonoBehaviour
 {
@@ -42,26 +43,40 @@ public class BattleManager : MonoBehaviour
         BoundManager.RightOffset = rightOffset;
 
         BattleArgs.TeamId0 = "Faith";
-        BattleArgs.TeamId0 = "Crimson";
+        BattleArgs.TeamId1 = "Crimson";
     }
 
     void Start()
     {
         //BattleBallManager.Instance.Spawn();
-        //StartBattle();
     }
-    /*
+    
     // Update is called once per frame
     void Update()
     {
         
     }
 
+    void OnEnable() 
+    {
+        if (BattleCharacterManager.Instance != null) {
+            BattleCharacterManager.Instance.OnAllCharactersSpawned += HandleAllCharactersSpawned;
+            LogManager.Trace("[BattleManager] Subscribed to OnAllCharactersSpawned.");
+        }
+    }
+
+    void OnDisable() 
+    {
+        if (BattleCharacterManager.Instance != null)
+            BattleCharacterManager.Instance.OnAllCharactersSpawned -= HandleAllCharactersSpawned;
+    }
+
     public void StartBattle()
     {
-        Reset();
+        ResetBattle();
         teams.Add(TeamManager.Instance.GetTeam(BattleArgs.TeamId0));
         teams.Add(TeamManager.Instance.GetTeam(BattleArgs.TeamId1));
+        OfflineSpawn();
         //StartKickoff(teams[0]);
     }
 
@@ -73,13 +88,11 @@ public class BattleManager : MonoBehaviour
     private void OfflineSpawn() 
     {
         SpawnCharacters_Singleplayer();
-        BattleBallManager.Instance.Spawn();
-        InitializeTeamCharacters();
     }
 
     public void AddCharacterToTeam(Character character, int teamIndex) 
     {
-        teams[teamIndex].characters.Add(character);
+        teams[teamIndex].Characters.Add(character);
     }
 
     private void SpawnCharacters_Singleplayer()
@@ -87,43 +100,50 @@ public class BattleManager : MonoBehaviour
         for (int teamIndex = 0; teamIndex < teams.Count; teamIndex++)
         {
             Team team = teams[teamIndex];
-            team.characters.Clear();
+            team.Characters.Clear();
 
-            ControlType controlType = (teamIndex == 0) ? ControlType.LocalHuman : ControlType.Ai;
+            ControlType controlType = (teamIndex == 0) ? ControlType.LocalHuman : ControlType.AI;
 
-            for (int j = 0; j < team.PlayerDataList.Count; j++)
+            for (int j = 0; j < team.CharacterDataList.Count; j++)
             {
-                BattleCharacterManager.Instance.SpawnCharacter_Singleplayer(teamIndex, controlType, team.Formation.FormationCoords[j]);
+                BattleCharacterManager.Instance.SpawnCharacter_Singleplayer(teamIndex);
             }
         }
     }
 
+    private void HandleAllCharactersSpawned()
+    {
+        LogManager.Trace("[BattleManager] HandleAllCharactersSpawned");
+        InitializeTeamCharacters();
+        ResetDefaultPositions();
+        BattleBallManager.Instance.Spawn();
+    }
+
     public void InitializeTeamCharacters()
     {
-        for (int teamIndex = 0; teamIndex < teams.Count; teamIndex++)
+        for (int i = 0; i < teams.Count; i++)
         {
-            Team team = teams[teamIndex];
-            for (int charIndex = 0; charIndex < team.characters.Count; charIndex++)
+            int teamIndex = i;
+            Team team = teams[teamIndex];            
+            for (int j = 0; j < TeamManager.Instance.SizeBattle; j++)
             {
-                Character character = team.characters[charIndex];
-                CharacterData characterData = team.CharacterDataList[charIndex];
-                bool isKeeper = (charIndex == 0);
+                int characterIndex = j;
+                Character character = team.Characters[characterIndex];
+                CharacterData characterData = team.CharacterDataList[characterIndex];
+                character.Initialize(characterData);
+                //reverse if necesary
+                FormationCoord formationCoord = team.Formation.FormationCoords[characterIndex];
+                ControlType controlType = (teamIndex == 0) ? ControlType.LocalHuman : ControlType.AI;
+                bool isKeeper = (characterIndex == 0);
                 
-                //call event here OnAssignToTeamBattle
-                BattleCharacterManager.Instance.InitializeCharacter(
-                    character,
-                    characterData,
-                    teamIndex,
-                    team,
-                    isKeeper
-                );
+                TeamEvents.RaiseAssignToTeamBattle(character, team, teamIndex, formationCoord, controlType, isKeeper);
             }
         }
     }
 
     private void ResetBattle()
     {
-        BoundManager.Setup();
+        //BoundManager.Setup();
         teams.Clear();
         //Reset timers
     }
@@ -131,7 +151,7 @@ public class BattleManager : MonoBehaviour
     private void ResetDefaultPositions()
     {
         ResetPlayerPositions();
-        BattleBallManager.Instance.ResetPosition();
+        BattleBallManager.Instance.ResetBallPosition();
     }
 
     private void ResetPlayerPositions()
@@ -140,7 +160,7 @@ public class BattleManager : MonoBehaviour
         {
             foreach (var character in team.Characters)
             {
-                BattleCharacterManager.Instance.ResetPosition(character);
+                BattleCharacterManager.Instance.ResetCharacterPosition(character);
             }
         }
     }
@@ -169,15 +189,15 @@ public class BattleManager : MonoBehaviour
     }
 
 
-    public Player GetOppKeeper(Player player)
+    public Character GetOppKeeper(Character character)
     {
-        int oppTeamIdx = 1 - player.TeamIndex;
-        return teams[oppTeamIdx].players[0];
+        int oppTeamIdx = 1 - character.GetTeamIndex();
+        return teams[oppTeamIdx].Characters[0];
     }
 
     public int GetLocalTeamIndex()
     {
         return 0; //Single Player only
     }
-*/
+
 }

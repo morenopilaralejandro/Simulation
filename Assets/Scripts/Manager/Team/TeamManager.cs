@@ -29,7 +29,17 @@ public class TeamManager : MonoBehaviour
 
     public void LoadAllTeams()
     {
-        Addressables.LoadAssetsAsync<TeamData>("Teams", RegisterTeam);
+        var handle = Addressables.LoadAssetsAsync<TeamData>("Teams", RegisterTeam);
+        handle.Completed += OnTeamsLoaded;
+    }
+
+    private void OnTeamsLoaded(AsyncOperationHandle<IList<TeamData>> handle)
+    {
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            LogManager.Trace($"[TeamManager] All teams loaded. Total count: {teams.Count}", this);
+            BattleManager.Instance.StartBattle();
+        }
     }
 
     public void RegisterTeam(TeamData data)
@@ -44,7 +54,18 @@ public class TeamManager : MonoBehaviour
 
     public Team GetTeam(string id)
     {
-        teams.TryGetValue(id, out var team);
+        if (string.IsNullOrEmpty(id))
+        {
+            LogManager.Error("[TeamManager] Tried to GetTeam with null/empty id!");
+            return null;
+        }
+
+        if (!teams.TryGetValue(id, out var team))
+        {
+            LogManager.Error($"[TeamManager] No team found for id '{id}'.");
+            return null;
+        }
+
         return team;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class BattleCharacterManager : MonoBehaviour
 
     private Transform spawnPoint; 
     private string characterKey = "CharacterPrefab";
+    private int charactersSpawned = 0;
+    public event Action OnAllCharactersSpawned;
 
     private void Awake()
     {
@@ -44,25 +47,27 @@ public class BattleCharacterManager : MonoBehaviour
     {
         spawnPoint = null;
     }
-    /*
-    public void OfflineSpawn() {
-        SpawnCharacters_Singleplayer();
-    }
 
-    private void SpawnCharacter_Singleplayer(int teamIndex, ControlType controlType, FormationCoord formationCoord)
+    public void SpawnCharacter_Singleplayer(int teamIndex)
     {
-        Vector3 spawnPos = formationCoord.DefaultPosition;
+        Vector3 spawnPos = spawnPoint.position;
         InstantiateCharacter_Singleplayer(
             characterKey,
             spawnPos,
             Quaternion.identity,
             teamIndex,
-            controlType,
-            formationCoord,
             (character) =>
             {
-                if (character != null)
-                    BattleBallManager.Instance.AddCharacterToTeam(character, teamIndex);
+                if (character != null) {
+                    BattleManager.Instance.AddCharacterToTeam(character, teamIndex);
+                    charactersSpawned++;
+                    if (charactersSpawned >= TeamManager.Instance.SizeBattle*2)
+                    {
+                        charactersSpawned = 0;
+                        LogManager.Trace("[BattleCharacterManager] All characters spawned.");
+                        OnAllCharactersSpawned?.Invoke();
+                    }
+                }
             });
     }
 
@@ -71,8 +76,6 @@ public class BattleCharacterManager : MonoBehaviour
         Vector3 position,
         Quaternion rotation,
         int teamIndex,
-        ControlType controlType,
-        FormationCoord formationCoord,
         System.Action<Character> onCharacterSpawned)
     {
         Addressables.InstantiateAsync(characterKey, position, rotation, spawnPoint).Completed += (handle) =>
@@ -84,11 +87,7 @@ public class BattleCharacterManager : MonoBehaviour
                 Character characterComponent = go.GetComponent<Character>();
                 if (characterComponent != null)
                 {
-                    characterComponent.TeamIndex = teamIndex;
-                    characterComponent.ControlType = controlType;
-                    characterComponent.Coord = coord;
-                    characterComponent.DefaultPosition = position;
-
+                    LogManager.Trace($"[BattleCharacterManager] Successfully spawned character with key: {characterKey}");
                     onCharacterSpawned?.Invoke(characterComponent);
                 }
                 else
@@ -105,21 +104,9 @@ public class BattleCharacterManager : MonoBehaviour
         };
     }
 
-    public void InitializeCharacter(Character character, CharacterData characterData, int teamIndex, Team team, bool isKeeper)
-    {
-                character.Initialize(characterData);
-                character.IsKeeper = isKeeper;
-                character.UpdateKeeperColliderState();
-                character.Lv = team.Lv;
-                character.TeamIndex = i;
-                character.SetWear(team.WearId, WearManager.Instance.IsHome(teams, character.TeamIndex));
-            
-    }
-
     public void ResetCharacterPosition(Character character)
     {
-        character.Unstun();
-        character.transform.position = character.DefaultPosition;        
+        //character.Unstun();
+        character.transform.position = character.GetFormationCoord().DefaultPosition;        
     }
-*/
 }
