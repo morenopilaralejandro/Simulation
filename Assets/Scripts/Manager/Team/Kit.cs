@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
+using Simulation.Enums.Localization;
 
 public class Kit
 {
@@ -13,10 +14,6 @@ public class Kit
 
     [SerializeField] private LocalizedString localizedName;
     public LocalizedString LocalizedName => localizedName;
-  
-    [SerializeField] private bool isRomazed = false;
-    [SerializeField] private string stringTableNameLocalized = "KitNamesLocalized";
-    [SerializeField] private string stringTableNameRomanized = "KitNamesRomanized";
 
     public void Initialize(KitData kitData)
     {
@@ -28,7 +25,7 @@ public class Kit
     private void SetName()
     {
         localizedName = new LocalizedString(
-            isRomazed ? stringTableNameRomanized : stringTableNameLocalized,
+            LocalizationManager.Instance.GetTableReference(LocalizationEntity.Kit, LocalizationField.Name),
             kitId
         );
     }

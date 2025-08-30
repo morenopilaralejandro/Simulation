@@ -39,6 +39,7 @@ public class Character : MonoBehaviour
     public void Initialize(CharacterData characterData, bool isSave = false)
     {
         attributeComponent.Initialize(characterData);
+        localizationComponent.Initialize(characterData);
         /*
         stats.Initialize(def);
         health.Initialize(stats);
@@ -69,7 +70,8 @@ public class Character : MonoBehaviour
     public Position GetPosition() => attributeComponent.GetPosition();
     public ControlType GetControlType() => attributeComponent.GetControlType();
     //localizationComponent
-    public LocalizedString GetLocalizedName() => localizationComponent.GetLocalizedName();
+    public LocalizedString GetLocalizedFullName() => localizationComponent.GetLocalizedFullName();
+    public LocalizedString GetLocalizedNickName() => localizationComponent.GetLocalizedNickName();
     public LocalizedString GetLocalizedDescription() => localizationComponent.GetLocalizedDescription();
     //teamMemberComponent
     public int GetTeamIndex() => teamMemberComponent.GetTeamIndex();

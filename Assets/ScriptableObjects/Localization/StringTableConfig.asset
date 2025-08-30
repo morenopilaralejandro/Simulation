@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03cceafc74a6e59dc9df6d104f973b78, type: 3}
+  m_Name: StringTableConfig
+  m_EditorClassIdentifier: 
+  mappings:
+  - Entity: 0
+    Field: 3
+    Style: 0
+    Table:
+      m_TableCollectionName: CharacterDescriptionsLocalized
+  - Entity: 0
+    Field: 3
+    Style: 1
+    Table:
+      m_TableCollectionName: CharacterDescriptionsRomanized
+  - Entity: 0
+    Field: 1
+    Style: 0
+    Table:
+      m_TableCollectionName: CharacterFullNamesLocalized
+  - Entity: 0
+    Field: 1
+    Style: 1
+    Table:
+      m_TableCollectionName: CharacterFullNamesRomanized
+  - Entity: 0
+    Field: 2
+    Style: 0
+    Table:
+      m_TableCollectionName: CharacterNickNamesLocalized
+  - Entity: 0
+    Field: 2
+    Style: 1
+    Table:
+      m_TableCollectionName: CharacterNickNamesRomanized
+  - Entity: 1
+    Field: 0
+    Style: 0
+    Table:
+      m_TableCollectionName: FormationNamesLocalized
+  - Entity: 1
+    Field: 0
+    Style: 1
+    Table:
+      m_TableCollectionName: FormationNamesRomanized
+  - Entity: 2
+    Field: 0
+    Style: 0
+    Table:
+      m_TableCollectionName: KitNamesLocalized
+  - Entity: 2
+    Field: 0
+    Style: 1
+    Table:
+      m_TableCollectionName: KitNamesRomanized
+  - Entity: 3
+    Field: 3
+    Style: 0
+    Table:
+      m_TableCollectionName: MoveDescriptionsLocalized
+  - Entity: 3
+    Field: 3
+    Style: 1
+    Table:
+      m_TableCollectionName: MoveDescriptionsRomanized
+  - Entity: 3
+    Field: 0
+    Style: 0
+    Table:
+      m_TableCollectionName: MoveNamesLocalized
+  - Entity: 3
+    Field: 0
+    Style: 1
+    Table:
+      m_TableCollectionName: MoveNamesRomanized
+  - Entity: 4
+    Field: 0
+    Style: 0
+    Table:
+      m_TableCollectionName: TeamNamesLocalized
+  - Entity: 4
+    Field: 0
+    Style: 1
+    Table:
+      m_TableCollectionName: TeamNamesRomanized

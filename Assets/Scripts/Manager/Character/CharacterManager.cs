@@ -31,6 +31,7 @@ public class CharacterManager : MonoBehaviour
         }).Completed += handle =>
         {
             LogManager.Trace($"[CharacterManager] All characters loaded. Total count: {characterDict.Count}", this);
+            TeamManager.Instance.LoadAllTeams();
         };
     }
 

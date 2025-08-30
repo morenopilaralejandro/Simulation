@@ -25,6 +25,10 @@ public class TeamManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
+    }
+
+    public void LoadAllTeams()
+    {
         Addressables.LoadAssetsAsync<TeamData>("Teams", RegisterTeam);
     }
 

@@ -7,6 +7,7 @@ using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
+using Simulation.Enums.Localization;
 
 public class Move
 {
@@ -84,15 +85,6 @@ public class Move
     public bool HasParticipantMoveRestriction => RequiredParticipantMoves.Count > 0;
     #endregion
 
-    #region Localization
-    [Header("Localization")]
-    [SerializeField] private bool isRomazed = false;
-    [SerializeField] private string stringTableNameLocalized = "MoveNamesLocalized";
-    [SerializeField] private string stringTableNameRomanized = "MoveNamesRomanized";
-    [SerializeField] private string stringTableDescriptionLocalized = "MoveDescriptionsLocalized";
-    [SerializeField] private string stringTableDescriptionRomanized = "MoveDescriptionsRomanized";
-    #endregion
-
     public void Initialize(MoveData moveData)
     {
         moveId = moveData.MoveId;
@@ -126,7 +118,7 @@ public class Move
     private void SetName()
     {
         localizedName = new LocalizedString(
-            isRomazed ? stringTableNameRomanized : stringTableNameLocalized,
+            LocalizationManager.Instance.GetTableReference(LocalizationEntity.Move, LocalizationField.Name),
             moveId
         );
     }
@@ -134,7 +126,7 @@ public class Move
     private void SetDescription()
     {
         localizedDescription = new LocalizedString(
-            isRomazed ? stringTableDescriptionRomanized : stringTableDescriptionLocalized,
+            LocalizationManager.Instance.GetTableReference(LocalizationEntity.Move, LocalizationField.Description),
             moveId
         );
     }

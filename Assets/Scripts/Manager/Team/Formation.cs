@@ -6,6 +6,7 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
 using Simulation.Enums.Character;
+using Simulation.Enums.Localization;
 
 public class Formation
 {
@@ -23,11 +24,6 @@ public class Formation
 
     [SerializeField] private int kickoff1;
     public int Kickoff1 => kickoff1;
-
-    [SerializeField] private bool isRomazed = false;
-    [SerializeField] private string stringTableNameLocalized = "FormationNamesLocalized";
-    [SerializeField] private string stringTableNameRomanized = "FormationNamesRomanized";
-
 
     public void Initialize(FormationData formationData)
     {
@@ -56,7 +52,7 @@ public class Formation
     private void SetName()
     {
         localizedName = new LocalizedString(
-            isRomazed ? stringTableNameRomanized : stringTableNameLocalized,
+            LocalizationManager.Instance.GetTableReference(LocalizationEntity.Formation, LocalizationField.Name),
             formationId
         );
     }

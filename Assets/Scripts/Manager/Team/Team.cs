@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using UnityEngine.Localization.Settings;
+using Simulation.Enums.Localization;
 
 public class Team
 {
@@ -27,35 +28,33 @@ public class Team
     [SerializeField] private List<Character> characters = new();
     public List<Character> Characters => characters;
 
-    [SerializeField] private bool isRomazed = false;
-    [SerializeField] private string stringTableNameLocalized = "TeamNamesLocalized";
-    [SerializeField] private string stringTableNameRomanized = "TeamNamesRomanized"; 
-
-
     public void Initialize(TeamData teamData)
     {
         teamId = teamData.TeamId;
-    /*
-        formation = TeamManager.Instance.GetFormationById(teamData.FormationId);
-        kit = KitManager.Instance.GetKitById(teamData.KitId);
+        formation = FormationManager.Instance.GetFormation(teamData.FormationId);
+        kit = KitManager.Instance.GetKit(teamData.KitId);
         lv = teamData.Lv;
 
         characterDataList.Clear();
         foreach (var characterId in teamData.CharacterIds)
         {
-            CharacterData characterData = CharacterManager.Instance.GetCharacterDataById(characterId);
-            if (characterData != null)
-                characterDataList.Add(characterData);
-            else
-                LogManager.Warning($"[Team] CharacterData not found for ID: {characterId}", this);
+            if (characterId != "")
+            {
+                CharacterData characterData = CharacterManager.Instance.GetCharacterData(characterId);
+                if (characterData != null)
+                    characterDataList.Add(characterData);
+                else
+                    LogManager.Warning($"[Team] CharacterData not found for ID: {characterId}");
+            }
         }
-    */
+
+        SetName();
     }
 
     private void SetName()
     {
         localizedName = new LocalizedString(
-            isRomazed ? stringTableNameRomanized : stringTableNameLocalized,
+            LocalizationManager.Instance.GetTableReference(LocalizationEntity.Team, LocalizationField.Name),
             teamId
         );
     }
