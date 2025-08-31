@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
+using System;
 using Simulation.Enums.Localization;
 
 public class LocalizationManager : MonoBehaviour
@@ -8,7 +9,10 @@ public class LocalizationManager : MonoBehaviour
     public static LocalizationManager Instance { get; private set; }
 
     [SerializeField] private StringTableConfig stringTableConfig;
-    [SerializeField] private bool isRomazed = false;
+    [SerializeField] private LocalizationStyle currentStyle = LocalizationStyle.Localized;
+    public LocalizationStyle CurrentStyle => currentStyle;
+
+    public event Action<LocalizationStyle> OnLocalizationStyleChanged;
 
     private void Awake()
     {
@@ -25,10 +29,24 @@ public class LocalizationManager : MonoBehaviour
         stringTableConfig.Initialize();
     }
 
-    public TableReference GetTableReference(LocalizationEntity entity, LocalizationField field)
+    public void Subscribe(Action<LocalizationStyle> callback)
     {
-        LocalizationStyle style = isRomazed ? LocalizationStyle.Romanized : LocalizationStyle.Localized; 
-        return stringTableConfig.GetTableReference(entity, field, style);
+        OnLocalizationStyleChanged += callback;
     }
 
+    public void Unsubscribe(Action<LocalizationStyle> callback)
+    {
+        OnLocalizationStyleChanged -= callback;
+    }
+
+    public void SetLocalizationStyle(LocalizationStyle style)
+    {
+        currentStyle = style;
+        OnLocalizationStyleChanged?.Invoke(style);
+    }
+
+    public TableReference GetTableReference(LocalizationEntity entity, LocalizationField field)
+    {
+        return stringTableConfig.GetTableReference(entity, field, currentStyle);
+    }
 }

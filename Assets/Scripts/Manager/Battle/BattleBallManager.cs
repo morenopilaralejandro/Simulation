@@ -75,7 +75,7 @@ public class BattleBallManager : MonoBehaviour
     {
         if (ball == null)
         {
-            LogManager.Warning("No ball to reset! Spawning a new one...");
+            LogManager.Info("No ball to reset. Spawning a new one...");
             Spawn();
             return;
         }
