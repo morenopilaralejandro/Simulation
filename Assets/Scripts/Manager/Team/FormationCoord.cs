@@ -18,4 +18,10 @@ public class FormationCoord
         this.defaultPosition = defaultPosition;
         this.position = position;
     }
+
+    public void FlipDefaultPosition()
+    {
+        defaultPosition.x *= -1;
+        defaultPosition.z *= -1;
+    }
 }

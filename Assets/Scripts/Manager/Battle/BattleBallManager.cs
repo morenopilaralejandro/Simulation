@@ -56,7 +56,7 @@ public class BattleBallManager : MonoBehaviour
             return;
         }
 
-        Addressables.InstantiateAsync(ballKey, spawnPoint.position, spawnPoint.rotation)
+        Addressables.InstantiateAsync(ballKey, spawnPoint.position, spawnPoint.rotation, spawnPoint)
             .Completed += (AsyncOperationHandle<GameObject> handle) =>
         {
             if (handle.Status == AsyncOperationStatus.Succeeded)

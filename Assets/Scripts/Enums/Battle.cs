@@ -8,6 +8,13 @@ namespace Simulation.Enums.Battle
         Kickoff
     }
 
+    public enum BattleType
+    {
+        Battle,
+        MiniBattle,
+        MultiplayerBattle
+    }
+
     public enum GoalPlacement
     {
         Top,

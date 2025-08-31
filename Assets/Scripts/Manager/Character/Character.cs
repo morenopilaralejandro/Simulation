@@ -69,7 +69,6 @@ public class Character : MonoBehaviour
     public Gender GetGender() => attributeComponent.GetGender();
     public Element GetElement() => attributeComponent.GetElement();
     public Position GetPosition() => attributeComponent.GetPosition();
-    public ControlType GetControlType() => attributeComponent.GetControlType();
     //localizationComponent
     public string GetCharacterFullName() => localizationComponent.GetString(LocalizationField.FullName);
     public string GetCharacterNickName() => localizationComponent.GetString(LocalizationField.NickName);
@@ -77,8 +76,10 @@ public class Character : MonoBehaviour
     //teamMemberComponent
     public int GetTeamIndex() => teamMemberComponent.GetTeamIndex();
     public FormationCoord GetFormationCoord() => teamMemberComponent.GetFormationCoord();
+    public ControlType GetControlType() => teamMemberComponent.GetControlType();
     //keeperComponent
     public bool IsKeeper() => keeperComponent.IsKeeper();
+    
 
     //public void ApplyStun(float duration) => status.ApplyStun(duration);
     //public void ClearStun() => status.ClearStun();

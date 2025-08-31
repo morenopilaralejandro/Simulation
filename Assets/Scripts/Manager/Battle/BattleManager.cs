@@ -11,6 +11,9 @@ public class BattleManager : MonoBehaviour
 
     public BattlePhase CurrentPhase { get; private set; }
     public BattlePhase PreviousPhase { get; private set; }
+    public BattleType CurrentType { get; private set; }
+    public BattleType PreviousType { get; private set; }
+    public int CurrentTeamSize { get; private set; }
     public event Action<BattlePhase, BattlePhase> OnPhaseChanged;
 
     public bool IsMovementFrozen { get; private set; } = false;
@@ -25,6 +28,11 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private float leftOffset   = 1f;
     [SerializeField] private float rightOffset  = 1f;
 
+    public event Action OnAllCharactersReady;
+    private int charactersReadyMax;
+    private int charactersReady;
+
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,6 +45,8 @@ public class BattleManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
+        OnAllCharactersReady += HandleAllCharactersReady;
+
         BoundManager.TopOffset = topOffset;
         BoundManager.BottomOffset = bottomOffset;
         BoundManager.LeftOffset = leftOffset;
@@ -44,11 +54,12 @@ public class BattleManager : MonoBehaviour
 
         BattleArgs.TeamId0 = "Faith";
         BattleArgs.TeamId1 = "Crimson";
+        BattleArgs.BattleType = BattleType.Battle;
     }
 
     void Start()
     {
-        //BattleBallManager.Instance.Spawn();
+
     }
     
     // Update is called once per frame
@@ -57,87 +68,59 @@ public class BattleManager : MonoBehaviour
         
     }
 
-    void OnEnable() 
+    private void OnDestroy()
     {
-        if (BattleCharacterManager.Instance != null) {
-            BattleCharacterManager.Instance.OnAllCharactersSpawned += HandleAllCharactersSpawned;
-            LogManager.Trace("[BattleManager] Subscribed to OnAllCharactersSpawned.");
-        }
+        OnAllCharactersReady -= HandleAllCharactersReady;
     }
 
-    void OnDisable() 
-    {
-        if (BattleCharacterManager.Instance != null)
-            BattleCharacterManager.Instance.OnAllCharactersSpawned -= HandleAllCharactersSpawned;
-    }
-
+    //called on team manager for testing
     public void StartBattle()
     {
+        PreviousType = CurrentType;
+        CurrentType = BattleArgs.BattleType;
+        CurrentTeamSize = CurrentType == BattleType.Battle ? TeamManager.Instance.SizeBattle : TeamManager.Instance.SizeMiniBattle;
+        charactersReadyMax = CurrentTeamSize*2;
         ResetBattle();
         teams.Add(TeamManager.Instance.GetTeam(BattleArgs.TeamId0));
         teams.Add(TeamManager.Instance.GetTeam(BattleArgs.TeamId1));
-        OfflineSpawn();
-        //StartKickoff(teams[0]);
-    }
 
-    private void SetCameraForMyTeam(int myTeamIndex)
-    {
-
-    }
-
-    private void OfflineSpawn() 
-    {
-        SpawnCharacters_Singleplayer();
-    }
-
-    public void AddCharacterToTeam(Character character, int teamIndex) 
-    {
-        teams[teamIndex].Characters.Add(character);
-    }
-
-    private void SpawnCharacters_Singleplayer()
-    {
-        for (int teamIndex = 0; teamIndex < teams.Count; teamIndex++)
-        {
-            Team team = teams[teamIndex];
-            team.Characters.Clear();
-
-            ControlType controlType = (teamIndex == 0) ? ControlType.LocalHuman : ControlType.AI;
-
-            for (int j = 0; j < team.CharacterDataList.Count; j++)
-            {
-                BattleCharacterManager.Instance.SpawnCharacter_Singleplayer(teamIndex);
-            }
+        for (int i = 0; i < teams.Count; i++) {
+            Team team = teams[i];
+            PopulateTeamWithCharacters(team, i, CurrentTeamSize);
         }
     }
 
-    private void HandleAllCharactersSpawned()
+    private void HandleAllCharactersReady()
     {
-        LogManager.Trace("[BattleManager] HandleAllCharactersSpawned");
-        InitializeTeamCharacters();
+        //start kickoff etc
         ResetDefaultPositions();
-        BattleBallManager.Instance.Spawn();
     }
 
-    public void InitializeTeamCharacters()
+    private void PopulateTeamWithCharacters(Team team, int teamIndex, int teamSize)
     {
-        for (int i = 0; i < teams.Count; i++)
+        foreach (var character in team.Characters)
         {
-            int teamIndex = i;
-            Team team = teams[teamIndex];            
-            for (int j = 0; j < TeamManager.Instance.SizeBattle; j++)
+            BattleCharacterManager.Instance.ReturnCharacterToPool(character);
+        }
+        team.Characters.Clear();
+
+        for (int i = 0; i < teamSize; i++)
+        {
+            int characterIndex = i;
+            BattleCharacterManager.Instance.GetPooledCharacter((character) =>
             {
-                int characterIndex = j;
-                Character character = team.Characters[characterIndex];
-                CharacterData characterData = team.CharacterDataList[characterIndex];
-                character.Initialize(characterData);
-                //reverse if necesary
-                FormationCoord formationCoord = team.Formation.FormationCoords[characterIndex];
-                ControlType controlType = (teamIndex == 0) ? ControlType.LocalHuman : ControlType.AI;
-                bool isKeeper = (characterIndex == 0);
+                if (character != null && characterIndex < team.CharacterDataList.Count)
+                {
+                    CharacterData characterData = team.CharacterDataList[characterIndex]; 
+                    character.Initialize(characterData);
+                    BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex, teamIndex);
+                    team.Characters.Add(character);
                 
-                TeamEvents.RaiseAssignToTeamBattle(character, team, teamIndex, formationCoord, controlType, isKeeper);
-            }
+                    charactersReady++;
+                    if (charactersReady >= charactersReadyMax)
+                        OnAllCharactersReady?.Invoke(); 
+                }
+            });
         }
     }
 
@@ -145,6 +128,7 @@ public class BattleManager : MonoBehaviour
     {
         //BoundManager.Setup();
         teams.Clear();
+        charactersReady = 0;
         //Reset timers
     }
 

@@ -9,16 +9,14 @@ public static class TeamEvents
         OnAssignToTeam?.Invoke(character, team, teamIndex, formationCoord);
     }
 
-    public static event Action<Character, Team, int, FormationCoord, ControlType, bool> OnAssignToTeamBattle;
-    public static void RaiseAssignToTeamBattle(
+    public static event Action<Character, Team, int, FormationCoord, ControlType> OnAssignCharacterToTeamBattle;
+    public static void RaiseAssignCharacterToTeamBattle(
         Character character, 
         Team team, 
         int teamIndex, 
         FormationCoord formationCoord, 
-        ControlType controlType,
-        bool isKeeper)
+        ControlType controlType)
     {
-        OnAssignToTeamBattle?.Invoke(character, team, teamIndex, formationCoord, controlType, isKeeper);
+        OnAssignCharacterToTeamBattle?.Invoke(character, team, teamIndex, formationCoord, controlType);
     }
-
 }
