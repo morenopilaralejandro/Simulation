@@ -34,11 +34,10 @@ public class Character : MonoBehaviour
     public void Initialize(CharacterData characterData, bool isSave = false)
     {
         attributeComponent.Initialize(characterData);
-        localizationComponent = new ComponentLocalization();
-        localizationComponent.Initialize(
+        localizationComponent = new ComponentLocalization(
             LocalizationEntity.Character,
             characterData.CharacterId,
-            new [] { LocalizationField.FullName, LocalizationField.NickName, LocalizationField.Description }
+            new [] { LocalizationField.FullName, LocalizationField.NickName, LocalizationField.Description }            
         );
 
         /*

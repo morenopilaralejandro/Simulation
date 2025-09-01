@@ -7,7 +7,7 @@ public class MoveManager : MonoBehaviour
 {
     public static MoveManager Instance { get; private set; }
 
-    private readonly Dictionary<string, Move> moves = new();
+    private readonly Dictionary<string, MoveData> moveDataDict = new();
 
     public int SizeMax = 8;
 
@@ -23,38 +23,36 @@ public class MoveManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        LoadAllMoves();
+        LoadAllMoveData();
     }
 
-    public void LoadAllMoves()
+    public void LoadAllMoveData()
     {
-        Addressables.LoadAssetsAsync<MoveData>("Moves", RegisterMove);
+        Addressables.LoadAssetsAsync<MoveData>("Moves", RegisterMoveData);
     }
 
-    public void RegisterMove(MoveData data)
+    public void RegisterMoveData(MoveData moveData)
     {
-        if (!moves.ContainsKey(data.MoveId))
+        if (!moveDataDict.ContainsKey(moveData.MoveId))
         {
-            var move = new Move();
-            move.Initialize(data);
-            moves.Add(move.MoveId, move);
+            moveDataDict.Add(moveData.MoveId, moveData);
         }
     }
 
-    public Move GetMove(string id)
+    public MoveData GetMoveData(string id)
     {
         if (string.IsNullOrEmpty(id))
         {
-            LogManager.Error("[MoveManager] Tried to GetMove with null/empty id!");
+            LogManager.Error("[MoveManager] Tried to GetMoveData with null/empty id!");
             return null;
         }
 
-        if (!moves.TryGetValue(id, out var move))
+        if (!moveDataDict.TryGetValue(id, out var moveData))
         {
-            LogManager.Error($"[MoveManager] No move found for id '{id}'.");
+            LogManager.Error($"[MoveManager] No moveData found for id '{id}'.");
             return null;
         }
 
-        return move;
+        return moveData;
     }
 }

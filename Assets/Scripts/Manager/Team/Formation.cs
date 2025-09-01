@@ -25,8 +25,7 @@ public class Formation
     {
         formationId = formationData.FormationId;
 
-        localizationComponent = new ComponentLocalization();
-        localizationComponent.Initialize(
+        localizationComponent = new ComponentLocalization(
             LocalizationEntity.Formation,
             formationData.FormationId,
             new [] { LocalizationField.Name }

@@ -28,8 +28,7 @@ public class Team
     {
         teamId = teamData.TeamId;
 
-        localizationComponent = new ComponentLocalization();
-        localizationComponent.Initialize(
+        localizationComponent = new ComponentLocalization(
             LocalizationEntity.Team,
             teamData.TeamId,
             new [] { LocalizationField.Name }
