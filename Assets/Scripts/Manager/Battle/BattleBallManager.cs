@@ -56,7 +56,7 @@ public class BattleBallManager : MonoBehaviour
             return;
         }
 
-        Addressables.InstantiateAsync(ballKey, spawnPoint.position, spawnPoint.rotation)
+        Addressables.InstantiateAsync(ballKey, spawnPoint.position, spawnPoint.rotation, spawnPoint)
             .Completed += (AsyncOperationHandle<GameObject> handle) =>
         {
             if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -70,27 +70,27 @@ public class BattleBallManager : MonoBehaviour
             }
         };
     }
-/*
-    public void ResetPosition() 
+
+    public void ResetBallPosition() 
     {
-        if (currentBall == null)
+        if (ball == null)
         {
-            LogManager.Warning("No ball to reset! Spawning a new one...");
+            LogManager.Info("No ball to reset. Spawning a new one...");
             Spawn();
             return;
         }
 
-        Rigidbody rb = currentBall.GetComponent<Rigidbody>();
+        Rigidbody rb = ball.GetComponent<Rigidbody>();
         if (rb != null)
         {
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
 
-        currentBall.transform.position = defaultBallPosition;
-        currentBall.transform.rotation = Quaternion.identity;
+        ball.transform.position = defaultBallPosition;
+        ball.transform.rotation = Quaternion.identity;
         
-        LogManager.Debug("Ball reset to default position: " + defaultBallPosition);
+        LogManager.Trace("[BattleBallManager] Ball reset to default position: " + defaultBallPosition);
     }
-*/
+
 }

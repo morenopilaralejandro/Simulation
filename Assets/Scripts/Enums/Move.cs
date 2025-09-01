@@ -7,4 +7,29 @@ namespace Simulation.Enums.Move
         Block,
         Catch
     }
+
+    public enum Trait
+    {
+        None,
+        Long,
+        Chain,
+        Block,
+        Catch,
+        Punch1,
+        Punch2
+    }
+
+    public enum GrowthType
+    {
+        Delchi,
+        S,
+        Uraga
+    }
+
+    public enum GrowthRate 
+    {
+        Fast,
+        Medium,
+        Slow
+    }
 }

@@ -3,9 +3,16 @@ namespace Simulation.Enums.Battle
     public enum BattlePhase
     {
         Battle,
-        Duel,
+        Selection,
         Cutscene,
         Kickoff
+    }
+
+    public enum BattleType
+    {
+        Battle,
+        MiniBattle,
+        MultiplayerBattle
     }
 
     public enum GoalPlacement

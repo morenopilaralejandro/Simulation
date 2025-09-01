@@ -1,13 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using Simulation.Enums.Character;
 
 public class BattleCharacterManager : MonoBehaviour
 {
-
     public static BattleCharacterManager Instance { get; private set; }
+
+    private Queue<Character> characterPool = new Queue<Character>();
 
     private Transform spawnPoint; 
     private string characterKey = "CharacterPrefab";
@@ -44,82 +47,71 @@ public class BattleCharacterManager : MonoBehaviour
     {
         spawnPoint = null;
     }
-    /*
-    public void OfflineSpawn() {
-        SpawnCharacters_Singleplayer();
-    }
 
-    private void SpawnCharacter_Singleplayer(int teamIndex, ControlType controlType, FormationCoord formationCoord)
+    public void GetPooledCharacter(System.Action<Character> onCharacterReady)
     {
-        Vector3 spawnPos = formationCoord.DefaultPosition;
-        InstantiateCharacter_Singleplayer(
-            characterKey,
-            spawnPos,
-            Quaternion.identity,
-            teamIndex,
-            controlType,
-            formationCoord,
-            (character) =>
-            {
-                if (character != null)
-                    BattleBallManager.Instance.AddCharacterToTeam(character, teamIndex);
-            });
-    }
-
-    private void InstantiateCharacter_Singleplayer(
-        string characterKey,
-        Vector3 position,
-        Quaternion rotation,
-        int teamIndex,
-        ControlType controlType,
-        FormationCoord formationCoord,
-        System.Action<Character> onCharacterSpawned)
-    {
-        Addressables.InstantiateAsync(characterKey, position, rotation, spawnPoint).Completed += (handle) =>
+        if (characterPool.Count > 0)
         {
-            if (handle.Status == AsyncOperationStatus.Succeeded)
+            Character pooledCharacter = characterPool.Dequeue();
+            pooledCharacter.gameObject.SetActive(true);
+            onCharacterReady?.Invoke(pooledCharacter);
+        }
+        else
+        {
+            //prefab key, position, rotation, root
+            Addressables.InstantiateAsync(characterKey, spawnPoint.position, Quaternion.Euler(70f, 0f, 0f), spawnPoint).Completed += (handle) =>
             {
-                GameObject go = handle.Result;
-
-                Character characterComponent = go.GetComponent<Character>();
-                if (characterComponent != null)
+                if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    characterComponent.TeamIndex = teamIndex;
-                    characterComponent.ControlType = controlType;
-                    characterComponent.Coord = coord;
-                    characterComponent.DefaultPosition = position;
+                    GameObject go = handle.Result;
+                    Character character = go.GetComponent<Character>();
 
-                    onCharacterSpawned?.Invoke(characterComponent);
+                    if (character != null)
+                    {
+                        LogManager.Trace($"[BattleCharacterManager] Spawned new character via Addressables with key {characterKey}");
+                        onCharacterReady?.Invoke(character);
+                    }
+                    else
+                    {
+                        Debug.LogError("[BattleCharacterManager] Prefab is missing Character component!");
+                        onCharacterReady?.Invoke(null);
+                    }
                 }
                 else
                 {
-                    LogManager.Error("[BattleCharacterManager] Spawned prefab is missing a Character component!");
-                    onCharacterSpawned?.Invoke(null);
+                    Debug.LogError($"[BattleCharacterManager] Failed to load character with key {characterKey}");
+                    onCharacterReady?.Invoke(null);
                 }
-            }
-            else
-            {
-                LogManager.Error($"[BattleCharacterManager] Failed to spawn character with key: {characterKey}");
-                onCharacterSpawned?.Invoke(null);
-            }
-        };
+            };
+        }
     }
 
-    public void InitializeCharacter(Character character, CharacterData characterData, int teamIndex, Team team, bool isKeeper)
-    {
-                character.Initialize(characterData);
-                character.IsKeeper = isKeeper;
-                character.UpdateKeeperColliderState();
-                character.Lv = team.Lv;
-                character.TeamIndex = i;
-                character.SetWear(team.WearId, WearManager.Instance.IsHome(teams, character.TeamIndex));
-            
+    public void AssignCharacterToTeamBattle(Character character, Team team, int characterIndex, int teamIndex) {
+        FormationCoord formationCoord = team.Formation.FormationCoords[characterIndex];
+        ControlType controlType = (teamIndex == 0) ? ControlType.LocalHuman : ControlType.AI;
+        TeamEvents.RaiseAssignCharacterToTeamBattle(character, team, teamIndex, formationCoord, controlType);
     }
 
     public void ResetCharacterPosition(Character character)
     {
-        character.Unstun();
-        character.transform.position = character.DefaultPosition;        
+        //character.Unstun();
+        character.transform.position = character.GetFormationCoord().DefaultPosition;        
     }
-*/
+
+    public void ReturnCharacterToPool(Character character)
+    {
+        if (character == null) return;
+
+        character.gameObject.SetActive(false);
+        characterPool.Enqueue(character);
+    }
+
+    public void ClearPool()
+    {
+        foreach (var character in characterPool)
+        {
+            Destroy(character.gameObject);
+        }
+        characterPool.Clear();
+    }
 }
