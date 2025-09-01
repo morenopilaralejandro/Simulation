@@ -34,11 +34,10 @@ public class Character : MonoBehaviour
     public void Initialize(CharacterData characterData, bool isSave = false)
     {
         attributeComponent.Initialize(characterData);
-        localizationComponent = new ComponentLocalization();
-        localizationComponent.Initialize(
+        localizationComponent = new ComponentLocalization(
             LocalizationEntity.Character,
             characterData.CharacterId,
-            new [] { LocalizationField.FullName, LocalizationField.NickName, LocalizationField.Description }
+            new [] { LocalizationField.FullName, LocalizationField.NickName, LocalizationField.Description }            
         );
 
         /*
@@ -64,11 +63,11 @@ public class Character : MonoBehaviour
 
     #region API
     //attributeComponent
-    public string GetCharacterId() => attributeComponent.GetCharacterId();
-    public CharacterSize GetCharacterSize() => attributeComponent.GetCharacterSize();
-    public Gender GetGender() => attributeComponent.GetGender();
-    public Element GetElement() => attributeComponent.GetElement();
-    public Position GetPosition() => attributeComponent.GetPosition();
+    public string CharacterId() => attributeComponent.GetCharacterId();
+    public CharacterSize CharacterSize => attributeComponent.GetCharacterSize();
+    public Gender Gender => attributeComponent.GetGender();
+    public Element Element => attributeComponent.GetElement();
+    public Position Position => attributeComponent.GetPosition();
     //localizationComponent
     public string GetCharacterFullName() => localizationComponent.GetString(LocalizationField.FullName);
     public string GetCharacterNickName() => localizationComponent.GetString(LocalizationField.NickName);

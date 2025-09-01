@@ -4,46 +4,25 @@ using Simulation.Enums.Move;
 
 public static class MoveValidator
 {
-    /*
-    public static bool CanLearnMove(Character character, MoveData move)
+    public static bool CanLearnMove(Character character, MoveData moveData)
     {
-        if (move.allowedElements.Count > 0 && !move.allowedElements.Contains(character.element))
+        if (moveData.AllowedElements.Count > 0 && !moveData.AllowedElements.Contains(character.Element))
             return false;
 
-        if (move.allowedPositions.Count > 0 && !move.allowedPositions.Contains(character.position))
+        if (moveData.AllowedPositions.Count > 0 && !moveData.AllowedPositions.Contains(character.Position))
             return false;
 
-        if (move.allowedGenders.Count > 0 && !move.allowedGenders.Contains(character.gender))
+        if (moveData.AllowedGenders.Count > 0 && !moveData.AllowedGenders.Contains(character.Gender))
             return false;
 
-        if (move.allowedSizes.Count > 0 && !move.allowedSizes.Contains(character.size))
+        if (moveData.AllowedSizes.Count > 0 && !moveData.AllowedSizes.Contains(character.CharacterSize))
             return false;
 
         return true;
     }
 
-    public static bool CanExecuteMove(List<Character> participants, MoveData move)
+    public static bool CanExecuteMove(Move move)
     {
-        if (move.hasParticipantElementRestriction)
-        {
-            for (int i = 0; i < move.requiredParticipantElements.Count; i++)
-            {
-                if (i >= participants.Count) return false;
-                if (move.requiredParticipantElements[i] != participants[i].element)
-                    return false;
-            }
-        }
-
-        if (move.hasParticipantMoveRestriction)
-        {
-            for (int i = 0; i < move.requiredParticipantMoves.Count; i++)
-            {
-                if (i >= participants.Count) return false;
-                if (!participants[i].learnedMoves.Exists(m => m.moveName == move.requiredParticipantMoves[i]))
-                    return false;
-            }
-        }
-        return true;
+        return move.HasValidParticipantElements() && move.HasValidParticipantMoves();
     }
-    */
 }

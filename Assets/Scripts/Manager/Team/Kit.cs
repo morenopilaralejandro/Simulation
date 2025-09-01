@@ -15,8 +15,7 @@ public class Kit
     {
         kitId = kitData.KitId;
 
-        localizationComponent = new ComponentLocalization();
-        localizationComponent.Initialize(
+        localizationComponent = new ComponentLocalization(
             LocalizationEntity.Kit,
             kitData.KitId,
             new [] { LocalizationField.Name }

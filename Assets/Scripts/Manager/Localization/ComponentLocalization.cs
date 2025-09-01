@@ -12,16 +12,10 @@ public class ComponentLocalization
     private Dictionary<LocalizationField, LocalizedString> localizedStrings 
         = new Dictionary<LocalizationField, LocalizedString>();
 
-    /// <summary>
-    /// Retrieves the localized string value for the given LocalizationField
-    /// </summary>
-    public string GetString(LocalizationField field)
-    {
-        if (localizedStrings.TryGetValue(field, out var localizedString))
-            return localizedString.GetLocalizedString();
 
-        LogManager.Warning($"[ComponentLocalization] Missing localized string for field {field}");
-        return string.Empty;
+    public ComponentLocalization(LocalizationEntity entity, string id, LocalizationField[] fields) 
+    {
+        Initialize(entity,id, fields);
     }
 
     /// <summary>
@@ -39,6 +33,19 @@ public class ComponentLocalization
             );
         }
     }
+
+    /// <summary>
+    /// Retrieves the localized string value for the given LocalizationField
+    /// </summary>
+    public string GetString(LocalizationField field)
+    {
+        if (localizedStrings.TryGetValue(field, out var localizedString))
+            return localizedString.GetLocalizedString();
+
+        LogManager.Warning($"[ComponentLocalization] Missing localized string for field {field}");
+        return string.Empty;
+    }
+
 }
 
 /*
