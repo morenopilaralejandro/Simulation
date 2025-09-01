@@ -39,7 +39,18 @@ public class FormationManager : MonoBehaviour
 
     public Formation GetFormation(string id)
     {
-        formations.TryGetValue(id, out var f);
-        return f;
+        if (string.IsNullOrEmpty(id))
+        {
+            LogManager.Error("[FormationManager] Tried to GetFormation with null/empty id!");
+            return null;
+        }
+
+        if (!formations.TryGetValue(id, out var formation))
+        {
+            LogManager.Error($"[FormationManager] No formation found for id '{id}'.");
+            return null;
+        }
+
+        return formation;
     }
 }

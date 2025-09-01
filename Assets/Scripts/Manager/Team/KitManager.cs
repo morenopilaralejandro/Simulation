@@ -21,6 +21,11 @@ public class KitManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
+        LoadAllTeams();
+    }
+
+    public void LoadAllTeams()
+    {
         Addressables.LoadAssetsAsync<KitData>("Kits", RegisterKit);
     }
 
@@ -36,7 +41,18 @@ public class KitManager : MonoBehaviour
 
     public Kit GetKit(string id)
     {
-        kits.TryGetValue(id, out var kit);
+        if (string.IsNullOrEmpty(id))
+        {
+            LogManager.Error("[KitManager] Tried to GetKit with null/empty id!");
+            return null;
+        }
+
+        if (!kits.TryGetValue(id, out var kit))
+        {
+            LogManager.Error($"[KitManager] No kit found for id '{id}'.");
+            return null;
+        }
+
         return kit;
     }
 }

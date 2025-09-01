@@ -7,7 +7,7 @@ public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager Instance { get; private set; }
 
-    private readonly Dictionary<string, CharacterData> characterDict = new();
+    private readonly Dictionary<string, CharacterData> characterDataDict = new();
 
     private void Awake()
     {
@@ -19,26 +19,36 @@ public class CharacterManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        LoadAllCharacters();
+        LoadAllCharacterData();
     }
 
-    private void LoadAllCharacters()
+    private void LoadAllCharacterData()
     {
         Addressables.LoadAssetsAsync<CharacterData>("Characters", data =>
         {
-            if (!characterDict.ContainsKey(data.CharacterId))
-                characterDict.Add(data.CharacterId, data);
+            if (!characterDataDict.ContainsKey(data.CharacterId))
+                characterDataDict.Add(data.CharacterId, data);
         }).Completed += handle =>
         {
-            LogManager.Trace($"[CharacterManager] All characters loaded. Total count: {characterDict.Count}", this);
+            LogManager.Trace($"[CharacterManager] All characters loaded. Total count: {characterDataDict.Count}", this);
             TeamManager.Instance.LoadAllTeams();
         };
     }
 
     public CharacterData GetCharacterData(string id)
     {
-        if (characterDict.TryGetValue(id, out var cd))
-            return cd;
-        return null;
+        if (string.IsNullOrEmpty(id))
+        {
+            LogManager.Error("[CharacterManager] Tried to GetCharacterData with null/empty id!");
+            return null;
+        }
+
+        if (!characterDataDict.TryGetValue(id, out var characterData))
+        {
+            LogManager.Error($"[CharacterManager] No characterData found for id '{id}'.");
+            return null;
+        }
+
+        return characterData;
     }
 }

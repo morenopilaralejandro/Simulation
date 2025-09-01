@@ -23,6 +23,11 @@ public class MoveManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
+        LoadAllMoves();
+    }
+
+    public void LoadAllMoves()
+    {
         Addressables.LoadAssetsAsync<MoveData>("Moves", RegisterMove);
     }
 
@@ -38,7 +43,18 @@ public class MoveManager : MonoBehaviour
 
     public Move GetMove(string id)
     {
-        moves.TryGetValue(id, out var move);
+        if (string.IsNullOrEmpty(id))
+        {
+            LogManager.Error("[MoveManager] Tried to GetMove with null/empty id!");
+            return null;
+        }
+
+        if (!moves.TryGetValue(id, out var move))
+        {
+            LogManager.Error($"[MoveManager] No move found for id '{id}'.");
+            return null;
+        }
+
         return move;
     }
 }

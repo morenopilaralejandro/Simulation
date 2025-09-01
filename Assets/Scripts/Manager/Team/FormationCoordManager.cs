@@ -7,7 +7,7 @@ public class FormationCoordManager : MonoBehaviour
 {
     public static FormationCoordManager Instance { get; private set; }
 
-    private readonly Dictionary<string, FormationCoordData> formationCoordDict = new();
+    private readonly Dictionary<string, FormationCoordData> formationCoordDataDict = new();
 
     private void Awake()
     {
@@ -19,26 +19,36 @@ public class FormationCoordManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        LoadAllFormationCoords();
+        LoadAllFormationCoordData();
     }
 
-    private void LoadAllFormationCoords()
+    private void LoadAllFormationCoordData()
     {
         Addressables.LoadAssetsAsync<FormationCoordData>("FormationCoords", data =>
         {
-            if (!formationCoordDict.ContainsKey(data.FormationCoordId))
-                formationCoordDict.Add(data.FormationCoordId, data);
+            if (!formationCoordDataDict.ContainsKey(data.FormationCoordId))
+                formationCoordDataDict.Add(data.FormationCoordId, data);
         }).Completed += handle =>
         {
-            LogManager.Trace($"[FormationCoordManager] All formationCoords loaded. Total count: {formationCoordDict.Count}", this);
+            LogManager.Trace($"[FormationCoordManager] All formationCoordData loaded. Total count: {formationCoordDataDict.Count}", this);
             FormationManager.Instance.LoadAllFormations();
         };
     }
 
     public FormationCoordData GetFormationCoordData(string id)
     {
-        if (formationCoordDict.TryGetValue(id, out var cd))
-            return cd;
-        return null;
+        if (string.IsNullOrEmpty(id))
+        {
+            LogManager.Error("[FormationCoordManager] Tried to GetFormationCoordData with null/empty id!");
+            return null;
+        }
+
+        if (!formationCoordDataDict.TryGetValue(id, out var formationCoordData))
+        {
+            LogManager.Error($"[FormationCoordManager] No formationCoordData found for id '{id}'.");
+            return null;
+        }
+
+        return formationCoordData;
     }
 }

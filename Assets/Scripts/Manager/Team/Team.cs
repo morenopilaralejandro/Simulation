@@ -42,7 +42,7 @@ public class Team
         characterDataList.Clear();
         foreach (var characterId in teamData.CharacterIds)
         {
-            if (characterId != "")
+            if (!string.IsNullOrEmpty(characterId))
             {
                 CharacterData characterData = CharacterManager.Instance.GetCharacterData(characterId);
                 if (characterData != null)

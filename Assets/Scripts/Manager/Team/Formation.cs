@@ -34,7 +34,7 @@ public class Formation
     
         for (int i = 0; i < formationData.CoordIds.Count; i++) 
         {
-            if (formationData.CoordIds[i] != null) {
+            if (!string.IsNullOrEmpty(formationData.CoordIds[i])) {
                 FormationCoordData formationCoordData = FormationCoordManager.Instance.GetFormationCoordData(formationData.CoordIds[i]);
                 formationCoords.Add(
                     new FormationCoord (
