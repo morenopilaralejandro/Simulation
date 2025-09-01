@@ -10,13 +10,10 @@ public class Move
 {
     private MoveComponentAttribute attributeComponent;
     private ComponentLocalization localizationComponent;
-    private MoveComponentParticipant participantComponent;
+    private MoveComponentParticipants participantsComponent;
     private MoveComponentEvolution evolutionComponent;
-    private MoveComponentRestrictionLearn restrictionLearnComponent;
-    private MoveComponentRestrictionParticipant restrictionParticipantComponent;
-
-
-
+    //private MoveComponentRestrictionLearn restrictionLearnComponent;
+    private MoveComponentRestrictionParticipants restrictionParticipantsComponent;
 
     public void Initialize(MoveData moveData)
     {
@@ -28,15 +25,10 @@ public class Move
             new [] { LocalizationField.Name, LocalizationField.Description }
         );
 
-        participantComponent = new MoveComponentParticipant(moveData);
+        participantsComponent = new MoveComponentParticipants(moveData);
         evolutionComponent = new MoveComponentEvolution(moveData);
-        restrictionLearnComponent = new MoveComponentRestrictionLearn(moveData);
-        restrictionParticipantComponent = new MoveComponentRestrictionParticipant();
-
-
-
-        requiredParticipantElements = new List<Element>(moveData.RequiredParticipantElements);
-        requiredParticipantMoves = new List<string>(moveData.RequiredParticipantMoves);
+        //restrictionLearnComponent = new MoveComponentRestrictionLearn(moveData);
+        restrictionParticipantsComponent = new MoveComponentRestrictionParticipants(moveData);
     }
 
     #region API
@@ -55,21 +47,29 @@ public class Move
     //localizationComponent
     public string MoveName => localizationComponent.GetString(LocalizationField.Name);
     public string MoveDescription => localizationComponent.GetString(LocalizationField.Description);
-    //participantComponent
-    public int Participants => participantComponent.Participants;
-    public Character[] SelectedParticipants => participantComponent.SelectedParticipants;
-    public void SetParticipant(int participantIndex, Character character) => participantComponent.SetParticipant(participantIndex, character);
-    public bool IsParticipantSelected(int participantIndex) => participantComponent.IsParticipantSelected(participantIndex);
-    public List<Character> GetFinalParticipants(List<Character> teammates) => participantComponent.GetFinalParticipants(teammates);
+    //participantsComponent
+    public int TotalParticipantCount => participantsComponent.TotalParticipantCount;
+    public int RequiredParticipantCount => participantsComponent.RequiredParticipantCount;
+    public Character[] SelectedParticipants => participantsComponent.SelectedParticipants;
+    public void SetParticipant(int participantIndex, Character character) => participantsComponent.SetParticipant(participantIndex, character);
+    public bool IsParticipantSelected(int participantIndex) => participantsComponent.IsParticipantSelected(participantIndex);
+    public List<Character> GetFinalParticipants(List<Character> teammates) => participantsComponent.GetFinalParticipants(teammates);
     //evolutionComponent
     public GrowthType GrowthType => evolutionComponent.GrowthType;
     public GrowthRate GrowthRate => evolutionComponent.GrowthRate;
     //restrictionLearnComponent
+    /*
     public List<Element> AllowedElements => restrictionLearnComponent.AllowedElements;
     public List<Position> AllowedPositions => restrictionLearnComponent.AllowedPositions;
     public List<Gender> AllowedGenders => restrictionLearnComponent.AllowedGenders;
     public List<CharacterSize> AllowedSizes => restrictionLearnComponent.AllowedSizes;
-    //restrictionParticipantComponent
-
+    */
+    //restrictionParticipantsComponent
+    public List<Element> RequiredParticipantElements => restrictionParticipantsComponent.RequiredParticipantElements;
+    public List<string> RequiredParticipantMoves => restrictionParticipantsComponent.RequiredParticipantMoves;
+    public bool HasParticipantElementRestriction => restrictionParticipantsComponent.HasParticipantElementRestriction;
+    public bool HasParticipantMoveRestriction => restrictionParticipantsComponent.HasParticipantMoveRestriction;
+    public bool HasValidParticipantElements() => restrictionParticipantsComponent.HasValidParticipantElements(participantsComponent.SelectedParticipants);
+    public bool HasValidParticipantMoves() => restrictionParticipantsComponent.HasValidParticipantElements(participantsComponent.SelectedParticipants);
     #endregion
 }

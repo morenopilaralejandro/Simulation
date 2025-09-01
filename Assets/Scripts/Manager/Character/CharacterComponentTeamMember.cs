@@ -29,7 +29,7 @@ public class CharacterComponentTeamMember : MonoBehaviour
         FormationCoord formationCoord, 
         ControlType controlType)
     {
-        if (character.GetCharacterId() == attributeComponent.GetCharacterId())
+        if (character.CharacterId() == attributeComponent.GetCharacterId())
         {
             this.teamIndex = teamIndex;
             this.controlType = controlType;

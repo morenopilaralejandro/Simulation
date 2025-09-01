@@ -32,7 +32,7 @@ public class CharacterComponentKeeper : MonoBehaviour
         FormationCoord formationCoord, 
         ControlType controlType)
     {
-        if (character.GetCharacterId() == attributeComponent.GetCharacterId())
+        if (character.CharacterId() == attributeComponent.GetCharacterId())
         {
             this.isKeeper = formationCoord.Position == Position.GK ? true : false;
             UpdateKeeperColliderState();

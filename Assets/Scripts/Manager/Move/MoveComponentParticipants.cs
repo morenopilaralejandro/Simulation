@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
 
-public class MoveComponentParticipant
+public class MoveComponentParticipants
 {
-    public int Participants { get; private set; }
+    public int TotalParticipantCount { get; private set; }
+    public int RequiredParticipantCount { get; private set; }
     public Character[] SelectedParticipants { get; private set; }
 
-    public MoveComponentParticipant(MoveData moveData)
+    public MoveComponentParticipants(MoveData moveData)
     {
         Initialize(moveData);
     }
 
     public void Initialize(MoveData moveData)
     {
-        Participants = moveData.Participants;
-
-        SelectedParticipants = new Character[Participants];
+        TotalParticipantCount = moveData.Participants;
+        RequiredParticipantCount = moveData.Participants - 1;
+        SelectedParticipants = new Character[RequiredParticipantCount];
     }
 
     public void SetParticipant(int participantIndex, Character character)
@@ -31,7 +32,7 @@ public class MoveComponentParticipant
     {
         List<Character> finalParticipants = new List<Character>();
 
-        for (int i = 0; i < Participants; i++)
+        for (int i = 0; i < RequiredParticipantCount; i++)
         {
             if (!IsParticipantSelected(i))
             {
