@@ -9,7 +9,7 @@ using Simulation.Enums.Localization;
 public class Move
 {
     private MoveComponentAttribute attributeComponent;
-    private ComponentLocalization localizationComponent;
+    private ComponentLocalizationString stringLocalizationComponent;
     private MoveComponentParticipants participantsComponent;
     private MoveComponentEvolution evolutionComponent;
     //private MoveComponentRestrictionLearn restrictionLearnComponent;
@@ -19,7 +19,7 @@ public class Move
     {
         attributeComponent = new MoveComponentAttribute(moveData);
 
-        localizationComponent = new ComponentLocalization(
+        stringLocalizationComponent = new ComponentLocalizationString(
             LocalizationEntity.Move,
             moveData.MoveId,
             new [] { LocalizationField.Name, LocalizationField.Description }
@@ -45,8 +45,8 @@ public class Move
     public int Difficulty => attributeComponent.Difficulty;
     public int FaultRate => attributeComponent.FaultRate;
     //localizationComponent
-    public string MoveName => localizationComponent.GetString(LocalizationField.Name);
-    public string MoveDescription => localizationComponent.GetString(LocalizationField.Description);
+    public string MoveName => stringLocalizationComponent.GetString(LocalizationField.Name);
+    public string MoveDescription => stringLocalizationComponent.GetString(LocalizationField.Description);
     //participantsComponent
     public int TotalParticipantCount => participantsComponent.TotalParticipantCount;
     public int RequiredParticipantCount => participantsComponent.RequiredParticipantCount;

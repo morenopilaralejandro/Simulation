@@ -10,7 +10,7 @@ public class CSVMoveImporter
     [MenuItem("Tools/Import CSV/Move")]
     public static void ImportMovesFromCSV()
     {
-        string assetFolder = "Assets/Resources/ScriptableObjects/Move";
+        string assetFolder = "Assets/ScriptableObjects/Move";
         string csvFolder = "Csv";
         string defaultPath = Path.Combine(Application.dataPath, csvFolder);
         string path = EditorUtility.OpenFilePanel("Select Move CSV File", defaultPath, "csv");

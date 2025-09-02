@@ -9,7 +9,7 @@ public class CSVFormationImporter
     [MenuItem("Tools/Import CSV/Formation")]
     public static void ImportFormationsFromCSV()
     {
-        string assetFolder = "Assets/Resources/ScriptableObjects/Formation";
+        string assetFolder = "Assets/ScriptableObjects/Formation";
         string csvFolder = "Csv";
         string defaultPath = Path.Combine(Application.dataPath, csvFolder);
         string path = EditorUtility.OpenFilePanel("Select Formation CSV File", defaultPath, "csv");

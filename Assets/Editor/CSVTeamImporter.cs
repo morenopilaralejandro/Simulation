@@ -9,7 +9,7 @@ public class CSVTeamImporter
     public static void ImportTeamsFromCSV()
     {
        
-        string assetFolder = "Assets/Resources/ScriptableObjects/Team";
+        string assetFolder = "Assets/ScriptableObjects/Team";
         string csvFolder = "Csv";
         string defaultPath = Path.Combine(Application.dataPath, csvFolder);
         string path = EditorUtility.OpenFilePanel("Select Team CSV File", defaultPath, "csv");

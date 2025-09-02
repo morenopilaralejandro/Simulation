@@ -9,18 +9,18 @@ public class Kit
     [SerializeField] private string kitId;
     public string KitId => kitId;
 
-    [SerializeField] private ComponentLocalization localizationComponent;
+    [SerializeField] private ComponentLocalizationString stringLocalizationComponent;
 
     public void Initialize(KitData kitData)
     {
         kitId = kitData.KitId;
 
-        localizationComponent = new ComponentLocalization(
+        stringLocalizationComponent = new ComponentLocalizationString(
             LocalizationEntity.Kit,
             kitData.KitId,
             new [] { LocalizationField.Name }
         );
     }
 
-    public string GetKitName() => localizationComponent.GetString(LocalizationField.Name);
+    public string KitName => stringLocalizationComponent.GetString(LocalizationField.Name);
 }

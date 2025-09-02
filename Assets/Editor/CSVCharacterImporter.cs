@@ -8,7 +8,7 @@ public class CSVCharacterImporter
     [MenuItem("Tools/Import CSV/Character")]
     public static void ImportCharactersFromCSV()
     {
-        string assetFolder = "Assets/Resources/ScriptableObjects/Character";
+        string assetFolder = "Assets/ScriptableObjects/Character";
         string csvFolder = "Csv";
         string defaultPath = Path.Combine(Application.dataPath, csvFolder);
         string path = EditorUtility.OpenFilePanel("Select Character CSV File", defaultPath, "csv");

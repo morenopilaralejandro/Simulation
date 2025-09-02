@@ -6,7 +6,7 @@ public class Character : MonoBehaviour
 {
     #region Components
     [SerializeField] private CharacterComponentAttribute attributeComponent;
-    [SerializeField] private ComponentLocalization localizationComponent;
+    [SerializeField] private ComponentLocalizationString stringLocalizationComponent;
     [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
     [SerializeField] private CharacterComponentKeeper keeperComponent;
     #endregion
@@ -34,7 +34,7 @@ public class Character : MonoBehaviour
     public void Initialize(CharacterData characterData, bool isSave = false)
     {
         attributeComponent.Initialize(characterData);
-        localizationComponent = new ComponentLocalization(
+        stringLocalizationComponent = new ComponentLocalizationString(
             LocalizationEntity.Character,
             characterData.CharacterId,
             new [] { LocalizationField.FullName, LocalizationField.NickName, LocalizationField.Description }            
@@ -69,9 +69,9 @@ public class Character : MonoBehaviour
     public Element Element => attributeComponent.GetElement();
     public Position Position => attributeComponent.GetPosition();
     //localizationComponent
-    public string GetCharacterFullName() => localizationComponent.GetString(LocalizationField.FullName);
-    public string GetCharacterNickName() => localizationComponent.GetString(LocalizationField.NickName);
-    public string GetCharacterDescription() => localizationComponent.GetString(LocalizationField.Description);
+    public string CharacterFullName => stringLocalizationComponent.GetString(LocalizationField.FullName);
+    public string CharacterNickName => stringLocalizationComponent.GetString(LocalizationField.NickName);
+    public string CharacterDescription => stringLocalizationComponent.GetString(LocalizationField.Description);
     //teamMemberComponent
     public int GetTeamIndex() => teamMemberComponent.GetTeamIndex();
     public FormationCoord GetFormationCoord() => teamMemberComponent.GetFormationCoord();

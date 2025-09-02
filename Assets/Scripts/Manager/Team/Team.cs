@@ -7,7 +7,7 @@ public class Team
     [SerializeField] private string teamId;
     public string TeamId => teamId;
 
-    [SerializeField] private ComponentLocalization localizationComponent;
+    [SerializeField] private ComponentLocalizationString stringLocalizationComponent;
 
     [SerializeField] private Formation formation;
     public Formation Formation => formation;
@@ -28,7 +28,7 @@ public class Team
     {
         teamId = teamData.TeamId;
 
-        localizationComponent = new ComponentLocalization(
+        stringLocalizationComponent = new ComponentLocalizationString(
             LocalizationEntity.Team,
             teamData.TeamId,
             new [] { LocalizationField.Name }
@@ -52,5 +52,5 @@ public class Team
         }
     }
 
-    public string GetTeamName() => localizationComponent.GetString(LocalizationField.Name);
+    public string TeamName => stringLocalizationComponent.GetString(LocalizationField.Name);
 }

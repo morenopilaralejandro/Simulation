@@ -7,7 +7,7 @@ public class CSVKitImporter
     [MenuItem("Tools/Import CSV/Kit")]
     public static void ImportKitsFromCSV()
     {
-        string assetFolder = "Assets/Resources/ScriptableObjects/Kit";
+        string assetFolder = "Assets/ScriptableObjects/Kit";
         string csvFolder = "Csv";
         string defaultPath = Path.Combine(Application.dataPath, csvFolder);
         string path = EditorUtility.OpenFilePanel("Select Kit CSV File", defaultPath, "csv");

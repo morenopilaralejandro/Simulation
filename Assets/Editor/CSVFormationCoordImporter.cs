@@ -7,7 +7,7 @@ public class CSVFormationCoordImporter
     [MenuItem("Tools/Import CSV/FormationCord")]
     public static void ImportFormationCoordsFromCSV()
     {
-        string assetFolder = "Assets/Resources/ScriptableObjects/FormationCord";
+        string assetFolder = "Assets/ScriptableObjects/FormationCord";
         string csvFolder = "Csv";
         string defaultPath = Path.Combine(Application.dataPath, csvFolder);
         string path = EditorUtility.OpenFilePanel("Select FormationCord CSV File", defaultPath, "csv");
