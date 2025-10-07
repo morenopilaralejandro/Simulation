@@ -9,6 +9,8 @@ public class CharacterManager : MonoBehaviour
 
     private readonly Dictionary<string, CharacterData> characterDataDict = new();
 
+    public bool IsReady { get; private set; } = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -18,7 +20,6 @@ public class CharacterManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
         LoadAllCharacterData();
     }
 
@@ -31,6 +32,7 @@ public class CharacterManager : MonoBehaviour
         }).Completed += handle =>
         {
             LogManager.Trace($"[CharacterManager] All characters loaded. Total count: {characterDataDict.Count}", this);
+            IsReady = true;
             TeamManager.Instance.LoadAllTeams();
         };
     }

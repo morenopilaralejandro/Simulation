@@ -3,20 +3,36 @@ using Simulation.Enums.Character;
 
 public static class TeamEvents
 {
-    public static event Action<Character, Team, int, FormationCoord> OnAssignToTeam;
-    public static void RaiseAssignToTeam(Character character, Team team, int teamIndex, FormationCoord formationCoord)
+    public static event Action<Team, TeamSide> OnAssignTeamToSide;
+    public static void RaiseAssignTeamToSide(Team team, TeamSide teamSide)
     {
-        OnAssignToTeam?.Invoke(character, team, teamIndex, formationCoord);
+        OnAssignTeamToSide?.Invoke(team, teamSide);
     }
 
-    public static event Action<Character, Team, int, FormationCoord, ControlType> OnAssignCharacterToTeamBattle;
+    public static event Action<Character, Team, FormationCoord> OnAssignCharacterToTeam;
+    public static void RaiseAssignCharacterToTeam(Character character, Team team, FormationCoord formationCoord)
+    {
+        OnAssignCharacterToTeam?.Invoke(character, team, formationCoord);
+    }
+
+    public static event Action<Character, Team, FormationCoord> OnAssignCharacterToTeamBattle;
     public static void RaiseAssignCharacterToTeamBattle(
         Character character, 
-        Team team, 
-        int teamIndex, 
-        FormationCoord formationCoord, 
-        ControlType controlType)
+        Team team,
+        FormationCoord formationCoord)
     {
-        OnAssignCharacterToTeamBattle?.Invoke(character, team, teamIndex, formationCoord, controlType);
+        OnAssignCharacterToTeamBattle?.Invoke(character, team, formationCoord);
+    }
+
+    public static event Action<Team, Formation> OnFormationChanged;
+    public static void RaiseOnFormationChanged(Team team, Formation formation)
+    {
+        OnFormationChanged?.Invoke(team, formation);
+    }
+
+    public static event Action<Team, Kit> OnKitChanged;
+    public static void RaiseOnKitChanged(Team team, Kit kit)
+    {
+        OnKitChanged?.Invoke(team, kit);
     }
 }

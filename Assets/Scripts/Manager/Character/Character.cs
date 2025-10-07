@@ -5,8 +5,8 @@ using Simulation.Enums.Localization;
 public class Character : MonoBehaviour
 {
     #region Components
-    [SerializeField] private CharacterComponentAttribute attributeComponent;
-    [SerializeField] private ComponentLocalizationString stringLocalizationComponent;
+    [SerializeField] private CharacterComponentAttributes attributesComponent;
+    [SerializeField] private LocalizationComponentString localizationStringComponent;
     [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
     [SerializeField] private CharacterComponentKeeper keeperComponent;
     #endregion
@@ -33,11 +33,13 @@ public class Character : MonoBehaviour
     #region Initialize
     public void Initialize(CharacterData characterData, bool isSave = false)
     {
-        attributeComponent.Initialize(characterData);
-        stringLocalizationComponent = new ComponentLocalizationString(
+        BindComponents();
+
+        attributesComponent.Initialize(characterData);
+        localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Character,
             characterData.CharacterId,
-            new [] { LocalizationField.FullName, LocalizationField.NickName, LocalizationField.Description }            
+            new [] { LocalizationField.Name, LocalizationField.Nick, LocalizationField.Description }            
         );
 
         /*
@@ -59,25 +61,30 @@ public class Character : MonoBehaviour
         };
         */
     }
+
+    private void BindComponents()
+    {
+        teamMemberComponent.SetCharacter(this);
+        keeperComponent.SetCharacter(this);
+    }
     #endregion
 
     #region API
     //attributeComponent
-    public string CharacterId() => attributeComponent.GetCharacterId();
-    public CharacterSize CharacterSize => attributeComponent.GetCharacterSize();
-    public Gender Gender => attributeComponent.GetGender();
-    public Element Element => attributeComponent.GetElement();
-    public Position Position => attributeComponent.GetPosition();
+    public string CharacterId => attributesComponent.CharacterId;
+    public CharacterSize CharacterSize => attributesComponent.CharacterSize;
+    public Gender Gender => attributesComponent.Gender;
+    public Element Element => attributesComponent.Element;
+    public Position Position => attributesComponent.Position;
     //localizationComponent
-    public string CharacterFullName => stringLocalizationComponent.GetString(LocalizationField.FullName);
-    public string CharacterNickName => stringLocalizationComponent.GetString(LocalizationField.NickName);
-    public string CharacterDescription => stringLocalizationComponent.GetString(LocalizationField.Description);
+    public string CharacterName => localizationStringComponent.GetString(LocalizationField.Name);
+    public string CharacterNick => localizationStringComponent.GetString(LocalizationField.Nick);
+    public string CharacterDescription => localizationStringComponent.GetString(LocalizationField.Description);
     //teamMemberComponent
-    public int GetTeamIndex() => teamMemberComponent.GetTeamIndex();
-    public FormationCoord GetFormationCoord() => teamMemberComponent.GetFormationCoord();
-    public ControlType GetControlType() => teamMemberComponent.GetControlType();
+    public TeamSide TeamSide => teamMemberComponent.TeamSide;
+    public FormationCoord FormationCoord => teamMemberComponent.FormationCoord;
     //keeperComponent
-    public bool IsKeeper() => keeperComponent.IsKeeper();
+    public bool IsKeeper => keeperComponent.IsKeeper;
     
 
     //public void ApplyStun(float duration) => status.ApplyStun(duration);

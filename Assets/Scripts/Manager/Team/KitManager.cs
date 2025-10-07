@@ -9,6 +9,8 @@ public class KitManager : MonoBehaviour
 
     private readonly Dictionary<string, Kit> kits = new();
 
+    public bool IsReady { get; private set; } = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -21,12 +23,19 @@ public class KitManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        LoadAllTeams();
+        LoadAllKits();
     }
 
-    public void LoadAllTeams()
+    public void LoadAllKits()
     {
-        Addressables.LoadAssetsAsync<KitData>("Kits", RegisterKit);
+        Addressables.LoadAssetsAsync<KitData>("Kits", data =>
+        {
+            RegisterKit(data);
+        }).Completed += handle =>
+        {
+            LogManager.Trace($"[KitManager] All kits loaded. Total count: {kits.Count}", this);
+            IsReady = true;
+        };
     }
 
     public void RegisterKit(KitData data)

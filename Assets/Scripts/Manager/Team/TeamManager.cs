@@ -9,6 +9,8 @@ public class TeamManager : MonoBehaviour
 
     private readonly Dictionary<string, Team> teams = new();
 
+    public bool IsReady { get; private set; } = false;
+
     public int SizeMax = 16;
     public int SizeBattle = 11;
     public int SizeMiniBattle = 4;
@@ -38,7 +40,7 @@ public class TeamManager : MonoBehaviour
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             LogManager.Trace($"[TeamManager] All teams loaded. Total count: {teams.Count}", this);
-            BattleManager.Instance.StartBattle();
+            IsReady = true;
         }
     }
 

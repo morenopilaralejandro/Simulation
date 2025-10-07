@@ -9,6 +9,8 @@ public class FormationCoordManager : MonoBehaviour
 
     private readonly Dictionary<string, FormationCoordData> formationCoordDataDict = new();
 
+    public bool IsReady { get; private set; } = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -31,6 +33,7 @@ public class FormationCoordManager : MonoBehaviour
         }).Completed += handle =>
         {
             LogManager.Trace($"[FormationCoordManager] All formationCoordData loaded. Total count: {formationCoordDataDict.Count}", this);
+            IsReady = true;
             FormationManager.Instance.LoadAllFormations();
         };
     }

@@ -15,12 +15,6 @@ namespace Simulation.Enums.Battle
         MultiplayerBattle
     }
 
-    public enum GoalPlacement
-    {
-        Top,
-        Bottom
-    }
-
     public enum BoundPlacement
     {
         Top,

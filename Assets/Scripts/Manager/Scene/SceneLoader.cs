@@ -4,9 +4,39 @@ using System.Collections;
 
 public class SceneLoader : MonoBehaviour
 {
+    public static void LoadLoadingScreen() {
+        SceneManager.LoadSceneAsync("LoadingScreen", LoadSceneMode.Additive);
+    }
+
+    public static void UnloadLoadingScreen() {
+        SceneManager.UnloadSceneAsync("LoadingScreen");
+    }
+
+
+
+    public static void LoadSystemManager() {
+        SceneManager.LoadSceneAsync("SystemManager", LoadSceneMode.Additive);
+    }
+
+    public static void UnloadSystemManager() {
+        SceneManager.UnloadSceneAsync("SystemManager");
+    }
+
+
+
+    public static void LoadDebugMainMenu() {
+        LoadingScreen.LoadScenes(new string[] { "DebugMainMenu", "GlobalLighting"});
+    }
+
+    public static void UnloadDebugMainMenu() {
+        SceneManager.UnloadSceneAsync("DebugMainMenu");
+        SceneManager.UnloadSceneAsync("GlobalLighting");
+    }
+
+
+
     public static void LoadMainMenu() {
-        SceneManager.LoadSceneAsync("MainMenu", LoadSceneMode.Additive);
-        SceneManager.LoadSceneAsync("GlobalLighting", LoadSceneMode.Additive);
+        LoadingScreen.LoadScenes(new string[] { "MainMenu", "GlobalLighting"});
     }
 
     public static void UnloadMainMenu() {
@@ -14,22 +44,17 @@ public class SceneLoader : MonoBehaviour
         SceneManager.UnloadSceneAsync("GlobalLighting");
     }
 
+
+
     public static void LoadBattle()
     {
-        // Environment
-        SceneManager.LoadSceneAsync("BattleMap", LoadSceneMode.Additive);
-        // Spawners
-        SceneManager.LoadSceneAsync("BattleSpawners", LoadSceneMode.Additive);
-        // UI
-        SceneManager.LoadSceneAsync("BattleUI", LoadSceneMode.Additive);
-        // Lighting
-        SceneManager.LoadSceneAsync("GlobalLighting", LoadSceneMode.Additive);
+        LoadingScreen.LoadScenes(new string[] { "BattleMap", "BattleUI", "BattleSpawners", "GlobalLighting"});
     }
 
     public static void UnloadBattle()
     {
-        SceneManager.UnloadSceneAsync("Stadium_Main");
-        SceneManager.UnloadSceneAsync("Spawners");
+        SceneManager.UnloadSceneAsync("BattleMap");
+        SceneManager.UnloadSceneAsync("BattleSpawners");
         SceneManager.UnloadSceneAsync("BattleUI");
         SceneManager.UnloadSceneAsync("GlobalLighting");
     }

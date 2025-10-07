@@ -27,6 +27,12 @@ namespace Simulation.Enums.Character
         F 
     }
 
+    public enum TeamSide
+    {
+        Home,
+        Away
+    }
+
     public enum ControlType 
     { 
         LocalHuman, 

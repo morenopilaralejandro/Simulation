@@ -51,10 +51,6 @@ public class BattleManager : MonoBehaviour
         BoundManager.BottomOffset = bottomOffset;
         BoundManager.LeftOffset = leftOffset;
         BoundManager.RightOffset = rightOffset;
-
-        BattleArgs.TeamId0 = "Faith";
-        BattleArgs.TeamId1 = "Crimson";
-        BattleArgs.BattleType = BattleType.Battle;
     }
 
     void Start()
@@ -73,9 +69,9 @@ public class BattleManager : MonoBehaviour
         OnAllCharactersReady -= HandleAllCharactersReady;
     }
 
-    //called on team manager for testing
     public void StartBattle()
     {
+        //Called on BattleCharacterSpawnPoint
         PreviousType = CurrentType;
         CurrentType = BattleArgs.BattleType;
         CurrentTeamSize = CurrentType == BattleType.Battle ? TeamManager.Instance.SizeBattle : TeamManager.Instance.SizeMiniBattle;
@@ -175,13 +171,13 @@ public class BattleManager : MonoBehaviour
 
     public Character GetOppKeeper(Character character)
     {
-        int oppTeamIdx = 1 - character.GetTeamIndex();
+        int oppTeamIdx = 1 - character.TeamIndex;
         return teams[oppTeamIdx].Characters[0];
     }
 
-    public int GetLocalTeamIndex()
+    public TeamSide GetUserSide()
     {
-        return 0; //Single Player only
+        return TeamSide.Home; //Single Player only
     }
 
 }

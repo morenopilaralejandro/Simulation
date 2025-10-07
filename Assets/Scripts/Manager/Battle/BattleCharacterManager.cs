@@ -95,7 +95,7 @@ public class BattleCharacterManager : MonoBehaviour
     public void ResetCharacterPosition(Character character)
     {
         //character.Unstun();
-        character.transform.position = character.GetFormationCoord().DefaultPosition;        
+        character.transform.position = character.FormationCoord.DefaultPosition;        
     }
 
     public void ReturnCharacterToPool(Character character)

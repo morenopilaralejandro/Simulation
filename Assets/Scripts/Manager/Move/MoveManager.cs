@@ -9,6 +9,8 @@ public class MoveManager : MonoBehaviour
 
     private readonly Dictionary<string, MoveData> moveDataDict = new();
 
+    public bool IsReady { get; private set; } = false;
+
     public int SizeMax = 8;
 
     private void Awake()
@@ -28,7 +30,14 @@ public class MoveManager : MonoBehaviour
 
     public void LoadAllMoveData()
     {
-        Addressables.LoadAssetsAsync<MoveData>("Moves", RegisterMoveData);
+        Addressables.LoadAssetsAsync<MoveData>("Moves", data =>
+        {
+            RegisterMoveData(data);
+        }).Completed += handle =>
+        {
+            LogManager.Trace($"[MoveManager] All moves loaded. Total count: {moveDataDict.Count}", this);
+            IsReady = true;
+        };
     }
 
     public void RegisterMoveData(MoveData moveData)

@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d02f91ab8dc8525ac4e330f462f66a, type: 3}
+  m_Name: TableConfig
+  m_EditorClassIdentifier: 
+  mappings:
+  - Entity: 0
+    Field: 2
+    Style: 0
+    Table:
+      m_TableCollectionName: Gameplay-Characters-Descriptions-Localized
+  - Entity: 0
+    Field: 2
+    Style: 1
+    Table:
+      m_TableCollectionName: Gameplay-Characters-Descriptions-Romanized
+  - Entity: 0
+    Field: 0
+    Style: 0
+    Table:
+      m_TableCollectionName: Gameplay-Characters-Names-Localized
+  - Entity: 0
+    Field: 0
+    Style: 1
+    Table:
+      m_TableCollectionName: Gameplay-Characters-Names-Romanized
+  - Entity: 0
+    Field: 1
+    Style: 0
+    Table:
+      m_TableCollectionName: Gameplay-Characters-Nicks-Localized
+  - Entity: 0
+    Field: 1
+    Style: 1
+    Table:
+      m_TableCollectionName: Gameplay-Characters-Nicks-Romanized
+  - Entity: 1
+    Field: 0
+    Style: 0
+    Table:
+      m_TableCollectionName: Gameplay-Formations-Names-Localized
+  - Entity: 1
+    Field: 0
+    Style: 1
+    Table:
+      m_TableCollectionName: Gameplay-Formations-Names-Romanized
+  - Entity: 2
+    Field: 0
+    Style: 0
+    Table:
+      m_TableCollectionName: Gameplay-Kits-Names-Localized
+  - Entity: 2
+    Field: 0
+    Style: 1
+    Table:
+      m_TableCollectionName: Gameplay-Kits-Names-Romanized
+  - Entity: 3
+    Field: 2
+    Style: 0
+    Table:
+      m_TableCollectionName: Gameplay-Moves-Descriptions-Localized
+  - Entity: 3
+    Field: 2
+    Style: 1
+    Table:
+      m_TableCollectionName: Gameplay-Moves-Descriptions-Romanized
+  - Entity: 3
+    Field: 0
+    Style: 0
+    Table:
+      m_TableCollectionName: Gameplay-Moves-Names-Localized
+  - Entity: 3
+    Field: 0
+    Style: 1
+    Table:
+      m_TableCollectionName: Gameplay-Moves-Names-Romanized
+  - Entity: 4
+    Field: 0
+    Style: 0
+    Table:
+      m_TableCollectionName: Gameplay-Teams-Names-Localized
+  - Entity: 4
+    Field: 0
+    Style: 1
+    Table:
+      m_TableCollectionName: Gameplay-Teams-Names-Romanized

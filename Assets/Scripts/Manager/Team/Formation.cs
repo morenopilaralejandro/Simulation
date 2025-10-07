@@ -10,7 +10,7 @@ public class Formation
     [SerializeField] private string formationId;
     public string FormationId => formationId;
 
-    [SerializeField] private ComponentLocalizationString stringLocalizationComponent;
+    [SerializeField] private LocalizationComponentString localizationStringComponent;
 
     [SerializeField] private List<FormationCoord> formationCoords = new();
     public List<FormationCoord> FormationCoords => formationCoords;
@@ -25,7 +25,7 @@ public class Formation
     {
         formationId = formationData.FormationId;
 
-        stringLocalizationComponent = new ComponentLocalizationString(
+        localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Formation,
             formationData.FormationId,
             new [] { LocalizationField.Name }
@@ -49,5 +49,5 @@ public class Formation
         kickoff1 = formationData.Kickoff1;
     }
 
-    public string FormationName => stringLocalizationComponent.GetString(LocalizationField.Name);
+    public string FormationName => localizationStringComponent.GetString(LocalizationField.Name);
 }

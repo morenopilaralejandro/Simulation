@@ -1,10 +1,10 @@
 using UnityEngine;
+using Simulation.Enums.Character;
 using Simulation.Enums.Battle;
 
 public class Goal : MonoBehaviour
 {
-    public Team Team;
-    public GoalPlacement GoalPlacement;
+    [SerializeField] private TeamSide teamSide;
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class Goal : MonoBehaviour
         if (other.CompareTag("Ball") && !BattleManager.Instance.IsTimeFrozen)
         {
             //GameManager.Instance.OnGoalScored(Team);
-            LogManager.Info("[Goal] OnTriggerEnter: a goal was scored", this);
+            LogManager.Info("[Goal] OnTriggerEnter: a goal was scored. teamSide: {teamSide}", this);
         }
     }
 

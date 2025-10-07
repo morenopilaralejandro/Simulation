@@ -3,14 +3,18 @@ using Simulation.Enums.Character;
 
 public class CharacterComponentTeamMember : MonoBehaviour
 {
-    [SerializeField] private CharacterComponentAttribute attributeComponent;
-    [SerializeField] private int teamIndex;
-    [SerializeField] private FormationCoord formationCoord;
-    [SerializeField] private ControlType controlType;
+    private Character character;
 
-    public int GetTeamIndex() => teamIndex;
-    public FormationCoord GetFormationCoord() => formationCoord;
-    public ControlType GetControlType() => controlType;
+    [SerializeField] private TeamSide teamSide;
+    [SerializeField] private FormationCoord formationCoord;
+
+    public TeamSide TeamSide => teamSide;
+    public FormationCoord FormationCoord => formationCoord;
+
+    public void SetCharacter(Character character)
+    {
+        this.character = character;
+    }
 
     private void OnEnable()
     {
@@ -25,21 +29,18 @@ public class CharacterComponentTeamMember : MonoBehaviour
     private void HandleAssignCharacterToTeamBattle(
         Character character, 
         Team team, 
-        int teamIndex, 
-        FormationCoord formationCoord, 
-        ControlType controlType)
+        FormationCoord formationCoord)
     {
-        if (character.CharacterId() == attributeComponent.GetCharacterId())
+        if (character == this.character)
         {
-            this.teamIndex = teamIndex;
-            this.controlType = controlType;
+            this.teamSide = team.TeamSide;
             
-            if (teamIndex != BattleManager.Instance.GetLocalTeamIndex())
+            if (teamSide != BattleManager.Instance.GetUserSide())
                 formationCoord.FlipDefaultPosition();
 
             this.formationCoord = formationCoord;
 
-            LogManager.Trace($"[CharacterComponentTeamMember] {attributeComponent.GetCharacterId()} assigned to team {teamIndex} at {formationCoord.FormationCoordId}", this);
+            LogManager.Trace($"[CharacterComponentTeamMember] {this.character.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
         }
     }
 }

@@ -53,12 +53,12 @@ public class GoalManager : MonoBehaviour
 
     public Goal GetAllyGoal(Character character)
     {
-        return goals[character.GetTeamIndex()];  
+        return goals[character.TeamIndex];  
     }
 
     public Goal GetOpponentGoal(Character character)
     {
-        return goals[1 - character.GetTeamIndex()];
+        return goals[1 - character.TeamIndex];
     }
 
 
