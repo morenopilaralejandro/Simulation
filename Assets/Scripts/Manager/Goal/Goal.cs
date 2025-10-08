@@ -8,15 +8,12 @@ public class Goal : MonoBehaviour
 
     private void Awake()
     {
-        if (GoalManager.Instance != null)
-            GoalManager.Instance.AddGoal(this);
-        
+        GoalManager.Instance.SetGoal(this, teamSide);   
     }
 
     private void OnDestroy()
     {
-        if (GoalManager.Instance != null)
-            GoalManager.Instance.Reset();
+        GoalManager.Instance.Reset();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -24,7 +21,7 @@ public class Goal : MonoBehaviour
         if (other.CompareTag("Ball") && !BattleManager.Instance.IsTimeFrozen)
         {
             //GameManager.Instance.OnGoalScored(Team);
-            LogManager.Info("[Goal] OnTriggerEnter: a goal was scored. teamSide: {teamSide}", this);
+            LogManager.Info("[Goal] OnTriggerEnter: a goal was scored. TeamSide: {teamSide}", this);
         }
     }
 

@@ -17,10 +17,10 @@ public class CharacterComponentAttributes : MonoBehaviour
 
     public void Initialize(CharacterData characterData)
     {
-        characterId = characterData.CharacterId;
-        characterSize = characterData.CharacterSize;
-        gender = characterData.Gender;
-        element = characterData.Element;
-        position = characterData.Position;
+        this.characterId = characterData.CharacterId;
+        this.characterSize = characterData.CharacterSize;
+        this.gender = characterData.Gender;
+        this.element = characterData.Element;
+        this.position = characterData.Position;
     }
 }

@@ -26,7 +26,7 @@ public class FormationManager : MonoBehaviour
 
     public void LoadAllFormations()
     {
-        Addressables.LoadAssetsAsync<FormationData>("Formations", data =>
+        Addressables.LoadAssetsAsync<FormationData>("Formations-Data", data =>
         {
             RegisterFormation(data);
         }).Completed += handle =>

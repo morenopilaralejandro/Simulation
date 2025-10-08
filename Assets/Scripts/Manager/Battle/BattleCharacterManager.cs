@@ -13,7 +13,7 @@ public class BattleCharacterManager : MonoBehaviour
     private Queue<Character> characterPool = new Queue<Character>();
 
     private Transform spawnPoint; 
-    private string characterKey = "CharacterPrefab";
+    private string characterKey = "characters/prefabs/character";
 
     private void Awake()
     {
@@ -86,10 +86,9 @@ public class BattleCharacterManager : MonoBehaviour
         }
     }
 
-    public void AssignCharacterToTeamBattle(Character character, Team team, int characterIndex, int teamIndex) {
+    public void AssignCharacterToTeamBattle(Character character, Team team, int characterIndex) {
         FormationCoord formationCoord = team.Formation.FormationCoords[characterIndex];
-        ControlType controlType = (teamIndex == 0) ? ControlType.LocalHuman : ControlType.AI;
-        TeamEvents.RaiseAssignCharacterToTeamBattle(character, team, teamIndex, formationCoord, controlType);
+        TeamEvents.RaiseAssignCharacterToTeamBattle(character, team, formationCoord);
     }
 
     public void ResetCharacterPosition(Character character)

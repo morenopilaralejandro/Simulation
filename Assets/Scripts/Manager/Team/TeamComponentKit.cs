@@ -1,22 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamComponentKit : MonoBehaviour
+public class TeamComponentKit
 {
     private Team team;
 
-    [SerializeField] private Kit kit;
+    private Kit kit;
 
     public Kit Kit => kit;
 
-    public void Initialize(TeamData teamData)
+    public TeamComponentKit(TeamData teamData, Team team) 
     {
-        kit = KitManager.Instance.GetKit(teamData.KitId);
+        Initialize(teamData, team);
     }
 
-    public void SetTeam(Team team)
+    public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
+        this.kit = KitManager.Instance.GetKit(teamData.KitId);
     }
 
     public void SetKit(Kit kit)

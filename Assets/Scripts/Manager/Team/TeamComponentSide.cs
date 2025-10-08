@@ -1,20 +1,20 @@
 using UnityEngine;
 using Simulation.Enums.Character;
 
-public class TeamComponentSide : MonoBehaviour
+public class TeamComponentSide
 {
     private Team team;
 
-    [SerializeField] private TeamSide teamSide;
+    private TeamSide teamSide;
 
     public TeamSide TeamSide => teamSide;
 
-    public void Initialize(TeamData teamData)
+    public TeamComponentSide(TeamData teamData, Team team)
     {
-
+        Initialize(teamData, team);
     }
 
-    public void SetTeam(Team team)
+    public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
     }
@@ -33,10 +33,10 @@ public class TeamComponentSide : MonoBehaviour
         Team team, 
         TeamSide teamSide)
     {
-        if (team == this.team)
+        if (this.team == team)
         {
             this.teamSide = teamSide;
-            LogManager.Trace($"[TeamComponentSide] {this.team.TeamId} assigned to side {teamSide}", this);
+            LogManager.Trace($"[TeamComponentSide] {this.team.TeamId} assigned to side {teamSide}", null);
         }
     }
 }

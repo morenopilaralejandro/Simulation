@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3188685790197036401}
   - component: {fileID: 1538717655707987340}
   - component: {fileID: -1087728315389858910}
-  - component: {fileID: -4470573886384630392}
+  - component: {fileID: 1700100118279979926}
   - component: {fileID: 4813765327251362725}
   - component: {fileID: 8572061744133808409}
   m_Layer: 6
@@ -63,10 +63,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db6072a28a47379e0ad54973860508be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attributeComponent: {fileID: -4470573886384630392}
+  attributesComponent: {fileID: 1700100118279979926}
   teamMemberComponent: {fileID: 4813765327251362725}
   keeperComponent: {fileID: 8572061744133808409}
---- !u!114 &-4470573886384630392
+--- !u!114 &1700100118279979926
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -75,7 +75,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 181741452733680261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f8bbd6f9e79ab699ae65b1d22ee8828, type: 3}
+  m_Script: {fileID: 11500000, guid: 147dabcef8884b6c69d41870d538270d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterId: 
@@ -95,9 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af29fb9abfd58fbeb80a4419f35b8745, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attributeComponent: {fileID: -4470573886384630392}
-  teamIndex: 0
-  controlType: 0
+  teamSide: 0
 --- !u!114 &8572061744133808409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,9 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59387c08b78b06540b8ff81c553abe2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attributeComponent: {fileID: -4470573886384630392}
-  isKeeper: 0
   keeperCollider: {fileID: 0}
+  isKeeper: 0
 --- !u!1 &2767282533359409485
 GameObject:
   m_ObjectHideFlags: 0

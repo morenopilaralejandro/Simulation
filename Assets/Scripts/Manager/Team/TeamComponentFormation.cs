@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamComponentFormation : MonoBehaviour
+public class TeamComponentFormation
 {
     private Team team;
 
@@ -9,14 +9,15 @@ public class TeamComponentFormation : MonoBehaviour
 
     public Formation Formation => formation;
 
-    public void Initialize(TeamData teamData)
+    public TeamComponentFormation(TeamData teamData, Team team) 
     {
-        formation = FormationManager.Instance.GetFormation(teamData.FormationId);
+        Initialize(teamData, team);
     }
 
-    public void SetTeam(Team team)
+    public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
+        this.formation = FormationManager.Instance.GetFormation(teamData.FormationId);
     }
 
     public void SetFormation(Formation formation)

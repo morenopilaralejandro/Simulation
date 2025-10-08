@@ -33,14 +33,14 @@ public class Character : MonoBehaviour
     #region Initialize
     public void Initialize(CharacterData characterData, bool isSave = false)
     {
-        BindComponents();
-
         attributesComponent.Initialize(characterData);
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Character,
             characterData.CharacterId,
             new [] { LocalizationField.Name, LocalizationField.Nick, LocalizationField.Description }            
         );
+        keeperComponent.Initialize(characterData, this);
+        teamMemberComponent.Initialize(characterData, this);
 
         /*
         stats.Initialize(def);
@@ -61,12 +61,6 @@ public class Character : MonoBehaviour
         };
         */
     }
-
-    private void BindComponents()
-    {
-        teamMemberComponent.SetCharacter(this);
-        keeperComponent.SetCharacter(this);
-    }
     #endregion
 
     #region API
@@ -83,6 +77,9 @@ public class Character : MonoBehaviour
     //teamMemberComponent
     public TeamSide TeamSide => teamMemberComponent.TeamSide;
     public FormationCoord FormationCoord => teamMemberComponent.FormationCoord;
+    public bool IsOnUsersTeam() => teamMemberComponent.IsOnUsersTeam();
+    public bool IsSameTeam(Character otherCharacter) => teamMemberComponent.IsSameTeam(otherCharacter);
+    public TeamSide GetOpponentSide() => teamMemberComponent.GetOpponentSide();
     //keeperComponent
     public bool IsKeeper => keeperComponent.IsKeeper;
     
@@ -90,6 +87,9 @@ public class Character : MonoBehaviour
     //public void ApplyStun(float duration) => status.ApplyStun(duration);
     //public void ClearStun() => status.ClearStun();
     //public float GetSpeedPerSecond() => movement.GetSpeedPerSecond();
+
+
+    //misc
     #endregion
 
 }

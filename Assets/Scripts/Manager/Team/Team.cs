@@ -6,21 +6,24 @@ using Simulation.Enums.Localization;
 public class Team
 {
     #region Components
-    [SerializeField] private TeamComponentAttributes attributesComponent;
-    [SerializeField] private LocalizationComponentString localizationStringComponent;
-    [SerializeField] private TeamComponentFormation formationComponent;
-    [SerializeField] private TeamComponentKit kitComponent;
-    [SerializeField] private TeamComponentLevels levelsComponent;
-    [SerializeField] private TeamComponentPlayers playersComponent;
-    [SerializeField] private TeamComponentSide sideComponent;
+    private TeamComponentAttributes attributesComponent;
+    private LocalizationComponentString localizationStringComponent;
+    private TeamComponentFormation formationComponent;
+    private TeamComponentKit kitComponent;
+    private TeamComponentLevels levelsComponent;
+    private TeamComponentPlayers playersComponent;
+    private TeamComponentSide sideComponent;
     #endregion
 
     #region Initialize
+    public Team(TeamData teamData) 
+    {
+        Initialize(teamData);
+    }
+
     public void Initialize(TeamData teamData)
     {
-        BindComponents();
-
-        attributesComponent.Initialize(teamData);
+        attributesComponent = new TeamComponentAttributes(teamData);
 
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Team,
@@ -28,18 +31,11 @@ public class Team
             new [] { LocalizationField.Name }
         );
 
-        formationComponent.Initialize(teamData);
-        kitComponent.Initialize(teamData);
-        levelsComponent.Initialize(teamData);
-        playersComponent.Initialize(teamData);
-    }
-
-    private void BindComponents()
-    {
-        formationComponent.SetTeam(this);
-        kitComponent.SetTeam(this);
-        levelsComponent.SetTeam(this);
-        sideComponent.SetTeam(this);
+        formationComponent = new TeamComponentFormation(teamData, this);
+        kitComponent = new TeamComponentKit(teamData, this);
+        levelsComponent = new TeamComponentLevels(teamData, this);
+        playersComponent = new TeamComponentPlayers(teamData);
+        sideComponent = new TeamComponentSide(teamData, this);
     }
     #endregion
 

@@ -1,14 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamComponentAttributes : MonoBehaviour
+public class TeamComponentAttributes
 {
-    [SerializeField] private string teamId;
+    private string teamId;
 
     public string TeamId => teamId;
 
+    public TeamComponentAttributes(TeamData teamData)
+    {
+        Initialize(teamData);
+    }
+
     public void Initialize(TeamData teamData)
     {
-        teamId = teamData.TeamId;
+        this.teamId = teamData.TeamId;
     }
 }

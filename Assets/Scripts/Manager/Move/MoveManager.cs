@@ -30,7 +30,7 @@ public class MoveManager : MonoBehaviour
 
     public void LoadAllMoveData()
     {
-        Addressables.LoadAssetsAsync<MoveData>("Moves", data =>
+        Addressables.LoadAssetsAsync<MoveData>("Moves-Data", data =>
         {
             RegisterMoveData(data);
         }).Completed += handle =>

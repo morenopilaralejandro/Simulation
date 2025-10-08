@@ -28,7 +28,7 @@ public class KitManager : MonoBehaviour
 
     public void LoadAllKits()
     {
-        Addressables.LoadAssetsAsync<KitData>("Kits", data =>
+        Addressables.LoadAssetsAsync<KitData>("Kits-Data", data =>
         {
             RegisterKit(data);
         }).Completed += handle =>

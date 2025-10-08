@@ -11,15 +11,15 @@ public class CharacterComponentKeeper : MonoBehaviour
 
     public bool IsKeeper => isKeeper;
 
+    public void Initialize(CharacterData characterData, Character character)
+    {
+        this.character = character;
+    }
+
     public void UpdateKeeperColliderState()
     {
         if (keeperCollider != null)
             keeperCollider.enabled = isKeeper;
-    }
-
-    public void SetCharacter(Character character)
-    {
-        this.character = character;
     }
 
     private void OnEnable()
@@ -37,7 +37,7 @@ public class CharacterComponentKeeper : MonoBehaviour
         Team team, 
         FormationCoord formationCoord)
     {
-        if (character == this.character)
+        if (this.character == character)
         {
             this.isKeeper = formationCoord.Position == Position.GK ? true : false;
             UpdateKeeperColliderState();

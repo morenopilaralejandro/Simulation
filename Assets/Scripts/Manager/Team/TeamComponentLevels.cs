@@ -1,21 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamComponentLevels : MonoBehaviour
+public class TeamComponentLevels
 {
     private Team team;
 
-    [SerializeField] private int level;
+    private int level;
 
     public int Level => level;
 
-    public void Initialize(TeamData teamData)
+    public TeamComponentLevels(TeamData teamData, Team team)
     {
-        level = teamData.Lv;
+        Initialize(teamData, team);
     }
 
-    public void SetTeam(Team team)
+    public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
+        this.level = teamData.Lv;
     }
+
 }

@@ -2,13 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Simulation.Enums.Character;
 
-public class TeamComponentPlayers : MonoBehaviour
+public class TeamComponentPlayers
 {
-    [SerializeField] private List<CharacterData> characterDataList = new();
-    [SerializeField] private List<Character> characterList = new();
+    private List<CharacterData> characterDataList = new();
+    private List<Character> characterList = new();
 
     public List<CharacterData> CharacterDataList => characterDataList;
     public List<Character> CharacterList => characterList;
+
+    public TeamComponentPlayers(TeamData teamData)
+    {
+        Initialize(teamData);
+    }
 
     public void Initialize(TeamData teamData)
     {

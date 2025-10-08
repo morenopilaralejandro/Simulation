@@ -31,7 +31,7 @@ public class TeamManager : MonoBehaviour
 
     public void LoadAllTeams()
     {
-        var handle = Addressables.LoadAssetsAsync<TeamData>("Teams", RegisterTeam);
+        var handle = Addressables.LoadAssetsAsync<TeamData>("Teams-Data", RegisterTeam);
         handle.Completed += OnTeamsLoaded;
     }
 
@@ -48,8 +48,7 @@ public class TeamManager : MonoBehaviour
     {
         if (!teams.ContainsKey(data.TeamId))
         {
-            var team = new Team();
-            team.Initialize(data);
+            var team = new Team(data);
             teams.Add(team.TeamId, team);
         }
     }

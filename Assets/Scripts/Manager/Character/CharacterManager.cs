@@ -25,7 +25,7 @@ public class CharacterManager : MonoBehaviour
 
     private void LoadAllCharacterData()
     {
-        Addressables.LoadAssetsAsync<CharacterData>("Characters", data =>
+        Addressables.LoadAssetsAsync<CharacterData>("Characters-Data", data =>
         {
             if (!characterDataDict.ContainsKey(data.CharacterId))
                 characterDataDict.Add(data.CharacterId, data);

@@ -26,7 +26,7 @@ public class FormationCoordManager : MonoBehaviour
 
     private void LoadAllFormationCoordData()
     {
-        Addressables.LoadAssetsAsync<FormationCoordData>("FormationCoords", data =>
+        Addressables.LoadAssetsAsync<FormationCoordData>("FormationCoords-Data", data =>
         {
             if (!formationCoordDataDict.ContainsKey(data.FormationCoordId))
                 formationCoordDataDict.Add(data.FormationCoordId, data);

@@ -11,7 +11,7 @@ public class CharacterComponentTeamMember : MonoBehaviour
     public TeamSide TeamSide => teamSide;
     public FormationCoord FormationCoord => formationCoord;
 
-    public void SetCharacter(Character character)
+    public void Initialize(CharacterData characterData, Character character)
     {
         this.character = character;
     }
@@ -31,16 +31,31 @@ public class CharacterComponentTeamMember : MonoBehaviour
         Team team, 
         FormationCoord formationCoord)
     {
-        if (character == this.character)
+        if (this.character == character)
         {
             this.teamSide = team.TeamSide;
             
-            if (teamSide != BattleManager.Instance.GetUserSide())
+            if (!character.IsOnUsersTeam())
                 formationCoord.FlipDefaultPosition();
 
             this.formationCoord = formationCoord;
 
             LogManager.Trace($"[CharacterComponentTeamMember] {this.character.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
         }
+    }
+
+    public bool IsOnUsersTeam() 
+    {
+        return this.teamSide == BattleTeamManager.Instance.GetUserSide();
+    }
+
+    public bool IsSameTeam(Character otherCharacter) 
+    {
+        return this.teamSide == otherCharacter.TeamSide;
+    }
+
+    public TeamSide GetOpponentSide() 
+    {
+        return this.character.TeamSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
     }
 }
