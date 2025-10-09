@@ -6,11 +6,11 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class BattleBallManager : MonoBehaviour
 {
-
     public static BattleBallManager Instance { get; private set; }
 
+    [SerializeField] private GameObject ballPrefab; //inspector
+
     private Transform spawnPoint; 
-    private string ballKey = "BallPrefab";
     private Vector3 defaultBallPosition;
     private GameObject ball; 
 
@@ -56,19 +56,8 @@ public class BattleBallManager : MonoBehaviour
             return;
         }
 
-        Addressables.InstantiateAsync(ballKey, spawnPoint.position, spawnPoint.rotation, spawnPoint)
-            .Completed += (AsyncOperationHandle<GameObject> handle) =>
-        {
-            if (handle.Status == AsyncOperationStatus.Succeeded)
-            {
-                ball = handle.Result;
-                LogManager.Info("[BattleBallManager] Ball spawned successfully: " + ball.name);
-            }
-            else
-            {
-                LogManager.Error("[BattleBallManager] Failed to spawn ball with key: " + ballKey);
-            }
-        };
+         ball = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
+         Debug.Log("[BattleBallManager] Ball spawned successfully.");
     }
 
     public void ResetBallPosition() 

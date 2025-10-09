@@ -15,7 +15,7 @@ public class CharacterComponentAttributes : MonoBehaviour
     public Element Element => element;
     public Position Position => position;
 
-    public void Initialize(CharacterData characterData)
+    public void Initialize(CharacterData characterData, Character character)
     {
         this.characterId = characterData.CharacterId;
         this.characterSize = characterData.CharacterSize;

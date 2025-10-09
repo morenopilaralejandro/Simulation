@@ -79,6 +79,7 @@ public class BattleManager : MonoBehaviour
 
         BattleTeamManager.Instance.AssignTeamToSide(TeamManager.Instance.GetTeam(BattleArgs.TeamId0), TeamSide.Home);
         BattleTeamManager.Instance.AssignTeamToSide(TeamManager.Instance.GetTeam(BattleArgs.TeamId1), TeamSide.Away);
+        BattleTeamManager.Instance.AssignVariants();
 
         foreach (Team team in Teams.Values) 
         {
@@ -149,7 +150,7 @@ public class BattleManager : MonoBehaviour
     {
         if (CurrentPhase != newPhase)
         {
-            LogManager.Debug("BattlePhase: " + newPhase);
+            LogManager.Debug("[BattleManager] BattlePhase: " + newPhase);
             PreviousPhase = CurrentPhase;
             CurrentPhase = newPhase;
             OnPhaseChanged?.Invoke(CurrentPhase, PreviousPhase);

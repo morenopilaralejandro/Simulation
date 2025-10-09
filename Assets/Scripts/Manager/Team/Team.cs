@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
 using Simulation.Enums.Localization;
 
 public class Team
@@ -23,7 +24,7 @@ public class Team
 
     public void Initialize(TeamData teamData)
     {
-        attributesComponent = new TeamComponentAttributes(teamData);
+        attributesComponent = new TeamComponentAttributes(teamData, this);
 
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Team,
@@ -34,7 +35,7 @@ public class Team
         formationComponent = new TeamComponentFormation(teamData, this);
         kitComponent = new TeamComponentKit(teamData, this);
         levelsComponent = new TeamComponentLevels(teamData, this);
-        playersComponent = new TeamComponentPlayers(teamData);
+        playersComponent = new TeamComponentPlayers(teamData, this);
         sideComponent = new TeamComponentSide(teamData, this);
     }
     #endregion
@@ -57,5 +58,6 @@ public class Team
     public List<Character> CharacterList => playersComponent.CharacterList;
     //sideComponent
     public TeamSide TeamSide => sideComponent.TeamSide;
+    public Variant Variant => sideComponent.Variant;
     #endregion    
 }

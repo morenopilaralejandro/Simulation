@@ -7,12 +7,12 @@ public class TeamComponentAttributes
 
     public string TeamId => teamId;
 
-    public TeamComponentAttributes(TeamData teamData)
+    public TeamComponentAttributes(TeamData teamData, Team team)
     {
-        Initialize(teamData);
+        Initialize(teamData, team);
     }
 
-    public void Initialize(TeamData teamData)
+    public void Initialize(TeamData teamData, Team team)
     {
         this.teamId = teamData.TeamId;
     }

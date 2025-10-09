@@ -8,6 +8,7 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentAttributes attributesComponent;
     [SerializeField] private LocalizationComponentString localizationStringComponent;
     [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
+    [SerializeField] private CharacterComponentAppearance appearanceComponent;
     [SerializeField] private CharacterComponentKeeper keeperComponent;
     #endregion
 
@@ -24,23 +25,23 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterStatusController status; //stun
     [SerializeField] private CharacterSpeedComponent speedDebuff;
     [SerializeField] private MovementComponent movement;
-    [SerializeField] private CharacterAppearanceComponent appearance; //include PortraitSize BodyId
     [SerializeField] private SecretLearning secrets; //change to character move component
     [SerializeField] private CharacterPersistenceComponent persistence; //
     [SerializeField] private CharacterAiComponent ai; //ally and opponent
     */
 
     #region Initialize
-    public void Initialize(CharacterData characterData, bool isSave = false)
+    public void Initialize(CharacterData characterData)
     {
-        attributesComponent.Initialize(characterData);
+        attributesComponent.Initialize(characterData, this);
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Character,
             characterData.CharacterId,
             new [] { LocalizationField.Name, LocalizationField.Nick, LocalizationField.Description }            
         );
-        keeperComponent.Initialize(characterData, this);
         teamMemberComponent.Initialize(characterData, this);
+        appearanceComponent.Initialize(characterData, this);
+        keeperComponent.Initialize(characterData, this);
 
         /*
         stats.Initialize(def);
@@ -80,6 +81,10 @@ public class Character : MonoBehaviour
     public bool IsOnUsersTeam() => teamMemberComponent.IsOnUsersTeam();
     public bool IsSameTeam(Character otherCharacter) => teamMemberComponent.IsSameTeam(otherCharacter);
     public TeamSide GetOpponentSide() => teamMemberComponent.GetOpponentSide();
+    //appearanceComponent
+    public Sprite CharacterPortraitSprite => appearanceComponent.CharacterPortraitSprite;
+    public Sprite KitPortraitSprite => appearanceComponent.KitPortraitSprite;
+    public void SetRenderersVisible(bool isVisible) => appearanceComponent.SetRenderersVisible(isVisible);
     //keeperComponent
     public bool IsKeeper => keeperComponent.IsKeeper;
     

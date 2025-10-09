@@ -1,5 +1,6 @@
 using System;
 using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
 
 public static class TeamEvents
 {
@@ -7,6 +8,12 @@ public static class TeamEvents
     public static void RaiseAssignTeamToSide(Team team, TeamSide teamSide)
     {
         OnAssignTeamToSide?.Invoke(team, teamSide);
+    }
+
+    public static event Action<Team, Variant> OnAssignVariantToTeam;
+    public static void RaiseAssignVariantToTeam(Team team, Variant variant)
+    {
+        OnAssignVariantToTeam?.Invoke(team, variant);
     }
 
     public static event Action<Character, Team, FormationCoord> OnAssignCharacterToTeam;

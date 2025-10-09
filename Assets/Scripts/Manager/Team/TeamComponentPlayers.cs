@@ -10,12 +10,12 @@ public class TeamComponentPlayers
     public List<CharacterData> CharacterDataList => characterDataList;
     public List<Character> CharacterList => characterList;
 
-    public TeamComponentPlayers(TeamData teamData)
+    public TeamComponentPlayers(TeamData teamData, Team team)
     {
-        Initialize(teamData);
+        Initialize(teamData, team);
     }
 
-    public void Initialize(TeamData teamData)
+    public void Initialize(TeamData teamData, Team team)
     {
         characterDataList.Clear();
         foreach (var characterId in teamData.CharacterIds)

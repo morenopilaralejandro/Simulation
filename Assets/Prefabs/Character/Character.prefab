@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -1087728315389858910}
   - component: {fileID: 1700100118279979926}
   - component: {fileID: 4813765327251362725}
+  - component: {fileID: 2666673417431752304}
   - component: {fileID: 8572061744133808409}
   m_Layer: 6
   m_Name: Character
@@ -65,6 +66,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attributesComponent: {fileID: 1700100118279979926}
   teamMemberComponent: {fileID: 4813765327251362725}
+  appearanceComponent: {fileID: 2666673417431752304}
   keeperComponent: {fileID: 8572061744133808409}
 --- !u!114 &1700100118279979926
 MonoBehaviour:
@@ -96,6 +98,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamSide: 0
+--- !u!114 &2666673417431752304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181741452733680261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2190ea73df829f26ca0641bea3cd2259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterHeadRenderer: {fileID: 511219193308339002}
+  characterBodyRenderer: {fileID: 2397485659318451750}
+  kitBodyRenderer: {fileID: 5899720134491172244}
+  characterHeadSprite: {fileID: 0}
+  characterBodySprite: {fileID: 0}
+  characterPortraitSprite: {fileID: 0}
+  kitBodySprite: {fileID: 0}
+  kitPortraitSprite: {fileID: 0}
 --- !u!114 &8572061744133808409
 MonoBehaviour:
   m_ObjectHideFlags: 0
