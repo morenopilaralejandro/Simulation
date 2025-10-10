@@ -20,15 +20,21 @@ public class TeamComponentSide
     public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
+        SubscribeEvents();
     }
 
-    private void OnEnable()
+    public void Deinitialize()
+    {
+        UnsubscribeEvents();
+    }
+
+    private void SubscribeEvents()
     {
         TeamEvents.OnAssignTeamToSide += HandleAssignTeamToSide;
         TeamEvents.OnAssignVariantToTeam += HandleAssignVariantToTeam;
     }
 
-    private void OnDisable()
+    private void UnsubscribeEvents()
     {
         TeamEvents.OnAssignTeamToSide -= HandleAssignTeamToSide;
         TeamEvents.OnAssignVariantToTeam -= HandleAssignVariantToTeam;

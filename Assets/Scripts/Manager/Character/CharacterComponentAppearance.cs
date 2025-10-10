@@ -98,12 +98,19 @@ public class CharacterComponentAppearance : MonoBehaviour
         Role role = GetRole();
         Variant variant = GetVariant(team);
 
-        _kitBodyAddress = AddressableLoader.GetKitBodyAddress(kit.KitId, variant.ToString(), role.ToString());
+        _kitBodyAddress = AddressableLoader.GetKitBodyAddress(
+            kit.KitId, 
+            variant.ToString().ToLower(), 
+            role.ToString().ToLower());
         kitBodySprite = await AddressableLoader.LoadAsync<Sprite>(_kitBodyAddress);
         if (kitBodySprite)
             kitBodyRenderer.sprite = kitBodySprite;
 
-        _kitPortraitAddress = AddressableLoader.GetKitPortraitAddress(kit.KitId, variant.ToString(), role.ToString(), portraitSize.ToString());
+        _kitPortraitAddress = AddressableLoader.GetKitPortraitAddress(
+            kit.KitId, 
+            variant.ToString().ToLower(), 
+            role.ToString().ToLower(), 
+            portraitSize.ToString().ToLower());
         kitPortraitSprite = await AddressableLoader.LoadAsync<Sprite>(_kitPortraitAddress);
     }
 

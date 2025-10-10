@@ -38,6 +38,11 @@ public class Team
         playersComponent = new TeamComponentPlayers(teamData, this);
         sideComponent = new TeamComponentSide(teamData, this);
     }
+
+    public void Deinitialize()
+    {
+        sideComponent.Deinitialize();
+    }
     #endregion
 
     #region API

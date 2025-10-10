@@ -75,14 +75,14 @@ public static class AddressableLoader
 
     // Address
     public static string GetCharacterHeadAddress(string id) =>
-        $"{AddressableConfig.CharacterHeadPath}/{id}";
+        $"{AddressableConfig.CharacterHeadPath}{AddressableConfig.PathSeparator}{id}";
     public static string GetCharacterBodyAddress(string tone) =>
-        $"{AddressableConfig.CharacterBodyPath}/{tone}";
+        $"{AddressableConfig.CharacterBodyPath}{AddressableConfig.PathSeparator}{tone}";
     public static string GetCharacterPortraitAddress(string id) =>
-        $"{AddressableConfig.CharacterPortraitPath}/{id}";
+        $"{AddressableConfig.CharacterPortraitPath}{AddressableConfig.PathSeparator}{id}";
 
     public static string GetKitBodyAddress(string kitId, string variant, string role) =>
-        $"{AddressableConfig.KitBodyPath}/{kitId}/{variant}/{role}";
+        $"{AddressableConfig.KitBodyPath}{AddressableConfig.PathSeparator}{kitId}{AddressableConfig.PathSeparator}{variant}{AddressableConfig.PathSeparator}{role}";
     public static string GetKitPortraitAddress(string kitId, string variant, string role, string size) =>
-        $"{AddressableConfig.KitPortraitPath}/{kitId}/{variant}/{role}/{size}";
+        $"{AddressableConfig.KitPortraitPath}{AddressableConfig.PathSeparator}{kitId}{AddressableConfig.PathSeparator}{variant}{AddressableConfig.PathSeparator}{role}{AddressableConfig.PathSeparator}{size}";
 }

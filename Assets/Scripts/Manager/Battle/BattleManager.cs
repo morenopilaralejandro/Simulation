@@ -66,8 +66,6 @@ public class BattleManager : MonoBehaviour
         OnAllCharactersReady -= HandleAllCharactersReady;
     }
 
-    
-
     public void StartBattle()
     {
         //Called on BattleCharacterSpawnPoint
