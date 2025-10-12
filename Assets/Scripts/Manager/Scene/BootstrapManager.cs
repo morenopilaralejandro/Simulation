@@ -17,12 +17,28 @@ public class BootstrapManager : MonoBehaviour
         SceneManager.LoadScene(LoadingData.LoadingSceneName);
 
         SceneLoader.LoadSystemManager();
+        SceneLoader.LoadMainCamera();
 
         AsyncOperationHandle initAddressablesHandle = Addressables.InitializeAsync();
         yield return initAddressablesHandle;
 
         yield return new WaitUntil(() => CharacterManager.Instance != null);
         yield return new WaitUntil(() => CharacterManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => MoveManager.Instance != null);
+        yield return new WaitUntil(() => MoveManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => FormationCoordManager.Instance != null);
+        yield return new WaitUntil(() => FormationCoordManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => FormationManager.Instance != null);
+        yield return new WaitUntil(() => FormationManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => KitManager.Instance != null);
+        yield return new WaitUntil(() => KitManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => TeamManager.Instance != null);
+        yield return new WaitUntil(() => TeamManager.Instance.IsReady);
 
         SceneManager.UnloadSceneAsync(LoadingData.LoadingSceneName);
 

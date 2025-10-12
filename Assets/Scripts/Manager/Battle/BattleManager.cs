@@ -109,6 +109,7 @@ public class BattleManager : MonoBehaviour
                     CharacterData characterData = team.CharacterDataList[characterIndex]; 
                     character.Initialize(characterData);
                     BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
+                    character.gameObject.name = character.CharacterId;
                     team.CharacterList.Add(character);
                 
                     charactersReady++;

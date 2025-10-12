@@ -24,6 +24,16 @@ public class SceneLoader : MonoBehaviour
 
 
 
+    public static void LoadMainCamera() {
+        SceneManager.LoadSceneAsync("MainCamera", LoadSceneMode.Additive);
+    }
+
+    public static void UnloadMainCamera() {
+        SceneManager.UnloadSceneAsync("MainCamera");
+    }
+
+
+
     public static void LoadDebugMainMenu() {
         LoadingScreen.LoadScenes(new string[] { "DebugMainMenu", "GlobalLighting"});
     }

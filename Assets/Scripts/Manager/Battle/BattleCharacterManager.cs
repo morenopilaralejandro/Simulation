@@ -93,6 +93,7 @@ public class BattleCharacterManager : MonoBehaviour
     public void ResetCharacterPosition(Character character)
     {
         character.transform.position = character.FormationCoord.DefaultPosition;
+        character.ClearAllStatus();
     }
 
     public void ClearPool()

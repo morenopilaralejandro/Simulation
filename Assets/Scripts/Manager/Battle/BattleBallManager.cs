@@ -56,8 +56,8 @@ public class BattleBallManager : MonoBehaviour
             return;
         }
 
-         ball = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
-         Debug.Log("[BattleBallManager] Ball spawned successfully.");
+        ball = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
+        Debug.Log("[BattleBallManager] Ball spawned successfully.");
     }
 
     public void ResetBallPosition() 

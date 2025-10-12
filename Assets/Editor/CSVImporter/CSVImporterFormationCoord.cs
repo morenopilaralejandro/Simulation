@@ -4,13 +4,13 @@ using System.IO;
 
 public class CSVImporterFormationCoord
 {
-    [MenuItem("Tools/Import CSV/FormationCord")]
+    [MenuItem("Tools/Import CSV/FormationCoord")]
     public static void ImportFormationCoordsFromCSV()
     {
-        string assetFolder = "Assets/Addressables/Characters/FormationCords/Data";
+        string assetFolder = "Assets/Addressables/FormationCoords/Data";
         string csvFolder = "Csv";
         string defaultPath = Path.Combine(Application.dataPath, csvFolder);
-        string path = EditorUtility.OpenFilePanel("Select FormationCord CSV File", defaultPath, "csv");
+        string path = EditorUtility.OpenFilePanel("Select FormationCoord CSV File", defaultPath, "csv");
         if (string.IsNullOrEmpty(path))
         {
             Debug.LogWarning("No CSV file selected.");
@@ -54,6 +54,6 @@ public class CSVImporterFormationCoord
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log("FormationCord ScriptableObjects created from CSV.");
+        Debug.Log("FormationCoord ScriptableObjects created from CSV.");
     }
 }

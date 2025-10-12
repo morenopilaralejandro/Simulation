@@ -7,7 +7,7 @@ public class LoadingScreen : MonoBehaviour
 {
     public static void LoadScenes(string[] scenes)
     {
-        SceneManager.LoadScene(LoadingData.LoadingSceneName);
+        SceneManager.LoadSceneAsync(LoadingData.LoadingSceneName, LoadSceneMode.Additive);
         LoadingData.ScenesToLoad = scenes;      
     }
 
