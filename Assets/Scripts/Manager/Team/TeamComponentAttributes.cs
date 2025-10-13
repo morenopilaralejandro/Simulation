@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class TeamComponentAttributes
 {
-    private string teamId;
-
-    public string TeamId => teamId;
+    public string TeamId { get; private set; }
 
     public TeamComponentAttributes(TeamData teamData, Team team)
     {
@@ -14,6 +12,6 @@ public class TeamComponentAttributes
 
     public void Initialize(TeamData teamData, Team team)
     {
-        this.teamId = teamData.TeamId;
+        this.TeamId = teamData.TeamId;
     }
 }

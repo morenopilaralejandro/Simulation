@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using Simulation.Enums.Character;
 
 public class CharacterComponentTeamMember : MonoBehaviour
@@ -44,18 +45,12 @@ public class CharacterComponentTeamMember : MonoBehaviour
         }
     }
 
-    public bool IsOnUsersTeam() 
-    {
-        return this.teamSide == BattleTeamManager.Instance.GetUserSide();
-    }
+    public bool IsOnUsersTeam() => this.teamSide == BattleTeamManager.Instance.GetUserSide();
+    public bool IsSameTeam(Character otherCharacter) => this.teamSide == otherCharacter.TeamSide;
+    public TeamSide GetOpponentSide() => this.character.TeamSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
+    public Team GetTeam() => BattleTeamManager.Instance.Teams[this.teamSide];
+    public Team GetOpponentTeam() => BattleTeamManager.Instance.Teams[this.teamSide];
+    public List<Character> GetTeammates() => GetTeam().CharacterList;
+    public List<Character> GetOpponents() => GetOpponentTeam().CharacterList;
 
-    public bool IsSameTeam(Character otherCharacter) 
-    {
-        return this.teamSide == otherCharacter.TeamSide;
-    }
-
-    public TeamSide GetOpponentSide() 
-    {
-        return this.character.TeamSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
-    }
 }

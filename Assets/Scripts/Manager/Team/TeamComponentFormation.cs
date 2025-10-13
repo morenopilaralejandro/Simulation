@@ -5,9 +5,7 @@ public class TeamComponentFormation
 {
     private Team team;
 
-    [SerializeField] private Formation formation;
-
-    public Formation Formation => formation;
+    public Formation Formation { get; private set; }
 
     public TeamComponentFormation(TeamData teamData, Team team) 
     {
@@ -17,13 +15,13 @@ public class TeamComponentFormation
     public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
-        this.formation = FormationManager.Instance.GetFormation(teamData.FormationId);
+        this.Formation = FormationManager.Instance.GetFormation(teamData.FormationId);
     }
 
     public void SetFormation(Formation formation)
     {
         if (formation == null) return;
-        this.formation = formation;
+        this.Formation = formation;
         TeamEvents.RaiseOnFormationChanged(team, formation);
     }
 }

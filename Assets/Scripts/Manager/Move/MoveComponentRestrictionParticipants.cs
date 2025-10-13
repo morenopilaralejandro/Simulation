@@ -1,58 +1,48 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
 
 public class MoveComponentRestrictionParticipants
 {
+    private Move move;
+
     public List<Element> RequiredParticipantElements { get; private set; }
     public List<string> RequiredParticipantMoves { get; private set; }
 
-    public MoveComponentRestrictionParticipants(MoveData moveData)
+    public MoveComponentRestrictionParticipants(MoveData moveData, Move move)
     {
-        Initialize(moveData);
+        Initialize(moveData, move);
     }
 
-    public void Initialize(MoveData moveData)
+    public void Initialize(MoveData moveData, Move move)
     {
-        RequiredParticipantElements = moveData.RequiredParticipantElements;
-        RequiredParticipantMoves = moveData.RequiredParticipantMoves;
+        this.move = move;
+        RequiredParticipantElements = moveData.RequiredParticipantElements ?? new List<Element>();
+        RequiredParticipantMoves = moveData.RequiredParticipantMoves ?? new List<string>();
     }
 
-    public bool HasParticipantElementRestriction => RequiredParticipantElements.Count > 0;
-    public bool HasParticipantMoveRestriction => RequiredParticipantMoves.Count > 0;
-
-
-    public bool HasValidParticipantElements(Character[] selectedParticipants) 
+    public bool IsCharacterValidForIndex(Character character, int index)
     {
-        if (HasParticipantElementRestriction)
+        if (index < RequiredParticipantElements.Count &&
+            character.Element != RequiredParticipantElements[index])
+            return false;
+
+        if (index < RequiredParticipantMoves.Count &&
+            !character.IsMoveEquipped(RequiredParticipantMoves[index]))
+            return false;
+
+        return true;
+    }
+
+    public bool MeetsAllParticipantRestrictions(Character[] participants)
+    {
+        for (int i = 1; i < participants.Length; i++) // skip user at index 0
         {
-            for (int i = 0; i < selectedParticipants.Length; i++)
-            {
-                if (RequiredParticipantElements[i] != selectedParticipants[i].Element)
-                    return false;
-            }
-            return true;
-        } else {
-            return true;
+            if (!IsCharacterValidForIndex(participants[i], i - 1))
+                return false;
         }
-    }
-
-    public bool HasValidParticipantMoves(Character[] selectedParticipants) 
-    {
-        /*
-        if (HasParticipantMoveRestriction)
-        {
-            for (int i = 0; i < selectedParticipants.Length; i++)
-            {
-                //if (!selectedParticipants[i].learnedMoves.Exists(move => move.MoveId == RequiredParticipantMoves[i]))
-                    return false;
-            }
-            return true;
-        } else {
-            return true;
-        }
-        */
-        return true; //delete this
+        return true;
     }
 }

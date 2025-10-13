@@ -6,11 +6,8 @@ public class TeamComponentSide
 {
     private Team team;
 
-    private TeamSide teamSide;
-    private Variant variant;
-
-    public TeamSide TeamSide => teamSide;
-    public Variant Variant => variant;
+    public TeamSide TeamSide { get; private set; }
+    public Variant Variant { get; private set; }
 
     public TeamComponentSide(TeamData teamData, Team team)
     {
@@ -46,7 +43,7 @@ public class TeamComponentSide
     {
         if (this.team == team)
         {
-            this.teamSide = teamSide;
+            this.TeamSide = teamSide;
             LogManager.Trace($"[TeamComponentSide] {this.team.TeamId} assigned to side {teamSide}", null);
         }
     }
@@ -57,7 +54,7 @@ public class TeamComponentSide
     {
         if (this.team == team)
         {
-            this.variant = variant;
+            this.Variant = variant;
             LogManager.Trace($"[TeamComponentSide] {this.team.TeamId} assigned to variant {variant}", null);
         }
     }

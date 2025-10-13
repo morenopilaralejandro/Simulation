@@ -5,9 +5,7 @@ public class TeamComponentKit
 {
     private Team team;
 
-    private Kit kit;
-
-    public Kit Kit => kit;
+    public Kit Kit { get; private set; }
 
     public TeamComponentKit(TeamData teamData, Team team) 
     {
@@ -17,13 +15,13 @@ public class TeamComponentKit
     public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
-        this.kit = KitManager.Instance.GetKit(teamData.KitId);
+        this.Kit = KitManager.Instance.GetKit(teamData.KitId);
     }
 
     public void SetKit(Kit kit)
     {
         if (kit == null) return;
-        this.kit = kit;
+        this.Kit = kit;
         TeamEvents.RaiseOnKitChanged(team, kit);
     }
 }

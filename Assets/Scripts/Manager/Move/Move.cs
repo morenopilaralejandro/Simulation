@@ -15,6 +15,11 @@ public class Move
     //private MoveComponentRestrictionLearn restrictionLearnComponent;
     private MoveComponentRestrictionParticipants restrictionParticipantsComponent;
 
+    public Move(MoveData moveData)
+    {
+        Initialize(moveData);
+    }
+
     public void Initialize(MoveData moveData)
     {
         attributeComponent = new MoveComponentAttribute(moveData);
@@ -25,10 +30,10 @@ public class Move
             new [] { LocalizationField.Name, LocalizationField.Description }
         );
 
-        participantsComponent = new MoveComponentParticipants(moveData);
+        participantsComponent = new MoveComponentParticipants(moveData, this);
         evolutionComponent = new MoveComponentEvolution(moveData);
         //restrictionLearnComponent = new MoveComponentRestrictionLearn(moveData);
-        restrictionParticipantsComponent = new MoveComponentRestrictionParticipants(moveData);
+        restrictionParticipantsComponent = new MoveComponentRestrictionParticipants(moveData, this);
     }
 
     #region API
@@ -51,9 +56,8 @@ public class Move
     public int TotalParticipantCount => participantsComponent.TotalParticipantCount;
     public int RequiredParticipantCount => participantsComponent.RequiredParticipantCount;
     public Character[] SelectedParticipants => participantsComponent.SelectedParticipants;
-    public void SetParticipant(int participantIndex, Character character) => participantsComponent.SetParticipant(participantIndex, character);
-    public bool IsParticipantSelected(int participantIndex) => participantsComponent.IsParticipantSelected(participantIndex);
-    public List<Character> GetFinalParticipants(List<Character> teammates) => participantsComponent.GetFinalParticipants(teammates);
+    public List<Character> FinalParticipants => participantsComponent.FinalParticipants;
+    public bool TryFinalizeParticipants(Character user, List<Character> teammates) => participantsComponent.TryFinalizeParticipants(user, teammates);
     //evolutionComponent
     public GrowthType GrowthType => evolutionComponent.GrowthType;
     public GrowthRate GrowthRate => evolutionComponent.GrowthRate;
@@ -67,9 +71,7 @@ public class Move
     //restrictionParticipantsComponent
     public List<Element> RequiredParticipantElements => restrictionParticipantsComponent.RequiredParticipantElements;
     public List<string> RequiredParticipantMoves => restrictionParticipantsComponent.RequiredParticipantMoves;
-    public bool HasParticipantElementRestriction => restrictionParticipantsComponent.HasParticipantElementRestriction;
-    public bool HasParticipantMoveRestriction => restrictionParticipantsComponent.HasParticipantMoveRestriction;
-    public bool HasValidParticipantElements() => restrictionParticipantsComponent.HasValidParticipantElements(participantsComponent.SelectedParticipants);
-    public bool HasValidParticipantMoves() => restrictionParticipantsComponent.HasValidParticipantElements(participantsComponent.SelectedParticipants);
+    public bool IsCharacterValidForIndex(Character character, int index) => restrictionParticipantsComponent.IsCharacterValidForIndex(character, index);
+    public bool MeetsAllParticipantRestrictions(Character[] participants) => restrictionParticipantsComponent.MeetsAllParticipantRestrictions(participants);
     #endregion
 }

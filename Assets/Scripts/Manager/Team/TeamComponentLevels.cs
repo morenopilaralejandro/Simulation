@@ -5,9 +5,7 @@ public class TeamComponentLevels
 {
     private Team team;
 
-    private int level;
-
-    public int Level => level;
+    public int Level { get; private set; }
 
     public TeamComponentLevels(TeamData teamData, Team team)
     {
@@ -17,7 +15,7 @@ public class TeamComponentLevels
     public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
-        this.level = teamData.Lv;
+        this.Level = teamData.Lv;
     }
 
 }

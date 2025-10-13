@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Simulation.Enums.Character;
+using Simulation.Enums.Move;
 using Simulation.Enums.Localization;
 
 public class Character : MonoBehaviour
@@ -18,6 +19,7 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentFatigue fatigueComponent;
     [SerializeField] private CharacterComponentSpeed speedComponent;
     [SerializeField] private CharacterComponentStatusEffects statusEffectsComponent;
+    [SerializeField] private CharacterComponentMoves movesComponent;
 
     [SerializeField] private SpeechBubble speechBubble;
     #endregion
@@ -50,6 +52,7 @@ public class Character : MonoBehaviour
         fatigueComponent.Initialize(characterData, this);
         speedComponent.Initialize(characterData, this);
         statusEffectsComponent.Initialize(characterData, this);
+        movesComponent.Initialize(characterData, this);
 
         /*
         if (isSave)
@@ -82,6 +85,10 @@ public class Character : MonoBehaviour
     public bool IsOnUsersTeam() => teamMemberComponent.IsOnUsersTeam();
     public bool IsSameTeam(Character otherCharacter) => teamMemberComponent.IsSameTeam(otherCharacter);
     public TeamSide GetOpponentSide() => teamMemberComponent.GetOpponentSide();
+    public Team GetTeam() => teamMemberComponent.GetTeam();
+    public Team GetOpponentTeam() => teamMemberComponent.GetOpponentTeam();
+    public List<Character> GetTeammates() => teamMemberComponent.GetTeammates();
+    public List<Character> GetOpponents() => teamMemberComponent.GetOpponents();
     //appearanceComponent
     public Sprite CharacterPortraitSprite => appearanceComponent.CharacterPortraitSprite;
     public Sprite KitPortraitSprite => appearanceComponent.KitPortraitSprite;
@@ -123,13 +130,35 @@ public class Character : MonoBehaviour
     public void ClearStatus(StatusEffect effect) => statusEffectsComponent.ClearStatus(effect);
     public void ClearAllStatus() => statusEffectsComponent.ClearAllStatus();
     public bool HasStatusEffect() => ActiveStatusEffects.Count != 0;
+    public bool IsStunned() => ActiveStatusEffects.Contains(StatusEffect.Stunned);
+    // movesComponent
+    public int MaxEquippedMovesDefault => CharacterComponentMoves.MAX_EQUIPPED_MOVES_DEFAULT;
+    public int MaxEquippedMovesFusion => CharacterComponentMoves.MAX_EQUIPPED_MOVES_FUSION;
+    public IReadOnlyList<MoveLearnsetData> LevelUpLearnset => movesComponent.LevelUpLearnset;
+    public IReadOnlyList<Move> LearnedMoves => movesComponent.LearnedMoves;
+    public IReadOnlyList<Move> EquippedMoves => movesComponent.EquippedMoves;
+    public void CheckLearnMoveOnLevelUp() => movesComponent.CheckLearnMoveOnLevelUp();
+    public void LearnMove(string moveId) => movesComponent.LearnMove(moveId);
+    public void EquipMove(Move move) => movesComponent.EquipMove(move);
+    public void UnequipMove(Move move) => movesComponent.UnequipMove(move);
+    public bool IsMoveEquipped(string moveId) => movesComponent.IsMoveEquipped(moveId);
+    public bool IsMoveEquipped(Move move) => movesComponent.IsMoveEquipped(move);
+    public bool IsMoveLearned(string moveId) => movesComponent.IsMoveLearned(moveId);
+    public bool IsMoveLearned(Move move) => movesComponent.IsMoveLearned(move);
+    public bool CanLearnMove(string moveId) => movesComponent.CanLearnMove(moveId);
+    public bool CanPerformeMove(Move move) => movesComponent.CanPerformeMove(move);
+    public bool CanAffordMove(Move move) => movesComponent.CanAffordMove(move);
+    public bool HasAffordableMove() => movesComponent.HasAffordableMove();
+    public bool HasAffordableMoveWithTrait(Trait trait) => movesComponent.HasAffordableMoveWithTrait(trait);
+    public Move GetRandomAffordableMove() => movesComponent.GetRandomAffordableMove();
+    public Move GetStrongestAffordableMove() => movesComponent.GetStrongestAffordableMove();
 
     //speechBubble
     public void ShowMessage(BubbleMessage bubbleMessage) => speechBubble.ShowMessage(bubbleMessage);
     public void HideSpeechBubbleImmediate() => speechBubble.HideImmediate();
-
-
     //misc
+    public bool CanMove() => !IsStunned();
+    public bool CanDuel() => !IsStunned();
     #endregion
 
 }

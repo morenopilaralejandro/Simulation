@@ -4,11 +4,8 @@ using Simulation.Enums.Character;
 
 public class TeamComponentPlayers
 {
-    private List<CharacterData> characterDataList = new();
-    private List<Character> characterList = new();
-
-    public List<CharacterData> CharacterDataList => characterDataList;
-    public List<Character> CharacterList => characterList;
+    public List<CharacterData> CharacterDataList { get; private set; }
+    public List<Character> CharacterList { get; private set; }
 
     public TeamComponentPlayers(TeamData teamData, Team team)
     {
@@ -17,14 +14,14 @@ public class TeamComponentPlayers
 
     public void Initialize(TeamData teamData, Team team)
     {
-        characterDataList.Clear();
+        CharacterDataList.Clear();
         foreach (var characterId in teamData.CharacterIds)
         {
             if (!string.IsNullOrEmpty(characterId))
             {
                 CharacterData characterData = CharacterManager.Instance.GetCharacterData(characterId);
                 if (characterData != null)
-                    characterDataList.Add(characterData);
+                    CharacterDataList.Add(characterData);
                 else
                     LogManager.Warning($"[TeamComponentPlayers] CharacterData not found for ID: {characterId}");
             }
