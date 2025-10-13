@@ -19,9 +19,7 @@ public class BattleManager : MonoBehaviour
     public bool IsMovementFrozen { get; private set; } = false;
     public bool IsTimeFrozen { get; private set; } = false;
 
-    [SerializeField] private List<Team> teams = new List<Team>();
-    public List<Team> Teams => teams;
-
+    public Dictionary<TeamSide, Team> Teams => BattleTeamManager.Instance.Teams;
 
     [SerializeField] private float topOffset    = 1f;
     [SerializeField] private float bottomOffset = 1f;
@@ -31,7 +29,6 @@ public class BattleManager : MonoBehaviour
     public event Action OnAllCharactersReady;
     private int charactersReadyMax;
     private int charactersReady;
-
 
     private void Awake()
     {
@@ -51,10 +48,6 @@ public class BattleManager : MonoBehaviour
         BoundManager.BottomOffset = bottomOffset;
         BoundManager.LeftOffset = leftOffset;
         BoundManager.RightOffset = rightOffset;
-
-        BattleArgs.TeamId0 = "Faith";
-        BattleArgs.TeamId1 = "Crimson";
-        BattleArgs.BattleType = BattleType.Battle;
     }
 
     void Start()
@@ -73,20 +66,22 @@ public class BattleManager : MonoBehaviour
         OnAllCharactersReady -= HandleAllCharactersReady;
     }
 
-    //called on team manager for testing
     public void StartBattle()
     {
+        //Called on BattleCharacterSpawnPoint
         PreviousType = CurrentType;
         CurrentType = BattleArgs.BattleType;
         CurrentTeamSize = CurrentType == BattleType.Battle ? TeamManager.Instance.SizeBattle : TeamManager.Instance.SizeMiniBattle;
         charactersReadyMax = CurrentTeamSize*2;
         ResetBattle();
-        teams.Add(TeamManager.Instance.GetTeam(BattleArgs.TeamId0));
-        teams.Add(TeamManager.Instance.GetTeam(BattleArgs.TeamId1));
 
-        for (int i = 0; i < teams.Count; i++) {
-            Team team = teams[i];
-            PopulateTeamWithCharacters(team, i, CurrentTeamSize);
+        BattleTeamManager.Instance.AssignTeamToSide(TeamManager.Instance.GetTeam(BattleArgs.TeamId0), TeamSide.Home);
+        BattleTeamManager.Instance.AssignTeamToSide(TeamManager.Instance.GetTeam(BattleArgs.TeamId1), TeamSide.Away);
+        BattleTeamManager.Instance.AssignVariants();
+
+        foreach (Team team in Teams.Values) 
+        {
+            PopulateTeamWithCharacters(team, CurrentTeamSize);
         }
     }
 
@@ -96,13 +91,13 @@ public class BattleManager : MonoBehaviour
         ResetDefaultPositions();
     }
 
-    private void PopulateTeamWithCharacters(Team team, int teamIndex, int teamSize)
+    private void PopulateTeamWithCharacters(Team team, int teamSize)
     {
-        foreach (var character in team.Characters)
+        foreach (var character in team.CharacterList)
         {
             BattleCharacterManager.Instance.ReturnCharacterToPool(character);
         }
-        team.Characters.Clear();
+        team.CharacterList.Clear();
 
         for (int i = 0; i < teamSize; i++)
         {
@@ -113,8 +108,9 @@ public class BattleManager : MonoBehaviour
                 {
                     CharacterData characterData = team.CharacterDataList[characterIndex]; 
                     character.Initialize(characterData);
-                    BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex, teamIndex);
-                    team.Characters.Add(character);
+                    BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
+                    character.gameObject.name = character.CharacterId;
+                    team.CharacterList.Add(character);
                 
                     charactersReady++;
                     if (charactersReady >= charactersReadyMax)
@@ -127,7 +123,7 @@ public class BattleManager : MonoBehaviour
     private void ResetBattle()
     {
         //BoundManager.Setup();
-        teams.Clear();
+        BattleTeamManager.Instance.Reset();
         charactersReady = 0;
         //Reset timers
     }
@@ -140,9 +136,9 @@ public class BattleManager : MonoBehaviour
 
     private void ResetPlayerPositions()
     {
-        foreach (var team in teams) 
+        foreach (Team team in Teams.Values) 
         {
-            foreach (var character in team.Characters)
+            foreach (var character in team.CharacterList)
             {
                 BattleCharacterManager.Instance.ResetCharacterPosition(character);
             }
@@ -153,7 +149,7 @@ public class BattleManager : MonoBehaviour
     {
         if (CurrentPhase != newPhase)
         {
-            LogManager.Debug("BattlePhase: " + newPhase);
+            LogManager.Debug("[BattleManager] BattlePhase: " + newPhase);
             PreviousPhase = CurrentPhase;
             CurrentPhase = newPhase;
             OnPhaseChanged?.Invoke(CurrentPhase, PreviousPhase);
@@ -170,18 +166,6 @@ public class BattleManager : MonoBehaviour
     {
         IsMovementFrozen = false;
         IsTimeFrozen = false;
-    }
-
-
-    public Character GetOppKeeper(Character character)
-    {
-        int oppTeamIdx = 1 - character.GetTeamIndex();
-        return teams[oppTeamIdx].Characters[0];
-    }
-
-    public int GetLocalTeamIndex()
-    {
-        return 0; //Single Player only
     }
 
 }

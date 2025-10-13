@@ -3,11 +3,18 @@ using Simulation.Enums.Character;
 
 public class CharacterComponentKeeper : MonoBehaviour
 {
-    [SerializeField] private CharacterComponentAttribute attributeComponent;
-    [SerializeField] private bool isKeeper;
-    [SerializeField] private Collider keeperCollider;
+    private Character character;
 
-    public bool IsKeeper() => isKeeper;
+    [SerializeField] private Collider keeperCollider;   //inspector
+
+    [SerializeField] private bool isKeeper;
+
+    public bool IsKeeper => isKeeper;
+
+    public void Initialize(CharacterData characterData, Character character)
+    {
+        this.character = character;
+    }
 
     public void UpdateKeeperColliderState()
     {
@@ -28,11 +35,9 @@ public class CharacterComponentKeeper : MonoBehaviour
     private void HandleAssignCharacterToTeamBattle(
         Character character, 
         Team team, 
-        int teamIndex, 
-        FormationCoord formationCoord, 
-        ControlType controlType)
+        FormationCoord formationCoord)
     {
-        if (character.CharacterId() == attributeComponent.GetCharacterId())
+        if (this.character == character)
         {
             this.isKeeper = formationCoord.Position == Position.GK ? true : false;
             UpdateKeeperColliderState();

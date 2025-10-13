@@ -9,6 +9,8 @@ public class FormationManager : MonoBehaviour
 
     private readonly Dictionary<string, Formation> formations = new();
 
+    public bool IsReady { get; private set; } = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -24,7 +26,14 @@ public class FormationManager : MonoBehaviour
 
     public void LoadAllFormations()
     {
-        Addressables.LoadAssetsAsync<FormationData>("Formations", RegisterFormation);
+        Addressables.LoadAssetsAsync<FormationData>("Formations-Data", data =>
+        {
+            RegisterFormation(data);
+        }).Completed += handle =>
+        {
+            LogManager.Trace($"[FormationManager] All formations loaded. Total count: {formations.Count}", this);
+            IsReady = true;
+        };
     }
 
     public void RegisterFormation(FormationData data)

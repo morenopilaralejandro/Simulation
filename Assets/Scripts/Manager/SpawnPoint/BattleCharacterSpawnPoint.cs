@@ -19,4 +19,9 @@ public class BattleCharacterSpawnPoint : MonoBehaviour
             BattleCharacterManager.Instance.UnregisterSpawnPoint();
         }
     }
+
+    private void Start() 
+    {
+        BattleManager.Instance.StartBattle();
+    }
 }

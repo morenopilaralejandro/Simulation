@@ -8,7 +8,7 @@ public class LocalizationManager : MonoBehaviour
 {
     public static LocalizationManager Instance { get; private set; }
 
-    [SerializeField] private StringTableConfig stringTableConfig;
+    [SerializeField] private TableConfig tableConfig;
     [SerializeField] private LocalizationStyle currentStyle = LocalizationStyle.Localized;
     public LocalizationStyle CurrentStyle => currentStyle;
 
@@ -26,7 +26,7 @@ public class LocalizationManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        stringTableConfig.Initialize();
+        tableConfig.Initialize();
     }
 
     public void Subscribe(Action<LocalizationStyle> callback)
@@ -47,6 +47,6 @@ public class LocalizationManager : MonoBehaviour
 
     public TableReference GetTableReference(LocalizationEntity entity, LocalizationField field)
     {
-        return stringTableConfig.GetTableReference(entity, field, currentStyle);
+        return tableConfig.GetTableReference(entity, field, currentStyle);
     }
 }

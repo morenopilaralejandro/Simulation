@@ -1,22 +1,19 @@
 using UnityEngine;
+using Simulation.Enums.Character;
 using Simulation.Enums.Battle;
 
 public class Goal : MonoBehaviour
 {
-    public Team Team;
-    public GoalPlacement GoalPlacement;
+    [SerializeField] private TeamSide teamSide;
 
     private void Awake()
     {
-        if (GoalManager.Instance != null)
-            GoalManager.Instance.AddGoal(this);
-        
+        GoalManager.Instance.SetGoal(this, teamSide);   
     }
 
     private void OnDestroy()
     {
-        if (GoalManager.Instance != null)
-            GoalManager.Instance.Reset();
+        GoalManager.Instance.Reset();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -24,7 +21,7 @@ public class Goal : MonoBehaviour
         if (other.CompareTag("Ball") && !BattleManager.Instance.IsTimeFrozen)
         {
             //GameManager.Instance.OnGoalScored(Team);
-            LogManager.Info("[Goal] OnTriggerEnter: a goal was scored", this);
+            LogManager.Info("[Goal] OnTriggerEnter: a goal was scored. TeamSide: {teamSide}", this);
         }
     }
 

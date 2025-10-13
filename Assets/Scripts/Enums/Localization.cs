@@ -12,8 +12,7 @@ namespace Simulation.Enums.Localization
     public enum LocalizationField
     {
         Name,
-        FullName,
-        NickName,
+        Nick,
         Description
     }
 

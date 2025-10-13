@@ -1,29 +1,52 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections;
 
 public class BootstrapManager : MonoBehaviour
 {
-    [SerializeField] private string systemScene = "SystemManager";   // your core systems
-
     private void Awake()
     {
-        // Ensure bootstrap itself never dies
         DontDestroyOnLoad(gameObject);
-
-        // Kick off bootstrap process
         StartCoroutine(LoadSystemAndInitialScenes());
     }
 
     private IEnumerator LoadSystemAndInitialScenes()
     {
-        // 1. Load SystemManager (contains GameManager, CharacterManager, etc.)
-        AsyncOperation sysLoad = SceneManager.LoadSceneAsync(systemScene, LoadSceneMode.Additive);
-        yield return sysLoad;
+        SceneManager.LoadScene(LoadingData.LoadingSceneName);
 
-        Debug.Log("SystemManager loaded.");
+        SceneLoader.LoadSystemManager();
+        SceneLoader.LoadMainCamera();
 
+        AsyncOperationHandle initAddressablesHandle = Addressables.InitializeAsync();
+        yield return initAddressablesHandle;
+
+        yield return new WaitUntil(() => CharacterManager.Instance != null);
+        yield return new WaitUntil(() => CharacterManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => MoveManager.Instance != null);
+        yield return new WaitUntil(() => MoveManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => FormationCoordManager.Instance != null);
+        yield return new WaitUntil(() => FormationCoordManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => FormationManager.Instance != null);
+        yield return new WaitUntil(() => FormationManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => KitManager.Instance != null);
+        yield return new WaitUntil(() => KitManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => TeamManager.Instance != null);
+        yield return new WaitUntil(() => TeamManager.Instance.IsReady);
+
+        SceneManager.UnloadSceneAsync(LoadingData.LoadingSceneName);
+
+    #if UNITY_EDITOR || DEVELOPMENT_BUILD
+        SceneLoader.LoadDebugMainMenu();
+    #else
         SceneLoader.LoadMainMenu();
+    #endif
     }
 }
 

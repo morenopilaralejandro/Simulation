@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Simulation.Enums.Character;
 using Simulation.Enums.Battle;
 
 /// <summary>
@@ -11,7 +12,8 @@ public class GoalManager : MonoBehaviour
 {
     public static GoalManager Instance { get; private set; }
 
-    private List<Goal> goals;
+    private Dictionary<TeamSide, Goal> goals = new Dictionary<TeamSide, Goal>();
+    public Dictionary<TeamSide, Goal> Goals => goals;
 
     private void Awake()
     {
@@ -22,7 +24,6 @@ public class GoalManager : MonoBehaviour
         }
 
         Instance = this;
-        goals = new List<Goal>();
         DontDestroyOnLoad(gameObject);
     }
 
@@ -36,31 +37,20 @@ public class GoalManager : MonoBehaviour
         goals.Clear();
     }
 
-    public void AddGoal(Goal goal) 
+    public void SetGoal(Goal goal, TeamSide teamSide) 
     {
-        // Make sure goals list has the right size
-        if (goals.Count == 0)
-        {
-            goals.AddRange(new Goal[BattleManager.Instance.Teams.Count]);
-        }
-
-        // Index mapping: Bottom = Team 0, Top = Team 1
-        int teamIndex = (goal.GoalPlacement == GoalPlacement.Bottom) ? 0 : 1;
-
-        goals[teamIndex] = goal;
-        goal.Team = BattleManager.Instance.Teams[teamIndex];
+        goals[teamSide] = goal;
     }
 
     public Goal GetAllyGoal(Character character)
     {
-        return goals[character.GetTeamIndex()];  
+        return goals[character.TeamSide];  
     }
 
     public Goal GetOpponentGoal(Character character)
     {
-        return goals[1 - character.GetTeamIndex()];
+        return goals[character.GetOpponentSide()];
     }
-
 
     public float GetDistanceToAllyGoal(Character character)
     {
@@ -84,6 +74,16 @@ public class GoalManager : MonoBehaviour
     {
         Transform goal = GetOpponentGoal(character).transform;
         return Mathf.Abs(character.transform.position.z - goal.position.z);
+    }
+
+    public Character GetAllyKeeper(Character character)
+    {
+        return BattleManager.Instance.Teams[character.TeamSide].CharacterList[0];
+    }
+
+    public Character GetOpponentKeeper(Character character)
+    {
+        return BattleManager.Instance.Teams[character.GetOpponentSide()].CharacterList[0];
     }
 
 }

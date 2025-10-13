@@ -27,6 +27,12 @@ namespace Simulation.Enums.Character
         F 
     }
 
+    public enum TeamSide
+    {
+        Home,
+        Away
+    }
+
     public enum ControlType 
     { 
         LocalHuman, 
@@ -68,4 +74,29 @@ namespace Simulation.Enums.Character
         XL    
     }
 
+    public enum BubbleMessage
+    {
+        Win,
+        Lose,
+        Dribble,
+        Block,
+        Pass,
+        Shoot,
+        Nice,
+        Direct
+    }
+
+    public enum FatigueState
+    {
+        Normal,
+        Tired,
+        Exhausted
+    }
+
+    public enum StatusEffect
+    {
+        None,
+        Stunned,
+        Tripping
+    }
 }

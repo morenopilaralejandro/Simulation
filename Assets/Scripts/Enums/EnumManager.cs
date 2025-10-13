@@ -82,4 +82,34 @@ public static class EnumManager
 
         return list;
     }
+
+    /// <summary>
+    /// Gets the number of defined values in the specified enum type.
+    /// </summary>
+    /// <typeparam name="T">The enum type.</typeparam>
+    /// <returns>The number of values defined in the enum.</returns>
+    public static int GetLength<T>() where T : System.Enum
+    {
+        return System.Enum.GetValues(typeof(T)).Length;
+    }
+
+    /// <summary>
+    /// Gets an array containing all values of the specified enum type.
+    /// </summary>
+    /// <typeparam name="T">The enum type.</typeparam>
+    /// <returns>An array of the enum’s values.</returns>
+    public static T[] GetValues<T>() where T : System.Enum
+    {
+        return (T[])System.Enum.GetValues(typeof(T));
+    }
+
+    /// <summary>
+    /// Gets an array containing the names of all values in the specified enum type.
+    /// </summary>
+    /// <typeparam name="T">The enum type.</typeparam>
+    /// <returns>An array of strings representing the enum’s value names.</returns>
+    public static string[] GetNames<T>() where T : System.Enum
+    {
+        return System.Enum.GetNames(typeof(T));
+    }
 }

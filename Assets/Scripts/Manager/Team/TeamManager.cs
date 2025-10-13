@@ -9,6 +9,8 @@ public class TeamManager : MonoBehaviour
 
     private readonly Dictionary<string, Team> teams = new();
 
+    public bool IsReady { get; private set; } = false;
+
     public int SizeMax = 16;
     public int SizeBattle = 11;
     public int SizeMiniBattle = 4;
@@ -29,7 +31,7 @@ public class TeamManager : MonoBehaviour
 
     public void LoadAllTeams()
     {
-        var handle = Addressables.LoadAssetsAsync<TeamData>("Teams", RegisterTeam);
+        var handle = Addressables.LoadAssetsAsync<TeamData>("Teams-Data", RegisterTeam);
         handle.Completed += OnTeamsLoaded;
     }
 
@@ -38,7 +40,7 @@ public class TeamManager : MonoBehaviour
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             LogManager.Trace($"[TeamManager] All teams loaded. Total count: {teams.Count}", this);
-            BattleManager.Instance.StartBattle();
+            IsReady = true;
         }
     }
 
@@ -46,8 +48,7 @@ public class TeamManager : MonoBehaviour
     {
         if (!teams.ContainsKey(data.TeamId))
         {
-            var team = new Team();
-            team.Initialize(data);
+            var team = new Team(data);
             teams.Add(team.TeamId, team);
         }
     }

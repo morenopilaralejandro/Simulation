@@ -1,56 +1,68 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
 using Simulation.Enums.Localization;
 
 public class Team
 {
-    [SerializeField] private string teamId;
-    public string TeamId => teamId;
+    #region Components
+    private TeamComponentAttributes attributesComponent;
+    private LocalizationComponentString localizationStringComponent;
+    private TeamComponentFormation formationComponent;
+    private TeamComponentKit kitComponent;
+    private TeamComponentLevels levelsComponent;
+    private TeamComponentPlayers playersComponent;
+    private TeamComponentSide sideComponent;
+    #endregion
 
-    [SerializeField] private ComponentLocalization localizationComponent;
-
-    [SerializeField] private Formation formation;
-    public Formation Formation => formation;
-
-    [SerializeField] private Kit kit;
-    public Kit Kit => kit;
-
-    [SerializeField] private int lv;
-    public int Lv => lv;
-
-    [SerializeField] private List<CharacterData> characterDataList = new();
-    public List<CharacterData> CharacterDataList => characterDataList;
-
-    [SerializeField] private List<Character> characters = new();
-    public List<Character> Characters => characters;
+    #region Initialize
+    public Team(TeamData teamData) 
+    {
+        Initialize(teamData);
+    }
 
     public void Initialize(TeamData teamData)
     {
-        teamId = teamData.TeamId;
+        attributesComponent = new TeamComponentAttributes(teamData, this);
 
-        localizationComponent = new ComponentLocalization(
+        localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Team,
             teamData.TeamId,
             new [] { LocalizationField.Name }
         );
 
-        formation = FormationManager.Instance.GetFormation(teamData.FormationId);
-        kit = KitManager.Instance.GetKit(teamData.KitId);
-        lv = teamData.Lv;
-
-        characterDataList.Clear();
-        foreach (var characterId in teamData.CharacterIds)
-        {
-            if (!string.IsNullOrEmpty(characterId))
-            {
-                CharacterData characterData = CharacterManager.Instance.GetCharacterData(characterId);
-                if (characterData != null)
-                    characterDataList.Add(characterData);
-                else
-                    LogManager.Warning($"[Team] CharacterData not found for ID: {characterId}");
-            }
-        }
+        formationComponent = new TeamComponentFormation(teamData, this);
+        kitComponent = new TeamComponentKit(teamData, this);
+        levelsComponent = new TeamComponentLevels(teamData, this);
+        playersComponent = new TeamComponentPlayers(teamData, this);
+        sideComponent = new TeamComponentSide(teamData, this);
     }
 
-    public string GetTeamName() => localizationComponent.GetString(LocalizationField.Name);
+    public void Deinitialize()
+    {
+        sideComponent.Deinitialize();
+    }
+    #endregion
+
+    #region API
+    //attributeComponent
+    public string TeamId => attributesComponent.TeamId;
+    //localizationComponent
+    public string TeamName => localizationStringComponent.GetString(LocalizationField.Name);
+    //formationComponent
+    public Formation Formation => formationComponent.Formation;    
+    public void SetFormation(Formation formation) => formationComponent.SetFormation(formation);
+    //kitComponent
+    public Kit Kit => kitComponent.Kit;    
+    public void SetKit(Kit kit) => kitComponent.SetKit(kit);
+    //levelsComponent
+    public int Level => levelsComponent.Level;
+    //playersComponent
+    public List<CharacterData> CharacterDataList => playersComponent.CharacterDataList;
+    public List<Character> CharacterList => playersComponent.CharacterList;
+    //sideComponent
+    public TeamSide TeamSide => sideComponent.TeamSide;
+    public Variant Variant => sideComponent.Variant;
+    #endregion    
 }
