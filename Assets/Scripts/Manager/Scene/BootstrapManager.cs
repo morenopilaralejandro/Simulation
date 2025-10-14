@@ -28,6 +28,12 @@ public class BootstrapManager : MonoBehaviour
         yield return new WaitUntil(() => MoveManager.Instance != null);
         yield return new WaitUntil(() => MoveManager.Instance.IsReady);
 
+        yield return new WaitUntil(() => MoveEvolutionGrowthProfileManager.Instance != null);
+        yield return new WaitUntil(() => MoveEvolutionGrowthProfileManager.Instance.IsReady);
+
+        yield return new WaitUntil(() => MoveEvolutionPathManager.Instance != null);
+        yield return new WaitUntil(() => MoveEvolutionPathManager.Instance.IsReady);
+
         yield return new WaitUntil(() => FormationCoordManager.Instance != null);
         yield return new WaitUntil(() => FormationCoordManager.Instance.IsReady);
 

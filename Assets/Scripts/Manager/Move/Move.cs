@@ -8,7 +8,7 @@ using Simulation.Enums.Localization;
 
 public class Move
 {
-    private MoveComponentAttribute attributeComponent;
+    private MoveComponentAttributes attributesComponent;
     private LocalizationComponentString localizationStringComponent;
     private MoveComponentParticipants participantsComponent;
     private MoveComponentEvolution evolutionComponent;
@@ -22,7 +22,7 @@ public class Move
 
     public void Initialize(MoveData moveData)
     {
-        attributeComponent = new MoveComponentAttribute(moveData);
+        attributesComponent = new MoveComponentAttributes(moveData, this);
 
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Move,
@@ -31,24 +31,24 @@ public class Move
         );
 
         participantsComponent = new MoveComponentParticipants(moveData, this);
-        evolutionComponent = new MoveComponentEvolution(moveData);
+        evolutionComponent = new MoveComponentEvolution(moveData, this);
         //restrictionLearnComponent = new MoveComponentRestrictionLearn(moveData);
         restrictionParticipantsComponent = new MoveComponentRestrictionParticipants(moveData, this);
     }
 
     #region API
-    //attributeComponent
-    public string MoveId => attributeComponent.MoveId;
-    public Category Category => attributeComponent.Category;
-    public Element Element => attributeComponent.Element;
-    public Trait Trait => attributeComponent.Trait;
+    //attributesComponent
+    public string MoveId => attributesComponent.MoveId;
+    public Category Category => attributesComponent.Category;
+    public Element Element => attributesComponent.Element;
+    public Trait Trait => attributesComponent.Trait;
 
-    public int Cost => attributeComponent.Cost;
-    public int BasePower => attributeComponent.BasePower;
-    public int StunDamage => attributeComponent.StunDamage;
-    public int AuraDamage => attributeComponent.AuraDamage;
-    public int Difficulty => attributeComponent.Difficulty;
-    public int FaultRate => attributeComponent.FaultRate;
+    public int Cost => attributesComponent.Cost;
+    public int BasePower => attributesComponent.BasePower;
+    public int StunDamage => attributesComponent.StunDamage;
+    public int AuraDamage => attributesComponent.AuraDamage;
+    public int Difficulty => attributesComponent.Difficulty;
+    public int FaultRate => attributesComponent.FaultRate;
     //localizationComponent
     public string MoveName => localizationStringComponent.GetString(LocalizationField.Name);
     public string MoveDescription => localizationStringComponent.GetString(LocalizationField.Description);
@@ -58,6 +58,7 @@ public class Move
     public Character[] SelectedParticipants => participantsComponent.SelectedParticipants;
     public List<Character> FinalParticipants => participantsComponent.FinalParticipants;
     public bool TryFinalizeParticipants(Character user, List<Character> teammates) => participantsComponent.TryFinalizeParticipants(user, teammates);
+    public void SetSelectedParticipant(Character character, int index) => participantsComponent.SetSelectedParticipant(character, index);
     //evolutionComponent
     public GrowthType GrowthType => evolutionComponent.GrowthType;
     public GrowthRate GrowthRate => evolutionComponent.GrowthRate;

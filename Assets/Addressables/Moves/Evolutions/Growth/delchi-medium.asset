@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a186ac7564ba6e68db01d8a30718d4c0, type: 3}
+  m_Name: delchi-medium
+  m_EditorClassIdentifier: 
+  growthType: 0
+  growthRate: 1
+  bonuses:
+  - evolution: 1
+    extraPower: 16
+  - evolution: 2
+    extraPower: 32
+  - evolution: 3
+    extraPower: 64
+  thresholds:
+  - evolution: 0
+    usageThreshold: 16
+  - evolution: 1
+    usageThreshold: 24

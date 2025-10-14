@@ -21,19 +21,19 @@ public class MoveComponentParticipants
     public void Initialize(MoveData moveData, Move move)
     {
         this.move = move;
-        TotalParticipantCount = moveData.Participants;
-        RequiredParticipantCount = moveData.Participants - 1;
-        SelectedParticipants = new Character[RequiredParticipantCount]; 
+        this.TotalParticipantCount = moveData.Participants;
+        this.RequiredParticipantCount = moveData.Participants - 1;
+        this.SelectedParticipants = new Character[this.RequiredParticipantCount]; 
     }
 
     public bool TryFinalizeParticipants(Character user, List<Character> teammates)
     {
-        FinalParticipants = new List<Character> { user };
+        this.FinalParticipants = new List<Character> { user };
         HashSet<Character> used = new HashSet<Character> { user };
 
-        for (int i = 0; i < RequiredParticipantCount; i++)
+        for (int i = 0; i < this.RequiredParticipantCount; i++)
         {
-            Character participant = SelectedParticipants[i];
+            Character participant = this.SelectedParticipants[i];
 
             if (participant == null)
                 participant = FindValidParticipant(i, teammates, used);
@@ -41,11 +41,11 @@ public class MoveComponentParticipants
             if (participant == null)
                 return false; // couldn’t satisfy restriction
 
-            FinalParticipants.Add(participant);
+            this.FinalParticipants.Add(participant);
             used.Add(participant);
         }
 
-        return this.move.MeetsAllParticipantRestrictions(FinalParticipants.ToArray());
+        return this.move.MeetsAllParticipantRestrictions(this.FinalParticipants.ToArray());
     }
 
     private Character FindValidParticipant(int index, List<Character> teammates, HashSet<Character> used)
@@ -57,4 +57,6 @@ public class MoveComponentParticipants
         }
         return null;
     }
+
+    public void SetSelectedParticipant(Character character, int index) => SelectedParticipants[index] = character;
 }

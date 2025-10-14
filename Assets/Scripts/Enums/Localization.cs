@@ -13,7 +13,8 @@ namespace Simulation.Enums.Localization
     {
         Name,
         Nick,
-        Description
+        Description,
+        Evolution
     }
 
     public enum LocalizationStyle
