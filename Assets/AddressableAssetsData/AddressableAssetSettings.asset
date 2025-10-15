@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 46965002627bb57fc9329d2cd6558115
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: cb6645fdd9c04ae0c9ad40a4b84870d0
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -45,6 +45,9 @@ MonoBehaviour:
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: f3318168b5fe0fefe98be2bbf2c0ff11, type: 2}
+  - {fileID: 11400000, guid: a5f3190c7ab26614e8c7e618b77f8bbc, type: 2}
+  - {fileID: 11400000, guid: 1a637a04a96e9424e88c34e13130c0d1, type: 2}
+  - {fileID: 11400000, guid: f6e7e6bbf5d99cc66b6eca870a97edf1, type: 2}
   - {fileID: 11400000, guid: d3ffd1efc434ba79c97823d91d0d78c7, type: 2}
   - {fileID: 11400000, guid: 7c4e827322432899aaa0e355be68184e, type: 2}
   - {fileID: 11400000, guid: 42c08fa6adbbf4625b8be5ad97daba21, type: 2}
@@ -53,16 +56,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f61149a78f066a341a30d7392ad3afd7, type: 2}
   - {fileID: 11400000, guid: a6b66dcb5063d6aeeb29bf881de4cbaf, type: 2}
   - {fileID: 11400000, guid: c0b8336cfc93e70c5a6b2b9d3d490e15, type: 2}
+  - {fileID: 11400000, guid: 190f367643c444cea9b659beb7071914, type: 2}
   - {fileID: 11400000, guid: 0eb6ce25fc8edb05da6a241767ae16d8, type: 2}
   - {fileID: 11400000, guid: 6ca7c9be013825460b92cff9aba07294, type: 2}
   - {fileID: 11400000, guid: 91975a136fc837ffab86b5847f1a891e, type: 2}
   - {fileID: 11400000, guid: 9db161dd40262fb7091d44de8472709a, type: 2}
+  - {fileID: 11400000, guid: c762f5ad1468e62949303a7b275bbe38, type: 2}
+  - {fileID: 11400000, guid: 966d182a72417ececbafe1351ab7a155, type: 2}
   - {fileID: 11400000, guid: f855f1e9c2e7459929f83edc6fc56dfa, type: 2}
+  - {fileID: 11400000, guid: d5dae056c98307d3992bc9306eb41d24, type: 2}
   - {fileID: 11400000, guid: cc008c119c19653a1a82c225610319dd, type: 2}
   - {fileID: 11400000, guid: b741aac1153b18567815d36c056d4569, type: 2}
   - {fileID: 11400000, guid: 8b423cb5ebef363c08627b7245c55c67, type: 2}
   - {fileID: 11400000, guid: 84eba08445af222429add9aa16fc4e38, type: 2}
   - {fileID: 11400000, guid: 85c76be586b1343d983356dd136893f5, type: 2}
+  - {fileID: 11400000, guid: e7d1337403028c0219c4c504d3016df4, type: 2}
   - {fileID: 11400000, guid: f91444a2035496d71bd5353d18f0ee57, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
@@ -115,6 +123,8 @@ MonoBehaviour:
     - FormationCoords-Data
     - Kits-Data
     - Moves-Data
+    - Moves-Evolutions-Growth
+    - Moves-Evolutions-Path
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 7c5394c970d916acd94dde95d049b628, type: 2}

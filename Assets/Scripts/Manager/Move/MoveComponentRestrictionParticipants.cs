@@ -19,18 +19,18 @@ public class MoveComponentRestrictionParticipants
     public void Initialize(MoveData moveData, Move move)
     {
         this.move = move;
-        RequiredParticipantElements = moveData.RequiredParticipantElements ?? new List<Element>();
-        RequiredParticipantMoves = moveData.RequiredParticipantMoves ?? new List<string>();
+        this.RequiredParticipantElements = moveData.RequiredParticipantElements ?? new List<Element>();
+        this.RequiredParticipantMoves = moveData.RequiredParticipantMoves ?? new List<string>();
     }
 
     public bool IsCharacterValidForIndex(Character character, int index)
     {
-        if (index < RequiredParticipantElements.Count &&
-            character.Element != RequiredParticipantElements[index])
+        if (index < this.RequiredParticipantElements.Count &&
+            character.Element != this.RequiredParticipantElements[index])
             return false;
 
-        if (index < RequiredParticipantMoves.Count &&
-            !character.IsMoveEquipped(RequiredParticipantMoves[index]))
+        if (index < this.RequiredParticipantMoves.Count &&
+            !character.IsMoveEquipped(this.RequiredParticipantMoves[index]))
             return false;
 
         return true;

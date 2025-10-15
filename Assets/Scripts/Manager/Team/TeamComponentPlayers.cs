@@ -14,7 +14,8 @@ public class TeamComponentPlayers
 
     public void Initialize(TeamData teamData, Team team)
     {
-        CharacterDataList.Clear();
+        CharacterDataList = new();
+        CharacterList = new();
         foreach (var characterId in teamData.CharacterIds)
         {
             if (!string.IsNullOrEmpty(characterId))

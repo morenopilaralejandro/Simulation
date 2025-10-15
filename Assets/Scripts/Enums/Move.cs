@@ -32,4 +32,18 @@ namespace Simulation.Enums.Move
         Medium,
         Slow
     }
+
+    public enum MoveEvolution 
+    {
+        None,
+        Delta,
+        Chi,
+        Phi,
+        S,
+        Ss,
+        Sss,
+        Ura,
+        Galaxy,
+        Legend
+    }
 }
