@@ -45,11 +45,11 @@ public class MoveEvolutionPathManager : MonoBehaviour
             moveEvolutionPathDict.Add(moveEvolutionPath.growthType, moveEvolutionPath);
     }
 
-    public MoveEvolutionPath GetMoveEvolutionPath(Move move)
+    public MoveEvolutionPath GetMoveEvolutionPath(MoveData moveData)
     {
-        if (!moveEvolutionPathDict.TryGetValue(move.GrowthType, out var moveEvolutionPath))
+        if (!moveEvolutionPathDict.TryGetValue(moveData.GrowthType, out var moveEvolutionPath))
         {
-            LogManager.Error($"[MoveEvolutionPathManager] No MoveEvolutionPath found for type '{move.GrowthType}'.");
+            LogManager.Error($"[MoveEvolutionPathManager] No MoveEvolutionPath found for type '{moveData.GrowthType}'.");
             return null;
         }
 

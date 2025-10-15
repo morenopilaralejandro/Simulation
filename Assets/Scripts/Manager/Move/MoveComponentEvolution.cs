@@ -2,14 +2,20 @@ using UnityEngine;
 using System.Collections.Generic;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
+using Simulation.Enums.Localization;
 
 public class MoveComponentEvolution
 {
     private Move move;
-    private MoveEvolution currentEvolution;
-
+    private MoveEvolutionGrowthProfile growthProfile;
+    private MoveEvolutionPath path;
+    private LocalizationComponentAsset<Sprite> assetLocalizationComponent;
+    
+    public MoveEvolution CurrentEvolution { get; private set; }
     public GrowthType GrowthType { get; private set; }
     public GrowthRate GrowthRate { get; private set; }
+    public Sprite EvolutionSprite { get; private set; }
+
     public int TimesUsedTotal { get; private set; }
     public int TimesUsedCurrentEvolution { get; private set; }
 
@@ -21,11 +27,100 @@ public class MoveComponentEvolution
     public void Initialize(MoveData moveData, Move move)
     {
         this.move = move;
-        this.currentEvolution = MoveEvolution.None;
-        GrowthType = moveData.GrowthType;
-        GrowthRate = moveData.GrowthRate;
+        this.CurrentEvolution = MoveEvolution.None;
+        this.GrowthType = moveData.GrowthType;
+        this.GrowthRate = moveData.GrowthRate;
+        this.growthProfile = MoveEvolutionGrowthProfileManager.Instance.GetMoveEvolutionGrowthProfile(moveData);
+        this.path = MoveEvolutionPathManager.Instance.GetMoveEvolutionPath(moveData);
 
+        ForceMaxEvolution();
     }
+
+    public bool IsAtFinalEvolution => !path.TryGetNextEvolution(this.CurrentEvolution, out _);
+
+    public void ProgressEvolution()
+    {
+        this.TimesUsedTotal++;
+        this.TimesUsedCurrentEvolution++;
+
+        // Stop at last evolution stage
+        if (IsAtFinalEvolution) return;
+
+        int threshold = growthProfile.GetThreshold(CurrentEvolution);
+
+        if (this.TimesUsedCurrentEvolution >= threshold)
+        {
+            if (TryEvolve()) this.TimesUsedCurrentEvolution = 0;
+        }
+    }
+
+    public bool TryEvolve()
+    {
+        if (path.TryGetNextEvolution(this.CurrentEvolution, out MoveEvolution next))
+        {
+            this.CurrentEvolution = next;
+            UpdateLocalization();
+            LogManager.Trace($"[MoveComponentEvolution] [{move.MoveId}] evolved to {this.CurrentEvolution}");
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool LimitBreak()
+    {
+        if (path.TryGetNextEvolution(this.CurrentEvolution, out MoveEvolution next))
+        {
+            if (path.TryGetNextEvolution(next, out MoveEvolution _)) return false; // Not at penultimate stage yet
+
+            this.CurrentEvolution = next;
+            this.TimesUsedCurrentEvolution = 0;
+            UpdateLocalization();
+            LogManager.Trace($"[MoveComponentEvolution] [{move.MoveId}] performed LIMIT BREAK -> {this.CurrentEvolution}");
+            return true;
+        }
+
+        return false;
+    }
+
+    public void ForceMaxEvolution()
+    {
+        this.CurrentEvolution = path.GetLastEvolution();
+        this.TimesUsedCurrentEvolution = 0;
+        UpdateLocalization();
+        LogManager.Trace($"MoveComponentEvolution] [{move.MoveId}] was force-evolved to MAX: {this.CurrentEvolution}");
+    }
+
+    public int GetExtraPower() => growthProfile.GetBonus(this.CurrentEvolution);
+
+    public int GetThreshold() => growthProfile.GetThreshold(this.CurrentEvolution);
+
+    public void ResetEvolution()
+    {
+        this.CurrentEvolution = MoveEvolution.None;
+        this.TimesUsedTotal = TimesUsedCurrentEvolution = 0;
+        UpdateLocalization();
+    }
+
+    private async void UpdateLocalization()
+    {
+        if(this.CurrentEvolution == MoveEvolution.None)
+        {
+            this.assetLocalizationComponent = null;
+            this.EvolutionSprite = null;
+            return;
+        }
+
+        this.assetLocalizationComponent = new LocalizationComponentAsset<Sprite>(
+            LocalizationEntity.Move,
+            this.CurrentEvolution.ToString().ToLower(),
+            new[] { LocalizationField.Evolution }
+        );
+
+        this.EvolutionSprite = await assetLocalizationComponent.GetAssetAsync(LocalizationField.Evolution);
+    }
+
+}
 
     /*
     dictionaries
@@ -108,4 +203,3 @@ public class MoveComponentEvolution
     LimitBreak: this method is called to evolve to the last evolution. For example from SS to SSS. But it only works is you are in the previos evolution to the last one.
     
     */
-}

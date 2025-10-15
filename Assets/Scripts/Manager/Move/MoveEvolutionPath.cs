@@ -15,12 +15,12 @@ public class MoveEvolutionPath : ScriptableObject
 
     public void Initialize()
     {
-        _pathMap = evolutionPath.ToDictionary(p => p.previous, p => p.next);
+        _pathMap = evolutionPath.ToDictionary(p => p.Previous, p => p.Next);
     }
 
-    public bool TryGetNextEvolution(MoveEvolution current, out MoveEvolution next)
-        => _pathMap.TryGetValue(current, out next);
+    public bool TryGetNextEvolution(MoveEvolution current, out MoveEvolution next) => _pathMap.TryGetValue(current, out next);
 
-    public bool IsLastEvolution(MoveEvolution evo)
-        => !_pathMap.ContainsKey(evo);
+    public bool IsLastEvolution(MoveEvolution evo) => !_pathMap.ContainsKey(evo);
+
+    public MoveEvolution GetLastEvolution() => evolutionPath[evolutionPath.Count - 1].Next;
 }

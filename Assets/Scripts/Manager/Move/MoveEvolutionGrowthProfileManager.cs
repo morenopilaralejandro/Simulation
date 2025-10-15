@@ -29,7 +29,7 @@ public class MoveEvolutionGrowthProfileManager : MonoBehaviour
 
     public void LoadAllMoveEvolutionGrowthProfile()
     {
-        Addressables.LoadAssetsAsync<MoveEvolutionGrowthProfile>("Moves-Evolutions-GrowthProfile", data =>
+        Addressables.LoadAssetsAsync<MoveEvolutionGrowthProfile>("Moves-Evolutions-Growth", data =>
         {
             RegisterMoveEvolutionGrowthProfile(data);
         }).Completed += handle =>
@@ -46,12 +46,12 @@ public class MoveEvolutionGrowthProfileManager : MonoBehaviour
             moveEvolutionGrowthProfileDict.Add(key, moveEvolutionGrowthProfile);
     }
 
-    public MoveEvolutionGrowthProfile GetMoveEvolutionGrowthProfile(Move move)
+    public MoveEvolutionGrowthProfile GetMoveEvolutionGrowthProfile(MoveData moveData)
     {
-        var key = (move.GrowthType, move.GrowthRate);
+        var key = (moveData.GrowthType, moveData.GrowthRate);
         if (!moveEvolutionGrowthProfileDict.TryGetValue(key, out var moveEvolutionGrowthProfile))
         {
-            LogManager.Error($"[MoveEvolutionGrowthProfileManager] No MoveEvolutionGrowthProfile found for type '{move.GrowthType}' and rate '{move.GrowthRate}'.");
+            LogManager.Error($"[MoveEvolutionGrowthProfileManager] No MoveEvolutionGrowthProfile found for type '{moveData.GrowthType}' and rate '{moveData.GrowthRate}'.");
             return null;
         }
 

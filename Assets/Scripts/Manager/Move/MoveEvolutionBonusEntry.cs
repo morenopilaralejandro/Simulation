@@ -5,6 +5,6 @@ using Simulation.Enums.Move;
 [Serializable]
 public class MoveEvolutionBonusEntry
 {
-    public MoveEvolution evolution;
-    public int extraPower;
+    public MoveEvolution Evolution;
+    public int ExtraPower;
 }

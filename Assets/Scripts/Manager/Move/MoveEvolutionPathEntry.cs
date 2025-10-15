@@ -5,6 +5,6 @@ using Simulation.Enums.Move;
 [Serializable]
 public class MoveEvolutionPathEntry
 {
-    public MoveEvolution previous;
-    public MoveEvolution next;
+    public MoveEvolution Previous;
+    public MoveEvolution Next;
 }

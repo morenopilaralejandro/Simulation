@@ -11,9 +11,9 @@ public class Move
     private MoveComponentAttributes attributesComponent;
     private LocalizationComponentString localizationStringComponent;
     private MoveComponentParticipants participantsComponent;
-    private MoveComponentEvolution evolutionComponent;
     //private MoveComponentRestrictionLearn restrictionLearnComponent;
     private MoveComponentRestrictionParticipants restrictionParticipantsComponent;
+    private MoveComponentEvolution evolutionComponent;
 
     public Move(MoveData moveData)
     {
@@ -31,9 +31,9 @@ public class Move
         );
 
         participantsComponent = new MoveComponentParticipants(moveData, this);
-        evolutionComponent = new MoveComponentEvolution(moveData, this);
         //restrictionLearnComponent = new MoveComponentRestrictionLearn(moveData);
         restrictionParticipantsComponent = new MoveComponentRestrictionParticipants(moveData, this);
+        evolutionComponent = new MoveComponentEvolution(moveData, this);
     }
 
     #region API
@@ -59,9 +59,6 @@ public class Move
     public List<Character> FinalParticipants => participantsComponent.FinalParticipants;
     public bool TryFinalizeParticipants(Character user, List<Character> teammates) => participantsComponent.TryFinalizeParticipants(user, teammates);
     public void SetSelectedParticipant(Character character, int index) => participantsComponent.SetSelectedParticipant(character, index);
-    //evolutionComponent
-    public GrowthType GrowthType => evolutionComponent.GrowthType;
-    public GrowthRate GrowthRate => evolutionComponent.GrowthRate;
     //restrictionLearnComponent
     /*
     public List<Element> AllowedElements => restrictionLearnComponent.AllowedElements;
@@ -74,5 +71,9 @@ public class Move
     public List<string> RequiredParticipantMoves => restrictionParticipantsComponent.RequiredParticipantMoves;
     public bool IsCharacterValidForIndex(Character character, int index) => restrictionParticipantsComponent.IsCharacterValidForIndex(character, index);
     public bool MeetsAllParticipantRestrictions(Character[] participants) => restrictionParticipantsComponent.MeetsAllParticipantRestrictions(participants);
+    //evolutionComponent
+    public GrowthType GrowthType => evolutionComponent.GrowthType;
+    public GrowthRate GrowthRate => evolutionComponent.GrowthRate;
+
     #endregion
 }

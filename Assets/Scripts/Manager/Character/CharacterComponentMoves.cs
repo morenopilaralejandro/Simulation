@@ -57,13 +57,13 @@ public class CharacterComponentMoves : MonoBehaviour
     {
         Move move = new Move(MoveManager.Instance.GetMoveData(moveId));
         learnedMoves.Add(move);
+        LogManager.Trace($"[CharacterComponentMoves] {this.character.CharacterId} learned {move.MoveId}");
         EquipMove(move);
     }
 
     public void EquipMove(Move move)
     {
-        if (equippedMoves.Count < MAX_EQUIPPED_MOVES_DEFAULT)
-            equippedMoves.Add(move);
+        if (equippedMoves.Count < MAX_EQUIPPED_MOVES_DEFAULT) equippedMoves.Add(move);
     }
 
     public void UnequipMove(Move move)

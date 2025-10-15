@@ -18,8 +18,8 @@ public class MoveEvolutionGrowthProfile : ScriptableObject
 
     public void Initialize()
     {
-        _bonusMap = bonuses.ToDictionary(b => b.evolution, b => b.extraPower);
-        _thresholdMap = thresholds.ToDictionary(t => t.evolution, t => t.usageThreshold);
+        _bonusMap = bonuses.ToDictionary(b => b.Evolution, b => b.ExtraPower);
+        _thresholdMap = thresholds.ToDictionary(t => t.Evolution, t => t.UsageThreshold);
     }
 
     public int GetBonus(MoveEvolution evo)

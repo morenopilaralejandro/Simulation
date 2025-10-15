@@ -5,6 +5,6 @@ using Simulation.Enums.Move;
 [Serializable]
 public class MoveEvolutionThresholdEntry
 {
-    public MoveEvolution evolution;
-    public int usageThreshold;
+    public MoveEvolution Evolution;
+    public int UsageThreshold;
 }
