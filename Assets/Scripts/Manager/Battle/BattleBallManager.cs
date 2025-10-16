@@ -12,7 +12,9 @@ public class BattleBallManager : MonoBehaviour
 
     private Transform spawnPoint; 
     private Vector3 defaultBallPosition;
-    private GameObject ball; 
+    private Ball ball;
+
+    public Ball Ball => ball; 
 
     private void Awake()
     {
@@ -56,7 +58,10 @@ public class BattleBallManager : MonoBehaviour
             return;
         }
 
-        ball = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
+        GameObject go = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
+        ball = go.GetComponent<Ball>();
+        ball.Initialize(BallManager.Instance.GetBallData(BattleArgs.BallId));
+        ball.name = ball.BallId;
         Debug.Log("[BattleBallManager] Ball spawned successfully.");
     }
 

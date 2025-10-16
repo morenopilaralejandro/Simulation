@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 4696448471607189628}
   - component: {fileID: 8878287290745493603}
   - component: {fileID: 2135094274942254463}
+  - component: {fileID: 7698264331970528490}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -84,6 +85,7 @@ MonoBehaviour:
   speedComponent: {fileID: 4696448471607189628}
   statusEffectsComponent: {fileID: 8878287290745493603}
   movesComponent: {fileID: 2135094274942254463}
+  controllerComponent: {fileID: 7698264331970528490}
   speechBubble: {fileID: 35096799686590751}
 --- !u!114 &1700100118279979926
 MonoBehaviour:
@@ -239,6 +241,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelUpLearnset: []
+--- !u!114 &7698264331970528490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181741452733680261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53936a3db4642e2199787310616c1ddf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2767282533359409485
 GameObject:
   m_ObjectHideFlags: 0
