@@ -22,6 +22,9 @@ public class BootstrapManager : MonoBehaviour
         AsyncOperationHandle initAddressablesHandle = Addressables.InitializeAsync();
         yield return initAddressablesHandle;
 
+        yield return new WaitUntil(() => BallManager.Instance != null);
+        yield return new WaitUntil(() => BallManager.Instance.IsReady);
+
         yield return new WaitUntil(() => CharacterManager.Instance != null);
         yield return new WaitUntil(() => CharacterManager.Instance.IsReady);
 

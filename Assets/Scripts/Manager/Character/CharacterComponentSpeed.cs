@@ -5,7 +5,7 @@ public class CharacterComponentSpeed : MonoBehaviour
 {
     private Character character;
 
-    private float defaultSpeedMultiplier = 1f;
+    private float defaultSpeedMultiplier = 0.025f;
     private float minSpeed = 0.2f;
 
     public void Initialize(CharacterData characterData, Character character) 

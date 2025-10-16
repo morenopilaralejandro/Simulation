@@ -20,11 +20,7 @@ public class BattleManager : MonoBehaviour
     public bool IsTimeFrozen { get; private set; } = false;
 
     public Dictionary<TeamSide, Team> Teams => BattleTeamManager.Instance.Teams;
-
-    [SerializeField] private float topOffset    = 1f;
-    [SerializeField] private float bottomOffset = 1f;
-    [SerializeField] private float leftOffset   = 1f;
-    [SerializeField] private float rightOffset  = 1f;
+    public Ball Ball => BattleBallManager.Instance.Ball; 
 
     public event Action OnAllCharactersReady;
     private int charactersReadyMax;
@@ -43,11 +39,6 @@ public class BattleManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         OnAllCharactersReady += HandleAllCharactersReady;
-
-        BoundManager.TopOffset = topOffset;
-        BoundManager.BottomOffset = bottomOffset;
-        BoundManager.LeftOffset = leftOffset;
-        BoundManager.RightOffset = rightOffset;
     }
 
     void Start()
@@ -89,6 +80,7 @@ public class BattleManager : MonoBehaviour
     {
         //start kickoff etc
         ResetDefaultPositions();
+        CharacterChangeControlManager.Instance.ChangeToBallNearest();
     }
 
     private void PopulateTeamWithCharacters(Team team, int teamSize)

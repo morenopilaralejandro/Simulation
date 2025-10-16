@@ -20,6 +20,7 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentSpeed speedComponent;
     [SerializeField] private CharacterComponentStatusEffects statusEffectsComponent;
     [SerializeField] private CharacterComponentMoves movesComponent;
+    [SerializeField] private CharacterComponentController controllerComponent;
 
     [SerializeField] private SpeechBubble speechBubble;
     #endregion
@@ -53,23 +54,19 @@ public class Character : MonoBehaviour
         speedComponent.Initialize(characterData, this);
         statusEffectsComponent.Initialize(characterData, this);
         movesComponent.Initialize(characterData, this);
+        controllerComponent.Initialize(characterData, this);
 
         /*
         if (isSave)
             persistence.Apply(save);
         else
-            stats.ApplyLevel(def.StartingLevel);        
-        
-        health.OnHpChanged += hp =>
-        {
-            speedDebuff.OnHpChanged(hp);
-        };
+            stats.ApplyLevel(def.StartingLevel);               
         */
     }
     #endregion
 
     #region API
-    //attributeComponent
+    //attributesComponent
     public string CharacterId => attributesComponent.CharacterId;
     public CharacterSize CharacterSize => attributesComponent.CharacterSize;
     public Gender Gender => attributesComponent.Gender;
@@ -152,13 +149,20 @@ public class Character : MonoBehaviour
     public bool HasAffordableMoveWithTrait(Trait trait) => movesComponent.HasAffordableMoveWithTrait(trait);
     public Move GetRandomAffordableMove() => movesComponent.GetRandomAffordableMove();
     public Move GetStrongestAffordableMove() => movesComponent.GetStrongestAffordableMove();
+    //controllerComponent
+    public bool IsControlled => controllerComponent.IsControlled;
+
 
     //speechBubble
     public void ShowMessage(BubbleMessage bubbleMessage) => speechBubble.ShowMessage(bubbleMessage);
     public void HideSpeechBubbleImmediate() => speechBubble.HideImmediate();
+
+    //ball
+    public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;
     //misc
     public bool CanMove() => !IsStunned();
     public bool CanDuel() => !IsStunned();
+    
     #endregion
 
 }
