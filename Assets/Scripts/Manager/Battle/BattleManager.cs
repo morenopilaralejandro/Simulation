@@ -20,7 +20,10 @@ public class BattleManager : MonoBehaviour
     public bool IsTimeFrozen { get; private set; } = false;
 
     public Dictionary<TeamSide, Team> Teams => BattleTeamManager.Instance.Teams;
-    public Ball Ball => BattleBallManager.Instance.Ball; 
+    public Dictionary<TeamSide, Character> TargetedCharacter => CharacterTargetManager.Instance.TargetedCharacter;
+    public Dictionary<TeamSide, Character> ControlledCharacter => CharacterChangeControlManager.Instance.ControlledCharacter;
+    public Ball Ball => BattleBallManager.Instance.Ball;
+    public TeamSide GetUserSide() => BattleTeamManager.Instance.GetUserSide();
 
     public event Action OnAllCharactersReady;
     private int charactersReadyMax;
@@ -33,9 +36,7 @@ public class BattleManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-
         DontDestroyOnLoad(gameObject);
 
         OnAllCharactersReady += HandleAllCharactersReady;
@@ -80,7 +81,7 @@ public class BattleManager : MonoBehaviour
     {
         //start kickoff etc
         ResetDefaultPositions();
-        CharacterChangeControlManager.Instance.ChangeToBallNearest();
+        CharacterEvents.RaiseControlChange(Teams[TeamSide.Home].CharacterList[10]);
     }
 
     private void PopulateTeamWithCharacters(Team team, int teamSize)

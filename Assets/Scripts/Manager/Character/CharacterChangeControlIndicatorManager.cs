@@ -8,7 +8,7 @@ public class CharacterChangeControlIndicatorManager : MonoBehaviour
     public static CharacterChangeControlIndicatorManager Instance { get; private set; }
 
     private Transform indicator;
-    private Character target => CharacterChangeControlManager.Instance.CurrentCharacter;
+    private Character currenCharacter => BattleManager.Instance.ControlledCharacter?[BattleTeamManager.Instance.GetUserSide()];
 
     private void Awake()
     {
@@ -28,10 +28,10 @@ public class CharacterChangeControlIndicatorManager : MonoBehaviour
 
     void Update()
     {
-        if (target && !BattleManager.Instance.IsTimeFrozen)
+        if (currenCharacter && !BattleManager.Instance.IsTimeFrozen)
         {
             indicator.gameObject.SetActive(true);
-            TrackTarget();
+            TrackCurrenCharacter();
         } else 
         {
             indicator?.gameObject.SetActive(false);
@@ -50,9 +50,9 @@ public class CharacterChangeControlIndicatorManager : MonoBehaviour
         this.indicator = null;
     }
 
-    public void TrackTarget()
+    public void TrackCurrenCharacter()
     {
-        indicator.position = target.transform.position;
+        indicator.position = currenCharacter.transform.position;
     }
 
 }

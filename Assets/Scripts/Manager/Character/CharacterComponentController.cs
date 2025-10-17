@@ -7,7 +7,8 @@ public class CharacterComponentController : MonoBehaviour
 {
     private Character character;
 
-    [SerializeField] private bool isControlled => CharacterChangeControlManager.Instance.CurrentCharacter == this.character;
+    private float rotationSpeed = 10f;
+    [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
 
     public bool IsControlled => isControlled;
 
@@ -28,18 +29,31 @@ public class CharacterComponentController : MonoBehaviour
 
     void Update()
     {
-        if (!this.isControlled || !this.character.CanMove()) return;
+        if (!this.isControlled || BattleManager.Instance.IsTimeFrozen) 
+            return;
 
-        Vector2 moveInput = InputManager.Instance.GetMove();
-        float speed = this.character.GetMovementSpeed();
-        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y) * speed * Time.deltaTime;
-        if (moveInput.sqrMagnitude > 0.01f)
-            LogManager.Trace($"[CharacterComponentController] " +
-                $"Character: {character.CharacterId}, " +
-                $"Input: {moveInput}, " +
-                $"Speed: {speed}, " +
-                $"Position: {transform.position}");
-        transform.Translate(move, Space.World);
+        HandleTarget();
+    
+        if (!this.character.HasBall() && 
+            InputManager.Instance.GetDown(BattleAction.Change)) 
+            HandleChange();
+
+        if (!this.character.CanMove()) 
+            return;
+            
+        HandleMovement();
+
+        //block
+
+        if (!this.character.HasBall()) 
+            return;
+
+        if (InputManager.Instance.GetDown(BattleAction.Pass)) 
+            HandlePass();
+
+        //dribble
+
+
     }
 
     private void HandleAssignCharacterToTeamBattle(
@@ -51,6 +65,86 @@ public class CharacterComponentController : MonoBehaviour
         {
             this.enabled = false;
         }
+    }
+
+    private void HandleTarget() 
+    {
+        Vector2 moveInput = InputManager.Instance.GetMove();
+        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
+        Character target = 
+            CharacterTargetManager.Instance.GetClosestTeammateInDirection(
+            this.character, move);
+        CharacterEvents.RaiseTargetChange(target);
+    }
+
+    private void HandleMovement() 
+    {
+        Vector2 moveInput = InputManager.Instance.GetMove();
+        float speed = this.character.GetMovementSpeed();
+        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
+
+        if (move.sqrMagnitude > 0.01f)
+        {
+            // Calculate target rotation (look direction)
+            Quaternion targetRotation = Quaternion.LookRotation(move, Vector3.up);
+
+            // Smoothly rotate towards movement direction
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                rotationSpeed * Time.deltaTime
+            );
+
+            // Apply movement
+            transform.Translate(move * speed * Time.deltaTime, Space.World);
+
+            LogManager.Trace($"[CharacterComponentController] " +
+                $"Character: {character.CharacterId}, " +
+                $"Input: {moveInput}, " +
+                $"Speed: {speed}, " +
+                $"Position: {transform.position}");
+        }
+    }
+
+    private void HandlePass() 
+    {
+        Character target = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
+        if(target)
+            PassToTeammate(target);
+        else 
+            PassForward();
+    }
+
+    private void PassToTeammate(Character character) 
+    {
+
+    }
+
+    private void PassForward() 
+    {
+
+    }
+
+    private void HandleChange() 
+    {
+        Character target = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
+        if (target)
+            ChangeToTarget(target);
+        else
+            ChangeToClosestToBall();
+    }
+
+    private void ChangeToTarget(Character character) 
+    {
+        CharacterEvents.RaiseControlChange(character);
+    }
+
+    private void ChangeToClosestToBall() 
+    {
+        Character newCharacter = 
+            CharacterChangeControlManager.Instance.GetClosestTeammateToBall(
+                this.character, includeSelf: false);
+        CharacterEvents.RaiseControlChange(newCharacter);
     }
 
 }

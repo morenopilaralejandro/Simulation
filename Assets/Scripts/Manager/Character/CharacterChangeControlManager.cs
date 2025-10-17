@@ -1,18 +1,18 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Simulation.Enums.Character;
 using Simulation.Enums.Input;
 
 public class CharacterChangeControlManager : MonoBehaviour
 {
     public static CharacterChangeControlManager Instance { get; private set; }
 
-    private List<Character> teammates => BattleManager.Instance.Teams[BattleTeamManager.Instance.GetUserSide()].CharacterList;
     private Ball ball => BattleManager.Instance.Ball;
     private int teamSize => BattleManager.Instance.CurrentTeamSize;
-    [SerializeField] private Character currentCharacter = null;
+    [SerializeField] private Dictionary<TeamSide, Character> controlledCharacter = new ();
 
-    public Character CurrentCharacter => currentCharacter;
+    public Dictionary<TeamSide, Character> ControlledCharacter => controlledCharacter;
 
     private void Awake()
     {
@@ -23,6 +23,9 @@ public class CharacterChangeControlManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        this.controlledCharacter.Add(TeamSide.Home, null);
+        this.controlledCharacter.Add(TeamSide.Away, null);
     }
 
     void Start()
@@ -30,30 +33,48 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     }
 
-    void Update()
+    private void OnEnable()
     {
-        if (!BattleManager.Instance.IsTimeFrozen && InputManager.Instance.GetDown(BattleAction.Change))
-            ChangeToBallNearest();
+        CharacterEvents.OnControlChange += HandleOnControlChange;
     }
 
-    public void ChangeToBallNearest()
+    private void OnDisable()
     {
-        Character nearestCharacter = currentCharacter;
+        CharacterEvents.OnControlChange += HandleOnControlChange;
+    }
+
+    private void HandleOnControlChange(
+        Character character)
+    {
+        this.controlledCharacter[character.TeamSide] = character;
+    }
+
+    public Character GetClosestTeammateToBall(Character character, bool includeSelf)
+    {
+        Character nearestCharacter = null;
+        List<Character> teammates = character.GetTeammates();
         float closestDistance = Mathf.Infinity;
 
         for (int i = 0; i < teamSize; i++)
         {
-            float dist = Vector3.Distance(ball.transform.position, teammates[i].transform.position);
+            Character teammate = teammates[i];
+
+            // Skip self unless includeSelf is true
+            if (!includeSelf && teammate == character || !teammate.CanMove())
+                continue;
+            float dist = Vector3.Distance(
+                ball.transform.position, 
+                teammate.transform.position);
             if (dist < closestDistance)
             {
                 closestDistance = dist;
-                nearestCharacter = teammates[i];
+                nearestCharacter = teammate;
             }
         }
 
-        // Only switch if we actually found a different player
-        if (nearestCharacter != currentCharacter)
-            currentCharacter = nearestCharacter;
+        return nearestCharacter ?? character;
     }
+
+
 
 }
