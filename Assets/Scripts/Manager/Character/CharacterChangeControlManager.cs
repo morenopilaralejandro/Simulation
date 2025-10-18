@@ -33,20 +33,27 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     }
 
-    private void OnEnable()
+    void Update() 
     {
-        CharacterEvents.OnControlChange += HandleOnControlChange;
+        Character character = controlledCharacter[BattleManager.Instance.GetUserSide()];
+        if (character &&
+            !character.HasBall() && 
+            InputManager.Instance.GetDown(BattleAction.Change)) 
+        {
+            Character newCharacter = BattleManager.Instance.TargetedCharacter[character.TeamSide];
+            if(newCharacter == null) 
+                newCharacter = GetClosestTeammateToBall(character, includeSelf: false);
+ 
+            SetControlledCharacter(newCharacter, newCharacter.TeamSide);           
+        }
+        //event used to change indicator
     }
 
-    private void OnDisable()
-    {
-        CharacterEvents.OnControlChange += HandleOnControlChange;
-    }
-
-    private void HandleOnControlChange(Character character, TeamSide teamSide)
+    public void SetControlledCharacter(Character character, TeamSide teamSide)
     {
         this.controlledCharacter[teamSide] = character;
-        LogManager.Trace($"[CharacterChangeControlManager] {teamSide.ToString()} control assigned to {character?.CharacterId}", this);
+        CharacterEvents.RaiseControlChange(character, character.TeamSide);
+        LogManager.Trace($"[CharacterChangeControlManager] {character.TeamSide.ToString()} control assigned to {character.CharacterId}", this);
     }
 
     public Character GetClosestTeammateToBall(Character character, bool includeSelf)

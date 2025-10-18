@@ -7,6 +7,9 @@ public class CharacterComponentController : MonoBehaviour
 {
     private Character character;
 
+    private Vector2 moveInput;
+    private Vector3 move;
+    private float moveTolerance = 0.01f;
     private float rotationSpeed = 10f;
     [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
 
@@ -32,14 +35,10 @@ public class CharacterComponentController : MonoBehaviour
         if (!this.isControlled || BattleManager.Instance.IsTimeFrozen) 
             return;
 
-        HandleTarget();
-    
-        if (!this.character.HasBall() && 
-            InputManager.Instance.GetDown(BattleAction.Change)) 
-        {
-            HandleChange();
-            return;
-        }
+        moveInput = InputManager.Instance.GetMove();
+        move = new Vector3(moveInput.x, 0f, moveInput.y);
+
+        HandleTarget();    
 
         if (!this.character.CanMove()) 
             return;
@@ -72,10 +71,8 @@ public class CharacterComponentController : MonoBehaviour
 
     private void HandleTarget() 
     {
-        Vector2 moveInput = InputManager.Instance.GetMove();
-        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
         Character target = 
-            move.sqrMagnitude > 0.01f ?
+            move.sqrMagnitude > moveTolerance ?
                 CharacterTargetManager.Instance.GetClosestTeammateInDirection(
                 this.character, move) 
                 : null;
@@ -84,12 +81,9 @@ public class CharacterComponentController : MonoBehaviour
 
     private void HandleMovement() 
     {
-        Vector2 moveInput = InputManager.Instance.GetMove();
-        float speed = this.character.GetMovementSpeed();
-        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
-
-        if (move.sqrMagnitude > 0.01f)
+        if (move.sqrMagnitude > moveTolerance)
         {
+            float speed = this.character.GetMovementSpeed();
             // Calculate target rotation (look direction)
             Quaternion targetRotation = Quaternion.LookRotation(move, Vector3.up);
 
@@ -102,12 +96,13 @@ public class CharacterComponentController : MonoBehaviour
 
             // Apply movement
             transform.Translate(move * speed * Time.deltaTime, Space.World);
-
+            /*
             LogManager.Trace($"[CharacterComponentController] " +
                 $"Character: {character.CharacterId}, " +
                 $"Input: {moveInput}, " +
                 $"Speed: {speed}, " +
                 $"Position: {transform.position}");
+            */
         }
     }
 
@@ -129,27 +124,4 @@ public class CharacterComponentController : MonoBehaviour
     {
 
     }
-
-    private void HandleChange() 
-    {
-        Character target = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
-        if (target)
-            ChangeToTarget(target);
-        else
-            ChangeToClosestToBall();
-    }
-
-    private void ChangeToTarget(Character character) 
-    {
-        CharacterEvents.RaiseControlChange(character, this.character.TeamSide);
-    }
-
-    private void ChangeToClosestToBall() 
-    {
-        Character newCharacter = 
-            CharacterChangeControlManager.Instance.GetClosestTeammateToBall(
-                this.character, includeSelf: false);
-        CharacterEvents.RaiseControlChange(newCharacter, this.character.TeamSide);
-    }
-
 }
