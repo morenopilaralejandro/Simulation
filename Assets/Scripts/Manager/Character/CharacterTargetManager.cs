@@ -43,10 +43,10 @@ public class CharacterTargetManager : MonoBehaviour
         CharacterEvents.OnTargetChange += HandleOnTargetChange;
     }
 
-    private void HandleOnTargetChange(
-        Character character)
+    private void HandleOnTargetChange(Character character, TeamSide teamSide)
     {
-        this.targetedCharacter[BattleTeamManager.Instance.GetUserSide()] = character;
+        this.targetedCharacter[teamSide] = character;
+        //LogManager.Trace($"[CharacterTargetManager] {teamSide.ToString()} target assigned to {character?.CharacterId}", this);
     }
 
     public Character GetClosestTeammateInDirection(Character character, Vector3 direction)

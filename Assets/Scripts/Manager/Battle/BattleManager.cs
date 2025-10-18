@@ -81,7 +81,7 @@ public class BattleManager : MonoBehaviour
     {
         //start kickoff etc
         ResetDefaultPositions();
-        CharacterEvents.RaiseControlChange(Teams[TeamSide.Home].CharacterList[10]);
+        CharacterEvents.RaiseControlChange(Teams[TeamSide.Home].CharacterList[10], TeamSide.Home);
     }
 
     private void PopulateTeamWithCharacters(Team team, int teamSize)

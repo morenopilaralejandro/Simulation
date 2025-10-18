@@ -22,6 +22,7 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentMoves movesComponent;
     [SerializeField] private CharacterComponentController controllerComponent;
 
+    [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private SpeechBubble speechBubble;
     #endregion
 
@@ -56,6 +57,8 @@ public class Character : MonoBehaviour
         movesComponent.Initialize(characterData, this);
         controllerComponent.Initialize(characterData, this);
 
+
+        teamIndicatorComponent.Initialize(characterData, this);
         /*
         if (isSave)
             persistence.Apply(save);

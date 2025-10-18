@@ -20,34 +20,34 @@ public static class ColorManager
 
     private static readonly Dictionary<string, Color> teamIndicatorColors = new Dictionary<string, Color>()
     {
-        {"ally",    Color.blue},
-        {"opp",     Color.red}
+        {"ally-default", new Color(0.00f, 0.00f, 0.50f)},
+        {"opponent-default", new Color(0.50f, 0.00f, 0.00f)},
+        {"ally-highlight", new Color(0.40f, 0.40f, 1.00f)},
+        {"opponent-highlight", new Color(1.00f, 0.40f, 0.40f)}
     };
 
-    public static Color GetTeamIndicatorColor(int teamIndex)
+    public static Color GetTeamIndicatorColor(TeamSide teamSide, bool highlight)
     {
-        //int localTeamIndex = BattleManager.Instance.GetLocalTeamIndex();
-        int localTeamIndex = 0;
-        if (teamIndex == localTeamIndex) 
+        TeamSide userSide = BattleManager.Instance.GetUserSide();
+        if (teamSide == userSide) 
         {
-            return teamIndicatorColors["ally"];
+            return highlight ? teamIndicatorColors["ally-highlight"] : teamIndicatorColors["ally-default"];
         } else 
         {
-            return teamIndicatorColors["opp"];
+            return highlight ? teamIndicatorColors["opponent-highlight"] : teamIndicatorColors["opponent-default"];
         }
     }
 
     private static readonly Dictionary<string, Color> teamIndicatorTextColors = new Dictionary<string, Color>()
     {
-        {"ally",    new Color(0.00f, 1.00f, 1.00f)},
-        {"opp",     new Color(1.0f, 0.10f, 0.10f)}
+        {"ally",    Color.blue},
+        {"opponent",     Color.red}
     };
 
-    public static Color GetTeamIndicatorTextColor(int teamIndex)
+    public static Color GetTeamIndicatorTextColor(TeamSide teamSide)
     {
-        //int localTeamIndex = BattleManager.Instance.GetLocalTeamIndex();
-        int localTeamIndex = 0;
-        if (teamIndex == localTeamIndex) 
+        TeamSide userSide = BattleManager.Instance.GetUserSide();
+        if (teamSide == userSide) 
         {
             return teamIndicatorTextColors["ally"];
         } else 

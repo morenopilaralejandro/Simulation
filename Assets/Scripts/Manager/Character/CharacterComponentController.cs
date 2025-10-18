@@ -36,7 +36,10 @@ public class CharacterComponentController : MonoBehaviour
     
         if (!this.character.HasBall() && 
             InputManager.Instance.GetDown(BattleAction.Change)) 
+        {
             HandleChange();
+            return;
+        }
 
         if (!this.character.CanMove()) 
             return;
@@ -72,9 +75,11 @@ public class CharacterComponentController : MonoBehaviour
         Vector2 moveInput = InputManager.Instance.GetMove();
         Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y);
         Character target = 
-            CharacterTargetManager.Instance.GetClosestTeammateInDirection(
-            this.character, move);
-        CharacterEvents.RaiseTargetChange(target);
+            move.sqrMagnitude > 0.01f ?
+                CharacterTargetManager.Instance.GetClosestTeammateInDirection(
+                this.character, move) 
+                : null;
+            CharacterEvents.RaiseTargetChange(target, this.character.TeamSide);
     }
 
     private void HandleMovement() 
@@ -136,7 +141,7 @@ public class CharacterComponentController : MonoBehaviour
 
     private void ChangeToTarget(Character character) 
     {
-        CharacterEvents.RaiseControlChange(character);
+        CharacterEvents.RaiseControlChange(character, this.character.TeamSide);
     }
 
     private void ChangeToClosestToBall() 
@@ -144,7 +149,7 @@ public class CharacterComponentController : MonoBehaviour
         Character newCharacter = 
             CharacterChangeControlManager.Instance.GetClosestTeammateToBall(
                 this.character, includeSelf: false);
-        CharacterEvents.RaiseControlChange(newCharacter);
+        CharacterEvents.RaiseControlChange(newCharacter, this.character.TeamSide);
     }
 
 }

@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 8878287290745493603}
   - component: {fileID: 2135094274942254463}
   - component: {fileID: 7698264331970528490}
+  - component: {fileID: 5105419617310854482}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -87,6 +88,7 @@ MonoBehaviour:
   statusEffectsComponent: {fileID: 8878287290745493603}
   movesComponent: {fileID: 2135094274942254463}
   controllerComponent: {fileID: 7698264331970528490}
+  teamIndicatorComponent: {fileID: 5105419617310854482}
   speechBubble: {fileID: 35096799686590751}
 --- !u!114 &1700100118279979926
 MonoBehaviour:
@@ -254,6 +256,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53936a3db4642e2199787310616c1ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5105419617310854482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181741452733680261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61756727ec60bb25eae678ab95a0d364, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indicatorRenderer: {fileID: 2406097349220093144}
 --- !u!1 &2767282533359409485
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,6 +633,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a13954fc2421080798c9be617b65957, type: 3}
+--- !u!212 &2406097349220093144 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5131061559107179272, guid: 8a13954fc2421080798c9be617b65957, type: 3}
+  m_PrefabInstance: {fileID: 7372706534607495120}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4800912450715253977 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2662007776084681481, guid: 8a13954fc2421080798c9be617b65957, type: 3}

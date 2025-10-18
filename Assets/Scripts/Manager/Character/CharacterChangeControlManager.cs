@@ -43,10 +43,10 @@ public class CharacterChangeControlManager : MonoBehaviour
         CharacterEvents.OnControlChange += HandleOnControlChange;
     }
 
-    private void HandleOnControlChange(
-        Character character)
+    private void HandleOnControlChange(Character character, TeamSide teamSide)
     {
-        this.controlledCharacter[character.TeamSide] = character;
+        this.controlledCharacter[teamSide] = character;
+        LogManager.Trace($"[CharacterChangeControlManager] {teamSide.ToString()} control assigned to {character?.CharacterId}", this);
     }
 
     public Character GetClosestTeammateToBall(Character character, bool includeSelf)
