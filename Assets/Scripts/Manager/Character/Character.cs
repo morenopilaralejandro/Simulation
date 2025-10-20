@@ -165,7 +165,11 @@ public class Character : MonoBehaviour
     public void HideSpeechBubbleImmediate() => speechBubble.HideImmediate();
 
     //ball
+    public void KickBallTo(Vector3 targetPos) => BattleManager.Instance.Ball.KickBallTo(targetPos);
     public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;
+    public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this);
+    public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this); //also handle long shoot etc;
+    public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
     //misc
     public bool CanMove() => !IsStunned();
     public bool CanDuel() => !IsStunned();

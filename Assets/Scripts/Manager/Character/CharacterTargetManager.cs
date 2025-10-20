@@ -9,7 +9,7 @@ public class CharacterTargetManager : MonoBehaviour
     public static CharacterTargetManager Instance { get; private set; }
 
     private int teamSize => BattleManager.Instance.CurrentTeamSize;
-    private float angleThreshold = 45f;
+    private float angleThreshold = 30f;
     [SerializeField] private Dictionary<TeamSide, Character> targetedCharacter = new ();
 
     public Dictionary<TeamSide, Character> TargetedCharacter => targetedCharacter;
@@ -40,7 +40,7 @@ public class CharacterTargetManager : MonoBehaviour
 
     private void OnDisable()
     {
-        CharacterEvents.OnTargetChange += HandleOnTargetChange;
+        CharacterEvents.OnTargetChange -= HandleOnTargetChange;
     }
 
     private void HandleOnTargetChange(Character character, TeamSide teamSide)
@@ -61,12 +61,12 @@ public class CharacterTargetManager : MonoBehaviour
             Character teammate = teammates[i];
             if (teammate == character || !teammate.CanMove()) continue;  // Skip self
 
-            Vector3 toTeammate = (teammate.transform.position - character.transform.position);
+            Vector3 toTeammate = teammate.transform.position - character.transform.position;
             float angle = Vector3.Angle(direction, toTeammate);
 
             if (angle < angleThreshold)
             {
-                float distance = toTeammate.magnitude;
+                float distance = Vector3.Distance(character.transform.position, teammate.transform.position);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;

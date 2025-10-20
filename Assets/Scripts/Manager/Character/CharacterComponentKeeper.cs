@@ -24,7 +24,7 @@ public class CharacterComponentKeeper : MonoBehaviour
 
     private void OnEnable()
     {
-        TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;    
+        TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;
     }
 
     private void OnDisable()
@@ -40,6 +40,7 @@ public class CharacterComponentKeeper : MonoBehaviour
         if (this.character == character)
         {
             this.isKeeper = formationCoord.Position == Position.GK ? true : false;
+            GoalManager.Instance.SetKeeper(this.character, team.TeamSide);
             UpdateKeeperColliderState();
         }
     }

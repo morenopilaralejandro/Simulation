@@ -11,6 +11,7 @@ public class CharacterComponentController : MonoBehaviour
     private Vector3 move;
     private float moveTolerance = 0.01f;
     private float rotationSpeed = 10f;
+    float forwardPassDistance = 1f;
     [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
 
     public bool IsControlled => isControlled;
@@ -79,7 +80,7 @@ public class CharacterComponentController : MonoBehaviour
             CharacterEvents.RaiseTargetChange(target, this.character.TeamSide);
     }
 
-    private void HandleMovement() 
+    private void HandleMovement()
     {
         if (move.sqrMagnitude > moveTolerance)
         {
@@ -117,11 +118,15 @@ public class CharacterComponentController : MonoBehaviour
 
     private void PassToTeammate(Character character) 
     {
-
+        this.character.KickBallTo(character.transform.position);
+        CharacterChangeControlManager.Instance.SetControlledCharacter(character, character.TeamSide);
     }
 
     private void PassForward() 
     {
-
+        Vector3 forwardDirection = this.character.transform.forward;
+        Vector3 targetPosition = this.character.transform.position + forwardDirection * forwardPassDistance;
+        this.character.KickBallTo(targetPosition);
     }
+
 }

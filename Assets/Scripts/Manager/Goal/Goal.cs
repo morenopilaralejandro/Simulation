@@ -6,9 +6,11 @@ public class Goal : MonoBehaviour
 {
     [SerializeField] private TeamSide teamSide;
 
+    public TeamSide TeamSide => teamSide;
+
     private void Awake()
     {
-        GoalManager.Instance.SetGoal(this, teamSide);   
+        GoalManager.Instance.SetGoal(this);   
     }
 
     private void OnDestroy()

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2662007776084681481}
   - component: {fileID: 5131061559107179272}
-  - component: {fileID: 2606619690732233202}
   m_Layer: 0
   m_Name: CharacterTeamIndicator
   m_TagString: Untagged
@@ -85,17 +84,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2606619690732233202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 758514543610058534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0943adf5ad7278ebe9d60f54f65498cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetCamera: {fileID: 0}
-  keepUpright: 1

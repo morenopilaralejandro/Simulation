@@ -33,6 +33,16 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     }
 
+    private void OnEnable()
+    {
+        BallEvents.OnGained += HandleOnGained;    
+    }
+
+    private void OnDisable()
+    {
+        BallEvents.OnGained -= HandleOnGained;
+    }
+
     void Update() 
     {
         Character character = controlledCharacter[BattleManager.Instance.GetUserSide()];
@@ -54,6 +64,11 @@ public class CharacterChangeControlManager : MonoBehaviour
         this.controlledCharacter[teamSide] = character;
         CharacterEvents.RaiseControlChange(character, character.TeamSide);
         LogManager.Trace($"[CharacterChangeControlManager] {character.TeamSide.ToString()} control assigned to {character.CharacterId}", this);
+    }
+
+    private void HandleOnGained(Character character) 
+    {
+        SetControlledCharacter(character, character.TeamSide);
     }
 
     public Character GetClosestTeammateToBall(Character character, bool includeSelf)

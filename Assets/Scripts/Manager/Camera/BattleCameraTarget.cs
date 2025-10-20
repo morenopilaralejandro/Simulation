@@ -4,8 +4,8 @@ public class BattleCameraTarget : MonoBehaviour
 {
     [Header("Offsets")]
     private Vector3 offset = new Vector3(0, 3, -4);  
-    private Vector3 team0Offset = new Vector3(0, 3, -4);  
-    private Vector3 team1Offset = new Vector3(0, 3, -4);   
+    private Vector3 homeOffset = new Vector3(0, 3, -2f);  
+    private Vector3 awayOffset = new Vector3(0, 3, -4);   
 
     [Header("Smoothing")]
     private float currentSmoothSpeed = 2f;
@@ -24,12 +24,12 @@ public class BattleCameraTarget : MonoBehaviour
              PossessionManager.Instance.LastCharacter != null &&
              PossessionManager.Instance.LastCharacter.IsOnUsersTeam())) 
         {
-            offset = team0Offset;
+            offset = homeOffset;
             followTarget = BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()].transform;
         }
         else
         {
-            offset = team1Offset;
+            offset = awayOffset;
             followTarget = BattleManager.Instance?.Ball.transform;
         }
 
@@ -39,7 +39,7 @@ public class BattleCameraTarget : MonoBehaviour
 
         // Clamp to field boundaries
         Vector3 clamped = desiredPosition;
-        clamped.z = -4;
+        //clamped.z = -4;
 
         float distance = Vector3.Distance(transform.position, clamped);
         currentSmoothSpeed = distance > distanceThreshold ? fastSmoothSpeed : normalSmoothSpeed;

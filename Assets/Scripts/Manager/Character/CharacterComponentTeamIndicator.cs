@@ -12,32 +12,46 @@ public class CharacterComponentTeamIndicator : MonoBehaviour
     public void Initialize(CharacterData characterData, Character character) 
     {
         this.character = character;
-        ChangeColor(false);
     }
 
     private void OnEnable()
     {
-        CharacterEvents.OnControlChange += HandleOnControlChange;    
+        TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;
+        CharacterEvents.OnControlChange += HandleOnControlChange;
     }
 
     private void OnDisable()
     {
+        TeamEvents.OnAssignCharacterToTeamBattle -= HandleAssignCharacterToTeamBattle;
         CharacterEvents.OnControlChange -= HandleOnControlChange;
+    }
+
+    private void HandleAssignCharacterToTeamBattle(
+        Character character, 
+        Team team, 
+        FormationCoord formationCoord)
+    {
+        if (this.character == character)
+        {
+            ChangeColor(team.TeamSide, false);
+        }
     }
 
     private void HandleOnControlChange(Character character, TeamSide teamSide)
     {
+        if (teamSide != this.character.TeamSide) return;
+
         if (this.character == character)
         {
-            ChangeColor(true);
+            ChangeColor(this.character.TeamSide, true);
         } else {
-            ChangeColor(false);
+            ChangeColor(this.character.TeamSide, false);
         }
     }
 
-    private void ChangeColor(bool highlight) 
+    private void ChangeColor(TeamSide teamSide, bool highlight) 
     {
-        indicatorRenderer.color = ColorManager.GetTeamIndicatorColor(this.character.TeamSide, highlight);
+        indicatorRenderer.color = ColorManager.GetTeamIndicatorColor(teamSide, highlight);
     }
 
 }

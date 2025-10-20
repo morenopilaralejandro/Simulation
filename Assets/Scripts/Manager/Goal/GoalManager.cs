@@ -12,8 +12,14 @@ public class GoalManager : MonoBehaviour
 {
     public static GoalManager Instance { get; private set; }
 
-    private Dictionary<TeamSide, Goal> goals = new Dictionary<TeamSide, Goal>();
+    private float keeperGoalDistanceX = 2f;
+    private float keeperGoalDistanceZ = 2f;
+    private float shootDistance = 2f;
+    private Dictionary<TeamSide, Goal> goals = new ();
+    private Dictionary<TeamSide, Character> keepers = new ();
+    
     public Dictionary<TeamSide, Goal> Goals => goals;
+    public Dictionary<TeamSide, Character> Keepers => keepers;
 
     private void Awake()
     {
@@ -35,11 +41,17 @@ public class GoalManager : MonoBehaviour
     public void Reset() 
     {
         goals.Clear();
+        keepers.Clear();
     }
 
-    public void SetGoal(Goal goal, TeamSide teamSide) 
+    public void SetGoal(Goal goal) 
     {
-        goals[teamSide] = goal;
+        goals[goal.TeamSide] = goal;
+    }
+
+    public void SetKeeper(Character character, TeamSide teamSide) 
+    {
+        keepers[teamSide] = character;
     }
 
     public Goal GetAllyGoal(Character character)
@@ -58,6 +70,12 @@ public class GoalManager : MonoBehaviour
         return Vector3.Distance(character.transform.position, goal.position);
     }
 
+    public float GetDistanceToAllyGoalX(Character character)
+    {
+        Transform goal = GetAllyGoal(character).transform;
+        return Mathf.Abs(character.transform.position.x - goal.position.x);
+    }
+
     public float GetDistanceToAllyGoalZ(Character character)
     {
         Transform goal = GetAllyGoal(character).transform;
@@ -70,6 +88,12 @@ public class GoalManager : MonoBehaviour
         return Vector3.Distance(character.transform.position, goal.position);
     }
 
+    public float GetDistanceToOppOpponentX(Character character)
+    {
+        Transform goal = GetOpponentGoal(character).transform;
+        return Mathf.Abs(character.transform.position.x - goal.position.x);
+    }
+
     public float GetDistanceToOppOpponentZ(Character character)
     {
         Transform goal = GetOpponentGoal(character).transform;
@@ -78,12 +102,25 @@ public class GoalManager : MonoBehaviour
 
     public Character GetAllyKeeper(Character character)
     {
-        return BattleManager.Instance.Teams[character.TeamSide].CharacterList[0];
+        return keepers[character.TeamSide];
     }
 
     public Character GetOpponentKeeper(Character character)
     {
-        return BattleManager.Instance.Teams[character.GetOpponentSide()].CharacterList[0];
+        return keepers[character.GetOpponentSide()];
+    }
+
+    public bool IsInOwnPenaltyArea(Character character)
+    {
+        float distanceX = GetDistanceToAllyGoalX(character);
+        float distanceZ = GetDistanceToAllyGoalZ(character);
+        return distanceX <= keeperGoalDistanceX && distanceZ <= keeperGoalDistanceZ;
+    }
+
+    public bool IsInShootDistance(Character character)
+    {
+        float distance = GetDistanceToOpponentGoal(character);
+        return distance <= shootDistance;
     }
 
 }
