@@ -7,7 +7,12 @@ public class CharacterComponentController : MonoBehaviour
 {
     private Character character;
 
-    [SerializeField] private bool isControlled => CharacterChangeControlManager.Instance.CurrentCharacter == this.character;
+    private Vector2 moveInput;
+    private Vector3 move;
+    private float moveTolerance = 0.01f;
+    private float rotationSpeed = 12f;
+    float forwardPassDistance = 1f;
+    [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
 
     public bool IsControlled => isControlled;
 
@@ -28,18 +33,30 @@ public class CharacterComponentController : MonoBehaviour
 
     void Update()
     {
-        if (!this.isControlled || !this.character.CanMove()) return;
+        if (!this.isControlled || BattleManager.Instance.IsTimeFrozen) 
+            return;
 
-        Vector2 moveInput = InputManager.Instance.GetMove();
-        float speed = this.character.GetMovementSpeed();
-        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y) * speed * Time.deltaTime;
-        if (moveInput.sqrMagnitude > 0.01f)
-            LogManager.Trace($"[CharacterComponentController] " +
-                $"Character: {character.CharacterId}, " +
-                $"Input: {moveInput}, " +
-                $"Speed: {speed}, " +
-                $"Position: {transform.position}");
-        transform.Translate(move, Space.World);
+        moveInput = InputManager.Instance.GetMove();
+        move = new Vector3(moveInput.x, 0f, moveInput.y);
+
+        HandleTarget();    
+
+        if (!this.character.CanMove()) 
+            return;
+            
+        HandleMovement();
+
+        //block
+
+        if (!this.character.HasBall()) 
+            return;
+
+        if (InputManager.Instance.GetDown(BattleAction.Pass)) 
+            HandlePass();
+
+        //dribble
+
+
     }
 
     private void HandleAssignCharacterToTeamBattle(
@@ -51,6 +68,66 @@ public class CharacterComponentController : MonoBehaviour
         {
             this.enabled = false;
         }
+    }
+
+    private void HandleTarget() 
+    {
+        Character target = 
+            move.sqrMagnitude > moveTolerance ?
+                CharacterTargetManager.Instance.GetClosestTeammateInDirection(
+                this.character, move) 
+                : null;
+            CharacterEvents.RaiseTargetChange(target, this.character.TeamSide);
+    }
+
+    private void HandleMovement()
+    {
+        if (move.sqrMagnitude > moveTolerance)
+        {
+            float speed = this.character.GetMovementSpeed();
+            // Calculate target rotation (look direction)
+            Quaternion targetRotation = Quaternion.LookRotation(move, Vector3.up);
+
+            // Smoothly rotate towards movement direction
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                rotationSpeed * Time.deltaTime
+            );
+
+            // Apply movement
+            transform.Translate(move * speed * Time.deltaTime, Space.World);
+            /*
+            LogManager.Trace($"[CharacterComponentController] " +
+                $"Character: {character.CharacterId}, " +
+                $"Input: {moveInput}, " +
+                $"Speed: {speed}, " +
+                $"Position: {transform.position}");
+            */
+        }
+    }
+
+    private void HandlePass() 
+    {
+        Character target = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
+        if(target)
+            PassToTeammate(target);
+        else 
+            PassForward();
+    }
+
+    private void PassToTeammate(Character character) 
+    {
+        this.character.KickBallTo(character.transform.position);
+        CharacterChangeControlManager.Instance.SetControlledCharacter(character, character.TeamSide);
+    }
+
+    private void PassForward() 
+    {
+        //Vector3 forwardDirection = this.character.transform.forward;
+        Vector3 forwardDirection = Vector3.forward;
+        Vector3 targetPosition = this.character.transform.position + forwardDirection * forwardPassDistance;
+        this.character.KickBallTo(targetPosition);
     }
 
 }

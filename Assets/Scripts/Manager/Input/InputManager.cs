@@ -18,7 +18,7 @@ public class InputManager : MonoBehaviour
     private Vector2 move;
     private readonly ButtonState[] buttons = new ButtonState[System.Enum.GetValues(typeof(BattleAction)).Length];
     private readonly Dictionary<InputAction, BattleAction> actionLookup = new();
-    [SerializeField] private GameObject onScreenControlsRoot;
+    private GameObject onScreenControlsRoot;
     [SerializeField] private PlayerInput playerInput;
     #endregion
 
@@ -79,6 +79,17 @@ public class InputManager : MonoBehaviour
         }
 
         if (Instance == this) Instance = null;
+    }
+
+    public void RegisterScreenControls(GameObject screenControls) 
+    {
+        onScreenControlsRoot = screenControls;
+        UpdateOnScreenVisibility();
+    }
+
+    public void UnregisterScreenControls()
+    {
+        onScreenControlsRoot = null;
     }
 
     private void Update()

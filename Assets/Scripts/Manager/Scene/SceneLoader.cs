@@ -58,7 +58,7 @@ public class SceneLoader : MonoBehaviour
 
     public static void LoadBattle()
     {
-        LoadingScreen.LoadScenes(new string[] { "BattleMap", "BattleUI", "BattleSpawners", "GlobalLighting"});
+        LoadingScreen.LoadScenes(new string[] { "BattleMap", "BattleUI", "BattleSpawners", "GlobalLighting", "BattleCamera"});
     }
 
     public static void UnloadBattle()
@@ -67,6 +67,7 @@ public class SceneLoader : MonoBehaviour
         SceneManager.UnloadSceneAsync("BattleSpawners");
         SceneManager.UnloadSceneAsync("BattleUI");
         SceneManager.UnloadSceneAsync("GlobalLighting");
+        SceneManager.UnloadSceneAsync("BattleCamera");
     }
 }
 

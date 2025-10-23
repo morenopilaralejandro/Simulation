@@ -31,6 +31,13 @@ public class OnScreenControlsManager : MonoBehaviour
         
         if (onScreenButtons == null) 
             onScreenButtons = transform.Find("OnScreenButtons")?.GetComponent<RectTransform>();
+
+        InputManager.Instance.RegisterScreenControls(onScreenControlsRoot);
+    }
+
+    private void OnDestroy() 
+    {
+        InputManager.Instance?.UnregisterScreenControls();
     }
 
     #region Scale Controls

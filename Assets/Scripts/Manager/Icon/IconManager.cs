@@ -24,7 +24,7 @@ public class IconManager : MonoBehaviour
     }
 
 /*
-Usage: IconManager.Instance.categoryIcons.GetIcon(Category.Catch);
+Usage: IconManager.Instance.Category.GetIcon(Category.Catch);
 */
 
 }

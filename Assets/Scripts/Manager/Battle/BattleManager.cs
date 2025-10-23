@@ -20,7 +20,10 @@ public class BattleManager : MonoBehaviour
     public bool IsTimeFrozen { get; private set; } = false;
 
     public Dictionary<TeamSide, Team> Teams => BattleTeamManager.Instance.Teams;
-    public Ball Ball => BattleBallManager.Instance.Ball; 
+    public Dictionary<TeamSide, Character> TargetedCharacter => CharacterTargetManager.Instance.TargetedCharacter;
+    public Dictionary<TeamSide, Character> ControlledCharacter => CharacterChangeControlManager.Instance.ControlledCharacter;
+    public Ball Ball => BattleBallManager.Instance.Ball;
+    public TeamSide GetUserSide() => BattleTeamManager.Instance.GetUserSide();
 
     public event Action OnAllCharactersReady;
     private int charactersReadyMax;
@@ -33,9 +36,7 @@ public class BattleManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-
         DontDestroyOnLoad(gameObject);
 
         OnAllCharactersReady += HandleAllCharactersReady;
@@ -72,6 +73,7 @@ public class BattleManager : MonoBehaviour
 
         foreach (Team team in Teams.Values) 
         {
+            BattleUIManager.Instance.SetTeam(team);
             PopulateTeamWithCharacters(team, CurrentTeamSize);
         }
     }
@@ -80,7 +82,7 @@ public class BattleManager : MonoBehaviour
     {
         //start kickoff etc
         ResetDefaultPositions();
-        CharacterChangeControlManager.Instance.ChangeToBallNearest();
+        CharacterChangeControlManager.Instance.SetControlledCharacter(Teams[TeamSide.Home].CharacterList[10], TeamSide.Home);
     }
 
     private void PopulateTeamWithCharacters(Team team, int teamSize)
@@ -114,9 +116,9 @@ public class BattleManager : MonoBehaviour
 
     private void ResetBattle()
     {
-        //BoundManager.Setup();
         BattleTeamManager.Instance.Reset();
         charactersReady = 0;
+        BattleUIManager.Instance.ResetScoreboard();
         //Reset timers
     }
 

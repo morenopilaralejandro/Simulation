@@ -19,9 +19,11 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentFatigue fatigueComponent;
     [SerializeField] private CharacterComponentSpeed speedComponent;
     [SerializeField] private CharacterComponentStatusEffects statusEffectsComponent;
+    [SerializeField] private CharacterComponentStatusIndicator statusIndicatorComponent;
     [SerializeField] private CharacterComponentMoves movesComponent;
     [SerializeField] private CharacterComponentController controllerComponent;
 
+    [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private SpeechBubble speechBubble;
     #endregion
 
@@ -53,9 +55,12 @@ public class Character : MonoBehaviour
         fatigueComponent.Initialize(characterData, this);
         speedComponent.Initialize(characterData, this);
         statusEffectsComponent.Initialize(characterData, this);
+        statusIndicatorComponent.Initialize(characterData, this);
         movesComponent.Initialize(characterData, this);
         controllerComponent.Initialize(characterData, this);
 
+
+        teamIndicatorComponent.Initialize(characterData, this);
         /*
         if (isSave)
             persistence.Apply(save);
@@ -128,6 +133,8 @@ public class Character : MonoBehaviour
     public void ClearAllStatus() => statusEffectsComponent.ClearAllStatus();
     public bool HasStatusEffect() => ActiveStatusEffects.Count != 0;
     public bool IsStunned() => ActiveStatusEffects.Contains(StatusEffect.Stunned);
+    //statusIndicatorComponent
+    public void UpdateStatusIndicator(StatusEffect? newStatus) => statusIndicatorComponent.UpdateStatusIndicator(newStatus);
     // movesComponent
     public int MaxEquippedMovesDefault => CharacterComponentMoves.MAX_EQUIPPED_MOVES_DEFAULT;
     public int MaxEquippedMovesFusion => CharacterComponentMoves.MAX_EQUIPPED_MOVES_FUSION;
@@ -158,7 +165,11 @@ public class Character : MonoBehaviour
     public void HideSpeechBubbleImmediate() => speechBubble.HideImmediate();
 
     //ball
+    public void KickBallTo(Vector3 targetPos) => BattleManager.Instance.Ball.KickBallTo(targetPos);
     public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;
+    public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this);
+    public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this); //also handle long shoot etc;
+    public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
     //misc
     public bool CanMove() => !IsStunned();
     public bool CanDuel() => !IsStunned();

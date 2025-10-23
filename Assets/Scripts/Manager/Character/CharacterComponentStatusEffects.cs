@@ -39,6 +39,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
                 tripCoroutine = StartCoroutine(HandleTrip(1f));
                 break;
         }
+        this.character.UpdateStatusIndicator(effect);
     }
 
     public void ClearStatus(StatusEffect effect)
@@ -58,6 +59,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
         }
 
         activeStatusEffects.Remove(effect);
+        this.character.UpdateStatusIndicator(null);
     }
 
     public void ClearAllStatus()
