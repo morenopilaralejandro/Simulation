@@ -22,5 +22,11 @@ namespace Simulation.Enums.Battle
         Left,
         Right
     }
+
+    public enum TimerHalf 
+    {
+        First,
+        Second
+    }
 }
 

@@ -10,7 +10,7 @@ public class CharacterComponentController : MonoBehaviour
     private Vector2 moveInput;
     private Vector3 move;
     private float moveTolerance = 0.01f;
-    private float rotationSpeed = 10f;
+    private float rotationSpeed = 12f;
     float forwardPassDistance = 1f;
     [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
 
@@ -124,7 +124,8 @@ public class CharacterComponentController : MonoBehaviour
 
     private void PassForward() 
     {
-        Vector3 forwardDirection = this.character.transform.forward;
+        //Vector3 forwardDirection = this.character.transform.forward;
+        Vector3 forwardDirection = Vector3.forward;
         Vector3 targetPosition = this.character.transform.position + forwardDirection * forwardPassDistance;
         this.character.KickBallTo(targetPosition);
     }

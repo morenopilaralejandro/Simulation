@@ -28,6 +28,7 @@ public class Billboard : MonoBehaviour
         if (keepUpright)
         {
             Vector3 lookPos = targetCamera.transform.position;
+            lookPos.x = transform.position.x; // Lock vertical
             lookPos.y = transform.position.y; // Lock vertical
             transform.LookAt(lookPos, Vector3.up);
         }

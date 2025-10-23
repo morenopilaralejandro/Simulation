@@ -9,6 +9,7 @@ public class Team
     #region Components
     private TeamComponentAttributes attributesComponent;
     private LocalizationComponentString localizationStringComponent;
+    private TeamComponentAppearance appearanceComponent;
     private TeamComponentFormation formationComponent;
     private TeamComponentKit kitComponent;
     private TeamComponentLevels levelsComponent;
@@ -32,6 +33,7 @@ public class Team
             new [] { LocalizationField.Name }
         );
 
+        appearanceComponent = new TeamComponentAppearance(teamData, this);
         formationComponent = new TeamComponentFormation(teamData, this);
         kitComponent = new TeamComponentKit(teamData, this);
         levelsComponent = new TeamComponentLevels(teamData, this);
@@ -50,6 +52,8 @@ public class Team
     public string TeamId => attributesComponent.TeamId;
     //localizationComponent
     public string TeamName => localizationStringComponent.GetString(LocalizationField.Name);
+    //appearanceComponent
+    public Sprite TeamCrestSprite => appearanceComponent.TeamCrestSprite;
     //formationComponent
     public Formation Formation => formationComponent.Formation;    
     public void SetFormation(Formation formation) => formationComponent.SetFormation(formation);

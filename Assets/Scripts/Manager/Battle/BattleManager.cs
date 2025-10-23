@@ -73,6 +73,7 @@ public class BattleManager : MonoBehaviour
 
         foreach (Team team in Teams.Values) 
         {
+            BattleUIManager.Instance.SetTeam(team);
             PopulateTeamWithCharacters(team, CurrentTeamSize);
         }
     }
@@ -115,9 +116,9 @@ public class BattleManager : MonoBehaviour
 
     private void ResetBattle()
     {
-        //BoundManager.Setup();
         BattleTeamManager.Instance.Reset();
         charactersReady = 0;
+        BattleUIManager.Instance.ResetScoreboard();
         //Reset timers
     }
 

@@ -9,7 +9,7 @@ public class BattleCameraTarget : MonoBehaviour
 
     [Header("Smoothing")]
     private float currentSmoothSpeed = 2f;
-    private float normalSmoothSpeed = 2f;
+    private float normalSmoothSpeed = 5.5f;
     private float fastSmoothSpeed = 100f;
     private float distanceThreshold = 15f;
 
