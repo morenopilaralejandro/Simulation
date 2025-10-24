@@ -9,15 +9,21 @@ public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance { get; private set; }
 
-    public BattlePhase CurrentPhase { get; private set; }
-    public BattlePhase PreviousPhase { get; private set; }
-    public BattleType CurrentType { get; private set; }
-    public BattleType PreviousType { get; private set; }
-    public int CurrentTeamSize { get; private set; }
-    public event Action<BattlePhase, BattlePhase> OnPhaseChanged;
+    [SerializeField] private BattlePhase currentPhase;
+    [SerializeField] private BattlePhase lastPhase;
+    [SerializeField] private BattleType currentType;
+    [SerializeField] private BattleType lastType;
+    [SerializeField] private int currentTeamSize;
+    [SerializeField] private bool isMovementFrozen;
+    [SerializeField] private bool isTimeFrozen;
 
-    public bool IsMovementFrozen { get; private set; } = false;
-    public bool IsTimeFrozen { get; private set; } = false;
+    public BattlePhase CurrentPhase => currentPhase;
+    public BattlePhase LastPhase => lastPhase;
+    public BattleType CurrentType => currentType;
+    public BattleType LastType => lastType;
+    public int CurrentTeamSize => currentTeamSize;
+    public bool IsMovementFrozen => isMovementFrozen;
+    public bool IsTimeFrozen => isTimeFrozen;
 
     public Dictionary<TeamSide, Team> Teams => BattleTeamManager.Instance.Teams;
     public Dictionary<TeamSide, Character> TargetedCharacter => CharacterTargetManager.Instance.TargetedCharacter;
@@ -25,6 +31,7 @@ public class BattleManager : MonoBehaviour
     public Ball Ball => BattleBallManager.Instance.Ball;
     public TeamSide GetUserSide() => BattleTeamManager.Instance.GetUserSide();
 
+    public event Action<BattlePhase, BattlePhase> OnBattlePhaseChanged;
     public event Action OnAllCharactersReady;
     private int charactersReadyMax;
     private int charactersReady;
@@ -44,7 +51,7 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
-
+        SetTeamSize();
     }
     
     // Update is called once per frame
@@ -58,20 +65,63 @@ public class BattleManager : MonoBehaviour
         OnAllCharactersReady -= HandleAllCharactersReady;
     }
 
+    public void Freeze()
+    {
+        isMovementFrozen = true;
+        isTimeFrozen = true;
+    }
+
+    public void Unfreeze()
+    {
+        isMovementFrozen = false;
+        isTimeFrozen = false;
+    }
+
+    public void SetBattlePhase(BattlePhase newPhase)
+    {
+        if (currentPhase == newPhase) return;
+
+        LogManager.Info("[BattleManager] " + 
+            "BattlePhase changed to {newPhase}" , this);
+        lastPhase = currentPhase;
+        currentPhase = newPhase;
+        OnBattlePhaseChanged?.Invoke(currentPhase, lastPhase);
+    }
+
+    private void SetBattleType(BattleType newType)
+    {
+        if (currentType == newType) return;
+
+        LogManager.Info("[BattleManager] " + 
+            "BattleType changed to {newType}" , this);
+        lastType = currentType;
+        currentType = newType;
+        SetTeamSize();
+    }
+
+    private void SetTeamSize()
+    {
+        currentTeamSize = currentType == BattleType.Battle ? TeamManager.Instance.SizeBattle : TeamManager.Instance.SizeMiniBattle;
+        charactersReadyMax = currentTeamSize*2;
+    }
+
     public void StartBattle()
     {
         //Called on BattleCharacterSpawnPoint
-        PreviousType = CurrentType;
-        CurrentType = BattleArgs.BattleType;
-        CurrentTeamSize = CurrentType == BattleType.Battle ? TeamManager.Instance.SizeBattle : TeamManager.Instance.SizeMiniBattle;
-        charactersReadyMax = CurrentTeamSize*2;
+        Freeze();
+        SetBattleType(BattleArgs.BattleType);
+        //SetBattlePhase(BattlePhase.Battle);
         ResetBattle();
 
-        BattleTeamManager.Instance.AssignTeamToSide(TeamManager.Instance.GetTeam(BattleArgs.TeamId0), TeamSide.Home);
-        BattleTeamManager.Instance.AssignTeamToSide(TeamManager.Instance.GetTeam(BattleArgs.TeamId1), TeamSide.Away);
+        BattleTeamManager.Instance.AssignTeamToSide(
+            TeamManager.Instance.GetTeam(BattleArgs.TeamId0), 
+            TeamSide.Home);
+        BattleTeamManager.Instance.AssignTeamToSide(
+            TeamManager.Instance.GetTeam(BattleArgs.TeamId1), 
+            TeamSide.Away);
         BattleTeamManager.Instance.AssignVariants();
 
-        foreach (Team team in Teams.Values) 
+        foreach (Team team in Teams.Values)
         {
             BattleUIManager.Instance.SetTeam(team);
             PopulateTeamWithCharacters(team, CurrentTeamSize);
@@ -82,7 +132,12 @@ public class BattleManager : MonoBehaviour
     {
         //start kickoff etc
         ResetDefaultPositions();
-        CharacterChangeControlManager.Instance.SetControlledCharacter(Teams[TeamSide.Home].CharacterList[10], TeamSide.Home);
+        CharacterChangeControlManager.Instance.SetControlledCharacter(
+            Teams[TeamSide.Home].CharacterList[10], 
+            TeamSide.Home);
+
+        SetBattlePhase(BattlePhase.Battle);
+        Unfreeze();
     }
 
     private void PopulateTeamWithCharacters(Team team, int teamSize)
@@ -137,29 +192,6 @@ public class BattleManager : MonoBehaviour
                 BattleCharacterManager.Instance.ResetCharacterPosition(character);
             }
         }
-    }
-
-    public void SetGamePhase(BattlePhase newPhase)
-    {
-        if (CurrentPhase != newPhase)
-        {
-            LogManager.Debug("[BattleManager] BattlePhase: " + newPhase);
-            PreviousPhase = CurrentPhase;
-            CurrentPhase = newPhase;
-            OnPhaseChanged?.Invoke(CurrentPhase, PreviousPhase);
-        }
-    }
-
-    public void Freeze()
-    {
-        IsMovementFrozen = true;
-        IsTimeFrozen = true;
-    }
-
-    public void Unfreeze()
-    {
-        IsMovementFrozen = false;
-        IsTimeFrozen = false;
     }
 
 }

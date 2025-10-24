@@ -72,8 +72,21 @@ public class Move
     public bool IsCharacterValidForIndex(Character character, int index) => restrictionParticipantsComponent.IsCharacterValidForIndex(character, index);
     public bool MeetsAllParticipantRestrictions(Character[] participants) => restrictionParticipantsComponent.MeetsAllParticipantRestrictions(participants);
     //evolutionComponent
+    public MoveEvolution CurrentEvolution => evolutionComponent.CurrentEvolution;
     public GrowthType GrowthType => evolutionComponent.GrowthType;
     public GrowthRate GrowthRate => evolutionComponent.GrowthRate;
-
+    public Sprite EvolutionSprite => evolutionComponent.EvolutionSprite;
+    public int TimesUsedTotal => evolutionComponent.TimesUsedTotal;
+    public int TimesUsedCurrentEvolution => evolutionComponent.TimesUsedCurrentEvolution;
+    public bool IsAtFinalEvolution => evolutionComponent.IsAtFinalEvolution;
+    public void ProgressEvolution() => evolutionComponent.ProgressEvolution();
+    public bool TryEvolve() => evolutionComponent.TryEvolve();
+    public bool LimitBreak() => evolutionComponent.LimitBreak();
+    public void ForceMaxEvolution() => evolutionComponent.ForceMaxEvolution();
+    public int GetExtraPower() => evolutionComponent.GetExtraPower();
+    public int GetThreshold() => evolutionComponent.GetThreshold();
+    public void ResetEvolution() => evolutionComponent.ResetEvolution();
+    //misc
+    public int Power => BasePower + GetExtraPower();
     #endregion
 }

@@ -22,6 +22,8 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentStatusIndicator statusIndicatorComponent;
     [SerializeField] private CharacterComponentMoves movesComponent;
     [SerializeField] private CharacterComponentController controllerComponent;
+    [SerializeField] private CharacterComponentDuelFieldCollider duelFieldColliderComponent;
+
 
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private SpeechBubble speechBubble;
@@ -58,6 +60,7 @@ public class Character : MonoBehaviour
         statusIndicatorComponent.Initialize(characterData, this);
         movesComponent.Initialize(characterData, this);
         controllerComponent.Initialize(characterData, this);
+        duelFieldColliderComponent.Initialize(characterData, this);
 
 
         teamIndicatorComponent.Initialize(characterData, this);

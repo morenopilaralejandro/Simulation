@@ -16,7 +16,7 @@ public class DuelParticantsPanel : MonoBehaviour
 
     private void Awake()
     {
-        BattleUIManager.Instance?.RegisterDuelPanel(this);
+        BattleUIManager.Instance?.RegisterDuelParticipantsPanel(this);
 
         //flip so user is always on the left
         if (BattleManager.Instance.GetUserSide() == TeamSide.Home) 
@@ -33,12 +33,14 @@ public class DuelParticantsPanel : MonoBehaviour
                 { TeamSide.Home, duelSideAway }
             };
         }
+
+        Hide();
     }
 
     private void OnDestroy()
     {
         if (BattleUIManager.Instance != null)
-            BattleUIManager.Instance.UnregisterDuelPanel(this);
+            BattleUIManager.Instance.UnregisterDuelParticipantsPanel(this);
     }
 
     public void SetSide(Character character, List<Character> supports) 

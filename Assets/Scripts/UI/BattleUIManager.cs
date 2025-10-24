@@ -14,6 +14,7 @@ public class BattleUIManager : MonoBehaviour
     private BattleScoreboard battleScoreboard;
     private BattleTimer battleTimer;
     private DuelParticantsPanel duelParticantsPanel;
+    private DuelMenu duelMenu;
 
     private void Awake()
     {
@@ -47,14 +48,24 @@ public class BattleUIManager : MonoBehaviour
         battleTimer = null;
     }
 
-    public void RegisterDuelPanel(DuelParticantsPanel panel)
+    public void RegisterDuelParticipantsPanel(DuelParticantsPanel panel)
     {
         duelParticantsPanel = panel;
     }
 
-    public void UnregisterDuelPanel(DuelParticantsPanel panel)
+    public void UnregisterDuelParticipantsPanel(DuelParticantsPanel panel)
     {
         duelParticantsPanel = null;
+    }
+
+    public void RegisterDuelMenu(DuelMenu duelMenu)
+    {
+        this.duelMenu = duelMenu;
+    }
+
+    public void UnregisterDuelMenu(DuelMenu duelMenu)
+    {
+        this.duelMenu = null;
     }
     #endregion
 
@@ -105,16 +116,36 @@ public class BattleUIManager : MonoBehaviour
             duelParticantsPanel.SetCategory(category);
     }
 
-    public void ShowDuelPanel()
+    public void ShowDuelParticipantsPanel()
     {
         if (duelParticantsPanel != null) 
             duelParticantsPanel.Show();
     }
 
-    public void HideDuelPanel()
+    public void HideDuelParticipantsPanel()
     {
         if (duelParticantsPanel != null) 
             duelParticantsPanel.Hide();
+    }
+    #endregion
+
+    #region DuelMenu
+    public void ShowDuelMenuForUser()
+    {
+        if (duelMenu != null) 
+            duelMenu.Show();
+    }
+
+    public void ShowDuelMenuForBoth()
+    {
+        if (duelMenu != null) 
+            duelMenu.Show();
+    }
+
+    public void HideDuelMenu()
+    {
+        if (duelMenu != null) 
+            duelMenu.Hide();
     }
     #endregion
 }
