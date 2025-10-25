@@ -9,30 +9,94 @@ using Simulation.Enums.Duel;
 public class FieldDuelHandler : IDuelHandler 
 {
     private Duel duel;
-    List<DuelParticipant> supporters = new List<DuelParticipant>();
+    private float supporterMultiplier = 0.1f;
 
     public FieldDuelHandler(Duel duel) 
     { 
         this.duel = duel;
     }
 
-    public void StartDuel() {
-        
-    }
-
-    public void AddParticipant(DuelParticipant p) {
-        //if is support
-        duel.Participants.Add(p);
-        if (duel.Participants.Count >= 2) {
-            Resolve();
+    public void AddParticipant(DuelParticipant participant) {
+        duel.Participants.Add(participant);
+        LogManager.Trace($"[FieldDuelHandler] AddParticipant {participant.Character.CharacterId}");
+        if (participant.Action == DuelAction.Offense) 
+        {
+            duel.LastOffense = participant;
+        } else {
+            duel.LastDefense = participant;
         }
+
+        if (duel.Participants.Count >= 2)
+            Resolve();
     }
 
     public void Resolve() 
     { 
-        var offense = duel.Participants.First(x => x.Action == DuelAction.Offense);
-        var defense = duel.Participants.First(x => x.Action == DuelAction.Defense);
+        LogManager.Trace($"[FieldDuelHandler] Start OffensePressure {duel.LastOffense.Damage}");
+        LogManager.Trace($"[FieldDuelHandler] Start DefensePressure {duel.LastDefense.Damage}");
+
+        DuelManager.Instance.ApplyElementalEffectiveness(
+            duel.LastOffense, 
+            duel.LastDefense);
+
+        duel.OffensePressure = duel.LastOffense.Damage;
+        duel.DefensePressure = duel.LastDefense.Damage;
+
+        float offenseSupportDamage = GetSupportDamage(
+            duel.LastOffense, 
+            duel.OffenseSupports);
+        float defenseSupportDamage = GetSupportDamage(
+            duel.LastDefense, 
+            duel.DefenseSupports);
+
+        LogManager.Info($"[FieldDuelHandler] offenseSupportDamage {offenseSupportDamage}");
+        LogManager.Info($"[FieldDuelHandler] defenseSupportDamage {defenseSupportDamage}");
+
+        duel.OffensePressure += offenseSupportDamage;
+        duel.DefensePressure += defenseSupportDamage;
+
+        LogManager.Info($"[FieldDuelHandler] Final OffensePressure {duel.OffensePressure}");
+        LogManager.Info($"[FieldDuelHandler] Fianl DefensePressure {duel.DefensePressure}");
+
+        if (duel.OffensePressure > duel.DefensePressure) 
+        {
+            EndDuel(duel.LastOffense, duel.LastDefense);
+        } else {
+            EndDuel(duel.LastDefense, duel.LastOffense);
+        }
     }
 
-    public void Cancel() { /* cleanup */ }
+    public void EndDuel(DuelParticipant winner, DuelParticipant loser) 
+    { 
+        loser.Character.ApplyStatus(StatusEffect.Stunned);
+        DuelManager.Instance.EndDuel(winner, loser);
+    }
+
+    public void CancelDuel() { }
+
+    private float GetSupportDamage(
+        DuelParticipant participant, 
+        List<Character> supports) 
+    {
+        float damage = 0;
+        int elementMatchingSupports = 1;
+
+        foreach(Character support in supports) 
+        {
+            damage += DamageCalculator.GetDamage(
+                participant.Category,
+                participant.Command,
+                support,
+                null,
+                false,
+                false);
+            if(participant.Character.Element == support.Element) 
+                elementMatchingSupports++;
+        }
+    
+        damage *= supporterMultiplier;
+        damage *= elementMatchingSupports;
+        return damage;
+    }
+
 }

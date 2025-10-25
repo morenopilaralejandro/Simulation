@@ -18,7 +18,7 @@ public class DuelParticipant
     #endregion
 
     #region Field
-    public bool IsSupporter { get; set; }
+    public bool IsKeeperDuel { get; }
     #endregion
 
     #region Shoot
@@ -31,6 +31,7 @@ public class DuelParticipant
         DuelAction action,
         DuelCommand command,
         Move move,
+        bool isKeeperDuel,
         bool isDirect)
     {
         Character = character;
@@ -39,8 +40,15 @@ public class DuelParticipant
         Command = command;
         Move = move;
         IsDirect = isDirect;
+        IsKeeperDuel = isKeeperDuel;
 
         CurrentElement = move == null ? character.Element : Move.Element;
-        Damage = DamageCalculator.GetDamage(Category, Command, character, Move);        
+        Damage = DamageCalculator.GetDamage(
+            Category, 
+            Command, 
+            character, 
+            Move,
+            IsDirect,
+            IsKeeperDuel);        
     }
 }

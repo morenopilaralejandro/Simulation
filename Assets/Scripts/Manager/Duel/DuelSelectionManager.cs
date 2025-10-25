@@ -97,7 +97,6 @@ public class DuelSelectionManager : MonoBehaviour
         int participantIndex, 
         Character character) 
     {
-        Debug.Log($"asd {teamSide}");
         var selection = selections[teamSide];
         selection.ParticipantIndex = participantIndex;
         selection.Category = category;
@@ -106,6 +105,8 @@ public class DuelSelectionManager : MonoBehaviour
 
     public void SelectionMadeHumand(TeamSide teamSide, DuelCommand command, Move move)
     {
+        if (teamSide == BattleManager.Instance.GetUserSide())
+            BattleUIManager.Instance.HideDuelMenu(); 
         FinalizeSelection(teamSide, command, move);
     }
 
@@ -167,8 +168,8 @@ public class DuelSelectionManager : MonoBehaviour
                 );
             }
         }
-        //GameManager.Instance.UnfreezeGame();
-        //GameManager.Instance.SetGamePhaseNetworkSafe(GamePhase.Battle);
+        BattleManager.Instance.Unfreeze();
+        BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
         OnSelectionsComplete?.Invoke();
     }
 

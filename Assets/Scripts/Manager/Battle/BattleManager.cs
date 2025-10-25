@@ -81,8 +81,8 @@ public class BattleManager : MonoBehaviour
     {
         if (currentPhase == newPhase) return;
 
-        LogManager.Info("[BattleManager] " + 
-            "BattlePhase changed to {newPhase}" , this);
+        LogManager.Info($"[BattleManager] " + 
+            $"BattlePhase changed to {newPhase}" , this);
         lastPhase = currentPhase;
         currentPhase = newPhase;
         OnBattlePhaseChanged?.Invoke(currentPhase, lastPhase);
@@ -92,8 +92,8 @@ public class BattleManager : MonoBehaviour
     {
         if (currentType == newType) return;
 
-        LogManager.Info("[BattleManager] " + 
-            "BattleType changed to {newType}" , this);
+        LogManager.Info($"[BattleManager] " + 
+            $"BattleType changed to {newType}" , this);
         lastType = currentType;
         currentType = newType;
         SetTeamSize();

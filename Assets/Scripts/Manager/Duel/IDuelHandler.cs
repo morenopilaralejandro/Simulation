@@ -1,7 +1,7 @@
 public interface IDuelHandler 
 {
-    void StartDuel();
-    void AddParticipant(DuelParticipant p);
+    void AddParticipant(DuelParticipant participant);
     void Resolve();
-    void Cancel();
+    void EndDuel(DuelParticipant winner, DuelParticipant loser);
+    void CancelDuel();
 }

@@ -13,7 +13,6 @@ public class DuelParticipantData
     public DuelCommand? Command;
     public Move Move;
 
-    public bool IsSupporter;
     public bool IsDirect;
 
     public bool IsComplete =>

@@ -33,7 +33,7 @@ public class PossessionManager : MonoBehaviour
 
         Release();
         currentCharacter = character;
-        LogManager.Trace($"[PossessionManager] Possession gained by {character.CharacterId}", this);
+        LogManager.Info($"[PossessionManager] Possession gained by {character.CharacterId}", this);
         BallEvents.RaiseGained(character);
     }
 
@@ -43,7 +43,7 @@ public class PossessionManager : MonoBehaviour
 
         lastCharacter = currentCharacter;
         lastKickTime = Time.time;
-        LogManager.Trace($"[PossessionManager] Possession released by {lastCharacter.CharacterId}", this);
+        LogManager.Info($"[PossessionManager] Possession released by {lastCharacter.CharacterId}", this);
         BallEvents.RaiseReleased(currentCharacter);
         currentCharacter = null;
     }

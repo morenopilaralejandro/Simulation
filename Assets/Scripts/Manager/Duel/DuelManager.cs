@@ -16,6 +16,9 @@ public class DuelManager : MonoBehaviour
     private TeamSide shootTeamSide;
     private TeamSide ShootTeamSide => shootTeamSide;
 
+    private int maxSupporters = 2;
+    private float supporterRadius = 1.5f;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -49,7 +52,6 @@ public class DuelManager : MonoBehaviour
                 break;
             */
         }
-        duelHandler.StartDuel();
     }
 
     public void AddParticipant(DuelParticipant participant)
@@ -60,6 +62,7 @@ public class DuelManager : MonoBehaviour
     public void Reset() 
     {
         duel.Reset();
+        stagedParticipants.Clear();
         DuelSelectionManager.Instance.ResetSelections();
     }
 
@@ -75,16 +78,90 @@ public class DuelManager : MonoBehaviour
         return DuelAction.Defense;
     }
 
-    private void Cancel()
+    private void CancelDuel()
     {
         //GameLogger.Warning("[DuelManager] Duel cancelled", this);
-
-        duelHandler.Cancel(); 
         duel.IsResolved = true;
         //ShootTriangle.Instance.SetTriangleVisible(false);
         //BallTrail.Instance.SetTrailVisible(false);
+        duelHandler.CancelDuel();
     }
 
+    public void EndDuel(DuelParticipant winner, DuelParticipant loser)
+    {
+        LogManager.Info(
+            $"[DuelManager] EndDuel " +
+            $"Winner {winner.Character?.CharacterId}, " +
+            $"TeamSide {winner.Character?.TeamSide}, " +
+            $"Action {winner.Action}, " +
+            $"Category {winner.Category}", this);
+
+        if (winner.Character.TeamSide == BattleManager.Instance.GetUserSide())
+        {
+            //DuelLogManager.Instance.AddDuelWin(winningParticipant.Player.TeamIndex);
+            //AudioManager.Instance.PlaySfx("SfxDuelWin");
+        }
+        else
+        {
+            //DuelLogManager.Instance.AddDuelLose(winningParticipant.Player.TeamIndex);
+            //AudioManager.Instance.PlaySfx("SfxDuelLose");
+        }
+
+
+        /*
+        if (winner.Action == DuelAction.Defense)
+        {
+            //BallTravelController.Instance.CancelTravel();
+            PossessionManager.Instance.Gain(winner.Character);
+            duel.LastOffense.Character.ApplyStatus(StatusEffect.Stunned);
+        }
+        */
+
+        BattleUIManager.Instance.HideDuelParticipantsPanel();
+        duel.IsResolved = true;
+    }
+
+    public void ApplyElementalEffectiveness(DuelParticipant offense, DuelParticipant defense)
+    {
+        if (DamageCalculator.IsEffective(defense.CurrentElement, offense.CurrentElement))
+        {
+            defense.Damage *= 2f;
+            //DuelLogManager.Instance.AddElementDefense(defense.Category);
+            LogManager.Info("[DuelManager] Defense element is effective!", this);
+        }
+        else if (DamageCalculator.IsEffective(offense.CurrentElement, defense.CurrentElement))
+        {
+            //currentDuel.AttackPressure -= offense.Damage;
+            offense.Damage *= 2;
+            //currentDuel.AttackPressure += offense.Damage;
+            //DuelLogManager.Instance.AddElementOffense(offense.Category);
+            LogManager.Info("[DuelManager] Offense element is effective!", this);
+        }
+    }
+
+    public List<Character> FindNearbySupporters(Character character)
+    {
+        List<Character> supporters = new List<Character>();
+
+        foreach (var teammate in character.GetTeammates())
+        {
+            if (supporters.Count >= maxSupporters)
+                break;
+
+            if (teammate == character ||
+                teammate.IsKeeper ||
+                !teammate.CanDuel())
+                continue;
+            
+            if (
+                Vector3.Distance(
+                    character.transform.position, 
+                    teammate.transform.position) < supporterRadius)
+                supporters.Add(teammate);
+        }
+
+        return supporters;
+    }
 
     #region Participant Registration
     public void RegisterTrigger(
@@ -102,9 +179,19 @@ public class DuelManager : MonoBehaviour
         shootTeamSide = teamSide;
     } 
 
-    public void SetIsKeeper(bool isKeeper) {
-        duel.IsKeeper = isKeeper;
+    public void SetIsKeeperDuel(bool isKeeperDuel) {
+        duel.IsKeeperDuel = isKeeperDuel;
     } 
+
+    public void SetOffenseSupports(List<Character> supports) 
+    {
+        duel.OffenseSupports.AddRange(supports);
+    }
+
+    public void SetDefenseSupports(List<Character> supports) 
+    {
+        duel.DefenseSupports.AddRange(supports);   
+    }
 
     public void RegisterSelection(int index, Category category, DuelCommand command, Move move)
     {
@@ -137,7 +224,8 @@ public class DuelManager : MonoBehaviour
             pd.Action.Value,
             pd.Command.Value,
             pd.Move,
-            pd.IsDirect
+            pd.IsDirect,
+            duel.IsKeeperDuel
         );
 
         //GameLogger.DebugLog($"[DuelManager] Created participant: {participant.Player.PlayerName}", this);

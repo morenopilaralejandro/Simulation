@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using System;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
@@ -36,6 +38,7 @@ public class CharacterComponentDuelFieldCollider : MonoBehaviour
     private void TryStartDuel(Collider other)
     {
         if (!character.HasBall() ||
+            !character.CanDuel() ||
             !other.gameObject.CompareTag(this.tag) || 
             !DuelManager.Instance.IsResolved || 
             BattleManager.Instance.IsTimeFrozen)
@@ -44,7 +47,9 @@ public class CharacterComponentDuelFieldCollider : MonoBehaviour
         Character otherCharacter = 
             other.GetComponentInParent<Character>();
 
-        if (character.IsSameTeam(otherCharacter)) return;
+        if (otherCharacter.IsSameTeam(character) ||
+            !otherCharacter.CanDuel()) 
+            return;
 
         LogManager.Info(
             $"[CharacterComponentDuelFieldCollider] " +  
@@ -52,19 +57,28 @@ public class CharacterComponentDuelFieldCollider : MonoBehaviour
             $"{character.CharacterId} ({character.TeamSide}) and " +
             $"{otherCharacter.CharacterId} ({otherCharacter.TeamSide})", this);
 
-        bool isKeeper = 
+        bool isKeeperDuel = 
             otherCharacter.IsKeeper &&
             otherCharacter.IsInOwnPenaltyArea();
            
         DuelManager.Instance.StartDuel(DuelMode.Field);
-        DuelManager.Instance.SetIsKeeper(isKeeper);
-        BattleUIManager.Instance.SetDuelParticipant(character, null);
-        BattleUIManager.Instance.SetDuelParticipant(otherCharacter, null);
+        DuelManager.Instance.SetIsKeeperDuel(isKeeperDuel);
 
         Category category = Category.Dribble;
         Category otherCategory = Category.Block;
 
-        // RegisterTrigger
+        //Support
+        List<Character> offenseSupports =
+            DuelManager.Instance.FindNearbySupporters(character);
+        List<Character> defenseSupports =
+            DuelManager.Instance.FindNearbySupporters(otherCharacter);
+        
+        DuelManager.Instance.SetOffenseSupports(offenseSupports);
+        DuelManager.Instance.SetDefenseSupports(defenseSupports);
+        //UI
+        BattleUIManager.Instance.SetDuelParticipant(character, offenseSupports);
+        BattleUIManager.Instance.SetDuelParticipant(otherCharacter, defenseSupports);
+        //RegisterTrigger
         DuelManager.Instance.RegisterTrigger(
             character, 
             false);

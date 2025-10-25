@@ -8,11 +8,16 @@ using Simulation.Enums.Duel;
 public static class DamageCalculator
 {
     // Multiplier constants
-    private const float MAIN_MULTIPLIER   = 1f;
-    private const float SUB_MULTIPLIER    = 0.5f;
+    private const float MAIN_MULTIPLIER = 1f;
+    private const float SUB_MULTIPLIER = 0.5f;
     private const float MOVE_MULTIPLIER = 5.0f;
-    private const float ELEMENT_MATCH_MULTIPLIER  = 1.5f;
-    private const float DISTANCE_MULTIPLIER  = 10f;
+    private const float ELEMENT_MATCH_MULTIPLIER = 1.5f;
+
+    private const float KEEPER_MULTIPLIER = 1.5f;
+
+    private const float DISTANCE_MULTIPLIER = 10f;
+    private const float DIRECT_BONUS = 50f;
+
 
     // Helper function for Melee/Ranged formulas
     private static float CalcFormula(Character character, Stat main, Stat sub0, Stat sub1)
@@ -67,24 +72,39 @@ public static class DamageCalculator
         {(Category.Catch, DuelCommand.Move),  (character, move) => CalcMove(character, move, Stat.Guard)}
     };
 
-    public static float GetDamage(Category category, DuelCommand command, Character character, Move move)
+    public static float GetDamage(
+        Category category, 
+        DuelCommand command, 
+        Character character, 
+        Move move,
+        bool isKeeperDuel,
+        bool isDirect)
     {
         float damage = 0f;
         if (damageFormulas.TryGetValue((category, command), out var formula))
             damage = formula(character, move);
+
+        if (isKeeperDuel && character.IsKeeper)
+            damage *= KEEPER_MULTIPLIER;
+
         if (category == Category.Shoot)
             damage -= CalcDistanceReduction(character);
+        if (isDirect)
+            damage += DIRECT_BONUS;
+
         return damage;
     }
 
-    public static bool IsEffective(Element off, Element def)
+    public static bool IsEffective(
+        Element offenseElement, 
+        Element defenseElement)
     {
-        int offIndex = (int)off;
-        int defIndex = (int)def;
+        int offenseIndex = (int)offenseElement;
+        int defenseIndex = (int)defenseElement;
 
         // Compute next in cycle (with wrap-around)
-        int nextIndex = (offIndex + 1) % System.Enum.GetValues(typeof(Element)).Length;
+        int nextIndex = (offenseIndex + 1) % System.Enum.GetValues(typeof(Element)).Length;
 
-        return defIndex == nextIndex;
+        return defenseIndex == nextIndex;
     }
 }
