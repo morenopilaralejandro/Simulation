@@ -18,6 +18,7 @@ public class BoundManager : MonoBehaviour
     private float rightOffsetCamera = 0f;
 
     private Dictionary<BoundPlacement, Bound> bounds = new();
+    public Dictionary<BoundPlacement, Bound> Bounds => bounds;
     
     #region Bound Accessors
     private Bound left => bounds.ContainsKey(BoundPlacement.Left) ? bounds[BoundPlacement.Left] : null;

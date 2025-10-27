@@ -46,16 +46,18 @@ public class CharacterChangeControlManager : MonoBehaviour
     void Update() 
     {
         Character character = controlledCharacter[BattleManager.Instance.GetUserSide()];
-        if (character &&
-            !character.HasBall() && 
-            InputManager.Instance.GetDown(BattleAction.Change)) 
-        {
-            Character newCharacter = BattleManager.Instance.TargetedCharacter[character.TeamSide];
-            if(newCharacter == null) 
-                newCharacter = GetClosestTeammateToBall(character, includeSelf: false);
+        if (!character ||
+            character.HasBall() || 
+            BattleManager.Instance.IsTimeFrozen ||
+            !InputManager.Instance.GetDown(BattleAction.Change)) 
+            return;
+
+        Character newCharacter = BattleManager.Instance.TargetedCharacter[character.TeamSide];
+        if(newCharacter == null) 
+            newCharacter = GetClosestTeammateToBall(character, includeSelf: false);
  
-            SetControlledCharacter(newCharacter, newCharacter.TeamSide);           
-        }
+        SetControlledCharacter(newCharacter, newCharacter.TeamSide);           
+
         //event used to change indicator
     }
 

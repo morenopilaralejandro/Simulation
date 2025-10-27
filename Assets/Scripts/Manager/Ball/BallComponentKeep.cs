@@ -16,18 +16,26 @@ public class BallComponentKeep : MonoBehaviour
 
     private void OnEnable()
     {
-        BallEvents.OnGained += HandleOnGained;    
+        BallEvents.OnGained += HandleOnGained;
+        BallEvents.OnReleased += HandleOnReleased;
     }
 
     private void OnDisable()
     {
         BallEvents.OnGained -= HandleOnGained;
+        BallEvents.OnReleased -= HandleOnReleased;
     }
 
     private void HandleOnGained(Character character)
     {
         this.character = character;
         ball.SetKinematic();
+    }
+
+    private void HandleOnReleased(Character character)
+    {
+        if (!ball.IsTraveling)
+            ball.SetDynamic();
     }
 
     void Update() 

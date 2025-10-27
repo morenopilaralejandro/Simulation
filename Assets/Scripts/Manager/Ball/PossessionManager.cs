@@ -44,7 +44,7 @@ public class PossessionManager : MonoBehaviour
         lastCharacter = currentCharacter;
         lastKickTime = Time.time;
         LogManager.Info($"[PossessionManager] Possession released by {lastCharacter.CharacterId}", this);
-        BallEvents.RaiseReleased(currentCharacter);
+        BallEvents.RaiseReleased(lastCharacter);
         currentCharacter = null;
     }
 
@@ -57,4 +57,8 @@ public class PossessionManager : MonoBehaviour
         lastKickTime = -Mathf.Infinity;
     }
 
+    public void GiveBallToCharacter(Character character) 
+    {
+        BattleManager.Instance.Ball.transform.position = character.transform.position;
+    }
 }

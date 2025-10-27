@@ -33,6 +33,8 @@ public class CharacterComponentStatusEffects : MonoBehaviour
         switch (effect)
         {
             case StatusEffect.Stunned:
+                if (character.HasBall())
+                    PossessionManager.Instance.Release();
                 stunCoroutine = StartCoroutine(HandleStun(3f));
                 break;
             case StatusEffect.Tripping:

@@ -9,7 +9,7 @@ using Simulation.Enums.Duel;
 public class FieldDuelHandler : IDuelHandler 
 {
     private Duel duel;
-    private float supporterMultiplier = 0.1f;
+    private float supporterMultiplier = 0.2f;
 
     public FieldDuelHandler(Duel duel) 
     { 
@@ -49,14 +49,14 @@ public class FieldDuelHandler : IDuelHandler
             duel.LastDefense, 
             duel.DefenseSupports);
 
-        LogManager.Info($"[FieldDuelHandler] offenseSupportDamage {offenseSupportDamage}");
-        LogManager.Info($"[FieldDuelHandler] defenseSupportDamage {defenseSupportDamage}");
+        LogManager.Trace($"[FieldDuelHandler] offenseSupportDamage {offenseSupportDamage}");
+        LogManager.Trace($"[FieldDuelHandler] defenseSupportDamage {defenseSupportDamage}");
 
         duel.OffensePressure += offenseSupportDamage;
         duel.DefensePressure += defenseSupportDamage;
 
         LogManager.Info($"[FieldDuelHandler] Final OffensePressure {duel.OffensePressure}");
-        LogManager.Info($"[FieldDuelHandler] Fianl DefensePressure {duel.DefensePressure}");
+        LogManager.Info($"[FieldDuelHandler] Final DefensePressure {duel.DefensePressure}");
 
         if (duel.OffensePressure > duel.DefensePressure) 
         {
@@ -69,6 +69,8 @@ public class FieldDuelHandler : IDuelHandler
     public void EndDuel(DuelParticipant winner, DuelParticipant loser) 
     { 
         loser.Character.ApplyStatus(StatusEffect.Stunned);
+        StunSupports(loser.Action);
+        PossessionManager.Instance.GiveBallToCharacter(winner.Character);
         DuelManager.Instance.EndDuel(winner, loser);
     }
 
@@ -93,10 +95,23 @@ public class FieldDuelHandler : IDuelHandler
             if(participant.Character.Element == support.Element) 
                 elementMatchingSupports++;
         }
-    
+
         damage *= supporterMultiplier;
         damage *= elementMatchingSupports;
+
+        LogManager.Trace($"[FieldDuelHandler] elementMatchingSupports {elementMatchingSupports}");
         return damage;
+    }
+
+    private void StunSupports(
+        DuelAction action) 
+    {
+        var supports = action == DuelAction.Offense ? 
+            duel.OffenseSupports :
+            duel.DefenseSupports;
+            
+        foreach(Character support in supports) 
+            support.ApplyStatus(StatusEffect.Stunned);
     }
 
 }

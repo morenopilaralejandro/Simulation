@@ -45,7 +45,6 @@ public class BallComponentKick : MonoBehaviour
             velocity = velocity.normalized * maxPower;
 
         PossessionManager.Instance.Release();
-        ball.SetDynamic();
         ballRigidbody.velocity = velocity;
     }
 

@@ -17,7 +17,7 @@ public class DuelManager : MonoBehaviour
     private TeamSide ShootTeamSide => shootTeamSide;
 
     private int maxSupporters = 2;
-    private float supporterRadius = 1.5f;
+    private float supporterRadius = 1f;
 
     private void Awake()
     {
@@ -70,13 +70,14 @@ public class DuelManager : MonoBehaviour
 
     public DuelMode DuelMode => duel.DuelMode;
 
-    public DuelAction GetActionByCategory(Category category) 
+    public DuelAction GetActionByCategory(Category category) =>
+    category switch
     {
-        if (category == Category.Shoot ||
-            category == Category.Dribble)
-            return DuelAction.Offense;
-        return DuelAction.Defense;
-    }
+        Category.Shoot or Category.Dribble => 
+            DuelAction.Offense,
+        _ => 
+            DuelAction.Defense
+    };
 
     private void CancelDuel()
     {
@@ -127,37 +128,50 @@ public class DuelManager : MonoBehaviour
         {
             defense.Damage *= 2f;
             //DuelLogManager.Instance.AddElementDefense(defense.Category);
-            LogManager.Info("[DuelManager] Defense element is effective!", this);
+            LogManager.Info("[DuelManager] Defense element is effective", this);
         }
         else if (DamageCalculator.IsEffective(offense.CurrentElement, defense.CurrentElement))
         {
-            //currentDuel.AttackPressure -= offense.Damage;
+            if (duel.DuelMode == DuelMode.Shoot)
+                duel.OffensePressure -= offense.Damage;
             offense.Damage *= 2;
-            //currentDuel.AttackPressure += offense.Damage;
+            if (duel.DuelMode == DuelMode.Shoot)
+                duel.OffensePressure += offense.Damage;
             //DuelLogManager.Instance.AddElementOffense(offense.Category);
-            LogManager.Info("[DuelManager] Offense element is effective!", this);
+            LogManager.Info("[DuelManager] Offense element is effective", this);
         }
     }
 
     public List<Character> FindNearbySupporters(Character character)
     {
         List<Character> supporters = new List<Character>();
+        HashSet<Character> uniqueCharacters = new HashSet<Character>();
 
-        foreach (var teammate in character.GetTeammates())
+
+        Collider[] nearbyColliders = Physics.OverlapSphere(
+            character.transform.position,
+            supporterRadius
+        );
+
+        foreach (var collider in nearbyColliders)
         {
+            Character nearbyCharacter = collider.GetComponentInParent<Character>();
+
             if (supporters.Count >= maxSupporters)
                 break;
 
-            if (teammate == character ||
-                teammate.IsKeeper ||
-                !teammate.CanDuel())
+            if (nearbyCharacter == null ||
+                !uniqueCharacters.Add(nearbyCharacter) ||
+                nearbyCharacter == character ||
+                !nearbyCharacter.IsSameTeam(character) ||
+                nearbyCharacter.IsKeeper ||
+                !nearbyCharacter.CanDuel())
                 continue;
             
-            if (
-                Vector3.Distance(
-                    character.transform.position, 
-                    teammate.transform.position) < supporterRadius)
-                supporters.Add(teammate);
+            LogManager.Trace("[DuelManager] Added support " + 
+                $"({character.TeamSide}) " +
+                $"{nearbyCharacter.CharacterId}", this);
+            supporters.Add(nearbyCharacter);
         }
 
         return supporters;

@@ -15,8 +15,7 @@ public class Duel
 
     public DuelParticipant LastOffense;
     public DuelParticipant LastDefense;
-    public List<DuelParticipant> OffenseParticipants = new List<DuelParticipant>();
-    public List<DuelParticipant> DefenseParticipants = new List<DuelParticipant>();
+
     public List<Character> OffenseSupports = new List<Character>();
     public List<Character> DefenseSupports = new List<Character>();
 
@@ -26,14 +25,12 @@ public class Duel
     public void Reset()
     {
         Participants.Clear();
-        OffenseParticipants.Clear();
-        DefenseParticipants.Clear();
+        LastOffense = null;
+        LastDefense = null;
         OffenseSupports.Clear();
         DefenseSupports.Clear();
         OffensePressure = 0f;
         DefensePressure = 0f;
-        LastOffense = null;
-        LastDefense = null;
         IsResolved = false;
         IsKeeperDuel = false;
     }
