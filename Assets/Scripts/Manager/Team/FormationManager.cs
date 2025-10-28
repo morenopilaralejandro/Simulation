@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -18,25 +19,22 @@ public class FormationManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);      
     }
 
-    public void LoadAllFormations()
+    public async Task LoadAllFormationsAsync()
     {
-        Addressables.LoadAssetsAsync<FormationData>("Formations-Data", data =>
-        {
-            RegisterFormation(data);
-        }).Completed += handle =>
-        {
-            LogManager.Trace($"[FormationManager] All formations loaded. Total count: {formations.Count}", this);
-            IsReady = true;
-        };
+        var handle = Addressables.LoadAssetsAsync<FormationData>(
+            "Formations-Data",
+            data => RegisterFormation(data)
+        );
+        await handle.Task;
+        IsReady = true;
+        LogManager.Trace($"[FormationManager] All formations loaded. Total count: {formations.Count}", this);
     }
 
-    public void RegisterFormation(FormationData data)
+    private void RegisterFormation(FormationData data)
     {
         if (!formations.ContainsKey(data.FormationId))
         {

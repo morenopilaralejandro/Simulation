@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Simulation.Enums.Move;
 
 public class MoveEvolutionPathManager : MonoBehaviour
@@ -12,31 +13,29 @@ public class MoveEvolutionPathManager : MonoBehaviour
 
     public bool IsReady { get; private set; } = false;
 
-    private void Awake()
+    private async void Awake()
     {
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-
         DontDestroyOnLoad(gameObject);
 
-        LoadAllMoveEvolutionPath();
+        await LoadAllMoveEvolutionPathAsync();
+        IsReady = true;
+        LogManager.Trace($"[MoveEvolutionPathManager] All MoveEvolutionPath loaded. Total count: {moveEvolutionPathDict.Count}", this);
     }
 
-    public void LoadAllMoveEvolutionPath()
+    public async Task LoadAllMoveEvolutionPathAsync()
     {
-        Addressables.LoadAssetsAsync<MoveEvolutionPath>("Moves-Evolutions-Path", data =>
-        {
-            RegisterMoveEvolutionPath(data);
-        }).Completed += handle =>
-        {
-            LogManager.Trace($"[MoveEvolutionPathManager] All MoveEvolutionPath loaded. Total count: {moveEvolutionPathDict.Count}", this);
-            IsReady = true;
-        };
+        var handle = Addressables.LoadAssetsAsync<MoveEvolutionPath>(
+            "Moves-Evolutions-Path",
+            data => RegisterMoveEvolutionPath(data)
+        );
+
+        await handle.Task;
     }
 
     public void RegisterMoveEvolutionPath(MoveEvolutionPath moveEvolutionPath)

@@ -76,7 +76,7 @@ public class BattleUIManager : MonoBehaviour
             battleScoreboard.SetTeam(team);
     }
 
-    public void UpdateScore(Team team, int newScore)
+    public void UpdateScoreDisplay(Team team, int newScore)
     {
         if (battleScoreboard != null) 
         battleScoreboard.UpdateScoreDisplay(team, newScore);
@@ -90,13 +90,13 @@ public class BattleUIManager : MonoBehaviour
     #endregion
 
     #region Timer
-    public void UpdateTimer(float time)
+    public void UpdateTimerDisplay(float time)
     {
         if (battleTimer != null) 
             battleTimer.UpdateTimerDisplay(time);
     }
 
-    public void UpdateTimerHalf(TimerHalf timerHalf)
+    public void UpdateTimerHalfDisplay(TimerHalf timerHalf)
     {
         if (battleTimer != null) 
             battleTimer.UpdateTimerHalfDisplay(timerHalf);

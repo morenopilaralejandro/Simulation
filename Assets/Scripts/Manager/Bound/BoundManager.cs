@@ -6,16 +6,16 @@ public class BoundManager : MonoBehaviour
 {
     public static BoundManager Instance { get; private set; }
 
-    private float topOffsetCharacter = 0f;
-    private float bottomOffsetCharacter = 0f;
-    private float leftOffsetCharacter = 0f;
-    private float rightOffsetCharacter = 0f;
+    private float topOffsetCharacter = 1.2f;
+    private float bottomOffsetCharacter = 1.2f;
+    private float leftOffsetCharacter = 1.2f;
+    private float rightOffsetCharacter = 1.2f;
     private float touchAreaOffset = 0f;
 
-    private float topOffsetCamera = 0f;
-    private float bottomOffsetCamera = 0f;
-    private float leftOffsetCamera = 0f;
-    private float rightOffsetCamera = 0f;
+    private float topOffsetCamera = 7f;
+    private float bottomOffsetCamera = -1f;
+    private float leftOffsetCamera = 5f;
+    private float rightOffsetCamera = 5f;
 
     private Dictionary<BoundPlacement, Bound> bounds = new();
     public Dictionary<BoundPlacement, Bound> Bounds => bounds;

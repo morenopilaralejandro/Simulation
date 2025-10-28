@@ -96,7 +96,10 @@ public class CharacterComponentController : MonoBehaviour
             );
 
             // Apply movement
-            transform.Translate(move * speed * Time.deltaTime, Space.World);
+            Vector3 translation = move * speed * Time.deltaTime;
+            transform.Translate(translation, Space.World);
+            transform.position = BoundManager.Instance.ClampCharacter(transform.position);
+
             /*
             LogManager.Trace($"[CharacterComponentController] " +
                 $"Character: {character.CharacterId}, " +

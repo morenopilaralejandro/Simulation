@@ -16,6 +16,10 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private int currentTeamSize;
     [SerializeField] private bool isMovementFrozen;
     [SerializeField] private bool isTimeFrozen;
+    [SerializeField] private float timeDefault = 0f;
+    [SerializeField] private float timeCurrent = 1800f;
+    [SerializeField] private float timeLimit = 1800f;
+    [SerializeField] private Dictionary<TeamSide, int> scoreDict;
 
     public BattlePhase CurrentPhase => currentPhase;
     public BattlePhase LastPhase => lastPhase;
@@ -36,6 +40,7 @@ public class BattleManager : MonoBehaviour
     private int charactersReadyMax;
     private int charactersReady;
 
+    #region Lifecycle
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -46,6 +51,7 @@ public class BattleManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        ResetScore();
         OnAllCharactersReady += HandleAllCharactersReady;
     }
 
@@ -54,17 +60,26 @@ public class BattleManager : MonoBehaviour
         SetTeamSize();
     }
     
-    // Update is called once per frame
     void Update()
     {
-        
+        if (!isTimeFrozen)
+        {
+            if (timeCurrent <= timeLimit)
+            {
+                timeCurrent++;
+                BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
+            }
+            CheckEndGame();
+        }
     }
 
     private void OnDestroy()
     {
         OnAllCharactersReady -= HandleAllCharactersReady;
     }
+    #endregion
 
+    #region Generic
     public void Freeze()
     {
         isMovementFrozen = true;
@@ -104,7 +119,9 @@ public class BattleManager : MonoBehaviour
         currentTeamSize = currentType == BattleType.Battle ? TeamManager.Instance.SizeBattle : TeamManager.Instance.SizeMiniBattle;
         charactersReadyMax = currentTeamSize*2;
     }
+    #endregion
 
+    #region StartBattle
     public void StartBattle()
     {
         //Called on BattleCharacterSpawnPoint
@@ -128,6 +145,89 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private void ResetBattle()
+    {
+        BattleTeamManager.Instance.Reset();
+        charactersReady = 0;
+        ResetScore();
+        ResetTimer();
+    }
+
+    private void ResetScore() 
+    {
+        scoreDict = new Dictionary<TeamSide, int>
+        {
+            { TeamSide.Home, 0 },
+            { TeamSide.Away, 0 }
+        };
+        BattleUIManager.Instance.ResetScoreboard();
+    }
+
+    private void ResetTimer() 
+    {
+        timeCurrent = timeDefault;
+        BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
+    }
+
+    public void GoalScored(Goal goal)
+    {
+        Team scorringTeam = null;
+        if (goal.TeamSide == TeamSide.Home) 
+        {
+            scorringTeam = Teams[TeamSide.Away];
+        }
+        else {
+            scorringTeam = Teams[TeamSide.Home];
+        }
+    
+        scoreDict[scorringTeam.TeamSide]++;
+        BattleUIManager.Instance.UpdateScoreDisplay(
+            scorringTeam, 
+            scoreDict[scorringTeam.TeamSide]);
+
+        StartCoroutine(GoalSequence(goal.TeamSide));
+    }
+
+    private void CheckEndGame() 
+    {
+        if (timeCurrent >= timeLimit)
+        {
+            StartCoroutine(TimeOverSequence());
+        }
+    }
+    #endregion
+
+    #region Sequence 
+    private IEnumerator GoalSequence(TeamSide kickoffTeamSide)
+    {
+        float duration = 2f;
+        isTimeFrozen = true;
+        //AudioManager.Instance.PlayBgm("BgmOle");
+        //panelGoalMessage.SetActive(true);
+        //textGoalMessage.Play("TextGoalSlide", -1, 0f);
+
+        yield return new WaitForSeconds(duration);
+        //panelGoalMessage.SetActive(false);
+        isTimeFrozen = false;
+        //StartKickoff(kickoffTeam);
+    }
+
+    private IEnumerator TimeOverSequence()
+    {
+        float duration = 2f;
+        //isTimeFrozen = true;
+        //AudioManager.Instance.PlayBgm("BgmTimeUp");
+        ResetTimer();
+        //panelTimeMessage.SetActive(true);
+        //DuelLogManager.Instance.AddMatchEnd();
+
+        yield return new WaitForSeconds(duration);
+        //panelTimeMessage.SetActive(false);
+        //SceneManager.LoadScene("GameOver");
+    }
+    #endregion
+
+    #region Team and Ball
     private void HandleAllCharactersReady()
     {
         //start kickoff etc
@@ -169,14 +269,6 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void ResetBattle()
-    {
-        BattleTeamManager.Instance.Reset();
-        charactersReady = 0;
-        BattleUIManager.Instance.ResetScoreboard();
-        //Reset timers
-    }
-
     private void ResetDefaultPositions()
     {
         ResetPlayerPositions();
@@ -193,5 +285,6 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
 }

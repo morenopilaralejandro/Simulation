@@ -32,28 +32,6 @@ public class DuelManager : MonoBehaviour
         duel = new Duel();
     }
 
-    public void StartDuel(DuelMode DuelMode)
-    {
-        Reset();
-        //PlayDuelStartEffect();
-        //AudioManager.Instance.PlaySfx("SfxDuelField");
-        BattleUIManager.Instance.ShowDuelParticipantsPanel();
-        switch (DuelMode)
-        {
-            case DuelMode.Field:
-                duelHandler = new FieldDuelHandler(duel);
-                break;
-            /*
-            case DuelMode.Shoot:
-                duelHandler = new ShootDuelHandler(duel);
-                break;
-            case DuelMode.Air:
-                duelHandler = new AirDuelHandler(duel);
-                break;
-            */
-        }
-    }
-
     public void AddParticipant(DuelParticipant participant)
     {
         duelHandler?.AddParticipant(participant);
@@ -78,6 +56,80 @@ public class DuelManager : MonoBehaviour
         _ => 
             DuelAction.Defense
     };
+
+    public Trait? GetRequiredTraitByCategory(Category category) 
+    {
+        //this method is for shoot duel only
+        if (category == Category.Shoot) 
+        {
+            if (duel.Participants.Count == 0) 
+            {
+                //if (isLongShootStart)
+                    return Trait.Long;
+            } else 
+            {
+                return Trait.Chain;
+            }
+        } else if (category == Category.Block) 
+        {
+            return Trait.Block;
+        }
+
+        return null;
+    }
+
+    public bool CanSelectMoveCommand(Category category) 
+    {
+        return 
+            duel.DuelMode != DuelMode.Field &&
+            category != Category.Dribble &&
+            !duel.IsKeeperDuel;
+    }
+
+    public bool CanRegularCommands(Category category) 
+    {
+        if (category == Category.Shoot) 
+        {
+            if (duel.Participants.Count == 0) 
+            {
+                //if (isLongShootStart)
+                    return false;
+            } else 
+            {
+                return false;
+            }
+                 
+        }
+
+        if (category == Category.Block &&
+            duel.DuelMode == DuelMode.Shoot) 
+            return false;
+    
+        return true;
+    }
+
+    #region Duel Interface
+    public void StartDuel(DuelMode DuelMode)
+    {
+        Reset();
+        //PlayDuelStartEffect();
+        //AudioManager.Instance.PlaySfx("SfxDuelField");
+        BattleUIManager.Instance.ShowDuelParticipantsPanel();
+        switch (DuelMode)
+        {
+            case DuelMode.Field:
+                duelHandler = new FieldDuelHandler(duel);
+                break;
+            /*
+            case DuelMode.Shoot:
+                duelHandler = new ShootDuelHandler(duel);
+                break;
+            case DuelMode.Air:
+                duelHandler = new AirDuelHandler(duel);
+                break;
+            */
+        }
+    }
 
     private void CancelDuel()
     {
@@ -121,7 +173,9 @@ public class DuelManager : MonoBehaviour
         BattleUIManager.Instance.HideDuelParticipantsPanel();
         duel.IsResolved = true;
     }
+    #endregion
 
+    #region Element
     public void ApplyElementalEffectiveness(DuelParticipant offense, DuelParticipant defense)
     {
         if (DamageCalculator.IsEffective(defense.CurrentElement, offense.CurrentElement))
@@ -141,7 +195,9 @@ public class DuelManager : MonoBehaviour
             LogManager.Info("[DuelManager] Offense element is effective", this);
         }
     }
+    #endregion
 
+    #region Support
     public List<Character> FindNearbySupporters(Character character)
     {
         List<Character> supporters = new List<Character>();
@@ -176,6 +232,7 @@ public class DuelManager : MonoBehaviour
 
         return supporters;
     }
+    #endregion
 
     #region Participant Registration
     public void RegisterTrigger(

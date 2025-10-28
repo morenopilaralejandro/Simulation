@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Simulation.Enums.Move;
 
 public class MoveEvolutionGrowthProfileManager : MonoBehaviour
@@ -12,34 +13,41 @@ public class MoveEvolutionGrowthProfileManager : MonoBehaviour
 
     public bool IsReady { get; private set; } = false;
 
-    private void Awake()
+    private async void Awake()
     {
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-
         DontDestroyOnLoad(gameObject);
 
-        LoadAllMoveEvolutionGrowthProfile();
+        await LoadAllMoveEvolutionGrowthProfileAsync();
+        IsReady = true;
+        LogManager.Trace($"[MoveEvolutionGrowthProfileManager] All MoveEvolutionGrowthProfile loaded. Total count: {moveEvolutionGrowthProfileDict.Count}", this);
     }
 
-    public void LoadAllMoveEvolutionGrowthProfile()
+    public async Task LoadAllMoveEvolutionGrowthProfileAsync()
     {
         Addressables.LoadAssetsAsync<MoveEvolutionGrowthProfile>("Moves-Evolutions-Growth", data =>
         {
             RegisterMoveEvolutionGrowthProfile(data);
         }).Completed += handle =>
         {
-            LogManager.Trace($"[MoveEvolutionGrowthProfileManager] All MoveEvolutionGrowthProfile loaded. Total count: {moveEvolutionGrowthProfileDict.Count}", this);
+            
             IsReady = true;
         };
+
+        var handle = Addressables.LoadAssetsAsync<MoveEvolutionGrowthProfile>(
+            "Moves-Evolutions-Growth",
+            data => RegisterMoveEvolutionGrowthProfile(data)
+        );
+
+        await handle.Task;
     }
 
-    public void RegisterMoveEvolutionGrowthProfile(MoveEvolutionGrowthProfile moveEvolutionGrowthProfile)
+    private void RegisterMoveEvolutionGrowthProfile(MoveEvolutionGrowthProfile moveEvolutionGrowthProfile)
     {
         var key = (moveEvolutionGrowthProfile.growthType, moveEvolutionGrowthProfile.growthRate);
         if (!moveEvolutionGrowthProfileDict.ContainsKey(key))

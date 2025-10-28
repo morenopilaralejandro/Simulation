@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -11,7 +12,7 @@ public class FormationCoordManager : MonoBehaviour
 
     public bool IsReady { get; private set; } = false;
 
-    private void Awake()
+    private async void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -21,21 +22,19 @@ public class FormationCoordManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        LoadAllFormationCoordData();
+        await LoadAllFormationCoordDataAsync();
+        IsReady = true;
+        LogManager.Trace($"[FormationCoordManager] All formationCoordData loaded. Total count: {formationCoordDataDict.Count}", this);
     }
 
-    private void LoadAllFormationCoordData()
+    public async Task LoadAllFormationCoordDataAsync()
     {
-        Addressables.LoadAssetsAsync<FormationCoordData>("FormationCoords-Data", data =>
-        {
-            if (!formationCoordDataDict.ContainsKey(data.FormationCoordId))
-                formationCoordDataDict.Add(data.FormationCoordId, data);
-        }).Completed += handle =>
-        {
-            LogManager.Trace($"[FormationCoordManager] All formationCoordData loaded. Total count: {formationCoordDataDict.Count}", this);
-            IsReady = true;
-            FormationManager.Instance.LoadAllFormations();
-        };
+        var handle = Addressables.LoadAssetsAsync<FormationCoordData>(
+            "FormationCoords-Data",
+            data => formationCoordDataDict[data.FormationCoordId] = data
+        );
+
+        await handle.Task;
     }
 
     public FormationCoordData GetFormationCoordData(string id)

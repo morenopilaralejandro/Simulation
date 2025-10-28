@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
@@ -20,32 +21,19 @@ public class MoveManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-
         DontDestroyOnLoad(gameObject);
-
-        LoadAllMoveData();
     }
 
-    public void LoadAllMoveData()
+    public async Task LoadAllMoveDataAsync()
     {
-        Addressables.LoadAssetsAsync<MoveData>("Moves-Data", data =>
-        {
-            RegisterMoveData(data);
-        }).Completed += handle =>
-        {
-            LogManager.Trace($"[MoveManager] All moves loaded. Total count: {moveDataDict.Count}", this);
-            IsReady = true;
-        };
-    }
-
-    public void RegisterMoveData(MoveData moveData)
-    {
-        if (!moveDataDict.ContainsKey(moveData.MoveId))
-        {
-            moveDataDict.Add(moveData.MoveId, moveData);
-        }
+        var handle = Addressables.LoadAssetsAsync<MoveData>(
+            "Moves-Data",
+            data => moveDataDict[data.MoveId] = data
+        );
+        await handle.Task;
+        IsReady = true;
+        LogManager.Trace($"[MoveManager] All moves loaded. Total count: {moveDataDict.Count}", this);
     }
 
     public MoveData GetMoveData(string id)
