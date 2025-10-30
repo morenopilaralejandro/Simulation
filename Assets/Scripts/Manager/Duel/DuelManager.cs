@@ -45,6 +45,8 @@ public class DuelManager : MonoBehaviour
     public bool IsResolved => duel.IsResolved;
     public DuelMode DuelMode => duel.DuelMode;
     public int GetParticipantCount() => duel.Participants.Count;
+    public int GetStagedParticipantCount() => stagedParticipants.Count;
+
     public DuelParticipant GetLastOffense() => duel.LastOffense;
     public DuelParticipant GetLastDefense() => duel.LastDefense;
 
@@ -108,22 +110,143 @@ public class DuelManager : MonoBehaviour
         return true;
     }
 
-    #region Duel Interface
-    public void StartDuel(DuelMode DuelMode)
+    #region Field
+    public void StartFieldDuel(Character offense, Character defense) 
     {
-        Reset();
+        LogManager.Info(
+            $"[DuelManager] " +  
+            $"Starting field duel between " +
+            $"{offense.CharacterId} ({offense.TeamSide}) and " +
+            $"{defense.CharacterId} ({defense.TeamSide})", this);
+           
+        StartDuel(DuelMode.Field);
         //PlayDuelStartEffect();
         //AudioManager.Instance.PlaySfx("SfxDuelField");
+
+        duel.IsKeeperDuel = 
+            defense.IsKeeper &&
+            defense.IsInOwnPenaltyArea();
+
+        //Support
+        List<Character> offenseSupports = FindNearbySupporters(offense);
+        List<Character> defenseSupports = FindNearbySupporters(defense);
+        duel.OffenseSupports.AddRange(offenseSupports);
+        duel.OffenseSupports.AddRange(defenseSupports);
+
+        //UI
+        BattleUIManager.Instance.SetDuelParticipant(offense, offenseSupports);
+        BattleUIManager.Instance.SetDuelParticipant(defense, defenseSupports);
         BattleUIManager.Instance.ShowDuelParticipantsPanel();
+
+        //RegisterTrigger
+        DuelManager.Instance.RegisterTrigger(
+            offense, 
+            false);
+        DuelManager.Instance.RegisterTrigger(
+            defense, 
+            false);
+
+        //SetPreselection
+        DuelSelectionManager.Instance.SetPreselection(
+            offense.TeamSide, 
+            Category.Dribble, 
+            0, 
+            offense);
+        DuelSelectionManager.Instance.SetPreselection(
+            defense.TeamSide, 
+            Category.Block, 
+            1, 
+            defense);
+        DuelSelectionManager.Instance.StartSelectionPhase();
+    }
+    #endregion
+
+    #region Shoot
+    public void StartShootDuel(Character character, bool isDirect) 
+    {
+        LogManager.Info($"[DuelManager] " +
+            $"Shoot duel started by " +
+            $"{character.CharacterId}, " +
+            $"teamSide {character.TeamSide}, " +
+            $"isDirect {isDirect}", this);       
+
+        DuelManager.Instance.StartDuel(DuelMode.Shoot);
+        ShootTriangleManager.Instance.SetTriangleFromCharacter(character);
+
+        //PlayDuelStartEffect();
+        //AudioManager.Instance.PlaySfx("SfxShootField");
+        //DuelLogManager.Instance.AddActionShoot(_cachedPlayer);
+
+        //UI
+        BattleUIManager.Instance.SetDuelParticipant(character, null);
+        BattleUIManager.Instance.SetDuelParticipant(GoalManager.Instance.GetOpponentKeeper(character), null);
+        BattleUIManager.Instance.ShowDuelParticipantsPanel();
+
+        //RegisterTrigger
+        DuelManager.Instance.RegisterTrigger(character, isDirect);
+
+        //SetPreselection
+        DuelSelectionManager.Instance.SetPreselection(
+            character.TeamSide, 
+            Category.Shoot, 
+            0, 
+            character);
+        DuelSelectionManager.Instance.SetShootDuelSelectionTeamSide(
+            character.TeamSide);
+        DuelSelectionManager.Instance.StartSelectionPhase();        
+    }
+
+    public void StartShootDuelCombo(Character character, Category category) 
+    {
+        int participantIndex = duel.Participants.Count;
+        LogManager.Info(
+            $"[DuelManager] " +  
+            $"Registering combo trigger for " +
+            $"{character.CharacterId} ({character.TeamSide}), " +
+            $"participantIndex {participantIndex}, " +
+            $"category {category}", this);
+
+        //Travel
+        BattleManager.Instance.Ball.PauseTravel();
+
+        //UI
+        BattleUIManager.Instance.SetDuelParticipant(character, null);
+        //AudioManager.Instance.PlaySfx("SfxDuelShoot");
+        
+
+        //RegisterTrigger
+        DuelManager.Instance.RegisterTrigger(character, false);
+        //SetPreselection
+        DuelSelectionManager.Instance.SetPreselection(
+            character.TeamSide, 
+            category, 
+            participantIndex, 
+            character);
+        DuelSelectionManager.Instance.SetShootDuelSelectionTeamSide(
+            character.TeamSide);
+        DuelSelectionManager.Instance.StartSelectionPhase();
+    }
+
+    public void StartShootDuelReversal() 
+    {
+        //triangle and travel to the other goal, keep the same duel
+    }
+    #endregion
+
+    #region Duel Interface
+    public void StartDuel(DuelMode duelMode)
+    {
+        Reset();
+        duel.DuelMode = duelMode;
         switch (DuelMode)
         {
             case DuelMode.Field:
                 duelHandler = new FieldDuelHandler(duel);
                 break;
-            /*
             case DuelMode.Shoot:
                 duelHandler = new ShootDuelHandler(duel);
                 break;
+            /*
             case DuelMode.Air:
                 duelHandler = new AirDuelHandler(duel);
                 break;
@@ -131,13 +254,14 @@ public class DuelManager : MonoBehaviour
         }
     }
 
-    private void CancelDuel()
+    public void CancelDuel()
     {
-        //GameLogger.Warning("[DuelManager] Duel cancelled", this);
+        LogManager.Info("[DuelManager] Duel cancelled", this);
         duel.IsResolved = true;
+        duelHandler.CancelDuel();
+
         //ShootTriangle.Instance.SetTriangleVisible(false);
         //BallTrail.Instance.SetTrailVisible(false);
-        duelHandler.CancelDuel();
     }
 
     public void EndDuel(DuelParticipant winner, DuelParticipant loser)
@@ -246,20 +370,6 @@ public class DuelManager : MonoBehaviour
         TryFinalizeParticipant(pd);
     }
 
-    public void SetIsKeeperDuel(bool isKeeperDuel) {
-        duel.IsKeeperDuel = isKeeperDuel;
-    } 
-
-    public void SetOffenseSupports(List<Character> supports) 
-    {
-        duel.OffenseSupports.AddRange(supports);
-    }
-
-    public void SetDefenseSupports(List<Character> supports) 
-    {
-        duel.DefenseSupports.AddRange(supports);   
-    }
-
     public void RegisterSelection(int index, Category category, DuelCommand command, Move move)
     {
         /*
@@ -295,7 +405,11 @@ public class DuelManager : MonoBehaviour
             duel.IsKeeperDuel
         );
 
-        //GameLogger.DebugLog($"[DuelManager] Created participant: {participant.Player.PlayerName}", this);
+        /*
+        LogManager.Trace($"[DuelManager] Created participant: " +  
+            $"{participant.Character.CharacterId}, " + 
+            $"{participant.Character.TeamSide}", this);
+        */
         AddParticipant(participant);
     }
     #endregion

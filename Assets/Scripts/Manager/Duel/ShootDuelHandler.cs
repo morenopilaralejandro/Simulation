@@ -15,19 +15,21 @@ public class ShootDuelHandler : IDuelHandler
         this.duel = duel;
     }
 
-    public void AddParticipant(DuelParticipant participant) {
-        //BallTravelController.Instance.ResumeTravel();
-
-        if (participant.Category == Category.Shoot)
+    public void AddParticipant(DuelParticipant participant) 
+    {
+        if (duel.Participants.Count == 0) 
         {
-            PossessionManager.Instance.SetLastCharacter(participant.Character);
-            if (duel.Participants.Count == 0) 
+            if (participant.Category == Category.Shoot)
             {
-                //PossessionManager.Instance.Release();
-                //BallTravelController.Instance.StartTravel(
-                //ShootTriangle.Instance.GetRandomPoint());
-            } 
-
+                PossessionManager.Instance.Release();
+                BattleManager.Instance.Ball.StartTravel(
+                    ShootTriangleManager.Instance.GetRandomPoint());
+            }
+        } else 
+        {
+            BattleManager.Instance.Ball.ResumeTravel();
+            if (participant.Category == Category.Shoot)            
+                PossessionManager.Instance.SetLastCharacter(participant.Character);
         }
 
         duel.Participants.Add(participant);
@@ -46,6 +48,7 @@ public class ShootDuelHandler : IDuelHandler
         }
         else
         {
+            duel.LastDefense = participant;
             Resolve();
         }
 
@@ -75,6 +78,13 @@ public class ShootDuelHandler : IDuelHandler
 
             duel.LastOffense.Character.ApplyStatus(StatusEffect.Stunned);
 
+            /*
+                if category.block && move && move.category==shoot move.trait.block
+                    Reversal
+                else 
+                    End
+            */
+
             EndDuel(duel.LastDefense, duel.LastOffense);
         }
         else
@@ -92,7 +102,6 @@ public class ShootDuelHandler : IDuelHandler
                 LogManager.Info("[ShootDuelHandler] Keeper fails to catch the ball");
                 EndDuel(duel.LastOffense, duel.LastDefense);
             }
-  
         }
     }
 

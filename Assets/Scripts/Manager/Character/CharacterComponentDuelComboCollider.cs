@@ -48,37 +48,11 @@ public class CharacterComponentDuelComboCollider : MonoBehaviour
         if (lastOffense == null || lastOffense.Character == character)
             return;
 
-
-        int participantIndex = DuelManager.Instance.GetParticipantCount();
-        Category category = lastOffense.Character.IsSameTeam(character) ? 
+        Category category = PossessionManager.Instance.LastCharacter.IsSameTeam(character) ? 
             Category.Shoot : 
             Category.Block;
 
-        LogManager.Info(
-            $"[CharacterComponentDuelComboCollider] " +  
-            $"Registering trigger for " +
-            $"{character.CharacterId} ({character.TeamSide}), " +
-            $"participantIndex {participantIndex}, " +
-            $"category {category}", this);
-
-        //UI
-        //BattleUIManager.Instance.SetDuelParticipant(character, null);
-        //AudioManager.Instance.PlaySfx("SfxDuelShoot");
-        
-        //Travel
-        //BallTravelController.Instance.PauseTravel();
-
-        //RegisterTrigger
-        DuelManager.Instance.RegisterTrigger(character, false);
-        //SetPreselection
-        DuelSelectionManager.Instance.SetPreselection(
-            character.TeamSide, 
-            category, 
-            participantIndex, 
-            character);
-        DuelSelectionManager.Instance.SetShootDuelSelectionTeamSide(
-            character.TeamSide);
-        DuelSelectionManager.Instance.StartSelectionPhase();
+        DuelManager.Instance.StartShootDuelCombo(character, category);
     }
     #endregion
 }

@@ -88,13 +88,13 @@ public class GoalManager : MonoBehaviour
         return Vector3.Distance(character.transform.position, goal.position);
     }
 
-    public float GetDistanceToOppOpponentX(Character character)
+    public float GetDistanceToOppOpponentGoalX(Character character)
     {
         Transform goal = GetOpponentGoal(character).transform;
         return Mathf.Abs(character.transform.position.x - goal.position.x);
     }
 
-    public float GetDistanceToOppOpponentZ(Character character)
+    public float GetDistanceToOppOpponentGoalZ(Character character)
     {
         Transform goal = GetOpponentGoal(character).transform;
         return Mathf.Abs(character.transform.position.z - goal.position.z);
@@ -119,7 +119,7 @@ public class GoalManager : MonoBehaviour
 
     public bool IsInShootDistance(Character character)
     {
-        float distance = GetDistanceToOpponentGoal(character);
+        float distance = GetDistanceToOppOpponentGoalZ(character);
         return distance <= shootDistance;
     }
 

@@ -105,7 +105,7 @@ public class DuelSelectionManager : MonoBehaviour
         selection.Character = character;
     }
 
-    public void SelectionMadeHumand(TeamSide teamSide, DuelCommand command, Move move)
+    public void SelectionMadeHuman(TeamSide teamSide, DuelCommand command, Move move)
     {
         if (teamSide == BattleManager.Instance.GetUserSide())
             BattleUIManager.Instance.HideDuelMenu(); 
@@ -149,8 +149,7 @@ public class DuelSelectionManager : MonoBehaviour
             var selection = kvp.Value;
             if (duelMode == DuelMode.Shoot)
             {
-                var userSide = BattleManager.Instance.GetUserSide();
-                if (side == userSide)
+                if (side == shootDuelSelectionTeamSide)
                 {
                     DuelManager.Instance.RegisterSelection(
                         selection.ParticipantIndex,

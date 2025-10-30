@@ -29,6 +29,7 @@ public class ShootTriangle : MonoBehaviour
     private int controlMax = 130;
     private float narrowFactorMin = 1.0f;
     private float narrowFactorMax = 0.3f;
+    private float randomPointY = 0.5f;
 
     private void Awake()
     {
@@ -146,6 +147,7 @@ public class ShootTriangle : MonoBehaviour
     {
         float t = Random.Range(0f, 1f);
         Vector3 randomPoint = Vector3.Lerp(vertex1, vertex2, t);
+        randomPoint.y = randomPointY;
         LogManager.Trace($"[ShootTriangle] Generated random point on base: {randomPoint}", this);
         return randomPoint;
     }

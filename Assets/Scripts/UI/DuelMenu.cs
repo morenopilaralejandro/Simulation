@@ -36,7 +36,7 @@ public class DuelMenu : MonoBehaviour
     public void OnCommandMeleeTapped()
     {
         //AudioManager.Instance.PlaySfx("SfxMenuTap");
-        DuelSelectionManager.Instance.SelectionMadeHumand(
+        DuelSelectionManager.Instance.SelectionMadeHuman(
             BattleManager.Instance.GetUserSide(), 
             DuelCommand.Melee, 
             null);
@@ -45,7 +45,7 @@ public class DuelMenu : MonoBehaviour
     public void OnCommandRangedTapped()
     {
         //AudioManager.Instance.PlaySfx("SfxMenuTap");
-        DuelSelectionManager.Instance.SelectionMadeHumand(
+        DuelSelectionManager.Instance.SelectionMadeHuman(
             BattleManager.Instance.GetUserSide(), 
             DuelCommand.Ranged, 
             null);
@@ -87,7 +87,7 @@ public class DuelMenu : MonoBehaviour
 
         AudioManager.Instance.PlaySfx("SfxSecretSelect");
         DuelSelectionMade(GameManager.Instance.GetLocalTeamIndex(), DuelCommand.Secret, secretCommandSlot.Secret);
-        DuelSelectionManager.Instance.SelectionMadeHumand
+        DuelSelectionManager.Instance.SelectionMadeHuman
     }
     */
 

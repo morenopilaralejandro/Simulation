@@ -49,6 +49,7 @@ public class ShootTriangleManager : MonoBehaviour
         shootTriangle.SetTriangleFromCharacter(
             character, 
             GoalManager.Instance.GetOpponentGoal(character).transform.position);
+        Show();
     }
 
     public Vector3 GetRandomPoint()

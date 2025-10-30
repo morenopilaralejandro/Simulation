@@ -162,30 +162,7 @@ public class CharacterComponentController : MonoBehaviour
     private void HandleShoot() 
     {
         bool isDirect = false;
-
-        LogManager.Info($"[CharacterComponentController] " +
-            $"Shoot duel started by " +
-            $"{character.CharacterId}, " +
-            $"teamSide {character.TeamSide}, " +
-            $"isDirect {isDirect}", this);
-        
-        //DuelLogManager.Instance.AddActionShoot(_cachedPlayer);
-
-        //StartDuel
-        DuelManager.Instance.StartDuel(DuelMode.Shoot);
-
-        //RegisterTrigger
-        DuelManager.Instance.RegisterTrigger(character, isDirect);
-
-        //SetPreselection
-        DuelSelectionManager.Instance.SetPreselection(
-            character.TeamSide, 
-            Category.Shoot, 
-            0, 
-            character);
-        DuelSelectionManager.Instance.SetShootDuelSelectionTeamSide(
-            character.TeamSide);
-        DuelSelectionManager.Instance.StartSelectionPhase();
+        DuelManager.Instance.StartShootDuel(character, isDirect);
     }
     #endregion
 }

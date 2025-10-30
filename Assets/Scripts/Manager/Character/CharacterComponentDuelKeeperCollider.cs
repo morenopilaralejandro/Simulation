@@ -24,6 +24,27 @@ public class CharacterComponentDuelKeeperCollider : MonoBehaviour
     {
         TryHandleTrigger(other);
     }
+
+    private void OnEnable()
+    {
+        TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;    
+    }
+
+    private void OnDisable()
+    {
+        TeamEvents.OnAssignCharacterToTeamBattle -= HandleAssignCharacterToTeamBattle;
+    }
+
+    private void HandleAssignCharacterToTeamBattle(
+        Character character, 
+        Team team, 
+        FormationCoord formationCoord)
+    {
+        if (this.character == character)
+        {
+            this.gameObject.SetActive(formationCoord.Position == Position.GK);
+        }
+    }
     #endregion
 
     #region Duel Logic
@@ -52,31 +73,7 @@ public class CharacterComponentDuelKeeperCollider : MonoBehaviour
         if (lastOffense.Character.IsSameTeam(character))
             return;
 
-        int participantIndex = DuelManager.Instance.GetParticipantCount();
-
-        LogManager.Info(
-            $"[CharacterComponentDuelKeeperCollider] " +  
-            $"Registering trigger for " +
-            $"{character.CharacterId} ({character.TeamSide}), " +
-            $"participantIndex {participantIndex}", this);
-
-        //UI
-        //BattleUIManager.Instance.SetDuelParticipant(character, null);
-        
-        //Travel
-        //BallTravelController.Instance.PauseTravel();
-
-        //RegisterTrigger
-        DuelManager.Instance.RegisterTrigger(character, false);
-        //SetPreselection
-        DuelSelectionManager.Instance.SetPreselection(
-            character.TeamSide, 
-            Category.Catch, 
-            participantIndex, 
-            character);
-        DuelSelectionManager.Instance.SetShootDuelSelectionTeamSide(
-            character.TeamSide);
-        DuelSelectionManager.Instance.StartSelectionPhase();
+        DuelManager.Instance.StartShootDuelCombo(character, Category.Catch);
     }
     #endregion
 }

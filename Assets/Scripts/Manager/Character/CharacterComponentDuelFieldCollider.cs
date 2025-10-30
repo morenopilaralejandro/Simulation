@@ -51,65 +51,7 @@ public class CharacterComponentDuelFieldCollider : MonoBehaviour
             !otherCharacter.CanDuel()) 
             return;
 
-        LogManager.Info(
-            $"[CharacterComponentDuelFieldCollider] " +  
-            $"Starting field duel between " +
-            $"{character.CharacterId} ({character.TeamSide}) and " +
-            $"{otherCharacter.CharacterId} ({otherCharacter.TeamSide})", this);
-
-        bool isKeeperDuel = 
-            otherCharacter.IsKeeper &&
-            otherCharacter.IsInOwnPenaltyArea();
-           
-        DuelManager.Instance.StartDuel(DuelMode.Field);
-        DuelManager.Instance.SetIsKeeperDuel(isKeeperDuel);
-
-        Category category = Category.Dribble;
-        Category otherCategory = Category.Block;
-
-        //Support
-        List<Character> offenseSupports =
-            DuelManager.Instance.FindNearbySupporters(character);
-        List<Character> defenseSupports =
-            DuelManager.Instance.FindNearbySupporters(otherCharacter);
-        
-        DuelManager.Instance.SetOffenseSupports(offenseSupports);
-        DuelManager.Instance.SetDefenseSupports(defenseSupports);
-        //UI
-        BattleUIManager.Instance.SetDuelParticipant(character, offenseSupports);
-        BattleUIManager.Instance.SetDuelParticipant(otherCharacter, defenseSupports);
-        //RegisterTrigger
-        DuelManager.Instance.RegisterTrigger(
-            character, 
-            false);
-        DuelManager.Instance.RegisterTrigger(
-            otherCharacter, 
-            false);
-        //SetPreselection
-        DuelSelectionManager.Instance.SetPreselection(
-            character.TeamSide, 
-            category, 
-            0, 
-            character);
-        DuelSelectionManager.Instance.SetPreselection(
-            otherCharacter.TeamSide, 
-            otherCategory, 
-            1, 
-            otherCharacter);
-            
-        DuelSelectionManager.Instance.StartSelectionPhase();
+        DuelManager.Instance.StartFieldDuel(character, otherCharacter);
     }
-
-    /*
-    private bool CanStartDuel()
-    {
-        return true;        
-        return Time.time >= _nextDuelAllowedTime
-               && !GameManager.Instance.IsMovementFrozen
-               && DuelManager.Instance.IsDuelResolved();
-        
-    }
-    */
-
     #endregion
 }

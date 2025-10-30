@@ -174,7 +174,7 @@ public class Character : MonoBehaviour
     //ball
     public void KickBallTo(Vector3 targetPos) => BattleManager.Instance.Ball.KickBallTo(targetPos);
     public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;
-    public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this);
+    public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this) && !IsStunned();
     public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this); //also handle long shoot etc;
     public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
     //misc

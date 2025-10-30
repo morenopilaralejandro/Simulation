@@ -7,6 +7,7 @@ public class BallComponentTravel : MonoBehaviour
     [SerializeField] private bool isTraveling;
     [SerializeField] private bool isTravelPaused;
 
+    private float defaultBallY = 1f;
     private float travelSpeed = 3f;
     private float endThreshold = 0.01f;
     private float maxVelocity = 10f;
@@ -52,10 +53,15 @@ public class BallComponentTravel : MonoBehaviour
         }
 
         LogManager.Trace($"[BallComponentTravel] [StartTravel] Travel started to {target}.", this);
-        isTraveling = true;
-        isTravelPaused = false;
         currentTarget = target;
         ball.SetKinematic();
+
+        var ballPostion = ball.transform.position;
+        ballPostion.y = defaultBallY;
+        ball.transform.position = ballPostion;
+
+        isTraveling = true;
+        isTravelPaused = false;
         BallEvents.RaiseStartTravel(target);
     }
 
@@ -96,6 +102,7 @@ public class BallComponentTravel : MonoBehaviour
         isTraveling = false;
         isTravelPaused = false;
         ball.SetDynamic();
+        DuelManager.Instance.CancelDuel();
         BallEvents.RaiseCancelTravel();
     }
 
