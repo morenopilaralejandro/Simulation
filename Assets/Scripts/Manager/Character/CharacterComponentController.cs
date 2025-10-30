@@ -2,9 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Simulation.Enums.Input;
+using Simulation.Enums.Character;
+using Simulation.Enums.Move;
+using Simulation.Enums.Duel;
+using Simulation.Enums.Battle;
 
 public class CharacterComponentController : MonoBehaviour
 {
+    #region Fields
     private Character character;
 
     private Vector2 moveInput;
@@ -15,7 +20,9 @@ public class CharacterComponentController : MonoBehaviour
     [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
 
     public bool IsControlled => isControlled;
+    #endregion
 
+    #region Lifecycle
     public void Initialize(CharacterData characterData, Character character) 
     {
         this.character = character;
@@ -51,14 +58,24 @@ public class CharacterComponentController : MonoBehaviour
         if (!this.character.HasBall()) 
             return;
 
+        //pass
+
         if (InputManager.Instance.GetDown(BattleAction.Pass)) 
             HandlePass();
 
         //dribble
 
+        //shoot
+        if (InputManager.Instance.GetDown(BattleAction.Shoot) && 
+            character.CanShoot() && 
+            DuelManager.Instance.IsResolved &&
+            !BattleManager.Instance.IsTimeFrozen) 
+            HandleShoot();
 
     }
+    #endregion
 
+    #region Events
     private void HandleAssignCharacterToTeamBattle(
         Character character, 
         Team team, 
@@ -69,7 +86,9 @@ public class CharacterComponentController : MonoBehaviour
             this.enabled = false;
         }
     }
+    #endregion
 
+    #region Target
     private void HandleTarget() 
     {
         Character target = 
@@ -79,7 +98,9 @@ public class CharacterComponentController : MonoBehaviour
                 : null;
             CharacterEvents.RaiseTargetChange(target, this.character.TeamSide);
     }
+    #endregion
 
+    #region Movement
     private void HandleMovement()
     {
         if (move.sqrMagnitude > moveTolerance)
@@ -109,7 +130,10 @@ public class CharacterComponentController : MonoBehaviour
             */
         }
     }
+    #endregion
 
+
+    #region Pass
     private void HandlePass() 
     {
         Character target = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
@@ -132,5 +156,36 @@ public class CharacterComponentController : MonoBehaviour
         Vector3 targetPosition = this.character.transform.position + forwardDirection * forwardPassDistance;
         this.character.KickBallTo(targetPosition);
     }
+    #endregion
 
+    #region Shoot
+    private void HandleShoot() 
+    {
+        bool isDirect = false;
+
+        LogManager.Info($"[CharacterComponentController] " +
+            $"Shoot duel started by " +
+            $"{character.CharacterId}, " +
+            $"teamSide {character.TeamSide}, " +
+            $"isDirect {isDirect}", this);
+        
+        //DuelLogManager.Instance.AddActionShoot(_cachedPlayer);
+
+        //StartDuel
+        DuelManager.Instance.StartDuel(DuelMode.Shoot);
+
+        //RegisterTrigger
+        DuelManager.Instance.RegisterTrigger(character, isDirect);
+
+        //SetPreselection
+        DuelSelectionManager.Instance.SetPreselection(
+            character.TeamSide, 
+            Category.Shoot, 
+            0, 
+            character);
+        DuelSelectionManager.Instance.SetShootDuelSelectionTeamSide(
+            character.TeamSide);
+        DuelSelectionManager.Instance.StartSelectionPhase();
+    }
+    #endregion
 }

@@ -23,6 +23,8 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentMoves movesComponent;
     [SerializeField] private CharacterComponentController controllerComponent;
     [SerializeField] private CharacterComponentDuelFieldCollider duelFieldColliderComponent;
+    [SerializeField] private CharacterComponentDuelComboCollider duelComboColliderComponent;
+    [SerializeField] private CharacterComponentDuelKeeperCollider duelKeeperColliderComponent;
 
 
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
@@ -61,6 +63,8 @@ public class Character : MonoBehaviour
         movesComponent.Initialize(characterData, this);
         controllerComponent.Initialize(characterData, this);
         duelFieldColliderComponent.Initialize(characterData, this);
+        duelComboColliderComponent.Initialize(characterData, this);
+        duelKeeperColliderComponent.Initialize(characterData, this);
 
 
         teamIndicatorComponent.Initialize(characterData, this);

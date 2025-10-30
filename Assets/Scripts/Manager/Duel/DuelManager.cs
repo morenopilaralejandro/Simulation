@@ -13,8 +13,6 @@ public class DuelManager : MonoBehaviour
     private Duel duel;
     private IDuelHandler duelHandler;
     private List<DuelParticipantData> stagedParticipants = new List<DuelParticipantData>();
-    private TeamSide shootTeamSide;
-    private TeamSide ShootTeamSide => shootTeamSide;
 
     private int maxSupporters = 2;
     private float supporterRadius = 1f;
@@ -45,8 +43,10 @@ public class DuelManager : MonoBehaviour
     }
 
     public bool IsResolved => duel.IsResolved;
-
     public DuelMode DuelMode => duel.DuelMode;
+    public int GetParticipantCount() => duel.Participants.Count;
+    public DuelParticipant GetLastOffense() => duel.LastOffense;
+    public DuelParticipant GetLastDefense() => duel.LastDefense;
 
     public DuelAction GetActionByCategory(Category category) =>
     category switch
@@ -245,10 +245,6 @@ public class DuelManager : MonoBehaviour
         stagedParticipants.Add(pd);
         TryFinalizeParticipant(pd);
     }
-
-    public void SetShootTeamSide(TeamSide teamSide) {
-        shootTeamSide = teamSide;
-    } 
 
     public void SetIsKeeperDuel(bool isKeeperDuel) {
         duel.IsKeeperDuel = isKeeperDuel;

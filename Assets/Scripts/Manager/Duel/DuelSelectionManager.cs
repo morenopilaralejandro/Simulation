@@ -15,6 +15,7 @@ public class DuelSelectionManager : MonoBehaviour
     private const float SelectionTimeout = 10f;
 
     private DuelMode duelMode;
+    private TeamSide shootDuelSelectionTeamSide;
     private Dictionary<TeamSide, DuelSelection> selections;
 
     public event Action OnSelectionsComplete;
@@ -55,6 +56,9 @@ public class DuelSelectionManager : MonoBehaviour
         };
     }
 
+    public void SetShootDuelSelectionTeamSide(TeamSide teamSide) 
+        => shootDuelSelectionTeamSide = teamSide;
+
     #endregion
 
     #region Local Duel Selection
@@ -69,16 +73,14 @@ public class DuelSelectionManager : MonoBehaviour
         }
         else if (duelMode == DuelMode.Shoot)
         {
-            /*
-            if (DuelManager.Instance.ShootTeamSide == GameManager.Instance.GetLocalTeamIndex())
+            if (shootDuelSelectionTeamSide == BattleManager.Instance.GetUserSide())
             {
-                //BattleUIManager.Instance.ShowDuelMenuForUser();
+                BattleUIManager.Instance.ShowDuelMenuForUser();
             }
             else
             {
-                SelectionMadeAi(shootTeamIndex);
+                SelectionMadeAi();
             }
-            */
         }
     }
 
