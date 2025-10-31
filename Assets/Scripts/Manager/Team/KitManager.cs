@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class KitManager : MonoBehaviour
 {
@@ -18,27 +19,22 @@ public class KitManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-
-        DontDestroyOnLoad(gameObject);
-
-        LoadAllKits();
+        DontDestroyOnLoad(gameObject);       
     }
 
-    public void LoadAllKits()
+    public async Task LoadAllKitsAsync()
     {
-        Addressables.LoadAssetsAsync<KitData>("Kits-Data", data =>
-        {
-            RegisterKit(data);
-        }).Completed += handle =>
-        {
-            LogManager.Trace($"[KitManager] All kits loaded. Total count: {kits.Count}", this);
-            IsReady = true;
-        };
+        var handle = Addressables.LoadAssetsAsync<KitData>(
+            "Kits-Data",
+            data => RegisterKit(data)
+        );
+        await handle.Task;
+        IsReady = true;
+        LogManager.Trace($"[KitManager] All kits loaded. Total count: {kits.Count}", this);
     }
 
-    public void RegisterKit(KitData data)
+    private void RegisterKit(KitData data)
     {
         if (!kits.ContainsKey(data.KitId))
         {

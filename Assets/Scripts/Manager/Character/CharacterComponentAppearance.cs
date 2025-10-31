@@ -89,7 +89,7 @@ public class CharacterComponentAppearance : MonoBehaviour
         if (characterBodySprite)
             characterBodyRenderer.sprite = characterBodySprite;
 
-        _characterPortraitAddress = AddressableLoader.GetCharacterHeadAddress(characterData.CharacterId);
+        _characterPortraitAddress = AddressableLoader.GetCharacterPortraitAddress(characterData.CharacterId);
         characterPortraitSprite = await AddressableLoader.LoadAsync<Sprite>(_characterPortraitAddress);
     }
 

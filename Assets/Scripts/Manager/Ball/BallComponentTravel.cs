@@ -7,7 +7,8 @@ public class BallComponentTravel : MonoBehaviour
     [SerializeField] private bool isTraveling;
     [SerializeField] private bool isTravelPaused;
 
-    private float travelSpeed = 3f;
+    private float defaultBallY = 1f;
+    private float travelSpeed = 4f;
     private float endThreshold = 0.01f;
     private float maxVelocity = 10f;
     private Vector3 travelVelocity;
@@ -52,10 +53,15 @@ public class BallComponentTravel : MonoBehaviour
         }
 
         LogManager.Trace($"[BallComponentTravel] [StartTravel] Travel started to {target}.", this);
-        isTraveling = true;
-        isTravelPaused = false;
         currentTarget = target;
         ball.SetKinematic();
+
+        var ballPostion = ball.transform.position;
+        ballPostion.y = defaultBallY;
+        ball.transform.position = ballPostion;
+
+        isTraveling = true;
+        isTravelPaused = false;
         BallEvents.RaiseStartTravel(target);
     }
 
@@ -95,19 +101,29 @@ public class BallComponentTravel : MonoBehaviour
         LogManager.Trace($"[BallComponentTravel] [CancelTravel] Travel cancelled at position {transform.position}.", this);
         isTraveling = false;
         isTravelPaused = false;
-        ball.SetDynamic();
+
+        if (travelVelocity.magnitude > maxVelocity)
+            travelVelocity = travelVelocity.normalized * maxVelocity;
+        ball.SetDynamic(travelVelocity);
+
+        ShootTriangleManager.Instance.Hide();
+
+        DuelManager.Instance.CancelDuel();
         BallEvents.RaiseCancelTravel();
     }
 
-    private void EndTravel()
+    public void EndTravel()
     {
+        isTraveling = false;
+
         //clamp travel velocity        
         if (travelVelocity.magnitude > maxVelocity)
             travelVelocity = travelVelocity.normalized * maxVelocity;
-
-        LogManager.Trace($"[BallComponentTravel] [EndTravel] Travel ended at {currentTarget} with velocity {travelVelocity}.", this);
-        isTraveling = false;
         ball.SetDynamic(travelVelocity);
+
+        ShootTriangleManager.Instance.Hide();
+
+        LogManager.Trace($"[BallComponentTravel] [EndTravel] Travel ended at {ball.transform.position} with velocity {travelVelocity}.", this);
         BallEvents.RaiseEndTravel(currentTarget);
     }
 }

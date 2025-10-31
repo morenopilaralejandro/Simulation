@@ -99,4 +99,24 @@ namespace Simulation.Enums.Character
         Stunned,
         Tripping
     }
+
+    public enum AIDifficulty 
+    { 
+        Easy, 
+        Normal, 
+        Hard 
+    }
+
+    public enum AIState 
+    { 
+        Idle, 
+        Kickoff, 
+        KickoffPass, 
+        ChaseBall, 
+        Attack, 
+        Defend, 
+        Keeper, 
+        Pass, 
+        Shoot 
+    }
 }

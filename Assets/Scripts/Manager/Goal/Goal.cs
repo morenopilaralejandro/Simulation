@@ -4,27 +4,27 @@ using Simulation.Enums.Battle;
 
 public class Goal : MonoBehaviour
 {
-    [SerializeField] private TeamSide teamSide;
+    #region Components
+    [SerializeField] private GoalComponentTeamSide teamSideComponent;
+    [SerializeField] private GoalComponentTrigger triggerComponent;
+    #endregion
 
-    public TeamSide TeamSide => teamSide;
-
-    private void Awake()
+    #region Initialize
+    public void Start()
     {
-        GoalManager.Instance.SetGoal(this);   
+        Initialize();
     }
 
-    private void OnDestroy()
+    public void Initialize()
     {
-        GoalManager.Instance.Reset();
+        teamSideComponent.Initialize(this);
+        triggerComponent.Initialize(this);
     }
+    #endregion
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Ball") && !BattleManager.Instance.IsTimeFrozen)
-        {
-            //GameManager.Instance.OnGoalScored(Team);
-            LogManager.Info("[Goal] OnTriggerEnter: a goal was scored. TeamSide: {teamSide}", this);
-        }
-    }
+    #region API
+    //teamSideComponent
+    public TeamSide TeamSide => teamSideComponent.TeamSide;
+    #endregion
 
 }

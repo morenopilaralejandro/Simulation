@@ -3,9 +3,9 @@ using UnityEngine;
 public class BattleCameraTarget : MonoBehaviour
 {
     [Header("Offsets")]
-    private Vector3 offset = new Vector3(0, 3, -4);  
-    private Vector3 homeOffset = new Vector3(0, 3, -2f);  
-    private Vector3 awayOffset = new Vector3(0, 3, -4);   
+    private Vector3 offset = new Vector3(0, 3, -6);
+    private Vector3 homeOffset = new Vector3(0, 3, -3.8f);
+    private Vector3 awayOffset = new Vector3(0, 3, -6);
 
     [Header("Smoothing")]
     private float currentSmoothSpeed = 2f;
@@ -38,8 +38,7 @@ public class BattleCameraTarget : MonoBehaviour
         desiredPosition += offset;
 
         // Clamp to field boundaries
-        Vector3 clamped = desiredPosition;
-        //clamped.z = -4;
+        Vector3 clamped = BoundManager.Instance.ClampCamera(desiredPosition);
 
         float distance = Vector3.Distance(transform.position, clamped);
         currentSmoothSpeed = distance > distanceThreshold ? fastSmoothSpeed : normalSmoothSpeed;

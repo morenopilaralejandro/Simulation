@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -20,21 +21,17 @@ public class CharacterManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        LoadAllCharacterData();
     }
 
-    private void LoadAllCharacterData()
+    public async Task LoadAllCharacterDataAsync()
     {
-        Addressables.LoadAssetsAsync<CharacterData>("Characters-Data", data =>
-        {
-            if (!characterDataDict.ContainsKey(data.CharacterId))
-                characterDataDict.Add(data.CharacterId, data);
-        }).Completed += handle =>
-        {
-            LogManager.Trace($"[CharacterManager] All characters loaded. Total count: {characterDataDict.Count}", this);
-            IsReady = true;
-            TeamManager.Instance.LoadAllTeams();
-        };
+        var handle = Addressables.LoadAssetsAsync<CharacterData>(
+            "Characters-Data",
+            data => characterDataDict[data.CharacterId] = data
+        );
+        await handle.Task;
+        IsReady = true;
+        LogManager.Trace($"[CharacterManager] All characters loaded. Total count: {characterDataDict.Count}", this);
     }
 
     public CharacterData GetCharacterData(string id)

@@ -42,6 +42,7 @@ public class Ball : MonoBehaviour
     public void SetDynamic() => kinematicComponent.SetDynamic();
     public void SetDynamic(Vector3 velocity) => kinematicComponent.SetDynamic(velocity);
     public void ToggleKinematic() => kinematicComponent.ToggleKinematic();
+    public Vector3 GetVelocity() => kinematicComponent.GetVelocity();
     //kickComponent
     public void KickBallTo(Vector3 targetPos) => kickComponent.KickBallTo(targetPos);
 
@@ -53,6 +54,7 @@ public class Ball : MonoBehaviour
     public void PauseTravel() => travelComponent.PauseTravel();
     public void ResumeTravel() => travelComponent.ResumeTravel();
     public void CancelTravel() => travelComponent.CancelTravel();
+    public void EndTravel() => travelComponent.EndTravel();
 
     //misc
     public bool IsFree() => PossessionManager.Instance.CurrentCharacter == null;

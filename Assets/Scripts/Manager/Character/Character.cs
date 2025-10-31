@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
+using Simulation.Enums.Duel;
+using Simulation.Enums.Battle;
 using Simulation.Enums.Localization;
 
 public class Character : MonoBehaviour
@@ -22,6 +24,11 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentStatusIndicator statusIndicatorComponent;
     [SerializeField] private CharacterComponentMoves movesComponent;
     [SerializeField] private CharacterComponentController controllerComponent;
+    [SerializeField] private CharacterComponentDuelFieldCollider duelFieldColliderComponent;
+    [SerializeField] private CharacterComponentDuelComboCollider duelComboColliderComponent;
+    [SerializeField] private CharacterComponentDuelKeeperCollider duelKeeperColliderComponent;
+    [SerializeField] private CharacterComponentAI aiComponent;
+
 
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private SpeechBubble speechBubble;
@@ -58,7 +65,10 @@ public class Character : MonoBehaviour
         statusIndicatorComponent.Initialize(characterData, this);
         movesComponent.Initialize(characterData, this);
         controllerComponent.Initialize(characterData, this);
-
+        duelFieldColliderComponent.Initialize(characterData, this);
+        duelComboColliderComponent.Initialize(characterData, this);
+        duelKeeperColliderComponent.Initialize(characterData, this);
+        aiComponent.Initialize(characterData, this);
 
         teamIndicatorComponent.Initialize(characterData, this);
         /*
@@ -153,12 +163,15 @@ public class Character : MonoBehaviour
     public bool CanPerformeMove(Move move) => movesComponent.CanPerformeMove(move);
     public bool CanAffordMove(Move move) => movesComponent.CanAffordMove(move);
     public bool HasAffordableMove() => movesComponent.HasAffordableMove();
+    public bool HasAffordableMoveWithCategory(Category category) => movesComponent.HasAffordableMoveWithCategory(category);
     public bool HasAffordableMoveWithTrait(Trait trait) => movesComponent.HasAffordableMoveWithTrait(trait);
-    public Move GetRandomAffordableMove() => movesComponent.GetRandomAffordableMove();
-    public Move GetStrongestAffordableMove() => movesComponent.GetStrongestAffordableMove();
+    public Move GetRandomAffordableMoveByCategory(Category category) => movesComponent.GetRandomAffordableMoveByCategory(category);
+    public Move GetStrongestAffordableMoveByCategory(Category category) => movesComponent.GetStrongestAffordableMoveByCategory(category);
     //controllerComponent
     public bool IsControlled => controllerComponent.IsControlled;
-
+    //aiComponent
+    public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);
+    public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
 
     //speechBubble
     public void ShowMessage(BubbleMessage bubbleMessage) => speechBubble.ShowMessage(bubbleMessage);
@@ -167,7 +180,7 @@ public class Character : MonoBehaviour
     //ball
     public void KickBallTo(Vector3 targetPos) => BattleManager.Instance.Ball.KickBallTo(targetPos);
     public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;
-    public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this);
+    public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this) && !IsStunned();
     public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this); //also handle long shoot etc;
     public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
     //misc

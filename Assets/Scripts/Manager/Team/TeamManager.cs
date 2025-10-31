@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class TeamManager : MonoBehaviour
 {
@@ -24,27 +25,21 @@ public class TeamManager : MonoBehaviour
         }
 
         Instance = this;
-
-        DontDestroyOnLoad(gameObject);
-
+        DontDestroyOnLoad(gameObject);        
     }
 
-    public void LoadAllTeams()
+    public async Task LoadAllTeamsAsync()
     {
-        var handle = Addressables.LoadAssetsAsync<TeamData>("Teams-Data", RegisterTeam);
-        handle.Completed += OnTeamsLoaded;
+        var handle = Addressables.LoadAssetsAsync<TeamData>(
+            "Teams-Data",
+            data => RegisterTeam(data)
+        );
+        await handle.Task;
+        IsReady = true;
+        LogManager.Trace($"[TeamManager] All teams loaded. Total count: {teams.Count}", this);
     }
 
-    private void OnTeamsLoaded(AsyncOperationHandle<IList<TeamData>> handle)
-    {
-        if (handle.Status == AsyncOperationStatus.Succeeded)
-        {
-            LogManager.Trace($"[TeamManager] All teams loaded. Total count: {teams.Count}", this);
-            IsReady = true;
-        }
-    }
-
-    public void RegisterTeam(TeamData data)
+    private void RegisterTeam(TeamData data)
     {
         if (!teams.ContainsKey(data.TeamId))
         {

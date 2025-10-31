@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -20,21 +21,18 @@ public class BallManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-        LoadAllData();
+        DontDestroyOnLoad(gameObject);       
     }
 
-    private void LoadAllData()
+    public async Task LoadAllBallDataAsync()
     {
-        Addressables.LoadAssetsAsync<BallData>("Balls-Data", data =>
-        {
-            if (!ballDataDict.ContainsKey(data.BallId))
-                ballDataDict.Add(data.BallId, data);
-        }).Completed += handle =>
-        {
-            LogManager.Trace($"[BallManager] All balls loaded. Total count: {ballDataDict.Count}", this);
-            IsReady = true;
-        };
+        var handle = Addressables.LoadAssetsAsync<BallData>(
+            "Balls-Data",
+            data => ballDataDict[data.BallId] = data
+        );
+        await handle.Task;
+        IsReady = true;
+        LogManager.Trace($"[BallManager] All balls loaded. Total count: {ballDataDict.Count}", this);
     }
 
     public BallData GetBallData(string id)

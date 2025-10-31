@@ -4,7 +4,7 @@ public class BallComponentCollider : MonoBehaviour
 {
     private Ball ball;
     private string tagCharacterKeep = "Character-Keep";
-    private string tagCharacterKeeper = "Character-Keeper";
+    private string tagCharacterKeeper = "Character-Duel-Keeper";
     private string tagBound = "Bound";
     
     
@@ -25,11 +25,10 @@ public class BallComponentCollider : MonoBehaviour
         if (character == null) return;
 
         bool isCharacterKeeperCollision = IsCharacterKeeperCollision(character, otherCollider);
-
+      
         if (
             character.CanGainBall() &&
-            IsCharacterKeepCollision(character, otherCollider) ||
-            isCharacterKeeperCollision
+            (IsCharacterKeepCollision(character, otherCollider) || isCharacterKeeperCollision)
         )
         {
             LogManager.Trace($"[BallComponentCollider] [OnTriggerEnter] {character.CharacterId}", this);
@@ -62,9 +61,10 @@ public class BallComponentCollider : MonoBehaviour
         Character character, 
         Collider otherCollider) =>
         //keeper won't stop a pass from a player in its same team
-        GetComponent<Collider>().CompareTag(tagCharacterKeeper) &&
+        character.IsKeeper &&
+        character.IsInOwnPenaltyArea() &&
+        otherCollider.CompareTag(tagCharacterKeeper) &&
         PossessionManager.Instance.LastCharacter &&
-        !PossessionManager.Instance.LastCharacter.IsSameTeam(character) &&
-        character.IsInOwnPenaltyArea();
+        !PossessionManager.Instance.LastCharacter.IsSameTeam(character);
 
 }
