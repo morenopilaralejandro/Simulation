@@ -30,7 +30,8 @@ public class BootstrapManager : MonoBehaviour
     #if UNITY_EDITOR || DEVELOPMENT_BUILD
         SceneLoader.LoadDebugMainMenu();
     #else
-        SceneLoader.LoadMainMenu();
+        SceneLoader.LoadDebugMainMenu();        
+        //SceneLoader.LoadMainMenu();
     #endif
     }
 }

@@ -86,8 +86,17 @@ public class DuelSelectionManager : MonoBehaviour
 
     private void SelectionMadeAi()
     {
-        //get the command and move from ai script
-        FinalizeSelection(TeamSide.Away, DuelCommand.Melee, null);
+        var selection = selections[TeamSide.Away];
+        Character character = selection.Character;
+        DuelCommand command = character.GetCommandByCategory(selection.Category);
+        Move move = character.GetMoveByCommandAndCategory(
+            selection.Command,
+            selection.Category);
+
+        FinalizeSelection(
+            character.TeamSide, 
+            command, 
+            move);
     }
 
     #endregion
@@ -129,8 +138,7 @@ public class DuelSelectionManager : MonoBehaviour
 
         if (duelMode == DuelMode.Shoot)
         {
-            var userSide = BattleManager.Instance.GetUserSide();
-            ready = selections[userSide].IsReady;
+            ready = selections[shootDuelSelectionTeamSide].IsReady;
         }
         else
         {

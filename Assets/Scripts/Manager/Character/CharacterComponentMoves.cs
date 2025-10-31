@@ -99,21 +99,33 @@ public class CharacterComponentMoves : MonoBehaviour
     public bool CanAffordMove(Move move) => this.character.GetBattleStat(Stat.Sp) >= move.Cost;
 
     public bool HasAffordableMove() => equippedMoves.Any(move => CanAffordMove(move));
+
+    public bool HasAffordableMoveWithCategory(Category category) => equippedMoves.Any(move => move.Category == category && CanAffordMove(move));
  
     public bool HasAffordableMoveWithTrait(Trait trait) => equippedMoves.Any(move => move.Trait == trait && CanAffordMove(move));
 
-    public Move GetRandomAffordableMove()
+    public Move GetRandomAffordableMoveByCategory(Category category)
     {
-        var affordableMoves = equippedMoves.Where(CanAffordMove).ToList();
+         var affordableMoves = equippedMoves
+            .Where(
+                m => m.Category == category && 
+                CanAffordMove(m))
+            .ToList();
+
         if (affordableMoves.Count == 0) return null;
 
         int index = UnityEngine.Random.Range(0, affordableMoves.Count);
         return affordableMoves[index];
     }
 
-    public Move GetStrongestAffordableMove()
+    public Move GetStrongestAffordableMoveByCategory(Category category)
     {
-        var affordableMoves = equippedMoves.Where(CanAffordMove).ToList();
+         var affordableMoves = equippedMoves
+            .Where(
+                m => m.Category == category && 
+                CanAffordMove(m))
+            .ToList();
+
         if (affordableMoves.Count == 0) return null;
 
         // Sort moves by element match priority and then by base power

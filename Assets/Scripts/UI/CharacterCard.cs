@@ -17,7 +17,7 @@ public class CharacterCard : MonoBehaviour
         characterPortrait.SetCharacter(character);
         imageElement.sprite = IconManager.Instance.Element.GetIcon(character.Element);
         imageGender.sprite = IconManager.Instance.Gender.GetIcon(character.Gender);
-        imagePosition.color = ColorManager.GetPositionColor(character.Position);
+        imagePosition.color = ColorManager.GetPositionColor(character.FormationCoord.Position);
         textName.text = character.CharacterNick;
     }
 

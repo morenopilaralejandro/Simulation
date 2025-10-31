@@ -25,11 +25,10 @@ public class BallComponentCollider : MonoBehaviour
         if (character == null) return;
 
         bool isCharacterKeeperCollision = IsCharacterKeeperCollision(character, otherCollider);
-
+      
         if (
             character.CanGainBall() &&
-            IsCharacterKeepCollision(character, otherCollider) ||
-            isCharacterKeeperCollision
+            (IsCharacterKeepCollision(character, otherCollider) || isCharacterKeeperCollision)
         )
         {
             LogManager.Trace($"[BallComponentCollider] [OnTriggerEnter] {character.CharacterId}", this);

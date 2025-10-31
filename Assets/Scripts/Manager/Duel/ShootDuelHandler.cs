@@ -27,7 +27,6 @@ public class ShootDuelHandler : IDuelHandler
             }
         } else 
         {
-            BattleManager.Instance.Ball.ResumeTravel();
             if (participant.Category == Category.Shoot)            
                 PossessionManager.Instance.SetLastCharacter(participant.Character);
         }
@@ -42,9 +41,12 @@ public class ShootDuelHandler : IDuelHandler
             duel.OffensePressure += participant.Damage;
             duel.LastOffense = participant;
 
+            BattleManager.Instance.Ball.ResumeTravel();
+
             //DuelLogManager.Instance.AddActionCommand(participant.Player, participant.Command, participant.Secret);
             //DuelLogManager.Instance.AddActionDamage(participant.Action, participant.Damage);
             LogManager.Info($"[ShootDuelHandler] Offense action increases attack pressure +{participant.Damage}");
+            
         }
         else
         {
@@ -78,6 +80,9 @@ public class ShootDuelHandler : IDuelHandler
 
             duel.LastOffense.Character.ApplyStatus(StatusEffect.Stunned);
 
+            BattleManager.Instance.Ball.EndTravel();
+            PossessionManager.Instance.GiveBallToCharacter(duel.LastDefense.Character);
+
             /*
                 if category.block && move && move.category==shoot move.trait.block
                     Reversal
@@ -95,6 +100,9 @@ public class ShootDuelHandler : IDuelHandler
                 $"OffensePressure now {duel.OffensePressure}");
 
             duel.LastDefense.Character.ApplyStatus(StatusEffect.Stunned);
+            //duel.LastDefense.Character.gameObject.SetActive(false);
+
+            BattleManager.Instance.Ball.ResumeTravel();
 
             if (duel.LastDefense.Category == Category.Catch)
             {
@@ -107,14 +115,12 @@ public class ShootDuelHandler : IDuelHandler
 
     public void EndDuel(DuelParticipant winner, DuelParticipant loser) 
     { 
-        //triangle
         DuelManager.Instance.EndDuel(winner, loser);
     }
 
     public void CancelDuel() 
     { 
-        //travel
-        //triangle
+        BattleManager.Instance.Ball.CancelTravel();
     }
 
 }

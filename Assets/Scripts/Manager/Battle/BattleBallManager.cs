@@ -62,6 +62,7 @@ public class BattleBallManager : MonoBehaviour
         ball = go.GetComponent<Ball>();
         ball.Initialize(BallManager.Instance.GetBallData(BattleArgs.BallId));
         ball.name = ball.BallId;
+        BallEvents.RaiseBallSpawned(ball);
         Debug.Log("[BattleBallManager] Ball spawned successfully.");
     }
 

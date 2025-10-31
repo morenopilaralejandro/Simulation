@@ -14,7 +14,7 @@ public class CharacterCardMini : MonoBehaviour
     {
         characterPortrait.SetCharacter(character);
         imageElement.sprite = IconManager.Instance.Element.GetIcon(character.Element);
-        imagePosition.color = ColorManager.GetPositionColor(character.Position);
+        imagePosition.color = ColorManager.GetPositionColor(character.FormationCoord.Position);
     }
 
 }

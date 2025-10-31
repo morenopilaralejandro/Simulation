@@ -3,6 +3,13 @@ using UnityEngine;
 
 public static class BallEvents
 {
+    //spawn
+    public static event Action<Ball> OnBallSpawned;
+    public static void RaiseBallSpawned(Ball ball)
+    {
+        OnBallSpawned?.Invoke(ball);
+    }
+
     //possession
     public static event Action<Character> OnGained;
     public static void RaiseGained(Character character)

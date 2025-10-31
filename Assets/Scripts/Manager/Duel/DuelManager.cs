@@ -17,6 +17,9 @@ public class DuelManager : MonoBehaviour
     private int maxSupporters = 2;
     private float supporterRadius = 1f;
 
+    private int hpWinner = 20;
+    private int hpLoser = 5;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -43,6 +46,7 @@ public class DuelManager : MonoBehaviour
     }
 
     public bool IsResolved => duel.IsResolved;
+    public bool IsKeeperDuel => duel.IsKeeperDuel;
     public DuelMode DuelMode => duel.DuelMode;
     public int GetParticipantCount() => duel.Participants.Count;
     public int GetStagedParticipantCount() => stagedParticipants.Count;
@@ -131,7 +135,7 @@ public class DuelManager : MonoBehaviour
         List<Character> offenseSupports = FindNearbySupporters(offense);
         List<Character> defenseSupports = FindNearbySupporters(defense);
         duel.OffenseSupports.AddRange(offenseSupports);
-        duel.OffenseSupports.AddRange(defenseSupports);
+        duel.DefenseSupports.AddRange(defenseSupports);
 
         //UI
         BattleUIManager.Instance.SetDuelParticipant(offense, offenseSupports);
@@ -272,6 +276,9 @@ public class DuelManager : MonoBehaviour
             $"TeamSide {winner.Character?.TeamSide}, " +
             $"Action {winner.Action}, " +
             $"Category {winner.Category}", this);
+
+        winner.Character.ModifyBattleStat(Stat.Hp, hpWinner);
+        loser.Character.ModifyBattleStat(Stat.Hp, hpLoser);
 
         if (winner.Character.TeamSide == BattleManager.Instance.GetUserSide())
         {

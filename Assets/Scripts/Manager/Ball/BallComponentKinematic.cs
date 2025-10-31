@@ -8,6 +8,7 @@ public class BallComponentKinematic : MonoBehaviour
     [SerializeField] private Rigidbody ballRigidbody;
 
     public bool IsKinematic => ballRigidbody.isKinematic;
+    public Vector3 GetVelocity() => ballRigidbody.velocity;
 
     public void Initialize(BallData ballData, Ball ball)
     {
