@@ -170,6 +170,10 @@ public class Character : MonoBehaviour
     //controllerComponent
     public bool IsControlled => controllerComponent.IsControlled;
     //aiComponent
+    public bool IsEnemyAI => aiComponent.IsEnemyAI;
+    public bool IsAIEnabled => aiComponent.IsAIEnabled;
+    public AIDifficulty AIDifficulty => aiComponent.AIDifficulty;
+    public AIState AIState => aiComponent.AIState;
     public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);
     public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
 

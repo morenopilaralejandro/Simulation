@@ -41,7 +41,7 @@ public class CharacterComponentTeamIndicator : MonoBehaviour
     {
         if (teamSide != this.character.TeamSide) return;
 
-        if (this.character == character)
+        if (this.character == character && !character.IsEnemyAI)
         {
             ChangeColor(this.character.TeamSide, true);
         } else {
