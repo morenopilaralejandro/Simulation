@@ -113,8 +113,11 @@ namespace Simulation.Enums.Character
         Kickoff, 
         KickoffPass, 
         ChaseBall, 
-        Attack, 
-        Defend, 
+        Defend,
+        Combo,        
+        Dribble,
+        Mark, 
+        Support,
         Keeper, 
         Pass, 
         Shoot 
