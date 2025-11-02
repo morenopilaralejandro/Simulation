@@ -35,6 +35,12 @@ public class ShootDuelHandler : IDuelHandler
         LogManager.Trace($"[ShootDuelHandler] AddParticipant {participant.Character.CharacterId}");
 
         // Handle secret moves and SFX
+        if (participant.Move != null) 
+        {
+            participant.Character.ModifyBattleStat(Stat.Sp, -participant.Move.Cost);
+            BattleUIManager.Instance.SetDuelParticipant(participant.Character, null);
+        }
+            
 
         if (participant.Action == DuelAction.Offense)
         {
@@ -45,8 +51,9 @@ public class ShootDuelHandler : IDuelHandler
 
             //DuelLogManager.Instance.AddActionCommand(participant.Player, participant.Command, participant.Secret);
             //DuelLogManager.Instance.AddActionDamage(participant.Action, participant.Damage);
-            LogManager.Info($"[ShootDuelHandler] Offense action increases attack pressure +{participant.Damage}");
-            
+            LogManager.Info($"[ShootDuelHandler] " + 
+                $"Offense action increases attack pressure " +
+                $"+{participant.Damage}");
         }
         else
         {
@@ -65,6 +72,9 @@ public class ShootDuelHandler : IDuelHandler
             duel.LastOffense, 
             duel.LastDefense);
 
+        LogManager.Info($"[ShootDuelHandler] " +
+            $"Defense action decreases attack pressure " +
+            $"-{duel.LastDefense.Damage}");
         if (duel.LastDefense.Damage >= duel.OffensePressure)
         {
             /*
@@ -75,8 +85,8 @@ public class ShootDuelHandler : IDuelHandler
             */
             LogManager.Info($"[ShootDuelHandler] " +
                 $"{duel.LastDefense.Character.CharacterId} " +
-                $"stopped the attack " +
-                $"-{duel.LastDefense.Damage}");
+                $"stopped the attack. " +
+                $"OffensePressure now {duel.OffensePressure}");
 
             duel.LastOffense.Character.ApplyStatus(StatusEffect.Stunned);
 

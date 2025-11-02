@@ -324,6 +324,169 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""BattleUIActions"",
+            ""id"": ""3aecf937-1126-4c9f-b798-e8d2138111c2"",
+            ""actions"": [
+                {
+                    ""name"": ""BattleUI_ClickEastButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""457a3649-823d-4c07-873a-a6d717d6c0fe"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_ClickWestButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""10507b5e-673d-4aa6-af68-fa8e64e76d8d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_ClickNorthButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""a467c15b-a758-4d8f-b3dc-074143206a95"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_CloseMoveMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""cd23d3cb-5a26-45f9-93af-dfba74178af4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_NextMove"",
+                    ""type"": ""Button"",
+                    ""id"": ""fcea7f93-1247-460a-9c15-7967a03281be"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""47b01c18-99ba-4de0-a75a-43162f50b863"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_ClickEastButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1a871c8c-18f7-4557-9a5d-57fb8accef79"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_ClickEastButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a911e05-b7ea-4a25-826e-a97ab8e6bfc6"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_ClickWestButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a47857f9-780d-40c3-8edd-8158e1c79d9f"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_ClickWestButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""584ae5ab-f7f8-41b7-b13c-6205caf3a670"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_ClickNorthButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""255cf56a-1495-41a1-98a8-a36b2dc9aaf7"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_ClickNorthButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c075df0a-62d4-4294-ba49-9a9103c92ad1"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_NextMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5ddc2800-49ab-4149-8797-abe946770ee2"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_NextMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c23302d-70fd-4b58-896c-4a50d1f5831e"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseMoveMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""24c76f65-afe1-49e3-a7a8-d4cc8a4f2f0c"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseMoveMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -336,11 +499,19 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_BattleActions_Change = m_BattleActions.FindAction("Change", throwIfNotFound: true);
         m_BattleActions_Dribble = m_BattleActions.FindAction("Dribble", throwIfNotFound: true);
         m_BattleActions_Block = m_BattleActions.FindAction("Block", throwIfNotFound: true);
+        // BattleUIActions
+        m_BattleUIActions = asset.FindActionMap("BattleUIActions", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_ClickEastButton = m_BattleUIActions.FindAction("BattleUI_ClickEastButton", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_ClickWestButton = m_BattleUIActions.FindAction("BattleUI_ClickWestButton", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_ClickNorthButton = m_BattleUIActions.FindAction("BattleUI_ClickNorthButton", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_CloseMoveMenu = m_BattleUIActions.FindAction("BattleUI_CloseMoveMenu", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_NextMove = m_BattleUIActions.FindAction("BattleUI_NextMove", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
     {
         UnityEngine.Debug.Assert(!m_BattleActions.enabled, "This will cause a leak and performance issues, GameInputActions.BattleActions.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_BattleUIActions.enabled, "This will cause a leak and performance issues, GameInputActions.BattleUIActions.Disable() has not been called.");
     }
 
     /// <summary>
@@ -563,6 +734,146 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="BattleActionsActions" /> instance referencing this action map.
     /// </summary>
     public BattleActionsActions @BattleActions => new BattleActionsActions(this);
+
+    // BattleUIActions
+    private readonly InputActionMap m_BattleUIActions;
+    private List<IBattleUIActionsActions> m_BattleUIActionsActionsCallbackInterfaces = new List<IBattleUIActionsActions>();
+    private readonly InputAction m_BattleUIActions_BattleUI_ClickEastButton;
+    private readonly InputAction m_BattleUIActions_BattleUI_ClickWestButton;
+    private readonly InputAction m_BattleUIActions_BattleUI_ClickNorthButton;
+    private readonly InputAction m_BattleUIActions_BattleUI_CloseMoveMenu;
+    private readonly InputAction m_BattleUIActions_BattleUI_NextMove;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "BattleUIActions".
+    /// </summary>
+    public struct BattleUIActionsActions
+    {
+        private @GameInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public BattleUIActionsActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_ClickEastButton".
+        /// </summary>
+        public InputAction @BattleUI_ClickEastButton => m_Wrapper.m_BattleUIActions_BattleUI_ClickEastButton;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_ClickWestButton".
+        /// </summary>
+        public InputAction @BattleUI_ClickWestButton => m_Wrapper.m_BattleUIActions_BattleUI_ClickWestButton;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_ClickNorthButton".
+        /// </summary>
+        public InputAction @BattleUI_ClickNorthButton => m_Wrapper.m_BattleUIActions_BattleUI_ClickNorthButton;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_CloseMoveMenu".
+        /// </summary>
+        public InputAction @BattleUI_CloseMoveMenu => m_Wrapper.m_BattleUIActions_BattleUI_CloseMoveMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_NextMove".
+        /// </summary>
+        public InputAction @BattleUI_NextMove => m_Wrapper.m_BattleUIActions_BattleUI_NextMove;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_BattleUIActions; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="BattleUIActionsActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(BattleUIActionsActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="BattleUIActionsActions" />
+        public void AddCallbacks(IBattleUIActionsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_BattleUIActionsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_BattleUIActionsActionsCallbackInterfaces.Add(instance);
+            @BattleUI_ClickEastButton.started += instance.OnBattleUI_ClickEastButton;
+            @BattleUI_ClickEastButton.performed += instance.OnBattleUI_ClickEastButton;
+            @BattleUI_ClickEastButton.canceled += instance.OnBattleUI_ClickEastButton;
+            @BattleUI_ClickWestButton.started += instance.OnBattleUI_ClickWestButton;
+            @BattleUI_ClickWestButton.performed += instance.OnBattleUI_ClickWestButton;
+            @BattleUI_ClickWestButton.canceled += instance.OnBattleUI_ClickWestButton;
+            @BattleUI_ClickNorthButton.started += instance.OnBattleUI_ClickNorthButton;
+            @BattleUI_ClickNorthButton.performed += instance.OnBattleUI_ClickNorthButton;
+            @BattleUI_ClickNorthButton.canceled += instance.OnBattleUI_ClickNorthButton;
+            @BattleUI_CloseMoveMenu.started += instance.OnBattleUI_CloseMoveMenu;
+            @BattleUI_CloseMoveMenu.performed += instance.OnBattleUI_CloseMoveMenu;
+            @BattleUI_CloseMoveMenu.canceled += instance.OnBattleUI_CloseMoveMenu;
+            @BattleUI_NextMove.started += instance.OnBattleUI_NextMove;
+            @BattleUI_NextMove.performed += instance.OnBattleUI_NextMove;
+            @BattleUI_NextMove.canceled += instance.OnBattleUI_NextMove;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="BattleUIActionsActions" />
+        private void UnregisterCallbacks(IBattleUIActionsActions instance)
+        {
+            @BattleUI_ClickEastButton.started -= instance.OnBattleUI_ClickEastButton;
+            @BattleUI_ClickEastButton.performed -= instance.OnBattleUI_ClickEastButton;
+            @BattleUI_ClickEastButton.canceled -= instance.OnBattleUI_ClickEastButton;
+            @BattleUI_ClickWestButton.started -= instance.OnBattleUI_ClickWestButton;
+            @BattleUI_ClickWestButton.performed -= instance.OnBattleUI_ClickWestButton;
+            @BattleUI_ClickWestButton.canceled -= instance.OnBattleUI_ClickWestButton;
+            @BattleUI_ClickNorthButton.started -= instance.OnBattleUI_ClickNorthButton;
+            @BattleUI_ClickNorthButton.performed -= instance.OnBattleUI_ClickNorthButton;
+            @BattleUI_ClickNorthButton.canceled -= instance.OnBattleUI_ClickNorthButton;
+            @BattleUI_CloseMoveMenu.started -= instance.OnBattleUI_CloseMoveMenu;
+            @BattleUI_CloseMoveMenu.performed -= instance.OnBattleUI_CloseMoveMenu;
+            @BattleUI_CloseMoveMenu.canceled -= instance.OnBattleUI_CloseMoveMenu;
+            @BattleUI_NextMove.started -= instance.OnBattleUI_NextMove;
+            @BattleUI_NextMove.performed -= instance.OnBattleUI_NextMove;
+            @BattleUI_NextMove.canceled -= instance.OnBattleUI_NextMove;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="BattleUIActionsActions.UnregisterCallbacks(IBattleUIActionsActions)" />.
+        /// </summary>
+        /// <seealso cref="BattleUIActionsActions.UnregisterCallbacks(IBattleUIActionsActions)" />
+        public void RemoveCallbacks(IBattleUIActionsActions instance)
+        {
+            if (m_Wrapper.m_BattleUIActionsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="BattleUIActionsActions.AddCallbacks(IBattleUIActionsActions)" />
+        /// <seealso cref="BattleUIActionsActions.RemoveCallbacks(IBattleUIActionsActions)" />
+        /// <seealso cref="BattleUIActionsActions.UnregisterCallbacks(IBattleUIActionsActions)" />
+        public void SetCallbacks(IBattleUIActionsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_BattleUIActionsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_BattleUIActionsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="BattleUIActionsActions" /> instance referencing this action map.
+    /// </summary>
+    public BattleUIActionsActions @BattleUIActions => new BattleUIActionsActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BattleActions" which allows adding and removing callbacks.
     /// </summary>
@@ -612,5 +923,48 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBlock(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BattleUIActions" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="BattleUIActionsActions.AddCallbacks(IBattleUIActionsActions)" />
+    /// <seealso cref="BattleUIActionsActions.RemoveCallbacks(IBattleUIActionsActions)" />
+    public interface IBattleUIActionsActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_ClickEastButton" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_ClickEastButton(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_ClickWestButton" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_ClickWestButton(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_ClickNorthButton" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_ClickNorthButton(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_CloseMoveMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_CloseMoveMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_NextMove" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_NextMove(InputAction.CallbackContext context);
     }
 }

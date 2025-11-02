@@ -49,7 +49,7 @@ public class CharacterChangeControlManager : MonoBehaviour
         if (!character ||
             character.HasBall() || 
             BattleManager.Instance.IsTimeFrozen ||
-            !InputManager.Instance.GetDown(BattleAction.Change)) 
+            !InputManager.Instance.GetDown(CustomAction.Change)) 
             return;
 
         Character newCharacter = BattleManager.Instance.TargetedCharacter[character.TeamSide];

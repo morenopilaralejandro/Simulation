@@ -90,7 +90,7 @@ public class DuelSelectionManager : MonoBehaviour
         Character character = selection.Character;
         DuelCommand command = character.GetCommandByCategory(selection.Category);
         Move move = character.GetMoveByCommandAndCategory(
-            selection.Command,
+            command,
             selection.Category);
 
         FinalizeSelection(

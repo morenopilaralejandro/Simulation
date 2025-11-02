@@ -40,8 +40,11 @@ public class MoveEvolutionPathManager : MonoBehaviour
 
     public void RegisterMoveEvolutionPath(MoveEvolutionPath moveEvolutionPath)
     {
-        if (!moveEvolutionPathDict.ContainsKey(moveEvolutionPath.growthType))
+        if (!moveEvolutionPathDict.ContainsKey(moveEvolutionPath.growthType)) 
+        {
+            moveEvolutionPath.Initialize();
             moveEvolutionPathDict.Add(moveEvolutionPath.growthType, moveEvolutionPath);
+        }
     }
 
     public MoveEvolutionPath GetMoveEvolutionPath(MoveData moveData)
