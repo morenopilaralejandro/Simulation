@@ -124,7 +124,8 @@ public class BattleManager : MonoBehaviour
     #region StartBattle
     public void StartBattle()
     {
-        //Called on BattleCharacterSpawnPoint
+        AudioManager.Instance.PlayBgm("bgm-battle_crimson");        
+
         Freeze();
         SetBattleType(BattleArgs.BattleType);
         //SetBattlePhase(BattlePhase.Battle);

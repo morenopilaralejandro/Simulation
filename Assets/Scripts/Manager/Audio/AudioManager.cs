@@ -29,12 +29,25 @@ public class AudioManager : MonoBehaviour
         AudioClip clip = await LoadClipAsync(address);
         if (clip == null)
         {
-            Debug.LogWarning($"[AudioManager] Failed to load clip at address '{address}'");
+            LogManager.Error($"[AudioManager] Failed to load clip at address '{address}'");
             return;
         }
 
         var src = sourceSfx;
-        src.transform.position = Vector3.zero;
+        src.spatialBlend = 0f;
+        src.PlayOneShot(clip);
+    }
+
+    public async void PlayBgm(string address)
+    {
+        AudioClip clip = await LoadClipAsync(address);
+        if (clip == null)
+        {
+            LogManager.Error($"[AudioManager] Failed to load clip at address '{address}'");
+            return;
+        }
+
+        var src = sourceBgm;
         src.spatialBlend = 0f;
         src.clip = clip;
         src.Play();
