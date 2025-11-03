@@ -22,8 +22,8 @@ public class DebugMainMenu : MonoBehaviour
     }
 
     private void HandleButton1() {
-        BattleArgs.TeamId0 = "faith";
-        BattleArgs.TeamId1 = "crimson";
+        BattleArgs.TeamId0 = "faith_selection";
+        BattleArgs.TeamId1 = "crimson_selection";
         BattleArgs.BallId = "crimson";
         BattleArgs.BattleType = BattleType.Battle;
 

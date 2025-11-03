@@ -116,6 +116,7 @@ public class KickoffManager : MonoBehaviour
         character1 = team.CharacterList[team.Formation.Kickoff1];
         character0.transform.position = position0;
         character1.transform.position = position1[teamSide];
+        PossessionManager.Instance.Release();
         PossessionManager.Instance.GiveBallToCharacter(character0);
     }
 }
