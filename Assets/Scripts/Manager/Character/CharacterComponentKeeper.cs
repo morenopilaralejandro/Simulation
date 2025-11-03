@@ -40,7 +40,8 @@ public class CharacterComponentKeeper : MonoBehaviour
         if (this.character == character)
         {
             this.isKeeper = formationCoord.Position == Position.GK ? true : false;
-            GoalManager.Instance.SetKeeper(this.character, team.TeamSide);
+            if (this.isKeeper)
+                GoalManager.Instance.SetKeeper(this.character, team.TeamSide);
             UpdateKeeperColliderState();
         }
     }

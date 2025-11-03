@@ -103,9 +103,9 @@ public class DuelMenu : MonoBehaviour
     {
         HideMove();
         HideCommand();
-    
+
+        isOpen = false;    
         this.gameObject.SetActive(false);
-        isOpen = false;
     }
 
     public void ShowCommand() 
@@ -116,8 +116,8 @@ public class DuelMenu : MonoBehaviour
 
     public void HideCommand() 
     {
-        panelCommand.SetActive(false);
         isCommandOpen = false;
+        panelCommand.SetActive(false);
     }
 
     public void ShowMove() 
@@ -131,8 +131,8 @@ public class DuelMenu : MonoBehaviour
 
     public void HideMove() 
     {
-        panelMove.SetActive(false);
         isMoveOpen = false;
+        panelMove.SetActive(false);
     }
 
     private void SetMoveButtonInteractable(bool isInteractable) 
@@ -208,8 +208,8 @@ public class DuelMenu : MonoBehaviour
         else
         {
             // Only one move — disable 2nd + next button
-            moveCommandSlot1.SetActive(false);
             buttonMoveNext.interactable = false;
+            moveCommandSlot1.SetActive(false);
         }
 
     }

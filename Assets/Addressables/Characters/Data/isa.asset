@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14cce13614f1b6aa4ad89ebae2aa3b3f, type: 3}
+  m_Name: isa
+  m_EditorClassIdentifier: 
+  CharacterId: isa
+  BodyTone: light
+  PortraitSize: 1
+  CharacterSize: 1
+  Gender: 1
+  Element: 0
+  Position: 1
+  Hp: 91
+  Sp: 92
+  Kick: 92
+  Body: 80
+  Control: 128
+  Guard: 90
+  Speed: 95
+  Stamina: 85
+  Technique: 0
+  Luck: 0
+  Courage: 40
+  Freedom: 150
+  MoveIds:
+  - flame_feint
+  - lightning_elastico
+  - burn_zone
+  - salamander_dash
+  MoveLvs: 050000000f000000190000002d000000
