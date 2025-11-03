@@ -130,7 +130,7 @@ public class ShootDuelHandler : IDuelHandler
 
     public void CancelDuel() 
     { 
-        BattleManager.Instance.Ball.CancelTravel();
+
     }
 
 }
