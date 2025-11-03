@@ -160,7 +160,12 @@ public class DuelMenu : MonoBehaviour
 
     public void OnButtonNextTapped()
     {
-        currentStartIndex = (currentStartIndex + 2) % moves.Count;
+        currentStartIndex += 2;
+
+        // Prevent wrapping — stop when we exceed move count
+        if (currentStartIndex >= moves.Count)
+            currentStartIndex = 0;
+
         UpdateMoveSlots();
     }
 
@@ -191,27 +196,31 @@ public class DuelMenu : MonoBehaviour
 
     private void UpdateMoveSlots()
     {
-        if (moves == null || moves.Count == 0) return;
+        if (moves == null || moves.Count == 0)
+            return;
 
-        int index0 = currentStartIndex % moves.Count;
-        moveCommandSlot0.SetMove(moves[index0]);
-        moveCommandSlot0.SetInteractable(character.CanAffordMove(moves[index0]));
+        // Always show first move slot
+        moveCommandSlot0.SetActive(true);
+        moveCommandSlot0.SetMove(moves[currentStartIndex]);
+        moveCommandSlot0.SetInteractable(character.CanAffordMove(moves[currentStartIndex]));
 
-        if (moves.Count > 1)
+        int nextIndex = currentStartIndex + 1;
+
+        // If there's another move in range, show it.
+        if (nextIndex < moves.Count)
         {
-            moveCommandSlot1.SetInteractable(true);
-            int index1 = (currentStartIndex + 1) % moves.Count;
-            moveCommandSlot1.SetMove(moves[index1]);
-            buttonMoveNext.interactable = true;
-            moveCommandSlot1.SetInteractable(character.CanAffordMove(moves[index1]));
+            moveCommandSlot1.SetActive(true);
+            moveCommandSlot1.SetMove(moves[nextIndex]);
+            moveCommandSlot1.SetInteractable(character.CanAffordMove(moves[nextIndex]));
         }
         else
         {
-            // Only one move — disable 2nd + next button
-            buttonMoveNext.interactable = false;
+            // Hide second slot if no more moves
             moveCommandSlot1.SetActive(false);
         }
 
+        // Enable/disable “Next” button only if there are more moves ahead
+        buttonMoveNext.interactable = (currentStartIndex + 2 < moves.Count);
     }
 
     public void OnMoveSlotTapped(MoveCommandSlot moveCommandSlot)
