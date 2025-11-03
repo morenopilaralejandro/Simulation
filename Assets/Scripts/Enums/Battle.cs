@@ -5,7 +5,7 @@ namespace Simulation.Enums.Battle
         Battle,
         Selection,
         Cutscene,
-        Kickoff
+        Deadball 
     }
 
     public enum BattleType
