@@ -209,7 +209,9 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(duration);
         //panelGoalMessage.SetActive(false);
         isTimeFrozen = false;
-        //StartKickoff(kickoffTeam);
+
+        ResetDefaultPositions();
+        KickoffManager.Instance.StartKickoff(kickoffTeamSide);
     }
 
     private IEnumerator TimeOverSequence()
@@ -232,12 +234,7 @@ public class BattleManager : MonoBehaviour
     {
         //start kickoff etc
         ResetDefaultPositions();
-        CharacterChangeControlManager.Instance.SetControlledCharacter(
-            Teams[TeamSide.Home].CharacterList[10], 
-            TeamSide.Home);
-
-        SetBattlePhase(BattlePhase.Battle);
-        Unfreeze();
+        KickoffManager.Instance.StartKickoff(TeamSide.Home);
     }
 
     private void PopulateTeamWithCharacters(Team team, int teamSize)

@@ -41,7 +41,7 @@ public class MoveCommandSlot : MonoBehaviour
     }
 
     public bool CanBeSelected() =>
-        this.gameObject.active && 
+        this.gameObject.activeSelf && 
         this.GetComponent<Button>().interactable;
 
 }
