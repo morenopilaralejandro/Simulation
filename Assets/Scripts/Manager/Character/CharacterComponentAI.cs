@@ -62,7 +62,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     [SerializeField] private bool isEnemyAI;
     [SerializeField] private bool isAIEnabled = false;  
-    [SerializeField] private AIDifficulty difficulty = AIDifficulty.Hard;
+    [SerializeField] private AIDifficulty difficulty;
     [SerializeField] private AIState currentState = AIState.Idle;
 
     public bool IsEnemyAI => isEnemyAI;
@@ -75,18 +75,12 @@ public class CharacterComponentAI : MonoBehaviour
     private Goal opponentGoal;
     private List<Character> teammates;
     private List<Character> opponents;
-    private float attackDistance = ATTACK_DISTANCE;
-    private float defendDistance = DEFEND_DISTANCE;
-    private float closeDistanceOpponent;
     private float closeDistanceBall;
-    private float closeDistanceOpponentGoal = CLOSE_DISTANCE_OPP_GOAL;
-    private bool pendingKickoffPass = false;
     private Character lastPassReceiver;
     private float lastPassTime = -100f;
     private float nextDecisionTime = 0f;
     private float minDecisionDelay;
     private float maxDecisionDelay;
-    private float awareness = DEFAULT_AWARENESS;
     private float confidence = DEFAULT_CONFIDENCE;
 
     // ============================
@@ -96,6 +90,7 @@ public class CharacterComponentAI : MonoBehaviour
     public void Initialize(CharacterData characterData, Character character)
     {
         this.character = character;
+        this.difficulty = AIDifficulty.Hard;
         InitializeDecisionDelay();
     }
 
@@ -104,15 +99,12 @@ public class CharacterComponentAI : MonoBehaviour
         switch (position)
         {
             case Position.GK:
-                closeDistanceOpponent = 0.5f;
                 closeDistanceBall = 0.5f;
                 break;
             case Position.DF:
-                closeDistanceOpponent = 2f;
                 closeDistanceBall = 2f;
                 break;
             default:
-                closeDistanceOpponent = 4f;
                 closeDistanceBall = 4f;
                 break;
         }
@@ -607,6 +599,9 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void ActShoot()
     {
+        if (!DuelManager.Instance.IsResolved)
+           return;
+
         bool isDirect = false;
         DuelManager.Instance.StartShootDuel(character, isDirect);
     }

@@ -60,13 +60,13 @@ public class CharacterComponentController : MonoBehaviour
 
         //pass
 
-        if (InputManager.Instance.GetDown(BattleAction.Pass)) 
+        if (InputManager.Instance.GetDown(CustomAction.Pass)) 
             HandlePass();
 
         //dribble
 
         //shoot
-        if (InputManager.Instance.GetDown(BattleAction.Shoot) && 
+        if (InputManager.Instance.GetDown(CustomAction.Shoot) && 
             character.CanShoot() && 
             DuelManager.Instance.IsResolved &&
             !BattleManager.Instance.IsTimeFrozen) 

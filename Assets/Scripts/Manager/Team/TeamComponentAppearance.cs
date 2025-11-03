@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Threading.Tasks;
 
-public class TeamComponentAppearance : MonoBehaviour
+public class TeamComponentAppearance
 {
     #region Sprite
     public Sprite TeamCrestSprite { get; private set; }

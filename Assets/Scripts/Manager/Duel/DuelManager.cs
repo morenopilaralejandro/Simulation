@@ -87,12 +87,12 @@ public class DuelManager : MonoBehaviour
     public bool CanSelectMoveCommand(Category category) 
     {
         return 
-            duel.DuelMode != DuelMode.Field &&
+            (duel.DuelMode != DuelMode.Field &&
             category != Category.Dribble &&
-            !duel.IsKeeperDuel;
+            !duel.IsKeeperDuel);
     }
 
-    public bool CanRegularCommands(Category category) 
+    public bool CanSelectRegularCommands(Category category) 
     {
         if (category == Category.Shoot) 
         {

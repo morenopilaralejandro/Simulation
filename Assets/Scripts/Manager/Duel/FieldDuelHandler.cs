@@ -68,13 +68,19 @@ public class FieldDuelHandler : IDuelHandler
 
     public void EndDuel(DuelParticipant winner, DuelParticipant loser) 
     { 
+        if (winner.Move != null)
+            winner.Character.ModifyBattleStat(Stat.Sp, -winner.Move.Cost);
+
         loser.Character.ApplyStatus(StatusEffect.Stunned);
         StunSupports(loser.Action);
         PossessionManager.Instance.GiveBallToCharacter(winner.Character);
         DuelManager.Instance.EndDuel(winner, loser);
     }
 
-    public void CancelDuel() { }
+    public void CancelDuel() 
+    { 
+
+    }
 
     private float GetSupportDamage(
         DuelParticipant participant, 

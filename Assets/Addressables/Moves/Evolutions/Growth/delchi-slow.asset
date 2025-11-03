@@ -15,14 +15,14 @@ MonoBehaviour:
   growthType: 0
   growthRate: 2
   bonuses:
-  - evolution: 1
-    extraPower: 64
-  - evolution: 2
-    extraPower: 96
-  - evolution: 3
-    extraPower: 128
+  - Evolution: 1
+    ExtraPower: 64
+  - Evolution: 2
+    ExtraPower: 96
+  - Evolution: 3
+    ExtraPower: 128
   thresholds:
-  - evolution: 0
-    usageThreshold: 24
-  - evolution: 1
-    usageThreshold: 24
+  - Evolution: 1
+    UsageThreshold: 24
+  - Evolution: 2
+    UsageThreshold: 32

@@ -30,15 +30,6 @@ public class MoveEvolutionGrowthProfileManager : MonoBehaviour
 
     public async Task LoadAllMoveEvolutionGrowthProfileAsync()
     {
-        Addressables.LoadAssetsAsync<MoveEvolutionGrowthProfile>("Moves-Evolutions-Growth", data =>
-        {
-            RegisterMoveEvolutionGrowthProfile(data);
-        }).Completed += handle =>
-        {
-            
-            IsReady = true;
-        };
-
         var handle = Addressables.LoadAssetsAsync<MoveEvolutionGrowthProfile>(
             "Moves-Evolutions-Growth",
             data => RegisterMoveEvolutionGrowthProfile(data)
@@ -50,8 +41,11 @@ public class MoveEvolutionGrowthProfileManager : MonoBehaviour
     private void RegisterMoveEvolutionGrowthProfile(MoveEvolutionGrowthProfile moveEvolutionGrowthProfile)
     {
         var key = (moveEvolutionGrowthProfile.growthType, moveEvolutionGrowthProfile.growthRate);
-        if (!moveEvolutionGrowthProfileDict.ContainsKey(key))
-            moveEvolutionGrowthProfileDict.Add(key, moveEvolutionGrowthProfile);
+        if (!moveEvolutionGrowthProfileDict.ContainsKey(key)) 
+        {
+            moveEvolutionGrowthProfile.Initialize();
+            moveEvolutionGrowthProfileDict.Add(key, moveEvolutionGrowthProfile);    
+        }
     }
 
     public MoveEvolutionGrowthProfile GetMoveEvolutionGrowthProfile(MoveData moveData)

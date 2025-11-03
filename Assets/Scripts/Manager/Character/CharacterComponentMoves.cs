@@ -137,4 +137,11 @@ public class CharacterComponentMoves : MonoBehaviour
         return bestMove;
     }
 
+    public List<Move> GetEquippedMovesByCategory(Category category)
+    {
+        return equippedMoves
+            .Where(move => move.Category == category)
+            .ToList();
+    }
+
 }

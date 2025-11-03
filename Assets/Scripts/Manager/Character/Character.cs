@@ -167,6 +167,7 @@ public class Character : MonoBehaviour
     public bool HasAffordableMoveWithTrait(Trait trait) => movesComponent.HasAffordableMoveWithTrait(trait);
     public Move GetRandomAffordableMoveByCategory(Category category) => movesComponent.GetRandomAffordableMoveByCategory(category);
     public Move GetStrongestAffordableMoveByCategory(Category category) => movesComponent.GetStrongestAffordableMoveByCategory(category);
+    public List<Move> GetEquippedMovesByCategory(Category category) => movesComponent.GetEquippedMovesByCategory(category);
     //controllerComponent
     public bool IsControlled => controllerComponent.IsControlled;
     //aiComponent

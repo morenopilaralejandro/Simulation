@@ -7,7 +7,7 @@ using Simulation.Enums.Input;
 ///<summary>
 /// Handles input with Unity New Input System. 
 /// Supports keyboard, gamepad and touch screen.
-/// Usage: InputManager.Instance.GetDown(BattleAction.Pass))
+/// Usage: InputManager.Instance.GetDown(CustomAction.Pass))
 ///</summary>
 public class InputManager : MonoBehaviour
 {
@@ -16,8 +16,8 @@ public class InputManager : MonoBehaviour
 
     private GameInputActions input;   
     private Vector2 move;
-    private readonly ButtonState[] buttons = new ButtonState[System.Enum.GetValues(typeof(BattleAction)).Length];
-    private readonly Dictionary<InputAction, BattleAction> actionLookup = new();
+    private readonly ButtonState[] buttons = new ButtonState[System.Enum.GetValues(typeof(CustomAction)).Length];
+    private readonly Dictionary<InputAction, CustomAction> actionLookup = new();
     private GameObject onScreenControlsRoot;
     [SerializeField] private PlayerInput playerInput;
     #endregion
@@ -40,14 +40,22 @@ public class InputManager : MonoBehaviour
         input.BattleActions.Move.canceled += _ => move = Vector2.zero;
 
         // Buttons
-        BindButton(input.BattleActions.Pass,    BattleAction.Pass);
-        BindButton(input.BattleActions.Shoot,   BattleAction.Shoot);
-        BindButton(input.BattleActions.Change,  BattleAction.Change);
-        BindButton(input.BattleActions.Dribble, BattleAction.Dribble);
-        BindButton(input.BattleActions.Block,  BattleAction.Block);
+        BindButton(input.BattleActions.Pass, CustomAction.Pass);
+        BindButton(input.BattleActions.Shoot, CustomAction.Shoot);
+        BindButton(input.BattleActions.Change, CustomAction.Change);
+        BindButton(input.BattleActions.Dribble, CustomAction.Dribble);
+        BindButton(input.BattleActions.Block, CustomAction.Block);
+
+        BindButton(input.BattleUIActions.BattleUI_ClickEastButton, CustomAction.BattleUI_ClickEastButton);
+        BindButton(input.BattleUIActions.BattleUI_ClickWestButton, CustomAction.BattleUI_ClickWestButton);
+        BindButton(input.BattleUIActions.BattleUI_ClickNorthButton, CustomAction.BattleUI_ClickNorthButton);
+        BindButton(input.BattleUIActions.BattleUI_CloseMoveMenu, CustomAction.BattleUI_CloseMoveMenu);
+        BindButton(input.BattleUIActions.BattleUI_NextMove, CustomAction.BattleUI_NextMove);
+
 
         // Enable once here
         input.BattleActions.Enable();
+        input.BattleUIActions.Enable();
 
         // Respond to control scheme changes (requires a PlayerInput component on the same GO)
         playerInput = GetComponent<PlayerInput>();
@@ -96,7 +104,7 @@ public class InputManager : MonoBehaviour
     {
         // Accumulate hold time for held buttons
         float deltaTime = Time.unscaledDeltaTime;
-        for (int i = 0; i < System.Enum.GetValues(typeof(BattleAction)).Length; i++)
+        for (int i = 0; i < System.Enum.GetValues(typeof(CustomAction)).Length; i++)
         {
             if (buttons[i].Held)
             {
@@ -109,9 +117,9 @@ public class InputManager : MonoBehaviour
     #endregion
 
     #region Binding helpers
-    private void BindButton(InputAction inputAction, BattleAction battleAction)
+    private void BindButton(InputAction inputAction, CustomAction customAction)
     {
-        actionLookup[inputAction] = battleAction;
+        actionLookup[inputAction] = customAction;
         inputAction.started += OnAnyButtonStarted;
         inputAction.canceled += OnAnyButtonCanceled;
     }
@@ -133,37 +141,37 @@ public class InputManager : MonoBehaviour
 
     private void OnAnyButtonStarted(InputAction.CallbackContext ctx)
     {
-        if (actionLookup.TryGetValue(ctx.action, out var battleAction))
-            OnButtonDown(battleAction);
+        if (actionLookup.TryGetValue(ctx.action, out var customAction))
+            OnButtonDown(customAction);
     }
 
     private void OnAnyButtonCanceled(InputAction.CallbackContext ctx)
     {
-        if (actionLookup.TryGetValue(ctx.action, out var battleAction))
-            OnButtonUp(battleAction);
+        if (actionLookup.TryGetValue(ctx.action, out var customAction))
+            OnButtonUp(customAction);
     }
 
-    private void OnButtonDown(BattleAction battleAction)
+    private void OnButtonDown(CustomAction customAction)
     {
-        LogManager.Trace($"[InputManager] OnButtonDown: {battleAction}");
-        var button = buttons[(int)battleAction];
+        LogManager.Trace($"[InputManager] OnButtonDown: {customAction}");
+        var button = buttons[(int)customAction];
         button.SetDown();
-        buttons[(int)battleAction] = button;
+        buttons[(int)customAction] = button;
     }
 
-    private void OnButtonUp(BattleAction battleAction)
+    private void OnButtonUp(CustomAction customAction)
     {
-        var button = buttons[(int)battleAction];
+        var button = buttons[(int)customAction];
         button.SetUp();
-        buttons[(int)battleAction] = button;
+        buttons[(int)customAction] = button;
     }
     #endregion
 
     #region API
     public Vector2 GetMove() => move;
-    public bool GetDown(BattleAction battleAction) => buttons[(int)battleAction].DownFrame == (uint)Time.frameCount;
-    public bool GetHeld(BattleAction battleAction) => buttons[(int)battleAction].Held;
-    public bool GetUp(BattleAction battleAction) => buttons[(int)battleAction].UpFrame == (uint)Time.frameCount;
+    public bool GetDown(CustomAction customAction) => buttons[(int)customAction].DownFrame == (uint)Time.frameCount;
+    public bool GetHeld(CustomAction customAction) => buttons[(int)customAction].Held;
+    public bool GetUp(CustomAction customAction) => buttons[(int)customAction].UpFrame == (uint)Time.frameCount;
     #endregion
 
     #region Scheme helpers
