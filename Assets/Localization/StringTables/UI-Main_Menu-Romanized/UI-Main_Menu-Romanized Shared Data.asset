@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI-Main_Menu-Romanized Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: UI-Main_Menu-Romanized
+  m_TableCollectionNameGuidString: e9a482b139d3d5461a763c19e2201c02
+  m_Entries:
+  - m_Id: 17462730752
+    m_Key: title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17462730753
+    m_Key: button_quit
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2307361536685637645
+  references:
+    version: 2
+    RefIds:
+    - rid: 2307361536685637645
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1762279869698

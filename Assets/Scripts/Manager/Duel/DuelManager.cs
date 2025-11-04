@@ -86,10 +86,7 @@ public class DuelManager : MonoBehaviour
 
     public bool CanSelectMoveCommand(Category category) 
     {
-        return 
-            (duel.DuelMode != DuelMode.Field &&
-            category != Category.Dribble &&
-            !duel.IsKeeperDuel);
+        return !(duel.IsKeeperDuel && category == Category.Dribble);
     }
 
     public bool CanSelectRegularCommands(Category category) 

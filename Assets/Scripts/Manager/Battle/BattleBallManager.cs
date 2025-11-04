@@ -75,13 +75,6 @@ public class BattleBallManager : MonoBehaviour
             return;
         }
 
-        Rigidbody rb = ball.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-
         ball.transform.position = defaultBallPosition;
         ball.transform.rotation = Quaternion.identity;
         
