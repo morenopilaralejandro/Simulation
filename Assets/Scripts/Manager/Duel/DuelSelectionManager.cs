@@ -97,6 +97,9 @@ public class DuelSelectionManager : MonoBehaviour
             character.TeamSide, 
             command, 
             move);
+
+        if (duelMode == DuelMode.Shoot)
+            BattleUIManager.Instance.SetDuelCategory(selection.Category);
     }
 
     #endregion

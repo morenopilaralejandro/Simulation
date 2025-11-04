@@ -124,7 +124,6 @@ public class BattleManager : MonoBehaviour
     #region StartBattle
     public void StartBattle()
     {
-        //Called on BattleCharacterSpawnPoint
         Freeze();
         SetBattleType(BattleArgs.BattleType);
         //SetBattlePhase(BattlePhase.Battle);
@@ -202,7 +201,7 @@ public class BattleManager : MonoBehaviour
     {
         float duration = 2f;
         isTimeFrozen = true;
-        //AudioManager.Instance.PlayBgm("BgmOle");
+        AudioManager.Instance.PlayBgm("bgm-ole");
         //panelGoalMessage.SetActive(true);
         //textGoalMessage.Play("TextGoalSlide", -1, 0f);
 
@@ -268,6 +267,7 @@ public class BattleManager : MonoBehaviour
 
     private void ResetDefaultPositions()
     {
+        AudioManager.Instance.PlayBgm("bgm-battle_crimson");
         ResetPlayerPositions();
         BattleBallManager.Instance.ResetBallPosition();
     }

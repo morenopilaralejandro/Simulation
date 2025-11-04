@@ -46,6 +46,8 @@ public class BallComponentKick : MonoBehaviour
 
         PossessionManager.Instance.Release();
         ballRigidbody.velocity = velocity;
+
+        AudioManager.Instance.PlaySfx("sfx-ball_kick");
     }
 
     private Vector3 CalculateBallisticVelocity(Vector3 target, Vector3 origin, float launchAngle)

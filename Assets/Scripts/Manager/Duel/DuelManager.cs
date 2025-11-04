@@ -246,9 +246,11 @@ public class DuelManager : MonoBehaviour
         {
             case DuelMode.Field:
                 duelHandler = new FieldDuelHandler(duel);
+                AudioManager.Instance.PlaySfx("sfx-duel_start_field");
                 break;
             case DuelMode.Shoot:
                 duelHandler = new ShootDuelHandler(duel);
+                AudioManager.Instance.PlaySfx("sfx-duel_start_shoot");
                 break;
             /*
             case DuelMode.Air:
@@ -283,12 +285,12 @@ public class DuelManager : MonoBehaviour
         if (winner.Character.TeamSide == BattleManager.Instance.GetUserSide())
         {
             //DuelLogManager.Instance.AddDuelWin(winningParticipant.Player.TeamIndex);
-            //AudioManager.Instance.PlaySfx("SfxDuelWin");
+            AudioManager.Instance.PlaySfx("sfx-duel_win");
         }
         else
         {
             //DuelLogManager.Instance.AddDuelLose(winningParticipant.Player.TeamIndex);
-            //AudioManager.Instance.PlaySfx("SfxDuelLose");
+            AudioManager.Instance.PlaySfx("sfx-duel_lose");
         }
 
 

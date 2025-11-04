@@ -40,6 +40,17 @@ public class ShootDuelHandler : IDuelHandler
             participant.Character.ModifyBattleStat(Stat.Sp, -participant.Move.Cost);
             BattleUIManager.Instance.SetDuelParticipant(participant.Character, null);
         }
+
+        if (participant.Category == Category.Shoot) 
+        {
+            if (participant.Move != null) 
+            {
+                AudioManager.Instance.PlaySfx("sfx-ball_shoot_regular");
+            } else 
+            {
+                AudioManager.Instance.PlaySfx("sfx-ball_shoot_special");
+            }
+        }
             
 
         if (participant.Action == DuelAction.Offense)
@@ -130,7 +141,7 @@ public class ShootDuelHandler : IDuelHandler
 
     public void CancelDuel() 
     { 
-        BattleManager.Instance.Ball.CancelTravel();
+
     }
 
 }

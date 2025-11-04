@@ -85,6 +85,8 @@ public class DuelMenu : MonoBehaviour
         character = DuelSelectionManager.Instance.GetUserCharacter();
         moves = character.GetEquippedMovesByCategory(category);
         userSide = BattleManager.Instance.GetUserSide();
+
+        BattleUIManager.Instance.SetDuelCategory(category);
     }
 
     public void Show() 
@@ -154,12 +156,15 @@ public class DuelMenu : MonoBehaviour
 
     public void OnButtonBackTapped()
     {
+        AudioManager.Instance.PlaySfx("sfx-menu_back");
         HideMove();
         ShowCommand();
     }
 
     public void OnButtonNextTapped()
     {
+        AudioManager.Instance.PlaySfx("sfx-menu-move-command");
+
         currentStartIndex += 2;
 
         // Prevent wrapping — stop when we exceed move count
@@ -171,7 +176,7 @@ public class DuelMenu : MonoBehaviour
 
     public void OnCommandMeleeTapped()
     {
-        //AudioManager.Instance.PlaySfx("SfxMenuTap");
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
         DuelSelectionManager.Instance.SelectionMadeHuman(
             userSide, 
             DuelCommand.Melee, 
@@ -180,7 +185,7 @@ public class DuelMenu : MonoBehaviour
 
     public void OnCommandRangedTapped()
     {
-        //AudioManager.Instance.PlaySfx("SfxMenuTap");
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
         DuelSelectionManager.Instance.SelectionMadeHuman(
             userSide, 
             DuelCommand.Ranged, 
@@ -189,7 +194,7 @@ public class DuelMenu : MonoBehaviour
 
     public void OnCommandMoveTapped()
     {
-        //AudioManager.Instance.PlaySfx("SfxSecretCommand");
+        AudioManager.Instance.PlaySfx("sfx-menu-move-command");
         HideCommand();
         ShowMove();
     }
@@ -226,6 +231,7 @@ public class DuelMenu : MonoBehaviour
     public void OnMoveSlotTapped(MoveCommandSlot moveCommandSlot)
     {
         if (moveCommandSlot?.Move == null) return;
+        AudioManager.Instance.PlaySfx("sfx-menu-move-select");
 
         /*
         if (localSel.Player.GetStat(PlayerStats.Sp) < secretCommandSlot.Secret.Cost)
@@ -234,8 +240,6 @@ public class DuelMenu : MonoBehaviour
             return;
         }
         */
-
-        //AudioManager.Instance.PlaySfx("SfxSecretSelect");
 
         DuelSelectionManager.Instance.SelectionMadeHuman(
             userSide, 

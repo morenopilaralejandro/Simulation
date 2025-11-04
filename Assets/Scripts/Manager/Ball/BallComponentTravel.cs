@@ -122,6 +122,9 @@ public class BallComponentTravel : MonoBehaviour
         ball.SetDynamic(travelVelocity);
 
         ShootTriangleManager.Instance.Hide();
+    
+        if(!DuelManager.Instance.IsResolved)
+            DuelManager.Instance.CancelDuel();
 
         LogManager.Trace($"[BallComponentTravel] [EndTravel] Travel ended at {ball.transform.position} with velocity {travelVelocity}.", this);
         BallEvents.RaiseEndTravel(currentTarget);
