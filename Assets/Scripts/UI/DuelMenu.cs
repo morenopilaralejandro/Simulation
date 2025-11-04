@@ -145,7 +145,7 @@ public class DuelMenu : MonoBehaviour
     private bool CanSelectMoveCommand() 
     {
         return 
-            //DuelManager.Instance.CanSelectMoveCommand(category) && 
+            DuelManager.Instance.CanSelectMoveCommand(category) && 
             moves.Count > 0;
     }
 

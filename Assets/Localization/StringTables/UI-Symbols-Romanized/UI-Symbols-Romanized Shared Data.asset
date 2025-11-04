@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI-Symbols-Romanized Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: UI-Symbols-Romanized
+  m_TableCollectionNameGuidString: 1a87abf812000fac3b6226d24a555a71
+  m_Entries:
+  - m_Id: 23154401280
+    m_Key: symbol_plus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23158595584
+    m_Key: symbol_minus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23158595585
+    m_Key: symbol_infinity
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2307361536685637649
+  references:
+    version: 2
+    RefIds:
+    - rid: 2307361536685637649
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1762280026429

@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI-Character_Stats-Localized Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: UI-Character_Stats-Localized
+  m_TableCollectionNameGuidString: 0bc6832df65b5e5ae9678a0a998f340a
+  m_Entries:
+  - m_Id: 18351923200
+    m_Key: text_stats
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741328736256
+    m_Key: stat_hp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039424
+    m_Key: stat_sp
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039425
+    m_Key: stat_kick
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039426
+    m_Key: stat_body
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039427
+    m_Key: stat_control
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039428
+    m_Key: stat_guard
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039429
+    m_Key: stat_speed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039430
+    m_Key: stat_stamina
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039431
+    m_Key: stat_technique
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039432
+    m_Key: stat_luck
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039433
+    m_Key: stat_courage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5741400039434
+    m_Key: stat_freedom
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2307361536685637638
+  references:
+    version: 2
+    RefIds:
+    - rid: 2307361536685637638
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1762279652133

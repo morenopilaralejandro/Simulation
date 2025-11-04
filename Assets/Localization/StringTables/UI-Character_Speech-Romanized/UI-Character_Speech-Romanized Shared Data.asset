@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI-Character_Speech-Romanized Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: UI-Character_Speech-Romanized
+  m_TableCollectionNameGuidString: 9809deb12b5edbf6080c0ac315e8cef9
+  m_Entries:
+  - m_Id: 17483702272
+    m_Key: speech_win
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17483702273
+    m_Key: speech_lose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17483702274
+    m_Key: speech_dribble
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17483702275
+    m_Key: speech_block
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17483702276
+    m_Key: speech_pass
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17483702277
+    m_Key: speech_shoot
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17483702278
+    m_Key: speech_nice
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17483702279
+    m_Key: speech_direct
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2307361536685637637
+  references:
+    version: 2
+    RefIds:
+    - rid: 2307361536685637637
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1762279608230

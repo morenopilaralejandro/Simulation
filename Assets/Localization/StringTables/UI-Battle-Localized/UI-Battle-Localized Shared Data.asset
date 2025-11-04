@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI-Battle-Localized Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: UI-Battle-Localized
+  m_TableCollectionNameGuidString: 00f2edbf73703906bb09abb1e4e0e09e
+  m_Entries:
+  - m_Id: 17894744064
+    m_Key: text_duel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744065
+    m_Key: button_command_move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744066
+    m_Key: button_command_melee
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744067
+    m_Key: button_command_ranged
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744068
+    m_Key: condition_score_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744069
+    m_Key: condition_score_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744070
+    m_Key: condition_score_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744071
+    m_Key: text_exit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744072
+    m_Key: text_win
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744073
+    m_Key: text_lose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744074
+    m_Key: text_goal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744075
+    m_Key: text_time_up
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744076
+    m_Key: text_time_half
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744077
+    m_Key: text_time_full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744078
+    m_Key: text_time_first
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17894744079
+    m_Key: text_time_second
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2307361536685637634
+  references:
+    version: 2
+    RefIds:
+    - rid: 2307361536685637634
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1762279514820

@@ -11,7 +11,9 @@ public class CharacterTargetIndicator : MonoBehaviour
     public void Update()
     {
         // Hide line if we have missing references
-        if (controlledCharacter == null || targetedCharacter == null)
+        if (controlledCharacter == null || 
+            targetedCharacter == null || 
+            BattleManager.Instance.IsTimeFrozen)
         {
             lineRenderer.positionCount = 0;
             return;

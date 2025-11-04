@@ -66,6 +66,12 @@ public static class FontAtlasGenerator
         //characters.Add('\n');
         characters.Add('-');
         characters.Add('_');
+        characters.Add('.');
+        characters.Add(',');
+        characters.Add(':');
+        characters.Add(';');
+        characters.Add('#');
+        characters.Add('%');
         characters.Add('/');
         characters.Add('0');
         characters.Add('1');
