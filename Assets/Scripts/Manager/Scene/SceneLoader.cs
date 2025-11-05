@@ -56,6 +56,28 @@ public class SceneLoader : MonoBehaviour
 
 
 
+    public static void LoadBattleResults() {
+        LoadingScreen.LoadScenes(new string[] { "BattleResults", "GlobalLighting"});
+    }
+
+    public static void UnloadBattleResults() {
+        SceneManager.UnloadSceneAsync("BattleResults");
+        SceneManager.UnloadSceneAsync("GlobalLighting");
+    }
+
+
+
+    public static void LoadGameOver() {
+        LoadingScreen.LoadScenes(new string[] { "GameOver", "GlobalLighting"});
+    }
+
+    public static void UnloadGameOver() {
+        SceneManager.UnloadSceneAsync("GameOver");
+        SceneManager.UnloadSceneAsync("GlobalLighting");
+    }
+
+
+
     public static void LoadBattle()
     {
         LoadingScreen.LoadScenes(new string[] { "BattleMap", "BattleUI", "BattleSpawners", "GlobalLighting", "BattleCamera"});
@@ -63,11 +85,11 @@ public class SceneLoader : MonoBehaviour
 
     public static void UnloadBattle()
     {
-        SceneManager.UnloadSceneAsync("BattleMap");
-        SceneManager.UnloadSceneAsync("BattleSpawners");
         SceneManager.UnloadSceneAsync("BattleUI");
-        SceneManager.UnloadSceneAsync("GlobalLighting");
+        SceneManager.UnloadSceneAsync("BattleMap");
         SceneManager.UnloadSceneAsync("BattleCamera");
+        SceneManager.UnloadSceneAsync("BattleSpawners");
+        SceneManager.UnloadSceneAsync("GlobalLighting");
     }
 }
 

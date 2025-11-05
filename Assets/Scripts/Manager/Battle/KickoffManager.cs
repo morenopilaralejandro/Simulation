@@ -63,11 +63,6 @@ public class KickoffManager : MonoBehaviour
         BattleManager.Instance.SetBattlePhase(BattlePhase.Deadball);
     }
 
-    private void EndKickoff() 
-    {
-        BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
-    }
-
     private void ResetReady() 
     {
         isTeamReady =
@@ -104,6 +99,7 @@ public class KickoffManager : MonoBehaviour
 
     private void PerformKickOff()
     {
+        BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
         BattleManager.Instance.Unfreeze();
         if(character0.IsEnemyAI)
             character0.KickBallTo(character1.transform.position);

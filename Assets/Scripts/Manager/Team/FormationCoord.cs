@@ -19,6 +19,13 @@ public class FormationCoord
         this.position = position;
     }
 
+    public FormationCoord(FormationCoord other)
+    {
+        this.formationCoordId = other.formationCoordId;
+        this.defaultPosition = other.defaultPosition;
+        this.position = other.position;
+    }
+
     public void FlipDefaultPosition()
     {
         defaultPosition.x *= -1;
