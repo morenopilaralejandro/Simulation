@@ -36,10 +36,10 @@ public class CharacterComponentTeamMember : MonoBehaviour
         {
             this.teamSide = team.TeamSide;
             
-            if (!character.IsOnUsersTeam())
-                formationCoord.FlipDefaultPosition();
+            this.formationCoord = new FormationCoord(formationCoord);
 
-            this.formationCoord = formationCoord;
+            if (!character.IsOnUsersTeam())
+                this.formationCoord.FlipDefaultPosition();
 
             LogManager.Trace($"[CharacterComponentTeamMember] {this.character.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
         }

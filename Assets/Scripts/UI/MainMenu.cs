@@ -1,27 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Simulation.Enums.Battle;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject panelMain;
+    [SerializeField] private GameObject panelCredits;
+    [SerializeField] private GameObject firstSelectedMain;
+    [SerializeField] private GameObject firstSelectedCredits;
+
+    private void Start() 
     {
-        
+        AudioManager.Instance.PlayBgm("bgm-simulation");    
+        panelMain.SetActive(true);
+        panelCredits.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(firstSelectedMain);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnButtonDreamMatchTapped() 
     {
-        
-    }
+        BattleArgs.TeamId0 = "faith_selection";
+        BattleArgs.TeamId1 = "crimson_selection";
+        BattleArgs.BallId = "crimson";
+        BattleArgs.BattleType = BattleType.Battle;
 
-    public void OnButton1Tapped() {
-        HandleButton1();
-    }
-
-    private void HandleButton1() {
         SceneLoader.UnloadMainMenu();
         SceneLoader.LoadBattle();
     }
+
+    public void OnButtonCreditsTapped() 
+    {
+        panelMain.SetActive(false);
+        panelCredits.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(firstSelectedCredits);
+    }
+
+    public void OnButtonCreditsContinueTapped() 
+    {
+        panelCredits.SetActive(false);
+        panelMain.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(firstSelectedMain);
+    }
+
+    public void OnButtonQuitTapped() 
+    {
+        Application.Quit();
+    }
+
 }

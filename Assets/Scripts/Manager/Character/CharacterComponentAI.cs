@@ -82,6 +82,8 @@ public class CharacterComponentAI : MonoBehaviour
     private float minDecisionDelay;
     private float maxDecisionDelay;
     private float confidence = DEFAULT_CONFIDENCE;
+    private float forwardOffset;
+    private Vector3 cachedSupportTarget;
 
     // ============================
     // INITIALIZATION
@@ -129,6 +131,25 @@ public class CharacterComponentAI : MonoBehaviour
         }
     }
 
+    private void InitializeSupportForwardOffset(Position position) 
+    {
+        switch (position)
+        {
+            case Position.GK:
+                forwardOffset = 0f;
+                break;
+            case Position.DF:
+                forwardOffset = -6f;
+                break;
+            case Position.MF:
+                forwardOffset = Random.Range(-2f, 1f);
+                break;
+            case Position.FW:
+                forwardOffset = Random.Range(2f, 5f);
+                break;
+        }
+    }
+
     private void OnEnable()
     {
         TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;    
@@ -151,6 +172,7 @@ public class CharacterComponentAI : MonoBehaviour
             teammates = character.GetTeammates();
             opponents = character.GetOpponents();
             InitializeDistances(formationCoord.Position);
+            InitializeSupportForwardOffset(formationCoord.Position);
             isAIEnabled = true;
         }
     }
@@ -165,7 +187,7 @@ public class CharacterComponentAI : MonoBehaviour
     // UPDATE LOGIC
     // ============================
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (character.IsControlled || !isAIEnabled || BattleManager.Instance.IsTimeFrozen)
             return;
@@ -442,24 +464,7 @@ public class CharacterComponentAI : MonoBehaviour
         Vector3 toGoal = (opponentGoal.transform.position - ballHolder.transform.position).normalized;
         Vector3 lateral = Vector3.Cross(Vector3.up, toGoal);
 
-        float forwardOffset = 0f;
         float lateralBias = character.FormationCoord.DefaultPosition.x;
-
-        switch (character.FormationCoord.Position)
-        {
-            case Position.GK:
-                MoveTowards(ownGoal.transform.position);
-                return;
-            case Position.DF:
-                forwardOffset = -6f;
-                break;
-            case Position.MF:
-                forwardOffset = Random.Range(-2f, 1f);
-                break;
-            case Position.FW:
-                forwardOffset = Random.Range(2f, 5f);
-                break;
-        }
 
         Vector3 supportTarget = ballHolder.transform.position + toGoal * forwardOffset;
         float desiredX = Mathf.Lerp(ballHolder.transform.position.x + lateralBias, character.FormationCoord.DefaultPosition.x, 0.5f);
@@ -479,6 +484,11 @@ public class CharacterComponentAI : MonoBehaviour
 
         if (character.FormationCoord.Position == Position.DF)
             supportTarget = ClampDefensiveLine(supportTarget);
+
+        if (Vector3.Distance(cachedSupportTarget, supportTarget) > 2f)
+            cachedSupportTarget = supportTarget;
+        else
+            supportTarget = Vector3.Lerp(cachedSupportTarget, supportTarget, 0.01f);
 
         MoveTowards(supportTarget);
     }
@@ -553,9 +563,10 @@ public class CharacterComponentAI : MonoBehaviour
         direction.Normalize();
 
         Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, ROTATION_SPEED * Time.deltaTime);
+        if (direction.sqrMagnitude > 0.01f)
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, ROTATION_SPEED * Time.fixedDeltaTime);
 
-        Vector3 translation = direction * speed * Time.deltaTime;
+        Vector3 translation = direction * speed * Time.fixedDeltaTime;
         transform.Translate(translation, Space.World);
         transform.position = BoundManager.Instance.ClampCharacter(transform.position);  
     }

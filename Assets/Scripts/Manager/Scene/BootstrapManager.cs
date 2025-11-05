@@ -16,8 +16,8 @@ public class BootstrapManager : MonoBehaviour
     {
         SceneManager.LoadScene(LoadingData.LoadingSceneName);
 
-        SceneLoader.LoadSystemManager();
         SceneLoader.LoadMainCamera();
+        SceneLoader.LoadSystemManager();
 
         AsyncOperationHandle initAddressablesHandle = Addressables.InitializeAsync();
         yield return initAddressablesHandle;
@@ -28,10 +28,11 @@ public class BootstrapManager : MonoBehaviour
         SceneManager.UnloadSceneAsync(LoadingData.LoadingSceneName);
 
     #if UNITY_EDITOR || DEVELOPMENT_BUILD
-        SceneLoader.LoadDebugMainMenu();
+        //SceneLoader.LoadDebugMainMenu();
+        SceneLoader.LoadMainMenu();
     #else
-        SceneLoader.LoadDebugMainMenu();        
-        //SceneLoader.LoadMainMenu();
+        //SceneLoader.LoadDebugMainMenu();        
+        SceneLoader.LoadMainMenu();
     #endif
     }
 }

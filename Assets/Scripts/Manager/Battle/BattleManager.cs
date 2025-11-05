@@ -17,7 +17,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private bool isMovementFrozen;
     [SerializeField] private bool isTimeFrozen;
     [SerializeField] private float timeDefault = 0f;
-    [SerializeField] private float timeCurrent = 1800f;
+    [SerializeField] private float timeCurrent = 0f;
     [SerializeField] private float timeLimit = 1800f;
     [SerializeField] private Dictionary<TeamSide, int> scoreDict;
 
@@ -57,6 +57,7 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
+        Freeze();
         SetTeamSize();
     }
     
@@ -64,11 +65,9 @@ public class BattleManager : MonoBehaviour
     {
         if (!isTimeFrozen)
         {
-            if (timeCurrent <= timeLimit)
-            {
-                timeCurrent++;
-                BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
-            }
+            float timeScale = 10f;
+            timeCurrent += Time.deltaTime * timeScale;
+            BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
             CheckEndGame();
         }
     }
@@ -189,9 +188,40 @@ public class BattleManager : MonoBehaviour
 
     private void CheckEndGame() 
     {
-        if (timeCurrent >= timeLimit)
+        if (!isTimeFrozen && timeCurrent >= timeLimit) 
         {
+            Freeze();
             StartCoroutine(TimeOverSequence());
+        }
+    }
+
+    private void EndGame()
+    {   
+        // Determine which side won
+        int homeScore = scoreDict[TeamSide.Home];
+        int awayScore = scoreDict[TeamSide.Away];
+
+        TeamSide? winningSide = null;
+        if (homeScore > awayScore)
+            winningSide = TeamSide.Home;
+        else if (awayScore > homeScore)
+            winningSide = TeamSide.Away;
+        else
+            winningSide = null; // tie
+
+        TeamSide userSide = GetUserSide();
+        LogManager.Info($"[BattleManager] Game Ended — Home: {homeScore} Away: {awayScore}, User side: {userSide}, Winner: {winningSide}", this);
+
+        SceneLoader.UnloadBattle();
+        if (winningSide == userSide)
+        {
+            // User won
+            SceneLoader.LoadBattleResults();
+        }
+        else
+        {
+            // User lost
+            SceneLoader.LoadGameOver();
         }
     }
     #endregion
@@ -215,16 +245,16 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator TimeOverSequence()
     {
-        float duration = 2f;
+        float duration = 1f;
         //isTimeFrozen = true;
         //AudioManager.Instance.PlayBgm("BgmTimeUp");
-        ResetTimer();
+        //ResetTimer();
         //panelTimeMessage.SetActive(true);
         //DuelLogManager.Instance.AddMatchEnd();
 
         yield return new WaitForSeconds(duration);
         //panelTimeMessage.SetActive(false);
-        //SceneManager.LoadScene("GameOver");
+        EndGame();
     }
     #endregion
 
