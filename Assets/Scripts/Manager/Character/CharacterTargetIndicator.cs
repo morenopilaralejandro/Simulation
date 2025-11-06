@@ -1,4 +1,5 @@
 using UnityEngine;
+using Simulation.Enums.Battle;
 
 [RequireComponent(typeof(LineRenderer))]
 public class CharacterTargetIndicator : MonoBehaviour
@@ -6,14 +7,14 @@ public class CharacterTargetIndicator : MonoBehaviour
     [SerializeField] private LineRenderer lineRenderer;
     private Character controlledCharacter => BattleManager.Instance.ControlledCharacter[BattleManager.Instance.GetUserSide()];
     private Character targetedCharacter => BattleManager.Instance.TargetedCharacter[BattleManager.Instance.GetUserSide()];
-    private float lineY = 0f;
+    private float lineY = 0.01f;
 
     public void Update()
     {
         // Hide line if we have missing references
         if (controlledCharacter == null || 
             targetedCharacter == null || 
-            BattleManager.Instance.IsTimeFrozen)
+            (BattleManager.Instance.CurrentPhase != BattlePhase.Battle && BattleManager.Instance.CurrentPhase != BattlePhase.Deadball))
         {
             lineRenderer.positionCount = 0;
             return;

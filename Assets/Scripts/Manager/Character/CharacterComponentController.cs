@@ -40,13 +40,16 @@ public class CharacterComponentController : MonoBehaviour
 
     void Update()
     {
-        if (!this.isControlled || BattleManager.Instance.IsTimeFrozen) 
+        if (!this.isControlled) 
             return;
 
         moveInput = InputManager.Instance.GetMove();
         move = new Vector3(moveInput.x, 0f, moveInput.y);
 
-        HandleTarget();    
+        HandleTarget();   
+
+        if (BattleManager.Instance.IsTimeFrozen) 
+            return;
 
         if (!this.character.CanMove()) 
             return;
