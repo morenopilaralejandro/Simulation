@@ -16,6 +16,7 @@ public class BattleResultsUI : MonoBehaviour
 
     public void OnButtonContinueTapped() 
     {
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
         SceneLoader.UnloadBattleResults();
         SceneLoader.LoadMainMenu();
     }

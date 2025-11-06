@@ -21,6 +21,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnButtonDreamMatchTapped() 
     {
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
         BattleArgs.TeamId0 = "faith_selection";
         BattleArgs.TeamId1 = "crimson_selection";
         BattleArgs.BallId = "crimson";
@@ -32,6 +33,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnButtonCreditsTapped() 
     {
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
         panelMain.SetActive(false);
         panelCredits.SetActive(true);
         EventSystem.current.SetSelectedGameObject(firstSelectedCredits);
@@ -39,6 +41,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnButtonCreditsContinueTapped() 
     {
+        AudioManager.Instance.PlaySfx("sfx-menu_back");
         panelCredits.SetActive(false);
         panelMain.SetActive(true);
         EventSystem.current.SetSelectedGameObject(firstSelectedMain);
@@ -46,6 +49,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnButtonQuitTapped() 
     {
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
         Application.Quit();
     }
 

@@ -16,6 +16,7 @@ public class GameOverUI : MonoBehaviour
 
     public void OnButtonContinueTapped() 
     {
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
         SceneLoader.UnloadGameOver();
         SceneLoader.LoadMainMenu();
     }

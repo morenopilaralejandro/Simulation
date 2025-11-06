@@ -261,6 +261,7 @@ public class DuelManager : MonoBehaviour
     {
         LogManager.Info("[DuelManager] Duel cancelled", this);
         duel.IsResolved = true;
+        BattleUIManager.Instance.HideDuelParticipantsPanel();
         duelHandler.CancelDuel();
 
         //ShootTriangle.Instance.SetTriangleVisible(false);
