@@ -23,7 +23,9 @@ public class ShootDuelHandler : IDuelHandler
             {
                 PossessionManager.Instance.Release();
                 BattleManager.Instance.Ball.StartTravel(
-                    ShootTriangleManager.Instance.GetRandomPoint());
+                    ShootTriangleManager.Instance.GetRandomPoint(),
+                    participant.Command
+                );
             }
         } else 
         {

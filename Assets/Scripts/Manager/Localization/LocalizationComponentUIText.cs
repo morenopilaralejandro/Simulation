@@ -14,13 +14,13 @@ public class LocalizationComponentUIText : MonoBehaviour
 
     void OnEnable()
     {
-        LocalizationManager.Instance?.Subscribe(OnLocalizationStyleChanged);
-        ApplyLocalizationStyle(LocalizationManager.Instance.CurrentStyle);
+        SettingsManager.Instance.OnLocalizationStyleChanged += HandleLocalizationStyleChanged;
+        ApplyLocalizationStyle(SettingsManager.Instance.CurrentSettings.CurrentLocalizationStyle);
     }
 
     void OnDisable()
     {
-        LocalizationManager.Instance?.Unsubscribe(OnLocalizationStyleChanged);
+        SettingsManager.Instance.OnLocalizationStyleChanged -= HandleLocalizationStyleChanged;
     }
 
     private void ApplyLocalizationStyle(LocalizationStyle style)
@@ -39,7 +39,7 @@ public class LocalizationComponentUIText : MonoBehaviour
         localizeStringEvent.RefreshString();
     }
 
-    private void OnLocalizationStyleChanged(LocalizationStyle style)
+    private void HandleLocalizationStyleChanged(LocalizationStyle style)
     {
         ApplyLocalizationStyle(style);
     }

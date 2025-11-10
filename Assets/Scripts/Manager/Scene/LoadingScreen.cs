@@ -47,4 +47,15 @@ public class LoadingScreen : MonoBehaviour
     {
 
     }
+
+    public static bool IsSceneLoaded(string sceneName)
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+            if (scene.name == sceneName)
+                return true;
+        }
+        return false;
+    }
 }

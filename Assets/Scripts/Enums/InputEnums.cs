@@ -1,5 +1,11 @@
 namespace Simulation.Enums.Input 
 {
+    public enum ControlScheme
+    {
+        Traditional,
+        Touch
+    }
+
     public enum CustomAction
     {
         //BattleActions

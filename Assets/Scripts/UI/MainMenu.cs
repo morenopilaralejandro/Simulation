@@ -7,14 +7,17 @@ using Simulation.Enums.Battle;
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private GameObject panelMain;
+    [SerializeField] private GameObject panelSettings;
     [SerializeField] private GameObject panelCredits;
     [SerializeField] private GameObject firstSelectedMain;
+    [SerializeField] private GameObject firstSelectedSettings;
     [SerializeField] private GameObject firstSelectedCredits;
 
     private void Start() 
     {
         AudioManager.Instance.PlayBgm("bgm-simulation");    
         panelMain.SetActive(true);
+        panelSettings.SetActive(false);
         panelCredits.SetActive(false);
         EventSystem.current.SetSelectedGameObject(firstSelectedMain);
     }
@@ -29,6 +32,22 @@ public class MainMenu : MonoBehaviour
 
         SceneLoader.UnloadMainMenu();
         SceneLoader.LoadBattle();
+    }
+
+    public void OnButtonSettingsTapped() 
+    {
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        panelMain.SetActive(false);
+        panelSettings.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(firstSelectedSettings);
+    }
+
+    public void OnButtonSettingsContinueTapped() 
+    {
+        AudioManager.Instance.PlaySfx("sfx-menu_back");
+        panelSettings.SetActive(false);
+        panelMain.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(firstSelectedMain);
     }
 
     public void OnButtonCreditsTapped() 

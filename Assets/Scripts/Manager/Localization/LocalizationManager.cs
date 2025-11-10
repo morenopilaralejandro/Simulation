@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
 using System;
 using Simulation.Enums.Localization;
@@ -9,10 +10,6 @@ public class LocalizationManager : MonoBehaviour
     public static LocalizationManager Instance { get; private set; }
 
     [SerializeField] private TableConfig tableConfig;
-    [SerializeField] private LocalizationStyle currentStyle = LocalizationStyle.Localized;
-    public LocalizationStyle CurrentStyle => currentStyle;
-
-    public event Action<LocalizationStyle> OnLocalizationStyleChanged;
 
     private void Awake()
     {
@@ -29,24 +26,27 @@ public class LocalizationManager : MonoBehaviour
         tableConfig.Initialize();
     }
 
-    public void Subscribe(Action<LocalizationStyle> callback)
+    private void OnEnable()
     {
-        OnLocalizationStyleChanged += callback;
+        SettingsManager.Instance.OnLanguageChanged += HandleOnLanguageChanged;
+        HandleOnLanguageChanged(SettingsManager.Instance.CurrentSettings.LocaleIndex);
     }
 
-    public void Unsubscribe(Action<LocalizationStyle> callback)
+    private void OnDisable()
     {
-        OnLocalizationStyleChanged -= callback;
-    }
-
-    public void SetLocalizationStyle(LocalizationStyle style)
-    {
-        currentStyle = style;
-        OnLocalizationStyleChanged?.Invoke(style);
+        SettingsManager.Instance.OnLanguageChanged += HandleOnLanguageChanged;
     }
 
     public TableReference GetTableReference(LocalizationEntity entity, LocalizationField field)
     {
-        return tableConfig.GetTableReference(entity, field, currentStyle);
+        return tableConfig.GetTableReference(
+            entity, 
+            field, 
+            SettingsManager.Instance.CurrentSettings.CurrentLocalizationStyle);
+    }
+
+    private void HandleOnLanguageChanged(int localeIndex) 
+    {
+        LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[localeIndex];
     }
 }
