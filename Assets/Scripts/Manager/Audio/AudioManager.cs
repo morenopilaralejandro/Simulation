@@ -22,6 +22,31 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void OnEnable()
+    {
+        SettingsManager.Instance.OnBgmVolumeChanged += SetBgmVolume;
+        SettingsManager.Instance.OnSfxVolumeChanged += SetSfxVolume;
+
+        SetBgmVolume(SettingsManager.Instance.CurrentSettings.BgmVolume);
+        SetSfxVolume(SettingsManager.Instance.CurrentSettings.SfxVolume);
+    }
+
+    private void OnDisable()
+    {
+        SettingsManager.Instance.OnBgmVolumeChanged -= SetBgmVolume;
+        SettingsManager.Instance.OnSfxVolumeChanged -= SetSfxVolume;
+    }
+
+    public void SetBgmVolume(float volume)
+    {
+        sourceBgm.volume = volume;
+    }
+
+    public void SetSfxVolume(float volume)
+    {
+        sourceSfx.volume = volume;
+    }
+
     // --- MAIN PLAYBACK METHODS --- //
 
     public async void PlaySfx(string address)

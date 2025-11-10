@@ -17,8 +17,8 @@ public class DuelManager : MonoBehaviour
     private int maxSupporters = 2;
     private float supporterRadius = 1f;
 
-    private int hpWinner = 20;
-    private int hpLoser = 5;
+    private int hpWinner = -20;
+    private int hpLoser = -5;
 
     private void Awake()
     {

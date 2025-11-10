@@ -1,4 +1,5 @@
 using UnityEngine;
+using Simulation.Enums.Duel;
 
 public class BallComponentTravel : MonoBehaviour
 {
@@ -44,7 +45,7 @@ public class BallComponentTravel : MonoBehaviour
         }
     }
 
-    public void StartTravel(Vector3 target)
+    public void StartTravel(Vector3 target, DuelCommand command)
     {
         if (isTraveling)
         {
@@ -57,7 +58,8 @@ public class BallComponentTravel : MonoBehaviour
         ball.SetKinematic();
 
         var ballPostion = ball.transform.position;
-        ballPostion.y = defaultBallY;
+        if(command == DuelCommand.Move)
+            ballPostion.y = defaultBallY;
         ball.transform.position = ballPostion;
 
         isTraveling = true;

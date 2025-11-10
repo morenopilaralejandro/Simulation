@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Simulation.Enums.Duel;
 
 public class Ball : MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class Ball : MonoBehaviour
     //travelComponent
     public bool IsTraveling => travelComponent.IsTraveling;
     public bool IsTravelPaused => travelComponent.IsTravelPaused;
-    public void StartTravel(Vector3 target) => travelComponent.StartTravel(target);
+    public void StartTravel(Vector3 target, DuelCommand command) => travelComponent.StartTravel(target, command);
     public void PauseTravel() => travelComponent.PauseTravel();
     public void ResumeTravel() => travelComponent.ResumeTravel();
     public void CancelTravel() => travelComponent.CancelTravel();
