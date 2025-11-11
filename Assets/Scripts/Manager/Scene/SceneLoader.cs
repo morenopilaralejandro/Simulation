@@ -86,12 +86,23 @@ public class SceneLoader : MonoBehaviour
 
     public static void LoadBattle()
     {
-        LoadingScreen.LoadScenes(new string[] { "BattleMap", "BattleUI", "BattleSpawners", "BattleCamera"});
+        LoadingScreen.LoadScenes(new string[] { 
+            "BattleMap", 
+            "BattleUI", 
+        #if UNITY_EDITOR || DEVELOPMENT_BUILD
+            "DebugBattleUI", 
+        #endif
+            "BattleSpawners", 
+            "BattleCamera"
+        });
     }
 
     public static void UnloadBattle()
     {
         SceneManager.UnloadSceneAsync("BattleUI");
+    #if UNITY_EDITOR || DEVELOPMENT_BUILD
+        SceneManager.UnloadSceneAsync("DebugBattleUI");
+    #endif
         SceneManager.UnloadSceneAsync("BattleMap");
         SceneManager.UnloadSceneAsync("BattleCamera");
         SceneManager.UnloadSceneAsync("BattleSpawners");

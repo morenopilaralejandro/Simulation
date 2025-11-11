@@ -65,7 +65,7 @@ public class BattleManager : MonoBehaviour
     {
         if (!isTimeFrozen)
         {
-            float timeScale = 10f;
+            float timeScale = 15f;
             timeCurrent += Time.deltaTime * timeScale;
             BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
             CheckEndGame();
@@ -95,11 +95,12 @@ public class BattleManager : MonoBehaviour
     {
         if (currentPhase == newPhase) return;
 
+        OnBattlePhaseChanged?.Invoke(newPhase, lastPhase);
+
         LogManager.Info($"[BattleManager] " + 
             $"BattlePhase changed to {newPhase}" , this);
         lastPhase = currentPhase;
         currentPhase = newPhase;
-        OnBattlePhaseChanged?.Invoke(currentPhase, lastPhase);
     }
 
     private void SetBattleType(BattleType newType)

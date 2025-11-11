@@ -68,7 +68,7 @@ public class CharacterComponentStats : MonoBehaviour
     public void ModifyBattleStat(Stat stat, int amount)
     {
         if (stat == Stat.Hp && amount < 0) 
-            amount = GetReducedHpAmount(amount) * -1;
+            amount = GetReducedHpAmount(amount);
         battleStats[stat] = Mathf.Clamp(battleStats[stat] + amount, 0, trueStats[stat]);
         if (stat == Stat.Hp) this.character.UpdateFatigue();
     }
@@ -123,11 +123,12 @@ public class CharacterComponentStats : MonoBehaviour
 
     private int GetReducedHpAmount(int amount)
     {
+        //amount is negative
         const float LvReductionPerLevel = 0.01f;
-        const float MaxLvReduction = 0.5f;
+        const float MaxLvReduction = 0.7f;
         const float StaminaDivisor = 130f;
-        const float MaxStaminaReduction = 0.25f;
-        const float MinDamageTaken = 1f;
+        const float MaxStaminaReduction = 0.3f;
+        const float MinDamageTaken = -1f;
 
         float stamina = battleStats[Stat.Stamina];
 
@@ -139,7 +140,7 @@ public class CharacterComponentStats : MonoBehaviour
         float totalFactor = lvFactor * staminaFactor;
 
         // Ensure damage never goes below a minimum (e.g., at least 1)
-        float damageTaken = Mathf.Max(MinDamageTaken, amount * totalFactor);
+        float damageTaken = Mathf.Min(MinDamageTaken, amount * totalFactor);
 
         return (int)damageTaken;
     }

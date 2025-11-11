@@ -173,6 +173,9 @@ public class Character : MonoBehaviour
     //aiComponent
     public bool IsEnemyAI => aiComponent.IsEnemyAI;
     public bool IsAIEnabled => aiComponent.IsAIEnabled;
+    public void EnableAI() => aiComponent.EnableAI();
+    public void EnableAI(bool isAIEnabled) => aiComponent.EnableAI(isAIEnabled);
+    public void DisableAI() => aiComponent.DisableAI();
     public AIDifficulty AIDifficulty => aiComponent.AIDifficulty;
     public AIState AIState => aiComponent.AIState;
     public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);

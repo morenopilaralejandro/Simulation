@@ -13,14 +13,6 @@ public class SettingsManager : MonoBehaviour
 
     private string filePath;
 
-    // Events
-    public event Action<int> OnLanguageChanged;
-    public event Action<LocalizationStyle> OnLocalizationStyleChanged;
-    public event Action<float> OnBgmVolumeChanged;
-    public event Action<float> OnSfxVolumeChanged;
-    public event Action<ControlScheme, ControlSettings> OnControlSchemeChanged;
-    public event Action OnSettingsReset;
-
     private void Awake()
     {
         if (Instance)
@@ -61,28 +53,28 @@ public class SettingsManager : MonoBehaviour
     {
         CurrentSettings.BgmVolume = volume;
         SaveSettings();
-        OnBgmVolumeChanged?.Invoke(volume);
+        SettingsEvents.RaiseBgmVolumeChanged(volume);
     }
 
     public void SetSfxVolume(float volume)
     {
         CurrentSettings.SfxVolume = volume;
         SaveSettings();
-        OnSfxVolumeChanged?.Invoke(volume);
+        SettingsEvents.RaiseSfxVolumeChanged(volume);
     }
 
     public void SetLanguage(int localeIndex)
     {
         CurrentSettings.LocaleIndex = localeIndex;
         SaveSettings();
-        OnLanguageChanged?.Invoke(localeIndex);
+        SettingsEvents.RaiseLanguageChanged(localeIndex);
     }
 
     public void SetLocalizationStyle(LocalizationStyle localizationStyle)
     {
         CurrentSettings.CurrentLocalizationStyle = localizationStyle;
         SaveSettings();
-        OnLocalizationStyleChanged?.Invoke(localizationStyle);
+        SettingsEvents.RaiseLocalizationStyleChanged(localizationStyle);
     }
 
     // ======================================
@@ -95,7 +87,7 @@ public class SettingsManager : MonoBehaviour
         SaveSettings();
 
         var config = GetActiveControlSettings();
-        OnControlSchemeChanged?.Invoke(scheme, config);
+        SettingsEvents.RaiseControlSchemeChanged(scheme, config);
     }
 
     public ControlSettings GetActiveControlSettings()
@@ -119,7 +111,7 @@ public class SettingsManager : MonoBehaviour
         if (DefaultSettingsAsset)
             CurrentSettings = DefaultSettingsAsset.PresetDefault;
         SaveSettings();
-        OnSettingsReset?.Invoke();
+        SettingsEvents.RaiseSettingsReset();
     }
 
     public void ApplyPreset(ControlScheme scheme)
@@ -132,6 +124,6 @@ public class SettingsManager : MonoBehaviour
             CurrentSettings = DefaultSettingsAsset.PresetTraditional;
         
         SaveSettings();
-        OnControlSchemeChanged?.Invoke(scheme, GetActiveControlSettings());
+        SettingsEvents.RaiseControlSchemeChanged(scheme, GetActiveControlSettings());
     }
 }

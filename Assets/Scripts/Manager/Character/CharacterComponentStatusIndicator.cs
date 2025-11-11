@@ -15,7 +15,6 @@ public class CharacterComponentStatusIndicator : MonoBehaviour
     [SerializeField] private Animator indicatorAnimator;
     private string stunAnimationTrigger = "Stun";
 
-    private bool showingStatus;
     private StatusEffect? currentStatus;
     private FatigueState currentFatigue => this.character.FatigueState;
 
@@ -35,7 +34,7 @@ public class CharacterComponentStatusIndicator : MonoBehaviour
 
         indicatorRenderer.enabled = true;
 
-        if (showingStatus && currentStatus.HasValue)
+        if (currentStatus.HasValue)
         {
             switch (currentStatus.Value)
             {
@@ -44,15 +43,15 @@ public class CharacterComponentStatusIndicator : MonoBehaviour
                     indicatorRenderer.sprite = null; // hide static indicator
                     if (indicatorAnimator != null)
                     {
-                        indicatorRenderer.enabled = false; // hide sprite renderer if using animator sprite
-                        indicatorAnimator.gameObject.SetActive(true);
+                        indicatorRenderer.enabled = true;
+                        indicatorAnimator.enabled = true;
                         indicatorAnimator.SetTrigger(stunAnimationTrigger);
                     }
                     break;
 
                 case StatusEffect.Tripping:
                     if (indicatorAnimator != null)
-                        indicatorAnimator.gameObject.SetActive(false);
+                        indicatorAnimator.enabled = false;
                     indicatorRenderer.enabled = true;
                     indicatorRenderer.sprite = trippingSprite;
                     break;
@@ -62,7 +61,7 @@ public class CharacterComponentStatusIndicator : MonoBehaviour
         {
             // no active status, use fatigue
             if (indicatorAnimator != null)
-                indicatorAnimator.gameObject.SetActive(false);
+                indicatorAnimator.enabled = false;
             indicatorRenderer.enabled = true;
 
             switch (currentFatigue)
