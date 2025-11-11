@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7642976910361650820}
+  - component: {fileID: 3929109862810502629}
   m_Layer: 0
-  m_Name: FieldLineFull
+  m_Name: FieldLineBattle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,6 +35,19 @@ Transform:
   - {fileID: 6588286964103317142}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3929109862810502629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 259690548704984437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 680a95587434d8fc293fa5838cdeea0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineMaterial: {fileID: 2100000, guid: ca434245676a0cf8698ba54d5edb459c, type: 2}
 --- !u!1001 &1758969077467358631
 PrefabInstance:
   m_ObjectHideFlags: 0
