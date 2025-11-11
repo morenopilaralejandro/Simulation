@@ -26,15 +26,19 @@ public class LocalizationManager : MonoBehaviour
         tableConfig.Initialize();
     }
 
+    private void Start() 
+    {
+        HandleOnLanguageChanged(SettingsManager.Instance.CurrentSettings.LocaleIndex);
+    }
+
     private void OnEnable()
     {
-        SettingsManager.Instance.OnLanguageChanged += HandleOnLanguageChanged;
-        HandleOnLanguageChanged(SettingsManager.Instance.CurrentSettings.LocaleIndex);
+        SettingsEvents.OnLanguageChanged += HandleOnLanguageChanged;
     }
 
     private void OnDisable()
     {
-        SettingsManager.Instance.OnLanguageChanged += HandleOnLanguageChanged;
+        SettingsEvents.OnLanguageChanged += HandleOnLanguageChanged;
     }
 
     public TableReference GetTableReference(LocalizationEntity entity, LocalizationField field)

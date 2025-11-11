@@ -23,7 +23,7 @@ public class CharacterComponentFatigue : MonoBehaviour
 
     public void UpdateFatigue()
     {
-        int hp = this.character.GetBattleStat(Stat.Speed);
+        int hp = this.character.GetBattleStat(Stat.Hp);
         if (hp <= exhaustedThreshold)
         {
             fatigueState = FatigueState.Exhausted;
@@ -39,7 +39,8 @@ public class CharacterComponentFatigue : MonoBehaviour
             fatigueState = FatigueState.Normal;
             fatigueSpeedMultiplier = normalSpeedMultiplier;
         }
-        this.character.UpdateStatusIndicator(null);
+        if (!this.character.HasStatusEffect()) 
+            this.character.UpdateStatusIndicator(null);
     }
 
 }

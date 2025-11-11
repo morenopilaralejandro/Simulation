@@ -14,13 +14,13 @@ public class LocalizationComponentUIText : MonoBehaviour
 
     void OnEnable()
     {
-        SettingsManager.Instance.OnLocalizationStyleChanged += HandleLocalizationStyleChanged;
+        SettingsEvents.OnLocalizationStyleChanged += HandleLocalizationStyleChanged;
         ApplyLocalizationStyle(SettingsManager.Instance.CurrentSettings.CurrentLocalizationStyle);
     }
 
     void OnDisable()
     {
-        SettingsManager.Instance.OnLocalizationStyleChanged -= HandleLocalizationStyleChanged;
+        SettingsEvents.OnLocalizationStyleChanged -= HandleLocalizationStyleChanged;
     }
 
     private void ApplyLocalizationStyle(LocalizationStyle style)

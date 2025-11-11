@@ -62,6 +62,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
 
         activeStatusEffects.Remove(effect);
         this.character.UpdateStatusIndicator(null);
+        this.character.UpdateFatigue();
     }
 
     public void ClearAllStatus()

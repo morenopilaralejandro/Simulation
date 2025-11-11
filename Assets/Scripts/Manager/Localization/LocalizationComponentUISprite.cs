@@ -11,13 +11,13 @@ public class LocalizationComponentUISprite : MonoBehaviour
 
     private void OnEnable()
     {
-        SettingsManager.Instance.OnLocalizationStyleChanged += HandleLocalizationStyleChanged;
+        SettingsEvents.OnLocalizationStyleChanged += HandleLocalizationStyleChanged;
         ApplyLocalizationStyle(SettingsManager.Instance.CurrentSettings.CurrentLocalizationStyle);
     }
 
     private void OnDisable()
     {
-        SettingsManager.Instance.OnLocalizationStyleChanged -= HandleLocalizationStyleChanged;
+        SettingsEvents.OnLocalizationStyleChanged -= HandleLocalizationStyleChanged;
     }
 
     private void ApplyLocalizationStyle(LocalizationStyle style)

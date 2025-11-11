@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3332170544310676544}
   - component: {fileID: 5835421973010641891}
   - component: {fileID: 1686877836786707074}
+  - component: {fileID: 5914596861488882179}
   m_Layer: 0
   m_Name: StatusIndicator
   m_TagString: Untagged
@@ -124,3 +125,17 @@ MonoBehaviour:
   tiredSprite: {fileID: 21300000, guid: e15adb66ac2e4f647befd69743df8033, type: 3}
   exhaustedSprite: {fileID: 21300000, guid: 1140856712a2831e19a367e8d8b4370d, type: 3}
   indicatorAnimator: {fileID: 5835421973010641891}
+--- !u!114 &5914596861488882179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2739915572514983274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0943adf5ad7278ebe9d60f54f65498cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCamera: {fileID: 0}
+  keepUpright: 1

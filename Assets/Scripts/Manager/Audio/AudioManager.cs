@@ -22,19 +22,22 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void OnEnable()
+    private void Start() 
     {
-        SettingsManager.Instance.OnBgmVolumeChanged += SetBgmVolume;
-        SettingsManager.Instance.OnSfxVolumeChanged += SetSfxVolume;
-
         SetBgmVolume(SettingsManager.Instance.CurrentSettings.BgmVolume);
         SetSfxVolume(SettingsManager.Instance.CurrentSettings.SfxVolume);
     }
 
+    private void OnEnable()
+    {
+        SettingsEvents.OnBgmVolumeChanged += SetBgmVolume;
+        SettingsEvents.OnSfxVolumeChanged += SetSfxVolume;
+    }
+
     private void OnDisable()
     {
-        SettingsManager.Instance.OnBgmVolumeChanged -= SetBgmVolume;
-        SettingsManager.Instance.OnSfxVolumeChanged -= SetSfxVolume;
+        SettingsEvents.OnBgmVolumeChanged -= SetBgmVolume;
+        SettingsEvents.OnSfxVolumeChanged -= SetSfxVolume;
     }
 
     public void SetBgmVolume(float volume)
