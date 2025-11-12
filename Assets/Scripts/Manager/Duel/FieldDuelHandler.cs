@@ -71,6 +71,9 @@ public class FieldDuelHandler : IDuelHandler
         if (winner.Move != null)
             winner.Character.ModifyBattleStat(Stat.Sp, -winner.Move.Cost);
 
+        if (winner.Character.IsOnUsersTeam())
+            BattleEffectManager.Instance.PlayDuelWinEffect(winner.Character.transform); 
+        
         loser.Character.ApplyStatus(StatusEffect.Stunned);
         StunSupports(loser.Action);
         PossessionManager.Instance.GiveBallToCharacter(winner.Character);

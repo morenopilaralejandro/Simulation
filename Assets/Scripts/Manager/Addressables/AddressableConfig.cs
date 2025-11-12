@@ -19,5 +19,5 @@ public static class AddressableConfig
 
     [Header("Cache Settings")]
     [Tooltip("Maximum number of assets cached in memory using LRU cache.")]
-    public const int MaxCacheSize = 50;
+    public const int MaxCacheSize = 100;
 }
