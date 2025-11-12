@@ -10,8 +10,10 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
 
     [Header("Settings")]
-    [SerializeField] public AudioSource sourceBgm;
-    [SerializeField] public AudioSource sourceSfx;
+    [SerializeField] private AudioSource sourceBgm;
+    [SerializeField] private AudioSource sourceSfx;
+    [SerializeField] private AudioSource sourceSfxLoop;
+    private float factorSfxLoop = 0.7f;
 
     private readonly Dictionary<string, AudioClip> audioClipCache = new();
 
@@ -48,6 +50,7 @@ public class AudioManager : MonoBehaviour
     public void SetSfxVolume(float volume)
     {
         sourceSfx.volume = volume;
+        sourceSfxLoop.volume = volume * factorSfxLoop;
     }
 
     // --- MAIN PLAYBACK METHODS --- //
@@ -66,6 +69,41 @@ public class AudioManager : MonoBehaviour
         src.PlayOneShot(clip);
     }
 
+    public async void PlaySfxLoop(string address)
+    {
+        if (sourceSfxLoop.isPlaying && 
+            sourceSfxLoop.clip != null && 
+            sourceSfxLoop.clip.name == address)
+        return;
+
+        AudioClip clip = await LoadClipAsync(address);
+        if (clip == null)
+        {
+            LogManager.Error($"[AudioManager] Failed to load clip at address '{address}'");
+            return;
+        }
+
+        var src = sourceSfxLoop;
+        src.spatialBlend = 0f;
+        src.clip = clip;
+        src.Play();
+    }
+
+    public void StopSfxLoop() => sourceSfxLoop.Stop();
+
+    public void StopSfxLoop(string address)
+    {
+        if (!sourceSfxLoop.isPlaying)
+            return;
+
+        AudioClip currentClip = sourceSfxLoop.clip;
+        if (currentClip != null && currentClip.name == address)
+        {
+            sourceSfxLoop.Stop();
+            sourceSfxLoop.clip = null;
+        }
+    }
+
     public async void PlayBgm(string address)
     {
         AudioClip clip = await LoadClipAsync(address);
@@ -80,6 +118,8 @@ public class AudioManager : MonoBehaviour
         src.clip = clip;
         src.Play();
     }
+
+    public void StopBgm() => sourceBgm.Stop();
 
     // --- ADDRESSABLE LOADING --- //
 

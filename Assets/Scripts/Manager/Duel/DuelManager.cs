@@ -239,6 +239,7 @@ public class DuelManager : MonoBehaviour
     {
         Reset();
         duel.DuelMode = duelMode;
+        BattleEffectManager.Instance.PlayDuelStartEffect(BattleManager.Instance.Ball.transform);
         switch (DuelMode)
         {
             case DuelMode.Field:
@@ -291,6 +292,7 @@ public class DuelManager : MonoBehaviour
             AudioManager.Instance.PlaySfx("sfx-duel_lose");
         }
 
+        BattleEffectManager.Instance.StopDuelStartEffect();
 
         /*
         if (winner.Action == DuelAction.Defense)
