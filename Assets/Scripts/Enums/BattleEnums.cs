@@ -11,8 +11,7 @@ namespace Simulation.Enums.Battle
     public enum BattleType
     {
         Battle,
-        MiniBattle,
-        MultiplayerBattle
+        MiniBattle
     }
 
     public enum BoundPlacement
@@ -27,6 +26,16 @@ namespace Simulation.Enums.Battle
     {
         First,
         Second
+    }
+
+    public enum MessageType
+    {
+        Goal,
+        HalfTime,
+        FullTime,
+        TimeUp,
+        Foul,
+        Offside
     }
 }
 

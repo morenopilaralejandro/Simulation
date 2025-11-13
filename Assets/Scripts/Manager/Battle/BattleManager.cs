@@ -19,6 +19,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private float timeDefault = 0f;
     [SerializeField] private float timeCurrent = 0f;
     [SerializeField] private float timeLimit = 1800f;
+    [SerializeField] private TimerHalf timerHalf;
     [SerializeField] private Dictionary<TeamSide, int> scoreDict;
 
     public BattlePhase CurrentPhase => currentPhase;
@@ -162,10 +163,23 @@ public class BattleManager : MonoBehaviour
         BattleUIManager.Instance.ResetScoreboard();
     }
 
-    private void ResetTimer() 
+    private void ResetTimer()
     {
         timeCurrent = timeDefault;
+        timerHalf = TimerHalf.First;
         BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
+        BattleUIManager.Instance.UpdateTimerHalfDisplay(timerHalf);
+        if (currentType == BattleType.MiniBattle)
+            BattleUIManager.Instance.HideTimerHalf();
+    }
+
+    private void StartSecondHalf() 
+    {
+        ResetTimer();
+        timerHalf = TimerHalf.Second;
+        BattleUIManager.Instance.UpdateTimerHalfDisplay(timerHalf);
+        ResetDefaultPositions();
+        KickoffManager.Instance.StartKickoff(TeamSide.Away);
     }
 
     public void GoalScored(Goal goal)
@@ -233,11 +247,11 @@ public class BattleManager : MonoBehaviour
         float duration = 2f;
         isTimeFrozen = true;
         AudioManager.Instance.PlayBgm("bgm-ole");
-        //panelGoalMessage.SetActive(true);
-        //textGoalMessage.Play("TextGoalSlide", -1, 0f);
+        BattleUIManager.Instance.SetMessageActive(MessageType.Goal, true);
 
         yield return new WaitForSeconds(duration);
-        //panelGoalMessage.SetActive(false);
+
+        BattleUIManager.Instance.SetMessageActive(MessageType.Goal, false);
         isTimeFrozen = false;
 
         ResetDefaultPositions();
@@ -246,16 +260,39 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator TimeOverSequence()
     {
+        if (!DuelManager.Instance.IsResolved)
+            Ball.CancelTravel();
+
+        MessageType messageType = MessageType.TimeUp;
+        if (currentType == BattleType.Battle)
+            messageType =  
+                timerHalf == TimerHalf.First ?
+                MessageType.HalfTime :
+                MessageType.FullTime;
+
+        BattleUIManager.Instance.SetMessageActive(messageType, true);
+
         float duration = 1f;
+        //this is legacy code
         //isTimeFrozen = true;
         //AudioManager.Instance.PlayBgm("BgmTimeUp");
         //ResetTimer();
         //panelTimeMessage.SetActive(true);
         //DuelLogManager.Instance.AddMatchEnd();
+        //panelTimeMessage.SetActive(false);
 
         yield return new WaitForSeconds(duration);
-        //panelTimeMessage.SetActive(false);
-        EndGame();
+
+        BattleUIManager.Instance.SetMessageActive(messageType, false);
+
+        if (currentType == BattleType.MiniBattle ||
+            timerHalf == TimerHalf.Second) 
+        {
+            EndGame();
+        } else {
+            StartSecondHalf();
+        }
+
     }
     #endregion
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Simulation.Enums.Battle;
 
 public class CharacterShootIndicator : MonoBehaviour
 {
@@ -29,6 +30,9 @@ public class CharacterShootIndicator : MonoBehaviour
     private void Update()
     {
         if (character == null) return;
+        if (BattleManager.Instance.CurrentPhase != BattlePhase.Battle && 
+            BattleManager.Instance.CurrentPhase != BattlePhase.Selection) 
+            return;
 
         if (character.CanShoot())
         {
