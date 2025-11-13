@@ -260,31 +260,39 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator TimeOverSequence()
     {
+        float duration = 1.5f;
+
+        //cancel lingering duel
         if (!DuelManager.Instance.IsResolved)
             Ball.CancelTravel();
 
+        //Show message
         MessageType messageType = MessageType.TimeUp;
         if (currentType == BattleType.Battle)
             messageType =  
                 timerHalf == TimerHalf.First ?
                 MessageType.HalfTime :
                 MessageType.FullTime;
-
         BattleUIManager.Instance.SetMessageActive(messageType, true);
 
-        float duration = 1f;
-        //this is legacy code
-        //isTimeFrozen = true;
-        //AudioManager.Instance.PlayBgm("BgmTimeUp");
-        //ResetTimer();
-        //panelTimeMessage.SetActive(true);
+        //play sound effect
+        if (messageType == MessageType.HalfTime)
+        {
+            AudioManager.Instance.PlaySfx("sfx-whistle_single");
+        }
+        else
+        {
+            duration = 2f;
+            AudioManager.Instance.PlaySfx("sfx-whistle_triple");
+        }
+
         //DuelLogManager.Instance.AddMatchEnd();
-        //panelTimeMessage.SetActive(false);
 
         yield return new WaitForSeconds(duration);
 
         BattleUIManager.Instance.SetMessageActive(messageType, false);
 
+        //resolve
         if (currentType == BattleType.MiniBattle ||
             timerHalf == TimerHalf.Second) 
         {

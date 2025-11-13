@@ -29,9 +29,8 @@ public class CharacterShootIndicator : MonoBehaviour
 
     private void Update()
     {
-        if (character == null) return;
-        if (BattleManager.Instance.CurrentPhase != BattlePhase.Battle && 
-            BattleManager.Instance.CurrentPhase != BattlePhase.Selection) 
+        if (character == null || 
+            BattleManager.Instance.IsTimeFrozen) 
             return;
 
         if (character.CanShoot())

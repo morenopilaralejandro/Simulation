@@ -61,6 +61,7 @@ public class KickoffManager : MonoBehaviour
         ResetPositions();
         ResetReady();
         BattleManager.Instance.SetBattlePhase(BattlePhase.Deadball);
+        AudioManager.Instance.PlaySfx("sfx-whistle_single");
     }
 
     private void ResetReady() 
