@@ -19,6 +19,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private float timeDefault = 0f;
     [SerializeField] private float timeCurrent = 0f;
     [SerializeField] private float timeLimit = 1800f;
+    [SerializeField] private TimerHalf timerHalf;
     [SerializeField] private Dictionary<TeamSide, int> scoreDict;
 
     public BattlePhase CurrentPhase => currentPhase;
@@ -162,10 +163,23 @@ public class BattleManager : MonoBehaviour
         BattleUIManager.Instance.ResetScoreboard();
     }
 
-    private void ResetTimer() 
+    private void ResetTimer()
     {
         timeCurrent = timeDefault;
+        timerHalf = TimerHalf.First;
         BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
+        BattleUIManager.Instance.UpdateTimerHalfDisplay(timerHalf);
+        if (currentType == BattleType.MiniBattle)
+            BattleUIManager.Instance.HideTimerHalf();
+    }
+
+    private void StartSecondHalf() 
+    {
+        ResetTimer();
+        timerHalf = TimerHalf.Second;
+        BattleUIManager.Instance.UpdateTimerHalfDisplay(timerHalf);
+        ResetDefaultPositions();
+        KickoffManager.Instance.StartKickoff(TeamSide.Away);
     }
 
     public void GoalScored(Goal goal)
@@ -233,11 +247,11 @@ public class BattleManager : MonoBehaviour
         float duration = 2f;
         isTimeFrozen = true;
         AudioManager.Instance.PlayBgm("bgm-ole");
-        //panelGoalMessage.SetActive(true);
-        //textGoalMessage.Play("TextGoalSlide", -1, 0f);
+        BattleUIManager.Instance.SetMessageActive(MessageType.Goal, true);
 
         yield return new WaitForSeconds(duration);
-        //panelGoalMessage.SetActive(false);
+
+        BattleUIManager.Instance.SetMessageActive(MessageType.Goal, false);
         isTimeFrozen = false;
 
         ResetDefaultPositions();
@@ -246,16 +260,47 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator TimeOverSequence()
     {
-        float duration = 1f;
-        //isTimeFrozen = true;
-        //AudioManager.Instance.PlayBgm("BgmTimeUp");
-        //ResetTimer();
-        //panelTimeMessage.SetActive(true);
+        float duration = 1.5f;
+
+        //cancel lingering duel
+        if (!DuelManager.Instance.IsResolved)
+            Ball.CancelTravel();
+
+        //Show message
+        MessageType messageType = MessageType.TimeUp;
+        if (currentType == BattleType.Battle)
+            messageType =  
+                timerHalf == TimerHalf.First ?
+                MessageType.HalfTime :
+                MessageType.FullTime;
+        BattleUIManager.Instance.SetMessageActive(messageType, true);
+
+        //play sound effect
+        if (messageType == MessageType.HalfTime)
+        {
+            AudioManager.Instance.PlaySfx("sfx-whistle_single");
+        }
+        else
+        {
+            duration = 2f;
+            AudioManager.Instance.PlaySfx("sfx-whistle_triple");
+        }
+
         //DuelLogManager.Instance.AddMatchEnd();
 
         yield return new WaitForSeconds(duration);
-        //panelTimeMessage.SetActive(false);
-        EndGame();
+
+        BattleUIManager.Instance.SetMessageActive(messageType, false);
+
+        //resolve
+        if (currentType == BattleType.MiniBattle ||
+            timerHalf == TimerHalf.Second) 
+        {
+            EndGame();
+        } else {
+            StartSecondHalf();
+        }
+
     }
     #endregion
 

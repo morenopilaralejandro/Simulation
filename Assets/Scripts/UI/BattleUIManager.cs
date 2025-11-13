@@ -13,6 +13,7 @@ public class BattleUIManager : MonoBehaviour
 
     private BattleScoreboard battleScoreboard;
     private BattleTimer battleTimer;
+    private BattleMessage battleMessage;
     private DuelParticantsPanel duelParticantsPanel;
     private DuelMenu duelMenu;
 
@@ -46,6 +47,16 @@ public class BattleUIManager : MonoBehaviour
     public void UnregisterTimer(BattleTimer timer)
     {
         battleTimer = null;
+    }
+
+    public void RegisterBattleMessage(BattleMessage battleMessage)
+    {
+        this.battleMessage = battleMessage;
+    }
+
+    public void UnregisterBattleMessage(BattleMessage battleMessage)
+    {
+        this.battleMessage = null;
     }
 
     public void RegisterDuelParticipantsPanel(DuelParticantsPanel panel)
@@ -100,6 +111,20 @@ public class BattleUIManager : MonoBehaviour
     {
         if (battleTimer != null) 
             battleTimer.UpdateTimerHalfDisplay(timerHalf);
+    }
+
+    public void HideTimerHalf() 
+    {
+        if (battleTimer != null) 
+            battleTimer.HideTimerHalf();
+    }
+    #endregion
+
+    #region BattleMessage
+    public void SetMessageActive(MessageType messageType, bool isActive)
+    {
+        if (battleMessage != null) 
+            battleMessage.SetMessageActive(messageType, isActive);
     }
     #endregion
 

@@ -38,4 +38,10 @@ public class BattleTimer : MonoBehaviour
         textFirstHalf.gameObject.SetActive(isFirstHalf);
         textSecondHalf.gameObject.SetActive(!isFirstHalf);
     }
+
+    public void HideTimerHalf()
+    {
+        textFirstHalf.gameObject.SetActive(false);
+        textSecondHalf.gameObject.SetActive(false);
+    }
 }
