@@ -10,14 +10,21 @@ public struct ButtonState
     public double LastDownTime;
     public double LastUpTime;
     public bool ConsumedDown;
+    public double BufferedUntil;
+    public bool WasBufferedConsume;
 
-    public void SetDown()
+    public void SetDown(float bufferDuration)
     {
         Held = true;
         DownFrame = (uint)Time.frameCount;
         HoldTime = 0f;
         LastDownTime = Time.unscaledTimeAsDouble;
         ConsumedDown = false;
+        WasBufferedConsume = false;
+
+        BufferedUntil = bufferDuration > 0f ? 
+            Time.unscaledTimeAsDouble + bufferDuration : 
+            0;
     }
 
     public void SetUp()
@@ -34,4 +41,7 @@ public struct ButtonState
 
     public bool IsDownThisFrame() => DownFrame == (uint)Time.frameCount;
     public bool IsUpThisFrame()   => UpFrame == (uint)Time.frameCount;
+
+    public bool IsBuffered() => Time.unscaledTimeAsDouble <= BufferedUntil && !ConsumedDown;
+
 }

@@ -42,7 +42,10 @@ public class CharacterComponentController : MonoBehaviour
     {
         if (!this.isControlled) 
             return;
-
+            
+        //buffer shoot
+        InputManager.Instance.GetDown(CustomAction.Shoot);
+            
         moveInput = InputManager.Instance.GetMove();
         move = new Vector3(moveInput.x, 0f, moveInput.y);
 
@@ -70,11 +73,12 @@ public class CharacterComponentController : MonoBehaviour
         //dribble
 
         //shoot
-        if (InputManager.Instance.GetDown(CustomAction.Shoot) && 
+        bool wasBuffered;
+        if (InputManager.Instance.ConsumeBuffered(CustomAction.Shoot, out wasBuffered) && 
             character.CanShoot() && 
             DuelManager.Instance.IsResolved &&
             !BattleManager.Instance.IsTimeFrozen) 
-            HandleShoot();
+            HandleShoot(wasBuffered);
 
     }
     #endregion
@@ -165,9 +169,9 @@ public class CharacterComponentController : MonoBehaviour
     #endregion
 
     #region Shoot
-    private void HandleShoot() 
+    private void HandleShoot(bool isDirect) 
     {
-        bool isDirect = false;
+        LogManager.Trace($"[CharacterComponentController] isDirect: {isDirect}");
         DuelManager.Instance.StartShootDuel(character, isDirect);
     }
     #endregion
