@@ -36,8 +36,7 @@ public class BattleManager : MonoBehaviour
     public Ball Ball => BattleBallManager.Instance.Ball;
     public TeamSide GetUserSide() => BattleTeamManager.Instance.GetUserSide();
 
-    public event Action<BattlePhase, BattlePhase> OnBattlePhaseChanged;
-    public event Action OnAllCharactersReady;
+
     private int charactersReadyMax;
     private int charactersReady;
 
@@ -53,7 +52,7 @@ public class BattleManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         ResetScore();
-        OnAllCharactersReady += HandleAllCharactersReady;
+        BattleEvents.OnAllCharactersReady += HandleAllCharactersReady;
     }
 
     void Start()
@@ -75,7 +74,7 @@ public class BattleManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        OnAllCharactersReady -= HandleAllCharactersReady;
+        BattleEvents.OnAllCharactersReady -= HandleAllCharactersReady;
     }
     #endregion
 
@@ -96,7 +95,7 @@ public class BattleManager : MonoBehaviour
     {
         if (currentPhase == newPhase) return;
 
-        OnBattlePhaseChanged?.Invoke(newPhase, lastPhase);
+        BattleEvents.RaiseBattlePhaseChanged(newPhase, lastPhase);
 
         LogManager.Info($"[BattleManager] " + 
             $"BattlePhase changed to {newPhase}" , this);
@@ -227,6 +226,8 @@ public class BattleManager : MonoBehaviour
         TeamSide userSide = GetUserSide();
         LogManager.Info($"[BattleManager] Game Ended — Home: {homeScore} Away: {awayScore}, User side: {userSide}, Winner: {winningSide}", this);
 
+        SetBattlePhase(BattlePhase.End);
+        BattleEvents.RaiseEndBattle();
         SceneLoader.UnloadBattle();
         if (winningSide == userSide)
         {
@@ -307,7 +308,7 @@ public class BattleManager : MonoBehaviour
     #region Team and Ball
     private void HandleAllCharactersReady()
     {
-        //start kickoff etc
+        BattleEvents.RaiseStartBattle();
         ResetDefaultPositions();
         KickoffManager.Instance.StartKickoff(TeamSide.Home);
     }
@@ -335,7 +336,7 @@ public class BattleManager : MonoBehaviour
                 
                     charactersReady++;
                     if (charactersReady >= charactersReadyMax)
-                        OnAllCharactersReady?.Invoke(); 
+                        BattleEvents.RaiseAllCharactersReady();
                 }
             });
         }

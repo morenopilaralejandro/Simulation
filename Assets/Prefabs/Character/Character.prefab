@@ -24,6 +24,8 @@ GameObject:
   - component: {fileID: 2135094274942254463}
   - component: {fileID: 7698264331970528490}
   - component: {fileID: 8409659550929979516}
+  - component: {fileID: 5753816166142112087}
+  - component: {fileID: 8205756437304453066}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -97,6 +99,8 @@ MonoBehaviour:
   duelComboColliderComponent: {fileID: 260827287028833934}
   duelKeeperColliderComponent: {fileID: 1173388996270656118}
   aiComponent: {fileID: 8409659550929979516}
+  stateLockComponent: {fileID: 5753816166142112087}
+  stateMachineComponent: {fileID: 8205756437304453066}
   teamIndicatorComponent: {fileID: 4891902300048776065}
   speechBubble: {fileID: 35096799686590751}
 --- !u!114 &1700100118279979926
@@ -280,6 +284,32 @@ MonoBehaviour:
   isEnemyAI: 0
   isAIEnabled: 0
   difficulty: 0
+  currentState: 0
+--- !u!114 &5753816166142112087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181741452733680261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a2d9d98012becd07a5b44557fb7dc76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStateLocked: 0
+--- !u!114 &8205756437304453066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181741452733680261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 859c6c02261a0e8549ccb782f2815642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   currentState: 0
 --- !u!1 &2176928981764195961
 GameObject:

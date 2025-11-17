@@ -59,7 +59,7 @@ public class CharacterTargetManager : MonoBehaviour
         for (int i = 0; i < teamSize; i++)
         {
             Character teammate = teammates[i];
-            if (teammate == character || !teammate.CanMove()) continue;  // Skip self
+            if (teammate == character || !teammate.CanDuel()) continue;  // Skip self
 
             Vector3 toTeammate = teammate.transform.position - character.transform.position;
             float angle = Vector3.Angle(direction, toTeammate);

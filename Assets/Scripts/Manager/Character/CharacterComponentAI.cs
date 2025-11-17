@@ -203,7 +203,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void UpdateCurrentAIState()
     {
-        if (!character.CanMove())
+        if (!character.CanMove() || character.IsStateLocked)
         {
             currentState = AIState.Idle;
             return;
@@ -569,6 +569,8 @@ public class CharacterComponentAI : MonoBehaviour
         Vector3 translation = direction * speed * Time.fixedDeltaTime;
         transform.Translate(translation, Space.World);
         transform.position = BoundManager.Instance.ClampCharacter(transform.position);  
+
+        character.StartMove();
     }
 
     private void ActPass()

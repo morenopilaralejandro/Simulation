@@ -171,6 +171,7 @@ public class DuelManager : MonoBehaviour
             $"teamSide {character.TeamSide}, " +
             $"isDirect {isDirect}", this);       
 
+        character.StartKick();
         DuelManager.Instance.StartDuel(DuelMode.Shoot);
         ShootTriangleManager.Instance.SetTriangleFromCharacter(character);
 

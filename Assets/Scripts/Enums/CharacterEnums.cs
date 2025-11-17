@@ -100,6 +100,17 @@ namespace Simulation.Enums.Character
         Tripping
     }
 
+    public enum CharacterState 
+    { 
+        Idle,
+        Move,
+        Dash,
+        Kick,
+        Control,
+        Dribble,
+        Block
+    }
+
     public enum AIDifficulty 
     { 
         Easy, 
