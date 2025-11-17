@@ -11,12 +11,12 @@ public class DebugBattleUI : MonoBehaviour
 
     void OnEnable() 
     {
-        BattleManager.Instance.OnAllCharactersReady += ToggleAI;
+        BattleEvents.OnAllCharactersReady += ToggleAI;
     }
 
     void Disable() 
     {
-        BattleManager.Instance.OnAllCharactersReady -= ToggleAI;
+        BattleEvents.OnAllCharactersReady -= ToggleAI;
     }
 
     void Start()

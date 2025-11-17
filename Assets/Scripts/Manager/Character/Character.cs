@@ -28,7 +28,8 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentDuelComboCollider duelComboColliderComponent;
     [SerializeField] private CharacterComponentDuelKeeperCollider duelKeeperColliderComponent;
     [SerializeField] private CharacterComponentAI aiComponent;
-
+    [SerializeField] private CharacterComponentStateLock stateLockComponent;
+    [SerializeField] private CharacterComponentStateMachine stateMachineComponent;
 
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private SpeechBubble speechBubble;
@@ -69,6 +70,8 @@ public class Character : MonoBehaviour
         duelComboColliderComponent.Initialize(characterData, this);
         duelKeeperColliderComponent.Initialize(characterData, this);
         aiComponent.Initialize(characterData, this);
+        stateLockComponent.Initialize(characterData, this);
+        stateMachineComponent.Initialize(characterData, this);
 
         teamIndicatorComponent.Initialize(characterData, this);
         /*
@@ -180,13 +183,30 @@ public class Character : MonoBehaviour
     public AIState AIState => aiComponent.AIState;
     public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);
     public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
+    //stateLockComponent
+    public bool IsStateLocked => stateLockComponent.IsStateLocked;
+    public void StartStateLock(CharacterState state) => stateLockComponent.StartStateLock(state);
+    public void ReleaseStateLock() => stateLockComponent.ReleaseStateLock();
+    //stateMachineComponent
+    public CharacterState CurrentState => stateMachineComponent.CurrentState;
+    public void SetCharacterState(CharacterState state) => stateMachineComponent.SetCharacterState(state);
+    public void StartKick() => stateMachineComponent.StartKick();
+    public void StartControl() => stateMachineComponent.StartControl();
+    public void StartMove() => stateMachineComponent.StartMove();
+    public void OnKickAnimationEnd() => stateMachineComponent.OnKickAnimationEnd();
+    public void OnControlAnimationEnd() => stateMachineComponent.OnControlAnimationEnd();
+    public void OnMoveAnimationEnd() => stateMachineComponent.OnMoveAnimationEnd();
 
     //speechBubble
     public void ShowMessage(BubbleMessage bubbleMessage) => speechBubble.ShowMessage(bubbleMessage);
     public void HideSpeechBubbleImmediate() => speechBubble.HideImmediate();
 
     //ball
-    public void KickBallTo(Vector3 targetPos) => BattleManager.Instance.Ball.KickBallTo(targetPos);
+    public void KickBallTo(Vector3 targetPos) 
+    {
+        BattleManager.Instance.Ball.KickBallTo(targetPos);
+        StartKick();
+    }
     public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;
     public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this) && !IsStunned();
     public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this); //also handle long shoot etc;

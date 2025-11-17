@@ -29,6 +29,7 @@ public class BallComponentKeep : MonoBehaviour
     private void HandleOnGained(Character character)
     {
         this.character = character;
+        character.StartControl();
         ball.SetKinematic();
     }
 

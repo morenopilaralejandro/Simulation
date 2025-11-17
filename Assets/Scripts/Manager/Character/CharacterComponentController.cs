@@ -51,14 +51,15 @@ public class CharacterComponentController : MonoBehaviour
         if (BattleManager.Instance.IsTimeFrozen) 
             return;
 
-        if (!this.character.CanMove()) 
+        if (!character.CanMove()) 
             return;
-            
-        HandleMovement();
+        
+        if(!character.IsStateLocked) 
+            HandleMovement();
 
         //block
 
-        if (!this.character.HasBall()) 
+        if (!character.HasBall()) 
             return;
 
         //pass
@@ -123,6 +124,8 @@ public class CharacterComponentController : MonoBehaviour
             Vector3 translation = move * speed * Time.deltaTime;
             transform.Translate(translation, Space.World);
             transform.position = BoundManager.Instance.ClampCharacter(transform.position);
+
+            character.StartMove();
 
             /*
             LogManager.Trace($"[CharacterComponentController] " +
