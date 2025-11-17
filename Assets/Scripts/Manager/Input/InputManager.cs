@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour
     private readonly ButtonState[] buttons = new ButtonState[System.Enum.GetValues(typeof(CustomAction)).Length];
     private readonly Dictionary<InputAction, CustomAction> actionLookup = new();
     private GameObject onScreenControlsRoot;
+    private float bufferDurationShoot = 1f;
     [SerializeField] private PlayerInput playerInput;
     #endregion
 
@@ -155,7 +156,12 @@ public class InputManager : MonoBehaviour
     {
         LogManager.Trace($"[InputManager] OnButtonDown: {customAction}");
         var button = buttons[(int)customAction];
-        button.SetDown();
+
+        float bufferDuration = 
+            (customAction == CustomAction.Shoot) ? 
+            bufferDurationShoot : 0f;
+
+        button.SetDown(bufferDuration);
         buttons[(int)customAction] = button;
     }
 
@@ -172,6 +178,25 @@ public class InputManager : MonoBehaviour
     public bool GetDown(CustomAction customAction) => buttons[(int)customAction].DownFrame == (uint)Time.frameCount;
     public bool GetHeld(CustomAction customAction) => buttons[(int)customAction].Held;
     public bool GetUp(CustomAction customAction) => buttons[(int)customAction].UpFrame == (uint)Time.frameCount;
+
+    public bool ConsumeBuffered(CustomAction customAction, out bool wasBuffered)
+    {
+        var button = buttons[(int)customAction];
+        wasBuffered = false;
+
+        // Determine if we can consume a press
+        if (button.IsBuffered() || button.DownFrame == (uint)Time.frameCount)
+        {
+            wasBuffered = button.IsBuffered() && button.DownFrame != (uint)Time.frameCount;
+            button.ConsumedDown = true;
+            button.WasBufferedConsume = wasBuffered;
+
+            buttons[(int)customAction] = button;
+            return true;
+        }
+
+        return false;
+    }
     #endregion
 
     #region Scheme helpers
