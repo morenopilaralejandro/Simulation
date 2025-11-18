@@ -13,8 +13,6 @@ public class Ball : MonoBehaviour
     [SerializeField] private BallComponentKeep keepComponent;
     [SerializeField] private BallComponentKick kickComponent;
 
-
-
     [SerializeField] private BallComponentTravel travelComponent;
     #endregion
 
@@ -44,6 +42,7 @@ public class Ball : MonoBehaviour
     public void SetDynamic(Vector3 velocity) => kinematicComponent.SetDynamic(velocity);
     public void ToggleKinematic() => kinematicComponent.ToggleKinematic();
     public Vector3 GetVelocity() => kinematicComponent.GetVelocity();
+    public void SlowDown() => kinematicComponent.SlowDown();
     //kickComponent
     public void KickBallTo(Vector3 targetPos) => kickComponent.KickBallTo(targetPos);
 
