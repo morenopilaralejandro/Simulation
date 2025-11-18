@@ -16,7 +16,12 @@ public class CharacterComponentController : MonoBehaviour
     private Vector3 move;
     private float moveTolerance = 0.01f;
     private float rotationSpeed = 12f;
-    float forwardPassDistance = 1f;
+    private bool isAimingPass = false;
+    private Vector3 aimedPassPosition;
+    private float aimRadius = 2.5f;
+    private float holdThreshold = 0.2f;
+    private float passButtonHoldTime = 0f;
+
     [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
 
     public bool IsControlled => isControlled;
@@ -54,6 +59,9 @@ public class CharacterComponentController : MonoBehaviour
         if (BattleManager.Instance.IsTimeFrozen) 
             return;
 
+        if (BattleManager.Instance.CurrentPhase != BattlePhase.Battle) 
+            return;
+
         if (!character.CanMove()) 
             return;
         
@@ -66,8 +74,17 @@ public class CharacterComponentController : MonoBehaviour
             return;
 
         //pass
+        bool passDown = InputManager.Instance.GetDown(CustomAction.Pass);
+        bool passHeld = InputManager.Instance.GetHeld(CustomAction.Pass);
+        bool passUp   = InputManager.Instance.GetUp(CustomAction.Pass);
 
-        if (InputManager.Instance.GetDown(CustomAction.Pass)) 
+        if (passDown)
+            StartPassMode();
+
+        if (passHeld)
+            UpdatePassIndicator();
+
+        if (passDown || passUp)
             HandlePass();
 
         //dribble
@@ -99,6 +116,8 @@ public class CharacterComponentController : MonoBehaviour
     #region Target
     private void HandleTarget() 
     {
+        if(isAimingPass) return;
+
         Character target = 
             move.sqrMagnitude > moveTolerance ?
                 CharacterTargetManager.Instance.GetClosestTeammateInDirection(
@@ -142,29 +161,47 @@ public class CharacterComponentController : MonoBehaviour
     }
     #endregion
 
-
     #region Pass
+    private void StartPassMode()
+    {
+        passButtonHoldTime = 0f;
+        isAimingPass = false;
+    }
+
+    private void UpdatePassIndicator()
+    {
+        passButtonHoldTime += Time.deltaTime;
+
+        if (passButtonHoldTime <= holdThreshold) return;
+
+        CharacterEvents.RaiseTargetChange(null, this.character.TeamSide);
+        isAimingPass = true;
+        Vector3 center = transform.position;
+        Vector3 direction = (moveInput.sqrMagnitude > moveTolerance) ? 
+            new Vector3(moveInput.x, 0, moveInput.y).normalized
+            : transform.forward;
+        aimedPassPosition = center + direction * aimRadius;
+        CharacterTargetManager.Instance.ShowFreeAim(center, aimedPassPosition);
+    }
+
     private void HandlePass() 
     {
+        CharacterTargetManager.Instance.Hide();
+
+        if(isAimingPass)
+            this.character.KickBallTo(aimedPassPosition);
+
         Character target = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
         if(target)
             PassToTeammate(target);
-        else 
-            PassForward();
+      
+        isAimingPass = false;
     }
 
     private void PassToTeammate(Character character) 
     {
         this.character.KickBallTo(character.transform.position);
         CharacterChangeControlManager.Instance.SetControlledCharacter(character, character.TeamSide);
-    }
-
-    private void PassForward() 
-    {
-        //Vector3 forwardDirection = this.character.transform.forward;
-        Vector3 forwardDirection = Vector3.forward;
-        Vector3 targetPosition = this.character.transform.position + forwardDirection * forwardPassDistance;
-        this.character.KickBallTo(targetPosition);
     }
     #endregion
 
