@@ -19,8 +19,12 @@ public class InputManager : MonoBehaviour
     private readonly ButtonState[] buttons = new ButtonState[System.Enum.GetValues(typeof(CustomAction)).Length];
     private readonly Dictionary<InputAction, CustomAction> actionLookup = new();
     private GameObject onScreenControlsRoot;
+    private Camera mainCamera;
     private float bufferDurationShoot = 1f;
+    private bool isAndroid;
     [SerializeField] private PlayerInput playerInput;
+
+    public bool IsAndroid => isAndroid;
     #endregion
 
     #region Lifecycle
@@ -64,6 +68,11 @@ public class InputManager : MonoBehaviour
         {
             playerInput.onControlsChanged += OnControlsChanged;
         }
+    }
+
+    private void Start() 
+    {
+        mainCamera = Camera.main;
     }
 
     private void OnDestroy()
@@ -175,6 +184,7 @@ public class InputManager : MonoBehaviour
 
     #region API
     public Vector2 GetMove() => move;
+    public Vector2 GetMouse() => Mouse.current.position.ReadValue();
     public bool GetDown(CustomAction customAction) => buttons[(int)customAction].DownFrame == (uint)Time.frameCount;
     public bool GetHeld(CustomAction customAction) => buttons[(int)customAction].Held;
     public bool GetUp(CustomAction customAction) => buttons[(int)customAction].UpFrame == (uint)Time.frameCount;
@@ -196,6 +206,15 @@ public class InputManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public Vector3 ConvertToWorldPositionOnGround(Vector2 position)
+    {
+        Ray ray = mainCamera.ScreenPointToRay(position);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        if (groundPlane.Raycast(ray, out float distance))
+            return ray.GetPoint(distance);
+        return transform.position;
     }
     #endregion
 

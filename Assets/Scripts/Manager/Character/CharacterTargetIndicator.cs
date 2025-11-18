@@ -9,6 +9,16 @@ public class CharacterTargetIndicator : MonoBehaviour
     private Character targetedCharacter => BattleManager.Instance.TargetedCharacter[BattleManager.Instance.GetUserSide()];
     private float lineY = 0.01f;
 
+    private void Awake()
+    {
+        CharacterTargetManager.Instance.RegisterIndicator(this);
+    }
+
+    private void OnDestroy()
+    {
+        CharacterTargetManager.Instance.UnregisterIndicator();
+    }
+
     public void Update()
     {
         // Hide line if we have missing references
@@ -30,5 +40,19 @@ public class CharacterTargetIndicator : MonoBehaviour
 
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
+    }
+
+    public void ShowFreeAim(Vector3 startPos, Vector3 endPos)
+    {
+        lineRenderer.positionCount = 2;
+        startPos.y = lineY;
+        endPos.y = lineY;
+        lineRenderer.SetPosition(0, startPos);
+        lineRenderer.SetPosition(1, endPos);
+    }
+
+    public void Hide()
+    {
+        lineRenderer.positionCount = 0;
     }
 }

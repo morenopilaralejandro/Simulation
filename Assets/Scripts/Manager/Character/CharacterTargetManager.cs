@@ -10,6 +10,7 @@ public class CharacterTargetManager : MonoBehaviour
 
     private int teamSize => BattleManager.Instance.CurrentTeamSize;
     private float angleThreshold = 30f;
+    private CharacterTargetIndicator targetIndicator;
     [SerializeField] private Dictionary<TeamSide, Character> targetedCharacter = new ();
 
     public Dictionary<TeamSide, Character> TargetedCharacter => targetedCharacter;
@@ -28,11 +29,6 @@ public class CharacterTargetManager : MonoBehaviour
         this.targetedCharacter.Add(TeamSide.Away, null);
     }
 
-    void Start()
-    {
-
-    }
-
     private void OnEnable()
     {
         CharacterEvents.OnTargetChange += HandleOnTargetChange;
@@ -48,6 +44,17 @@ public class CharacterTargetManager : MonoBehaviour
         this.targetedCharacter[teamSide] = character;
         //LogManager.Trace($"[CharacterTargetManager] {teamSide.ToString()} target assigned to {character?.CharacterId}", this);
     }
+
+    public void RegisterIndicator(CharacterTargetIndicator indicator)
+    {
+        targetIndicator = indicator;
+    }
+
+    public void UnregisterIndicator()
+    {
+        targetIndicator = null;
+    }
+
 
     public Character GetClosestTeammateInDirection(Character character, Vector3 direction)
     {
@@ -76,6 +83,16 @@ public class CharacterTargetManager : MonoBehaviour
         }
 
         return bestTarget;
+    }
+
+    public void ShowFreeAim(Vector3 startPos, Vector3 endPos)
+    {
+        targetIndicator.ShowFreeAim(startPos, endPos);
+    }
+
+    public void Hide()
+    {
+        targetIndicator.Hide();
     }
 
 }

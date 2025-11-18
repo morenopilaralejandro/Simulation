@@ -17,6 +17,7 @@ public class GoalComponentTrigger : MonoBehaviour
             !BattleManager.Instance.IsTimeFrozen)
         {
             BattleManager.Instance.GoalScored(goal);
+            other.GetComponent<Ball>().SlowDown();
             LogManager.Info("[GoalComponentTrigger] A goal was scored. TeamSide: {goal.TeamSide}", this);
         }
     }

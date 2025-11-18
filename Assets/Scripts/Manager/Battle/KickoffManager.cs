@@ -102,8 +102,16 @@ public class KickoffManager : MonoBehaviour
     {
         BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
         BattleManager.Instance.Unfreeze();
-        if(character0.IsEnemyAI)
+
+        Character target = BattleManager.Instance.TargetedCharacter[character0.TeamSide];
+        if(!target || character0.IsEnemyAI) 
+        {
             character0.KickBallTo(character1.transform.position);
+        }
+        else {
+            character0.KickBallTo(target.transform.position);
+            CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
+        }
     }
 
     private void ResetPositions() 
