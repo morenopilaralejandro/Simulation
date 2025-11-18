@@ -21,6 +21,7 @@ public class CharacterComponentController : MonoBehaviour
     private float aimRadius = 2.5f;
     private float holdThreshold = 0.2f;
     private float passButtonHoldTime = 0f;
+    private bool useMouseAiming;
 
     [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
 
@@ -31,6 +32,8 @@ public class CharacterComponentController : MonoBehaviour
     public void Initialize(CharacterData characterData, Character character) 
     {
         this.character = character;
+
+        useMouseAiming = !InputManager.Instance.IsAndroid;
     }
 
     private void OnEnable()
@@ -176,10 +179,21 @@ public class CharacterComponentController : MonoBehaviour
 
         CharacterEvents.RaiseTargetChange(null, this.character.TeamSide);
         isAimingPass = true;
+
         Vector3 center = transform.position;
-        Vector3 direction = (moveInput.sqrMagnitude > moveTolerance) ? 
-            new Vector3(moveInput.x, 0, moveInput.y).normalized
-            : transform.forward;
+        Vector3 direction;
+        if (useMouseAiming)
+        {
+            Vector3 mouseWorld = InputManager.Instance.ConvertToWorldPositionOnGround(InputManager.Instance.GetMouse());
+            direction = (mouseWorld - transform.position).normalized;
+        }
+        else
+        {
+            direction = (moveInput.sqrMagnitude > moveTolerance)
+                ? new Vector3(moveInput.x, 0, moveInput.y).normalized
+                : transform.forward;
+        }  
+
         aimedPassPosition = center + direction * aimRadius;
         CharacterTargetManager.Instance.ShowFreeAim(center, aimedPassPosition);
     }
