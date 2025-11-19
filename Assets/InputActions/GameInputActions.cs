@@ -357,6 +357,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""BattleUI_ClickSouthButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""22842503-685e-4740-9530-a775d1c910e1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""BattleUI_CloseMoveMenu"",
                     ""type"": ""Button"",
                     ""id"": ""cd23d3cb-5a26-45f9-93af-dfba74178af4"",
@@ -369,6 +378,33 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""BattleUI_NextMove"",
                     ""type"": ""Button"",
                     ""id"": ""fcea7f93-1247-460a-9c15-7967a03281be"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_OpenBattleMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a8bb965-7f19-45e9-a325-8857a002c664"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_CloseBattleMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""905ba53f-3f3d-4a83-a818-b9b564d0ed42"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_BattleMenuShortcutPause"",
+                    ""type"": ""Button"",
+                    ""id"": ""e54f6eb6-18ce-47d6-9f52-cc0d5ccbca35"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -485,6 +521,83 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""BattleUI_CloseMoveMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed0a0c9e-567b-479e-8dff-9fcaf4e6e795"",
+                    ""path"": """",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_ClickSouthButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a36d5af-20d0-47ba-8fcf-db36a0489cd0"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_OpenBattleMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""45653903-ab53-403e-952f-aff97a6fcd01"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_OpenBattleMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b9dc8e5f-850d-4b10-add7-21b3b7f3b4c3"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseBattleMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""04c5c765-f851-49d3-9ee6-7e0d46387fa8"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseBattleMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6a0a74c7-9b7d-4e42-87c0-e2d2fb1d725b"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseBattleMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3c805a0-813f-4fb6-abd5-9f2251a1cbec"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_BattleMenuShortcutPause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -504,8 +617,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_BattleUIActions_BattleUI_ClickEastButton = m_BattleUIActions.FindAction("BattleUI_ClickEastButton", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_ClickWestButton = m_BattleUIActions.FindAction("BattleUI_ClickWestButton", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_ClickNorthButton = m_BattleUIActions.FindAction("BattleUI_ClickNorthButton", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_ClickSouthButton = m_BattleUIActions.FindAction("BattleUI_ClickSouthButton", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_CloseMoveMenu = m_BattleUIActions.FindAction("BattleUI_CloseMoveMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_NextMove = m_BattleUIActions.FindAction("BattleUI_NextMove", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_OpenBattleMenu = m_BattleUIActions.FindAction("BattleUI_OpenBattleMenu", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_CloseBattleMenu = m_BattleUIActions.FindAction("BattleUI_CloseBattleMenu", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_BattleMenuShortcutPause = m_BattleUIActions.FindAction("BattleUI_BattleMenuShortcutPause", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -741,8 +858,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_BattleUIActions_BattleUI_ClickEastButton;
     private readonly InputAction m_BattleUIActions_BattleUI_ClickWestButton;
     private readonly InputAction m_BattleUIActions_BattleUI_ClickNorthButton;
+    private readonly InputAction m_BattleUIActions_BattleUI_ClickSouthButton;
     private readonly InputAction m_BattleUIActions_BattleUI_CloseMoveMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_NextMove;
+    private readonly InputAction m_BattleUIActions_BattleUI_OpenBattleMenu;
+    private readonly InputAction m_BattleUIActions_BattleUI_CloseBattleMenu;
+    private readonly InputAction m_BattleUIActions_BattleUI_BattleMenuShortcutPause;
     /// <summary>
     /// Provides access to input actions defined in input action map "BattleUIActions".
     /// </summary>
@@ -767,6 +888,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @BattleUI_ClickNorthButton => m_Wrapper.m_BattleUIActions_BattleUI_ClickNorthButton;
         /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_ClickSouthButton".
+        /// </summary>
+        public InputAction @BattleUI_ClickSouthButton => m_Wrapper.m_BattleUIActions_BattleUI_ClickSouthButton;
+        /// <summary>
         /// Provides access to the underlying input action "BattleUIActions/BattleUI_CloseMoveMenu".
         /// </summary>
         public InputAction @BattleUI_CloseMoveMenu => m_Wrapper.m_BattleUIActions_BattleUI_CloseMoveMenu;
@@ -774,6 +899,18 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "BattleUIActions/BattleUI_NextMove".
         /// </summary>
         public InputAction @BattleUI_NextMove => m_Wrapper.m_BattleUIActions_BattleUI_NextMove;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_OpenBattleMenu".
+        /// </summary>
+        public InputAction @BattleUI_OpenBattleMenu => m_Wrapper.m_BattleUIActions_BattleUI_OpenBattleMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_CloseBattleMenu".
+        /// </summary>
+        public InputAction @BattleUI_CloseBattleMenu => m_Wrapper.m_BattleUIActions_BattleUI_CloseBattleMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_BattleMenuShortcutPause".
+        /// </summary>
+        public InputAction @BattleUI_BattleMenuShortcutPause => m_Wrapper.m_BattleUIActions_BattleUI_BattleMenuShortcutPause;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -809,12 +946,24 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_ClickNorthButton.started += instance.OnBattleUI_ClickNorthButton;
             @BattleUI_ClickNorthButton.performed += instance.OnBattleUI_ClickNorthButton;
             @BattleUI_ClickNorthButton.canceled += instance.OnBattleUI_ClickNorthButton;
+            @BattleUI_ClickSouthButton.started += instance.OnBattleUI_ClickSouthButton;
+            @BattleUI_ClickSouthButton.performed += instance.OnBattleUI_ClickSouthButton;
+            @BattleUI_ClickSouthButton.canceled += instance.OnBattleUI_ClickSouthButton;
             @BattleUI_CloseMoveMenu.started += instance.OnBattleUI_CloseMoveMenu;
             @BattleUI_CloseMoveMenu.performed += instance.OnBattleUI_CloseMoveMenu;
             @BattleUI_CloseMoveMenu.canceled += instance.OnBattleUI_CloseMoveMenu;
             @BattleUI_NextMove.started += instance.OnBattleUI_NextMove;
             @BattleUI_NextMove.performed += instance.OnBattleUI_NextMove;
             @BattleUI_NextMove.canceled += instance.OnBattleUI_NextMove;
+            @BattleUI_OpenBattleMenu.started += instance.OnBattleUI_OpenBattleMenu;
+            @BattleUI_OpenBattleMenu.performed += instance.OnBattleUI_OpenBattleMenu;
+            @BattleUI_OpenBattleMenu.canceled += instance.OnBattleUI_OpenBattleMenu;
+            @BattleUI_CloseBattleMenu.started += instance.OnBattleUI_CloseBattleMenu;
+            @BattleUI_CloseBattleMenu.performed += instance.OnBattleUI_CloseBattleMenu;
+            @BattleUI_CloseBattleMenu.canceled += instance.OnBattleUI_CloseBattleMenu;
+            @BattleUI_BattleMenuShortcutPause.started += instance.OnBattleUI_BattleMenuShortcutPause;
+            @BattleUI_BattleMenuShortcutPause.performed += instance.OnBattleUI_BattleMenuShortcutPause;
+            @BattleUI_BattleMenuShortcutPause.canceled += instance.OnBattleUI_BattleMenuShortcutPause;
         }
 
         /// <summary>
@@ -835,12 +984,24 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_ClickNorthButton.started -= instance.OnBattleUI_ClickNorthButton;
             @BattleUI_ClickNorthButton.performed -= instance.OnBattleUI_ClickNorthButton;
             @BattleUI_ClickNorthButton.canceled -= instance.OnBattleUI_ClickNorthButton;
+            @BattleUI_ClickSouthButton.started -= instance.OnBattleUI_ClickSouthButton;
+            @BattleUI_ClickSouthButton.performed -= instance.OnBattleUI_ClickSouthButton;
+            @BattleUI_ClickSouthButton.canceled -= instance.OnBattleUI_ClickSouthButton;
             @BattleUI_CloseMoveMenu.started -= instance.OnBattleUI_CloseMoveMenu;
             @BattleUI_CloseMoveMenu.performed -= instance.OnBattleUI_CloseMoveMenu;
             @BattleUI_CloseMoveMenu.canceled -= instance.OnBattleUI_CloseMoveMenu;
             @BattleUI_NextMove.started -= instance.OnBattleUI_NextMove;
             @BattleUI_NextMove.performed -= instance.OnBattleUI_NextMove;
             @BattleUI_NextMove.canceled -= instance.OnBattleUI_NextMove;
+            @BattleUI_OpenBattleMenu.started -= instance.OnBattleUI_OpenBattleMenu;
+            @BattleUI_OpenBattleMenu.performed -= instance.OnBattleUI_OpenBattleMenu;
+            @BattleUI_OpenBattleMenu.canceled -= instance.OnBattleUI_OpenBattleMenu;
+            @BattleUI_CloseBattleMenu.started -= instance.OnBattleUI_CloseBattleMenu;
+            @BattleUI_CloseBattleMenu.performed -= instance.OnBattleUI_CloseBattleMenu;
+            @BattleUI_CloseBattleMenu.canceled -= instance.OnBattleUI_CloseBattleMenu;
+            @BattleUI_BattleMenuShortcutPause.started -= instance.OnBattleUI_BattleMenuShortcutPause;
+            @BattleUI_BattleMenuShortcutPause.performed -= instance.OnBattleUI_BattleMenuShortcutPause;
+            @BattleUI_BattleMenuShortcutPause.canceled -= instance.OnBattleUI_BattleMenuShortcutPause;
         }
 
         /// <summary>
@@ -953,6 +1114,13 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBattleUI_ClickNorthButton(InputAction.CallbackContext context);
         /// <summary>
+        /// Method invoked when associated input action "BattleUI_ClickSouthButton" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_ClickSouthButton(InputAction.CallbackContext context);
+        /// <summary>
         /// Method invoked when associated input action "BattleUI_CloseMoveMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -966,5 +1134,26 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBattleUI_NextMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_OpenBattleMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_OpenBattleMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_CloseBattleMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_CloseBattleMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_BattleMenuShortcutPause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_BattleMenuShortcutPause(InputAction.CallbackContext context);
     }
 }

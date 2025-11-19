@@ -271,6 +271,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "BattleUI_ClickSouthButton",
+                    "type": "Button",
+                    "id": "22842503-685e-4740-9530-a775d1c910e1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "BattleUI_CloseMoveMenu",
                     "type": "Button",
                     "id": "cd23d3cb-5a26-45f9-93af-dfba74178af4",
@@ -283,6 +292,33 @@
                     "name": "BattleUI_NextMove",
                     "type": "Button",
                     "id": "fcea7f93-1247-460a-9c15-7967a03281be",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BattleUI_OpenBattleMenu",
+                    "type": "Button",
+                    "id": "4a8bb965-7f19-45e9-a325-8857a002c664",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BattleUI_CloseBattleMenu",
+                    "type": "Button",
+                    "id": "905ba53f-3f3d-4a83-a818-b9b564d0ed42",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BattleUI_BattleMenuShortcutPause",
+                    "type": "Button",
+                    "id": "e54f6eb6-18ce-47d6-9f52-cc0d5ccbca35",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -397,6 +433,83 @@
                     "processors": "",
                     "groups": "",
                     "action": "BattleUI_CloseMoveMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ed0a0c9e-567b-479e-8dff-9fcaf4e6e795",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_ClickSouthButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a36d5af-20d0-47ba-8fcf-db36a0489cd0",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_OpenBattleMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "45653903-ab53-403e-952f-aff97a6fcd01",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_OpenBattleMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b9dc8e5f-850d-4b10-add7-21b3b7f3b4c3",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_CloseBattleMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04c5c765-f851-49d3-9ee6-7e0d46387fa8",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_CloseBattleMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6a0a74c7-9b7d-4e42-87c0-e2d2fb1d725b",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_CloseBattleMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3c805a0-813f-4fb6-abd5-9f2251a1cbec",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_BattleMenuShortcutPause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -44,6 +44,7 @@ public class DuelMenu : MonoBehaviour
     private void Update() 
     {
         if (!isOpen) return;
+        if (BattleUIManager.Instance.IsBattleMenuOpen) return;
 
         if (isCommandOpen) 
         {

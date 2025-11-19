@@ -54,8 +54,13 @@ public class InputManager : MonoBehaviour
         BindButton(input.BattleUIActions.BattleUI_ClickEastButton, CustomAction.BattleUI_ClickEastButton);
         BindButton(input.BattleUIActions.BattleUI_ClickWestButton, CustomAction.BattleUI_ClickWestButton);
         BindButton(input.BattleUIActions.BattleUI_ClickNorthButton, CustomAction.BattleUI_ClickNorthButton);
+        //click south
         BindButton(input.BattleUIActions.BattleUI_CloseMoveMenu, CustomAction.BattleUI_CloseMoveMenu);
         BindButton(input.BattleUIActions.BattleUI_NextMove, CustomAction.BattleUI_NextMove);
+
+        BindButton(input.BattleUIActions.BattleUI_OpenBattleMenu, CustomAction.BattleUI_OpenBattleMenu);
+        BindButton(input.BattleUIActions.BattleUI_CloseBattleMenu, CustomAction.BattleUI_CloseBattleMenu);
+        BindButton(input.BattleUIActions.BattleUI_BattleMenuShortcutPause, CustomAction.BattleUI_BattleMenuShortcutPause);
 
 
         // Enable once here

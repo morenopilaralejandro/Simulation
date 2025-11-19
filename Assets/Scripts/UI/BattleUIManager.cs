@@ -16,6 +16,7 @@ public class BattleUIManager : MonoBehaviour
     private BattleMessage battleMessage;
     private DuelParticantsPanel duelParticantsPanel;
     private DuelMenu duelMenu;
+    private BattleMenu battleMenu;
 
     private void Awake()
     {
@@ -77,6 +78,16 @@ public class BattleUIManager : MonoBehaviour
     public void UnregisterDuelMenu(DuelMenu duelMenu)
     {
         this.duelMenu = null;
+    }
+
+    public void RegisterBattleMenu(BattleMenu battleMenu)
+    {
+        this.battleMenu = battleMenu;
+    }
+
+    public void UnregisterBattleMenu(BattleMenu battleMenu)
+    {
+        this.battleMenu = null;
     }
     #endregion
 
@@ -172,5 +183,9 @@ public class BattleUIManager : MonoBehaviour
         if (duelMenu != null) 
             duelMenu.Hide();
     }
+    #endregion
+
+    #region BattleMenu
+    public bool IsBattleMenuOpen => battleMenu.IsBattleMenuOpen;
     #endregion
 }

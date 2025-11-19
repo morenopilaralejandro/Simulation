@@ -71,6 +71,9 @@ public class CharacterComponentController : MonoBehaviour
         if(!character.IsStateLocked) 
             HandleMovement();
 
+        if(BattleUIManager.Instance.IsBattleMenuOpen)
+            return;
+
         //block
 
         if (!character.HasBall()) 

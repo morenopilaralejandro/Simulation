@@ -38,5 +38,6 @@ namespace Simulation.Enums.Battle
         Foul,
         Offside
     }
+
 }
 
