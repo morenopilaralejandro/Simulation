@@ -94,6 +94,7 @@ public class BattleCharacterManager : MonoBehaviour
     {
         character.transform.position = character.FormationCoord.DefaultPosition;
         character.ClearAllStatus();
+        character.ReleaseStateLock();
     }
 
     public void ClearPool()

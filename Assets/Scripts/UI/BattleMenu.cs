@@ -73,7 +73,7 @@ public class BattleMenu : MonoBehaviour
             SetAutoOrManualButtonActive();
         }
 
-        //EventSystem.current.SetSelectedGameObject(firstSelected);
+        EventSystem.current.SetSelectedGameObject(firstSelected);
     }
 
     public void SetBattleMenuActive(bool active)
@@ -89,8 +89,7 @@ public class BattleMenu : MonoBehaviour
 
     private void SetAutoOrManualButtonActive() 
     {
-        //TODO if (settingAuto) 
-        if (false) 
+        if (SettingsManager.Instance.IsAutoBattleEnabled) 
         {
             buttonAuto.gameObject.SetActive(false);
             buttonManual.gameObject.SetActive(true);
@@ -110,14 +109,12 @@ public class BattleMenu : MonoBehaviour
 
     public void OnButtonAutoTapped()
     {
-        Debug.Log("Auto button tapped.");
-        // TODO: Enable auto mode
+        AutoBattleManager.Instance.ToggleAutoBattle();       
     }
 
     public void OnButtonManualTapped()
     {
-        Debug.Log("Manual button tapped.");
-        // TODO: Switch to manual mode
+        AutoBattleManager.Instance.ToggleAutoBattle();
     }
 
     public void OnButtonConcedeTapped()

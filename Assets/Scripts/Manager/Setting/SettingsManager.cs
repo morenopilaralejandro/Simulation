@@ -10,6 +10,7 @@ public class SettingsManager : MonoBehaviour
 
     public DefaultSettings DefaultSettingsAsset;
     public GameSettings CurrentSettings { get; private set; }
+    public bool IsAutoBattleEnabled => AutoBattleManager.Instance.IsAutoBattleEnabled;
 
     private string filePath;
 

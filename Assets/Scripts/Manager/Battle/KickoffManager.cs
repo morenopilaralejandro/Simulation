@@ -1,8 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using TMPro;
-using UnityEngine.Localization;
 using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
 using Simulation.Enums.Input;
@@ -31,20 +30,23 @@ public class KickoffManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         position0 = new Vector3(0, 0.34f, 0);
-
-        position1 =
-        new Dictionary<TeamSide, Vector3>
+        position1 = new Dictionary<TeamSide, Vector3>
         {
             { TeamSide.Home, new Vector3(-1f, 0.34f, -0.1f) },
             { TeamSide.Away, new Vector3(1f, 0.34f, 0.1f) }
         };
 
-        isTeamReady =
-        new Dictionary<TeamSide, bool>
+        isTeamReady = new Dictionary<TeamSide, bool>
         {
             { TeamSide.Home, false },
             { TeamSide.Away, false }
         };
+    }
+
+    private void OnDestroy()
+    {
+        // Safety cleanup
+        BallEvents.OnGained -= OnBallGained;
     }
 
     void Update() 
@@ -62,12 +64,26 @@ public class KickoffManager : MonoBehaviour
         ResetReady();
         BattleManager.Instance.SetBattlePhase(BattlePhase.Deadball);
         AudioManager.Instance.PlaySfx("sfx-whistle_single");
+
+        BallEvents.OnGained -= OnBallGained;
+        BallEvents.OnGained += OnBallGained;
+    }
+
+    private void OnBallGained(Character character)
+    {
+        if (character != character0)
+            return;
+
+        if (BattleManager.Instance.CurrentPhase == BattlePhase.Deadball && 
+            AutoBattleManager.Instance.IsAutoBattleEnabled)
+            SetTeamReady(BattleManager.Instance.GetUserSide());
+
+        BallEvents.OnGained -= OnBallGained;
     }
 
     private void ResetReady() 
     {
-        isTeamReady =
-        new Dictionary<TeamSide, bool>
+        isTeamReady = new Dictionary<TeamSide, bool>
         {
             { TeamSide.Home, false },
             { TeamSide.Away, false }
@@ -89,9 +105,10 @@ public class KickoffManager : MonoBehaviour
             isKickoffReady = 
                 isTeamReady[TeamSide.Home] && 
                 isTeamReady[TeamSide.Away];
-        } else 
+        } 
+        else 
         {
-            isKickoffReady =  isTeamReady[TeamSide.Home];
+            isKickoffReady = isTeamReady[TeamSide.Home];
         }
 
         if (isKickoffReady) 
@@ -104,11 +121,12 @@ public class KickoffManager : MonoBehaviour
         BattleManager.Instance.Unfreeze();
 
         Character target = BattleManager.Instance.TargetedCharacter[character0.TeamSide];
-        if(!target || character0.IsEnemyAI) 
+        if (!target || character0.IsEnemyAI) 
         {
             character0.KickBallTo(character1.transform.position);
         }
-        else {
+        else 
+        {
             character0.KickBallTo(target.transform.position);
             CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
         }

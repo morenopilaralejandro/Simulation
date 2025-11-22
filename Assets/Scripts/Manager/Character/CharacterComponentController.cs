@@ -48,7 +48,7 @@ public class CharacterComponentController : MonoBehaviour
 
     void Update()
     {
-        if (!this.isControlled) 
+        if (!this.isControlled || character.IsAutoBattleEnabled)
             return;
             
         //buffer shoot

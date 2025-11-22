@@ -176,6 +176,7 @@ public class Character : MonoBehaviour
     //aiComponent
     public bool IsEnemyAI => aiComponent.IsEnemyAI;
     public bool IsAIEnabled => aiComponent.IsAIEnabled;
+    public bool IsAutoBattleEnabled => aiComponent.IsAutoBattleEnabled;
     public void EnableAI() => aiComponent.EnableAI();
     public void EnableAI(bool isAIEnabled) => aiComponent.EnableAI(isAIEnabled);
     public void DisableAI() => aiComponent.DisableAI();
