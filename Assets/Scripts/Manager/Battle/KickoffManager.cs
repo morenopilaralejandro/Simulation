@@ -45,7 +45,6 @@ public class KickoffManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Safety cleanup
         BallEvents.OnGained -= OnBallGained;
     }
 

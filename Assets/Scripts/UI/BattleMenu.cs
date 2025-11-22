@@ -10,7 +10,7 @@ public class BattleMenu : MonoBehaviour
     [SerializeField] private Button buttonDuelLog;
     [SerializeField] private Button buttonAuto;
     [SerializeField] private Button buttonManual;
-    [SerializeField] private Button buttonConcede;
+    [SerializeField] private Button buttonForfeit;
 
     [Header("Buttons - Special")]
     [SerializeField] private Button buttonPause;
@@ -71,9 +71,10 @@ public class BattleMenu : MonoBehaviour
         if (isBattleMenuOpen) 
         {
             SetAutoOrManualButtonActive();
+            EventSystem.current.SetSelectedGameObject(firstSelected);
         }
 
-        EventSystem.current.SetSelectedGameObject(firstSelected);
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
     }
 
     public void SetBattleMenuActive(bool active)
@@ -105,22 +106,29 @@ public class BattleMenu : MonoBehaviour
     {
         Debug.Log("Duel Log button tapped.");
         // TODO: Show duel log UI
+
+        ToggleBattleMenu();
     }
 
     public void OnButtonAutoTapped()
     {
-        AutoBattleManager.Instance.ToggleAutoBattle();       
+        AutoBattleManager.Instance.ToggleAutoBattle();
+
+        ToggleBattleMenu();
     }
 
     public void OnButtonManualTapped()
     {
         AutoBattleManager.Instance.ToggleAutoBattle();
+
+        ToggleBattleMenu();
     }
 
-    public void OnButtonConcedeTapped()
+    public void OnButtonForfeitTapped()
     {
-        Debug.Log("Concede button tapped.");
-        // TODO: Trigger concede confirmation
+        Debug.Log("Forfeit button tapped.");
+        ToggleBattleMenu();
+        //TODO open forfeit menu
     }
 
     public void OnButtonPauseTapped()
@@ -128,12 +136,21 @@ public class BattleMenu : MonoBehaviour
         Debug.Log("Pause button tapped.");
         // TODO: Pause the game
         // buttonPause.GetComponent<SpecialOption>().StartCooldown();
+
+        ToggleBattleMenu();
     }
 
     public void OnButtonResumeTapped()
     {
         Debug.Log("Resume button tapped.");
         // TODO: Resume the game
+
+        ToggleBattleMenu();
+    }
+
+    public void OnButtonSelected() 
+    {
+        AudioManager.Instance.PlaySfx("sfx-menu_change");
     }
 
 }

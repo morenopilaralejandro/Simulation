@@ -182,6 +182,7 @@ public class Character : MonoBehaviour
     public void DisableAI() => aiComponent.DisableAI();
     public AIDifficulty AIDifficulty => aiComponent.AIDifficulty;
     public AIState AIState => aiComponent.AIState;
+    public DuelCommand GetRegularCommand() => aiComponent.GetRegularCommand();
     public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);
     public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
     //stateLockComponent
