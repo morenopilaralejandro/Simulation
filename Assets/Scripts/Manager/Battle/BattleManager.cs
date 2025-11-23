@@ -240,6 +240,37 @@ public class BattleManager : MonoBehaviour
             SceneLoader.LoadGameOver();
         }
     }
+
+    private void ForceEndGame(TeamSide winnerSide)
+    {
+        SetBattlePhase(BattlePhase.End);
+        BattleEvents.RaiseEndBattle();
+        SceneLoader.UnloadBattle();
+
+        TeamSide userSide = GetUserSide();
+        if (winnerSide == userSide)
+            SceneLoader.LoadBattleResults();
+        else
+            SceneLoader.LoadGameOver();
+    }
+
+    public void ForfeitBattle()
+    {
+        LogManager.Info("[BattleManager] User forfeits the battle.", this);
+        
+        Freeze(); // Stop movement/time
+        
+        // Determine user’s side, so the opponent wins
+        TeamSide userSide = GetUserSide();
+        TeamSide opponentSide = (userSide == TeamSide.Home) ? TeamSide.Away : TeamSide.Home;
+
+        // Optional: update UI message
+        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, true);
+
+        // Wait briefly before ending the game (optional)
+        StartCoroutine(ForfeitSequence(opponentSide));
+    }
+
     #endregion
 
     #region Sequence 
@@ -302,6 +333,18 @@ public class BattleManager : MonoBehaviour
             StartSecondHalf();
         }
 
+    }
+
+    private IEnumerator ForfeitSequence(TeamSide winnerSide)
+    {
+        //AudioManager.Instance.PlaySfx("sfx-whistle_triple");
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide message
+        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
+
+        // Force end game — treat as loss for user
+        ForceEndGame(winnerSide);
     }
     #endregion
 

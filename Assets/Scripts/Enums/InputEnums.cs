@@ -19,7 +19,11 @@ namespace Simulation.Enums.Input
         BattleUI_ClickEastButton,
         BattleUI_ClickWestButton,
         BattleUI_ClickNorthButton,
+        BattleUI_ClickSouthButton,
         BattleUI_CloseMoveMenu,
-        BattleUI_NextMove
+        BattleUI_NextMove,
+        BattleUI_OpenBattleMenu,
+        BattleUI_CloseBattleMenu,
+        BattleUI_BattleMenuShortcutPause
     }
 }

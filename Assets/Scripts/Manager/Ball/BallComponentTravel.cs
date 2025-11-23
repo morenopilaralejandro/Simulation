@@ -9,7 +9,7 @@ public class BallComponentTravel : MonoBehaviour
     [SerializeField] private bool isTravelPaused;
 
     private float defaultBallY = 1f;
-    private float travelSpeed = 4f;
+    private float travelSpeed = 3.5f;
     private float endThreshold = 0.01f;
     private float maxVelocity = 10f;
     private Vector3 travelVelocity;

@@ -64,11 +64,13 @@ public class CharacterComponentAI : MonoBehaviour
     [SerializeField] private bool isAIEnabled = false;  
     [SerializeField] private AIDifficulty difficulty;
     [SerializeField] private AIState currentState = AIState.Idle;
+    [SerializeField] private bool isAutoBattleEnabled = false;
 
     public bool IsEnemyAI => isEnemyAI;
     public bool IsAIEnabled => isAIEnabled;
     public AIDifficulty AIDifficulty => difficulty;
     public AIState AIState => currentState;
+    public bool IsAutoBattleEnabled => isAutoBattleEnabled;
 
     private Ball ball;
     private Goal ownGoal;
@@ -154,12 +156,14 @@ public class CharacterComponentAI : MonoBehaviour
     {
         TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;    
         BallEvents.OnBallSpawned += HandleBallSpawned;
+        SettingsEvents.OnAutoBattleToggled += HandleAutoBattleToggled;
     }
 
     private void OnDisable()
     {
         TeamEvents.OnAssignCharacterToTeamBattle -= HandleAssignCharacterToTeamBattle;
         BallEvents.OnBallSpawned -= HandleBallSpawned;
+        SettingsEvents.OnAutoBattleToggled += HandleAutoBattleToggled;
     }
 
     private void HandleAssignCharacterToTeamBattle(Character character, Team team, FormationCoord formationCoord)
@@ -174,10 +178,15 @@ public class CharacterComponentAI : MonoBehaviour
             InitializeDistances(formationCoord.Position);
             InitializeSupportForwardOffset(formationCoord.Position);
             isAIEnabled = true;
+            isAutoBattleEnabled = SettingsManager.Instance.IsAutoBattleEnabled;
         }
     }
 
     private void HandleBallSpawned(Ball ball) => this.ball = ball;
+    private void HandleAutoBattleToggled(bool enable) 
+    { 
+        isAutoBattleEnabled = enable;
+    }
 
     public void EnableAI() => isAIEnabled = true;
     public void EnableAI(bool isAIEnabled) => this.isAIEnabled = isAIEnabled;
@@ -189,7 +198,9 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (character.IsControlled || !isAIEnabled || BattleManager.Instance.IsTimeFrozen)
+        if ((character.IsControlled && !character.IsAutoBattleEnabled) || 
+            !isAIEnabled || 
+            BattleManager.Instance.IsTimeFrozen)
             return;
 
         if (Time.time >= nextDecisionTime)
@@ -645,7 +656,7 @@ public class CharacterComponentAI : MonoBehaviour
         }
     }
 
-    private DuelCommand GetRegularCommand() =>
+    public DuelCommand GetRegularCommand() =>
         character.GetBattleStat(Stat.Body) > character.GetBattleStat(Stat.Control)
             ? DuelCommand.Melee
             : DuelCommand.Ranged;

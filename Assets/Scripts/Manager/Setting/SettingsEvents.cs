@@ -39,4 +39,10 @@ public static class SettingsEvents
     {
         OnSettingsReset?.Invoke();
     }
+
+    public static event Action<bool> OnAutoBattleToggled;
+    public static void RaiseAutoBattleToggled(bool enable)
+    {
+        OnAutoBattleToggled?.Invoke(enable);
+    }
 }

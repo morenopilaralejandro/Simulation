@@ -101,7 +101,6 @@ public class DuelSelectionManager : MonoBehaviour
         if (duelMode == DuelMode.Shoot)
             BattleUIManager.Instance.SetDuelCategory(selection.Category);
     }
-
     #endregion
 
     #region Selection Finalization
@@ -122,6 +121,14 @@ public class DuelSelectionManager : MonoBehaviour
         if (teamSide == BattleManager.Instance.GetUserSide())
             BattleUIManager.Instance.HideDuelMenu(); 
         FinalizeSelection(teamSide, command, move);
+    }
+
+    public void SelectionMadeAuto(TeamSide teamSide)
+    {
+        var selection = selections[teamSide];
+        Character character = selection.Character;
+        DuelCommand command = character.GetRegularCommand();
+        FinalizeSelection(teamSide, command, null);
     }
 
     private void FinalizeSelection(TeamSide teamSide, DuelCommand command, Move move)

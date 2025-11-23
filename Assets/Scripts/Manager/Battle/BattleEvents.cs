@@ -28,4 +28,16 @@ public static class BattleEvents
         OnEndBattle?.Invoke();
     }
 
+    public static event Action OnPauseBattle;
+    public static void RaisePauseBattle()
+    {
+        OnPauseBattle?.Invoke();
+    }
+
+    public static event Action OnResumeBattle;
+    public static void RaiseResumeBattle()
+    {
+        OnResumeBattle?.Invoke();
+    }
+
 }

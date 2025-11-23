@@ -74,7 +74,9 @@ public class BattleBallManager : MonoBehaviour
             Spawn();
             return;
         }
-
+        
+        PossessionManager.Instance.Release();
+        ball.ResetPhysics();
         ball.transform.position = defaultBallPosition;
         ball.transform.rotation = Quaternion.identity;
         

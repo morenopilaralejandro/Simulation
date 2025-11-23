@@ -14,8 +14,11 @@ public class BattleUIManager : MonoBehaviour
     private BattleScoreboard battleScoreboard;
     private BattleTimer battleTimer;
     private BattleMessage battleMessage;
+    private PausePanel pausePanel;
     private DuelParticantsPanel duelParticantsPanel;
     private DuelMenu duelMenu;
+    private BattleMenu battleMenu;
+    private ForfeitMenu forfeitMenu;
 
     private void Awake()
     {
@@ -59,6 +62,16 @@ public class BattleUIManager : MonoBehaviour
         this.battleMessage = null;
     }
 
+    public void RegisterPausePanel(PausePanel panel)
+    {
+        pausePanel = panel;
+    }
+
+    public void UnregisterPausePanel(PausePanel panel)
+    {
+        pausePanel = null;
+    }
+
     public void RegisterDuelParticipantsPanel(DuelParticantsPanel panel)
     {
         duelParticantsPanel = panel;
@@ -77,6 +90,26 @@ public class BattleUIManager : MonoBehaviour
     public void UnregisterDuelMenu(DuelMenu duelMenu)
     {
         this.duelMenu = null;
+    }
+
+    public void RegisterBattleMenu(BattleMenu battleMenu)
+    {
+        this.battleMenu = battleMenu;
+    }
+
+    public void UnregisterBattleMenu(BattleMenu battleMenu)
+    {
+        this.battleMenu = null;
+    }
+
+    public void RegisterForfeitMenu(ForfeitMenu forfeitMenu)
+    {
+        this.forfeitMenu = forfeitMenu;
+    }
+
+    public void UnregisterForfeitMenu(ForfeitMenu forfeitMenu)
+    {
+        this.forfeitMenu = null;
     }
     #endregion
 
@@ -128,6 +161,10 @@ public class BattleUIManager : MonoBehaviour
     }
     #endregion
 
+    #region Pause
+    public void TogglePausePanel() => pausePanel.Toggle();
+    #endregion
+
     #region Duel Participants
     public void SetDuelParticipant(Character character, List<Character> supports)
     {
@@ -172,5 +209,14 @@ public class BattleUIManager : MonoBehaviour
         if (duelMenu != null) 
             duelMenu.Hide();
     }
+    #endregion
+
+    #region BattleMenu
+    public bool IsBattleMenuOpen => battleMenu.IsBattleMenuOpen;
+    #endregion
+
+    #region ForfeitMenu
+    public bool IsForfeitMenuOpen => forfeitMenu.IsForfeitMenuOpen;
+    public void ToggleForfeitMenu() => forfeitMenu.ToggleForfeitMenu();
     #endregion
 }

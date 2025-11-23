@@ -33,17 +33,22 @@ public class DuelMenu : MonoBehaviour
     {
         BattleUIManager.Instance?.RegisterDuelMenu(this);
         Hide();
+
+        SettingsEvents.OnAutoBattleToggled += HandleOnAutoBattleToggled;
     }
 
     private void OnDestroy()
     {
         if (BattleUIManager.Instance != null)
             BattleUIManager.Instance.UnregisterDuelMenu(this);
+
+        SettingsEvents.OnAutoBattleToggled -= HandleOnAutoBattleToggled;
     }
 
     private void Update() 
     {
         if (!isOpen) return;
+        if (BattleUIManager.Instance.IsBattleMenuOpen) return;
 
         if (isCommandOpen) 
         {
@@ -98,7 +103,10 @@ public class DuelMenu : MonoBehaviour
         isOpen = true;
         this.gameObject.SetActive(true);
 
-        ShowCommand();
+        if(SettingsManager.Instance.IsAutoBattleEnabled)
+            DuelSelectionManager.Instance.SelectionMadeAuto(userSide);
+        else
+            ShowCommand();
     }
 
     public void Hide() 
@@ -245,6 +253,15 @@ public class DuelMenu : MonoBehaviour
             userSide, 
             DuelCommand.Move, 
             moveCommandSlot.Move);
+    }
+
+    private void HandleOnAutoBattleToggled(bool enable) 
+    {
+        if (isOpen && enable) 
+        {
+            DuelSelectionManager.Instance.SelectionMadeAuto(userSide);
+            Hide();
+        }
     }
 
 }

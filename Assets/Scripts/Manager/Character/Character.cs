@@ -176,11 +176,13 @@ public class Character : MonoBehaviour
     //aiComponent
     public bool IsEnemyAI => aiComponent.IsEnemyAI;
     public bool IsAIEnabled => aiComponent.IsAIEnabled;
+    public bool IsAutoBattleEnabled => aiComponent.IsAutoBattleEnabled;
     public void EnableAI() => aiComponent.EnableAI();
     public void EnableAI(bool isAIEnabled) => aiComponent.EnableAI(isAIEnabled);
     public void DisableAI() => aiComponent.DisableAI();
     public AIDifficulty AIDifficulty => aiComponent.AIDifficulty;
     public AIState AIState => aiComponent.AIState;
+    public DuelCommand GetRegularCommand() => aiComponent.GetRegularCommand();
     public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);
     public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
     //stateLockComponent
