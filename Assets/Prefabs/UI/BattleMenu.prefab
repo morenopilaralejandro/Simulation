@@ -556,7 +556,7 @@ MonoBehaviour:
   buttonDuelLog: {fileID: 2403998541027705886}
   buttonAuto: {fileID: 7152346652967608076}
   buttonManual: {fileID: 9147800968058977049}
-  buttonForfeit: {fileID: 0}
+  buttonForfeit: {fileID: 8717948628602896838}
   buttonPause: {fileID: 5448861358039213283}
   buttonResume: {fileID: 768310440312733737}
   firstSelected: {fileID: 33817834464454008}
@@ -1637,6 +1637,17 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &8717948628602896838 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1239469086374845637, guid: b84a55a6fbd8aea8c9edcbf6588539c3, type: 3}
+  m_PrefabInstance: {fileID: 7624341864011373827}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6474191495433478304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8052715488114010076
 PrefabInstance:
   m_ObjectHideFlags: 0

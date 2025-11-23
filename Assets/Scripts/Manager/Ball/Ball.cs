@@ -42,10 +42,12 @@ public class Ball : MonoBehaviour
     public void SetDynamic(Vector3 velocity) => kinematicComponent.SetDynamic(velocity);
     public void ToggleKinematic() => kinematicComponent.ToggleKinematic();
     public Vector3 GetVelocity() => kinematicComponent.GetVelocity();
+    public void PausePhysics() => kinematicComponent.PausePhysics();
+    public void ResumePhysics() => kinematicComponent.ResumePhysics();
+    public void ResetPhysics() => kinematicComponent.ResetPhysics();
     public void SlowDown() => kinematicComponent.SlowDown();
     //kickComponent
     public void KickBallTo(Vector3 targetPos) => kickComponent.KickBallTo(targetPos);
-
 
     //travelComponent
     public bool IsTraveling => travelComponent.IsTraveling;

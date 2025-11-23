@@ -15,7 +15,17 @@ public class BallComponentCollider : MonoBehaviour
         this.ball = ball;
     }
 
-    private void OnTriggerEnter(Collider otherCollider)
+    private void OnTriggerEnter(Collider otherCollider) 
+    {
+        HandleTrigger(otherCollider);
+    }
+
+    private void OnTriggerStay(Collider otherCollider) 
+    {
+        HandleTrigger(otherCollider);
+    }
+
+    private void HandleTrigger(Collider otherCollider)
     {
         //travel collision handle in player colliders
         if (ball.IsTraveling) return;

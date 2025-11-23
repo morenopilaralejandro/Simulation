@@ -12,6 +12,7 @@ public class KickoffManager : MonoBehaviour
 
     private TeamSide teamSide;
     private bool isKickoffReady;
+    private bool isBallReady;
     private Dictionary<TeamSide, bool> isTeamReady;
 
     private Character character0;
@@ -51,7 +52,8 @@ public class KickoffManager : MonoBehaviour
     void Update() 
     {
         if (InputManager.Instance.GetDown(CustomAction.Pass) && 
-            BattleManager.Instance.CurrentPhase == BattlePhase.Deadball)
+            BattleManager.Instance.CurrentPhase == BattlePhase.Deadball &&
+            isBallReady)
             SetTeamReady(BattleManager.Instance.GetUserSide());
     }
 
@@ -73,6 +75,7 @@ public class KickoffManager : MonoBehaviour
         if (character != character0)
             return;
 
+        isBallReady = true;
         if (BattleManager.Instance.CurrentPhase == BattlePhase.Deadball && 
             AutoBattleManager.Instance.IsAutoBattleEnabled)
             SetTeamReady(BattleManager.Instance.GetUserSide());
@@ -88,6 +91,7 @@ public class KickoffManager : MonoBehaviour
             { TeamSide.Away, false }
         };
         isKickoffReady = false;
+        isBallReady = false;
     }
 
     private void SetTeamReady(TeamSide teamSide)
@@ -116,6 +120,7 @@ public class KickoffManager : MonoBehaviour
 
     private void PerformKickOff()
     {
+        isBallReady = false;
         BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
         BattleManager.Instance.Unfreeze();
 

@@ -71,6 +71,7 @@ public class BattleMenu : MonoBehaviour
         if (isBattleMenuOpen) 
         {
             SetAutoOrManualButtonActive();
+            SetPauseOrResumeButtonActive();
             EventSystem.current.SetSelectedGameObject(firstSelected);
         }
 
@@ -102,6 +103,20 @@ public class BattleMenu : MonoBehaviour
         }
     }
 
+    private void SetPauseOrResumeButtonActive() 
+    {
+        if (PauseManager.Instance.IsPaused) 
+        {
+            buttonPause.gameObject.SetActive(false);
+            buttonResume.gameObject.SetActive(true);
+        }
+        else 
+        {
+            buttonPause.gameObject.SetActive(true);
+            buttonResume.gameObject.SetActive(false);
+        }
+    }
+
     public void OnButtonDuelLogTapped()
     {
         Debug.Log("Duel Log button tapped.");
@@ -126,26 +141,30 @@ public class BattleMenu : MonoBehaviour
 
     public void OnButtonForfeitTapped()
     {
-        Debug.Log("Forfeit button tapped.");
         ToggleBattleMenu();
-        //TODO open forfeit menu
+        if (!BattleUIManager.Instance.IsForfeitMenuOpen)
+            BattleUIManager.Instance.ToggleForfeitMenu();
     }
 
     public void OnButtonPauseTapped()
     {
-        Debug.Log("Pause button tapped.");
-        // TODO: Pause the game
-        // buttonPause.GetComponent<SpecialOption>().StartCooldown();
+        var specialOptionPause = buttonPause.GetComponent<SpecialOption>();
 
-        ToggleBattleMenu();
+        if (specialOptionPause.IsOnCooldown() || 
+            !PauseManager.Instance.CanPause()) return;
+
+        if (isBattleMenuOpen)
+            ToggleBattleMenu();
+        PauseManager.Instance.StartPause();
+        specialOptionPause.StartCooldown();
     }
 
     public void OnButtonResumeTapped()
     {
-        Debug.Log("Resume button tapped.");
-        // TODO: Resume the game
+        if (!PauseManager.Instance.IsPaused) return; 
 
         ToggleBattleMenu();
+        PauseManager.Instance.SetTeamReady(BattleManager.Instance.GetUserSide());
     }
 
     public void OnButtonSelected() 

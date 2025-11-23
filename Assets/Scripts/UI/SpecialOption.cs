@@ -12,7 +12,23 @@ public class SpecialOption : MonoBehaviour
 
     public string SpecialOptionId => specialOptionId;
 
-    public bool InOnCooldown() => cooldownRemaining > 0f;
+    void OnEnable()
+    {
+        BattleEvents.OnStartBattle += HandleStartBattle;
+    }
+
+    void OnDisable()
+    {
+        BattleEvents.OnStartBattle -= HandleStartBattle;
+    }
+
+    private void HandleStartBattle()
+    {
+        cooldownRemaining = 0f;
+        button.interactable = true;
+    }
+
+    public bool IsOnCooldown() => cooldownRemaining > 0f;
 
     public void StartCooldown()
     {
@@ -37,7 +53,7 @@ public class SpecialOption : MonoBehaviour
         {
             wasTimeFrozenLastFrame = false;
 
-            if (!InOnCooldown())
+            if (!IsOnCooldown())
                 button.interactable = true; // only become clickable again if cooldown done
         }
 
