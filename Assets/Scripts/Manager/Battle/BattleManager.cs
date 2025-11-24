@@ -243,6 +243,8 @@ public class BattleManager : MonoBehaviour
 
     private void ForceEndGame(TeamSide winnerSide)
     {
+        if (currentPhase == BattlePhase.End) return;        
+
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseEndBattle();
         SceneLoader.UnloadBattle();

@@ -46,6 +46,19 @@ public class LocalizationComponentString
         return string.Empty;
     }
 
+    /// <summary>
+    /// Sets the arguments for a specific localized string.
+    /// Example usage:
+    /// SetArguments(LocalizationField.TeamIntro, new { teamColor = GetTeamColor(teamIndex), teamName = GetTeamName(teamIndex) });
+    /// </summary>
+    public void SetArguments(LocalizationField field, object args)
+    {
+        if (localizedStrings.TryGetValue(field, out var localizedString))
+            localizedString.Arguments = new object[] { args };
+        else
+            Debug.LogWarning($"[LocalizationComponentString] Cannot set arguments - missing localized string for field {field}");
+    }
+
 }
 
 /*
