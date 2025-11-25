@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class DuelLogPopupManager : MonoBehaviour
+public class DuelLogPopupStack : MonoBehaviour
 {
-    /*
     [Header("Popup Lifetime")]
     [SerializeField] private float minDisplayTime = 2f;           // Minimum on screen time
     [SerializeField] private float autoHideTime = 2f;             // Disappear after this
@@ -17,13 +16,20 @@ public class DuelLogPopupManager : MonoBehaviour
     [SerializeField] private Transform popupParent;
     [SerializeField] private int maxPopups = 3;
 
-    private List<PopupData> activePopups = new List<PopupData>();
+    private List<DuelLogPopUpData> activePopups = new List<DuelLogPopUpData>();
     private Queue<DuelLogEntry> pendingEntries = new Queue<DuelLogEntry>();
     private bool isAdding = false;
     private bool isRemoving = false;
 
-    void OnEnable()    { DuelLogManager.Instance.OnNewEntry += EnqueuePopup; }
-    void OnDisable()   { DuelLogManager.Instance.OnNewEntry -= EnqueuePopup; }
+    void OnEnable()
+    { 
+        DuelLogEvents.OnNewEntry += EnqueuePopup; 
+    }
+
+    void OnDisable()
+    { 
+        DuelLogEvents.OnNewEntry -= EnqueuePopup; 
+    }
 
     void EnqueuePopup(DuelLogEntry entry)
     {
@@ -42,7 +48,7 @@ public class DuelLogPopupManager : MonoBehaviour
             DuelLogEntry entry = pendingEntries.Dequeue();
             DuelLogPopup popup = Instantiate(popupPrefab, popupParent);
             popup.Show(entry);
-            activePopups.Add(new PopupData { popup = popup, spawnTime = popup.spawnTime, removalScheduled = false });
+            activePopups.Add(new DuelLogPopUpData { Popup = popup, SpawnTime = popup.SpawnTime, RemovalScheduled = false });
 
             if (activePopups.Count < maxPopups)
                 yield return new WaitForSecondsRealtime(addStaggerInterval);
@@ -67,7 +73,7 @@ public class DuelLogPopupManager : MonoBehaviour
             while (activePopups.Count > maxPopups)
             {
                 var oldest = activePopups[0];
-                float alive = now - oldest.spawnTime;
+                float alive = now - oldest.SpawnTime;
                 float wait = Mathf.Max(minDisplayTime - alive, 0f);
                 if (wait > 0f)
                     yield return new WaitForSecondsRealtime(wait);
@@ -83,11 +89,11 @@ public class DuelLogPopupManager : MonoBehaviour
             }
 
             // --- 2. Remove for auto-hide (popups that reached their 5s) ---
-            foreach (var pd in new List<PopupData>(activePopups))
+            foreach (var pd in new List<DuelLogPopUpData>(activePopups))
             {
-                float alive = now - pd.spawnTime;
+                float alive = now - pd.SpawnTime;
                 // Only remove if at least autoHideTime elapsed
-                if (!pd.removalScheduled && alive >= autoHideTime)
+                if (!pd.RemovalScheduled && alive >= autoHideTime)
                 {
                     RemovePopup(pd);
                     removed = true;
@@ -106,11 +112,11 @@ public class DuelLogPopupManager : MonoBehaviour
         isRemoving = false;
     }
 
-    void RemovePopup(PopupData pd)
+    void RemovePopup(DuelLogPopUpData pd)
     {
-        pd.removalScheduled = true;
+        pd.RemovalScheduled = true;
         activePopups.Remove(pd);
-        Destroy(pd.popup.gameObject);
+        Destroy(pd.Popup.gameObject);
     }
 
     void Update()
@@ -122,5 +128,4 @@ public class DuelLogPopupManager : MonoBehaviour
         if (!isRemoving && activePopups.Count > 0)
             StartCoroutine(RemoveDuePopupsStaggered());
     }
-    */
 }

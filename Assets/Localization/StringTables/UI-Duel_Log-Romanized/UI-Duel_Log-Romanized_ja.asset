@@ -35,7 +35,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17609531395
-    m_Localized: "<color={teamColor}>{teamName}</color>\u3001\u30B7\u30FC\u30AF\u30EC\u30C3\u30C8\u30B9\u30C8\u30C3\u30D7\u8981\u6C42\uFF01"
+    m_Localized: "{teamName}\u3001\u30B7\u30FC\u30AF\u30EC\u30C3\u30C8\u30B9\u30C8\u30C3\u30D7\u8981\u6C42\uFF01"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531396
@@ -43,15 +43,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17609531397
-    m_Localized: "<color={teamColor}>{playerName}</color>\u304C\u30D1\u30B9\u3092\u51FA\u3057\u307E\u3059\u3002"
+    m_Localized: "{characterName}\u304C\u30D1\u30B9\u3092\u51FA\u3057\u307E\u3059\u3002"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531398
-    m_Localized: "<color={teamColor}>{playerName}</color>\u304C\u30B7\u30E5\u30FC\u30C8\u3092\u72D9\u3046\uFF01"
+    m_Localized: "{characterName}\u304C\u30B7\u30E5\u30FC\u30C8\u3092\u72D9\u3046\uFF01"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531399
-    m_Localized: "<color={teamColor}>{playerName}</color>\u306E<color={commandColor}>{commandName}</color>\uFF01"
+    m_Localized: "{characterName}\u306E{commandName}\uFF01"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531400
@@ -59,19 +59,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17609531401
-    m_Localized: "<color={teamColor}>{playerName}</color>\u304C\u30B4\u30FC\u30EB\u3092\u6C7A\u3081\u307E\u3057\u305F\uFF01"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 17609531402
-    m_Localized: "<color={teamColor}>{playerName}</color>\u304C\u30B7\u30E5\u30FC\u30C8\u3092\u6B62\u3081\u305F\uFF01"
+    m_Localized: "{characterName}\u304C\u30B4\u30FC\u30EB\u3092\u6C7A\u3081\u307E\u3057\u305F\uFF01"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531403
-    m_Localized: "<color={categoryColor}>\u30AA\u30D5\u30A7\u30F3\u30B9</color>\u30D1\u30EF\u30FC2\u500D\uFF01"
+    m_Localized: "\u30AA\u30D5\u30A7\u30F3\u30B9\u30D1\u30EF\u30FC2\u500D\uFF01"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531404
-    m_Localized: "<color={categoryColor}>\u30C7\u30A3\u30D5\u30A7\u30F3\u30B9</color>\u30D1\u30EF\u30FC2\u500D\uFF01"
+    m_Localized: "\u30C7\u30A3\u30D5\u30A7\u30F3\u30B9\u30D1\u30EF\u30FC2\u500D\uFF01"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531405
@@ -79,11 +75,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17609531406
-    m_Localized: "<color={outcomeColor}>\u52DD\u5229\uFF01</color>"
+    m_Localized: "\u52DD\u5229\uFF01"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531407
-    m_Localized: "<color={outcomeColor}>\u6557\u5317\uFF01</color>"
+    m_Localized: "\u6557\u5317\uFF01"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531408
@@ -95,11 +91,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17609531410
-    m_Localized: "<color={teamColor}>{playerName}</color>\u304C\u30DC\u30FC\u30EB\u3092\u596A\u3044\u307E\u3057\u305F\u3002"
+    m_Localized: "{characterName}\u304C\u30DC\u30FC\u30EB\u3092\u596A\u3044\u307E\u3057\u305F\u3002"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531411
     m_Localized: "\u30AF\u30EA\u30A2\u6761\u4EF6\uFF1A{condition}"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7669465946529792
+    m_Localized: "\u30AD\u30C3\u30AF\u30AA\u30D5\uFF01"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7669465950724096
+    m_Localized: "\u30C0\u30A4\u30EC\u30AF\u30C8\uFF01"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7669465950724097
+    m_Localized: "{characterName}\u304C\u30B7\u30E5\u30FC\u30C8\u3092\u6B62\u3081\u305F\uFF01"
     m_Metadata:
       m_Items: []
   references:

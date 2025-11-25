@@ -3,17 +3,21 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Localization;
+using Simulation.Enums.Battle;
+using Simulation.Enums.Character;
+using Simulation.Enums.Duel;
+using Simulation.Enums.Log;
 
 public class DuelLogManager : MonoBehaviour
 {
-/*
     #region Fields
 
     public static DuelLogManager Instance { get; private set; }
 
-    public event System.Action<DuelLogEntry> OnNewEntry;
-
     public List<DuelLogEntry> DuelLogEntries = new List<DuelLogEntry>();
+    public Color ColorHome { get; private set; }
+    public Color ColorAway { get; private set; }
+    public Color ColorDefault { get; private set; }
 
     #endregion
 
@@ -31,248 +35,324 @@ public class DuelLogManager : MonoBehaviour
         //DontDestroyOnLoad(gameObject);
     }
 
+    private void Start() 
+    {
+        ColorHome = ColorManager.GetTeamIndicatorColor(TeamSide.Home, false);
+        ColorAway = ColorManager.GetTeamIndicatorColor(TeamSide.Away, false);
+        ColorDefault = Color.black;
+    }
+
     #endregion
 
     #region Add Methods
 
-    private void AddEntry(LocalizedString localizedString, GameLogger.LogLevel logLevel) 
+    private void AddEntry(string entryId, LogLevel logLevel, Character character, Move move, object args) 
     {
-        DuelLogEntry entry = new DuelLogEntry(localizedString, logLevel);
+        DuelLogEntry entry = new DuelLogEntry(entryId, logLevel, character, move, args);
         DuelLogEntries.Add(entry);
-        GameLogger.Verbose("[DuelLogManager] Shown: " + (logLevel == GameLogger.LogLevel.Info) + ". String: " + entry.LocalizedString.GetLocalizedString());
-        if (logLevel == GameLogger.LogLevel.Info)
-            OnNewEntry?.Invoke(entry);
+        LogManager.Trace($"[DuelLogManager] Shown: {logLevel == LogLevel.Info} String: {entry.EntryString}");
+        DuelLogEvents.RaiseNewEntry(entry);
     }
 
     public void AddMatchStart()
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "MatchStart");
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        AddEntry(
+            "match_start", 
+            LogLevel.Trace,
+            null,
+            null,
+            null
+        );
+    }
+
+    public void AddMatchHalf()
+    {
+        AddEntry(
+            "match_half", 
+            LogLevel.Trace,
+            null,
+            null,
+            null
+        );
     }
 
     public void AddMatchEnd()
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "MatchEnd");
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        AddEntry(
+            "match_end", 
+            LogLevel.Trace,
+            null,
+            null,
+            null
+        );
     }
 
-    public void AddMatchPause(int teamIndex)
+    public void AddMatchPause(Character character)
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "MatchPause");
-        localizedString.Arguments = new object[] { new { teamColor = GetTeamColor(teamIndex), teamName = GetTeamName(teamIndex) } };
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        var args = new { 
+            teamName = character.GetTeam().TeamName
+        };
+        AddEntry(
+            "match_pause", 
+            LogLevel.Trace,
+            character,
+            null,
+            args
+        );
     }
 
     public void AddMatchResume()
     {
-        if (DuelLogEntries.Count > 3) 
+        AddEntry(
+            "match_resume", 
+            LogLevel.Trace,
+            null,
+            null,
+            null
+        );
+    }
+
+    public void AddDeadballKickoff(Character character)
+    {
+        AddEntry(
+            "deadball_kickoff", 
+            LogLevel.Trace,
+            character,
+            null,
+            null
+        );
+    }
+
+    public void AddActionPass(Character character)
+    {
+        var args = new { 
+            characterName = character.CharacterNick
+        };
+        AddEntry(
+            "action_pass", 
+            LogLevel.Trace,
+            character,
+            null,
+            args
+        );
+    }
+
+    public void AddActionShoot(Character character)
+    {
+        var args = new { 
+            characterName = character.CharacterNick
+        };
+        AddEntry(
+            "action_shoot", 
+            LogLevel.Trace,
+            character,
+            null,
+            args
+        );
+    }
+
+    public void AddActionDirect(Character character)
+    {
+        AddEntry(
+            "action_direct", 
+            LogLevel.Trace,
+            character,
+            null,
+            null
+        );
+    }
+
+    public void AddActionCommand(Character character, DuelCommand command, Move move)
+    {
+        string characterName = character.CharacterNick;
+        string commandName;
+
+        if (move != null)
         {
-            var localizedString = new LocalizedString("DuelLogTexts", "MatchResume");
-            var logLevel = GameLogger.LogLevel.Info;
-            AddEntry(localizedString, logLevel);
-        }
-    }
-
-    public void AddActionPass(Player player)
-    {
-        var localizedString = new LocalizedString("DuelLogTexts", "ActionPass");
-        localizedString.Arguments = new object[] { new { teamColor = GetTeamColor(player.TeamIndex), playerName = GetPlayerName(player) } };
-        var logLevel = GameLogger.LogLevel.Verbose;
-        AddEntry(localizedString, logLevel);
-    }
-
-    public void AddActionShoot(Player player)
-    {
-        var localizedString = new LocalizedString("DuelLogTexts", "ActionShoot");
-        localizedString.Arguments = new object[] { new { teamColor = GetTeamColor(player.TeamIndex), playerName = GetPlayerName(player) } };
-        var logLevel = GameLogger.LogLevel.Verbose;
-        AddEntry(localizedString, logLevel);
-    }
-
-    public void AddActionCommand(Player player, DuelCommand command, Secret secret)
-    {
-        string teamColor = GetTeamColor(player.TeamIndex);
-        string playerName = GetPlayerName(player);
-        string commandColor, commandName;
-
-        if (secret)
-        {
-            commandName = secret.SecretName;
-            commandColor = ColorManager.ColorToHex(ElementManager.Instance.GetElementColor(secret.Element));
+            commandName = move.MoveName;
         }
         else
         {
-            commandName = command == DuelCommand.Phys
-                ? new LocalizedString("UITexts", "Command1").GetLocalizedString()
-                : new LocalizedString("UITexts", "Command2").GetLocalizedString();
-            commandColor = ColorManager.ColorToHex(Color.white);
+            commandName = command == DuelCommand.Melee
+                ? new LocalizedString("UI-Battle-Localized", "button_command_melee").GetLocalizedString()
+                : new LocalizedString("UI-Battle-Localized", "button_command_ranged").GetLocalizedString();
         }
 
-        var localizedString = new LocalizedString("DuelLogTexts", "ActionCommand");
-        localizedString.Arguments = new object[] { new { 
-            teamColor = teamColor,
-            playerName = playerName,
-            commandColor = commandColor,
+        var args = new { 
+            characterName = characterName,
             commandName = commandName
-        }};
-
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        };
+        AddEntry(
+            "action_command", 
+            LogLevel.Info,
+            character,
+            move,
+            args
+        );
     }
 
     public void AddActionDamage(DuelAction action, float damage)
     {
         string actionSymbol = (action == DuelAction.Offense)
-            ? new LocalizedString("UITexts", "SymbolPlus").GetLocalizedString()
-            : new LocalizedString("UITexts", "SymbolMinus").GetLocalizedString();
+            ? "+"
+            : "-";
 
         string damageNumber = Mathf.RoundToInt(damage).ToString();
 
-        var localizedString = new LocalizedString("DuelLogTexts", "ActionDamage");
-        localizedString.Arguments = new object[] { new { 
+        var args = new { 
             actionSymbol = actionSymbol,
             damageNumber = damageNumber
-        }};
-
-        var logLevel = GameLogger.LogLevel.Verbose;
-        AddEntry(localizedString, logLevel);
+        };
+        AddEntry(
+            "action_damage", 
+            LogLevel.Trace,
+            null,
+            null,
+            args
+        );
     }
 
-    public void AddActionScore(Player player)
+    public void AddActionScore(Character character)
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "ActionScore");
-        localizedString.Arguments = new object[] { new { teamColor = GetTeamColor(player.TeamIndex), playerName = GetPlayerName(player) } };
-        var logLevel = GameLogger.LogLevel.Verbose;
-        AddEntry(localizedString, logLevel);
+        var args = new { 
+            characterName = character.CharacterNick
+        };
+        AddEntry(
+            "action_score", 
+            LogLevel.Trace,
+            character,
+            null,
+            args
+        );
     }
 
-    public void AddActionStop(Player player)
+    public void AddActionStop(Character character)
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "ActionStop");
-        localizedString.Arguments = new object[] { new { teamColor = GetTeamColor(player.TeamIndex), playerName = GetPlayerName(player) } };
-        var logLevel = GameLogger.LogLevel.Verbose;
-        AddEntry(localizedString, logLevel);
+        var args = new { 
+            characterName = character.CharacterNick
+        };
+        AddEntry(
+            "action_stop", 
+            LogLevel.Trace,
+            character,
+            null,
+            args
+        );
     }
 
-    public void AddElementOffense(Category category)
+    public void AddElementOffense()
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "ElementOffense");
-        localizedString.Arguments = new object[] { new { categoryColor = GetCategoryColor(category) } };
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        AddEntry(
+            "element_offense", 
+            LogLevel.Info,
+            null,
+            null,
+            null
+        );
     }
 
-    public void AddElementDefense(Category category)
+    public void AddElementDefense()
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "ElementDefense");
-        localizedString.Arguments = new object[] { new { categoryColor = GetCategoryColor(category) } };
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        AddEntry(
+            "element_defense", 
+            LogLevel.Info,
+            null,
+            null,
+            null
+        );
     }
 
-    public void AddDuel()
+    public void AddDuelStart()
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "Duel");
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        AddEntry(
+            "duel_start", 
+            LogLevel.Trace,
+            null,
+            null,
+            null
+        );
     }
 
-    public void AddDuelWin(int teamIndex)
+    public void AddDuelWin(Character character)
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "DuelWin");
-        localizedString.Arguments = new object[] { new { outcomeColor = GetOutcomeColor(teamIndex) } };
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        AddEntry(
+            "duel_win", 
+            LogLevel.Trace,
+            character,
+            null,
+            null
+        );
     }
 
-    public void AddDuelLose(int teamIndex)
+    public void AddDuelLose(Character character)
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "DuelLose");
-        localizedString.Arguments = new object[] { new { outcomeColor = GetOutcomeColor(teamIndex) } };
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        AddEntry(
+            "duel_lose", 
+            LogLevel.Trace,
+            character,
+            null,
+            null
+        );
     }
 
     public void AddDuelCancel()
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "DuelCancel");
-        var logLevel = GameLogger.LogLevel.Verbose;
-        AddEntry(localizedString, logLevel);
+        AddEntry(
+            "duel_cancel", 
+            LogLevel.Trace,
+            null,
+            null,
+            null
+        );
     }
 
     public void AddGoal()
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "Goal");
-        var logLevel = GameLogger.LogLevel.Verbose;
-        AddEntry(localizedString, logLevel);
+        AddEntry(
+            "goal", 
+            LogLevel.Trace,
+            null,
+            null,
+            null
+        );
     }
 
-    public void AddGainPossession(Player player)
+    public void AddGainPossession(Character character)
     {
-        if (GameManager.Instance.CurrentPhase != GamePhase.Kickoff)
-        {
-            var localizedString = new LocalizedString("DuelLogTexts", "GainPossession");
-            localizedString.Arguments = new object[] { new { teamColor = GetTeamColor(player.TeamIndex), playerName = GetPlayerName(player) } };
-            var logLevel = GameLogger.LogLevel.Verbose;
-            AddEntry(localizedString, logLevel);
-        }
+        if (BattleManager.Instance.CurrentPhase != BattlePhase.Deadball) return;
+
+        AddEntry(
+            "possession_gained", 
+            LogLevel.Trace,
+            character,
+            null,
+            null
+        );
     }
 
     public void AddCondition(string condition)
     {
-        var localizedString = new LocalizedString("DuelLogTexts", "Condition");
-        localizedString.Arguments = new object[] { new { condition = condition } };
-        var logLevel = GameLogger.LogLevel.Info;
-        AddEntry(localizedString, logLevel);
+        var args = new { 
+            condition = condition
+        };
+        AddEntry(
+            "condition", 
+            LogLevel.Trace,
+            null,
+            null,
+            args
+        );
     }
 
     #endregion
 
     #region Helper Methods
 
-    private string GetTeamColor(int teamIndex)
-    {
-        Color auxColor = ColorManager.GetTeamIndicatorTextColor(teamIndex);
-        string hexColor = ColorManager.ColorToHex(auxColor);
-        return hexColor;
-    }
-
-    private string GetTeamName(int teamIndex)
-    {
-        return GameManager.Instance.Teams[teamIndex].TeamName;
-    }
-
-    private string GetPlayerName(Player player)
-    {
-        return player.PlayerName;
-    }
-
-    private string GetCategoryColor(Category category)
-    {
-        Color auxColor = SecretManager.Instance.GetCategoryColor(category);
-        string hexColor = ColorManager.ColorToHex(auxColor);
-        return hexColor;
-    }
-
-    private string GetOutcomeColor(int teamIndex)
-    {
-        Color auxColor = ColorManager.GetDuelOutcomeColor(teamIndex);
-        string hexColor = ColorManager.ColorToHex(auxColor);
-        return hexColor;
-    }
-
     #endregion
 
     #region Other Methods
 
-    public void Clear()
-    {
-        DuelLogEntries.Clear();
-    }
+    public void Clear() => DuelLogEntries.Clear();
 
     #endregion
-*/
 }

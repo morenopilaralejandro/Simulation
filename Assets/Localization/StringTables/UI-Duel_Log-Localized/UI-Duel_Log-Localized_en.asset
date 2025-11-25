@@ -35,7 +35,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17294958595
-    m_Localized: <color={teamColor}>{teamName}</color> requests a Secret Stop.
+    m_Localized: '{teamName} requests a Secret Stop.'
     m_Metadata:
       m_Items: []
   - m_Id: 17294958596
@@ -43,15 +43,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17294958597
-    m_Localized: <color={teamColor}>{playerName}</color> passes the ball.
+    m_Localized: '{characterName} passes the ball.'
     m_Metadata:
       m_Items: []
   - m_Id: 17294958598
-    m_Localized: <color={teamColor}>{playerName}</color> shoots!
+    m_Localized: '{characterName} shoots!'
     m_Metadata:
       m_Items: []
   - m_Id: 17294958599
-    m_Localized: <color={teamColor}>{playerName}</color> uses <color={commandColor}>{commandName}</color>!
+    m_Localized: '{characterName} uses {commandName}!'
     m_Metadata:
       m_Items: []
   - m_Id: 17294958600
@@ -59,19 +59,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17294958601
-    m_Localized: <color={teamColor}>{playerName}</color> scores a goal!
-    m_Metadata:
-      m_Items: []
-  - m_Id: 17294958602
-    m_Localized: <color={teamColor}>{playerName}</color> stops it.
+    m_Localized: '{characterName} scores a goal!'
     m_Metadata:
       m_Items: []
   - m_Id: 17294958603
-    m_Localized: <color={categoryColor}>Offense</color> power X2!
+    m_Localized: Offense power X2!
     m_Metadata:
       m_Items: []
   - m_Id: 17294958604
-    m_Localized: <color={categoryColor}>Defense</color> power X2!
+    m_Localized: Defense power X2!
     m_Metadata:
       m_Items: []
   - m_Id: 17294958605
@@ -79,11 +75,11 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17294958606
-    m_Localized: <color={outcomeColor}>You win!</color>
+    m_Localized: You win!
     m_Metadata:
       m_Items: []
   - m_Id: 17294958607
-    m_Localized: <color={outcomeColor}>You lose!</color>
+    m_Localized: You lose!
     m_Metadata:
       m_Items: []
   - m_Id: 17294958608
@@ -95,11 +91,23 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 17294958610
-    m_Localized: <color={teamColor}>{playerName}</color> takes control of the ball.
+    m_Localized: '{characterName} takes control of the ball.'
     m_Metadata:
       m_Items: []
   - m_Id: 17294958611
     m_Localized: 'Condition: {condition}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7669565703856128
+    m_Localized: Kickoff!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7669565724827648
+    m_Localized: Direct!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7669565724827649
+    m_Localized: '{characterName} stops it!'
     m_Metadata:
       m_Items: []
   references:
