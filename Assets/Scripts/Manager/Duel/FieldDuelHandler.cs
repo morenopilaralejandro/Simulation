@@ -26,6 +26,8 @@ public class FieldDuelHandler : IDuelHandler
             duel.LastDefense = participant;
         }
 
+        DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
+
         if (duel.Participants.Count >= 2)
             Resolve();
     }

@@ -315,7 +315,7 @@ public class DuelManager : MonoBehaviour
         if (DamageCalculator.IsEffective(defense.CurrentElement, offense.CurrentElement))
         {
             defense.Damage *= 2f;
-            //DuelLogManager.Instance.AddElementDefense(defense.Category);
+            DuelLogManager.Instance.AddElementDefense(defense.Character);
             LogManager.Info("[DuelManager] Defense element is effective", this);
         }
         else if (DamageCalculator.IsEffective(offense.CurrentElement, defense.CurrentElement))
@@ -325,7 +325,7 @@ public class DuelManager : MonoBehaviour
             offense.Damage *= 2;
             if (duel.DuelMode == DuelMode.Shoot)
                 duel.OffensePressure += offense.Damage;
-            //DuelLogManager.Instance.AddElementOffense(offense.Category);
+            DuelLogManager.Instance.AddElementOffense(offense.Character);
             LogManager.Info("[DuelManager] Offense element is effective", this);
         }
     }

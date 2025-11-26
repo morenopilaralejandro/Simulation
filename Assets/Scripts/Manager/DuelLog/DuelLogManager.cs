@@ -178,16 +178,28 @@ public class DuelLogManager : MonoBehaviour
                 : new LocalizedString("UI-Battle-Localized", "button_command_ranged").GetLocalizedString();
         }
 
-        var args = new { 
+        var argsLong = new { 
             characterName = characterName,
             commandName = commandName
         };
+        var argsShort = new { 
+            commandName = commandName
+        };
+
         AddEntry(
             "action_command", 
+            LogLevel.Trace,
+            character,
+            move,
+            argsLong
+        );
+
+        AddEntry(
+            "action_command_short", 
             LogLevel.Info,
             character,
             move,
-            args
+            argsShort
         );
     }
 
@@ -240,23 +252,23 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddElementOffense()
+    public void AddElementOffense(Character character)
     {
         AddEntry(
             "element_offense", 
-            LogLevel.Info,
-            null,
+            LogLevel.Trace,
+            character,
             null,
             null
         );
     }
 
-    public void AddElementDefense()
+    public void AddElementDefense(Character character)
     {
         AddEntry(
             "element_defense", 
-            LogLevel.Info,
-            null,
+            LogLevel.Trace,
+            character,
             null,
             null
         );

@@ -62,7 +62,7 @@ public class ShootDuelHandler : IDuelHandler
 
             BattleManager.Instance.Ball.ResumeTravel();
 
-            //DuelLogManager.Instance.AddActionCommand(participant.Player, participant.Command, participant.Secret);
+            DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
             //DuelLogManager.Instance.AddActionDamage(participant.Action, participant.Damage);
             LogManager.Info($"[ShootDuelHandler] " + 
                 $"Offense action increases attack pressure " +
@@ -78,7 +78,7 @@ public class ShootDuelHandler : IDuelHandler
 
     public void Resolve()
     {
-        //DuelLogManager.Instance.AddActionCommand(duel.LastDefense.Character, duel.LastDefense.Command, duel.LastDefense.Move);
+        DuelLogManager.Instance.AddActionCommand(duel.LastDefense.Character, duel.LastDefense.Command, duel.LastDefense.Move);
         //DuelLogManager.Instance.AddActionDamage(duel.LastDefense.Action, duel.LastDefense.Damage);
 
         DuelManager.Instance.ApplyElementalEffectiveness(

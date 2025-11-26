@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 92af055cf362b062790e02e45c50df4d, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 2307362037524856837
   m_TableData:
   - m_Id: 17290764288
     m_Localized: Duel Log
@@ -37,7 +38,8 @@ MonoBehaviour:
   - m_Id: 17294958595
     m_Localized: '{teamName} requests a Secret Stop.'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 2307362037524856837
   - m_Id: 17294958596
     m_Localized: The match resumed.
     m_Metadata:
@@ -45,23 +47,28 @@ MonoBehaviour:
   - m_Id: 17294958597
     m_Localized: '{characterName} passes the ball.'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 2307362037524856837
   - m_Id: 17294958598
     m_Localized: '{characterName} shoots!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 2307362037524856837
   - m_Id: 17294958599
     m_Localized: '{characterName} uses {commandName}!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 2307362037524856837
   - m_Id: 17294958600
     m_Localized: '{actionSymbol}{damageNumber} AP'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 2307362037524856837
   - m_Id: 17294958601
     m_Localized: '{characterName} scores a goal!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 2307362037524856837
   - m_Id: 17294958603
     m_Localized: Offense power X2!
     m_Metadata:
@@ -93,11 +100,13 @@ MonoBehaviour:
   - m_Id: 17294958610
     m_Localized: '{characterName} takes control of the ball.'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 2307362037524856837
   - m_Id: 17294958611
     m_Localized: 'Condition: {condition}'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 2307362037524856837
   - m_Id: 7669565703856128
     m_Localized: Kickoff!
     m_Metadata:
@@ -109,7 +118,28 @@ MonoBehaviour:
   - m_Id: 7669565724827649
     m_Localized: '{characterName} stops it!'
     m_Metadata:
-      m_Items: []
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 8025183153299456
+    m_Localized: '{commandName}!'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2307362037524856837
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 17294958595
+        - id: 17294958597
+        - id: 17294958598
+        - id: 17294958599
+        - id: 17294958600
+        - id: 17294958601
+        - id: 7669565724827649
+        - id: 17294958610
+        - id: 17294958611
+        - id: 8025183153299456

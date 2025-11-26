@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Simulation.Enums.Log;
 
 public class DuelLogPopupStack : MonoBehaviour
 {
@@ -14,25 +15,48 @@ public class DuelLogPopupStack : MonoBehaviour
     [Header("Setup")]
     [SerializeField] private DuelLogPopup popupPrefab;
     [SerializeField] private Transform popupParent;
+    [SerializeField] private GameObject panelStack;
     [SerializeField] private int maxPopups = 3;
 
     private List<DuelLogPopUpData> activePopups = new List<DuelLogPopUpData>();
     private Queue<DuelLogEntry> pendingEntries = new Queue<DuelLogEntry>();
     private bool isAdding = false;
     private bool isRemoving = false;
+    private bool isOpen;
 
     void OnEnable()
-    { 
-        DuelLogEvents.OnNewEntry += EnqueuePopup; 
+    {
+        BattleEvents.OnStartBattle += HandleStartBattle;
+        SettingsEvents.OnAutoBattleToggled += HandleAutoBattleToggled;
+        DuelLogEvents.OnNewEntry += EnqueuePopup;
     }
 
     void OnDisable()
     { 
+        BattleEvents.OnStartBattle -= HandleStartBattle;
+        SettingsEvents.OnAutoBattleToggled -= HandleAutoBattleToggled;
         DuelLogEvents.OnNewEntry -= EnqueuePopup; 
     }
 
+    public void Toggle()
+    {
+        isOpen = !isOpen;
+        SetActive(isOpen);
+    }
+
+    public void SetActive(bool active) 
+    {
+        panelStack.SetActive(active);
+        if (active)
+            ClearAllPopups();
+    }
+    private void HandleStartBattle() => SetActive(!SettingsManager.Instance.IsAutoBattleEnabled);
+    private void HandleAutoBattleToggled(bool enable) => SetActive(!enable);
+
     void EnqueuePopup(DuelLogEntry entry)
     {
+        if (entry.LogLevel != LogLevel.Info) return;
+
         pendingEntries.Enqueue(entry);
 
         if (!isAdding)
@@ -119,6 +143,22 @@ public class DuelLogPopupStack : MonoBehaviour
         Destroy(pd.Popup.gameObject);
     }
 
+    private void ClearAllPopups()
+    {
+        // Destroy existing popup GameObjects
+        foreach (var pd in activePopups)
+        {
+            if (pd.Popup != null)
+                Destroy(pd.Popup.gameObject);
+        }
+
+        activePopups.Clear();
+        pendingEntries.Clear();
+
+        isAdding = false;
+        isRemoving = false;
+    }
+
     void Update()
     {
         // For robustness: if popups on screen and neither stagger is running, restart
@@ -128,4 +168,6 @@ public class DuelLogPopupStack : MonoBehaviour
         if (!isRemoving && activePopups.Count > 0)
             StartCoroutine(RemoveDuePopupsStaggered());
     }
+
+    
 }
