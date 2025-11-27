@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Simulation.Enums.Character;
 
 public class PausePanel : MonoBehaviour
 {
@@ -13,16 +14,19 @@ public class PausePanel : MonoBehaviour
     {
         SetActive(false);
         BattleUIManager.Instance.RegisterPausePanel(this);
-        BattleEvents.OnPauseBattle += Toggle;
-        BattleEvents.OnResumeBattle += Toggle;
+        BattleEvents.OnBattlePause += HandleBattlePause;
+        BattleEvents.OnBattleResume += HandleBattleResume;
     }
 
     private void OnDestroy()
     {
         BattleUIManager.Instance.UnregisterPausePanel(this);
-        BattleEvents.OnPauseBattle -= Toggle;
-        BattleEvents.OnResumeBattle -= Toggle;
+        BattleEvents.OnBattlePause -= HandleBattlePause;
+        BattleEvents.OnBattleResume -= HandleBattleResume;
     }
+
+    private void HandleBattlePause(TeamSide teamSide) => Toggle();
+    private void HandleBattleResume() => Toggle();
 
     public void Toggle()
     {

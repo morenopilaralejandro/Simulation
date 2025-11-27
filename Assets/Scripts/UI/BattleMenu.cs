@@ -70,6 +70,8 @@ public class BattleMenu : MonoBehaviour
 
         if (isBattleMenuOpen) 
         {
+            if (BattleUIManager.Instance.IsDuelLogMenuOpen)
+                BattleUIManager.Instance.ToggleDuelLogMenu();
             SetAutoOrManualButtonActive();
             SetPauseOrResumeButtonActive();
             EventSystem.current.SetSelectedGameObject(firstSelected);
@@ -119,8 +121,7 @@ public class BattleMenu : MonoBehaviour
 
     public void OnButtonDuelLogTapped()
     {
-        Debug.Log("Duel Log button tapped.");
-        // TODO: Show duel log UI
+        BattleUIManager.Instance.ToggleDuelLogMenu();
 
         ToggleBattleMenu();
     }
@@ -155,7 +156,7 @@ public class BattleMenu : MonoBehaviour
 
         if (isBattleMenuOpen)
             ToggleBattleMenu();
-        PauseManager.Instance.StartPause();
+        PauseManager.Instance.StartPause(BattleManager.Instance.GetUserSide());
         specialOptionPause.StartCooldown();
     }
 

@@ -17,6 +17,7 @@ public class BattleUIManager : MonoBehaviour
     private PausePanel pausePanel;
     private DuelParticantsPanel duelParticantsPanel;
     private DuelMenu duelMenu;
+    private DuelLogMenu duelLogMenu;
     private BattleMenu battleMenu;
     private ForfeitMenu forfeitMenu;
 
@@ -90,6 +91,16 @@ public class BattleUIManager : MonoBehaviour
     public void UnregisterDuelMenu(DuelMenu duelMenu)
     {
         this.duelMenu = null;
+    }
+
+    public void RegisterDuelLogMenu(DuelLogMenu duelLogMenu)
+    {
+        this.duelLogMenu = duelLogMenu;
+    }
+
+    public void UnregisterDuelLogMenu(DuelLogMenu duelLogMenu)
+    {
+        this.duelLogMenu = null;
     }
 
     public void RegisterBattleMenu(BattleMenu battleMenu)
@@ -209,6 +220,11 @@ public class BattleUIManager : MonoBehaviour
         if (duelMenu != null) 
             duelMenu.Hide();
     }
+    #endregion
+
+    #region DuelLogMenu
+    public bool IsDuelLogMenuOpen => duelLogMenu.IsOpen;
+    public void ToggleDuelLogMenu() => duelLogMenu.Toggle();
     #endregion
 
     #region BattleMenu

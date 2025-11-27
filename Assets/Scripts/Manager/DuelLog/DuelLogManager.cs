@@ -42,6 +42,38 @@ public class DuelLogManager : MonoBehaviour
         ColorDefault = Color.black;
     }
 
+
+    void OnEnable()
+    {
+        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattlePause += HandleBattlePause;
+        BattleEvents.OnBattleResume += HandleBattleResume;
+
+
+        BattleEvents.OnGoalScored += HandleGoalScored;
+    }
+
+    void OnDisable()
+    { 
+        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattlePause -= HandleBattlePause;
+        BattleEvents.OnBattleResume -= HandleBattleResume;
+        BattleEvents.OnGoalScored -= HandleGoalScored;
+    }
+
+    private void HandleBattleStart() 
+    { 
+        Clear();
+        DuelLogManager.Instance.AddMatchStart();
+    }
+
+    private void HandleBattleEnd() => AddMatchEnd();
+    private void HandleBattlePause(TeamSide teamSide) => AddMatchPause(GoalManager.Instance.Keepers[teamSide]);
+    private void HandleBattleResume() => AddMatchResume();
+    private void HandleGoalScored(Character scorringCharacter) => AddActionScore(scorringCharacter);
+
     #endregion
 
     #region Add Methods
@@ -329,16 +361,19 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddGainPossession(Character character)
+    public void AddPossessionGained(Character character)
     {
-        if (BattleManager.Instance.CurrentPhase != BattlePhase.Deadball) return;
+        if (BattleManager.Instance.CurrentPhase == BattlePhase.Deadball) return;
 
+        var args = new { 
+            characterName = character.CharacterNick
+        };
         AddEntry(
             "possession_gained", 
             LogLevel.Trace,
             character,
             null,
-            null
+            args
         );
     }
 

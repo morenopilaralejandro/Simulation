@@ -177,6 +177,7 @@ public class BattleManager : MonoBehaviour
         ResetTimer();
         timerHalf = TimerHalf.Second;
         BattleUIManager.Instance.UpdateTimerHalfDisplay(timerHalf);
+        DuelLogManager.Instance.AddMatchHalf();
         ResetDefaultPositions();
         KickoffManager.Instance.StartKickoff(TeamSide.Away);
     }
@@ -197,6 +198,7 @@ public class BattleManager : MonoBehaviour
             scorringTeam, 
             scoreDict[scorringTeam.TeamSide]);
 
+        BattleEvents.RaiseGoalScored(PossessionManager.Instance.LastCharacter);
         StartCoroutine(GoalSequence(goal.TeamSide));
     }
 
@@ -227,7 +229,7 @@ public class BattleManager : MonoBehaviour
         LogManager.Info($"[BattleManager] Game Ended — Home: {homeScore} Away: {awayScore}, User side: {userSide}, Winner: {winningSide}", this);
 
         SetBattlePhase(BattlePhase.End);
-        BattleEvents.RaiseEndBattle();
+        BattleEvents.RaiseBattleEnd();
         SceneLoader.UnloadBattle();
         if (winningSide == userSide)
         {
@@ -246,7 +248,7 @@ public class BattleManager : MonoBehaviour
         if (currentPhase == BattlePhase.End) return;        
 
         SetBattlePhase(BattlePhase.End);
-        BattleEvents.RaiseEndBattle();
+        BattleEvents.RaiseBattleEnd();
         SceneLoader.UnloadBattle();
 
         TeamSide userSide = GetUserSide();
@@ -320,8 +322,6 @@ public class BattleManager : MonoBehaviour
             AudioManager.Instance.PlaySfx("sfx-whistle_triple");
         }
 
-        //DuelLogManager.Instance.AddMatchEnd();
-
         yield return new WaitForSeconds(duration);
 
         BattleUIManager.Instance.SetMessageActive(messageType, false);
@@ -353,7 +353,7 @@ public class BattleManager : MonoBehaviour
     #region Team and Ball
     private void HandleAllCharactersReady()
     {
-        BattleEvents.RaiseStartBattle();
+        BattleEvents.RaiseBattleStart();
         ResetDefaultPositions();
         KickoffManager.Instance.StartKickoff(TeamSide.Home);
     }

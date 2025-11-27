@@ -2,37 +2,42 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Localization;
+using Simulation.Enums.Log;
 
 public class DuelLogMenu : MonoBehaviour
 {
-/*
     [SerializeField] private DuelLogPopup popupPrefab;
     [SerializeField] private Transform contentParent; // ScrollView content
-    [SerializeField] private GameObject panelDuelLogMenu; // ScrollView content
-    [SerializeField] private Animator animator;
+    [SerializeField] private GameObject panelMenu; // ScrollView content
     [SerializeField] private ScrollRect scrollRect;
-    
-    private LocalizedString textSwipeUp = new LocalizedString("UITexts", "TextSwipeUp");
-    private LocalizedString textSwipeLeft = new LocalizedString("UITexts", "TextSwipeLeft");
-    private LocalizedString textKickOff = new LocalizedString("UITexts", "TextKickOff");
+    [SerializeField] private DuelLogPopupStack popupStack;
 
-    private bool isMenuOpen = false;
+    private bool isOpen = false;
+    public bool IsOpen => isOpen;
     
     void Awake()
     {
+        BattleUIManager.Instance.RegisterDuelLogMenu(this);
+    }
 
+    void Start()
+    {
+        SetActive(false);
     }
 
     private void OnEnable()
     {
-        InputManager.Instance.SwipeDetector.OnSwipe += HandleSwipe;
-        InputManager.Instance.KeyboardDetector.OnDuelLogKey += HandleDuelLogKey;
+        
     }
 
     private void OnDisable()
     {
-        InputManager.Instance.SwipeDetector.OnSwipe -= HandleSwipe;
-        InputManager.Instance.KeyboardDetector.OnDuelLogKey -= HandleDuelLogKey;
+        
+    }
+
+    private void OnDestroy()
+    {
+        BattleUIManager.Instance.UnregisterDuelLogMenu(this);
     }
 
 
@@ -46,6 +51,8 @@ public class DuelLogMenu : MonoBehaviour
         // Add a static popup for each log entry
         foreach (DuelLogEntry entry in DuelLogManager.Instance.DuelLogEntries)
         {
+            if(entry.LogLevel == LogLevel.Info) continue;
+
             var popup = Instantiate(popupPrefab, contentParent);
 
             // Use a special method or overload that doesn't start a timer
@@ -53,11 +60,7 @@ public class DuelLogMenu : MonoBehaviour
         }
 
         StartCoroutine(ScrollToBottomNextFrame()); // <-- Fix here
-        isMenuOpen = true;
-        animator.SetTrigger("ShowMenu");       
-        AudioManager.Instance.PlaySfx("SfxMenuTap");
-        UIManager.Instance.SetHintVisible(true);
-        UIManager.Instance.SetHintText(textSwipeLeft.GetLocalizedString());
+        //AudioManager.Instance.PlaySfx("SfxMenuTap");
     }
 
     private IEnumerator ScrollToBottomNextFrame()
@@ -66,76 +69,17 @@ public class DuelLogMenu : MonoBehaviour
         scrollRect.verticalNormalizedPosition = 0f;
     }
 
-    private void HideMenu()
+    public void Toggle()
     {
-        isMenuOpen = false;
-        animator.SetTrigger("HideMenu");
-        AudioManager.Instance.PlaySfx("SfxMenuTap");
-        //if game phase is kickoff -> text tap : else -> textSwipeUp
-        if (GameManager.Instance.CurrentPhase == GamePhase.Kickoff) 
-        {
-            UIManager.Instance.SetHintText(textKickOff.GetLocalizedString());        
-        } else {
-            UIManager.Instance.SetHintText(textSwipeUp.GetLocalizedString());
-        }
-
-        if (UIManager.Instance.IsDuelMenuOpen() || UIManager.Instance.IsSecretMenuOpen())
-            UIManager.Instance.SetHintVisible(false);
+        isOpen = !isOpen;
+        SetActive(isOpen);
     }
 
-    public bool IsMenuOpen() 
+    public void SetActive(bool active) 
     {
-        return isMenuOpen;
-    }
-
-    private bool CanOpenMenu() 
-    {
-        return GameManager.Instance.IsTimeFrozen && !IsMenuOpen();
-    }
-
-    private bool CanCloseMenu() 
-    {
-        return IsMenuOpen();
-    }
-
-    private void OpenMenu() 
-    {
-        if (CanOpenMenu()) 
+        panelMenu.SetActive(active);
+        popupStack.Toggle();
+        if(active)
             PopulateLog();
     }
-
-    private void CloseMenu() 
-    {
-        if (CanCloseMenu())
-            HideMenu();
-    }
-
-    
-    private void HandleSwipe(SwipeDetector.SwipeDirection dir)
-    {
-        if (InputManager.Instance.IsDragging) return;
-        if (UIManager.Instance.IsExitMenuOpen()) return;
-        if (InputManager.Instance.SwipeDetector.WasConsumedThisFrame()) return;
-
-        if (dir == SwipeDetector.SwipeDirection.Right) 
-        {
-            OpenMenu();
-        }
-
-        if (dir == SwipeDetector.SwipeDirection.Left) 
-        {
-            CloseMenu();
-        }
-
-    }
-
-    private void HandleDuelLogKey() {
-        if (!IsMenuOpen()) {
-            OpenMenu();
-        } else 
-        {
-            CloseMenu();
-        }
-    }
-*/
 }

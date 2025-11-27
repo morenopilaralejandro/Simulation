@@ -5,10 +5,15 @@ using Simulation.Enums.Battle;
 public class GoalComponentTrigger : MonoBehaviour
 {
     private Goal goal;
+    [SerializeField] private BoxCollider goalCollider;
+
+    public BoxCollider GoalCollider => goalCollider;
+
 
     public void Initialize(Goal goal)
     {
         this.goal = goal; 
+        goalCollider = GetComponent<BoxCollider>();
     }
 
     private void OnTriggerEnter(Collider other)

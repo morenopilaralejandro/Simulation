@@ -64,6 +64,7 @@ public class KickoffManager : MonoBehaviour
         ResetPositions();
         ResetReady();
         BattleManager.Instance.SetBattlePhase(BattlePhase.Deadball);
+        DuelLogManager.Instance.AddDeadballKickoff(character0);
         AudioManager.Instance.PlaySfx("sfx-whistle_single");
 
         BallEvents.OnGained -= OnBallGained;

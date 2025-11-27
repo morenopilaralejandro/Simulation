@@ -26,20 +26,22 @@ public class DuelLogPopupStack : MonoBehaviour
 
     void OnEnable()
     {
-        BattleEvents.OnStartBattle += HandleStartBattle;
+        BattleEvents.OnBattleStart += HandleBattleStart;
         SettingsEvents.OnAutoBattleToggled += HandleAutoBattleToggled;
         DuelLogEvents.OnNewEntry += EnqueuePopup;
     }
 
     void OnDisable()
     { 
-        BattleEvents.OnStartBattle -= HandleStartBattle;
+        BattleEvents.OnBattleStart -= HandleBattleStart;
         SettingsEvents.OnAutoBattleToggled -= HandleAutoBattleToggled;
         DuelLogEvents.OnNewEntry -= EnqueuePopup; 
     }
 
     public void Toggle()
     {
+        if (!isOpen && SettingsManager.Instance.IsAutoBattleEnabled) return;
+
         isOpen = !isOpen;
         SetActive(isOpen);
     }
@@ -50,7 +52,8 @@ public class DuelLogPopupStack : MonoBehaviour
         if (active)
             ClearAllPopups();
     }
-    private void HandleStartBattle() => SetActive(!SettingsManager.Instance.IsAutoBattleEnabled);
+
+    private void HandleBattleStart() => SetActive(!SettingsManager.Instance.IsAutoBattleEnabled);
     private void HandleAutoBattleToggled(bool enable) => SetActive(!enable);
 
     void EnqueuePopup(DuelLogEntry entry)
