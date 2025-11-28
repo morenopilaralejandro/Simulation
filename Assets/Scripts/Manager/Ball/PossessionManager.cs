@@ -34,7 +34,6 @@ public class PossessionManager : MonoBehaviour
         Release();
         currentCharacter = character;
         LogManager.Info($"[PossessionManager] Possession gained by {character.CharacterId}", this);
-        DuelLogManager.Instance.AddPossessionGained(character);
         BallEvents.RaiseGained(character);
     }
 

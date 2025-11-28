@@ -174,10 +174,7 @@ public class DuelManager : MonoBehaviour
         character.StartKick();
         DuelManager.Instance.StartDuel(DuelMode.Shoot);
         ShootTriangleManager.Instance.SetTriangleFromCharacter(character);
-
-        //PlayDuelStartEffect();
-        //AudioManager.Instance.PlaySfx("SfxShootField");
-        //DuelLogManager.Instance.AddActionShoot(_cachedPlayer);
+        BattleEvents.RaiseShootPerformed(character, isDirect);
 
         //UI
         BattleUIManager.Instance.SetDuelParticipant(character, null);
@@ -240,6 +237,7 @@ public class DuelManager : MonoBehaviour
     {
         Reset();
         duel.DuelMode = duelMode;
+        DuelEvents.RaiseDuelStart(duelMode);
         BattleEffectManager.Instance.PlayDuelStartEffect(BattleManager.Instance.Ball.transform);
         switch (DuelMode)
         {
@@ -262,47 +260,32 @@ public class DuelManager : MonoBehaviour
     public void CancelDuel()
     {
         LogManager.Info("[DuelManager] Duel cancelled", this);
+        DuelEvents.RaiseDuelCancel();
         duel.IsResolved = true;
         BattleUIManager.Instance.HideDuelParticipantsPanel();
         duelHandler.CancelDuel();
-
-        //ShootTriangle.Instance.SetTriangleVisible(false);
-        //BallTrail.Instance.SetTrailVisible(false);
     }
 
     public void EndDuel(DuelParticipant winner, DuelParticipant loser)
     {
+        bool isWinnerUser = winner.Character.TeamSide == BattleManager.Instance.GetUserSide();
         LogManager.Info(
             $"[DuelManager] EndDuel " +
             $"Winner {winner.Character?.CharacterId}, " +
             $"TeamSide {winner.Character?.TeamSide}, " +
             $"Action {winner.Action}, " +
             $"Category {winner.Category}", this);
+        DuelEvents.RaiseDuelEnd(winner, loser, isWinnerUser);
 
         winner.Character.ModifyBattleStat(Stat.Hp, hpWinner);
         loser.Character.ModifyBattleStat(Stat.Hp, hpLoser);
 
-        if (winner.Character.TeamSide == BattleManager.Instance.GetUserSide())
-        {
-            //DuelLogManager.Instance.AddDuelWin(winningParticipant.Player.TeamIndex);
+        if (isWinnerUser)
             AudioManager.Instance.PlaySfx("sfx-duel_win");
-        }
         else
-        {
-            //DuelLogManager.Instance.AddDuelLose(winningParticipant.Player.TeamIndex);
             AudioManager.Instance.PlaySfx("sfx-duel_lose");
-        }
 
         BattleEffectManager.Instance.StopDuelStartEffect();
-
-        /*
-        if (winner.Action == DuelAction.Defense)
-        {
-            //BallTravelController.Instance.CancelTravel();
-            PossessionManager.Instance.Gain(winner.Character);
-            duel.LastOffense.Character.ApplyStatus(StatusEffect.Stunned);
-        }
-        */
 
         BattleUIManager.Instance.HideDuelParticipantsPanel();
         duel.IsResolved = true;

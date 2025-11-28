@@ -4,16 +4,19 @@ using Simulation.Enums.Duel;
 
 public static class DuelEvents
 {
-    public static event Action OnDuelStart;
-    public static void RaiseDuelStart()
+    public static event Action<DuelMode> OnDuelStart;
+    public static void RaiseDuelStart(DuelMode duelMode)
     {
-        OnDuelStart?.Invoke();
+        OnDuelStart?.Invoke(duelMode);
     }
 
-    public static event Action OnDuelEnd;
-    public static void RaiseDuelEnd()
+    public static event Action<DuelParticipant, DuelParticipant, bool> OnDuelEnd;
+    public static void RaiseDuelEnd(
+        DuelParticipant winner, 
+        DuelParticipant loser,
+        bool isWinnerUser)
     {
-        OnDuelEnd?.Invoke();
+        OnDuelEnd?.Invoke(winner, loser, isWinnerUser);
     }
 
     public static event Action OnDuelCancel;

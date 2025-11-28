@@ -285,6 +285,7 @@ MonoBehaviour:
   isAIEnabled: 0
   difficulty: 0
   currentState: 0
+  isAutoBattleEnabled: 0
 --- !u!114 &5753816166142112087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -531,8 +532,8 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.85
-  m_Height: 2
-  m_Direction: 1
+  m_Height: 2.1
+  m_Direction: 0
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1173388996270656118
 MonoBehaviour:

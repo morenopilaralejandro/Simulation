@@ -63,7 +63,7 @@ public class ShootDuelHandler : IDuelHandler
             BattleManager.Instance.Ball.ResumeTravel();
 
             DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
-            //DuelLogManager.Instance.AddActionDamage(participant.Action, participant.Damage);
+            DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, participant.Damage);
             LogManager.Info($"[ShootDuelHandler] " + 
                 $"Offense action increases attack pressure " +
                 $"+{participant.Damage}");
@@ -78,12 +78,12 @@ public class ShootDuelHandler : IDuelHandler
 
     public void Resolve()
     {
-        DuelLogManager.Instance.AddActionCommand(duel.LastDefense.Character, duel.LastDefense.Command, duel.LastDefense.Move);
-        //DuelLogManager.Instance.AddActionDamage(duel.LastDefense.Action, duel.LastDefense.Damage);
-
         DuelManager.Instance.ApplyElementalEffectiveness(
             duel.LastOffense, 
             duel.LastDefense);
+
+        DuelLogManager.Instance.AddActionCommand(duel.LastDefense.Character, duel.LastDefense.Command, duel.LastDefense.Move);
+        DuelLogManager.Instance.AddActionDamage(duel.LastDefense.Character, duel.LastDefense.Action, duel.LastDefense.Damage);
 
         LogManager.Info($"[ShootDuelHandler] " +
             $"Defense action decreases attack pressure " +
@@ -100,6 +100,7 @@ public class ShootDuelHandler : IDuelHandler
                 $"{duel.LastDefense.Character.CharacterId} " +
                 $"stopped the attack. " +
                 $"OffensePressure now {duel.OffensePressure}");
+            BattleEvents.RaiseShootStopped(duel.LastDefense.Character);
 
             duel.LastOffense.Character.ApplyStatus(StatusEffect.Stunned);
 

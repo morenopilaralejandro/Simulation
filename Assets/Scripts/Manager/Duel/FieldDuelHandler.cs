@@ -27,6 +27,7 @@ public class FieldDuelHandler : IDuelHandler
         }
 
         DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
+        DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, participant.Damage);
 
         if (duel.Participants.Count >= 2)
             Resolve();

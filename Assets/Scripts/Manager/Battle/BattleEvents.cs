@@ -46,4 +46,22 @@ public static class BattleEvents
         OnGoalScored?.Invoke(scorringCharacter);
     }
 
+    public static event Action<Character> OnPassPerformed;
+    public static void RaisePassPerformed(Character character)
+    {
+        OnPassPerformed?.Invoke(character);
+    }
+
+    public static event Action<Character, bool> OnShootPerformed;
+    public static void RaiseShootPerformed(Character character, bool isDirect)
+    {
+        OnShootPerformed?.Invoke(character, isDirect);
+    }
+
+    public static event Action<Character> OnShootStopped;
+    public static void RaiseShootStopped(Character character)
+    {
+        OnShootStopped?.Invoke(character);
+    }
+
 }
