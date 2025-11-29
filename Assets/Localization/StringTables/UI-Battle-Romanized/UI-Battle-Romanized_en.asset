@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 6139951b1e8226c3aa1e9e8fa7f6db60, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 2307362107809071107
   m_TableData:
   - m_Id: 14463803392
     m_Localized: DUEL
@@ -32,18 +33,6 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 14467997698
     m_Localized: Skill
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997699
-    m_Localized: score 1 goals!
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997700
-    m_Localized: score 3 goals!
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997701
-    m_Localized: score 5 goals!
     m_Metadata:
       m_Items: []
   - m_Id: 14467997702
@@ -114,6 +103,27 @@ MonoBehaviour:
     m_Localized: Forfeit
     m_Metadata:
       m_Items: []
+  - m_Id: 9045905770291200
+    m_Localized: Score {goalAmount} goal!
+    m_Metadata:
+      m_Items:
+      - rid: 2307362107809071107
+  - m_Id: 9045905770291201
+    m_Localized: Score {goalAmount} goals!
+    m_Metadata:
+      m_Items:
+      - rid: 2307362107809071107
+  - m_Id: 9045905770291202
+    m_Localized: AP
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2307362107809071107
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 9045905770291200
+        - id: 9045905770291201

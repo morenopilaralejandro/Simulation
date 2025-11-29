@@ -38,12 +38,14 @@ public class CharacterComponentController : MonoBehaviour
 
     private void OnEnable()
     {
-        TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;    
+        TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;
+        BattleEvents.OnBattlePhaseChanged += HandleBattlePhaseChanged;
     }
 
     private void OnDisable()
     {
         TeamEvents.OnAssignCharacterToTeamBattle -= HandleAssignCharacterToTeamBattle;
+        BattleEvents.OnBattlePhaseChanged += HandleBattlePhaseChanged;
     }
 
     void Update()
@@ -116,6 +118,11 @@ public class CharacterComponentController : MonoBehaviour
         {
             this.enabled = false;
         }
+    }
+
+    private void HandleBattlePhaseChanged(BattlePhase newPhase, BattlePhase oldPhase)
+    {
+        isAimingPass = false;
     }
     #endregion
 

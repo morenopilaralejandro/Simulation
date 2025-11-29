@@ -10,19 +10,26 @@ public static class DuelEvents
         OnDuelStart?.Invoke(duelMode);
     }
 
-    public static event Action<DuelParticipant, DuelParticipant, bool> OnDuelEnd;
+    public static event Action
+    <
+        DuelMode,
+        DuelParticipant, 
+        DuelParticipant, 
+        bool
+    > OnDuelEnd;
     public static void RaiseDuelEnd(
+        DuelMode duelMode,
         DuelParticipant winner, 
         DuelParticipant loser,
         bool isWinnerUser)
     {
-        OnDuelEnd?.Invoke(winner, loser, isWinnerUser);
+        OnDuelEnd?.Invoke(duelMode, winner, loser, isWinnerUser);
     }
 
-    public static event Action OnDuelCancel;
-    public static void RaiseDuelCancel()
+    public static event Action<DuelMode> OnDuelCancel;
+    public static void RaiseDuelCancel(DuelMode duelMode)
     {
-        OnDuelCancel?.Invoke();
+        OnDuelCancel?.Invoke(duelMode);
     }
 
 }
