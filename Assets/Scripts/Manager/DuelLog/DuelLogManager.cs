@@ -98,14 +98,14 @@ public class DuelLogManager : MonoBehaviour
     private void HandleShootStopped(Character character) => AddActionStop(character);
 
     private void HandleDuelStart(DuelMode duelMode) => AddDuelStart();
-    private void HandleDuelEnd(DuelParticipant winner, DuelParticipant loser, bool isWinnerUser)
+    private void HandleDuelEnd(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser)
     {
         if (isWinnerUser)
             AddDuelWin(winner.Character);
         else
             AddDuelLose(winner.Character);
     }
-    private void HandleDuelCancel() => AddDuelCancel();
+    private void HandleDuelCancel(DuelMode duelMode) => AddDuelCancel();
     private void HandleGained(Character character) => AddPossessionGained(character);
         
 

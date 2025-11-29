@@ -200,6 +200,10 @@ public class BattleUIManager : MonoBehaviour
         if (duelParticantsPanel != null) 
             duelParticantsPanel.Hide();
     }
+
+    public void ToggleComboDamage() => duelParticantsPanel.ToggleComboDamage();
+    public void SetComboDamage(float damage) => duelParticantsPanel.SetComboDamage(damage);
+
     #endregion
 
     #region DuelMenu

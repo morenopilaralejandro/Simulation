@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 142
       objectReference: {fileID: 0}
+    - target: {fileID: 6469662186148448163, guid: 2fc10be15e5738ff0bb6bfa5d9bef668, type: 3}
+      propertyPath: comboDamageIndicator
+      value: 
+      objectReference: {fileID: 957022349993514771}
     - target: {fileID: 8500921213172438232, guid: 2fc10be15e5738ff0bb6bfa5d9bef668, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -101,6 +105,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fc10be15e5738ff0bb6bfa5d9bef668, type: 3}
+--- !u!114 &957022349993514771 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 367659440249786540, guid: 2fc10be15e5738ff0bb6bfa5d9bef668, type: 3}
+  m_PrefabInstance: {fileID: 599601699527673791}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfa3ab0c4fe7f259080f5fc1a3c5bb05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &9055437424375141223 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8500921213172438232, guid: 2fc10be15e5738ff0bb6bfa5d9bef668, type: 3}
@@ -504,6 +519,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3621873159157746246, guid: 60eb488cdb342a1e1aff9e20cfd3bad5, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3621873159157746246, guid: 60eb488cdb342a1e1aff9e20cfd3bad5, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3621873159157746246, guid: 60eb488cdb342a1e1aff9e20cfd3bad5, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4187081752678854361, guid: 60eb488cdb342a1e1aff9e20cfd3bad5, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -588,6 +615,10 @@ PrefabInstance:
       propertyPath: popupStack
       value: 
       objectReference: {fileID: 3690930745937113149}
+    - target: {fileID: 7944512237347068666, guid: 60eb488cdb342a1e1aff9e20cfd3bad5, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

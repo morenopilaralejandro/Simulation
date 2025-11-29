@@ -260,7 +260,7 @@ public class DuelManager : MonoBehaviour
     public void CancelDuel()
     {
         LogManager.Info("[DuelManager] Duel cancelled", this);
-        DuelEvents.RaiseDuelCancel();
+        DuelEvents.RaiseDuelCancel(duel.DuelMode);
         duel.IsResolved = true;
         BattleUIManager.Instance.HideDuelParticipantsPanel();
         duelHandler.CancelDuel();
@@ -275,7 +275,7 @@ public class DuelManager : MonoBehaviour
             $"TeamSide {winner.Character?.TeamSide}, " +
             $"Action {winner.Action}, " +
             $"Category {winner.Category}", this);
-        DuelEvents.RaiseDuelEnd(winner, loser, isWinnerUser);
+        DuelEvents.RaiseDuelEnd(duel.DuelMode, winner, loser, isWinnerUser);
 
         winner.Character.ModifyBattleStat(Stat.Hp, hpWinner);
         loser.Character.ModifyBattleStat(Stat.Hp, hpLoser);

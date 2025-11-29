@@ -8,12 +8,9 @@ using Simulation.Enums.Duel;
 
 public class ShootDuelHandler : IDuelHandler 
 {
-    private Duel duel;
+    private readonly Duel duel;
 
-    public ShootDuelHandler(Duel duel) 
-    { 
-        this.duel = duel;
-    }
+    public ShootDuelHandler(Duel duel) => this.duel = duel;
 
     public void AddParticipant(DuelParticipant participant) 
     {
@@ -64,6 +61,8 @@ public class ShootDuelHandler : IDuelHandler
 
             DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
             DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, participant.Damage);
+            BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
+
             LogManager.Info($"[ShootDuelHandler] " + 
                 $"Offense action increases attack pressure " +
                 $"+{participant.Damage}");
@@ -104,7 +103,6 @@ public class ShootDuelHandler : IDuelHandler
 
             duel.LastOffense.Character.ApplyStatus(StatusEffect.Stunned);
 
-            BattleManager.Instance.Ball.EndTravel();
             PossessionManager.Instance.GiveBallToCharacter(duel.LastDefense.Character);
 
             /*
@@ -115,10 +113,12 @@ public class ShootDuelHandler : IDuelHandler
             */
 
             EndDuel(duel.LastDefense, duel.LastOffense);
+            BattleManager.Instance.Ball.EndTravel();
         }
         else
         {
             duel.OffensePressure -= duel.LastDefense.Damage;
+            BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
 
             LogManager.Info($"[ShootDuelHandler] Partial block. " +
                 $"OffensePressure now {duel.OffensePressure}");
