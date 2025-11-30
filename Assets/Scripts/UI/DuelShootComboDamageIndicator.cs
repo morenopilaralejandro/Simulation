@@ -66,7 +66,6 @@ public class DuelShootComboDamageIndicator : MonoBehaviour
     {
         isOpen = !isOpen;
         SetActive(isOpen);
-        Debug.LogWarning("toggle");
     }
 
     public void SetActive(bool active) 

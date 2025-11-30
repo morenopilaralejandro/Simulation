@@ -8,143 +8,148 @@ using Simulation.Enums.Duel;
 
 public class ShootDuelHandler : IDuelHandler 
 {
+    #region Fields
     private readonly Duel duel;
+    #endregion
 
+    #region Contructor
     public ShootDuelHandler(Duel duel) => this.duel = duel;
+    #endregion
+    
+    #region Basic Duel Logic
+    public void EndDuel(DuelParticipant winner, DuelParticipant loser) => DuelManager.Instance.EndDuel(winner, loser);
+
+    public void CancelDuel() { }
 
     public void AddParticipant(DuelParticipant participant) 
     {
-        if (duel.Participants.Count == 0) 
-        {
-            if (participant.Category == Category.Shoot)
-            {
-                PossessionManager.Instance.Release();
-                BattleManager.Instance.Ball.StartTravel(
-                    ShootTriangleManager.Instance.GetRandomPoint(),
-                    participant.Command
-                );
-            }
-        } else 
-        {
-            if (participant.Category == Category.Shoot)            
-                PossessionManager.Instance.SetLastCharacter(participant.Character);
-        }
+        bool isFirstParticipant = duel.Participants.Count == 0;
+        bool isCategoryShoot = participant.Category == Category.Shoot;
+        bool isActionOffense = participant.Action == DuelAction.Offense;
+
+        if (isFirstParticipant)
+            StartBallTravel(participant);
+        else if (isCategoryShoot) 
+            PossessionManager.Instance.SetLastCharacter(participant.Character); //keep track of the last character in the shoot chain to determine who scored
 
         duel.Participants.Add(participant);
         LogManager.Trace($"[ShootDuelHandler] AddParticipant {participant.Character.CharacterId}");
 
-        // Handle secret moves and SFX
-        if (participant.Move != null) 
-        {
-            participant.Character.ModifyBattleStat(Stat.Sp, -participant.Move.Cost);
-            BattleUIManager.Instance.SetDuelParticipant(participant.Character, null);
-        }
+        ProcessParticipantAction(participant, isActionOffense);
+    }
 
-        if (participant.Category == Category.Shoot) 
-        {
-            if (participant.Move != null) 
-            {
-                AudioManager.Instance.PlaySfx("sfx-ball_shoot_regular");
-            } else 
-            {
-                AudioManager.Instance.PlaySfx("sfx-ball_shoot_special");
-            }
-        }
-            
+    private void ProcessParticipantAction(DuelParticipant participant, bool isActionOffense)
+    {
+        HandleMove(participant);
 
-        if (participant.Action == DuelAction.Offense)
+        if (isActionOffense)
         {
-            duel.OffensePressure += participant.Damage;
             duel.LastOffense = participant;
-
-            BattleManager.Instance.Ball.ResumeTravel();
-
-            DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
-            DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, participant.Damage);
-            BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
-
-            LogManager.Info($"[ShootDuelHandler] " + 
-                $"Offense action increases attack pressure " +
-                $"+{participant.Damage}");
+            HandleOffense(participant);
         }
         else
         {
             duel.LastDefense = participant;
             Resolve();
         }
-
     }
+    #endregion
 
+    #region Offense Logic
+    private void HandleOffense(DuelParticipant offense) 
+    {
+        duel.OffensePressure += offense.Damage;
+        LogParticipantAction(offense);
+        HandleShootSfx(offense);
+        BattleManager.Instance.Ball.ResumeTravel();
+    }
+    #endregion
+
+    #region Defense Logic
     public void Resolve()
     {
-        DuelManager.Instance.ApplyElementalEffectiveness(
-            duel.LastOffense, 
-            duel.LastDefense);
+        DuelParticipant offense = duel.LastOffense;
+        DuelParticipant defense = duel.LastDefense;
 
-        DuelLogManager.Instance.AddActionCommand(duel.LastDefense.Character, duel.LastDefense.Command, duel.LastDefense.Move);
-        DuelLogManager.Instance.AddActionDamage(duel.LastDefense.Character, duel.LastDefense.Action, duel.LastDefense.Damage);
+        DuelManager.Instance.ApplyElementalEffectiveness(offense, defense);
 
-        LogManager.Info($"[ShootDuelHandler] " +
-            $"Defense action decreases attack pressure " +
-            $"-{duel.LastDefense.Damage}");
-        if (duel.LastDefense.Damage >= duel.OffensePressure)
-        {
-            /*
-            if (duel.LastDefense.Category == Category.Catch)
-                AudioManager.Instance.PlaySfx("SfxCatch");
-            if (duel.DuelMode == DuelMode.Shoot)
-                DuelLogManager.Instance.AddActionStop(duel.LastDefense.Player);
-            */
-            LogManager.Info($"[ShootDuelHandler] " +
-                $"{duel.LastDefense.Character.CharacterId} " +
-                $"stopped the attack. " +
-                $"OffensePressure now {duel.OffensePressure}");
-            BattleEvents.RaiseShootStopped(duel.LastDefense.Character);
+        duel.OffensePressure -= defense.Damage;
+        LogParticipantAction(defense);
 
-            duel.LastOffense.Character.ApplyStatus(StatusEffect.Stunned);
-
-            PossessionManager.Instance.GiveBallToCharacter(duel.LastDefense.Character);
-
-            /*
-                if category.block && move && move.category==shoot move.trait.block
-                    Reversal
-                else 
-                    End
-            */
-
-            EndDuel(duel.LastDefense, duel.LastOffense);
-            BattleManager.Instance.Ball.EndTravel();
-        }
+        bool isCategoryCatch = defense.Category == Category.Catch;
+        if (duel.OffensePressure <= 0)
+            HandleDefenseFull(offense, defense, isCategoryCatch);
         else
+            HandleDefensePartial(offense, defense, isCategoryCatch);
+    }
+
+    private void HandleDefenseFull(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
+    {
+        LogManager.Info($"[ShootDuelHandler] {defense.Character.CharacterId} stopped the attack.");
+
+        BattleEvents.RaiseShootStopped(defense.Character);
+        offense.Character.ApplyStatus(StatusEffect.Stunned);
+        PossessionManager.Instance.GiveBallToCharacter(defense.Character);
+
+        EndDuel(defense, offense);
+        BattleManager.Instance.Ball.EndTravel();
+    }
+
+    private void HandleDefensePartial(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
+    {
+        LogManager.Info($"[ShootDuelHandler] Partial block.");
+
+        defense.Character.ApplyStatus(StatusEffect.Stunned);
+        BattleManager.Instance.Ball.ResumeTravel();
+
+        if (isCategoryCatch)
         {
-            duel.OffensePressure -= duel.LastDefense.Damage;
-            BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
-
-            LogManager.Info($"[ShootDuelHandler] Partial block. " +
-                $"OffensePressure now {duel.OffensePressure}");
-
-            duel.LastDefense.Character.ApplyStatus(StatusEffect.Stunned);
-            //duel.LastDefense.Character.gameObject.SetActive(false);
-
-            BattleManager.Instance.Ball.ResumeTravel();
-
-            if (duel.LastDefense.Category == Category.Catch)
-            {
-                //AudioManager.Instance.PlaySfx("SfxKeeperScream");
-                LogManager.Info("[ShootDuelHandler] Keeper fails to catch the ball");
-                EndDuel(duel.LastOffense, duel.LastDefense);
-            }
+            LogManager.Info("[ShootDuelHandler] Keeper fails to catch the ball");
+            EndDuel(offense, defense);
         }
     }
+    #endregion
 
-    public void EndDuel(DuelParticipant winner, DuelParticipant loser) 
-    { 
-        DuelManager.Instance.EndDuel(winner, loser);
+    #region Helpers
+    private void StartBallTravel(DuelParticipant participant)
+    {
+        PossessionManager.Instance.Release();
+        BattleManager.Instance.Ball.StartTravel(
+            ShootTriangleManager.Instance.GetRandomPoint(),
+            participant.Command);
     }
 
-    public void CancelDuel() 
-    { 
+    private void HandleMove(DuelParticipant participant) 
+    {
+        if (participant.Move == null) return;
 
+        participant.Character.ModifyBattleStat(Stat.Sp, -participant.Move.Cost);
+        BattleUIManager.Instance.SetDuelParticipant(participant.Character, null);
     }
+
+    private void HandleShootSfx(DuelParticipant participant) 
+    {
+        if (participant.Move != null) 
+            AudioManager.Instance.PlaySfx("sfx-ball_shoot_regular");    
+        else 
+            AudioManager.Instance.PlaySfx("sfx-ball_shoot_special");
+    }
+
+    private void LogParticipantAction(DuelParticipant participant)
+    {
+        bool isActionOffense = participant.Action == DuelAction.Offense;
+
+        DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
+        DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, participant.Damage);
+        BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
+
+        if(isActionOffense)
+            LogManager.Info($"[ShootDuelHandler] Offense action increases attack pressure +{participant.Damage}");
+        else
+            LogManager.Info($"[ShootDuelHandler] Defense action decreases attack pressure -{participant.Damage}");
+
+        LogManager.Info($"[ShootDuelHandler] OffensePressure now {duel.OffensePressure}");
+    }
+    #endregion
 
 }
