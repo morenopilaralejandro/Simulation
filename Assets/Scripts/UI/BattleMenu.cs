@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Simulation.Enums.Input;
 
-public class BattleMenu : MonoBehaviour
+public class BattleMenu : Menu
 {
     [Header("Buttons - Regular")]
     [SerializeField] private Button buttonDuelLog;

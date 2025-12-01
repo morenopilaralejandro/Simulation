@@ -8,26 +8,27 @@ using Simulation.Enums.Duel;
 
 public class FieldDuelHandler : IDuelHandler 
 {
-    private Duel duel;
-    private float supporterMultiplier = 0.2f;
+    #region Fields
+    private readonly Duel duel;
+    private readonly float supporterMultiplier = 0.2f;
+    #endregion
 
-    public FieldDuelHandler(Duel duel) 
-    { 
-        this.duel = duel;
-    }
+    #region Contructor
+    public FieldDuelHandler(Duel duel) => this.duel = duel;
+    #endregion
 
+    #region Basic Duel Logic
     public void AddParticipant(DuelParticipant participant) {
+
         duel.Participants.Add(participant);
         LogManager.Trace($"[FieldDuelHandler] AddParticipant {participant.Character.CharacterId}");
-        if (participant.Action == DuelAction.Offense) 
-        {
-            duel.LastOffense = participant;
-        } else {
-            duel.LastDefense = participant;
-        }
 
-        DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
-        DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, participant.Damage);
+        if (participant.Action == DuelAction.Offense) 
+            duel.LastOffense = participant;
+        else
+            duel.LastDefense = participant;
+    
+        LogParticipantAction(participant);
 
         if (duel.Participants.Count >= 2)
             Resolve();
@@ -62,11 +63,9 @@ public class FieldDuelHandler : IDuelHandler
         LogManager.Info($"[FieldDuelHandler] Final DefensePressure {duel.DefensePressure}");
 
         if (duel.OffensePressure > duel.DefensePressure) 
-        {
             EndDuel(duel.LastOffense, duel.LastDefense);
-        } else {
+        else
             EndDuel(duel.LastDefense, duel.LastOffense);
-        }
     }
 
     public void EndDuel(DuelParticipant winner, DuelParticipant loser) 
@@ -83,11 +82,10 @@ public class FieldDuelHandler : IDuelHandler
         DuelManager.Instance.EndDuel(winner, loser);
     }
 
-    public void CancelDuel() 
-    { 
+    public void CancelDuel() { }
+    #endregion
 
-    }
-
+    #region Support
     private float GetSupportDamage(
         DuelParticipant participant, 
         List<Character> supports) 
@@ -125,5 +123,14 @@ public class FieldDuelHandler : IDuelHandler
         foreach(Character support in supports) 
             support.ApplyStatus(StatusEffect.Stunned);
     }
+    #endregion
+
+    #region Helpers
+    private void LogParticipantAction(DuelParticipant participant)
+    {
+        DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
+        DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, participant.Damage);
+    }
+    #endregion
 
 }
