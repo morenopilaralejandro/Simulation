@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: es
   m_SharedData: {fileID: 11400000, guid: 00f2edbf73703906bb09abb1e4e0e09e, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 2307362107809071106
   m_TableData:
   - m_Id: 17894744064
     m_Localized: DUELO
@@ -32,18 +33,6 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 17894744067
     m_Localized: "T\xE9cnica"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 17894744068
-    m_Localized: "\xA1Marca 1 gol!"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 17894744069
-    m_Localized: "\xA1Marca 3 goles!"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 17894744070
-    m_Localized: "\xA1Marca 5 goles!"
     m_Metadata:
       m_Items: []
   - m_Id: 17894744071
@@ -114,6 +103,27 @@ MonoBehaviour:
     m_Localized: Abandonar
     m_Metadata:
       m_Items: []
+  - m_Id: 9045895339057152
+    m_Localized: "\xA1Marca {goalAmount} gol!"
+    m_Metadata:
+      m_Items:
+      - rid: 2307362107809071106
+  - m_Id: 9045895360028672
+    m_Localized: "\xA1Marca {goalAmount} goles!"
+    m_Metadata:
+      m_Items:
+      - rid: 2307362107809071106
+  - m_Id: 9045895360028673
+    m_Localized: PA
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2307362107809071106
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 9045895339057152
+        - id: 9045895360028672

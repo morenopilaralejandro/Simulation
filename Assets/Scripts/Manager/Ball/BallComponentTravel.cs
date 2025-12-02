@@ -64,7 +64,7 @@ public class BallComponentTravel : MonoBehaviour
 
         isTraveling = true;
         isTravelPaused = false;
-        BallEvents.RaiseStartTravel(target);
+        BallEvents.RaiseTravelStart(target);
     }
 
     public void PauseTravel()
@@ -76,7 +76,7 @@ public class BallComponentTravel : MonoBehaviour
 
         isTravelPaused = true;
         LogManager.Trace("[BallComponentTravel] [PauseTravel] Travel paused.", this);
-        BallEvents.RaisePauseTravel();
+        BallEvents.RaiseTravelPause();
     }
 
     public void ResumeTravel()
@@ -89,7 +89,7 @@ public class BallComponentTravel : MonoBehaviour
  
         LogManager.Trace("[BallComponentTravel] [ResumeTravel] Travel resumed.", this);
         isTravelPaused = false;
-        BallEvents.RaiseResumeTravel();
+        BallEvents.RaiseTravelResume();
     }
 
     public void CancelTravel()
@@ -111,7 +111,7 @@ public class BallComponentTravel : MonoBehaviour
         ShootTriangleManager.Instance.Hide();
 
         DuelManager.Instance.CancelDuel();
-        BallEvents.RaiseCancelTravel();
+        BallEvents.RaiseTravelCancel();
     }
 
     public void EndTravel()
@@ -129,6 +129,6 @@ public class BallComponentTravel : MonoBehaviour
             DuelManager.Instance.CancelDuel();
 
         LogManager.Trace($"[BallComponentTravel] [EndTravel] Travel ended at {ball.transform.position} with velocity {travelVelocity}.", this);
-        BallEvents.RaiseEndTravel(currentTarget);
+        BallEvents.RaiseTravelEnd(currentTarget);
     }
 }

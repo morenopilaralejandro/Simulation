@@ -11,6 +11,7 @@ public class DuelParticantsPanel : MonoBehaviour
     [SerializeField] private Image categoryImage;
     [SerializeField] private DuelSide duelSideHome;
     [SerializeField] private DuelSide duelSideAway;
+    [SerializeField] private DuelShootComboDamageIndicator comboDamageIndicator;
 
     private Dictionary<TeamSide, DuelSide> duelSideDict;
 
@@ -43,16 +44,6 @@ public class DuelParticantsPanel : MonoBehaviour
             BattleUIManager.Instance.UnregisterDuelParticipantsPanel(this);
     }
 
-    public void SetSide(Character character, List<Character> supports) 
-    {
-        duelSideDict[character.TeamSide].SetSide(character, supports);
-    }
-
-    public void SetCategory(Category category) 
-    {
-        categoryImage.sprite = IconManager.Instance.Category.GetIcon(category);
-    }
-
     public void Show() 
     {
         this.gameObject.SetActive(true);
@@ -62,4 +53,15 @@ public class DuelParticantsPanel : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
+
+    public void SetSide(Character character, List<Character> supports) 
+    {
+        duelSideDict[character.TeamSide].SetSide(character, supports);
+    }
+
+    public void SetCategory(Category category) => categoryImage.sprite = IconManager.Instance.Category.GetIcon(category);
+
+    public void ToggleComboDamage() => comboDamageIndicator.Toggle();
+    public void SetComboDamage(float damage) => comboDamageIndicator.SetDamage(damage);
+
 }

@@ -1,6 +1,6 @@
 namespace Simulation.Enums.Log
 {
-    public enum Level
+    public enum LogLevel
     {
         Trace = 0,
         Debug = 1,

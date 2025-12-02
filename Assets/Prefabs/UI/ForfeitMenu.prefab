@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4884670198786122168}
   - component: {fileID: 3533714577643606778}
   - component: {fileID: 1296271259731825443}
+  - component: {fileID: 4425183331538175170}
   m_Layer: 5
   m_Name: ForfeitMenu
   m_TagString: Untagged
@@ -90,8 +91,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9e3d937ea2771099a381020b3a8efc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstSelected: {fileID: 6490038065745393108}
-  isForfeitMenuOpen: 0
+  defaultSelectable: {fileID: 4747160903250127954}
+  canvasGroup: {fileID: 4425183331538175170}
+  deactivateOnHide: 1
+  closeAllPreviousOnBack: 0
+--- !u!225 &4425183331538175170
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848528570223630114}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3834787237978411295
 GameObject:
   m_ObjectHideFlags: 0

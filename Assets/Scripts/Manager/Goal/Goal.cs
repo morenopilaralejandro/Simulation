@@ -25,6 +25,8 @@ public class Goal : MonoBehaviour
     #region API
     //teamSideComponent
     public TeamSide TeamSide => teamSideComponent.TeamSide;
+    //triggerComponent
+    public BoxCollider GoalCollider => triggerComponent.GoalCollider;
     #endregion
 
 }

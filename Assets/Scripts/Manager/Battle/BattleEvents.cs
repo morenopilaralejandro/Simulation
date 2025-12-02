@@ -16,28 +16,52 @@ public static class BattleEvents
         OnBattlePhaseChanged?.Invoke(newPhase, oldPhase);
     }
 
-    public static event Action OnStartBattle;
-    public static void RaiseStartBattle()
+    public static event Action OnBattleStart;
+    public static void RaiseBattleStart()
     {
-        OnStartBattle?.Invoke();
+        OnBattleStart?.Invoke();
     }
 
-    public static event Action OnEndBattle;
-    public static void RaiseEndBattle()
+    public static event Action OnBattleEnd;
+    public static void RaiseBattleEnd()
     {
-        OnEndBattle?.Invoke();
+        OnBattleEnd?.Invoke();
     }
 
-    public static event Action OnPauseBattle;
-    public static void RaisePauseBattle()
+    public static event Action<TeamSide> OnBattlePause;
+    public static void RaiseBattlePause(TeamSide teamSide)
     {
-        OnPauseBattle?.Invoke();
+        OnBattlePause?.Invoke(teamSide);
     }
 
-    public static event Action OnResumeBattle;
-    public static void RaiseResumeBattle()
+    public static event Action OnBattleResume;
+    public static void RaiseBattleResume()
     {
-        OnResumeBattle?.Invoke();
+        OnBattleResume?.Invoke();
+    }
+
+    public static event Action<Character> OnGoalScored;
+    public static void RaiseGoalScored(Character scorringCharacter)
+    {
+        OnGoalScored?.Invoke(scorringCharacter);
+    }
+
+    public static event Action<Character> OnPassPerformed;
+    public static void RaisePassPerformed(Character character)
+    {
+        OnPassPerformed?.Invoke(character);
+    }
+
+    public static event Action<Character, bool> OnShootPerformed;
+    public static void RaiseShootPerformed(Character character, bool isDirect)
+    {
+        OnShootPerformed?.Invoke(character, isDirect);
+    }
+
+    public static event Action<Character> OnShootStopped;
+    public static void RaiseShootStopped(Character character)
+    {
+        OnShootStopped?.Invoke(character);
     }
 
 }

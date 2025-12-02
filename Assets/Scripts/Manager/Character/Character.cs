@@ -207,6 +207,7 @@ public class Character : MonoBehaviour
     public void KickBallTo(Vector3 targetPos) 
     {
         BattleManager.Instance.Ball.KickBallTo(targetPos);
+        BattleEvents.RaisePassPerformed(this);
         StartKick();
     }
     public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;

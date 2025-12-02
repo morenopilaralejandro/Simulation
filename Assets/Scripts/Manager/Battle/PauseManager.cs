@@ -47,13 +47,13 @@ public class PauseManager : MonoBehaviour
             && !isPaused;
     }
 
-    public void StartPause() 
+    public void StartPause(TeamSide teamSide) 
     {
         if (isPaused) return;
 
         BattleManager.Instance.Freeze();
         ResetReady();
-        BattleEvents.RaisePauseBattle();
+        BattleEvents.RaiseBattlePause(teamSide);
         //BattleManager.Instance.SetBattlePhase(BattlePhase.Deadball);
         //AudioManager.Instance.PlaySfx("sfx-whistle_single");
 
@@ -102,7 +102,7 @@ public class PauseManager : MonoBehaviour
         AudioManager.Instance.PlaySfx("sfx-menu_tap");
         //BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
         BattleManager.Instance.Unfreeze();
-        BattleEvents.RaiseResumeBattle();
+        BattleEvents.RaiseBattleResume();
         isPaused = false;
     }
 

@@ -17,6 +17,7 @@ public class BattleUIManager : MonoBehaviour
     private PausePanel pausePanel;
     private DuelParticantsPanel duelParticantsPanel;
     private DuelMenu duelMenu;
+    private DuelLogMenu duelLogMenu;
     private BattleMenu battleMenu;
     private ForfeitMenu forfeitMenu;
 
@@ -90,6 +91,16 @@ public class BattleUIManager : MonoBehaviour
     public void UnregisterDuelMenu(DuelMenu duelMenu)
     {
         this.duelMenu = null;
+    }
+
+    public void RegisterDuelLogMenu(DuelLogMenu duelLogMenu)
+    {
+        this.duelLogMenu = duelLogMenu;
+    }
+
+    public void UnregisterDuelLogMenu(DuelLogMenu duelLogMenu)
+    {
+        this.duelLogMenu = null;
     }
 
     public void RegisterBattleMenu(BattleMenu battleMenu)
@@ -189,6 +200,10 @@ public class BattleUIManager : MonoBehaviour
         if (duelParticantsPanel != null) 
             duelParticantsPanel.Hide();
     }
+
+    public void ToggleComboDamage() => duelParticantsPanel.ToggleComboDamage();
+    public void SetComboDamage(float damage) => duelParticantsPanel.SetComboDamage(damage);
+
     #endregion
 
     #region DuelMenu
@@ -211,12 +226,18 @@ public class BattleUIManager : MonoBehaviour
     }
     #endregion
 
+    #region DuelLogMenu
+    public bool IsDuelLogMenuOpen => duelLogMenu.IsDuelLogMenuOpen;
+    public void OpenDuelLogMenu() => MenuManager.Instance.ReplaceMenu(duelLogMenu);
+    #endregion
+
     #region BattleMenu
+    public BattleMenu BattleMenu => battleMenu;
     public bool IsBattleMenuOpen => battleMenu.IsBattleMenuOpen;
     #endregion
 
     #region ForfeitMenu
     public bool IsForfeitMenuOpen => forfeitMenu.IsForfeitMenuOpen;
-    public void ToggleForfeitMenu() => forfeitMenu.ToggleForfeitMenu();
+    public void OpenForfeitMenu() => MenuManager.Instance.ReplaceMenu(forfeitMenu);
     #endregion
 }

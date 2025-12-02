@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Simulation.Enums.Input;
 
-public class BattleMenu : MonoBehaviour
+public class BattleMenu : Menu
 {
     [Header("Buttons - Regular")]
     [SerializeField] private Button buttonDuelLog;
@@ -16,12 +16,9 @@ public class BattleMenu : MonoBehaviour
     [SerializeField] private Button buttonPause;
     [SerializeField] private Button buttonResume;
 
-    [SerializeField] private GameObject firstSelected;
-    [SerializeField] private GameObject menuPanel;
-    [SerializeField] private bool isBattleMenuOpen;
-    private List<SpecialOption> specialOptions;
+    private List<SpecialOption> specialOptions = new List<SpecialOption>();
 
-    public bool IsBattleMenuOpen => isBattleMenuOpen;
+    public bool IsBattleMenuOpen => MenuManager.Instance.IsMenuOpen(this);
 
     private void Awake()
     {
@@ -35,27 +32,29 @@ public class BattleMenu : MonoBehaviour
 
     void Start()
     {
-        SetBattleMenuActive(false);
-        specialOptions = new List<SpecialOption>();
         specialOptions.Add(buttonPause.GetComponent<SpecialOption>());
+        base.Hide();
+        base.SetInteractable(false);
     }
 
     void Update()
     {
+        //if (!IsInteractable()) return;
+
         HandleInput();
         RefreshSpecialButtons();
     }
 
     private void HandleInput()
     {
-        if (isBattleMenuOpen) 
+        if (IsBattleMenuOpen)
         {
             if (InputManager.Instance.GetDown(CustomAction.BattleUI_CloseBattleMenu))
-                ToggleBattleMenu();
+                Close();
         } else 
         {
             if (InputManager.Instance.GetDown(CustomAction.BattleUI_OpenBattleMenu))
-                ToggleBattleMenu();
+                Open();
         }
 
         // Number shortcuts for specials (1, 2, 3…)
@@ -63,24 +62,34 @@ public class BattleMenu : MonoBehaviour
             OnButtonPauseTapped();
     }
 
-    public void ToggleBattleMenu()
+    public override void Show()
     {
-        isBattleMenuOpen = !isBattleMenuOpen;
-        SetBattleMenuActive(isBattleMenuOpen);
-
-        if (isBattleMenuOpen) 
-        {
-            SetAutoOrManualButtonActive();
-            SetPauseOrResumeButtonActive();
-            EventSystem.current.SetSelectedGameObject(firstSelected);
-        }
-
+        base.Show();
+        SetAutoOrManualButtonActive();
+        SetPauseOrResumeButtonActive();
         AudioManager.Instance.PlaySfx("sfx-menu_tap");
     }
 
-    public void SetBattleMenuActive(bool active)
+    public override void Hide()
     {
-        menuPanel.SetActive(active);
+        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        base.Hide();
+    }
+
+    public void Open()
+    {
+        if (MenuManager.Instance.CurrentMenu != null && 
+            !MenuManager.Instance.IsMenuOnTop(this)) 
+            return;
+
+        if (IsBattleMenuOpen) return;
+        MenuManager.Instance.OpenMenu(this);
+    }
+
+    public void Close()
+    {
+        if (!IsBattleMenuOpen) return;
+        MenuManager.Instance.CloseMenu();
     }
 
     private void RefreshSpecialButtons()
@@ -119,31 +128,25 @@ public class BattleMenu : MonoBehaviour
 
     public void OnButtonDuelLogTapped()
     {
-        Debug.Log("Duel Log button tapped.");
-        // TODO: Show duel log UI
-
-        ToggleBattleMenu();
+        BattleUIManager.Instance.OpenDuelLogMenu();
+        Close();
     }
 
     public void OnButtonAutoTapped()
     {
         AutoBattleManager.Instance.ToggleAutoBattle();
-
-        ToggleBattleMenu();
+        Close();
     }
 
     public void OnButtonManualTapped()
     {
         AutoBattleManager.Instance.ToggleAutoBattle();
-
-        ToggleBattleMenu();
+        Close();
     }
 
     public void OnButtonForfeitTapped()
     {
-        ToggleBattleMenu();
-        if (!BattleUIManager.Instance.IsForfeitMenuOpen)
-            BattleUIManager.Instance.ToggleForfeitMenu();
+        BattleUIManager.Instance.OpenForfeitMenu();
     }
 
     public void OnButtonPauseTapped()
@@ -153,9 +156,9 @@ public class BattleMenu : MonoBehaviour
         if (specialOptionPause.IsOnCooldown() || 
             !PauseManager.Instance.CanPause()) return;
 
-        if (isBattleMenuOpen)
-            ToggleBattleMenu();
-        PauseManager.Instance.StartPause();
+        if (IsBattleMenuOpen) Close();
+
+        PauseManager.Instance.StartPause(BattleManager.Instance.GetUserSide());
         specialOptionPause.StartCooldown();
     }
 
@@ -163,7 +166,7 @@ public class BattleMenu : MonoBehaviour
     {
         if (!PauseManager.Instance.IsPaused) return; 
 
-        ToggleBattleMenu();
+        Close();
         PauseManager.Instance.SetTeamReady(BattleManager.Instance.GetUserSide());
     }
 

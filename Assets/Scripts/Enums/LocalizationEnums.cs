@@ -6,7 +6,8 @@ namespace Simulation.Enums.Localization
         Formation,
         Kit,
         Move,
-        Team
+        Team,
+        DuelLog
     }
 
     public enum LocalizationField
@@ -14,7 +15,8 @@ namespace Simulation.Enums.Localization
         Name,
         Nick,
         Description,
-        Evolution
+        Evolution,
+        Entry
     }
 
     public enum LocalizationStyle

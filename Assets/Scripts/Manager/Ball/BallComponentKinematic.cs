@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Simulation.Enums.Character;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BallComponentKinematic : MonoBehaviour
@@ -7,7 +8,10 @@ public class BallComponentKinematic : MonoBehaviour
     private Ball ball;
 
     private float slowDuration = 1f;
-    private AnimationCurve slowCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
+    private AnimationCurve slowCurve = new AnimationCurve(
+        new Keyframe(0f, 1f, 0f, -1f),
+        new Keyframe(1f, 0f, -0.1f, 0f)
+    );
     private Coroutine slowingRoutine;
     private Vector3 cachedVelocity;
     private Vector3 cachedAngularVelocity;
@@ -26,25 +30,18 @@ public class BallComponentKinematic : MonoBehaviour
 
     void OnEnable()
     {
-        BattleEvents.OnPauseBattle += HandlePausedBattle;
-        BattleEvents.OnResumeBattle += HandleResumeBattle;
+        BattleEvents.OnBattlePause += HandleBattlePause;
+        BattleEvents.OnBattleResume += HandleBattleResume;
     }
 
     void OnDisable()
     {
-        BattleEvents.OnPauseBattle -= HandlePausedBattle;
-        BattleEvents.OnResumeBattle -= HandleResumeBattle;
+        BattleEvents.OnBattlePause -= HandleBattlePause;
+        BattleEvents.OnBattleResume -= HandleBattleResume;
     }
 
-    private void HandlePausedBattle()
-    {
-        PausePhysics();
-    }
-
-    private void HandleResumeBattle()
-    {
-        ResumePhysics();
-    }
+    private void HandleBattlePause(TeamSide teamSide) => PausePhysics();
+    private void HandleBattleResume() => ResumePhysics();
 
     public void SetKinematic()
     {
@@ -118,16 +115,19 @@ public class BallComponentKinematic : MonoBehaviour
     private IEnumerator SlowDownRoutine()
     {
         float elapsed = 0f;
-        Vector3 dir = ballRigidbody.velocity.normalized;
-        float speed = ballRigidbody.velocity.magnitude;
+        Vector3 initialVelocity = ballRigidbody.velocity;
+   
         while (elapsed < slowDuration)
         {
             float t = elapsed / slowDuration;
             float curveValue = slowCurve.Evaluate(t);
-            ballRigidbody.velocity = dir * (speed * curveValue);
 
-            elapsed += Time.deltaTime;
-            yield return null;
+            if (!ballRigidbody.isKinematic)
+                ballRigidbody.velocity *= curveValue;
+
+
+            elapsed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
         }
 
         ballRigidbody.velocity = Vector3.zero;

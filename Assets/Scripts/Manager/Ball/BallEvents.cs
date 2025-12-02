@@ -23,33 +23,33 @@ public static class BallEvents
     }
 
     //travel
-    public static event Action<Vector3> OnStartTravel;
-    public static void RaiseStartTravel(Vector3 startPosition)
+    public static event Action<Vector3> OnTravelStart;
+    public static void RaiseTravelStart(Vector3 startPosition)
     {
-        OnStartTravel?.Invoke(startPosition);
+        OnTravelStart?.Invoke(startPosition);
     }
 
-    public static event Action<Vector3> OnEndTravel;
-    public static void RaiseEndTravel(Vector3 endPosition)
+    public static event Action<Vector3> OnTravelEnd;
+    public static void RaiseTravelEnd(Vector3 endPosition)
     {
-        OnEndTravel?.Invoke(endPosition);
+        OnTravelEnd?.Invoke(endPosition);
     }
 
-    public static event Action OnPauseTravel;
-    public static void RaisePauseTravel()
+    public static event Action OnTravelPause;
+    public static void RaiseTravelPause()
     {
-        OnPauseTravel?.Invoke();
+        OnTravelPause?.Invoke();
     }
 
-    public static event Action OnResumeTravel;
-    public static void RaiseResumeTravel()
+    public static event Action OnTravelResume;
+    public static void RaiseTravelResume()
     {
-        OnResumeTravel?.Invoke();
+        OnTravelResume?.Invoke();
     }
 
-    public static event Action OnCancelTravel;
-    public static void RaiseCancelTravel()
+    public static event Action OnTravelCancel;
+    public static void RaiseTravelCancel()
     {
-        OnCancelTravel?.Invoke();
+        OnTravelCancel?.Invoke();
     }
 }

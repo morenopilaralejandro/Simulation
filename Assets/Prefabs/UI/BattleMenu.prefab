@@ -476,6 +476,7 @@ GameObject:
   - component: {fileID: 8518339752201704589}
   - component: {fileID: 7825187274917675462}
   - component: {fileID: 8484451176505404164}
+  - component: {fileID: 7518972536749075375}
   m_Layer: 5
   m_Name: BattleMenu
   m_TagString: Untagged
@@ -553,15 +554,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f591e030e7c264279254d5fd85d17d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultSelectable: {fileID: 2403998541027705886}
+  canvasGroup: {fileID: 7518972536749075375}
+  deactivateOnHide: 0
+  closeAllPreviousOnBack: 0
   buttonDuelLog: {fileID: 2403998541027705886}
   buttonAuto: {fileID: 7152346652967608076}
   buttonManual: {fileID: 9147800968058977049}
   buttonForfeit: {fileID: 8717948628602896838}
   buttonPause: {fileID: 5448861358039213283}
   buttonResume: {fileID: 768310440312733737}
-  firstSelected: {fileID: 33817834464454008}
-  menuPanel: {fileID: 4158772259057971541}
-  isBattleMenuOpen: 0
+--- !u!225 &7518972536749075375
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5619848325507753994}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &6055246415373803669
 GameObject:
   m_ObjectHideFlags: 0

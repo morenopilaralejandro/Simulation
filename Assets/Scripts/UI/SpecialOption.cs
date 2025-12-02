@@ -14,15 +14,15 @@ public class SpecialOption : MonoBehaviour
 
     void OnEnable()
     {
-        BattleEvents.OnStartBattle += HandleStartBattle;
+        BattleEvents.OnBattleStart += HandleBattleStart;
     }
 
     void OnDisable()
     {
-        BattleEvents.OnStartBattle -= HandleStartBattle;
+        BattleEvents.OnBattleStart -= HandleBattleStart;
     }
 
-    private void HandleStartBattle()
+    private void HandleBattleStart()
     {
         cooldownRemaining = 0f;
         button.interactable = true;
