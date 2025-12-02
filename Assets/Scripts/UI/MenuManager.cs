@@ -16,6 +16,13 @@ public class MenuManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        BattleEvents.OnBattleEnd += CloseAllMenus;
+    }
+
+    void OnDestroy()
+    {
+        BattleEvents.OnBattleEnd -= CloseAllMenus;
     }
 
     public void OpenMenu(Menu menu)
@@ -25,6 +32,7 @@ public class MenuManager : MonoBehaviour
 
         menuStack.Push(menu);
         menu.Show();
+        menu.SetInteractable(true);
         UIEvents.RaiseMenuOpened(menu);
     }
 
@@ -35,12 +43,14 @@ public class MenuManager : MonoBehaviour
         {
             Menu top = menuStack.Pop();
             top.Hide();
+            top.SetInteractable(false);
             UIEvents.RaiseMenuClosed(top);
         }
 
         // Open the new one
         menuStack.Push(newMenu);
         newMenu.Show();
+        newMenu.SetInteractable(true);
         UIEvents.RaiseMenuOpened(newMenu);
     }
 
@@ -51,6 +61,7 @@ public class MenuManager : MonoBehaviour
 
         Menu top = menuStack.Pop();
         top.Hide();
+        top.SetInteractable(false);
         UIEvents.RaiseMenuClosed(top);
 
         if (top.CloseAllPrevious)

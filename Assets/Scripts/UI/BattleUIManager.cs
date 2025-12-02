@@ -227,16 +227,17 @@ public class BattleUIManager : MonoBehaviour
     #endregion
 
     #region DuelLogMenu
-    public bool IsDuelLogMenuOpen => duelLogMenu.IsOpen;
-    public void ToggleDuelLogMenu() => duelLogMenu.Toggle();
+    public bool IsDuelLogMenuOpen => duelLogMenu.IsDuelLogMenuOpen;
+    public void OpenDuelLogMenu() => MenuManager.Instance.ReplaceMenu(duelLogMenu);
     #endregion
 
     #region BattleMenu
+    public BattleMenu BattleMenu => battleMenu;
     public bool IsBattleMenuOpen => battleMenu.IsBattleMenuOpen;
     #endregion
 
     #region ForfeitMenu
     public bool IsForfeitMenuOpen => forfeitMenu.IsForfeitMenuOpen;
-    public void ToggleForfeitMenu() => forfeitMenu.ToggleForfeitMenu();
+    public void OpenForfeitMenu() => MenuManager.Instance.ReplaceMenu(forfeitMenu);
     #endregion
 }

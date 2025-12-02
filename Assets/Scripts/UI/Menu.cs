@@ -6,24 +6,34 @@ public abstract class Menu : MonoBehaviour
 {
     [Header("Menu settings")]
     [SerializeField] private Selectable defaultSelectable;
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private bool deactivateOnHide = true;
     [SerializeField] private bool closeAllPreviousOnBack = false;
+
     private GameObject lastSelected;
 
     public bool CloseAllPrevious => closeAllPreviousOnBack;
 
     public virtual void Show()
     {
-        gameObject.SetActive(true);
+        if (deactivateOnHide)
+            gameObject.SetActive(true);
+        else
+            canvasGroup.alpha = 1f;
+
         SetDefaultFocus();
     }
 
-    public virtual void Hide() => gameObject.SetActive(false);
-
-    public virtual void SetInteractable(bool value)
+    public virtual void Hide() 
     {
-        var cg = GetComponent<CanvasGroup>();
-        if (cg) cg.interactable = cg.blocksRaycasts = value;
+        if (deactivateOnHide)
+            gameObject.SetActive(false);
+        else
+            canvasGroup.alpha = 0f;
     }
+
+    public virtual void SetInteractable(bool isInteractable) => canvasGroup.interactable = canvasGroup.blocksRaycasts = isInteractable;
+    public virtual bool IsInteractable() => canvasGroup.interactable;
 
     protected void SetDefaultFocus()
     {

@@ -4,12 +4,9 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Simulation.Enums.Input;
 
-public class ForfeitMenu : MonoBehaviour
+public class ForfeitMenu : Menu
 {
-    [SerializeField] private GameObject firstSelected;
-    [SerializeField] private bool isForfeitMenuOpen;
-
-    public bool IsForfeitMenuOpen => isForfeitMenuOpen;
+    public bool IsForfeitMenuOpen => MenuManager.Instance.IsMenuOpen(this);
 
     private void Awake()
     {
@@ -23,35 +20,30 @@ public class ForfeitMenu : MonoBehaviour
 
     void Start()
     {
-        SetForfeitMenuActive(false);
+        base.Hide();
     }
 
-    public void ToggleForfeitMenu()
+    public override void Show()
     {
-        isForfeitMenuOpen = !isForfeitMenuOpen;
-        SetForfeitMenuActive(isForfeitMenuOpen);
-
-        if (isForfeitMenuOpen) 
-            EventSystem.current.SetSelectedGameObject(firstSelected);
-
+        base.Show();
     }
 
-    public void SetForfeitMenuActive(bool active)
+    public override void Hide()
     {
-        this.gameObject.SetActive(active);
+        base.Hide();
     }
 
     public void OnButtonConfimTapped()
     {
         AudioManager.Instance.PlaySfx("sfx-menu_tap");
         BattleManager.Instance.ForfeitBattle();
-        ToggleForfeitMenu();
+        MenuManager.Instance.CloseMenu();
     }
 
     public void OnButtonCancelTapped()
     {
         AudioManager.Instance.PlaySfx("sfx-menu_tap");
-        ToggleForfeitMenu();
+        MenuManager.Instance.CloseMenu();
     }
 
     public void OnButtonSelected() 

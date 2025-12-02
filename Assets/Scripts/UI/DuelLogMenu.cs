@@ -3,8 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Localization;
 using Simulation.Enums.Log;
+using Simulation.Enums.Input;
 
-public class DuelLogMenu : MonoBehaviour
+public class DuelLogMenu : Menu
 {
     [SerializeField] private DuelLogPopup popupPrefab;
     [SerializeField] private Transform contentParent; // ScrollView content
@@ -12,9 +13,8 @@ public class DuelLogMenu : MonoBehaviour
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private DuelLogPopupStack popupStack;
 
-    private bool isOpen = false;
-    public bool IsOpen => isOpen;
-    
+    public bool IsDuelLogMenuOpen => MenuManager.Instance.IsMenuOpen(this);
+
     void Awake()
     {
         BattleUIManager.Instance.RegisterDuelLogMenu(this);
@@ -22,17 +22,17 @@ public class DuelLogMenu : MonoBehaviour
 
     void Start()
     {
-        SetActive(false);
+        base.Hide();
+        base.SetInteractable(false);
     }
 
     private void OnEnable()
     {
-        
     }
 
     private void OnDisable()
     {
-        
+
     }
 
     private void OnDestroy()
@@ -40,6 +40,20 @@ public class DuelLogMenu : MonoBehaviour
         BattleUIManager.Instance.UnregisterDuelLogMenu(this);
     }
 
+    void Update()
+    {
+        if (!IsInteractable()) return;
+        HandleInput();
+    }
+
+    private void HandleInput()
+    {
+        if (IsDuelLogMenuOpen)
+        {
+            if (InputManager.Instance.GetDown(CustomAction.BattleUI_CloseBattleMenu))
+                MenuManager.Instance.CloseMenu();
+        }
+    }
 
     // Call this when opening the menu
     private void PopulateLog()
@@ -69,17 +83,22 @@ public class DuelLogMenu : MonoBehaviour
         scrollRect.verticalNormalizedPosition = 0f;
     }
 
-    public void Toggle()
+    public override void Show()
     {
-        isOpen = !isOpen;
-        SetActive(isOpen);
+        base.Show();
+        PopulateLog();
     }
 
-    public void SetActive(bool active) 
+    public override void Hide()
     {
-        panelMenu.SetActive(active);
-        popupStack.Toggle();
-        if(active)
-            PopulateLog();
+        base.Hide();
+    }
+
+    private void HandleMenuOpened(Menu menu) 
+    {
+        if (menu == this) return;
+        if (!IsDuelLogMenuOpen) return;
+
+        MenuManager.Instance.CloseMenu();
     }
 }
