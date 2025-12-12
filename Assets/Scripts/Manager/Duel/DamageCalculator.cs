@@ -8,10 +8,11 @@ using Simulation.Enums.Duel;
 public static class DamageCalculator
 {
     // Multiplier constants
-    private const float MAIN_MULTIPLIER = 1f;
-    private const float SUB_MULTIPLIER = 0.5f;
-    private const float MOVE_MULTIPLIER = 5.0f;
+    private const float MAIN_MULTIPLIER = 0.5f;
+    private const float SUB_MULTIPLIER = 0.25f;
+    private const float MOVE_MULTIPLIER = 2f;
     private const float ELEMENT_MATCH_MULTIPLIER = 1.5f;
+    public const float ELEMENT_EFFECTIVE_MULTIPLIER = 1.5f;
 
     private const float KEEPER_MULTIPLIER = 1.5f;
 
@@ -23,10 +24,10 @@ public static class DamageCalculator
     private static float CalcFormula(Character character, Stat main, Stat sub0, Stat sub1)
     {
         return
-            character.GetBattleStat(main) +
-            character.GetBattleStat(sub0) * MAIN_MULTIPLIER +
+            character.GetBattleStat(main) * MAIN_MULTIPLIER +
+            character.GetBattleStat(sub0) * SUB_MULTIPLIER +
             character.GetBattleStat(sub1) * SUB_MULTIPLIER +
-            character.GetBattleStat(Stat.Courage);
+            character.GetBattleStat(Stat.Courage) * SUB_MULTIPLIER;
     }
 
     // Helper function for Move formulas
@@ -36,7 +37,7 @@ public static class DamageCalculator
         float baseDamage =
             move.Power * MOVE_MULTIPLIER +
             character.GetBattleStat(main) * MAIN_MULTIPLIER +
-            character.GetBattleStat(Stat.Courage);
+            character.GetBattleStat(Stat.Courage) * MAIN_MULTIPLIER;
         if (character.Element == move.Element)
             baseDamage *= ELEMENT_MATCH_MULTIPLIER;
         return baseDamage;

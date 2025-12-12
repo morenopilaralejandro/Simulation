@@ -58,9 +58,21 @@ public class ShootDuelHandler : IDuelHandler
     #region Offense Logic
     private void HandleOffense(DuelParticipant offense) 
     {
+        bool isFirstParticipant = duel.Participants.Count == 1;
+
         duel.OffensePressure += offense.Damage;
         LogParticipantAction(offense);
+
         HandleShootSfx(offense);
+
+        if (isFirstParticipant)
+            DuelManager.Instance.StartBallTravel(offense);
+        else
+            PossessionManager.Instance.SetLastCharacter(offense.Character); //keep track of the last character in the shoot chain to determine who scored
+
+        if (!isFirstParticipant)
+            BattleManager.Instance.Ball.ResumeTravel();
+
         BattleManager.Instance.Ball.ResumeTravel();
     }
     #endregion
@@ -77,7 +89,7 @@ public class ShootDuelHandler : IDuelHandler
         LogParticipantAction(defense);
 
         bool isCategoryCatch = defense.Category == Category.Catch;
-        if (duel.OffensePressure <= 0)
+        if (duel.OffensePressure <= 0.9)
             HandleDefenseFull(offense, defense, isCategoryCatch);
         else
             HandleDefensePartial(offense, defense, isCategoryCatch);
@@ -85,14 +97,23 @@ public class ShootDuelHandler : IDuelHandler
 
     private void HandleDefenseFull(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
     {
+        bool isShootReversal = defense.Move?.Category == Category.Shoot && DuelManager.Instance.IsShootReversalAllowed;
+
         LogManager.Info($"[ShootDuelHandler] {defense.Character.CharacterId} stopped the attack.");
 
         BattleEvents.RaiseShootStopped(defense.Character);
         offense.Character.ApplyStatus(StatusEffect.Stunned);
         PossessionManager.Instance.GiveBallToCharacter(defense.Character);
 
-        EndDuel(defense, offense);
-        BattleManager.Instance.Ball.EndTravel();
+        // if is reversal start else end
+        if (isShootReversal) 
+        {
+            DuelManager.Instance.StartShootDuelReversal();
+        } else 
+        {
+            EndDuel(defense, offense);
+            BattleManager.Instance.Ball.EndTravel();
+        }
     }
 
     private void HandleDefensePartial(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
@@ -100,6 +121,7 @@ public class ShootDuelHandler : IDuelHandler
         LogManager.Info($"[ShootDuelHandler] Partial block.");
 
         defense.Character.ApplyStatus(StatusEffect.Stunned);
+
         BattleManager.Instance.Ball.ResumeTravel();
 
         if (isCategoryCatch)

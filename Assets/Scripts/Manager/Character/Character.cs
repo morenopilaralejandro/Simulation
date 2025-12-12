@@ -170,7 +170,10 @@ public class Character : MonoBehaviour
     public bool HasAffordableMoveWithTrait(Trait trait) => movesComponent.HasAffordableMoveWithTrait(trait);
     public Move GetRandomAffordableMoveByCategory(Category category) => movesComponent.GetRandomAffordableMoveByCategory(category);
     public Move GetStrongestAffordableMoveByCategory(Category category) => movesComponent.GetStrongestAffordableMoveByCategory(category);
+    public Move GetRandomAffordableMoveByTrait(Trait trait) => movesComponent.GetRandomAffordableMoveByTrait(trait);
+    public Move GetStrongestAffordableMoveByTrait(Trait trait) => movesComponent.GetStrongestAffordableMoveByTrait(trait);
     public List<Move> GetEquippedMovesByCategory(Category category) => movesComponent.GetEquippedMovesByCategory(category);
+    public List<Move> GetEquippedMovesByTrait(Trait trait) => movesComponent.GetEquippedMovesByTrait(trait);
     //controllerComponent
     public bool IsControlled => controllerComponent.IsControlled;
     //aiComponent
@@ -184,7 +187,9 @@ public class Character : MonoBehaviour
     public AIState AIState => aiComponent.AIState;
     public DuelCommand GetRegularCommand() => aiComponent.GetRegularCommand();
     public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);
+    public DuelCommand GetCommandByTrait(Trait trait) => aiComponent.GetCommandByTrait(trait);
     public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
+    public Move GetMoveByCommandAndTrait(DuelCommand command, Trait trait) => aiComponent.GetMoveByCommandAndTrait(command, trait);
     //stateLockComponent
     public bool IsStateLocked => stateLockComponent.IsStateLocked;
     public void StartStateLock(CharacterState state) => stateLockComponent.StartStateLock(state);
@@ -212,7 +217,7 @@ public class Character : MonoBehaviour
     }
     public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;
     public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this) && !IsStunned();
-    public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this); //also handle long shoot etc;
+    public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this) || HasAffordableMoveWithTrait(Trait.Long);
     public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
     //misc
     public bool CanMove() => !IsStunned();

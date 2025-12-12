@@ -137,10 +137,50 @@ public class CharacterComponentMoves : MonoBehaviour
         return bestMove;
     }
 
+    public Move GetRandomAffordableMoveByTrait(Trait trait)
+    {
+         var affordableMoves = equippedMoves
+            .Where(
+                m => m.Trait == trait && 
+                CanAffordMove(m))
+            .ToList();
+
+        if (affordableMoves.Count == 0) return null;
+
+        int index = UnityEngine.Random.Range(0, affordableMoves.Count);
+        return affordableMoves[index];
+    }
+
+    public Move GetStrongestAffordableMoveByTrait(Trait trait)
+    {
+         var affordableMoves = equippedMoves
+            .Where(
+                m => m.Trait == trait && 
+                CanAffordMove(m))
+            .ToList();
+
+        if (affordableMoves.Count == 0) return null;
+
+        // Sort moves by element match priority and then by base power
+        var bestMove = affordableMoves
+            .OrderByDescending(move => move.Element == character.Element) // prioritize matching element
+            .ThenByDescending(move => move.BasePower)
+            .FirstOrDefault();
+
+        return bestMove;
+    }
+
     public List<Move> GetEquippedMovesByCategory(Category category)
     {
         return equippedMoves
             .Where(move => move.Category == category)
+            .ToList();
+    }
+
+    public List<Move> GetEquippedMovesByTrait(Trait trait)
+    {
+        return equippedMoves
+            .Where(move => move.Trait == trait)
             .ToList();
     }
 

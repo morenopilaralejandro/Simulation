@@ -10,6 +10,7 @@ public class Duel
     public DuelMode DuelMode;
     public bool IsResolved = true;
     public bool IsKeeperDuel = false;
+    public bool IsLongShootStart = false;
 
     public List<DuelParticipant> Participants = new List<DuelParticipant>();
 

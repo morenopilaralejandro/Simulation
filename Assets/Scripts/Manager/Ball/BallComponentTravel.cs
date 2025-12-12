@@ -47,12 +47,13 @@ public class BallComponentTravel : MonoBehaviour
 
     public void StartTravel(Vector3 target, DuelCommand command)
     {
+        /*
         if (isTraveling)
         {
             LogManager.Trace("[BallComponentTravel] [StartTravel] Already traveling, cannot start new travel.", this);
             return;
         }
-
+        */
         LogManager.Trace($"[BallComponentTravel] [StartTravel] Travel started to {target}.", this);
         currentTarget = target;
         ball.SetKinematic();

@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System;
 using System.Collections.Generic;
 using Simulation.Enums.Input;
+using Simulation.Enums.Duel;
 
 ///<summary>
 /// Handles input with Unity New Input System. 
@@ -73,6 +74,8 @@ public class InputManager : MonoBehaviour
         {
             playerInput.onControlsChanged += OnControlsChanged;
         }
+
+        //DuelEvents.OnDuelStart += HandleDuelStart;
     }
 
     private void Start() 
@@ -82,6 +85,8 @@ public class InputManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        //DuelEvents.OnDuelStart += HandleDuelStart;
+
         if (input != null)
         {
             input.BattleActions.Move.performed -= OnMovePerformed;
@@ -175,7 +180,11 @@ public class InputManager : MonoBehaviour
             (customAction == CustomAction.Shoot) ? 
             bufferDurationShoot : 0f;
 
-        button.SetDown(bufferDuration);
+        if (!BattleManager.Instance.IsTimeFrozen)
+            button.SetDown(bufferDuration);
+        else
+            button.SetDown(0f);
+
         buttons[(int)customAction] = button;
     }
 
@@ -184,6 +193,20 @@ public class InputManager : MonoBehaviour
         var button = buttons[(int)customAction];
         button.SetUp();
         buttons[(int)customAction] = button;
+    }
+    #endregion
+
+    #region Event Handler
+    private void HandleDuelStart(DuelMode duelMode) => InvalidateAllBuffers();
+    private void InvalidateAllBuffers()
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            var b = buttons[i];
+            if (b.BufferedUntil > 0)
+                b.BufferedUntil = 0;
+            buttons[i] = b;
+        }
     }
     #endregion
 

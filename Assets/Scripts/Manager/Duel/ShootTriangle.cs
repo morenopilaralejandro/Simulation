@@ -57,8 +57,7 @@ public class ShootTriangle : MonoBehaviour
         Vector3[] vertices = { vertex0, vertex1, vertex2 };
 
         // Ensure consistent winding order for culling
-        // If vertex0.z is negative, swap vertex1 and vertex2
-        if (vertex0.z < 0)
+        if (vertex1.z < 0)
         {
             // Swap vertex1 and vertex2
             Vector3 tmp = vertex1;

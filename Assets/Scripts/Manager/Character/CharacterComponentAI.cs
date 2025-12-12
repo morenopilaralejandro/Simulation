@@ -627,7 +627,8 @@ public class CharacterComponentAI : MonoBehaviour
            return;
 
         bool isDirect = false;
-        DuelManager.Instance.StartShootDuel(character, isDirect);
+        bool isLongShoot = false;
+        DuelManager.Instance.StartShootDuel(character, isDirect, isLongShoot);
     }
 
     // ============================
@@ -656,6 +657,25 @@ public class CharacterComponentAI : MonoBehaviour
         }
     }
 
+    public DuelCommand GetCommandByTrait(Trait trait)
+    {
+        switch (difficulty)
+        {
+            case AIDifficulty.Easy:
+                return GetRegularCommand();
+            case AIDifficulty.Normal:
+                if (Random.value < 0.4f && character.HasAffordableMoveWithTrait(trait))
+                    return DuelCommand.Move;
+                return GetRegularCommand();
+            case AIDifficulty.Hard:
+                return character.HasAffordableMoveWithTrait(trait)
+                    ? DuelCommand.Move
+                    : GetRegularCommand();
+            default:
+                return DuelCommand.Melee;
+        }
+    }
+
     public DuelCommand GetRegularCommand() =>
         character.GetBattleStat(Stat.Body) > character.GetBattleStat(Stat.Control)
             ? DuelCommand.Melee
@@ -667,5 +687,13 @@ public class CharacterComponentAI : MonoBehaviour
         return (difficulty == AIDifficulty.Normal)
             ? character.GetRandomAffordableMoveByCategory(category)
             : character.GetStrongestAffordableMoveByCategory(category);
+    }
+
+    public Move GetMoveByCommandAndTrait(DuelCommand command, Trait trait)
+    {
+        if (command != DuelCommand.Move) return null;
+        return (difficulty == AIDifficulty.Normal)
+            ? character.GetRandomAffordableMoveByTrait(trait)
+            : character.GetStrongestAffordableMoveByTrait(trait);
     }
 }
