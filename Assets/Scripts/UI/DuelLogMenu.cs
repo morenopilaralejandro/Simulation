@@ -44,7 +44,7 @@ public class DuelLogMenu : Menu
 
     private void HandleInput()
     {
-        if (IsDuelLogMenuOpen && InputManager.Instance.GetDown(CustomAction.BattleUI_CloseBattleMenu))
+        if (IsDuelLogMenuOpen && InputManager.Instance.GetUp(CustomAction.BattleUI_CloseBattleMenu))
             MenuManager.Instance.CloseMenu();
     }
 
