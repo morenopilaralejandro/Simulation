@@ -20,6 +20,8 @@ public class DuelManager : MonoBehaviour
     private int hpWinner = -20;
     private int hpLoser = -5;
 
+    private bool isShootReversalAllowed = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -47,6 +49,8 @@ public class DuelManager : MonoBehaviour
 
     public bool IsResolved => duel.IsResolved;
     public bool IsKeeperDuel => duel.IsKeeperDuel;
+    public bool IsLongShootStart => duel.IsLongShootStart;
+    public bool IsShootReversalAllowed => isShootReversalAllowed;
     public DuelMode DuelMode => duel.DuelMode;
     public int GetParticipantCount() => duel.Participants.Count;
     public int GetStagedParticipantCount() => stagedParticipants.Count;
@@ -66,11 +70,13 @@ public class DuelManager : MonoBehaviour
     public Trait? GetRequiredTraitByCategory(Category category) 
     {
         //this method is for shoot duel only
+        return null;
+        /*
         if (category == Category.Shoot) 
         {
             if (duel.Participants.Count == 0) 
             {
-                //if (isLongShootStart)
+                if (duel.IsLongShootStart)
                     return Trait.Long;
             } else 
             {
@@ -80,8 +86,9 @@ public class DuelManager : MonoBehaviour
         {
             return Trait.Block;
         }
-
+        
         return null;
+        */
     }
 
     public bool CanSelectMoveCommand(Category category) 
@@ -163,7 +170,7 @@ public class DuelManager : MonoBehaviour
     #endregion
 
     #region Shoot
-    public void StartShootDuel(Character character, bool isDirect) 
+    public void StartShootDuel(Character character, bool isDirect, bool isLongShootStart) 
     {
         LogManager.Info($"[DuelManager] " +
             $"Shoot duel started by " +
@@ -173,6 +180,7 @@ public class DuelManager : MonoBehaviour
 
         character.StartKick();
         DuelManager.Instance.StartDuel(DuelMode.Shoot);
+        duel.IsLongShootStart = isLongShootStart;
         ShootTriangleManager.Instance.SetTriangleFromCharacter(character);
         BattleEvents.RaiseShootPerformed(character, isDirect);
 
@@ -226,9 +234,34 @@ public class DuelManager : MonoBehaviour
         DuelSelectionManager.Instance.StartSelectionPhase();
     }
 
-    public void StartShootDuelReversal() 
+    public void StartShootDuelReversal()
     {
-        //triangle and travel to the other goal, keep the same duel
+        //keep the same duel
+
+        //flip roles
+        var participant = duel.LastDefense;
+        duel.LastDefense = duel.LastOffense;
+        duel.LastOffense = participant;
+        duel.OffensePressure = participant.Damage;
+
+        //UI
+        BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
+        BattleUIManager.Instance.SetDuelParticipant(participant.Character, null);
+        BattleUIManager.Instance.SetDuelParticipant(GoalManager.Instance.GetOpponentKeeper(participant.Character), null);
+
+        //handle ball
+        ShootTriangleManager.Instance.SetTriangleFromCharacter(participant.Character);
+        StartBallTravel(participant);
+        PossessionManager.Instance.SetLastCharacter(participant.Character);
+        //BattleManager.Instance.Ball.TryPlayParticle(participant.Move);
+    }
+
+    public void StartBallTravel(DuelParticipant participant)
+    {
+        PossessionManager.Instance.Release();
+        BattleManager.Instance.Ball.StartTravel(
+            ShootTriangleManager.Instance.GetRandomPoint(),
+            participant.Command);
     }
     #endregion
 
@@ -297,7 +330,7 @@ public class DuelManager : MonoBehaviour
     {
         if (DamageCalculator.IsEffective(defense.CurrentElement, offense.CurrentElement))
         {
-            defense.Damage *= 2f;
+            defense.Damage *= DamageCalculator.ELEMENT_EFFECTIVE_MULTIPLIER;
             DuelLogManager.Instance.AddElementDefense(defense.Character);
             LogManager.Info("[DuelManager] Defense element is effective", this);
         }
@@ -305,7 +338,7 @@ public class DuelManager : MonoBehaviour
         {
             if (duel.DuelMode == DuelMode.Shoot)
                 duel.OffensePressure -= offense.Damage;
-            offense.Damage *= 2;
+            offense.Damage *= DamageCalculator.ELEMENT_EFFECTIVE_MULTIPLIER;
             if (duel.DuelMode == DuelMode.Shoot)
                 duel.OffensePressure += offense.Damage;
             DuelLogManager.Instance.AddElementOffense(offense.Character);

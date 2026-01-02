@@ -88,8 +88,13 @@ public class DuelMenu : MonoBehaviour
     {
         category = DuelSelectionManager.Instance.GetUserCategory();
         character = DuelSelectionManager.Instance.GetUserCharacter();
-        moves = character.GetEquippedMovesByCategory(category);
         userSide = BattleManager.Instance.GetUserSide();
+
+        Trait? requiredTrait = DuelManager.Instance.GetRequiredTraitByCategory(category);
+        if (requiredTrait.HasValue) 
+            moves = character.GetEquippedMovesByTrait(requiredTrait.Value);
+        else 
+            moves = character.GetEquippedMovesByCategory(category);
 
         BattleUIManager.Instance.SetDuelCategory(category);
     }

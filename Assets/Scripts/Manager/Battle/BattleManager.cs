@@ -63,13 +63,14 @@ public class BattleManager : MonoBehaviour
     
     void Update()
     {
-        if (!isTimeFrozen)
-        {
-            float timeScale = 15f;
-            timeCurrent += Time.deltaTime * timeScale;
-            BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
+        if (isTimeFrozen) return;
+            
+        float timeScale = 15f;
+        timeCurrent += Time.deltaTime * timeScale;
+        BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
+        
+        if(!Ball.IsTraveling)
             CheckEndGame();
-        }
     }
 
     private void OnDestroy()
@@ -95,7 +96,7 @@ public class BattleManager : MonoBehaviour
     {
         if (currentPhase == newPhase) return;
 
-        BattleEvents.RaiseBattlePhaseChanged(newPhase, lastPhase);
+        BattleEvents.RaiseBattlePhaseChanged(newPhase, currentPhase);
 
         LogManager.Info($"[BattleManager] " + 
             $"BattlePhase changed to {newPhase}" , this);

@@ -88,18 +88,31 @@ public class DuelSelectionManager : MonoBehaviour
     {
         var selection = selections[TeamSide.Away];
         Character character = selection.Character;
-        DuelCommand command = character.GetCommandByCategory(selection.Category);
-        Move move = character.GetMoveByCommandAndCategory(
-            command,
-            selection.Category);
+
+        if (duelMode == DuelMode.Shoot)
+            BattleUIManager.Instance.SetDuelCategory(selection.Category);
+
+        Trait? requiredTrait = DuelManager.Instance.GetRequiredTraitByCategory(selection.Category);
+        DuelCommand command;
+        Move move = null;
+        if (requiredTrait.HasValue) 
+        {
+            command = character.GetCommandByTrait(requiredTrait.Value);
+            move = character.GetMoveByCommandAndTrait(
+                command,
+                requiredTrait.Value);
+        } else 
+        {
+            command = character.GetCommandByCategory(selection.Category);
+            move = character.GetMoveByCommandAndCategory(
+                command,
+                selection.Category);
+        }
 
         FinalizeSelection(
             character.TeamSide, 
             command, 
             move);
-
-        if (duelMode == DuelMode.Shoot)
-            BattleUIManager.Instance.SetDuelCategory(selection.Category);
     }
     #endregion
 
