@@ -24,7 +24,8 @@ public class DataLoadManager : MonoBehaviour
     private async void Start()
     {
         LogManager.Trace("[DataLoadManager] Starting data initialization...");
-        //Generic
+        // Generic
+        Task loadSpriteAtlas = SpriteAtlasManager.Instance.LoadAllSpriteAtlasAsync();
         Task loadFormationCoord = FormationCoordManager.Instance.LoadAllFormationCoordDataAsync();
         Task loadBalls = BallManager.Instance.LoadAllBallDataAsync();
         Task loadMoves = MoveManager.Instance.LoadAllMoveDataAsync();
@@ -32,6 +33,8 @@ public class DataLoadManager : MonoBehaviour
         Task loadMoveEvolutionPath =  MoveEvolutionPathManager.Instance.LoadAllMoveEvolutionPathAsync();
         Task loadCharacters = CharacterManager.Instance.LoadAllCharacterDataAsync();
         Task loadKits = KitManager.Instance.LoadAllKitsAsync();   
+        // SpriteAtlas
+        await loadSpriteAtlas;
         // Formation     
         await loadFormationCoord;
         Task loadFormations = FormationManager.Instance.LoadAllFormationsAsync();

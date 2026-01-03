@@ -6,7 +6,7 @@ using TMPro;
 
 public class CharacterCardMini : MonoBehaviour
 {
-    [SerializeField] private CharacterPortrait characterPortrait;
+    [SerializeField] private CharacterPortraitBattle characterPortrait;
     [SerializeField] private Image imageElement;
     [SerializeField] private Image imagePosition;
 

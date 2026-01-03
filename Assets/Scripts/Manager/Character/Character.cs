@@ -108,6 +108,7 @@ public class Character : MonoBehaviour
     public Sprite CharacterPortraitSprite => appearanceComponent.CharacterPortraitSprite;
     public Sprite KitPortraitSprite => appearanceComponent.KitPortraitSprite;
     public void SetRenderersVisible(bool isVisible) => appearanceComponent.SetRenderersVisible(isVisible);
+    public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
     //keeperComponent
     public bool IsKeeper => keeperComponent.IsKeeper;
     //levelsComponent

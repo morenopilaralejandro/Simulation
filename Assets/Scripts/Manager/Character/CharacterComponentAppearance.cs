@@ -6,40 +6,110 @@ using Simulation.Enums.Kit;
 public class CharacterComponentAppearance : MonoBehaviour
 {
     #region SpriteRenderer
-    [SerializeField] private SpriteRenderer characterHeadRenderer;    //inspector
-    [SerializeField] private SpriteRenderer characterBodyRenderer;    //inspector
-    [SerializeField] private SpriteRenderer kitBodyRenderer;          //inspector
-
-    public SpriteRenderer CharacterHeadRenderer => characterHeadRenderer;
-    public SpriteRenderer CharacterBodyRenderer => characterBodyRenderer;
-    public SpriteRenderer KitBodyRenderer => kitBodyRenderer;
+    [Header("SpriteRenderer")]
+    [Header("Hair")]
+    [SerializeField] private SpriteRenderer hairRenderer;
+    [Header("Body")]
+    [SerializeField] private SpriteRenderer bodyRenderer;
+    [Header("Eye")]
+    [SerializeField] private SpriteRenderer eyeBrowsRenderer;
+    [SerializeField] private SpriteRenderer eyeIrisRenderer;
+    [SerializeField] private SpriteRenderer eyeBaseRenderer;
+    [Header("Kit")]
+    [SerializeField] private SpriteRenderer kitDetailRenderer;
+    [SerializeField] private SpriteRenderer kitBaseRenderer;
+    [SerializeField] private SpriteRenderer kitShocksRenderer;
+    [Header("Gloves")]
+    [SerializeField] private SpriteRenderer glovesWristRenderer;
+    [SerializeField] private SpriteRenderer glovesFingersRenderer;
+    [Header("Spikes")]
+    [SerializeField] private SpriteRenderer spikesLacesRenderer;
+    [SerializeField] private SpriteRenderer spikesTongueRenderer;
+    [SerializeField] private SpriteRenderer spikesSoleRenderer;
     #endregion
 
     #region Sprite
-    [SerializeField] private Sprite characterHeadSprite;
-    [SerializeField] private Sprite characterBodySprite;
-    [SerializeField] private Sprite characterPortraitSprite;
-    [SerializeField] private Sprite kitBodySprite;
-    [SerializeField] private Sprite kitPortraitSprite;
+    [Header("Sprite")]
+    [Header("Portrait")]
+    [SerializeField] private Sprite portraitSprite;
+    [Header("Hair")]
+    [SerializeField] private Sprite hairSprite;
+    [Header("Body")]
+    [SerializeField] private Sprite bodySprite;
+    [Header("Eye")]
+    [SerializeField] private Sprite eyeBrowsSprite;
+    [SerializeField] private Sprite eyeIrisSprite;
+    [SerializeField] private Sprite eyeBaseSprite;
+    [Header("Kit")]
+    [SerializeField] private Sprite kitDetailSprite;
+    [SerializeField] private Sprite kitBaseSprite;
+    [SerializeField] private Sprite kitShocksSprite;
+    [Header("Gloves")]
+    [SerializeField] private Sprite glovesWristSprite;
+    [SerializeField] private Sprite glovesFingersSprite;
+    [Header("Spikes")]
+    [SerializeField] private Sprite spikesLacesSprite;
+    [SerializeField] private Sprite spikesTongueSprite;
+    [SerializeField] private Sprite spikesSoleSprite;
 
-    public Sprite CharacterHeadSprite => characterHeadSprite;
-    public Sprite CharacterBodySprite => characterBodySprite;
-    public Sprite CharacterPortraitSprite => characterPortraitSprite;
-    public Sprite KitBodySprite => kitBodySprite;
-    public Sprite KitPortraitSprite => kitPortraitSprite;
+    public Sprite PortraitSprite => portraitSprite;
+    public Sprite HairSprite => hairSprite;
+    public Sprite BodySprite => bodySprite;
+    public Sprite EyeBrowsSprite => eyeBrowsSprite;
+    public Sprite EyeIrisSprite => eyeIrisSprite;
+    public Sprite EyeBaseSprite => eyeBaseSprite;
+    public Sprite KitDetailSprite => kitDetailSprite;
+    public Sprite KitBaseSprite => kitBaseSprite;
+    public Sprite KitShocksSprite => kitShocksSprite;
+    public Sprite GlovesWristSprite => glovesWristSprite;
+    public Sprite GlovesFingersSprite => glovesFingersSprite;
+    public Sprite SpikesLacesSprite => spikesLacesSprite;
+    public Sprite SpikesTongueSprite => spikesTongueSprite;
+    public Sprite SpikesSoleSprite => spikesSoleSprite;
     #endregion
 
-    #region Address
-    private string _characterHeadAddress;
-    private string _characterBodyAddress;
-    private string _characterPortraitAddress;
-    private string _kitBodyAddress;
-    private string _kitPortraitAddress;
+    #region Color
+    [Header("Color")]
+    [Header("Hair")]
+    [SerializeField] private Color hairColor;
+    [Header("Body")]
+    [SerializeField] private Color bodyColor;
+    [Header("Eye")]
+    [SerializeField] private Color eyeBrowsColor;
+    [SerializeField] private Color eyeIrisColor;
+    //[SerializeField] private Color eyeBaseColor;
+    [Header("Kit")]
+    [SerializeField] private Color kitDetailColor;
+    [SerializeField] private Color kitBaseColor;
+    [SerializeField] private Color kitShocksColor;
+    [Header("Gloves")]
+    [SerializeField] private Color glovesWristColor;
+    [SerializeField] private Color glovesFingersColor;
+    [Header("Spikes")]
+    [SerializeField] private Color spikesLacesColor;
+    [SerializeField] private Color spikesTongueColor;
+    [SerializeField] private Color spikesSoleColor;
+
+    public Color HairColor => hairColor;
+    public Color BodyColor => bodyColor;
+    public Color EyeBrowsColor => eyeBrowsColor;
+    public Color EyeIrisColor => eyeIrisColor;
+    //public Color EyeBaseColor => eyeBaseColor;
+    public Color KitDetailColor => kitDetailColor;
+    public Color KitBaseColor => kitBaseColor;
+    public Color KitShocksColor => kitShocksColor;
+    public Color GlovesWristColor => glovesWristColor;
+    public Color GlovesFingersColor => glovesFingersColor;
+    public Color SpikesLacesColor => spikesLacesColor;
+    public Color SpikesTongueColor => spikesTongueColor;
+    public Color SpikesSoleColor => spikesSoleColor;
     #endregion
 
     #region Internal
     private Character character;
     private PortraitSize portraitSize;
+
+    public PortraitSize PortraitSize => portraitSize;
     #endregion
 
     public void Initialize(CharacterData characterData, Character character)
@@ -51,11 +121,7 @@ public class CharacterComponentAppearance : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (!string.IsNullOrEmpty(_characterHeadAddress)) AddressableLoader.Release(_characterHeadAddress);
-        if (!string.IsNullOrEmpty(_characterBodyAddress)) AddressableLoader.Release(_characterBodyAddress);
-        if (!string.IsNullOrEmpty(_characterPortraitAddress)) AddressableLoader.Release(_characterPortraitAddress);
-        if (!string.IsNullOrEmpty(_kitBodyAddress)) AddressableLoader.Release(_kitBodyAddress);
-        if (!string.IsNullOrEmpty(_kitPortraitAddress)) AddressableLoader.Release(_kitPortraitAddress);
+
     }
 
     private void OnEnable()
@@ -73,45 +139,22 @@ public class CharacterComponentAppearance : MonoBehaviour
         Team team, 
         FormationCoord formationCoord)
     {
-        if (this.character == character)
-            _ = SetKitAsync(team, team.Kit);
+        if (this.character != character) return;
+        _ = SetKitAsync(team, team.Kit);
+        SetGlovesVisible(formationCoord.Position == Position.GK);
     }
 
     private async Task InitializeAsync(CharacterData characterData)
     {
-        _characterHeadAddress = AddressableLoader.GetCharacterHeadAddress(characterData.CharacterId);
-        characterHeadSprite = await AddressableLoader.LoadAsync<Sprite>(_characterHeadAddress);
-        if (characterHeadSprite) 
-            characterHeadRenderer.sprite = characterHeadSprite;
-
-        _characterBodyAddress = AddressableLoader.GetCharacterBodyAddress(characterData.BodyTone.ToString().ToLower());
-        characterBodySprite = await AddressableLoader.LoadAsync<Sprite>(_characterBodyAddress);
-        if (characterBodySprite)
-            characterBodyRenderer.sprite = characterBodySprite;
-
-        _characterPortraitAddress = AddressableLoader.GetCharacterPortraitAddress(characterData.CharacterId);
-        characterPortraitSprite = await AddressableLoader.LoadAsync<Sprite>(_characterPortraitAddress);
+        hairSprite = await SpriteAtlasManager.Instance.GetCharacterHair("long"); //TODO
+        portraitSprite = await SpriteAtlasManager.Instance.GetCharacterPortrait(characterData.CharacterId);
     }
 
     private async Task SetKitAsync(Team team, Kit kit)
     {
-        Role role = GetRole();
-        Variant variant = GetVariant(team);
-
-        _kitBodyAddress = AddressableLoader.GetKitBodyAddress(
-            kit.KitId, 
-            variant.ToString().ToLower(), 
-            role.ToString().ToLower());
-        kitBodySprite = await AddressableLoader.LoadAsync<Sprite>(_kitBodyAddress);
-        if (kitBodySprite)
-            kitBodyRenderer.sprite = kitBodySprite;
-
-        _kitPortraitAddress = AddressableLoader.GetKitPortraitAddress(
-            kit.KitId, 
-            variant.ToString().ToLower(), 
-            role.ToString().ToLower(), 
-            portraitSize.ToString().ToLower());
-        kitPortraitSprite = await AddressableLoader.LoadAsync<Sprite>(_kitPortraitAddress);
+        //kitDetailColor;
+        //kitBaseColor;
+        //kitShocksColor;
     }
 
     private Role GetRole() 
@@ -124,11 +167,112 @@ public class CharacterComponentAppearance : MonoBehaviour
         return team.Variant;
     }
 
-    public void SetRenderersVisible(bool isVisible)
+    public void SetCharacterVisible(bool isVisible)
     {
-        characterHeadRenderer.enabled = isVisible;
-        characterBodyRenderer.enabled = isVisible;
-        kitBodyRenderer.enabled = isVisible;
+        SetHairVisible(isVisible);
+        SetBodyVisible(isVisible);
+        SetFaceVisible(isVisible);
+        SetKitVisible(isVisible);
+        SetSpikesVisible(isVisible);
+        if(character.IsKeeper)
+            SetGlovesVisible(isVisible);
+    }
+
+    private void SetGlovesVisible(bool isVisible)
+    {
+        glovesWristRenderer.enabled = isVisible;
+        glovesFingersRenderer.enabled = isVisible;
+    }
+
+    private void SetSpikesVisible(bool isVisible)
+    {
+        spikesLacesRenderer.enabled = isVisible;
+        spikesTongueRenderer.enabled = isVisible;
+        spikesSoleRenderer.enabled = isVisible;
+    }
+
+    private void SetFaceVisible(bool isVisible)
+    {
+        SetEyeVisible(isVisible);
+    }
+
+    private void SetEyeVisible(bool isVisible)
+    {
+        eyeBaseRenderer.enabled = isVisible;
+        eyeBrowsRenderer.enabled = isVisible;
+        eyeIrisRenderer.enabled = isVisible;
+    }
+
+    private void SetKitVisible(bool isVisible)
+    {
+        kitBaseRenderer.enabled = isVisible;
+        kitDetailRenderer.enabled = isVisible;
+        kitShocksRenderer.enabled = isVisible;
+    }
+
+    private void SetBodyVisible(bool isVisible)
+    {
+        bodyRenderer.enabled = isVisible;
+    }
+
+    private void SetHairVisible(bool isVisible)
+    {
+        hairRenderer.enabled = isVisible;
+    }
+
+
+    private void SetGlovesColor()
+    {
+        //glovesWristColor
+        //glovesFingersColor
+
+        glovesFingersRenderer.color = glovesWristColor;
+        glovesFingersRenderer.color = glovesFingersColor;
+    }
+
+    private void SetSpikesColor()
+    {
+        //spikesLacesColor
+        //spikesTongueColor
+        //spikesSoleColor
+
+        spikesLacesRenderer.color = spikesLacesColor;
+        spikesTongueRenderer.color = spikesTongueColor;
+        spikesSoleRenderer.color = spikesSoleColor;
+    }
+
+    private void SetBodyColor()
+    {
+        //bodyColor
+
+        bodyRenderer.color = bodyColor;
+    }
+
+    private void SetKitColor(Team team, Kit kit) 
+    {
+        //acount for variant and role
+
+        //kitBaseColor;
+        //kitDetailColor;
+        //kitShocksColor;
+
+        kitBaseRenderer.color = kitBaseColor;
+        kitDetailRenderer.color = kitDetailColor;
+        kitShocksRenderer.color = kitShocksColor;
+    }
+
+    private void SetHairColor()
+    {
+        //hairColor
+        //eyeBrowsColor
+        hairRenderer.color = hairColor;
+        eyeBrowsRenderer.color = eyeBrowsColor;
+    }
+
+    private void SetEyeColor()
+    {
+        //eyeIrisColor
+        eyeIrisRenderer.color = eyeIrisColor;        
     }
 
 }
