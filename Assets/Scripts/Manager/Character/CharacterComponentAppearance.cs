@@ -157,12 +157,12 @@ public class CharacterComponentAppearance : MonoBehaviour
         //kitShocksColor;
     }
 
-    private Role GetRole() 
+    public Role GetKitRole() 
     {
         return this.character.Position == Position.GK ? Role.Keeper : Role.Field;
     }
 
-    private Variant GetVariant(Team team) 
+    public Variant GetKitVariant(Team team) 
     {
         return team.Variant;
     }

@@ -35,16 +35,6 @@ public class Character : MonoBehaviour
     [SerializeField] private SpeechBubble speechBubble;
     #endregion
 
-    /*
-    character control window
-    character kick window
-    [SerializeField] private CharacterStatusController status; //stun
-
-    [SerializeField] private SecretLearning secrets; //change to character move component
-    [SerializeField] private CharacterPersistenceComponent persistence; //
-    [SerializeField] private CharacterAiComponent ai; //ally and opponent
-    */
-
     #region Initialize
     public void Initialize(CharacterData characterData)
     {

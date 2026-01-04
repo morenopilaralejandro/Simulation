@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Simulation.Enums.Move;
 using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
 
 public static class ColorManager
 {
@@ -117,5 +118,99 @@ public static class ColorManager
         if (positionColors.TryGetValue(position, out Color color))
             return color;
         return Color.white;
+    }
+
+    private static readonly Dictionary<KitColor, Color> kitColors = new Dictionary<KitColor, Color>()
+    {
+        { KitColor.Red,        new Color(218f/255f, 24f/255f, 24f/255f, 1f) },
+        { KitColor.Red_Light,  new Color(255f/255f, 102f/255f, 102f/255f, 1f) },
+        { KitColor.Red_Dark,   new Color(139f/255f, 0f/255f, 0f/255f, 1f) },
+
+        { KitColor.Blue,       new Color(30f/255f, 62f/255f, 186f/255f, 1f) },
+        { KitColor.Blue_Light, new Color(100f/255f, 149f/255f, 237f/255f, 1f) },
+        { KitColor.Blue_Dark,  new Color(0f/255f, 0f/255f, 139f/255f, 1f) },
+
+        { KitColor.Yellow,       new Color(255f/255f, 214f/255f, 0f/255f, 1f) },
+        { KitColor.Yellow_Light, new Color(255f/255f, 239f/255f, 153f/255f, 1f) },
+        { KitColor.Yellow_Dark,  new Color(204f/255f, 173f/255f, 0f/255f, 1f) },
+
+        { KitColor.Orange,       new Color(255f/255f, 140f/255f, 0f/255f, 1f) },
+        { KitColor.Orange_Light, new Color(255f/255f, 190f/255f, 120f/255f, 1f) },
+        { KitColor.Orange_Dark,  new Color(205f/255f, 102f/255f, 0f/255f, 1f) },
+
+        { KitColor.Purple,       new Color(128f/255f, 0f/255f, 128f/255f, 1f) },
+        { KitColor.Purple_Light, new Color(186f/255f, 85f/255f, 211f/255f, 1f) },
+        { KitColor.Purple_Dark,  new Color(75f/255f, 0f/255f, 130f/255f, 1f) },
+
+        { KitColor.Pink,       new Color(255f/255f, 105f/255f, 180f/255f, 1f) },
+        { KitColor.Pink_Light, new Color(255f/255f, 182f/255f, 193f/255f, 1f) },
+        { KitColor.Pink_Dark,  new Color(199f/255f, 21f/255f, 133f/255f, 1f) },
+
+        { KitColor.Green,       new Color(34f/255f, 139f/255f, 34f/255f, 1f) },
+        { KitColor.Green_Light, new Color(144f/255f, 238f/255f, 144f/255f, 1f) },
+        { KitColor.Green_Dark,  new Color(0f/255f, 100f/255f, 0f/255f, 1f) },
+
+        { KitColor.Brown,       new Color(139f/255f, 69f/255f, 19f/255f, 1f) },
+        { KitColor.Brown_Light, new Color(205f/255f, 133f/255f, 63f/255f, 1f) },
+        { KitColor.Brown_Dark,  new Color(92f/255f, 51f/255f, 23f/255f, 1f) },
+
+        { KitColor.Grey,       new Color(128f/255f, 128f/255f, 128f/255f, 1f) },
+        { KitColor.Grey_Light, new Color(211f/255f, 211f/255f, 211f/255f, 1f) },
+        { KitColor.Grey_Dark,  new Color(64f/255f, 64f/255f, 64f/255f, 1f) },
+
+        { KitColor.Black,       new Color(0f/255f, 0f/255f, 0f/255f, 1f) },
+        { KitColor.White,       new Color(255f/255f, 255f/255f, 255f/255f, 1f) },
+        { KitColor.None,       new Color(255f/255f, 255f/255f, 255f/255f, 0f) }
+
+    };
+
+    public static Color GetKitColor(KitColor kitColor)
+    {
+        if (kitColors.TryGetValue(kitColor, out Color color))
+            return color;
+        return Color.white;
+    }
+
+    private static readonly Dictionary<BodyColor, Color> bodyColors =
+        new Dictionary<BodyColor, Color>()
+    {
+        { BodyColor.White,    new Color(1f, 0.95f, 0.9f, 1f) },
+        { BodyColor.Generic,  new Color(0.85f, 0.75f, 0.65f, 1f) },
+        { BodyColor.Tanned,   new Color(0.76f, 0.60f, 0.42f, 1f) },
+        { BodyColor.Asian,    new Color(0.90f, 0.78f, 0.64f, 1f) },
+        { BodyColor.Hispanic, new Color(0.72f, 0.56f, 0.40f, 1f) },
+        { BodyColor.Indian,   new Color(0.62f, 0.45f, 0.30f, 1f) },
+        { BodyColor.Arab,     new Color(0.70f, 0.52f, 0.36f, 1f) },
+        { BodyColor.African,  new Color(0.36f, 0.25f, 0.18f, 1f) },
+        { BodyColor.Black,    new Color(0.15f, 0.10f, 0.08f, 1f) },
+        { BodyColor.Green,    new Color(0.2f, 0.8f, 0.2f, 1f) }
+    };
+
+    public static Color GetBodyColor(BodyColor bodyColor)
+    {
+        return bodyColors.TryGetValue(bodyColor, out var color)
+            ? color : Color.white;
+    }
+
+    private static readonly Dictionary<EyeColor, Color> eyeColors =
+        new Dictionary<EyeColor, Color>()
+    {
+        { EyeColor.Brown,  new Color(0.36f, 0.24f, 0.15f, 1f) },
+        { EyeColor.Blue,   new Color(0.2f, 0.4f, 0.8f, 1f) },
+        { EyeColor.Green,  new Color(0.2f, 0.6f, 0.3f, 1f) },
+        { EyeColor.Gray,   new Color(0.6f, 0.6f, 0.6f, 1f) },
+        { EyeColor.Red,    new Color(0.8f, 0.1f, 0.1f, 1f) },
+        { EyeColor.Purple, new Color(0.5f, 0.2f, 0.6f, 1f) },
+        { EyeColor.Gold,   new Color(1f, 0.84f, 0.0f, 1f) },
+        { EyeColor.Silver, new Color(0.75f, 0.75f, 0.75f, 1f) },
+        { EyeColor.Black,  new Color(0f, 0f, 0f, 1f) },
+        { EyeColor.White,  new Color(1f, 1f, 1f, 1f) },
+        { EyeColor.Pink,   new Color(1f, 0.6f, 0.8f, 1f) }
+    };
+
+    public static Color GetEyeColor(EyeColor eyeColor)
+    {
+        return eyeColors.TryGetValue(eyeColor, out var color)
+            ? color : Color.white;
     }
 }
