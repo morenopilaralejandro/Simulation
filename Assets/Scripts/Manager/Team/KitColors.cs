@@ -4,5 +4,5 @@ public struct KitColors
 {
     public Color Base;
     public Color Detail;
-    public Color Shock;
+    public Color Shocks;
 }

@@ -26,7 +26,7 @@ public class CharacterPortraitBattle : MonoBehaviour
 
     public void UpdateCharacterPortraitSprite(Character character)
     {
-        imageCharacterPortrait.sprite = character.CharacterPortraitSprite;
+        imageCharacterPortrait.sprite = character.PortraitSprite;
         _cachedId = character.CharacterId;
     }
 
@@ -42,9 +42,11 @@ public class CharacterPortraitBattle : MonoBehaviour
 
     public void UpdateKitPortraitColors(Character character)
     {
-        //imageKitPortraitBase.color = ;
-        //imageKitPortraitDetail.color = ;
-        //imageKitPortraitNeck.color = ;
+        var kitColor = character.GetTeam().Kit.GetColors(character.GetKitVariant(character.GetTeam()), character.GetKitRole());
+
+        imageKitPortraitBase.color = kitColor.Base;
+        imageKitPortraitDetail.color = kitColor.Detail;
+        imageKitPortraitNeck.color = character.BodyColor;
     }
 
 }

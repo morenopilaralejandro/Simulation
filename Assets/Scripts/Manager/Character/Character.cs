@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
 using Simulation.Enums.Move;
 using Simulation.Enums.Duel;
 using Simulation.Enums.Battle;
@@ -95,10 +96,12 @@ public class Character : MonoBehaviour
     public List<Character> GetTeammates() => teamMemberComponent.GetTeammates();
     public List<Character> GetOpponents() => teamMemberComponent.GetOpponents();
     //appearanceComponent
-    public Sprite CharacterPortraitSprite => appearanceComponent.CharacterPortraitSprite;
-    public Sprite KitPortraitSprite => appearanceComponent.KitPortraitSprite;
-    public void SetRenderersVisible(bool isVisible) => appearanceComponent.SetRenderersVisible(isVisible);
+    public void SetCharacterVisible(bool isVisible) => appearanceComponent.SetCharacterVisible(isVisible);
+    public Role GetKitRole() => appearanceComponent.GetKitRole();
+    public Variant GetKitVariant(Team team) => appearanceComponent.GetKitVariant(team);
+    public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
     public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
+    public Color BodyColor => appearanceComponent.BodyColor;
     //keeperComponent
     public bool IsKeeper => keeperComponent.IsKeeper;
     //levelsComponent

@@ -24,7 +24,7 @@ public class KitComponentColor
                     {
                         Base = kitData.BaseColorHomeField,
                         Detail = kitData.DetailColorHomeField,
-                        Shock = kitData.ShockColorHomeField
+                        Shocks = kitData.ShockColorHomeField
                     }
                 },
                 {
@@ -33,7 +33,7 @@ public class KitComponentColor
                     {
                         Base = kitData.BaseColorHomeKeeper,
                         Detail = kitData.DetailColorHomeKeeper,
-                        Shock = kitData.ShockColorHomeKeeper
+                        Shocks = kitData.ShockColorHomeKeeper
                     }
                 },
                 {
@@ -42,7 +42,7 @@ public class KitComponentColor
                     {
                         Base = kitData.BaseColorAwayField,
                         Detail = kitData.DetailColorAwayField,
-                        Shock = kitData.ShockColorAwayField
+                        Shocks = kitData.ShockColorAwayField
                     }
                 },
                 {
@@ -51,7 +51,7 @@ public class KitComponentColor
                     {
                         Base = kitData.BaseColorAwayKeeper,
                         Detail = kitData.DetailColorAwayKeeper,
-                        Shock = kitData.ShockColorAwayKeeper
+                        Shocks = kitData.ShockColorAwayKeeper
                     }
                 }
             };

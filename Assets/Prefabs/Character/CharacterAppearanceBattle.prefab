@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 3943641887977168860}
   - component: {fileID: 5206869866866252908}
   - component: {fileID: 3913424799742821647}
+  - component: {fileID: 5992253294801766362}
   m_Layer: 6
   m_Name: CharacterAppearanceBattle
   m_TagString: Untagged
@@ -383,6 +384,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetCamera: {fileID: 0}
   keepUpright: 1
+--- !u!114 &5992253294801766362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247417844628448630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2190ea73df829f26ca0641bea3cd2259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hairRenderer: {fileID: 1085539780682918941}
+  bodyRenderer: {fileID: 2848161408656511802}
+  eyeBrowsRenderer: {fileID: 2155873451461127466}
+  eyeIrisRenderer: {fileID: 6713939766135359124}
+  eyeBaseRenderer: {fileID: 2677063565794253085}
+  kitDetailRenderer: {fileID: 2188587699606239398}
+  kitBaseRenderer: {fileID: 3940645453166339326}
+  kitShocksRenderer: {fileID: 2900524408260200361}
+  glovesWristRenderer: {fileID: 3398242936105892569}
+  glovesFingersRenderer: {fileID: 2549945888835091065}
+  spikesLacesRenderer: {fileID: 843976410652218185}
+  spikesTongueRenderer: {fileID: 3262021415663342950}
+  spikesSoleRenderer: {fileID: 4486164996641672866}
+  portraitSprite: {fileID: 0}
+  hairSprite: {fileID: 0}
+  bodySprite: {fileID: 21300000, guid: 0fa1bdb8624e605439a1199350a808d8, type: 3}
+  eyeBrowsSprite: {fileID: 21300000, guid: 05414b2b5a2fae94dad93c5891b097b0, type: 3}
+  eyeIrisSprite: {fileID: 21300000, guid: 2b88d7912ee2c170997f9ae96160b4d5, type: 3}
+  eyeBaseSprite: {fileID: 21300000, guid: fdd0fded6f5ea8ca6b33a7d1ef243249, type: 3}
+  kitDetailSprite: {fileID: 21300000, guid: dd4c6085ebd4390328ef227913e1437e, type: 3}
+  kitBaseSprite: {fileID: 21300000, guid: 2fcfdc34c1f95044d8bca41f3cc80047, type: 3}
+  kitShocksSprite: {fileID: 0}
+  glovesWristSprite: {fileID: 0}
+  glovesFingersSprite: {fileID: 0}
+  spikesLacesSprite: {fileID: 0}
+  spikesTongueSprite: {fileID: 0}
+  spikesSoleSprite: {fileID: 0}
+  hairColor: {r: 0, g: 0, b: 0, a: 0}
+  bodyColor: {r: 0, g: 0, b: 0, a: 0}
+  eyeBrowsColor: {r: 0, g: 0, b: 0, a: 0}
+  eyeIrisColor: {r: 0, g: 0, b: 0, a: 0}
+  kitDetailColor: {r: 0, g: 0, b: 0, a: 0}
+  kitBaseColor: {r: 0, g: 0, b: 0, a: 0}
+  kitShocksColor: {r: 0, g: 0, b: 0, a: 0}
+  glovesWristColor: {r: 0, g: 0, b: 0, a: 0}
+  glovesFingersColor: {r: 0, g: 0, b: 0, a: 0}
+  spikesLacesColor: {r: 0, g: 0, b: 0, a: 0}
+  spikesTongueColor: {r: 0, g: 0, b: 0, a: 0}
+  spikesSoleColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2128780129293368662
 GameObject:
   m_ObjectHideFlags: 0
@@ -1112,7 +1164,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 9c29ce21396e8f4659a0fd5cc75a8b6d, type: 3}
-  m_Color: {r: 0.46245193, g: 0, b: 0.51634157, a: 1}
+  m_Color: {r: 0.24705046, g: 0.24705046, b: 0.24705046, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1196,7 +1248,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 696d94dd15471b5488d5706461285b81, type: 3}
-  m_Color: {r: 0.55707705, g: 0, b: 0.6053302, a: 1}
+  m_Color: {r: 0.50435597, g: 0.50435597, b: 0.50435597, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

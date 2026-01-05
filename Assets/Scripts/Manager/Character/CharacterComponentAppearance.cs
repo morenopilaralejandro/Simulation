@@ -140,26 +140,28 @@ public class CharacterComponentAppearance : MonoBehaviour
         FormationCoord formationCoord)
     {
         if (this.character != character) return;
-        _ = SetKitAsync(team, team.Kit);
+        SetKitColor(team, team.Kit);
         SetGlovesVisible(formationCoord.Position == Position.GK);
     }
 
     private async Task InitializeAsync(CharacterData characterData)
     {
-        hairSprite = await SpriteAtlasManager.Instance.GetCharacterHair("long"); //TODO
         portraitSprite = await SpriteAtlasManager.Instance.GetCharacterPortrait(characterData.CharacterId);
-    }
+        if (characterData.HairStyle == HairStyle.Bald) 
+            hairSprite = null;
+        else
+            hairSprite = await SpriteAtlasManager.Instance.GetCharacterHair(EnumManager.EnumToString(characterData.HairStyle).ToLower());
 
-    private async Task SetKitAsync(Team team, Kit kit)
-    {
-        //kitDetailColor;
-        //kitBaseColor;
-        //kitShocksColor;
+        hairRenderer.sprite = hairSprite;
+
+        SetBodyColor(characterData);
+        SetHairColor(characterData);
+        SetEyeColor(characterData);
     }
 
     public Role GetKitRole() 
     {
-        return this.character.Position == Position.GK ? Role.Keeper : Role.Field;
+        return this.character.FormationCoord.Position == Position.GK ? Role.Keeper : Role.Field;
     }
 
     public Variant GetKitVariant(Team team) 
@@ -241,37 +243,37 @@ public class CharacterComponentAppearance : MonoBehaviour
         spikesSoleRenderer.color = spikesSoleColor;
     }
 
-    private void SetBodyColor()
+    private void SetBodyColor(CharacterData characterData)
     {
-        //bodyColor
+        bodyColor = ColorManager.GetBodyColor(characterData.BodyColor);
 
         bodyRenderer.color = bodyColor;
     }
 
     private void SetKitColor(Team team, Kit kit) 
     {
-        //acount for variant and role
+        var kitColor = kit.GetColors(GetKitVariant(team), GetKitRole());
 
-        //kitBaseColor;
-        //kitDetailColor;
-        //kitShocksColor;
+        kitBaseColor = kitColor.Base;
+        kitDetailColor = kitColor.Detail;
+        kitShocksColor = kitColor.Shocks;
 
         kitBaseRenderer.color = kitBaseColor;
         kitDetailRenderer.color = kitDetailColor;
         kitShocksRenderer.color = kitShocksColor;
     }
 
-    private void SetHairColor()
+    private void SetHairColor(CharacterData characterData)
     {
-        //hairColor
-        //eyeBrowsColor
+        hairColor = ColorManager.GetHairColor(characterData.HairColor);
+        eyeBrowsColor = hairColor;
         hairRenderer.color = hairColor;
         eyeBrowsRenderer.color = eyeBrowsColor;
     }
 
-    private void SetEyeColor()
+    private void SetEyeColor(CharacterData characterData)
     {
-        //eyeIrisColor
+        eyeIrisColor = ColorManager.GetEyeColor(characterData.EyeColor);
         eyeIrisRenderer.color = eyeIrisColor;        
     }
 

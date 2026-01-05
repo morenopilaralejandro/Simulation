@@ -213,4 +213,25 @@ public static class ColorManager
         return eyeColors.TryGetValue(eyeColor, out var color)
             ? color : Color.white;
     }
+
+    private static readonly Dictionary<HairColor, Color> hairColors =
+        new Dictionary<HairColor, Color>()
+    {
+        { HairColor.Black,  new Color(0.05f, 0.05f, 0.05f, 1f) },
+        { HairColor.Blonde, new Color(0.95f, 0.85f, 0.55f, 1f) },
+        { HairColor.Blue,   new Color(0.2f, 0.4f, 0.9f, 1f) },
+        { HairColor.Brown,  new Color(0.4f, 0.25f, 0.1f, 1f) },
+        { HairColor.Green,  new Color(0.2f, 0.7f, 0.3f, 1f) },
+        { HairColor.Orange, new Color(1f, 0.5f, 0.1f, 1f) },
+        { HairColor.Pink,   new Color(1f, 0.6f, 0.8f, 1f) },
+        { HairColor.Purple, new Color(0.6f, 0.3f, 0.7f, 1f) },
+        { HairColor.Red,    new Color(0.8f, 0.2f, 0.1f, 1f) },
+        { HairColor.White,  new Color(0.95f, 0.95f, 0.95f, 1f) }
+    };
+
+    public static Color GetHairColor(HairColor hairColor)
+    {
+        return hairColors.TryGetValue(hairColor, out var color)
+            ? color : Color.white;
+    }
 }
