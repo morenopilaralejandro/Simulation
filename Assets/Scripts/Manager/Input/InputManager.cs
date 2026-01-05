@@ -255,7 +255,7 @@ public class InputManager : MonoBehaviour
 
     public void UpdateOnScreenVisibility()
     {
-        bool isAndroid = Application.platform == RuntimePlatform.Android;
+        isAndroid = Application.platform == RuntimePlatform.Android;
         if (onScreenControlsRoot && onScreenControlsRoot.activeSelf != isAndroid)
             onScreenControlsRoot.SetActive(isAndroid);
     }

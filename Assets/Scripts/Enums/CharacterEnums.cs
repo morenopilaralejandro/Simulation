@@ -186,4 +186,5 @@ namespace Simulation.Enums.Character
         Ponytail2,
         Bald
     }
+
 }

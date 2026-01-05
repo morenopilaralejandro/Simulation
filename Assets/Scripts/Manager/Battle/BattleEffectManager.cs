@@ -45,9 +45,12 @@ public class BattleEffectManager : MonoBehaviour
 
     public void PlayDuelWinEffect(Transform originTransform)
     {
-        spawnPoint.DuelWinEffect.transform.SetParent(originTransform);
-        spawnPoint.DuelWinEffect.transform.localPosition = Vector3.zero;
-        spawnPoint.DuelWinEffect.Play();
+        var psTransform = spawnPoint.DuelWinEffect.transform;
+
+        psTransform.position = originTransform.position;
+        psTransform.rotation = originTransform.rotation;
+
+        spawnPoint.DuelWinEffect.Play(true);
     }
 
 }
