@@ -18,7 +18,7 @@ public class DuelLogEntry
         Move = move;
 
         localizationStringComponent = new LocalizationComponentString(
-            LocalizationEntity.DuelLog,
+            LocalizationEntity.Duel_Log,
             entryId,
             new [] {  LocalizationField.Entry }
         );

@@ -38,8 +38,7 @@ public class KitManager : MonoBehaviour
     {
         if (!kits.ContainsKey(data.KitId))
         {
-            var kit = new Kit();
-            kit.Initialize(data);
+            var kit = new Kit(data);
             kits.Add(kit.KitId, kit);
         }
     }

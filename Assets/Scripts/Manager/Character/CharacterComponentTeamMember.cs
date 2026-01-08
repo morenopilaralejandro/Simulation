@@ -32,17 +32,15 @@ public class CharacterComponentTeamMember : MonoBehaviour
         Team team, 
         FormationCoord formationCoord)
     {
-        if (this.character == character)
-        {
-            this.teamSide = team.TeamSide;
-            
-            this.formationCoord = new FormationCoord(formationCoord);
+        if (this.character != character) return;
 
-            if (!character.IsOnUsersTeam())
-                this.formationCoord.FlipDefaultPosition();
+        this.teamSide = team.TeamSide;   
+        this.formationCoord = new FormationCoord(formationCoord);
 
-            LogManager.Trace($"[CharacterComponentTeamMember] {this.character.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
-        }
+        if (!character.IsOnUsersTeam())
+            this.formationCoord.FlipDefaultPosition();
+
+        LogManager.Trace($"[CharacterComponentTeamMember] {this.character.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
     }
 
     public bool IsOnUsersTeam() => this.teamSide == BattleTeamManager.Instance.GetUserSide();

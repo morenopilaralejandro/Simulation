@@ -21,8 +21,8 @@ TagManager:
   - UI
   - Character
   - Ball
-  - 
-  - 
+  - FieldLines
+  - Character-Presence
   - 
   - 
   - 
@@ -48,4 +48,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: FieldLines
+    uniqueID: 2792170937
+    locked: 0
+  - name: Character
+    uniqueID: 166002685
     locked: 0

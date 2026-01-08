@@ -11,7 +11,7 @@ public class DuelLogPopup : MonoBehaviour
     [SerializeField] private GameObject panelPortraitCharacter;
     [SerializeField] private GameObject panelPortraitDefault;
     [SerializeField] private GameObject panelEvolution;
-    [SerializeField] private CharacterPortrait characterPortrait;
+    [SerializeField] private CharacterPortraitBattle characterPortrait;
     [SerializeField] private Image imageEvolution;
     [SerializeField] private Image imageBackground;
 

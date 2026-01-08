@@ -96,7 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000006, guid: e0239def02288948197f8a92537b970d, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -133,6 +133,10 @@ PrefabInstance:
     - target: {fileID: 3312645113468349629, guid: 147db1052387b6270877bafb9f4d139d, type: 3}
       propertyPath: m_Name
       value: 'PlayArea '
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312645113468349629, guid: 147db1052387b6270877bafb9f4d139d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4225828601199530752, guid: 147db1052387b6270877bafb9f4d139d, type: 3}
       propertyPath: m_Name

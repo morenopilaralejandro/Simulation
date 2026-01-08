@@ -5,13 +5,22 @@ public class BallComponentKick : MonoBehaviour
     private Ball ball;
 
     [SerializeField] private Rigidbody ballRigidbody;
+    [SerializeField] private LayerMask characterPresenceLayer;
 
     private float shortDistance = 10f;
     private float mediumDistance = 25f;
     private float maxPower = 25f;
     private float gravity = 9.81f;
-    private float sphereCastRadius = 0.3f;
-    private string tagCharacterPresence = "Character-Presence";
+    private static readonly Collider[] overlapResults = new Collider[6];
+    private float sphereCastRadius = 0.2f;
+
+    #if UNITY_EDITOR
+    [SerializeField] private bool debugDraw = true;
+    private Vector3 debugCastStart;
+    private Vector3 debugCastEnd;
+    private bool debugHadHit;
+    private Vector3 debugHitPoint;
+    #endif
 
     public void Initialize(BallData ballData, Ball ball)
     {
@@ -34,7 +43,7 @@ public class BallComponentKick : MonoBehaviour
             angle = 35f;
 
         if (isOpponentInWay)
-            angle += 10f; // lift trajectory to go over opponent
+            angle += 45f; // lift trajectory to go over opponent
 
         angle = Mathf.Clamp(angle, 10f, 45f);
 
@@ -70,30 +79,74 @@ public class BallComponentKick : MonoBehaviour
 
     private bool IsOpponentInWay(Vector3 ballPos, Vector3 targetPos)
     {
-        Vector3 toTarget = targetPos - ballPos;
-        float distance = toTarget.magnitude;
+        float castHeight = ballPos.y;
 
-        // Cast a small sphere along the path to account for ball width
-        RaycastHit[] hits = Physics.SphereCastAll(
-            ballPos + Vector3.up * 0.5f,
-            sphereCastRadius, 
-            toTarget.normalized,
-            distance
+        Vector3 start = new Vector3(ballPos.x, castHeight, ballPos.z);
+        Vector3 end   = new Vector3(targetPos.x, castHeight, targetPos.z);
+
+    #if UNITY_EDITOR
+        debugCastStart = start;
+        debugCastEnd = end;
+        debugHadHit = false;
+    #endif
+
+        int count = Physics.OverlapCapsuleNonAlloc(
+            start,
+            end,
+            sphereCastRadius,
+            overlapResults,
+            characterPresenceLayer,
+            QueryTriggerInteraction.Collide
         );
 
-        foreach (RaycastHit hit in hits)
+        for (int i = 0; i < count; i++)
         {
-            GameObject obj = hit.collider.gameObject;
+        
+            Collider col = overlapResults[i];
 
-            // Skip self or the ball
-            if (obj == gameObject || obj == ball.gameObject || !obj.CompareTag(tagCharacterPresence))
+            var presence = col.GetComponentInParent<Character>();
+            if (presence == null || presence.IsStunned())
                 continue;
 
-            Character character = obj.GetComponent<Character>();
-            if (character != null && !character.IsSameTeam(PossessionManager.Instance.LastCharacter))
+            if (!presence.IsSameTeam(PossessionManager.Instance.CurrentCharacter))
+            {
+    #if UNITY_EDITOR
+                debugHadHit = true;
+                debugHitPoint = col.ClosestPoint((start + end) * 0.5f);
+    #endif
                 return true;
+            }
         }
 
         return false;
     }
+
+    #if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (!debugDraw) return;
+
+        Gizmos.color = Color.yellow;
+
+        // Main capsule axis
+        Gizmos.DrawLine(debugCastStart, debugCastEnd);
+
+        // End spheres
+        Gizmos.DrawWireSphere(debugCastStart, sphereCastRadius);
+        Gizmos.DrawWireSphere(debugCastEnd, sphereCastRadius);
+
+        // Side edges (visual aid)
+        Vector3 dir = (debugCastEnd - debugCastStart).normalized;
+        Vector3 right = Vector3.Cross(dir, Vector3.up) * sphereCastRadius;
+
+        Gizmos.DrawLine(debugCastStart + right, debugCastEnd + right);
+        Gizmos.DrawLine(debugCastStart - right, debugCastEnd - right);
+
+        if (debugHadHit)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(debugHitPoint, 0.15f);
+        }
+    }
+    #endif  
 }

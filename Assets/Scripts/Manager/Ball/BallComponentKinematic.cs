@@ -23,6 +23,19 @@ public class BallComponentKinematic : MonoBehaviour
     public bool IsKinematic => ballRigidbody.isKinematic;
     public Vector3 GetVelocity() => ballRigidbody.velocity;
 
+    void Awake()
+    {
+        StartCoroutine(WarmUpBall());
+    }
+
+    IEnumerator WarmUpBall()
+    {
+        ballRigidbody.isKinematic = false;
+        // Apply tiny force to initialize physics
+        ballRigidbody.AddForce(Vector3.forward * 0.001f, ForceMode.Impulse);
+        yield return new WaitForFixedUpdate();
+    }
+
     public void Initialize(BallData ballData, Ball ball)
     {
         this.ball = ball;

@@ -133,4 +133,58 @@ namespace Simulation.Enums.Character
         Pass, 
         Shoot 
     }
+
+    public enum BodyColorType
+    {
+        White,
+        Generic,
+        Tanned,
+        Asian,
+        Hispanic,
+        Indian,
+        Arab,
+        African,
+        Black,
+        Green
+    }
+
+    public enum EyeColorType
+    {
+        Brown,
+        Blue,
+        Green,
+        Gray,
+        Red,
+        Purple,
+        Gold,
+        Silver,
+        Black,
+        White,
+        Pink
+    }
+
+    public enum HairColorType
+    {
+        Black,
+        Blonde,
+        Blue,
+        Brown,
+        Green,
+        Orange,
+        Pink,
+        Purple,
+        Red,
+        White
+    }
+
+    public enum HairStyle 
+    {
+        Fade,
+        Butterfly,
+        Spiky,
+        Ponytail1,
+        Ponytail2,
+        Bald
+    }
+
 }

@@ -34,8 +34,7 @@ public class TeamComponentAppearance
 
     private async Task InitializeAsync(TeamData teamData)
     {
-        _teamCrestAddress = AddressableLoader.GetTeamCrestAddress(teamData.TeamId);
-        TeamCrestSprite = await AddressableLoader.LoadAsync<Sprite>(_teamCrestAddress);
+        TeamCrestSprite = await SpriteAtlasManager.Instance.GetTeamCrest(teamData.TeamId);
         if (!TeamCrestSprite) 
         {
             _teamCrestAddress = AddressableLoader.GetTeamCrestAddress(defaultId);

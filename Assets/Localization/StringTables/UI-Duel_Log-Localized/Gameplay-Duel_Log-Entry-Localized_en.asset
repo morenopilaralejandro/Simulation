@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Gameplay-Duel_Log-Entry-Localized_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 92af055cf362b062790e02e45c50df4d, type: 2}
+  m_Metadata:
+    m_Items:
+    - rid: 2307362037524856837
+  m_TableData:
+  - m_Id: 17290764288
+    m_Localized: Duel Log
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958592
+    m_Localized: The match is starting!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958593
+    m_Localized: Half Time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958594
+    m_Localized: The match is over!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958595
+    m_Localized: '{teamName} requests a Secret Stop.'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 17294958596
+    m_Localized: The match resumed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958597
+    m_Localized: '{characterName} passes the ball.'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 17294958598
+    m_Localized: '{characterName} shoots!'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 17294958599
+    m_Localized: '{characterName} uses {commandName}!'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 17294958600
+    m_Localized: '{actionSymbol}{damageNumber} AP'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 17294958601
+    m_Localized: '{characterName} scores a goal!'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 17294958603
+    m_Localized: Offense power X2!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958604
+    m_Localized: Defense power X2!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958605
+    m_Localized: Duel!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958606
+    m_Localized: You win!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958607
+    m_Localized: You lose!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958608
+    m_Localized: The duel ended.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958609
+    m_Localized: Goal!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 17294958610
+    m_Localized: '{characterName} takes control of the ball.'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 17294958611
+    m_Localized: 'Condition: {condition}'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 7669565703856128
+    m_Localized: Kickoff!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7669565724827648
+    m_Localized: Direct!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7669565724827649
+    m_Localized: '{characterName} stops it!'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  - m_Id: 8025183153299456
+    m_Localized: '{commandName}!'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856837
+  references:
+    version: 2
+    RefIds:
+    - rid: 2307362037524856837
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 17294958595
+        - id: 17294958597
+        - id: 17294958598
+        - id: 17294958599
+        - id: 17294958600
+        - id: 17294958601
+        - id: 7669565724827649
+        - id: 17294958610
+        - id: 17294958611
+        - id: 8025183153299456

@@ -1,134 +1,146 @@
 using UnityEngine;
+using System;
 using System.Threading.Tasks;
 using Simulation.Enums.Character;
 using Simulation.Enums.Kit;
+using Simulation.Enums.SpriteLayer;
 
-public class CharacterComponentAppearance : MonoBehaviour
+public class CharacterComponentAppearance : MonoBehaviour, IAsyncSceneLoader
 {
-    #region SpriteRenderer
-    [SerializeField] private SpriteRenderer characterHeadRenderer;    //inspector
-    [SerializeField] private SpriteRenderer characterBodyRenderer;    //inspector
-    [SerializeField] private SpriteRenderer kitBodyRenderer;          //inspector
+    #region Serialized Fields
 
-    public SpriteRenderer CharacterHeadRenderer => characterHeadRenderer;
-    public SpriteRenderer CharacterBodyRenderer => characterBodyRenderer;
-    public SpriteRenderer KitBodyRenderer => kitBodyRenderer;
+    [SerializeField] private SpriteLayerRendererCharacter spriteLayerRenderer;
+
     #endregion
 
-    #region Sprite
-    [SerializeField] private Sprite characterHeadSprite;
-    [SerializeField] private Sprite characterBodySprite;
-    [SerializeField] private Sprite characterPortraitSprite;
-    [SerializeField] private Sprite kitBodySprite;
-    [SerializeField] private Sprite kitPortraitSprite;
+    #region Private Fields
 
-    public Sprite CharacterHeadSprite => characterHeadSprite;
-    public Sprite CharacterBodySprite => characterBodySprite;
-    public Sprite CharacterPortraitSprite => characterPortraitSprite;
-    public Sprite KitBodySprite => kitBodySprite;
-    public Sprite KitPortraitSprite => kitPortraitSprite;
-    #endregion
-
-    #region Address
-    private string _characterHeadAddress;
-    private string _characterBodyAddress;
-    private string _characterPortraitAddress;
-    private string _kitBodyAddress;
-    private string _kitPortraitAddress;
-    #endregion
-
-    #region Internal
     private Character character;
+    private CharacterData characterData;
+    private SpriteLayerState<CharacterSpriteLayer> state;
+    private Sprite portraitSprite;
     private PortraitSize portraitSize;
+
     #endregion
+
+    #region Public Properties
+
+    public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState => state;
+    public Sprite PortraitSprite => portraitSprite;
+    public PortraitSize PortraitSize => portraitSize;
+
+    #endregion
+
+    #region Initialization
 
     public void Initialize(CharacterData characterData, Character character)
     {
         this.character = character;
-        this.portraitSize = characterData.PortraitSize;
-        _ = InitializeAsync(characterData);
+        this.characterData = characterData;
+
+        state = new SpriteLayerState<CharacterSpriteLayer>();
+        portraitSize = characterData.PortraitSize;
+
+        InitializeVisibility();
     }
 
-    private void OnDestroy()
+    #endregion
+
+    #region Async Loading
+
+    public async Task LoadAsync()
     {
-        if (!string.IsNullOrEmpty(_characterHeadAddress)) AddressableLoader.Release(_characterHeadAddress);
-        if (!string.IsNullOrEmpty(_characterBodyAddress)) AddressableLoader.Release(_characterBodyAddress);
-        if (!string.IsNullOrEmpty(_characterPortraitAddress)) AddressableLoader.Release(_characterPortraitAddress);
-        if (!string.IsNullOrEmpty(_kitBodyAddress)) AddressableLoader.Release(_kitBodyAddress);
-        if (!string.IsNullOrEmpty(_kitPortraitAddress)) AddressableLoader.Release(_kitPortraitAddress);
+        await LoadSprites();
+
+        ApplyColors(characterData);
+
+        if (character.FormationCoord.Position != Position.GK)
+        {
+            state.VisibleLayers.Remove(CharacterSpriteLayer.Gloves);
+            spriteLayerRenderer.SetActive(CharacterSpriteLayer.Gloves, false);
+        }
+
+        ApplyKit();
+        ApplyStateToRenderer();
     }
 
-    private void OnEnable()
+    private async Task LoadSprites()
     {
-        TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;    
+        state.Sprites[CharacterSpriteLayer.Hair] =
+            await SpriteAtlasManager.Instance.GetCharacterHair(
+                characterData.HairStyle.ToString().ToLower());
+
+        portraitSprite =
+            await SpriteAtlasManager.Instance.GetCharacterPortrait(
+                characterData.CharacterId);
     }
 
-    private void OnDisable()
+    #endregion
+
+    #region Appearance Application
+
+    private void ApplyColors(CharacterData characterData)
     {
-        TeamEvents.OnAssignCharacterToTeamBattle -= HandleAssignCharacterToTeamBattle;
+        var hairColor = ColorManager.GetHairColor(characterData.HairColorType);
+
+        state.Colors[CharacterSpriteLayer.Hair] = hairColor;
+        state.Colors[CharacterSpriteLayer.EyeIris] = ColorManager.GetEyeColor(characterData.EyeColorType);
+        state.Colors[CharacterSpriteLayer.Body] = ColorManager.GetBodyColor(characterData.BodyColorType);
     }
 
-    private void HandleAssignCharacterToTeamBattle(
-        Character character, 
-        Team team, 
-        FormationCoord formationCoord)
+    public void ApplyKit()
     {
-        if (this.character == character)
-            _ = SetKitAsync(team, team.Kit);
+        var kitColor = character.GetTeam().Kit.GetColors(GetKitVariant(), GetKitRole());
+
+        state.Colors[CharacterSpriteLayer.KitBase] = kitColor.Base;
+        state.Colors[CharacterSpriteLayer.KitDetail] = kitColor.Detail;
+        state.Colors[CharacterSpriteLayer.KitShocks] = kitColor.Shocks;
     }
 
-    private async Task InitializeAsync(CharacterData characterData)
+    private void ApplyStateToRenderer()
     {
-        _characterHeadAddress = AddressableLoader.GetCharacterHeadAddress(characterData.CharacterId);
-        characterHeadSprite = await AddressableLoader.LoadAsync<Sprite>(_characterHeadAddress);
-        if (characterHeadSprite) 
-            characterHeadRenderer.sprite = characterHeadSprite;
+        foreach (var (layer, sprite) in state.Sprites)
+            spriteLayerRenderer.SetSprite(layer, sprite);
 
-        _characterBodyAddress = AddressableLoader.GetCharacterBodyAddress(characterData.BodyTone.ToString().ToLower());
-        characterBodySprite = await AddressableLoader.LoadAsync<Sprite>(_characterBodyAddress);
-        if (characterBodySprite)
-            characterBodyRenderer.sprite = characterBodySprite;
+        foreach (var (layer, color) in state.Colors)
+            spriteLayerRenderer.SetColor(layer, color);
 
-        _characterPortraitAddress = AddressableLoader.GetCharacterPortraitAddress(characterData.CharacterId);
-        characterPortraitSprite = await AddressableLoader.LoadAsync<Sprite>(_characterPortraitAddress);
+        foreach (CharacterSpriteLayer layer in Enum.GetValues(typeof(CharacterSpriteLayer)))
+            spriteLayerRenderer.SetVisible(layer, state.Contains(layer));
     }
 
-    private async Task SetKitAsync(Team team, Kit kit)
+    #endregion
+
+    #region Visibility
+
+    private void InitializeVisibility()
     {
-        Role role = GetRole();
-        Variant variant = GetVariant(team);
+        foreach (CharacterSpriteLayer layer in Enum.GetValues(typeof(CharacterSpriteLayer)))
+            state.VisibleLayers.Add(layer);
 
-        _kitBodyAddress = AddressableLoader.GetKitBodyAddress(
-            kit.KitId, 
-            variant.ToString().ToLower(), 
-            role.ToString().ToLower());
-        kitBodySprite = await AddressableLoader.LoadAsync<Sprite>(_kitBodyAddress);
-        if (kitBodySprite)
-            kitBodyRenderer.sprite = kitBodySprite;
-
-        _kitPortraitAddress = AddressableLoader.GetKitPortraitAddress(
-            kit.KitId, 
-            variant.ToString().ToLower(), 
-            role.ToString().ToLower(), 
-            portraitSize.ToString().ToLower());
-        kitPortraitSprite = await AddressableLoader.LoadAsync<Sprite>(_kitPortraitAddress);
+        state.VisibleLayers.Remove(CharacterSpriteLayer.Aura);
+        state.VisibleLayers.Remove(CharacterSpriteLayer.Armor);
     }
 
-    private Role GetRole() 
+    public void SetCharacterVisible(bool isVisible)
     {
-        return this.character.Position == Position.GK ? Role.Keeper : Role.Field;
+        foreach (CharacterSpriteLayer layer in state.VisibleLayers)
+            spriteLayerRenderer.SetVisible(layer, isVisible);
     }
 
-    private Variant GetVariant(Team team) 
+    #endregion
+
+    #region Kit Helpers
+
+    public Role GetKitRole()
     {
-        return team.Variant;
+        return character.FormationCoord.Position == Position.GK ? Role.Keeper : Role.Field;
     }
 
-    public void SetRenderersVisible(bool isVisible)
+    public Variant GetKitVariant()
     {
-        characterHeadRenderer.enabled = isVisible;
-        characterBodyRenderer.enabled = isVisible;
-        kitBodyRenderer.enabled = isVisible;
+        return character.GetTeam().Variant;
     }
 
+    #endregion
 }

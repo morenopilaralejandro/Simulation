@@ -1,7 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Simulation.Enums.Character;
+using Simulation.Enums.SpriteLayer;
+using Simulation.Enums.Kit;
 using Simulation.Enums.Move;
 using Simulation.Enums.Duel;
 using Simulation.Enums.Battle;
@@ -34,16 +37,6 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private SpeechBubble speechBubble;
     #endregion
-
-    /*
-    character control window
-    character kick window
-    [SerializeField] private CharacterStatusController status; //stun
-
-    [SerializeField] private SecretLearning secrets; //change to character move component
-    [SerializeField] private CharacterPersistenceComponent persistence; //
-    [SerializeField] private CharacterAiComponent ai; //ally and opponent
-    */
 
     #region Initialize
     public void Initialize(CharacterData characterData)
@@ -105,9 +98,12 @@ public class Character : MonoBehaviour
     public List<Character> GetTeammates() => teamMemberComponent.GetTeammates();
     public List<Character> GetOpponents() => teamMemberComponent.GetOpponents();
     //appearanceComponent
-    public Sprite CharacterPortraitSprite => appearanceComponent.CharacterPortraitSprite;
-    public Sprite KitPortraitSprite => appearanceComponent.KitPortraitSprite;
-    public void SetRenderersVisible(bool isVisible) => appearanceComponent.SetRenderersVisible(isVisible);
+    public void SetCharacterVisible(bool isVisible) => appearanceComponent.SetCharacterVisible(isVisible);
+    public Role GetKitRole() => appearanceComponent.GetKitRole();
+    public Variant GetKitVariant() => appearanceComponent.GetKitVariant();
+    public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
+    public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
+    public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState => appearanceComponent.SpriteLayerState;
     //keeperComponent
     public bool IsKeeper => keeperComponent.IsKeeper;
     //levelsComponent
