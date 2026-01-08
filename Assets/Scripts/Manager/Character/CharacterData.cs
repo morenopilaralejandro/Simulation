@@ -5,9 +5,9 @@ using Simulation.Enums.Character;
 public class CharacterData : ScriptableObject
 {
     public string CharacterId;
-    public BodyColor BodyColor;
-    public EyeColor EyeColor;
-    public HairColor HairColor;
+    public BodyColorType BodyColorType;
+    public EyeColorType EyeColorType;
+    public HairColorType HairColorType;
     public HairStyle HairStyle;
     public PortraitSize PortraitSize;
     public CharacterSize CharacterSize;

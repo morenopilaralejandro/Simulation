@@ -171,67 +171,67 @@ public static class ColorManager
         return Color.white;
     }
 
-    private static readonly Dictionary<BodyColor, Color> bodyColors =
-        new Dictionary<BodyColor, Color>()
+    private static readonly Dictionary<BodyColorType, Color> bodyColors =
+        new Dictionary<BodyColorType, Color>()
     {
-        { BodyColor.White,    new Color(1f, 0.95f, 0.9f, 1f) },
-        { BodyColor.Generic,  new Color(0.85f, 0.75f, 0.65f, 1f) },
-        { BodyColor.Tanned,   new Color(0.76f, 0.60f, 0.42f, 1f) },
-        { BodyColor.Asian,    new Color(0.90f, 0.78f, 0.64f, 1f) },
-        { BodyColor.Hispanic, new Color(0.72f, 0.56f, 0.40f, 1f) },
-        { BodyColor.Indian,   new Color(0.62f, 0.45f, 0.30f, 1f) },
-        { BodyColor.Arab,     new Color(0.70f, 0.52f, 0.36f, 1f) },
-        { BodyColor.African,  new Color(0.36f, 0.25f, 0.18f, 1f) },
-        { BodyColor.Black,    new Color(0.15f, 0.10f, 0.08f, 1f) },
-        { BodyColor.Green,    new Color(0.2f, 0.8f, 0.2f, 1f) }
+        { BodyColorType.White,    new Color(1f, 0.95f, 0.9f, 1f) },
+        { BodyColorType.Generic,  new Color(0.85f, 0.75f, 0.65f, 1f) },
+        { BodyColorType.Tanned,   new Color(0.76f, 0.60f, 0.42f, 1f) },
+        { BodyColorType.Asian,    new Color(0.90f, 0.78f, 0.64f, 1f) },
+        { BodyColorType.Hispanic, new Color(0.72f, 0.56f, 0.40f, 1f) },
+        { BodyColorType.Indian,   new Color(0.62f, 0.45f, 0.30f, 1f) },
+        { BodyColorType.Arab,     new Color(0.70f, 0.52f, 0.36f, 1f) },
+        { BodyColorType.African,  new Color(0.36f, 0.25f, 0.18f, 1f) },
+        { BodyColorType.Black,    new Color(0.15f, 0.10f, 0.08f, 1f) },
+        { BodyColorType.Green,    new Color(0.2f, 0.8f, 0.2f, 1f) }
     };
 
-    public static Color GetBodyColor(BodyColor bodyColor)
+    public static Color GetBodyColor(BodyColorType bodyColorType)
     {
-        return bodyColors.TryGetValue(bodyColor, out var color)
+        return bodyColors.TryGetValue(bodyColorType, out var color)
             ? color : Color.white;
     }
 
-    private static readonly Dictionary<EyeColor, Color> eyeColors =
-        new Dictionary<EyeColor, Color>()
+    private static readonly Dictionary<EyeColorType, Color> eyeColors =
+        new Dictionary<EyeColorType, Color>()
     {
-        { EyeColor.Brown,  new Color(0.36f, 0.24f, 0.15f, 1f) },
-        { EyeColor.Blue,   new Color(0.2f, 0.4f, 0.8f, 1f) },
-        { EyeColor.Green,  new Color(0.2f, 0.6f, 0.3f, 1f) },
-        { EyeColor.Gray,   new Color(0.6f, 0.6f, 0.6f, 1f) },
-        { EyeColor.Red,    new Color(0.8f, 0.1f, 0.1f, 1f) },
-        { EyeColor.Purple, new Color(0.5f, 0.2f, 0.6f, 1f) },
-        { EyeColor.Gold,   new Color(1f, 0.84f, 0.0f, 1f) },
-        { EyeColor.Silver, new Color(0.75f, 0.75f, 0.75f, 1f) },
-        { EyeColor.Black,  new Color(0f, 0f, 0f, 1f) },
-        { EyeColor.White,  new Color(1f, 1f, 1f, 1f) },
-        { EyeColor.Pink,   new Color(1f, 0.6f, 0.8f, 1f) }
+        { EyeColorType.Brown,  new Color(0.36f, 0.24f, 0.15f, 1f) },
+        { EyeColorType.Blue,   new Color(0.2f, 0.4f, 0.8f, 1f) },
+        { EyeColorType.Green,  new Color(0.2f, 0.6f, 0.3f, 1f) },
+        { EyeColorType.Gray,   new Color(0.6f, 0.6f, 0.6f, 1f) },
+        { EyeColorType.Red,    new Color(0.8f, 0.1f, 0.1f, 1f) },
+        { EyeColorType.Purple, new Color(0.5f, 0.2f, 0.6f, 1f) },
+        { EyeColorType.Gold,   new Color(1f, 0.84f, 0.0f, 1f) },
+        { EyeColorType.Silver, new Color(0.75f, 0.75f, 0.75f, 1f) },
+        { EyeColorType.Black,  new Color(0f, 0f, 0f, 1f) },
+        { EyeColorType.White,  new Color(1f, 1f, 1f, 1f) },
+        { EyeColorType.Pink,   new Color(1f, 0.6f, 0.8f, 1f) }
     };
 
-    public static Color GetEyeColor(EyeColor eyeColor)
+    public static Color GetEyeColor(EyeColorType eyeColorType)
     {
-        return eyeColors.TryGetValue(eyeColor, out var color)
+        return eyeColors.TryGetValue(eyeColorType, out var color)
             ? color : Color.white;
     }
 
-    private static readonly Dictionary<HairColor, Color> hairColors =
-        new Dictionary<HairColor, Color>()
+    private static readonly Dictionary<HairColorType, Color> hairColors =
+        new Dictionary<HairColorType, Color>()
     {
-        { HairColor.Black,  new Color(0.05f, 0.05f, 0.05f, 1f) },
-        { HairColor.Blonde, new Color(0.95f, 0.85f, 0.55f, 1f) },
-        { HairColor.Blue,   new Color(0.2f, 0.4f, 0.9f, 1f) },
-        { HairColor.Brown,  new Color(0.4f, 0.25f, 0.1f, 1f) },
-        { HairColor.Green,  new Color(0.2f, 0.7f, 0.3f, 1f) },
-        { HairColor.Orange, new Color(1f, 0.5f, 0.1f, 1f) },
-        { HairColor.Pink,   new Color(1f, 0.6f, 0.8f, 1f) },
-        { HairColor.Purple, new Color(0.6f, 0.3f, 0.7f, 1f) },
-        { HairColor.Red,    new Color(0.8f, 0.2f, 0.1f, 1f) },
-        { HairColor.White,  new Color(0.95f, 0.95f, 0.95f, 1f) }
+        { HairColorType.Black,  new Color(0.05f, 0.05f, 0.05f, 1f) },
+        { HairColorType.Blonde, new Color(0.95f, 0.85f, 0.55f, 1f) },
+        { HairColorType.Blue,   new Color(0.2f, 0.4f, 0.9f, 1f) },
+        { HairColorType.Brown,  new Color(0.4f, 0.25f, 0.1f, 1f) },
+        { HairColorType.Green,  new Color(0.2f, 0.7f, 0.3f, 1f) },
+        { HairColorType.Orange, new Color(1f, 0.5f, 0.1f, 1f) },
+        { HairColorType.Pink,   new Color(1f, 0.6f, 0.8f, 1f) },
+        { HairColorType.Purple, new Color(0.6f, 0.3f, 0.7f, 1f) },
+        { HairColorType.Red,    new Color(0.8f, 0.2f, 0.1f, 1f) },
+        { HairColorType.White,  new Color(0.95f, 0.95f, 0.95f, 1f) }
     };
 
-    public static Color GetHairColor(HairColor hairColor)
+    public static Color GetHairColor(HairColorType hairColorType)
     {
-        return hairColors.TryGetValue(hairColor, out var color)
+        return hairColors.TryGetValue(hairColorType, out var color)
             ? color : Color.white;
     }
 }

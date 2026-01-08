@@ -45,6 +45,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 828601403932589118}
+  - {fileID: 2475129496627311137}
   - {fileID: 2980036836158023091}
   - {fileID: 6483671053604540643}
   - {fileID: 3050818964401299771}
@@ -344,6 +345,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970ef4698710794d696060d326682a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &2666723391835343053
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2475129496627311137}
+  - component: {fileID: 7380976312781821625}
+  m_Layer: 9
+  m_Name: ColliderPresence
+  m_TagString: Character-Presence
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2475129496627311137
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2666723391835343053}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3188685790197036401}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &7380976312781821625
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2666723391835343053}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.15
+  m_Height: 0.65
+  m_Direction: 1
+  m_Center: {x: 0.005, y: 0, z: 0}
 --- !u!1 &5008898317954055338
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,9 +616,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.15
-  m_Height: 0.65
+  m_Height: 0.35
   m_Direction: 1
-  m_Center: {x: 0.005, y: 0, z: 0}
+  m_Center: {x: 0.005, y: -0.15, z: 0}
 --- !u!1001 &4451080291270812642
 PrefabInstance:
   m_ObjectHideFlags: 0

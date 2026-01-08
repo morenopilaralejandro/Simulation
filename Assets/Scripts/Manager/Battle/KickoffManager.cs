@@ -52,6 +52,7 @@ public class KickoffManager : MonoBehaviour
     void Update() 
     {
         if (InputManager.Instance.GetDown(CustomAction.Pass) && 
+            !InputManager.Instance.IsLocked &&
             BattleManager.Instance.CurrentPhase == BattlePhase.Deadball &&
             isBallReady)
             SetTeamReady(BattleManager.Instance.GetUserSide());

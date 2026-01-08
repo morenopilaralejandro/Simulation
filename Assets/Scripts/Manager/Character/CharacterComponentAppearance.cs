@@ -5,35 +5,66 @@ using Simulation.Enums.Character;
 using Simulation.Enums.Kit;
 using Simulation.Enums.SpriteLayer;
 
-public class CharacterComponentAppearance : MonoBehaviour
+public class CharacterComponentAppearance : MonoBehaviour, IAsyncSceneLoader
 {
+    #region Serialized Fields
+
     [SerializeField] private SpriteLayerRendererCharacter spriteLayerRenderer;
-  
+
+    #endregion
+
+    #region Private Fields
+
     private Character character;
+    private CharacterData characterData;
     private SpriteLayerState<CharacterSpriteLayer> state;
     private Sprite portraitSprite;
     private PortraitSize portraitSize;
 
+    #endregion
+
+    #region Public Properties
+
     public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState => state;
     public Sprite PortraitSprite => portraitSprite;
     public PortraitSize PortraitSize => portraitSize;
-    public Color BodyColor => state.Colors[CharacterSpriteLayer.Body];
+
+    #endregion
+
+    #region Initialization
 
     public void Initialize(CharacterData characterData, Character character)
     {
         this.character = character;
+        this.characterData = characterData;
+
         state = new SpriteLayerState<CharacterSpriteLayer>();
+        portraitSize = characterData.PortraitSize;
+
         InitializeVisibility();
-        _ = InitializeAsync(characterData);
     }
 
-    private async Task InitializeAsync(CharacterData characterData)
+    #endregion
+
+    #region Async Loading
+
+    public async Task LoadAsync()
     {
-        await LoadSprites(characterData);
+        await LoadSprites();
+
         ApplyColors(characterData);
+
+        if (character.FormationCoord.Position != Position.GK)
+        {
+            state.VisibleLayers.Remove(CharacterSpriteLayer.Gloves);
+            spriteLayerRenderer.SetActive(CharacterSpriteLayer.Gloves, false);
+        }
+
+        ApplyKit();
+        ApplyStateToRenderer();
     }
 
-    private async Task LoadSprites(CharacterData characterData)
+    private async Task LoadSprites()
     {
         state.Sprites[CharacterSpriteLayer.Hair] =
             await SpriteAtlasManager.Instance.GetCharacterHair(
@@ -44,47 +75,26 @@ public class CharacterComponentAppearance : MonoBehaviour
                 characterData.CharacterId);
     }
 
-    private void OnEnable()
-    {
-        TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;    
-    }
+    #endregion
 
-    private void OnDisable()
-    {
-        TeamEvents.OnAssignCharacterToTeamBattle -= HandleAssignCharacterToTeamBattle;
-    }
-
-    private void HandleAssignCharacterToTeamBattle(
-        Character character, 
-        Team team, 
-        FormationCoord formationCoord)
-    {
-        if (this.character != character) return;
-
-        if(formationCoord.Position == Position.GK) 
-        {
-            state.VisibleLayers.Remove(CharacterSpriteLayer.Gloves);
-            spriteLayerRenderer.SetActive(CharacterSpriteLayer.Gloves, false);
-        }
-        ApplyKit(team, team.Kit);
-        ApplyStateToRenderer();
-    }
+    #region Appearance Application
 
     private void ApplyColors(CharacterData characterData)
     {
-        var hairColor = ColorManager.GetHairColor(characterData.HairColor);
+        var hairColor = ColorManager.GetHairColor(characterData.HairColorType);
 
         state.Colors[CharacterSpriteLayer.Hair] = hairColor;
-        state.Colors[CharacterSpriteLayer.EyeIris] = ColorManager.GetEyeColor(characterData.EyeColor);
-        state.Colors[CharacterSpriteLayer.Body] = ColorManager.GetBodyColor(characterData.BodyColor);
+        state.Colors[CharacterSpriteLayer.EyeIris] = ColorManager.GetEyeColor(characterData.EyeColorType);
+        state.Colors[CharacterSpriteLayer.Body] = ColorManager.GetBodyColor(characterData.BodyColorType);
     }
 
-    private void InitializeVisibility()
+    public void ApplyKit()
     {
-        foreach (CharacterSpriteLayer layer in Enum.GetValues(typeof(CharacterSpriteLayer)))
-            state.VisibleLayers.Add(layer);
+        var kitColor = character.GetTeam().Kit.GetColors(GetKitVariant(), GetKitRole());
 
-        state.VisibleLayers.Remove(CharacterSpriteLayer.Armor);
+        state.Colors[CharacterSpriteLayer.KitBase] = kitColor.Base;
+        state.Colors[CharacterSpriteLayer.KitDetail] = kitColor.Detail;
+        state.Colors[CharacterSpriteLayer.KitShocks] = kitColor.Shocks;
     }
 
     private void ApplyStateToRenderer()
@@ -99,23 +109,17 @@ public class CharacterComponentAppearance : MonoBehaviour
             spriteLayerRenderer.SetVisible(layer, state.Contains(layer));
     }
 
-    public void ApplyKit(Team team, Kit kit)
-    {
-        var kitColor = kit.GetColors(GetKitVariant(team), GetKitRole());
+    #endregion
 
-        state.Colors[CharacterSpriteLayer.KitBase] = kitColor.Base;
-        state.Colors[CharacterSpriteLayer.KitDetail] = kitColor.Detail;
-        state.Colors[CharacterSpriteLayer.KitShocks] = kitColor.Shocks;
-    }
+    #region Visibility
 
-    public Role GetKitRole() 
+    private void InitializeVisibility()
     {
-        return this.character.FormationCoord.Position == Position.GK ? Role.Keeper : Role.Field;
-    }
+        foreach (CharacterSpriteLayer layer in Enum.GetValues(typeof(CharacterSpriteLayer)))
+            state.VisibleLayers.Add(layer);
 
-    public Variant GetKitVariant(Team team) 
-    {
-        return team.Variant;
+        state.VisibleLayers.Remove(CharacterSpriteLayer.Aura);
+        state.VisibleLayers.Remove(CharacterSpriteLayer.Armor);
     }
 
     public void SetCharacterVisible(bool isVisible)
@@ -123,4 +127,20 @@ public class CharacterComponentAppearance : MonoBehaviour
         foreach (CharacterSpriteLayer layer in state.VisibleLayers)
             spriteLayerRenderer.SetVisible(layer, isVisible);
     }
+
+    #endregion
+
+    #region Kit Helpers
+
+    public Role GetKitRole()
+    {
+        return character.FormationCoord.Position == Position.GK ? Role.Keeper : Role.Field;
+    }
+
+    public Variant GetKitVariant()
+    {
+        return character.GetTeam().Variant;
+    }
+
+    #endregion
 }

@@ -23,9 +23,11 @@ public class InputManager : MonoBehaviour
     private Camera mainCamera;
     private float bufferDurationShoot = 1f;
     private bool isAndroid;
+    private bool isLocked;
     [SerializeField] private PlayerInput playerInput;
 
     public bool IsAndroid => isAndroid;
+    public bool IsLocked => isLocked;
     #endregion
 
     #region Lifecycle
@@ -258,6 +260,35 @@ public class InputManager : MonoBehaviour
         isAndroid = Application.platform == RuntimePlatform.Android;
         if (onScreenControlsRoot && onScreenControlsRoot.activeSelf != isAndroid)
             onScreenControlsRoot.SetActive(isAndroid);
+    }
+    #endregion
+
+    #region Lock
+    public void LockInput()
+    {
+        if (isLocked) return;
+        isLocked = true;
+
+        if (playerInput != null)
+            playerInput.DeactivateInput();
+
+        // Clear buffered inputs so nothing fires on unlock
+        InvalidateAllBuffers();
+        move = Vector2.zero;
+
+        LogManager.Trace("[InputManager] Input locked");
+    }
+
+    public void UnlockInput()
+    {
+        if (!isLocked) return;
+        isLocked = false;
+
+        // Re-enable input actions
+        if (playerInput != null)
+            playerInput.ActivateInput();
+
+        LogManager.Trace("[InputManager] Input unlocked");
     }
     #endregion
 }

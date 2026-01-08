@@ -1,7 +1,11 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class LoadingScreen : MonoBehaviour
 {
@@ -21,26 +25,50 @@ public class LoadingScreen : MonoBehaviour
 
     private IEnumerator LoadScenesAdditively(string[] scenes)
     {
+        InputManager.Instance.LockInput();
         yield return null;
 
         for (int i = 0; i < scenes.Length; i++)
         {
             var asyncLoad = SceneManager.LoadSceneAsync(scenes[i], LoadSceneMode.Additive);
-
             asyncLoad.allowSceneActivation = false;
 
-            while (!asyncLoad.isDone)
+            while (asyncLoad.progress < 0.9f)
             {
-                float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
-                UpdateLoadingUI(progress);
-
-                if (asyncLoad.progress >= 0.9f)
-                    asyncLoad.allowSceneActivation = true;
-
+                UpdateLoadingUI(asyncLoad.progress / 0.9f);
                 yield return null;
             }
+
+            asyncLoad.allowSceneActivation = true;
+
+            while (!asyncLoad.isDone)
+                yield return null;
+
+            yield return AwaitTask(AwaitSceneObjectLoaders(scenes[i]));
         }
+
+        InputManager.Instance.UnlockInput();
         SceneManager.UnloadSceneAsync(LoadingData.LoadingSceneName);
+    }
+
+    private async Task AwaitSceneObjectLoaders(string sceneName)
+    {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+
+        var loaders = scene.GetRootGameObjects()
+            .SelectMany(go => go.GetComponentsInChildren<IAsyncSceneLoader>())
+            .ToList();
+
+        await Task.WhenAll(loaders.Select(l => l.LoadAsync()));
+    }
+
+    private IEnumerator AwaitTask(Task task)
+    {
+        while (!task.IsCompleted)
+            yield return null;
+
+        if (task.IsFaulted)
+            Debug.LogException(task.Exception);
     }
 
     private void UpdateLoadingUI(float progress)

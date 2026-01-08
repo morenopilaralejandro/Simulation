@@ -2,6 +2,7 @@ namespace Simulation.Enums.SpriteLayer
 {
     public enum CharacterSpriteLayer
     {
+        Aura,
         Armor,
         Hair,
         Body,

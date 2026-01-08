@@ -32,10 +32,10 @@ public class CSVImporterCharacter
 
         int characterIdIndex        = System.Array.IndexOf(headers, "CharacterId");
 
-        int bodyColorIndex           = System.Array.IndexOf(headers, "BodyColor");
-        int eyeColorIndex           = System.Array.IndexOf(headers, "EyeColor");
-        int hairColorIndex           = System.Array.IndexOf(headers, "HairColor");
-        int hairStyleIndex           = System.Array.IndexOf(headers, "HairStyle");
+        int bodyColorTypeIndex      = System.Array.IndexOf(headers, "BodyColorType");
+        int eyeColorTypeIndex       = System.Array.IndexOf(headers, "EyeColorType");
+        int hairColorTypeIndex      = System.Array.IndexOf(headers, "HairColorType");
+        int hairStyleIndex          = System.Array.IndexOf(headers, "HairStyle");
 
         int portraitSizeIndex       = System.Array.IndexOf(headers, "PortraitSize");
         int characterSizeIndex      = System.Array.IndexOf(headers, "CharacterSize");
@@ -74,9 +74,9 @@ public class CSVImporterCharacter
 
             characterData.CharacterId   = values[characterIdIndex].Trim();
 			
-            characterData.BodyColor = EnumManager.StringToEnum<BodyColor>(values[bodyColorIndex].Trim());
-            characterData.EyeColor  = EnumManager.StringToEnum<EyeColor>(values[eyeColorIndex].Trim());
-            characterData.HairColor = EnumManager.StringToEnum<HairColor>(values[hairColorIndex].Trim());
+            characterData.BodyColorType = EnumManager.StringToEnum<BodyColorType>(values[bodyColorTypeIndex].Trim());
+            characterData.EyeColorType  = EnumManager.StringToEnum<EyeColorType>(values[eyeColorTypeIndex].Trim());
+            characterData.HairColorType = EnumManager.StringToEnum<HairColorType>(values[hairColorTypeIndex].Trim());
             characterData.HairStyle = EnumManager.StringToEnum<HairStyle>(values[hairStyleIndex].Trim());
 
             characterData.PortraitSize  = EnumManager.StringToEnum<PortraitSize>(values[portraitSizeIndex].Trim());

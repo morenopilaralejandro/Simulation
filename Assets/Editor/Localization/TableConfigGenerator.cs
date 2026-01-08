@@ -128,9 +128,6 @@ public static class TableConfigGenerator
         field = default;
         style = default;
 
-        ent = MakeSingular(ent);
-        fld = MakeSingular(fld);
-
         bool ok = Enum.TryParse(ent, true, out entity) &&
                   Enum.TryParse(fld, true, out field) &&
                   Enum.TryParse(stl, true, out style);
@@ -138,10 +135,4 @@ public static class TableConfigGenerator
         return ok;
     }
 
-    public static string MakeSingular(string input)
-    {
-        if (input.EndsWith("s", StringComparison.OrdinalIgnoreCase))
-            return input.Substring(0, input.Length - 1);
-        return input;
-    }
 }

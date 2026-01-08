@@ -33,6 +33,18 @@ public class DuelManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         duel = new Duel();
+        BattleEvents.OnBattleEnd += HandleBattleEnd;
+    }
+
+    private void OnDestroy()
+    {
+        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+    }
+
+    private void HandleBattleEnd() 
+    {
+        if(!duel.IsResolved)
+            CancelDuel();
     }
 
     public void AddParticipant(DuelParticipant participant)

@@ -587,7 +587,7 @@ public class CharacterComponentAI : MonoBehaviour
     private void ActPass()
     {
         Character teammate = GetBestPassTeammate();
-        if (!teammate) return;
+        if (!teammate || !character.HasBall()) return;
 
         character.KickBallTo(teammate.transform.position);
         lastPassReceiver = teammate;

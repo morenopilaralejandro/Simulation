@@ -134,7 +134,7 @@ namespace Simulation.Enums.Character
         Shoot 
     }
 
-    public enum BodyColor 
+    public enum BodyColorType
     {
         White,
         Generic,
@@ -148,7 +148,7 @@ namespace Simulation.Enums.Character
         Green
     }
 
-    public enum EyeColor 
+    public enum EyeColorType
     {
         Brown,
         Blue,
@@ -163,7 +163,7 @@ namespace Simulation.Enums.Character
         Pink
     }
 
-    public enum HairColor 
+    public enum HairColorType
     {
         Black,
         Blonde,
