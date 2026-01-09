@@ -43,6 +43,16 @@ MonoBehaviour:
     Style: 1
     Table:
       m_TableCollectionName: Gameplay-Character-Nick-Romanized
+  - Entity: 5
+    Field: 4
+    Style: 0
+    Table:
+      m_TableCollectionName: Gameplay-Duel_Log-Entry-Localized
+  - Entity: 5
+    Field: 4
+    Style: 1
+    Table:
+      m_TableCollectionName: Gameplay-Duel_Log-Entry-Romanized
   - Entity: 1
     Field: 0
     Style: 0
@@ -93,16 +103,16 @@ MonoBehaviour:
     Style: 1
     Table:
       m_TableCollectionName: Gameplay-Team-Name-Romanized
-  - Entity: 5
-    Field: 4
+  - Entity: 0
+    Field: 5
     Style: 0
     Table:
-      m_TableCollectionName: Gameplay-Duel_Log-Entry-Localized
-  - Entity: 5
-    Field: 4
+      m_TableCollectionName: Gameplay-Character-Speech-Localized
+  - Entity: 0
+    Field: 5
     Style: 1
     Table:
-      m_TableCollectionName: Gameplay-Duel_Log-Entry-Romanized
+      m_TableCollectionName: Gameplay-Character-Speech-Romanized
   - Entity: 3
     Field: 3
     Style: 0

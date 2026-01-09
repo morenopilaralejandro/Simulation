@@ -17,6 +17,7 @@ public class Character : MonoBehaviour
     [SerializeField] private LocalizationComponentString localizationStringComponent;
     [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
     [SerializeField] private CharacterComponentAppearance appearanceComponent;
+    [SerializeField] private CharacterComponentModel modelComponent;
     [SerializeField] private CharacterComponentKeeper keeperComponent;
     [SerializeField] private CharacterComponentLevels levelsComponent;
     [SerializeField] private CharacterComponentStats statsComponent;
@@ -35,7 +36,8 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentStateMachine stateMachineComponent;
 
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
-    [SerializeField] private SpeechBubble speechBubble;
+    [SerializeField] private CharacterComponentElementIndicator elementIndicatorComponent;
+    [SerializeField] private CharacterComponentSpeechBubble speechBubbleComponent;
     #endregion
 
     #region Initialize
@@ -67,6 +69,8 @@ public class Character : MonoBehaviour
         stateMachineComponent.Initialize(characterData, this);
 
         teamIndicatorComponent.Initialize(characterData, this);
+        elementIndicatorComponent.Initialize(characterData, this);
+        speechBubbleComponent.Initialize(characterData, this);
         /*
         if (isSave)
             persistence.Apply(save);
@@ -104,6 +108,8 @@ public class Character : MonoBehaviour
     public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
     public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
     public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState => appearanceComponent.SpriteLayerState;
+    //modelComponent
+    public Transform Model => modelComponent.Model;
     //keeperComponent
     public bool IsKeeper => keeperComponent.IsKeeper;
     //levelsComponent
@@ -200,9 +206,15 @@ public class Character : MonoBehaviour
     public void OnControlAnimationEnd() => stateMachineComponent.OnControlAnimationEnd();
     public void OnMoveAnimationEnd() => stateMachineComponent.OnMoveAnimationEnd();
 
-    //speechBubble
-    public void ShowMessage(BubbleMessage bubbleMessage) => speechBubble.ShowMessage(bubbleMessage);
-    public void HideSpeechBubbleImmediate() => speechBubble.HideImmediate();
+
+
+
+    //elementIndicatorComponent
+    public void SetElementIndicatorEnabled(bool enabled) => elementIndicatorComponent.SetEnabled(enabled);
+    public void SetElementIndicatorActive(bool active) => elementIndicatorComponent.SetActive(active);
+    //speechBubbleComponent
+    public void ShowSpeechBubble(SpeechMessage speechMessage) => speechBubbleComponent.ShowSpeechBubble(speechMessage);
+    public void HideSpeechBubble() => speechBubbleComponent.HideSpeechBubble();
 
     //ball
     public void KickBallTo(Vector3 targetPos) 
