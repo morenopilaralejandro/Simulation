@@ -14,4 +14,16 @@ public static class CharacterEvents
     {
         OnTargetChange?.Invoke(character, teamSide);
     }
+
+    public static event Action<Character> OnSpeechBubbleShown;
+    public static void RaiseSpeechBubbleShown(Character character)
+    {
+        OnSpeechBubbleShown?.Invoke(character);
+    }
+
+    public static event Action<Character> OnSpeechBubbleHidden;
+    public static void RaiseSpeechBubbleHidden(Character character)
+    {
+        OnSpeechBubbleHidden?.Invoke(character);
+    }
 }

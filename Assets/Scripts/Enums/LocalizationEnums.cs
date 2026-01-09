@@ -16,7 +16,8 @@ namespace Simulation.Enums.Localization
         Nick,
         Description,
         Evolution,
-        Entry
+        Entry,
+        Speech
     }
 
     public enum LocalizationStyle

@@ -74,16 +74,16 @@ namespace Simulation.Enums.Character
         XL    
     }
 
-    public enum BubbleMessage
+    public enum SpeechMessage
     {
+        Direct,
         Win,
         Lose,
         Dribble,
         Block,
         Pass,
         Shoot,
-        Nice,
-        Direct
+        Nice
     }
 
     public enum FatigueState
@@ -137,6 +137,7 @@ namespace Simulation.Enums.Character
     public enum BodyColorType
     {
         White,
+        Pale,
         Generic,
         Tanned,
         Asian,

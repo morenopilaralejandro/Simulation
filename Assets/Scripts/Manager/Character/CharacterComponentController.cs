@@ -18,7 +18,7 @@ public class CharacterComponentController : MonoBehaviour
     private float rotationSpeed = 12f;
     private bool isAimingPass = false;
     private Vector3 aimedPassPosition;
-    private float aimRadius = 2.5f;
+    private float aimRadius = 4f;
     private float holdThreshold = 0.2f;
     private float passButtonHoldTime = 0f;
     private bool useMouseAiming;
@@ -150,8 +150,8 @@ public class CharacterComponentController : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(move, Vector3.up);
 
             // Smoothly rotate towards movement direction
-            transform.rotation = Quaternion.Slerp(
-                transform.rotation,
+            character.Model.transform.rotation = Quaternion.Slerp(
+                character.Model.transform.rotation,
                 targetRotation,
                 rotationSpeed * Time.deltaTime
             );

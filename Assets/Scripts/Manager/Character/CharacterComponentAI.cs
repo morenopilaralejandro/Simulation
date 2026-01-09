@@ -575,7 +575,10 @@ public class CharacterComponentAI : MonoBehaviour
 
         Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
         if (direction.sqrMagnitude > 0.01f)
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, ROTATION_SPEED * Time.fixedDeltaTime);
+            character.Model.transform.rotation = Quaternion.Slerp(
+                character.Model.transform.rotation, 
+                targetRotation, 
+                ROTATION_SPEED * Time.fixedDeltaTime);
 
         Vector3 translation = direction * speed * Time.fixedDeltaTime;
         transform.Translate(translation, Space.World);

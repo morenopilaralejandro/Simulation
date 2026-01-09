@@ -43,7 +43,7 @@ public class BallComponentKeep : MonoBehaviour
     {
         if (this.ball.IsFree() || this.character == null) return;
 
-        Vector3 forwardDir = character.transform.forward;
+        Vector3 forwardDir = character.Model.transform.forward;
         Vector3 targetPosition = character.transform.position + forwardDir * ballToPlayerDiscance;
         targetPosition.y = ballY;
         transform.position = Vector3.Lerp(transform.position, targetPosition, keepSpeed * Time.deltaTime);
