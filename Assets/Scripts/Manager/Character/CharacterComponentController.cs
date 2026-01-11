@@ -92,9 +92,11 @@ public class CharacterComponentController : MonoBehaviour
         if (passHeld)
             UpdatePassIndicator();
 
-        if (passDown || passUp)
+        if (passDown || passUp) 
+        {
             HandlePass();
-
+            return;
+        }
         //dribble
 
         //shoot
@@ -201,7 +203,7 @@ public class CharacterComponentController : MonoBehaviour
         {
             direction = (moveInput.sqrMagnitude > moveTolerance)
                 ? new Vector3(moveInput.x, 0, moveInput.y).normalized
-                : transform.forward;
+                : character.Model.transform.forward;
         }  
 
         aimedPassPosition = center + direction * aimRadius;
@@ -213,7 +215,7 @@ public class CharacterComponentController : MonoBehaviour
         CharacterTargetManager.Instance.Hide();
 
         if(isAimingPass)
-            this.character.KickBallTo(aimedPassPosition);
+            PassToPosition(aimedPassPosition);
 
         Character target = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
         if(target)
@@ -226,6 +228,14 @@ public class CharacterComponentController : MonoBehaviour
     {
         this.character.KickBallTo(character.transform.position);
         CharacterChangeControlManager.Instance.SetControlledCharacter(character, character.TeamSide);
+    }
+
+    private void PassToPosition(Vector3 position) 
+    {
+        Character newCharacter = CharacterTargetManager.Instance.GetClosestTeammateToPoint(this.character, position);
+        this.character.KickBallTo(position);
+        if (newCharacter != null) 
+            CharacterChangeControlManager.Instance.SetControlledCharacter(newCharacter, character.TeamSide);
     }
     #endregion
 

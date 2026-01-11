@@ -13,6 +13,7 @@ public class KickoffManager : MonoBehaviour
     private TeamSide teamSide;
     private bool isKickoffReady;
     private bool isBallReady;
+    private bool isFirstTime = true;
     private Dictionary<TeamSide, bool> isTeamReady;
 
     private Character character0;
@@ -93,7 +94,7 @@ public class KickoffManager : MonoBehaviour
             { TeamSide.Away, false }
         };
         isKickoffReady = false;
-        isBallReady = false;
+        isBallReady = true;
     }
 
     private void SetTeamReady(TeamSide teamSide)
@@ -127,6 +128,8 @@ public class KickoffManager : MonoBehaviour
         BattleManager.Instance.Unfreeze();
 
         Character target = BattleManager.Instance.TargetedCharacter[character0.TeamSide];
+            CharacterChangeControlManager.Instance.SetControlledCharacter(character0, character0.TeamSide);
+
         if (!target || character0.IsEnemyAI) 
         {
             character0.KickBallTo(character1.transform.position);
@@ -145,7 +148,20 @@ public class KickoffManager : MonoBehaviour
         character1 = team.CharacterList[team.Formation.Kickoff1];
         character0.transform.position = position0;
         character1.transform.position = position1[teamSide];
-        PossessionManager.Instance.Release();
-        PossessionManager.Instance.GiveBallToCharacter(character0);
+
+        //warm ball on low end android devices
+        if (isFirstTime) 
+        {
+            PossessionManager.Instance.Release();
+            PossessionManager.Instance.GiveBallToCharacter(character1);
+            character1.KickBallTo(GoalManager.Instance.Keepers[0].transform.position);
+            PossessionManager.Instance.GiveBallToCharacter(character0);
+            isFirstTime = false;
+        } else 
+        {
+            PossessionManager.Instance.Release();
+            PossessionManager.Instance.GiveBallToCharacter(character0);
+        }
+
     }
 }

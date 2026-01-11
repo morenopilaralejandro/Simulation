@@ -30,9 +30,11 @@ public class BallComponentKinematic : MonoBehaviour
 
     IEnumerator WarmUpBall()
     {
-        ballRigidbody.isKinematic = false;
-        // Apply tiny force to initialize physics
-        ballRigidbody.AddForce(Vector3.forward * 0.001f, ForceMode.Impulse);
+        ballRigidbody.WakeUp();
+        ballRigidbody.velocity = Vector3.zero;
+
+        // Force one physics step worth of contact generation
+        ballRigidbody.AddForce(Vector3.up * 1f, ForceMode.VelocityChange);
         yield return new WaitForFixedUpdate();
     }
 

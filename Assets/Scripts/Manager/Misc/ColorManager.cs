@@ -174,16 +174,17 @@ public static class ColorManager
     private static readonly Dictionary<BodyColorType, Color> bodyColors =
         new Dictionary<BodyColorType, Color>()
     {
-        { BodyColorType.White,    new Color(1f, 0.95f, 0.9f, 1f) },
-        { BodyColorType.Generic,  new Color(0.85f, 0.75f, 0.65f, 1f) },
-        { BodyColorType.Tanned,   new Color(0.76f, 0.60f, 0.42f, 1f) },
-        { BodyColorType.Asian,    new Color(0.90f, 0.78f, 0.64f, 1f) },
-        { BodyColorType.Hispanic, new Color(0.72f, 0.56f, 0.40f, 1f) },
-        { BodyColorType.Indian,   new Color(0.62f, 0.45f, 0.30f, 1f) },
-        { BodyColorType.Arab,     new Color(0.70f, 0.52f, 0.36f, 1f) },
-        { BodyColorType.African,  new Color(0.36f, 0.25f, 0.18f, 1f) },
-        { BodyColorType.Black,    new Color(0.15f, 0.10f, 0.08f, 1f) },
-        { BodyColorType.Green,    new Color(0.2f, 0.8f, 0.2f, 1f) }
+        { BodyColorType.White,      new Color(1f, 0.95f, 0.9f, 1f) },
+        { BodyColorType.Pale,       new Color(0.85f, 0.75f, 0.65f, 1f) },
+        { BodyColorType.Generic,    new Color(0.953f, 0.776f, 0.631f, 1f) },
+        { BodyColorType.Tanned,     new Color(0.76f, 0.60f, 0.42f, 1f) },
+        { BodyColorType.Asian,      new Color(0.90f, 0.78f, 0.64f, 1f) },
+        { BodyColorType.Hispanic,   new Color(0.72f, 0.56f, 0.40f, 1f) },
+        { BodyColorType.Indian,     new Color(0.62f, 0.45f, 0.30f, 1f) },
+        { BodyColorType.Arab,       new Color(0.70f, 0.52f, 0.36f, 1f) },
+        { BodyColorType.African,    new Color(0.36f, 0.25f, 0.18f, 1f) },
+        { BodyColorType.Black,      new Color(0.15f, 0.10f, 0.08f, 1f) },
+        { BodyColorType.Green,      new Color(0.2f, 0.8f, 0.2f, 1f) }
     };
 
     public static Color GetBodyColor(BodyColorType bodyColorType)

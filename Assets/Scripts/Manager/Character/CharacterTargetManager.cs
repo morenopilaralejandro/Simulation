@@ -85,6 +85,33 @@ public class CharacterTargetManager : MonoBehaviour
         return bestTarget;
     }
 
+    public Character GetClosestTeammateToPoint(Character character, Vector3 point)
+    {
+        List<Character> teammates = character.GetTeammates();
+
+        Character bestTarget = null;
+        float closestDistance = Mathf.Infinity;
+
+        for (int i = 0; i < teamSize; i++)
+        {
+            Character teammate = teammates[i];
+
+            // Skip self and invalid teammates
+            if (!teammate.CanDuel())
+                continue;
+
+            float distance = Vector3.Distance(teammate.transform.position, point);
+
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                bestTarget = teammate;
+            }
+        }
+
+        return bestTarget;
+    }
+
     public void ShowFreeAim(Vector3 startPos, Vector3 endPos)
     {
         targetIndicator.ShowFreeAim(startPos, endPos);
