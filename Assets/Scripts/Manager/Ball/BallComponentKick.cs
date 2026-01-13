@@ -12,7 +12,9 @@ public class BallComponentKick : MonoBehaviour
     private float maxPower = 25f;
     private float gravity = 9.81f;
     private static readonly Collider[] overlapResults = new Collider[6];
-    private float sphereCastRadius = 0.2f;
+    private float sphereCastRadius = 0.4f;
+    private float opponentCheckStartOffset = 0.6f;
+    //private float castHeightOffset = 0f;
 
     #if UNITY_EDITOR
     [SerializeField] private bool debugDraw = true;
@@ -81,7 +83,10 @@ public class BallComponentKick : MonoBehaviour
     {
         float castHeight = ballPos.y;
 
-        Vector3 start = new Vector3(ballPos.x, castHeight, ballPos.z);
+        Vector3 direction = (targetPos - ballPos).normalized;
+
+        //Vector3 start = new Vector3(ballPos.x, castHeight, ballPos.z);
+        Vector3 start = ballPos + direction * opponentCheckStartOffset;
         Vector3 end   = new Vector3(targetPos.x, castHeight, targetPos.z);
 
     #if UNITY_EDITOR

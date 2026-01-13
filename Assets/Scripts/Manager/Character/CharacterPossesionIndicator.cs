@@ -4,7 +4,7 @@ public class CharacterPossessionIndicator : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer indicatorRenderer;
 
-    private void Update()
+    private void LateUpdate()
     {
         var currentCharacter = PossessionManager.Instance.CurrentCharacter;
 

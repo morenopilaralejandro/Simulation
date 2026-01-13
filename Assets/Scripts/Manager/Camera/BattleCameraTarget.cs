@@ -22,14 +22,16 @@ public class BattleCameraTarget : MonoBehaviour
             PossessionManager.Instance.CurrentCharacter.IsOnUsersTeam() || 
             (PossessionManager.Instance.CurrentCharacter == null && 
              PossessionManager.Instance.LastCharacter != null &&
-             PossessionManager.Instance.LastCharacter.IsOnUsersTeam())) 
+             PossessionManager.Instance.LastCharacter.IsOnUsersTeam()) && 
+            !BattleManager.Instance.Ball.IsTraveling) 
         {
             offset = homeOffset;
             followTarget = BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()].transform;
         }
         else
         {
-            offset = awayOffset;
+            if (!BattleManager.Instance.Ball.IsTraveling)
+                offset = awayOffset;
             followTarget = BattleManager.Instance?.Ball.transform;
         }
 

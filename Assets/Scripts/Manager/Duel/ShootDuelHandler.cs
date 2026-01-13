@@ -63,17 +63,18 @@ public class ShootDuelHandler : IDuelHandler
         duel.OffensePressure += offense.Damage;
         LogParticipantAction(offense);
 
+        BattleManager.Instance.Ball.UpdateTravelEffect(offense.Move, offense.CurrentElement);
         HandleShootSfx(offense);
 
-        if (isFirstParticipant)
+        if (isFirstParticipant) 
+        {
             DuelManager.Instance.StartBallTravel(offense);
-        else
+        } else 
+        {
             PossessionManager.Instance.SetLastCharacter(offense.Character); //keep track of the last character in the shoot chain to determine who scored
-
-        if (!isFirstParticipant)
             BattleManager.Instance.Ball.ResumeTravel();
+        }
 
-        BattleManager.Instance.Ball.ResumeTravel();
     }
     #endregion
 
