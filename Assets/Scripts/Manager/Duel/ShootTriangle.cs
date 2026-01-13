@@ -19,7 +19,7 @@ public class ShootTriangle : MonoBehaviour
     [SerializeField] private Vector3 vertex2;
 
     [Header("Base Length/Range Settings")]
-    private float coordY = 0.02f;
+    private float coordY = 0.03f;
     private float medianMin = 0.1f;
     private float medianMax = 2.0f;
     private float baseLengthAtDefault = 1.2f;

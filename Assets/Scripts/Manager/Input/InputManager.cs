@@ -77,7 +77,7 @@ public class InputManager : MonoBehaviour
             playerInput.onControlsChanged += OnControlsChanged;
         }
 
-        //DuelEvents.OnDuelStart += HandleDuelStart;
+        DuelEvents.OnDuelStart += HandleDuelStart;
     }
 
     private void Start() 
@@ -87,7 +87,7 @@ public class InputManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        //DuelEvents.OnDuelStart += HandleDuelStart;
+        DuelEvents.OnDuelStart += HandleDuelStart;
 
         if (input != null)
         {

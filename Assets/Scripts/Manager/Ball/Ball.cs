@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Simulation.Enums.Duel;
+using Simulation.Enums.Character;
 
 public class Ball : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Ball : MonoBehaviour
     [SerializeField] private BallComponentKick kickComponent;
 
     [SerializeField] private BallComponentTravel travelComponent;
+    [SerializeField] private BallComponentTravelParticle travelParticleComponent;
     #endregion
 
     #region Initialize
@@ -26,8 +28,8 @@ public class Ball : MonoBehaviour
         keepComponent.Initialize(ballData, this);
         kickComponent.Initialize(ballData, this);
 
-
         travelComponent.Initialize(ballData, this);
+        travelParticleComponent.Initialize(ballData, this);
     }
     #endregion
 
@@ -57,6 +59,9 @@ public class Ball : MonoBehaviour
     public void ResumeTravel() => travelComponent.ResumeTravel();
     public void CancelTravel() => travelComponent.CancelTravel();
     public void EndTravel() => travelComponent.EndTravel();
+
+    //travelParticleComponent
+    public void UpdateTravelEffect(Move move, Element characterElement) => travelParticleComponent.UpdateTravelEffect(move, characterElement);
 
     //misc
     public bool IsFree() => PossessionManager.Instance.CurrentCharacter == null;

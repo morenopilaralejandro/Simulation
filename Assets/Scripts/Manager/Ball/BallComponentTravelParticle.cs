@@ -4,13 +4,20 @@ using Simulation.Enums.Character;
 
 public class BallComponentTravelParticle : MonoBehaviour
 {
-    private Ball ball;
-
     [SerializeField] private ParticleSystem particleTravel;
 
+    private Ball ball;
     private Vector3 travelDirection;
-    private Element currentElement;
+
     private bool isPlaying;
+    private Element currentElement;
+
+    #region Unity Lifecycle
+
+    private void Awake()
+    {
+        StopParticle();
+    }
 
     private void OnEnable()
     {
@@ -26,11 +33,14 @@ public class BallComponentTravelParticle : MonoBehaviour
         BallEvents.OnTravelEnd -= HandleTravelEnd;
     }
 
+    #endregion
+
     public void Initialize(BallData ballData, Ball ball)
     {
         this.ball = ball;
-        particleTravel.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
+
+    #region Ball Events
 
     private void HandleTravelStart(Vector3 startPosition)
     {
@@ -47,41 +57,66 @@ public class BallComponentTravelParticle : MonoBehaviour
         StopParticle();
     }
 
-    public void TryPlayParticle(Move move)
-    {
-        if (move == null) return;
+    #endregion
 
-        currentElement = move.Element;
-        StartParticle();
+    // =========================================================
+    // MAIN ENTRY POINT
+    // =========================================================
+    public void UpdateTravelEffect(Move move, Element characterElement)
+    {
+        Element targetElement = move != null ? move.Element : characterElement;
+
+        if (!isPlaying)
+        {
+            if (move == null) return;
+            StartParticle(targetElement);
+            return;
+        }
+
+        //if (playing)
+        // Only update color if element changed
+        if (currentElement != targetElement)
+        {
+            SetElementColor(targetElement);
+            currentElement = targetElement;
+        }
     }
 
-    private void StartParticle()
+    #region Particle Control
+
+    private void StartParticle(Element element)
     {
-        if (isPlaying) return;
+        if (isPlaying)
+            return;
 
-        SetElementColor(currentElement);
-        particleTravel.transform.forward = -travelDirection;
+        currentElement = element;
+        SetElementColor(element);
+
+        if (travelDirection != Vector3.zero)
+            particleTravel.transform.forward = -travelDirection;
+
         particleTravel.Play(true);
-
         AudioManager.Instance.PlaySfxLoop("sfx-ball_energy");
+
         isPlaying = true;
     }
 
     private void StopParticle()
     {
-        if (!isPlaying) return;
+        if (!isPlaying)
+            return;
 
         particleTravel.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         AudioManager.Instance.StopSfxLoop("sfx-ball_energy");
+
         isPlaying = false;
     }
 
-    public void SetElementColor(Element element)
+    private void SetElementColor(Element element)
     {
-        if (!isPlaying) return;
-        Color newColor = ColorManager.GetElementColor(element);
         var main = particleTravel.main;
-        main.startColor = newColor;
+        main.startColor = ColorManager.GetElementColor(element);
     }
 
+    #endregion
 }

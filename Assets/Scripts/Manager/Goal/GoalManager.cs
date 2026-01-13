@@ -14,7 +14,7 @@ public class GoalManager : MonoBehaviour
 
     private float keeperGoalDistanceX = 2f;
     private float keeperGoalDistanceZ = 2f;
-    private float shootDistance = 3.5f;
+    private float shootDistance = 4f;
     private Dictionary<TeamSide, Goal> goals = new ();
     private Dictionary<TeamSide, Character> keepers = new ();
     

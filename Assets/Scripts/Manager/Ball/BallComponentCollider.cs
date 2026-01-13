@@ -57,8 +57,17 @@ public class BallComponentCollider : MonoBehaviour
         if (ball.IsTraveling && hitObj.CompareTag(tagBound))
         {
             LogManager.Trace($"[BallComponentCollider] [OnCollisionEnter] {hitObj.name} (Tag: {hitObj.tag}", this);
-            //DuelLogManager.Instance.AddDuelCancel();
-            //BallTravelController.Instance.CancelTravel();
+            ball.CancelTravel();
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        GameObject hitObj = collision.collider.gameObject;
+        if (ball.IsTraveling && hitObj.CompareTag(tagBound))
+        {
+            LogManager.Trace($"[BallComponentCollider] [OnCollisionEnter] {hitObj.name} (Tag: {hitObj.tag}", this);
+            ball.CancelTravel();
         }
     }
 
