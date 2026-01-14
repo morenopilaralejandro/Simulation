@@ -105,7 +105,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
     private IEnumerator BlinkEffect(float duration)
     {
         float elapsed = 0f;
-        float blinkInterval = 0.2f;
+        float blinkInterval = 0.5f;
         bool visible = true;
         float blinkElapsed = 0f;
 

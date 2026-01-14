@@ -75,9 +75,6 @@ MonoBehaviour:
   statusIndicatorComponent: {fileID: 8442538001952568912}
   movesComponent: {fileID: 2135094274942254463}
   controllerComponent: {fileID: 7698264331970528490}
-  duelFieldColliderComponent: {fileID: 7045443448692664032}
-  duelComboColliderComponent: {fileID: 260827287028833934}
-  duelKeeperColliderComponent: {fileID: 1173388996270656118}
   aiComponent: {fileID: 8409659550929979516}
   stateLockComponent: {fileID: 5753816166142112087}
   stateMachineComponent: {fileID: 8205756437304453066}
@@ -341,6 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970ef4698710794d696060d326682a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: -1087728315389858910}
 --- !u!1 &2666723391835343053
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,6 +349,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2475129496627311137}
   - component: {fileID: 7380976312781821625}
+  - component: {fileID: 5998546718742565871}
   m_Layer: 9
   m_Name: ColliderPresence
   m_TagString: Character-Presence
@@ -396,6 +395,19 @@ CapsuleCollider:
   m_Height: 0.65
   m_Direction: 1
   m_Center: {x: 0.005, y: 0, z: 0}
+--- !u!114 &5998546718742565871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2666723391835343053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed0c0ab0bbf9ace2f9470e53e8fe43d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: -1087728315389858910}
 --- !u!1 &3017062038126761382
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,6 +522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a4aaf37530d63ddb83bf17194f22b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: -1087728315389858910}
 --- !u!1 &5731472575287194943
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,6 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8adfe6d88469db2fa77a0c084892259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  character: {fileID: -1087728315389858910}
 --- !u!1 &6434379362892349908
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,6 +665,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2980036836158023091}
   - component: {fileID: 1330381145045511707}
+  - component: {fileID: 8279764640817569429}
   m_Layer: 6
   m_Name: ColliderKeep
   m_TagString: Character-Keep
@@ -696,6 +711,19 @@ CapsuleCollider:
   m_Height: 0.35
   m_Direction: 1
   m_Center: {x: 0.005, y: -0.15, z: 0}
+--- !u!114 &8279764640817569429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6434379362892349908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d885aba54f9364dd5bddab5c9085cad1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: -1087728315389858910}
 --- !u!1 &7629771923962355134
 GameObject:
   m_ObjectHideFlags: 0

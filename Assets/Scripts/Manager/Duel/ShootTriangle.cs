@@ -103,8 +103,8 @@ public class ShootTriangle : MonoBehaviour
         */
 
         float borderZ = (worldCoord.z >= 0f) 
-            ? GoalManager.Instance.Goals[character.GetOpponentSide()].GoalCollider.bounds.min.z
-            : GoalManager.Instance.Goals[character.GetOpponentSide()].GoalCollider.bounds.max.z;
+            ? GoalManager.Instance.Goals[character.GetOpponentSide()].GoalCollider.bounds.center.z
+            : GoalManager.Instance.Goals[character.GetOpponentSide()].GoalCollider.bounds.center.z;
         vertex1.z = borderZ;
         vertex2.z = borderZ;
 

@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 2272796174025441597}
   m_Layer: 0
   m_Name: BounceTopPost
-  m_TagString: Untagged
+  m_TagString: Bound
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -690,7 +690,7 @@ GameObject:
   - component: {fileID: 8371682307710303397}
   m_Layer: 0
   m_Name: BounceLeftPost
-  m_TagString: Untagged
+  m_TagString: Bound
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -810,7 +810,7 @@ GameObject:
   - component: {fileID: 208568281988006545}
   m_Layer: 0
   m_Name: BounceRightPost
-  m_TagString: Untagged
+  m_TagString: Bound
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -921,7 +921,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4851875656481190835, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: -4363268913186595803, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_CastShadows
@@ -941,7 +941,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3479488423554601503, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: -2922120290374380053, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_CastShadows
@@ -961,7 +961,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -925446829411849930, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: -840545360237175835, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_CastShadows
@@ -981,27 +981,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 801634945429343473, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_Name
       value: model-goal-default
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1463784396158251630, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 1642327355821528388, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5789599943777016326, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6313826483847768709, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6620240479572201073, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_CastShadows
@@ -1021,7 +1025,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7734767640992779127, guid: 92d5562dd793c2740836136d9ab5b2e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 126
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

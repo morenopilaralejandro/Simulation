@@ -8,18 +8,16 @@ using Simulation.Enums.Duel;
 using Simulation.Enums.Battle;
 
 [RequireComponent(typeof(Collider))]
-public class CharacterComponentDuelFieldCollider : MonoBehaviour
+public class CharacterComponentColliderDuelField : MonoBehaviour
 {
     #region Fields
-    private Character character;
+
+    [SerializeField] private Character character;
+    public Character Character => character;
+
     #endregion
 
     #region Unity Lifecycle
-
-    public void Initialize(CharacterData characterData, Character character)
-    {
-        this.character = character;
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -45,7 +43,9 @@ public class CharacterComponentDuelFieldCollider : MonoBehaviour
             return;
 
         Character otherCharacter = 
-            other.GetComponentInParent<Character>();
+            other.GetComponent
+                <CharacterComponentColliderDuelField>().
+                Character;
 
         if (otherCharacter.IsSameTeam(character) ||
             !otherCharacter.CanDuel()) 

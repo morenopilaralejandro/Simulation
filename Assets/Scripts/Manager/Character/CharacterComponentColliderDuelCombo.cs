@@ -8,25 +8,26 @@ using Simulation.Enums.Duel;
 using Simulation.Enums.Battle;
 
 [RequireComponent(typeof(Collider))]
-public class CharacterComponentDuelComboCollider : MonoBehaviour
+public class CharacterComponentColliderDuelCombo : MonoBehaviour
 {
     #region Fields
-    private Character character;
+
+    [SerializeField] private Character character;
+    public Character Character => character;
+
     #endregion
 
     #region Unity Lifecycle
-    public void Initialize(CharacterData characterData, Character character)
-    {
-        this.character = character;
-    }
 
     private void OnTriggerEnter(Collider other)
     {
         TryHandleTrigger(other);
     }
+
     #endregion
 
     #region Duel Logic
+
     private void TryHandleTrigger(Collider other)
     {
         if (!other.CompareTag("Ball") || 
@@ -54,5 +55,6 @@ public class CharacterComponentDuelComboCollider : MonoBehaviour
 
         DuelManager.Instance.StartShootDuelCombo(character, category);
     }
+
     #endregion
 }

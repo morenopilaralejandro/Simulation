@@ -7,6 +7,7 @@ public class BallComponentKick : MonoBehaviour
     [SerializeField] private Rigidbody ballRigidbody;
     [SerializeField] private LayerMask characterPresenceLayer;
 
+    private string tagCharacterPresence = "Character-Presence";
     private float shortDistance = 10f;
     private float mediumDistance = 25f;
     private float maxPower = 25f;
@@ -106,12 +107,14 @@ public class BallComponentKick : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-        
             Collider col = overlapResults[i];
 
-            var presence = col.GetComponentInParent<Character>();
-            if (presence == null || presence.IsStunned())
-                continue;
+            if(!col.gameObject.CompareTag(tagCharacterPresence)) continue;
+            var presence = col.GetComponent
+                <CharacterComponentColliderPresence>().
+                Character;
+
+            if (presence == null || presence.IsStunned()) continue;
 
             if (!presence.IsSameTeam(PossessionManager.Instance.CurrentCharacter))
             {

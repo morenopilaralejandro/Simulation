@@ -373,10 +373,12 @@ public class DuelManager : MonoBehaviour
 
         foreach (var collider in nearbyColliders)
         {
-            Character nearbyCharacter = collider.GetComponentInParent<Character>();
+            if (supporters.Count >= maxSupporters) break;
 
-            if (supporters.Count >= maxSupporters)
-                break;
+            if (!collider.gameObject.CompareTag("Character-Duel-Field")) continue;
+            Character nearbyCharacter = collider.GetComponent
+                <CharacterComponentColliderDuelField>().
+                Character;
 
             if (nearbyCharacter == null ||
                 !uniqueCharacters.Add(nearbyCharacter) ||
