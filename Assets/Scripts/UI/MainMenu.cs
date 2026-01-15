@@ -28,6 +28,7 @@ public class MainMenu : MonoBehaviour
         BattleArgs.TeamId0 = "faith_selection";
         BattleArgs.TeamId1 = "crimson_selection";
         BattleArgs.BallId = "crimson";
+        BattleArgs.FieldId = "stadium_main";
         BattleArgs.BattleType = BattleType.Battle;
 
         SceneLoader.UnloadMainMenu();

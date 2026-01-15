@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Components;
 using TMPro;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
@@ -9,59 +11,71 @@ using Simulation.Enums.Battle;
 
 public class BattleMessage : MonoBehaviour
 {
-    [SerializeField] private GameObject panelGoal;
-    [SerializeField] private GameObject panelHalfTime;
-    [SerializeField] private GameObject panelFullTime;
-    [SerializeField] private GameObject panelTimeUp;
-    [SerializeField] private GameObject panelFoul;
-    [SerializeField] private GameObject panelOffside;
+    [Header("UI References")]
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private TMP_Text messageText;
+    [SerializeField] private LocalizeStringEvent localizeStringEvent;
+
+    [Header("Localized Strings")]
+    [SerializeField] private LocalizedString goalMessage;
+    [SerializeField] private LocalizedString halfTimeMessage;
+    [SerializeField] private LocalizedString fullTimeMessage;
+    [SerializeField] private LocalizedString timeUpMessage;
+    [SerializeField] private LocalizedString foulMessage;
+    [SerializeField] private LocalizedString offsideMessage;
 
     private void Awake()
     {
-        panelGoal.SetActive(false);
-        panelHalfTime.SetActive(false);
-        panelFullTime.SetActive(false);
+        SetCanvasState(false);
         BattleUIManager.Instance?.RegisterBattleMessage(this);
     }
 
     private void OnDestroy()
     {
-        if (BattleUIManager.Instance != null)
-            BattleUIManager.Instance.UnregisterBattleMessage(this);
+        BattleUIManager.Instance.UnregisterBattleMessage(this);
     }
 
     public void SetMessageActive(MessageType messageType, bool isActive)
     {
+        messageText.color = ColorManager.GetBattleMessageColor(messageType);
+        SetCanvasState(isActive);
+
         switch (messageType)
         {
             case MessageType.Goal:
-                panelGoal.SetActive(isActive);
+                localizeStringEvent.StringReference = goalMessage;
                 break;
 
             case MessageType.HalfTime:
-                panelHalfTime.SetActive(isActive);
+                localizeStringEvent.StringReference = halfTimeMessage;
                 break;
 
             case MessageType.FullTime:
-                panelFullTime.SetActive(isActive);
+                localizeStringEvent.StringReference = fullTimeMessage;
                 break;
 
             case MessageType.TimeUp:
-                panelTimeUp.SetActive(isActive);
+                localizeStringEvent.StringReference = timeUpMessage;
                 break;
 
             case MessageType.Foul:
-                panelFoul.SetActive(isActive);
+                localizeStringEvent.StringReference = foulMessage;
                 break;
 
             case MessageType.Offside:
-                panelOffside.SetActive(isActive);
+                localizeStringEvent.StringReference = offsideMessage;
                 break;
 
             default:
-                LogManager.Warning($"[BattleMessage] Unhandled message type: {messageType}");
-                break;
+                return;
         }
+    }
+
+    private void SetCanvasState(bool isVisible)
+    {
+        canvasGroup.alpha = isVisible ? 1f : 0f;
+        canvasGroup.interactable = isVisible;
+        canvasGroup.blocksRaycasts = isVisible;
     }
 
 }
