@@ -10,7 +10,7 @@ public class BattleBallManager : MonoBehaviour
 
     [SerializeField] private GameObject ballPrefab; //inspector
 
-    private Transform spawnPoint; 
+    private Transform spawnPoint;
     private Vector3 defaultBallPosition;
     private Ball ball;
 
@@ -27,16 +27,6 @@ public class BattleBallManager : MonoBehaviour
         Instance = this;
 
         DontDestroyOnLoad(gameObject);
-    }
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
     }
 
     public void RegisterSpawnPoint(Transform spawner)

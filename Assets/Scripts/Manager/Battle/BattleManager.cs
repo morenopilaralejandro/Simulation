@@ -130,6 +130,8 @@ public class BattleManager : MonoBehaviour
         //SetBattlePhase(BattlePhase.Battle);
         ResetBattle();
 
+        BattleFieldManager.Instance.InitializeField();
+
         BattleTeamManager.Instance.AssignTeamToSide(
             TeamManager.Instance.GetTeam(BattleArgs.TeamId0), 
             TeamSide.Home);

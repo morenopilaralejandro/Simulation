@@ -28,9 +28,6 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentStatusIndicator statusIndicatorComponent;
     [SerializeField] private CharacterComponentMoves movesComponent;
     [SerializeField] private CharacterComponentController controllerComponent;
-    [SerializeField] private CharacterComponentDuelFieldCollider duelFieldColliderComponent;
-    [SerializeField] private CharacterComponentDuelComboCollider duelComboColliderComponent;
-    [SerializeField] private CharacterComponentDuelKeeperCollider duelKeeperColliderComponent;
     [SerializeField] private CharacterComponentAI aiComponent;
     [SerializeField] private CharacterComponentStateLock stateLockComponent;
     [SerializeField] private CharacterComponentStateMachine stateMachineComponent;
@@ -61,9 +58,6 @@ public class Character : MonoBehaviour
         statusIndicatorComponent.Initialize(characterData, this);
         movesComponent.Initialize(characterData, this);
         controllerComponent.Initialize(characterData, this);
-        duelFieldColliderComponent.Initialize(characterData, this);
-        duelComboColliderComponent.Initialize(characterData, this);
-        duelKeeperColliderComponent.Initialize(characterData, this);
         aiComponent.Initialize(characterData, this);
         stateLockComponent.Initialize(characterData, this);
         stateMachineComponent.Initialize(characterData, this);

@@ -3,29 +3,38 @@ using System.Collections.Generic;
 
 public class FieldLine : MonoBehaviour
 {
-    [Header("Assign the new material you want to apply")]
-    [SerializeField] private Material lineMaterial;
+    private Color lineColor;
+    private MaterialPropertyBlock propertyBlock;
 
-    public void SetMaterial(Material material)
+    void Awake()
     {
-        lineMaterial = material;
-        ApplyMaterialToChildren();
+        propertyBlock = new MaterialPropertyBlock();
+        ApplyToChildren();
     }
 
-    public void ApplyMaterialToChildren()
+    public void SetColor(Color color)
     {
-        if (lineMaterial == null) return;
+        lineColor = color;
+        ApplyToChildren();
+    }
 
-        // Get all MeshRenderers in this object and its children
+    private void ApplyToChildren()
+    {
+        //mesh
         var meshRenderers = GetComponentsInChildren<MeshRenderer>(includeInactive: true);
-        foreach (MeshRenderer mr in meshRenderers)
-            mr.sharedMaterial = lineMaterial;
+        meshRenderers[0].GetPropertyBlock(propertyBlock);
+        propertyBlock.SetColor("_Color", lineColor);
 
-        // Get all SpriteRenderers in this object and its children
+        foreach (var mr in meshRenderers) 
+            mr.SetPropertyBlock(propertyBlock);
+
+
+        //sprite
         var spriteRenderers = GetComponentsInChildren<SpriteRenderer>(includeInactive: true);
-        foreach (SpriteRenderer sr in spriteRenderers)
-            sr.sharedMaterial = lineMaterial;
 
-        LogManager.Trace($"Applied material to renderers under {name}.");
+        foreach (var sr in spriteRenderers)
+            sr.color = lineColor;
+
+        LogManager.Trace($"[FieldLine] Updated renderers under {name}.");
     }
 }

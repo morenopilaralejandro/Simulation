@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Move;
+using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
+using Simulation.Enums.Move;
 using Simulation.Enums.Kit;
 
 public static class ColorManager
@@ -235,4 +236,22 @@ public static class ColorManager
         return hairColors.TryGetValue(hairColorType, out var color)
             ? color : Color.white;
     }
+
+    private static readonly Dictionary<MessageType, Color> battleMessageColors =
+        new Dictionary<MessageType, Color>()
+    {
+        { MessageType.Goal,         new Color(1f, 0.5948128f, 0.015686274f, 1f) },
+        { MessageType.HalfTime,     new Color(1f, 1f, 1f, 1f) },
+        { MessageType.FullTime,     new Color(1f, 1f, 1f, 1f) },
+        { MessageType.TimeUp,       new Color(1f, 1f, 1f, 1f) },
+        { MessageType.Foul,       new Color(1f, 1f, 1f, 1f) },
+        { MessageType.Offside,    new Color(1f, 1f, 1f, 1f) }
+    };
+
+    public static Color GetBattleMessageColor(MessageType messageType)
+    {
+        return battleMessageColors.TryGetValue(messageType, out var color)
+            ? color : Color.white;
+    }
+
 }
