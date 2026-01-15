@@ -144,7 +144,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4285670978902635623}
   - component: {fileID: 8796048474047740662}
-  - component: {fileID: 2823653673189881984}
   m_Layer: 0
   m_Name: BoundTopGoal
   m_TagString: Bound
@@ -188,19 +187,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2823653673189881984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2457619603015452927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e83dc02707348538b8b6b2d4a8a585de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boundPlacement: 0
 --- !u!1 &6549448829197339352
 GameObject:
   m_ObjectHideFlags: 0

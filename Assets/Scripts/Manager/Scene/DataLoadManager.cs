@@ -28,6 +28,7 @@ public class DataLoadManager : MonoBehaviour
         Task loadSpriteAtlas = SpriteAtlasManager.Instance.LoadAllSpriteAtlasAsync();
         Task loadFormationCoord = FormationCoordManager.Instance.LoadAllFormationCoordDataAsync();
         Task loadBalls = BallManager.Instance.LoadAllBallDataAsync();
+        Task loadFields = FieldManager.Instance.LoadAllFieldDataAsync();
         Task loadMoves = MoveManager.Instance.LoadAllMoveDataAsync();
         Task loadMoveEvolutionGrowthProfile = MoveEvolutionGrowthProfileManager.Instance.LoadAllMoveEvolutionGrowthProfileAsync();
         Task loadMoveEvolutionPath =  MoveEvolutionPathManager.Instance.LoadAllMoveEvolutionPathAsync();
@@ -47,6 +48,7 @@ public class DataLoadManager : MonoBehaviour
         // Finish
         await Task.WhenAll(
             loadBalls, 
+            loadFields,
             loadMoves,
             loadMoveEvolutionGrowthProfile,
             loadMoveEvolutionPath,

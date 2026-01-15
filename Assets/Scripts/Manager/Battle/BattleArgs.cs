@@ -5,6 +5,7 @@ public static class BattleArgs
     public static string TeamId0;
     public static string TeamId1;
     public static string BallId;
+    public static string FieldId;
     public static BattleType BattleType;
 
     public static void Clear()

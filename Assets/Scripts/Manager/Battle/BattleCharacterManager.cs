@@ -94,6 +94,11 @@ public class BattleCharacterManager : MonoBehaviour
     public void ResetCharacterPosition(Character character)
     {
         character.transform.position = character.FormationCoord.DefaultPosition;
+
+        //rotation
+        float yRotation = character.transform.position.z > 0f ? 180f : 0f;
+        character.Model.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
+
         character.ClearAllStatus();
         character.ReleaseStateLock();
     }
