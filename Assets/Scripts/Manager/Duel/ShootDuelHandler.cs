@@ -97,12 +97,12 @@ public class ShootDuelHandler : IDuelHandler
     private async void HandleDefenseFull(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
     {
         bool isShootReversal = defense.Move?.Category == Category.Shoot && DuelManager.Instance.IsShootReversalAllowed;
+        bool isPunching = IsPunching(defense);
 
         LogManager.Info($"[ShootDuelHandler] {defense.Character.CharacterId} stopped the attack.");
 
         BattleEvents.RaiseShootStopped(defense.Character);
         offense.Character.ApplyStatus(StatusEffect.Stunned);
-        PossessionManager.Instance.GiveBallToCharacter(defense.Character);
 
         if(defense.Move != null)
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move.Element, defense.Character.transform.position);
@@ -115,6 +115,17 @@ public class ShootDuelHandler : IDuelHandler
         {
             EndDuel(defense, offense);
             BattleManager.Instance.Ball.EndTravel();
+
+            if (isCategoryCatch && isPunching) 
+            {
+                //punching
+                PossessionManager.Instance.SetLastCharacter(defense.Character);
+                defense.Character.PunchBall(defense.Move.Trait);
+            } else 
+            {
+                //regular catch
+                PossessionManager.Instance.GiveBallToCharacter(defense.Character);
+            }
         }
     }
 
@@ -176,6 +187,14 @@ public class ShootDuelHandler : IDuelHandler
             LogManager.Info($"[ShootDuelHandler] Defense action decreases attack pressure -{participant.Damage}");
 
         LogManager.Info($"[ShootDuelHandler] OffensePressure now {duel.OffensePressure}");
+    }
+
+    private bool IsPunching(DuelParticipant participant) 
+    {
+        return 
+            participant.Move != null && 
+            (participant.Move.Trait == Trait.Punch1 ||
+            participant.Move.Trait == Trait.Punch2);
     }
     #endregion
 

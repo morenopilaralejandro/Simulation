@@ -597,7 +597,7 @@ public class CharacterComponentAI : MonoBehaviour
         lastPassTime = Time.time;
     }
 
-    private Character GetBestPassTeammate()
+    public Character GetBestPassTeammate()
     {
         Character best = null;
         float bestScore = float.MinValue;
