@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Simulation.Enums.Character;
+using Simulation.Enums.Duel;
 using Simulation.Enums.Move;
 
 public class DuelSide : MonoBehaviour
@@ -13,6 +14,7 @@ public class DuelSide : MonoBehaviour
     [SerializeField] private Image possessionImage;
     [SerializeField] private CharacterCard characterCard;
     [SerializeField] private List<CharacterCardMini> characterCardMiniList;
+    [SerializeField] private DuelFieldDamageIndicator fieldDamageIndicator;
 
     public void SetSide(Character character, List<Character> supports)
     {
@@ -38,9 +40,9 @@ public class DuelSide : MonoBehaviour
     private void HideMiniCards() 
     {
         foreach (var card in characterCardMiniList)
-        {
             card.gameObject.SetActive(false);
-        }
     }
+
+    public void SetFieldDamage(float damage, DuelAction action) => fieldDamageIndicator.SetDamage(damage, action);
 
 }

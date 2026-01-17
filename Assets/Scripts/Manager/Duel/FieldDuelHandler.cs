@@ -62,16 +62,39 @@ public class FieldDuelHandler : IDuelHandler
         LogManager.Info($"[FieldDuelHandler] Final OffensePressure {duel.OffensePressure}");
         LogManager.Info($"[FieldDuelHandler] Final DefensePressure {duel.DefensePressure}");
 
+        //UI
+        /*
+        BattleUIManager.Instance.SetFieldDamage(
+            duel.LastOffense.Character,
+            duel.OffensePressure,
+            duel.LastOffense.Action);
+        BattleUIManager.Instance.SetFieldDamage(
+            duel.LastDefense.Character,
+            duel.DefensePressure,
+            duel.LastDefense.Action);
+        */
+
         if (duel.OffensePressure > duel.DefensePressure) 
             EndDuel(duel.LastOffense, duel.LastDefense);
         else
             EndDuel(duel.LastDefense, duel.LastOffense);
     }
 
-    public void EndDuel(DuelParticipant winner, DuelParticipant loser) 
+    public async void EndDuel(DuelParticipant winner, DuelParticipant loser) 
     { 
-        if (winner.Move != null)
+        if (winner.Move != null) 
+        {
             winner.Character.ModifyBattleStat(Stat.Sp, -winner.Move.Cost);
+
+            if (winner.Action == DuelAction.Offense) 
+                BattleUIManager.Instance.SetDuelParticipant(winner.Character, duel.OffenseSupports);
+            else
+                BattleUIManager.Instance.SetDuelParticipant(winner.Character, duel.DefenseSupports);
+            
+            await BattleEffectManager.Instance.PlayMoveParticle(
+                winner.Move.Element,
+                winner.Character.transform.position);
+        }
 
         if (winner.Character.IsOnUsersTeam())
             BattleEffectManager.Instance.PlayDuelWinEffect(winner.Character.transform); 

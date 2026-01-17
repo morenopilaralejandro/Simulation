@@ -28,7 +28,6 @@ public class FieldLine : MonoBehaviour
         foreach (var mr in meshRenderers) 
             mr.SetPropertyBlock(propertyBlock);
 
-
         //sprite
         var spriteRenderers = GetComponentsInChildren<SpriteRenderer>(includeInactive: true);
 

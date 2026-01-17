@@ -283,7 +283,8 @@ public class BattleManager : MonoBehaviour
     #region Sequence 
     private IEnumerator GoalSequence(TeamSide kickoffTeamSide)
     {
-        float duration = 2f;
+        float duration = 
+            SettingsManager.Instance.IsAutoBattleEnabled ? 0.8f : 2f;
         isTimeFrozen = true;
         AudioManager.Instance.PlayBgm("bgm-ole");
         BattleUIManager.Instance.SetMessageActive(MessageType.Goal, true);

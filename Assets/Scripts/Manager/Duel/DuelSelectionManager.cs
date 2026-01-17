@@ -200,7 +200,9 @@ public class DuelSelectionManager : MonoBehaviour
                 );
             }
         }
-        BattleManager.Instance.Unfreeze();
+        
+        if (!BattleEffectManager.Instance.IsPlayingMove)
+            BattleManager.Instance.Unfreeze();
         BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
         OnSelectionsComplete?.Invoke();
     }

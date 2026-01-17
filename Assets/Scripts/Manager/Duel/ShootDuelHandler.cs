@@ -27,11 +27,6 @@ public class ShootDuelHandler : IDuelHandler
         bool isCategoryShoot = participant.Category == Category.Shoot;
         bool isActionOffense = participant.Action == DuelAction.Offense;
 
-        if (isFirstParticipant)
-            StartBallTravel(participant);
-        else if (isCategoryShoot) 
-            PossessionManager.Instance.SetLastCharacter(participant.Character); //keep track of the last character in the shoot chain to determine who scored
-
         duel.Participants.Add(participant);
         LogManager.Trace($"[ShootDuelHandler] AddParticipant {participant.Character.CharacterId}");
 
@@ -56,24 +51,27 @@ public class ShootDuelHandler : IDuelHandler
     #endregion
 
     #region Offense Logic
-    private void HandleOffense(DuelParticipant offense) 
+    private async void HandleOffense(DuelParticipant offense) 
     {
         bool isFirstParticipant = duel.Participants.Count == 1;
 
         duel.OffensePressure += offense.Damage;
         LogParticipantAction(offense);
 
-        BattleManager.Instance.Ball.UpdateTravelEffect(offense.Move, offense.CurrentElement);
-        HandleShootSfx(offense);
+        if(offense.Move != null)
+            await BattleEffectManager.Instance.PlayMoveParticle(offense.Move.Element, offense.Character.transform.position);
 
         if (isFirstParticipant) 
         {
             DuelManager.Instance.StartBallTravel(offense);
         } else 
         {
-            PossessionManager.Instance.SetLastCharacter(offense.Character); //keep track of the last character in the shoot chain to determine who scored
+            PossessionManager.Instance.SetLastCharacter(offense.Character);     //keep track of the last character in the shoot chain to determine who scored
             BattleManager.Instance.Ball.ResumeTravel();
         }
+
+        BattleManager.Instance.Ball.UpdateTravelEffect(offense.Move, offense.CurrentElement);
+        HandleShootSfx(offense);
 
     }
     #endregion
@@ -96,7 +94,7 @@ public class ShootDuelHandler : IDuelHandler
             HandleDefensePartial(offense, defense, isCategoryCatch);
     }
 
-    private void HandleDefenseFull(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
+    private async void HandleDefenseFull(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
     {
         bool isShootReversal = defense.Move?.Category == Category.Shoot && DuelManager.Instance.IsShootReversalAllowed;
 
@@ -105,6 +103,9 @@ public class ShootDuelHandler : IDuelHandler
         BattleEvents.RaiseShootStopped(defense.Character);
         offense.Character.ApplyStatus(StatusEffect.Stunned);
         PossessionManager.Instance.GiveBallToCharacter(defense.Character);
+
+        if(defense.Move != null)
+            await BattleEffectManager.Instance.PlayMoveParticle(defense.Move.Element, defense.Character.transform.position);
 
         // if is reversal start else end
         if (isShootReversal) 
@@ -117,11 +118,14 @@ public class ShootDuelHandler : IDuelHandler
         }
     }
 
-    private void HandleDefensePartial(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
+    private async void HandleDefensePartial(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
     {
         LogManager.Info($"[ShootDuelHandler] Partial block.");
 
         defense.Character.ApplyStatus(StatusEffect.Stunned);
+
+        if(defense.Move != null)
+            await BattleEffectManager.Instance.PlayMoveParticle(defense.Move.Element, defense.Character.transform.position);
 
         BattleManager.Instance.Ball.ResumeTravel();
 

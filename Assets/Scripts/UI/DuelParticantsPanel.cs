@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Simulation.Enums.Character;
+using Simulation.Enums.Duel;
 using Simulation.Enums.Move;
 
 public class DuelParticantsPanel : MonoBehaviour
@@ -60,8 +61,7 @@ public class DuelParticantsPanel : MonoBehaviour
     }
 
     public void SetCategory(Category category) => categoryImage.sprite = IconManager.Instance.Category.GetIcon(category);
-
-    public void ToggleComboDamage() => comboDamageIndicator.Toggle();
     public void SetComboDamage(float damage) => comboDamageIndicator.SetDamage(damage);
+    public void SetFieldDamage(Character character, float damage, DuelAction action) => duelSideDict[character.TeamSide].SetFieldDamage(damage, action);
 
 }
