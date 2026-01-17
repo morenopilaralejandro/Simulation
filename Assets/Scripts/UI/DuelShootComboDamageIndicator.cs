@@ -7,15 +7,12 @@ using Simulation.Enums.Duel;
 
 public class DuelShootComboDamageIndicator : MonoBehaviour
 {
-    [SerializeField] private GameObject panelIndicator;
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TMP_Text textDamage;
-
-    private bool isOpen = false;
-    public bool IsOpen => isOpen;
     
     void Start()
     {
-        SetActive(false);
+        SetCanvasState(false);
     }
 
     private void OnEnable()
@@ -34,25 +31,24 @@ public class DuelShootComboDamageIndicator : MonoBehaviour
 
     private void HandleDuelStart(DuelMode duelMode) 
     {
-        if (duelMode == DuelMode.Shoot)
-            Toggle();
+        //if (duelMode == DuelMode.Shoot)
     }
 
     private void HandleDuelEnd(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser) 
     {
-        if (duelMode == DuelMode.Shoot && isOpen)
-            Toggle();
+        if (duelMode == DuelMode.Shoot)
+            SetCanvasState(false);
     }
 
     private void HandleDuelCancel(DuelMode duelMode) 
     {
-        if (duelMode == DuelMode.Shoot && isOpen)
-            Toggle();
+        if (duelMode == DuelMode.Shoot)
+            SetCanvasState(false);
     }
 
     public void SetDamage(float damage)
     {
-        if(!isOpen) Toggle();
+        SetCanvasState(true);
 
         string damageString = 
             damage < 0 ? 
@@ -62,14 +58,10 @@ public class DuelShootComboDamageIndicator : MonoBehaviour
         textDamage.text = damageString;
     }
 
-    public void Toggle()
+    private void SetCanvasState(bool isVisible)
     {
-        isOpen = !isOpen;
-        SetActive(isOpen);
-    }
-
-    public void SetActive(bool active) 
-    {
-        panelIndicator.SetActive(active);
+        canvasGroup.alpha = isVisible ? 1f : 0f;
+        canvasGroup.interactable = isVisible;
+        canvasGroup.blocksRaycasts = isVisible;
     }
 }

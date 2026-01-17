@@ -22,6 +22,7 @@ public class CharacterComponentController : MonoBehaviour
     private float holdThreshold = 0.2f;
     private float passButtonHoldTime = 0f;
     private bool useMouseAiming;
+    private Character cachedTarget;
 
     [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
 
@@ -92,7 +93,7 @@ public class CharacterComponentController : MonoBehaviour
         if (passHeld)
             UpdatePassIndicator();
 
-        if (passDown || passUp) 
+        if (passUp) 
         {
             HandlePass();
             return;
@@ -131,7 +132,7 @@ public class CharacterComponentController : MonoBehaviour
     #region Target
     private void HandleTarget() 
     {
-        if(isAimingPass) return;
+        if(isAimingPass || BattleEffectManager.Instance.IsPlayingMove) return;
 
         Character target = 
             move.sqrMagnitude > moveTolerance ?
@@ -181,6 +182,7 @@ public class CharacterComponentController : MonoBehaviour
     {
         passButtonHoldTime = 0f;
         isAimingPass = false;
+        cachedTarget = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
     }
 
     private void UpdatePassIndicator()
@@ -189,6 +191,7 @@ public class CharacterComponentController : MonoBehaviour
 
         if (passButtonHoldTime <= holdThreshold) return;
 
+        cachedTarget = null;
         CharacterEvents.RaiseTargetChange(null, this.character.TeamSide);
         isAimingPass = true;
 
@@ -217,9 +220,8 @@ public class CharacterComponentController : MonoBehaviour
         if(isAimingPass)
             PassToPosition(aimedPassPosition);
 
-        Character target = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
-        if(target)
-            PassToTeammate(target);
+        if(cachedTarget)
+            PassToTeammate(cachedTarget);
       
         isAimingPass = false;
     }

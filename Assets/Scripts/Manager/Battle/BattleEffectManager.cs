@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Simulation.Enums.Character;
+using Simulation.Enums.Move;
 
 public class BattleEffectManager : MonoBehaviour
 {
     public static BattleEffectManager Instance;
 
+    [SerializeField] private MoveParticlePlayer moveParticlePlayer;
     private BattleEffectSpawnPoint spawnPoint;
 
     private void Awake()
@@ -52,5 +55,9 @@ public class BattleEffectManager : MonoBehaviour
 
         spawnPoint.DuelWinEffect.Play(true);
     }
+
+    public ParticleSystem GetMoveParticle(Element element) => spawnPoint.GetMoveParticle(element);
+    public async Task PlayMoveParticle(Element element, Vector3 position) => await moveParticlePlayer.Play(element, position);
+    public bool IsPlayingMove => moveParticlePlayer.IsPlayingMove;
 
 }

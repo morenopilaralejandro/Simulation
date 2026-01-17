@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Simulation.Enums.Character;
-using Simulation.Enums.Move;
 using Simulation.Enums.Battle;
+using Simulation.Enums.Move;
+using Simulation.Enums.Duel;
 
 public class BattleUIManager : MonoBehaviour
 {
@@ -201,8 +202,8 @@ public class BattleUIManager : MonoBehaviour
             duelParticantsPanel.Hide();
     }
 
-    public void ToggleComboDamage() => duelParticantsPanel.ToggleComboDamage();
     public void SetComboDamage(float damage) => duelParticantsPanel.SetComboDamage(damage);
+    public void SetFieldDamage(Character character, float damage, DuelAction action) => duelParticantsPanel.SetFieldDamage(character, damage, action);
 
     #endregion
 
