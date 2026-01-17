@@ -106,6 +106,7 @@ public class Character : MonoBehaviour
     public Transform Model => modelComponent.Model;
     //keeperComponent
     public bool IsKeeper => keeperComponent.IsKeeper;
+    public void PunchBall(Trait trait) => keeperComponent.PunchBall(trait);
     //levelsComponent
     public int Level => levelsComponent.Level;
     public int MaxLevel => CharacterComponentLevels.MAX_LEVEL;
@@ -181,6 +182,7 @@ public class Character : MonoBehaviour
     public void DisableAI() => aiComponent.DisableAI();
     public AIDifficulty AIDifficulty => aiComponent.AIDifficulty;
     public AIState AIState => aiComponent.AIState;
+    public Character GetBestPassTeammate() => aiComponent.GetBestPassTeammate();
     public DuelCommand GetRegularCommand() => aiComponent.GetRegularCommand();
     public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);
     public DuelCommand GetCommandByTrait(Trait trait) => aiComponent.GetCommandByTrait(trait);

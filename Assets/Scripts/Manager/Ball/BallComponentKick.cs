@@ -56,7 +56,8 @@ public class BallComponentKick : MonoBehaviour
         if (velocity.magnitude > maxPower)
             velocity = velocity.normalized * maxPower;
 
-        PossessionManager.Instance.Release();
+        if (!ball.IsFree())
+            PossessionManager.Instance.Release();
         ballRigidbody.velocity = velocity;
 
         AudioManager.Instance.PlaySfx("sfx-ball_kick");
@@ -116,7 +117,12 @@ public class BallComponentKick : MonoBehaviour
 
             if (presence == null || presence.IsStunned()) continue;
 
-            if (!presence.IsSameTeam(PossessionManager.Instance.CurrentCharacter))
+            Character kickCharacter = 
+                PossessionManager.Instance.CurrentCharacter == null ?
+                    PossessionManager.Instance.LastCharacter :
+                    PossessionManager.Instance.CurrentCharacter;
+
+            if (!presence.IsSameTeam(kickCharacter))
             {
     #if UNITY_EDITOR
                 debugHadHit = true;
