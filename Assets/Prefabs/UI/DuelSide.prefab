@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1382434583673042763}
   - component: {fileID: 8376981707853631669}
   - component: {fileID: 3652798666391629733}
+  - component: {fileID: 2739467772492373892}
   m_Layer: 5
   m_Name: Possession
   m_TagString: Untagged
@@ -75,6 +76,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &2739467772492373892
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154656337294677943}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &467492177668334016
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,7 +519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBar: {fileID: 1040280316456517892}
   spBar: {fileID: 4791483446180931657}
-  possessionImage: {fileID: 3652798666391629733}
+  canvasGroupPossession: {fileID: 2739467772492373892}
   characterCard: {fileID: 8564131097414300588}
   characterCardMiniList:
   - {fileID: 6852486837991986789}

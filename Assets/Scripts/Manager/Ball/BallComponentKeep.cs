@@ -6,7 +6,8 @@ public class BallComponentKeep : MonoBehaviour
  
     private Character character;
     private float keepSpeed = 30f;
-    private float ballY = 0.1f;
+    private float ballYDefault = 0.1f;
+    private float ballYHand = 0.4f;
     private float ballToPlayerDiscance = 0.2f;
 
     public void Initialize(BallData ballData, Ball ball)
@@ -45,7 +46,7 @@ public class BallComponentKeep : MonoBehaviour
 
         Vector3 forwardDir = character.Model.transform.forward;
         Vector3 targetPosition = character.transform.position + forwardDir * ballToPlayerDiscance;
-        targetPosition.y = ballY;
+        targetPosition.y = character.HasBallInHand ? ballYHand : ballYDefault;
         transform.position = Vector3.Lerp(transform.position, targetPosition, keepSpeed * Time.deltaTime);
     }
 

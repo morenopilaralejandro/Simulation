@@ -123,8 +123,10 @@ public class ShootDuelHandler : IDuelHandler
                 defense.Character.PunchBall(defense.Move.Trait);
             } else 
             {
-                //regular catch
+                //regular catch and block
                 PossessionManager.Instance.GiveBallToCharacter(defense.Character);
+                if (isCategoryCatch) 
+                    defense.Character.ActivateBallInHand(); 
             }
         }
     }
