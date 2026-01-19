@@ -9,6 +9,7 @@ using Simulation.Enums.Move;
 
 public class DuelParticantsPanel : MonoBehaviour
 {
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Image categoryImage;
     [SerializeField] private DuelSide duelSideHome;
     [SerializeField] private DuelSide duelSideAway;
@@ -47,12 +48,19 @@ public class DuelParticantsPanel : MonoBehaviour
 
     public void Show() 
     {
-        this.gameObject.SetActive(true);
+        SetCanvasState(true);
     }
 
     public void Hide() 
     {
-        this.gameObject.SetActive(false);
+        SetCanvasState(false);
+    }
+
+    private void SetCanvasState(bool isVisible)
+    {
+        canvasGroup.alpha = isVisible ? 1f : 0f;
+        canvasGroup.interactable = isVisible;
+        canvasGroup.blocksRaycasts = isVisible;
     }
 
     public void SetSide(Character character, List<Character> supports) 

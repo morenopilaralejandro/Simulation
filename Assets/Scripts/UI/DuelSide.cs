@@ -11,7 +11,7 @@ public class DuelSide : MonoBehaviour
 {
     [SerializeField] private BarHPSP hpBar;
     [SerializeField] private BarHPSP spBar;
-    [SerializeField] private Image possessionImage;
+    [SerializeField] private CanvasGroup canvasGroupPossession;
     [SerializeField] private CharacterCard characterCard;
     [SerializeField] private List<CharacterCardMini> characterCardMiniList;
     [SerializeField] private DuelFieldDamageIndicator fieldDamageIndicator;
@@ -21,7 +21,7 @@ public class DuelSide : MonoBehaviour
         HideMiniCards();
         hpBar.SetCharacter(character, Stat.Hp);
         spBar.SetCharacter(character, Stat.Sp);
-        possessionImage.gameObject.SetActive(character.HasBall());
+        SetPossessionCanvasState(character.HasBall());
         characterCard.SetCharacter(character);
         if (supports != null)
             SetMiniCards(supports);
@@ -32,7 +32,7 @@ public class DuelSide : MonoBehaviour
         for (int i = 0; i < supports.Count; i++) 
         {
             Character character = supports[i];
-            characterCardMiniList[i].gameObject.SetActive(true);
+            characterCardMiniList[i].SetCanvasState(true);
             characterCardMiniList[i].SetCharacter(character);
         }
     }
@@ -40,7 +40,14 @@ public class DuelSide : MonoBehaviour
     private void HideMiniCards() 
     {
         foreach (var card in characterCardMiniList)
-            card.gameObject.SetActive(false);
+            card.SetCanvasState(false);
+    }
+
+    public void SetPossessionCanvasState(bool isVisible)
+    {
+        canvasGroupPossession.alpha = isVisible ? 1f : 0f;
+        canvasGroupPossession.interactable = isVisible;
+        canvasGroupPossession.blocksRaycasts = isVisible;
     }
 
     public void SetFieldDamage(float damage, DuelAction action) => fieldDamageIndicator.SetDamage(damage, action);

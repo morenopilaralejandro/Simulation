@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4359871580554556470}
   - component: {fileID: 6091738131733398007}
   - component: {fileID: 6469662186148448163}
+  - component: {fileID: 3474745002105751159}
   m_Layer: 5
   m_Name: DuelParticantsPanel
   m_TagString: Untagged
@@ -92,10 +93,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3db44c90ffb352e48944be29b16e8e0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 3474745002105751159}
   categoryImage: {fileID: 5305326785629970859}
   duelSideHome: {fileID: 6891200967902626451}
   duelSideAway: {fileID: 4601369589927264343}
   comboDamageIndicator: {fileID: 0}
+--- !u!225 &3474745002105751159
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 929583571634939406}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &261748429082572501
 PrefabInstance:
   m_ObjectHideFlags: 0

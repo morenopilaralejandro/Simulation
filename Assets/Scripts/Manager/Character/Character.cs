@@ -106,7 +106,10 @@ public class Character : MonoBehaviour
     public Transform Model => modelComponent.Model;
     //keeperComponent
     public bool IsKeeper => keeperComponent.IsKeeper;
+    public bool HasBallInHand => keeperComponent.HasBallInHand;
+    public void UpdateKeeperColliderState() => keeperComponent.UpdateKeeperColliderState();
     public void PunchBall(Trait trait) => keeperComponent.PunchBall(trait);
+    public void ActivateBallInHand() => keeperComponent.ActivateBallInHand();
     //levelsComponent
     public int Level => levelsComponent.Level;
     public int MaxLevel => CharacterComponentLevels.MAX_LEVEL;
@@ -225,7 +228,7 @@ public class Character : MonoBehaviour
     public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
     //misc
     public bool CanMove() => !IsStunned();
-    public bool CanDuel() => !IsStunned();
+    public bool CanDuel() => !IsStunned() && !HasBallInHand;
     
     #endregion
 

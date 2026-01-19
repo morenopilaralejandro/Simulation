@@ -1,38 +1,49 @@
 using UnityEngine;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
+using System.Collections;
 
 public class CharacterComponentKeeper : MonoBehaviour
 {
+    #region Fields
+
     private Character character;
 
     [SerializeField] private Collider keeperCollider;   //inspector
     [SerializeField] private bool isKeeper;
+    [SerializeField] private bool hasBallInHand;
 
     private float punchingRadius = 3f;
     private float punchingMaxAngle = 25f;
+    private float durationBallInHand = 2f;
+    private Coroutine hasBallInHandCoroutine;
 
     public bool IsKeeper => isKeeper;
+    public bool HasBallInHand => hasBallInHand;
+
+    #endregion
+
+    #region Lifecycle
 
     public void Initialize(CharacterData characterData, Character character)
     {
         this.character = character;
     }
 
-    public void UpdateKeeperColliderState()
-    {
-        if (keeperCollider != null)
-            keeperCollider.enabled = isKeeper;
-    }
+    #endregion
 
+    #region Events
+    
     private void OnEnable()
     {
         TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;
+        BallEvents.OnReleased += HandleOnReleased;
     }
 
     private void OnDisable()
     {
         TeamEvents.OnAssignCharacterToTeamBattle -= HandleAssignCharacterToTeamBattle;
+        BallEvents.OnReleased += HandleOnReleased;
     }
 
     private void HandleAssignCharacterToTeamBattle(
@@ -48,6 +59,28 @@ public class CharacterComponentKeeper : MonoBehaviour
             UpdateKeeperColliderState();
         }
     }
+
+    private void HandleOnReleased(Character character)
+    {
+        if (!hasBallInHand) return;
+        if (this.character != character) return;
+
+        DeactivateBallInHand();
+    }
+
+    #endregion
+
+    #region Collider
+
+    public void UpdateKeeperColliderState()
+    {
+        if (keeperCollider != null)
+            keeperCollider.enabled = isKeeper;
+    }
+
+    #endregion
+
+    #region Punching tonchi wo kika sete Sliding
 
     public void PunchBall(Trait trait)
     {
@@ -101,4 +134,37 @@ public class CharacterComponentKeeper : MonoBehaviour
 
         return rotation * orientation;
     }
+
+    #endregion
+
+    #region HasBallInHand
+    public void ActivateBallInHand()
+    {
+        hasBallInHand = true;
+
+        if (hasBallInHandCoroutine != null)
+            StopCoroutine(hasBallInHandCoroutine);
+
+        hasBallInHandCoroutine = StartCoroutine(HasBallInHandTimer());
+    }
+
+    private void DeactivateBallInHand()
+    {
+        if (hasBallInHandCoroutine != null)
+        {
+            StopCoroutine(hasBallInHandCoroutine);
+            hasBallInHandCoroutine = null;
+        }
+
+        hasBallInHand = false;
+    }
+
+    private IEnumerator HasBallInHandTimer()
+    {
+        yield return new WaitForSeconds(durationBallInHand);
+
+        hasBallInHand = false;
+        hasBallInHandCoroutine = null;
+    }
+    #endregion
 }
