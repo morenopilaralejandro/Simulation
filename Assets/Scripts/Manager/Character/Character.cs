@@ -31,6 +31,7 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentAI aiComponent;
     [SerializeField] private CharacterComponentStateLock stateLockComponent;
     [SerializeField] private CharacterComponentStateMachine stateMachineComponent;
+    [SerializeField] private CharacterComponentRigidbody rigidbodyComponent;
 
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private CharacterComponentElementIndicator elementIndicatorComponent;
@@ -204,7 +205,9 @@ public class Character : MonoBehaviour
     public void OnKickAnimationEnd() => stateMachineComponent.OnKickAnimationEnd();
     public void OnControlAnimationEnd() => stateMachineComponent.OnControlAnimationEnd();
     public void OnMoveAnimationEnd() => stateMachineComponent.OnMoveAnimationEnd();
-
+    //rigidbodyComponent
+    public void ResetPhysics() => rigidbodyComponent.ResetPhysics();
+    public void StopVelocity() => rigidbodyComponent.StopVelocity();
 
 
 

@@ -101,6 +101,7 @@ public class BattleCharacterManager : MonoBehaviour
 
         character.ClearAllStatus();
         character.ReleaseStateLock();
+        character.ResetPhysics();
     }
 
     public void ClearPool()

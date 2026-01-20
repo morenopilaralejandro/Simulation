@@ -41,6 +41,8 @@ public class CharacterComponentStateLock : MonoBehaviour
     {
         if (isStateLocked) return;
 
+        character.StopVelocity();
+
         isStateLocked = true;
         float duration = GetStateDuration(state);
 

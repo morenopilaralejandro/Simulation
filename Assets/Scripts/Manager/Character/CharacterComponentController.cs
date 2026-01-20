@@ -10,12 +10,18 @@ using Simulation.Enums.Battle;
 public class CharacterComponentController : MonoBehaviour
 {
     #region Fields
+    [SerializeField] private Rigidbody rb;
+
     private Character character;
 
     private Vector2 moveInput;
+    private Vector3 desiredVelocity;
     private Vector3 move;
     private float moveTolerance = 0.01f;
     private float rotationSpeed = 12f;
+
+    private float acceleration = 50f;
+
     private bool isAimingPass = false;
     private Vector3 aimedPassPosition;
     private float aimRadius = 4f;
@@ -71,8 +77,8 @@ public class CharacterComponentController : MonoBehaviour
         if (!character.CanMove()) 
             return;
         
-        if(!character.IsStateLocked) 
-            HandleMovement();
+        //if(!character.IsStateLocked) 
+            //HandleMovement();
 
         if(BattleUIManager.Instance.IsBattleMenuOpen)
             return;
@@ -109,6 +115,27 @@ public class CharacterComponentController : MonoBehaviour
             HandleShoot(wasBuffered);
 
     }
+
+    private void FixedUpdate()
+    {
+        if (!this.isControlled || character.IsAutoBattleEnabled)
+            return;
+
+        if (BattleManager.Instance.IsTimeFrozen) 
+            return;
+
+        if (BattleManager.Instance.CurrentPhase != BattlePhase.Battle) 
+            return;
+
+        if (!character.CanMove()) 
+            return;
+        
+        if(!character.IsStateLocked) {
+        HandleMovement();
+        HandleRotation();
+}
+    }
+
     #endregion
 
     #region Events
@@ -144,35 +171,36 @@ public class CharacterComponentController : MonoBehaviour
     #endregion
 
     #region Movement
+
     private void HandleMovement()
+    {     
+        float moveSpeed = character.GetMovementSpeed();
+        desiredVelocity.Set(
+            moveInput.x * moveSpeed,
+            rb.velocity.y,
+            moveInput.y * moveSpeed
+        );
+
+        rb.velocity = Vector3.MoveTowards(
+            rb.velocity,
+            desiredVelocity,
+            acceleration * Time.fixedDeltaTime
+        );
+    }
+
+    private void HandleRotation()
     {
-        if (move.sqrMagnitude > moveTolerance)
+        Vector3 flatVelocity = rb.velocity;
+        flatVelocity.y = 0f;
+
+        if (flatVelocity.sqrMagnitude > 0.05f)
         {
-            float speed = this.character.GetMovementSpeed();
-            // Calculate target rotation (look direction)
-            Quaternion targetRotation = Quaternion.LookRotation(move, Vector3.up);
-
-            // Smoothly rotate towards movement direction
-            character.Model.transform.rotation = Quaternion.Slerp(
-                character.Model.transform.rotation,
+            Quaternion targetRotation = Quaternion.LookRotation(flatVelocity);
+            character.Model.rotation = Quaternion.Slerp(
+                character.Model.rotation,
                 targetRotation,
-                rotationSpeed * Time.deltaTime
+                rotationSpeed * Time.fixedDeltaTime
             );
-
-            // Apply movement
-            Vector3 translation = move * speed * Time.deltaTime;
-            transform.Translate(translation, Space.World);
-            transform.position = BoundManager.Instance.ClampCharacter(transform.position);
-
-            character.StartMove();
-
-            /*
-            LogManager.Trace($"[CharacterComponentController] " +
-                $"Character: {character.CharacterId}, " +
-                $"Input: {moveInput}, " +
-                $"Speed: {speed}, " +
-                $"Position: {transform.position}");
-            */
         }
     }
     #endregion

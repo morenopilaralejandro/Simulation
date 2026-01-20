@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3188685790197036401}
+  - component: {fileID: 7496539539959397621}
   - component: {fileID: -1087728315389858910}
   - component: {fileID: 1700100118279979926}
   - component: {fileID: 4813765327251362725}
@@ -24,6 +25,7 @@ GameObject:
   - component: {fileID: 8409659550929979516}
   - component: {fileID: 5753816166142112087}
   - component: {fileID: 8205756437304453066}
+  - component: {fileID: 4588718368253062961}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -49,6 +51,33 @@ Transform:
   - {fileID: 526193745808927306}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &7496539539959397621
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181741452733680261}
+  serializedVersion: 4
+  m_Mass: 70
+  m_Drag: 5
+  m_AngularDrag: 10
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!114 &-1087728315389858910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +107,7 @@ MonoBehaviour:
   aiComponent: {fileID: 8409659550929979516}
   stateLockComponent: {fileID: 5753816166142112087}
   stateMachineComponent: {fileID: 8205756437304453066}
+  rigidbodyComponent: {fileID: 4588718368253062961}
   teamIndicatorComponent: {fileID: 4891902300048776065}
   elementIndicatorComponent: {fileID: 7751876429139741252}
   speechBubbleComponent: {fileID: 3209649348049751416}
@@ -228,7 +258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53936a3db4642e2199787310616c1ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 1036270582392311031}
+  rb: {fileID: 7496539539959397621}
 --- !u!114 &8409659550929979516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,6 +302,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+--- !u!114 &4588718368253062961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181741452733680261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5b2bfa4669f702ca720084159ef977, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 7496539539959397621}
 --- !u!1 &2176928981764195961
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,8 +614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7491170946239415309}
   - component: {fileID: 5645950202888989104}
-  - component: {fileID: 1036270582392311031}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: ColliderGoal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -617,33 +659,6 @@ CapsuleCollider:
   m_Height: 0.65
   m_Direction: 1
   m_Center: {x: 0.005, y: 0, z: 0}
---- !u!54 &1036270582392311031
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6108873790068905357}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &6280342411612621364
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,7 +669,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6483671053604540643}
   - component: {fileID: 3690857562082053916}
-  - component: {fileID: 9013191266459504485}
   - component: {fileID: 7045443448692664032}
   m_Layer: 6
   m_Name: ColliderDuelField
@@ -701,33 +715,6 @@ CapsuleCollider:
   m_Height: 0.65
   m_Direction: 1
   m_Center: {x: 0.005, y: 0, z: 0}
---- !u!54 &9013191266459504485
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6280342411612621364}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &7045443448692664032
 MonoBehaviour:
   m_ObjectHideFlags: 0
