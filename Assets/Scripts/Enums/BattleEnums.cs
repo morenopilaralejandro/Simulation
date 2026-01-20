@@ -23,6 +23,16 @@ namespace Simulation.Enums.Battle
         Right
     }
 
+    public enum BoundType
+    {
+        Wallbounce,
+        GoalPost,
+        GoalNet,
+        Endline,
+        Sideline,
+        Corner,
+    }
+
     public enum TimerHalf 
     {
         First,
