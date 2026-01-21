@@ -59,6 +59,8 @@ public class CharacterComponentRigidbody : MonoBehaviour
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
+        rb.Sleep();
     }
 
     public void StopVelocity() 
@@ -67,4 +69,22 @@ public class CharacterComponentRigidbody : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
     }
 
+    public void Teleport(Vector3 position)
+    {
+        rb.interpolation = RigidbodyInterpolation.None;
+
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        rb.position = position;
+
+        rb.Sleep();
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.WakeUp();
+    }
+
+    public void SetRotation(Quaternion rotation)
+    {
+        rb.rotation = rotation;
+    }
 }

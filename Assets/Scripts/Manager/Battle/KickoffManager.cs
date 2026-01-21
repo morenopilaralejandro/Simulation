@@ -94,7 +94,7 @@ public class KickoffManager : MonoBehaviour
             { TeamSide.Away, false }
         };
         isKickoffReady = false;
-        isBallReady = true;
+        isBallReady = false;
     }
 
     private void SetTeamReady(TeamSide teamSide)
@@ -146,8 +146,8 @@ public class KickoffManager : MonoBehaviour
         Team team = BattleManager.Instance.Teams[teamSide];
         character0 = team.CharacterList[team.Formation.Kickoff0];
         character1 = team.CharacterList[team.Formation.Kickoff1];
-        character0.transform.position = position0;
-        character1.transform.position = position1[teamSide];
+        character0.Teleport(position0);
+        character1.Teleport(position1[teamSide]);
 
         //warm ball on low end android devices
         if (isFirstTime) 

@@ -131,9 +131,9 @@ public class CharacterComponentController : MonoBehaviour
             return;
         
         if(!character.IsStateLocked) {
-        HandleMovement();
-        HandleRotation();
-}
+            HandleMovement();
+            HandleRotation();
+        }
     }
 
     #endregion
@@ -175,17 +175,17 @@ public class CharacterComponentController : MonoBehaviour
     private void HandleMovement()
     {     
         float moveSpeed = character.GetMovementSpeed();
-        desiredVelocity.Set(
+
+    Vector3 targetVelocity = new Vector3(
             moveInput.x * moveSpeed,
-            rb.velocity.y,
+            0f,
             moveInput.y * moveSpeed
         );
 
-        rb.velocity = Vector3.MoveTowards(
-            rb.velocity,
-            desiredVelocity,
-            acceleration * Time.fixedDeltaTime
-        );
+        Vector3 currentVelocity = rb.velocity;
+        Vector3 velocityChange = targetVelocity - new Vector3(currentVelocity.x, 0f, currentVelocity.z);
+
+        rb.AddForce(velocityChange * acceleration, ForceMode.Acceleration);
     }
 
     private void HandleRotation()

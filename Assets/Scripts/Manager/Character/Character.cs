@@ -208,6 +208,7 @@ public class Character : MonoBehaviour
     //rigidbodyComponent
     public void ResetPhysics() => rigidbodyComponent.ResetPhysics();
     public void StopVelocity() => rigidbodyComponent.StopVelocity();
+    public void Teleport(Vector3 position) => rigidbodyComponent.Teleport(position);
 
 
 

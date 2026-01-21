@@ -122,7 +122,7 @@ public class BallComponentKick : MonoBehaviour
                     PossessionManager.Instance.LastCharacter :
                     PossessionManager.Instance.CurrentCharacter;
 
-            if (!presence.IsSameTeam(kickCharacter))
+            if (kickCharacter && !presence.IsSameTeam(kickCharacter))
             {
     #if UNITY_EDITOR
                 debugHadHit = true;
