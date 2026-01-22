@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using Simulation.Enums.Input;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
@@ -9,183 +7,139 @@ using Simulation.Enums.Battle;
 
 public class CharacterComponentController : MonoBehaviour
 {
-    #region Fields
+    #region Constants
+    private const float MIN_INPUT_SQR_MAGNITUDE = 0.0001f;
+    private const float MIN_ROTATION_SQR_VELOCITY = 0.05f;
+    #endregion
+
+    #region Serialized Fields
+    [Header("References")]
     [SerializeField] private Rigidbody rb;
 
+    private float acceleration = 50f;
+    private float rotationSpeed = 12f;
+
+    [Header("Pass Aiming")]
+    private float aimRadius = 4f;
+    private float passHoldThreshold = 0.2f;
+    #endregion
+
+    #region State
     private Character character;
 
     private Vector2 moveInput;
-    private Vector3 desiredVelocity;
-    private Vector3 move;
-    private float moveTolerance = 0.01f;
-    private float rotationSpeed = 12f;
+    private Vector3 moveDirection;
 
-    private float acceleration = 50f;
-
-    private bool isAimingPass = false;
+    private bool isAimingPass;
+    private float passHoldTimer;
     private Vector3 aimedPassPosition;
-    private float aimRadius = 4f;
-    private float holdThreshold = 0.2f;
-    private float passButtonHoldTime = 0f;
+
     private bool useMouseAiming;
     private Character cachedTarget;
+    #endregion
 
-    [SerializeField] private bool isControlled => BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()] == this.character;
+    #region Properties
+    private bool IsControlledInternal =>
+        BattleManager.Instance.ControlledCharacter[
+            BattleTeamManager.Instance.GetUserSide()] == character;
 
-    public bool IsControlled => isControlled;
+    public bool IsControlled => IsControlledInternal;
+
+    private bool CanProcessInput =>
+        IsControlledInternal &&
+        !character.IsAutoBattleEnabled &&
+        BattleManager.Instance.CurrentPhase == BattlePhase.Battle &&
+        !BattleManager.Instance.IsTimeFrozen;
     #endregion
 
     #region Lifecycle
-    public void Initialize(CharacterData characterData, Character character) 
+    public void Initialize(CharacterData data, Character character)
     {
         this.character = character;
-
         useMouseAiming = !InputManager.Instance.IsAndroid;
     }
 
     private void OnEnable()
     {
-        TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;
-        BattleEvents.OnBattlePhaseChanged += HandleBattlePhaseChanged;
+        TeamEvents.OnAssignCharacterToTeamBattle += OnAssignCharacter;
+        BattleEvents.OnBattlePhaseChanged += OnBattlePhaseChanged;
     }
 
     private void OnDisable()
     {
-        TeamEvents.OnAssignCharacterToTeamBattle -= HandleAssignCharacterToTeamBattle;
-        BattleEvents.OnBattlePhaseChanged += HandleBattlePhaseChanged;
+        TeamEvents.OnAssignCharacterToTeamBattle -= OnAssignCharacter;
+        BattleEvents.OnBattlePhaseChanged -= OnBattlePhaseChanged;
     }
 
-    void Update()
+    private void Update()
     {
-        if (!this.isControlled || character.IsAutoBattleEnabled)
-            return;
-            
-        //buffer shoot
-        InputManager.Instance.GetDown(CustomAction.Shoot);
-            
-        moveInput = InputManager.Instance.GetMove();
-        move = new Vector3(moveInput.x, 0f, moveInput.y);
-
-        HandleTarget();   
-
-        if (BattleManager.Instance.IsTimeFrozen) 
+        if (!CanProcessInput)
             return;
 
-        if (BattleManager.Instance.CurrentPhase != BattlePhase.Battle) 
+        BufferShootInput();
+        ReadMovementInput();
+        UpdateTargeting();
+
+        if (!character.CanMove() || BattleUIManager.Instance.IsBattleMenuOpen)
             return;
 
-        if (!character.CanMove()) 
-            return;
-        
-        //if(!character.IsStateLocked) 
-            //HandleMovement();
-
-        if(BattleUIManager.Instance.IsBattleMenuOpen)
-            return;
-
-        //block
-
-        if (!character.HasBall()) 
-            return;
-
-        //pass
-        bool passDown = InputManager.Instance.GetDown(CustomAction.Pass);
-        bool passHeld = InputManager.Instance.GetHeld(CustomAction.Pass);
-        bool passUp   = InputManager.Instance.GetUp(CustomAction.Pass);
-
-        if (passDown)
-            StartPassMode();
-
-        if (passHeld)
-            UpdatePassIndicator();
-
-        if (passUp) 
-        {
-            HandlePass();
-            return;
-        }
-        //dribble
-
-        //shoot
-        bool wasBuffered;
-        if (InputManager.Instance.ConsumeBuffered(CustomAction.Shoot, out wasBuffered) && 
-            character.CanShoot() && 
-            DuelManager.Instance.IsResolved &&
-            !BattleManager.Instance.IsTimeFrozen) 
-            HandleShoot(wasBuffered);
-
+        HandlePassInput();
+        HandleShootInput();
     }
 
     private void FixedUpdate()
     {
-        if (!this.isControlled || character.IsAutoBattleEnabled)
+        if (!CanProcessInput || !character.CanMove() || character.IsStateLocked)
             return;
 
-        if (BattleManager.Instance.IsTimeFrozen) 
-            return;
-
-        if (BattleManager.Instance.CurrentPhase != BattlePhase.Battle) 
-            return;
-
-        if (!character.CanMove()) 
-            return;
-        
-        if(!character.IsStateLocked) {
-            HandleMovement();
-            HandleRotation();
-        }
-    }
-
-    #endregion
-
-    #region Events
-    private void HandleAssignCharacterToTeamBattle(
-        Character character, 
-        Team team, 
-        FormationCoord formationCoord)
-    {
-        if (this.character == character && team.TeamSide != BattleTeamManager.Instance.GetUserSide())
-        {
-            this.enabled = false;
-        }
-    }
-
-    private void HandleBattlePhaseChanged(BattlePhase newPhase, BattlePhase oldPhase)
-    {
-        isAimingPass = false;
+        HandleMovement();
+        HandleRotation();
     }
     #endregion
 
-    #region Target
-    private void HandleTarget() 
+    #region Input
+    private void BufferShootInput()
     {
-        if(isAimingPass || BattleEffectManager.Instance.IsPlayingMove) return;
+        InputManager.Instance.GetDown(CustomAction.Shoot);
+    }
 
-        Character target = 
-            move.sqrMagnitude > moveTolerance ?
-                CharacterTargetManager.Instance.GetClosestTeammateInDirection(
-                this.character, move) 
-                : null;
-            CharacterEvents.RaiseTargetChange(target, this.character.TeamSide);
+    private void ReadMovementInput()
+    {
+        moveInput = InputManager.Instance.GetMove();
+        moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
+    }
+    #endregion
+
+    #region Targeting
+    private void UpdateTargeting()
+    {
+        if (isAimingPass || BattleEffectManager.Instance.IsPlayingMove)
+            return;
+
+        Character target = moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE
+            ? CharacterTargetManager.Instance.GetClosestTeammateInDirection(character, moveDirection)
+            : null;
+
+        CharacterEvents.RaiseTargetChange(target, character.TeamSide);
     }
     #endregion
 
     #region Movement
-
     private void HandleMovement()
-    {     
-        float moveSpeed = character.GetMovementSpeed();
+    {
+        float speed = character.GetMovementSpeed();
 
-    Vector3 targetVelocity = new Vector3(
-            moveInput.x * moveSpeed,
+        Vector3 desiredVelocity = new Vector3(
+            moveInput.x * speed,
             0f,
-            moveInput.y * moveSpeed
+            moveInput.y * speed
         );
 
         Vector3 currentVelocity = rb.velocity;
-        Vector3 velocityChange = targetVelocity - new Vector3(currentVelocity.x, 0f, currentVelocity.z);
+        Vector3 horizontalVelocity = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
 
-        rb.AddForce(velocityChange * acceleration, ForceMode.Acceleration);
+        Vector3 velocityDelta = desiredVelocity - horizontalVelocity;
+        rb.AddForce(velocityDelta * acceleration, ForceMode.Acceleration);
     }
 
     private void HandleRotation()
@@ -193,87 +147,131 @@ public class CharacterComponentController : MonoBehaviour
         Vector3 flatVelocity = rb.velocity;
         flatVelocity.y = 0f;
 
-        if (flatVelocity.sqrMagnitude > 0.05f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(flatVelocity);
-            character.Model.rotation = Quaternion.Slerp(
-                character.Model.rotation,
-                targetRotation,
-                rotationSpeed * Time.fixedDeltaTime
-            );
-        }
+        if (flatVelocity.sqrMagnitude < MIN_ROTATION_SQR_VELOCITY)
+            return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(flatVelocity);
+        character.Model.rotation = Quaternion.Slerp(
+            character.Model.rotation,
+            targetRotation,
+            rotationSpeed * Time.fixedDeltaTime
+        );
     }
     #endregion
 
     #region Pass
-    private void StartPassMode()
+    private void HandlePassInput()
     {
-        passButtonHoldTime = 0f;
-        isAimingPass = false;
-        cachedTarget = BattleManager.Instance.TargetedCharacter[this.character.TeamSide];
+        if (!character.HasBall())
+            return;
+
+        if (InputManager.Instance.GetDown(CustomAction.Pass))
+            BeginPass();
+
+        if (InputManager.Instance.GetHeld(CustomAction.Pass))
+            UpdatePassAim();
+
+        if (InputManager.Instance.GetUp(CustomAction.Pass))
+            ExecutePass();
     }
 
-    private void UpdatePassIndicator()
+    private void BeginPass()
     {
-        passButtonHoldTime += Time.deltaTime;
+        passHoldTimer = 0f;
+        isAimingPass = false;
+        cachedTarget = BattleManager.Instance.TargetedCharacter[character.TeamSide];
+    }
 
-        if (passButtonHoldTime <= holdThreshold) return;
+    private void UpdatePassAim()
+    {
+        passHoldTimer += Time.deltaTime;
+        if (passHoldTimer < passHoldThreshold)
+            return;
 
-        cachedTarget = null;
-        CharacterEvents.RaiseTargetChange(null, this.character.TeamSide);
         isAimingPass = true;
+        cachedTarget = null;
+        CharacterEvents.RaiseTargetChange(null, character.TeamSide);
 
-        Vector3 center = transform.position;
-        Vector3 direction;
+        Vector3 direction = GetPassDirection();
+        aimedPassPosition = transform.position + direction * aimRadius;
+
+        CharacterTargetManager.Instance.ShowFreeAim(transform.position, aimedPassPosition);
+    }
+
+    private Vector3 GetPassDirection()
+    {
         if (useMouseAiming)
         {
-            Vector3 mouseWorld = InputManager.Instance.ConvertToWorldPositionOnGround(InputManager.Instance.GetMouse());
-            direction = (mouseWorld - transform.position).normalized;
-        }
-        else
-        {
-            direction = (moveInput.sqrMagnitude > moveTolerance)
-                ? new Vector3(moveInput.x, 0, moveInput.y).normalized
-                : character.Model.transform.forward;
-        }  
+            Vector3 mouseWorld =
+                InputManager.Instance.ConvertToWorldPositionOnGround(
+                    InputManager.Instance.GetMouse());
 
-        aimedPassPosition = center + direction * aimRadius;
-        CharacterTargetManager.Instance.ShowFreeAim(center, aimedPassPosition);
+            return (mouseWorld - transform.position).normalized;
+        }
+
+        return moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE
+            ? moveDirection.normalized
+            : character.Model.forward;
     }
 
-    private void HandlePass() 
+    private void ExecutePass()
     {
         CharacterTargetManager.Instance.Hide();
 
-        if(isAimingPass)
+        if (isAimingPass)
             PassToPosition(aimedPassPosition);
-
-        if(cachedTarget)
+        else if (cachedTarget != null)
             PassToTeammate(cachedTarget);
-      
+
         isAimingPass = false;
     }
 
-    private void PassToTeammate(Character character) 
+    private void PassToTeammate(Character target)
     {
-        this.character.KickBallTo(character.transform.position);
-        CharacterChangeControlManager.Instance.SetControlledCharacter(character, character.TeamSide);
+        character.KickBallTo(target.transform.position);
+        CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
     }
 
-    private void PassToPosition(Vector3 position) 
+    private void PassToPosition(Vector3 position)
     {
-        Character newCharacter = CharacterTargetManager.Instance.GetClosestTeammateToPoint(this.character, position);
-        this.character.KickBallTo(position);
-        if (newCharacter != null) 
-            CharacterChangeControlManager.Instance.SetControlledCharacter(newCharacter, character.TeamSide);
+        Character receiver =
+            CharacterTargetManager.Instance.GetClosestTeammateToPoint(character, position);
+
+        character.KickBallTo(position);
+
+        if (receiver != null)
+            CharacterChangeControlManager.Instance.SetControlledCharacter(receiver, character.TeamSide);
     }
     #endregion
 
     #region Shoot
-    private void HandleShoot(bool isDirect) 
+    private void HandleShootInput()
     {
-        LogManager.Trace($"[CharacterComponentController] isDirect: {isDirect}");
+        if (!character.HasBall()) return;
+
+        if (!InputManager.Instance.ConsumeBuffered(CustomAction.Shoot, out bool isDirect))
+            return;
+
+        if (!character.CanShoot() || !DuelManager.Instance.IsResolved)
+            return;
+
         DuelManager.Instance.StartShootDuel(character, isDirect, false);
+    }
+    #endregion
+
+    #region Events
+    private void OnAssignCharacter(Character assigned, Team team, FormationCoord coord)
+    {
+        if (assigned == character &&
+            team.TeamSide != BattleTeamManager.Instance.GetUserSide())
+        {
+            enabled = false;
+        }
+    }
+
+    private void OnBattlePhaseChanged(BattlePhase newPhase, BattlePhase oldPhase)
+    {
+        isAimingPass = false;
     }
     #endregion
 }

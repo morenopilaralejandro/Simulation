@@ -14,8 +14,8 @@ public class BoundManager : MonoBehaviour
 
     private float topOffsetCamera = 7f;
     private float bottomOffsetCamera = -1f;
-    private float leftOffsetCamera = 5f;
-    private float rightOffsetCamera = 5f;
+    private float leftOffsetCamera = 4f;
+    private float rightOffsetCamera = 4f;
 
     private Dictionary<BoundPlacement, Bound> bounds = new();
     public Dictionary<BoundPlacement, Bound> Bounds => bounds;

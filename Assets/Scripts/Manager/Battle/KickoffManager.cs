@@ -141,25 +141,25 @@ public class KickoffManager : MonoBehaviour
         }
     }
 
-    private void ResetPositions() 
+    private void ResetPositions()
     {
         Team team = BattleManager.Instance.Teams[teamSide];
         character0 = team.CharacterList[team.Formation.Kickoff0];
         character1 = team.CharacterList[team.Formation.Kickoff1];
+
         character0.Teleport(position0);
         character1.Teleport(position1[teamSide]);
+        PossessionManager.Instance.Release();
 
         //warm ball on low end android devices
         if (isFirstTime) 
         {
-            PossessionManager.Instance.Release();
             PossessionManager.Instance.GiveBallToCharacter(character1);
             character1.KickBallTo(GoalManager.Instance.Keepers[0].transform.position);
             PossessionManager.Instance.GiveBallToCharacter(character0);
             isFirstTime = false;
         } else 
         {
-            PossessionManager.Instance.Release();
             PossessionManager.Instance.GiveBallToCharacter(character0);
         }
 

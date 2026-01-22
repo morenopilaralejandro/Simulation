@@ -8,6 +8,8 @@ public class CharacterComponentRigidbody : MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
 
+    private bool isPaused;
+
     /*
     public void Initialize(CharacterData characterData, Character character)
     {
@@ -18,11 +20,15 @@ public class CharacterComponentRigidbody : MonoBehaviour
     void OnEnable()
     {
         BattleEvents.OnBattlePhaseChanged += HandleBattlePhaseChanged;
+        MoveEvents.OnMoveCutsceneStart += HandleMoveCutsceneStart;
+        MoveEvents.OnMoveCutsceneEnd += HandleMoveCutsceneEnd;
     }
 
     void OnDisable()
     {
         BattleEvents.OnBattlePhaseChanged -= HandleBattlePhaseChanged;
+        MoveEvents.OnMoveCutsceneStart -= HandleMoveCutsceneStart;
+        MoveEvents.OnMoveCutsceneEnd -= HandleMoveCutsceneEnd;
     }
 
     private void HandleBattlePhaseChanged(BattlePhase newPhase, BattlePhase oldPhase) 
@@ -37,17 +43,28 @@ public class CharacterComponentRigidbody : MonoBehaviour
             ResumePhysics();
     }
 
+    private void HandleMoveCutsceneStart() => PausePhysics();
+    private void HandleMoveCutsceneEnd() => ResumePhysics();
+
     private void PausePhysics()
     {
+        if(isPaused) return;
+
         rb.constraints = RigidbodyConstraints.FreezePosition;
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
+        isPaused = true;
     }
 
     private void ResumePhysics()
     {
+        if(!isPaused) return;
+
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+
+        isPaused = false;
 
         //rb.velocity = cachedVelocity;
         //rb.angularVelocity = cachedAngularVelocity;
@@ -77,6 +94,7 @@ public class CharacterComponentRigidbody : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
 
         rb.position = position;
+        transform.position = position;
 
         rb.Sleep();
         rb.interpolation = RigidbodyInterpolation.Interpolate;
