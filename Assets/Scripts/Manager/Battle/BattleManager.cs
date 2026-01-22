@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
+using Simulation.Enums.DeadBall;
 
 public class BattleManager : MonoBehaviour
 {
@@ -182,7 +183,7 @@ public class BattleManager : MonoBehaviour
         BattleUIManager.Instance.UpdateTimerHalfDisplay(timerHalf);
         DuelLogManager.Instance.AddMatchHalf();
         ResetDefaultPositions();
-        KickoffManager.Instance.StartKickoff(TeamSide.Away);
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Away);
     }
 
     public void GoalScored(Goal goal)
@@ -295,7 +296,7 @@ public class BattleManager : MonoBehaviour
         isTimeFrozen = false;
 
         ResetDefaultPositions();
-        KickoffManager.Instance.StartKickoff(kickoffTeamSide);
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, kickoffTeamSide);
     }
 
     private IEnumerator TimeOverSequence()
@@ -359,7 +360,7 @@ public class BattleManager : MonoBehaviour
     {
         BattleEvents.RaiseBattleStart();
         ResetDefaultPositions();
-        KickoffManager.Instance.StartKickoff(TeamSide.Home);
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Home);
     }
 
     private void PopulateTeamWithCharacters(Team team, int teamSize)

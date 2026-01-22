@@ -39,7 +39,7 @@ public class CharacterComponentRigidbody : MonoBehaviour
             return;
         }
 
-        if (newPhase == BattlePhase.Battle && oldPhase == BattlePhase.Selection)
+        if (newPhase == BattlePhase.Battle && oldPhase == BattlePhase.Selection && !BattleEffectManager.Instance.IsPlayingMove)
             ResumePhysics();
     }
 

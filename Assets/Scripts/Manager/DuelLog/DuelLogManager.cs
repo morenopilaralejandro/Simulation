@@ -181,7 +181,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddDeadballKickoff(Character character)
+    public void AddDeadBallKickoff(Character character)
     {
         AddEntry(
             "deadball_kickoff", 
@@ -194,6 +194,8 @@ public class DuelLogManager : MonoBehaviour
 
     public void AddActionPass(Character character)
     {
+        if (DeadBallManager.Instance.IsFirstKickoff) return;
+
         var args = new { 
             characterName = character.CharacterNick
         };
@@ -400,7 +402,7 @@ public class DuelLogManager : MonoBehaviour
 
     public void AddPossessionGained(Character character)
     {
-        if (BattleManager.Instance.CurrentPhase == BattlePhase.Deadball) return;
+        if (BattleManager.Instance.CurrentPhase == BattlePhase.DeadBall) return;
 
         var args = new { 
             characterName = character.CharacterNick

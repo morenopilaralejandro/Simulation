@@ -24,7 +24,7 @@ public class CharacterTargetIndicator : MonoBehaviour
         // Hide line if we have missing references
         if (controlledCharacter == null || 
             targetedCharacter == null || 
-            (BattleManager.Instance.CurrentPhase != BattlePhase.Battle && BattleManager.Instance.CurrentPhase != BattlePhase.Deadball) ||
+            (BattleManager.Instance.CurrentPhase != BattlePhase.Battle && BattleManager.Instance.CurrentPhase != BattlePhase.DeadBall) ||
             PauseManager.Instance.IsPaused)
         {
             lineRenderer.positionCount = 0;

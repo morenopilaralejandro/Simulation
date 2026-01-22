@@ -5,7 +5,7 @@ namespace Simulation.Enums.Battle
         Battle,
         Selection,
         Cutscene,
-        Deadball,
+        DeadBall,
         End
     }
 
