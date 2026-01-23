@@ -15,6 +15,10 @@ public class DeadBallManager : MonoBehaviour
     private IDeadBallHandler currentHandler;
     private bool isFirstKickoff = true;
     private Dictionary<TeamSide, bool> isTeamReady;
+    private Team offenseTeam;
+    private Team defenseTeam;
+    private TeamSide offenseSide;
+    private TeamSide defenseSide;
 
     private Vector3 cachedBallPosition;
     private Vector3 defaultPositionKickoffKicker;
@@ -25,6 +29,10 @@ public class DeadBallManager : MonoBehaviour
     public bool IsFirstKickoff => isFirstKickoff;
     public bool AreBothTeamsReady => isTeamReady[TeamSide.Home] && isTeamReady[TeamSide.Away];
     public Vector3 CachedBallPosition => cachedBallPosition;
+    public Team OffenseTeam => offenseTeam;
+    public Team DefenseTeam => defenseTeam;
+    public TeamSide OffenseSide => offenseSide;
+    public TeamSide DefenseSide => defenseSide;
 
     #endregion
 
@@ -68,6 +76,7 @@ public class DeadBallManager : MonoBehaviour
         DeadBallType = type;
         currentHandler = DeadBallFactory.Create(type);
         DeadBallState = DeadBallState.Setup;
+        ResolveOffenseDefense(teamSide);
 
         currentHandler.Setup(teamSide);
     }
@@ -76,11 +85,11 @@ public class DeadBallManager : MonoBehaviour
     {
         if (currentHandler == null) return;
 
-        //handleSharedInput Menu
+        //handleSharedInput Menu formation and change characters
 
         currentHandler.HandleInput();
 
-        if (currentHandler.IsReady && DeadBallState == DeadBallState.WaitingForReady)
+        if (DeadBallState == DeadBallState.WaitingForReady && currentHandler.IsReady)
             Execute();
     }
 
@@ -107,6 +116,7 @@ public class DeadBallManager : MonoBehaviour
     public Vector3 GetDefaultPositionKickoffKicker() => defaultPositionKickoffKicker;
     public Vector3 GetDefaultPositionKickoffReceive(TeamSide teamSide) => defaultPositionKickoffReceiver[teamSide];
     public void SetTeamReady(TeamSide teamSide) => isTeamReady[teamSide] = true;
+    public void SetUserTeamReady() => isTeamReady[BattleManager.Instance.GetUserSide()] = true;
 
     public void SetBothTeamsReady() 
     {
@@ -122,6 +132,31 @@ public class DeadBallManager : MonoBehaviour
 
     public void SetBallPosition(Vector3 ballPosition) => cachedBallPosition = ballPosition;
     public void SetState(DeadBallState state) => DeadBallState = state;
+
+    private void ResolveOffenseDefense(TeamSide offenseSide)
+    {
+        this.offenseSide = offenseSide;
+        defenseSide = offenseSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
+
+        offenseTeam = BattleManager.Instance.Teams[OffenseSide];
+        defenseTeam = BattleManager.Instance.Teams[DefenseSide];
+    }
+
+    public bool IsOffense(TeamSide side) => side == offenseSide;
+    public bool IsDefense(TeamSide side) => side == defenseSide;
+    public bool IsUserOffense => 
+        currentHandler != null &&
+        DeadBallState == DeadBallState.WaitingForReady &&
+        offenseSide == BattleManager.Instance.GetUserSide();
+    public bool IsUserDefense => 
+        currentHandler != null &&
+        DeadBallState == DeadBallState.WaitingForReady &&
+        defenseSide == BattleManager.Instance.GetUserSide();
+    public bool IsUserPenaltyOffense => 
+        currentHandler != null &&
+        DeadBallState == DeadBallState.WaitingForReady &&
+        DeadBallType == DeadBallType.Penalty &&
+        offenseSide == BattleManager.Instance.GetUserSide();
 
     #endregion
 }

@@ -73,15 +73,17 @@ public class CharacterComponentController : MonoBehaviour
 
     private void Update()
     {
-        if (!CanProcessInput)
-            return;
+        if (IsControlledInternal && !character.IsAutoBattleEnabled) 
+        {
+            ReadMovementInput();
+            UpdateTargeting();
+        }
+
+        if (!CanProcessInput) return;
 
         BufferShootInput();
-        ReadMovementInput();
-        UpdateTargeting();
 
-        if (!character.CanMove() || BattleUIManager.Instance.IsBattleMenuOpen)
-            return;
+        if (!character.CanMove() || BattleUIManager.Instance.IsBattleMenuOpen) return;
 
         HandlePassInput();
         HandleShootInput();
@@ -113,7 +115,7 @@ public class CharacterComponentController : MonoBehaviour
     #region Targeting
     private void UpdateTargeting()
     {
-        if (isAimingPass || BattleEffectManager.Instance.IsPlayingMove)
+        if (isAimingPass || BattleEffectManager.Instance.IsPlayingMove || DeadBallManager.Instance.IsUserDefense)
             return;
 
         Character target = moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE

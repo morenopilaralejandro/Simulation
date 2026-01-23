@@ -106,6 +106,11 @@ public class BallComponentKick : MonoBehaviour
             QueryTriggerInteraction.Collide
         );
 
+        Character kickCharacter = 
+            PossessionManager.Instance.CurrentCharacter == null ?
+                PossessionManager.Instance.LastCharacter :
+                PossessionManager.Instance.CurrentCharacter;
+
         for (int i = 0; i < count; i++)
         {
             Collider col = overlapResults[i];
@@ -116,11 +121,6 @@ public class BallComponentKick : MonoBehaviour
                 Character;
 
             if (presence == null || presence.IsStunned()) continue;
-
-            Character kickCharacter = 
-                PossessionManager.Instance.CurrentCharacter == null ?
-                    PossessionManager.Instance.LastCharacter :
-                    PossessionManager.Instance.CurrentCharacter;
 
             if (kickCharacter && !presence.IsSameTeam(kickCharacter))
             {

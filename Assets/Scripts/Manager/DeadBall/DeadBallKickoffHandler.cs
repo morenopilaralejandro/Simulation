@@ -11,11 +11,9 @@ public class DeadBallKickoffHandler : IDeadBallHandler
     #region Fields
 
     private Team team;
-    private TeamSide userSide;
     private DeadBallManager deadBallManager;
     private Character characterKicker;
     private Character characterReceiver;
-
 
     private bool isBallReady;
     private bool isAutoBattleEnabled;
@@ -33,7 +31,6 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         isAutoBattleEnabled = AutoBattleManager.Instance.IsAutoBattleEnabled;
         isMultiplayer = false;
         isBallReady = false;
-        userSide = BattleManager.Instance.GetUserSide();
 
         team = BattleManager.Instance.Teams[teamSide];
         characterKicker = team.CharacterList[team.Formation.Kickoff0];
@@ -53,26 +50,29 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         if (!InputManager.Instance.GetDown(CustomAction.Pass)) return;
 
         if (isMultiplayer) 
-            deadBallManager.SetTeamReady(userSide);
+            deadBallManager.SetUserTeamReady();
         else 
             deadBallManager.SetBothTeamsReady();
     }
 
     private void OnBallGained(Character c)
     {
-        if (c == characterKicker)
+        if (c == characterKicker) 
+        {
             isBallReady = true;
+            BallEvents.OnGained -= OnBallGained;
+        } else 
+        {
+            c.KickBallTo(characterKicker.transform.position);
+        }
 
         if (isAutoBattleEnabled) 
             deadBallManager.SetBothTeamsReady();
-
-        BallEvents.OnGained -= OnBallGained;
     }
 
     public void Execute()
     {
         Character target = BattleManager.Instance.TargetedCharacter[characterKicker.TeamSide];
-        //CharacterChangeControlManager.Instance.SetControlledCharacter(character0, character0.TeamSide);
 
         if (!target || characterKicker.IsEnemyAI) 
         {
@@ -94,18 +94,18 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         characterReceiver.Teleport(deadBallManager.GetDefaultPositionKickoffReceive(team.TeamSide));
         PossessionManager.Instance.Release();
 
-        // warm ball on low end android devices
         if (deadBallManager.IsFirstKickoff) 
         {
+            // warm ball on low end android devices
+            // the on gain event will pass the ball to characterKicker
             PossessionManager.Instance.GiveBallToCharacter(characterReceiver);
-            characterReceiver.KickBallTo(GoalManager.Instance.Keepers[0].transform.position);
-            PossessionManager.Instance.GiveBallToCharacter(characterKicker);
             deadBallManager.SetIsFirstKickoff(false);
         } else 
         {
             PossessionManager.Instance.GiveBallToCharacter(characterKicker);
         }
-
     }
+
+
     #endregion
 }
