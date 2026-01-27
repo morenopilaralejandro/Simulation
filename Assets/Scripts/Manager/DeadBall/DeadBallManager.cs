@@ -13,6 +13,7 @@ public class DeadBallManager : MonoBehaviour
     public static DeadBallManager Instance;
 
     private IDeadBallHandler currentHandler;
+    private DeadBallPositionConfig positionConfig;
     private bool isFirstKickoff = true;
     private Dictionary<TeamSide, bool> isTeamReady;
     private Team offenseTeam;
@@ -24,6 +25,7 @@ public class DeadBallManager : MonoBehaviour
     private Vector3 defaultPositionKickoffKicker;
     private Dictionary<TeamSide, Vector3> defaultPositionKickoffReceiver;
 
+    public DeadBallPositionConfig PositionConfig => positionConfig;
     public DeadBallState DeadBallState { get; private set; }
     public DeadBallType DeadBallType { get; private set; }
     public bool IsFirstKickoff => isFirstKickoff;
@@ -47,6 +49,9 @@ public class DeadBallManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        positionConfig = new DeadBallPositionConfig();
+        positionConfig.Initialize();
 
         defaultPositionKickoffKicker = new Vector3(0, 0.34f, 0);
         defaultPositionKickoffReceiver = new Dictionary<TeamSide, Vector3>
@@ -157,6 +162,115 @@ public class DeadBallManager : MonoBehaviour
         DeadBallState == DeadBallState.WaitingForReady &&
         DeadBallType == DeadBallType.Penalty &&
         offenseSide == BattleManager.Instance.GetUserSide();
+
+    public TeamSide GetDeadBallSide() 
+    {
+        if (PossessionManager.Instance.CurrentCharacter == null)
+            return PossessionManager.Instance.LastCharacter.TeamSide;
+        else 
+            return PossessionManager.Instance.CurrentCharacter.TeamSide;
+    }
+
+    public Character GetKickerCharacter(Team team)
+    {
+        Character nearestCharacter = null;
+        List<Character> teammates = team.CharacterList;
+        float closestDistance = Mathf.Infinity;
+
+        for (int i = 0; i < BattleManager.Instance.CurrentTeamSize; i++)
+        {
+            Character teammate = teammates[i];
+
+            // Skip self unless includeSelf is true
+            if (teammate.IsKeeper || (DeadBallType == DeadBallType.CornerKick && teammate.FormationCoord.Position == Position.FW))
+                continue;
+            float dist = Vector3.Distance(
+                cachedBallPosition, 
+                teammate.transform.position);
+            if (dist < closestDistance)
+            {
+                closestDistance = dist;
+                nearestCharacter = teammate;
+            }
+        }
+
+        return nearestCharacter ?? null;
+    }
+
+    public Character[] GetClosestCharacters(Team team, Character kicker)
+    {
+        int arrayLength = 3;
+        Character[] closest = new Character[arrayLength];
+        float[] distances = { Mathf.Infinity, Mathf.Infinity, Mathf.Infinity };
+
+        foreach (Character teammate in team.CharacterList)
+        {
+            if (teammate == kicker || teammate.IsKeeper)
+                continue;
+
+            float dist = Vector3.Distance(cachedBallPosition, teammate.transform.position);
+
+            for (int i = 0; i < arrayLength; i++)
+            {
+                if (dist < distances[i])
+                {
+                    // Shift down
+                    for (int j = arrayLength - 1; j > i; j--)
+                    {
+                        distances[j] = distances[j - 1];
+                        closest[j] = closest[j - 1];
+                    }
+
+                    distances[i] = dist;
+                    closest[i] = teammate;
+                    break;
+                }
+            }
+        }
+
+        return closest;
+    }
+
+    public CornerPlacement GetBallCornerPlacement(Vector3 ballPos)
+    {
+        bool isRight = ballPos.x > 0f;
+        bool isBottom = ballPos.z < 0f;
+
+        if (!isRight && !isBottom) return CornerPlacement.TopLeft;
+        if (isRight && !isBottom)  return CornerPlacement.TopRight;
+        if (!isRight && isBottom)  return CornerPlacement.BottomLeft;
+        return CornerPlacement.BottomRight;
+    }
+
+    public Vector3 FlipPositionOnCorner(Vector3 basePos, CornerPlacement cornerPlacement)
+    {
+        Vector3 pos = basePos;
+
+        switch (cornerPlacement)
+        {
+            case CornerPlacement.TopRight:
+                pos.x *= -1f;
+                break;
+
+            case CornerPlacement.BottomLeft:
+                pos.z *= -1f;
+                break;
+
+            case CornerPlacement.BottomRight:
+                pos.x *= -1f;
+                pos.z *= -1f;
+                break;
+        }
+
+        return pos;
+    }
+
+    public BoundPlacement GetBallEndPlacement(Vector3 ballPos)
+    {
+        if (ballPos.z > 0f) 
+            return BoundPlacement.Top;
+        return BoundPlacement.Bottom;
+    }
 
     #endregion
 }

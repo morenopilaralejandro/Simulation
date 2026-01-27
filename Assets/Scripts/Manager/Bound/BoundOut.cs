@@ -10,40 +10,44 @@ public class BoundOut : MonoBehaviour
 
     #region Unity Lifecycle
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        HandleCollision(other);
+        HandleTrigger(other);
     }
 
-    private void OnCollisionStay(Collision other)
+    private void OnTriggerStay(Collider other)
     {
-        HandleCollision(other);
+        HandleTrigger(other);
     }
 
     #endregion
 
     #region Duel Logic
 
-    private void HandleCollision(Collision other) 
+    private void HandleTrigger(Collider other) 
     {
         if (BattleManager.Instance.IsTimeFrozen) return;
 
-        GameObject hitObj = other.collider.gameObject;
+        GameObject hitObj = other.GetComponent<Collider>().gameObject;
         if (!hitObj.CompareTag("Ball")) return;
 
-        //var ball = BattleManager.Instance.Ball;
-
+        BattleManager.Instance.Freeze();
+        var ball = BattleManager.Instance.Ball;
+        DeadBallManager.Instance.SetBallPosition(ball.transform.position);
         //freeze
         //whistle sfx
 
         switch (boundType)
         {
             case BoundType.Endline:
-                Debug.Log("Ball crossed the end line.");
+                Debug.LogWarning("Ball crossed the end line.");
+                //determine if it is corner or goal kick
+                BattleManager.Instance.StartCornerKick(DeadBallManager.Instance.GetDeadBallSide());
                 break;
 
             case BoundType.Sideline:
-                Debug.Log("Ball went out on the sideline.");
+                Debug.LogWarning("Ball went out on the sideline.");
+                BattleManager.Instance.StartThrowIn(DeadBallManager.Instance.GetDeadBallSide());
                 break;
 
         }

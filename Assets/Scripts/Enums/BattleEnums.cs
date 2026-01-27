@@ -23,6 +23,14 @@ namespace Simulation.Enums.Battle
         Right
     }
 
+    public enum CornerPlacement
+    {
+        TopLeft,
+        TopRight,
+        BottomLeft,
+        BottomRight
+    }
+
     public enum BoundType
     {
         Wallbounce,

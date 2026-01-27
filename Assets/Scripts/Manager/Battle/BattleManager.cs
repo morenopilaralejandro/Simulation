@@ -353,6 +353,46 @@ public class BattleManager : MonoBehaviour
         // Force end game — treat as loss for user
         ForceEndGame(winnerSide);
     }
+
+    public void StartThrowIn(TeamSide side) 
+    {
+        StartCoroutine(ThrowInSequence(side));
+    }
+
+    private IEnumerator ThrowInSequence(TeamSide side)
+    {
+        AudioManager.Instance.PlaySfx("sfx-whistle_single");
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide message
+        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
+        ResetDefaultPositions();
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.ThrowIn, side);
+    }
+
+
+
+
+
+
+
+
+
+    public void StartCornerKick(TeamSide side) 
+    {
+        StartCoroutine(ThrowInSequence(side));
+    }
+
+    private IEnumerator CornerKickSequence(TeamSide side)
+    {
+        AudioManager.Instance.PlaySfx("sfx-whistle_single");
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide message
+        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
+        ResetDefaultPositions();
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.CornerKick, side);
+    }
     #endregion
 
     #region Team and Ball
@@ -392,7 +432,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void ResetDefaultPositions()
+    public void ResetDefaultPositions()
     {
         AudioManager.Instance.PlayBgm("bgm-battle_crimson");
         ResetPlayerPositions();

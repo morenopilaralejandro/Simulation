@@ -211,7 +211,6 @@ public class Character : MonoBehaviour
     public void Teleport(Vector3 position) => rigidbodyComponent.Teleport(position);
 
 
-
     //elementIndicatorComponent
     public void SetElementIndicatorEnabled(bool enabled) => elementIndicatorComponent.SetEnabled(enabled);
     public void SetElementIndicatorActive(bool active) => elementIndicatorComponent.SetActive(active);

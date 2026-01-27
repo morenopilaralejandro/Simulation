@@ -4,8 +4,6 @@ public static class DeadBallFactory
 {
     public static IDeadBallHandler Create(DeadBallType type)
     {
-                return new DeadBallKickoffHandler();
-/*
         switch (type)
         {
             case DeadBallType.Kickoff:
@@ -16,18 +14,17 @@ public static class DeadBallFactory
 
             case DeadBallType.CornerKick:
                 return new DeadBallCornerKickHandler();
-
+/*
             case DeadBallType.FreeKick:
                 return new DeadBallFreeKickHandler();
 
             case DeadBallType.Penalty:
                 return new DeadBallPenaltyHandler();
-
+*/
             default:
                 LogManager.Error($"DeadBallType {type} not supported");
                 return null;
 
         }
-*/
     }
 }
