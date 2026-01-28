@@ -370,17 +370,9 @@ public class BattleManager : MonoBehaviour
         DeadBallManager.Instance.StartDeadBall(DeadBallType.ThrowIn, side);
     }
 
-
-
-
-
-
-
-
-
     public void StartCornerKick(TeamSide side) 
     {
-        StartCoroutine(ThrowInSequence(side));
+        StartCoroutine(CornerKickSequence(side));
     }
 
     private IEnumerator CornerKickSequence(TeamSide side)

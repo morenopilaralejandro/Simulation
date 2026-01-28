@@ -117,7 +117,7 @@ public class DeadBallManager : MonoBehaviour
 
     #region Helpers
 
-    public bool SetIsFirstKickoff(bool isFirst) => isFirstKickoff = isFirst;
+    public bool MarkFirstKickoffComplete(bool isFirst) => isFirstKickoff = isFirst;
     public Vector3 GetDefaultPositionKickoffKicker() => defaultPositionKickoffKicker;
     public Vector3 GetDefaultPositionKickoffReceive(TeamSide teamSide) => defaultPositionKickoffReceiver[teamSide];
     public void SetTeamReady(TeamSide teamSide) => isTeamReady[teamSide] = true;
@@ -157,18 +157,18 @@ public class DeadBallManager : MonoBehaviour
         currentHandler != null &&
         DeadBallState == DeadBallState.WaitingForReady &&
         defenseSide == BattleManager.Instance.GetUserSide();
-    public bool IsUserPenaltyOffense => 
+    public bool IsUserTakingPenalty => 
         currentHandler != null &&
         DeadBallState == DeadBallState.WaitingForReady &&
         DeadBallType == DeadBallType.Penalty &&
         offenseSide == BattleManager.Instance.GetUserSide();
 
-    public TeamSide GetDeadBallSide() 
+    public TeamSide GetRestartTeamSide() 
     {
         if (PossessionManager.Instance.CurrentCharacter == null)
-            return PossessionManager.Instance.LastCharacter.TeamSide;
+            return PossessionManager.Instance.LastCharacter.TeamSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
         else 
-            return PossessionManager.Instance.CurrentCharacter.TeamSide;
+            return PossessionManager.Instance.CurrentCharacter.TeamSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
     }
 
     public Character GetKickerCharacter(Team team)
@@ -194,7 +194,7 @@ public class DeadBallManager : MonoBehaviour
             }
         }
 
-        return nearestCharacter ?? null;
+        return nearestCharacter;
     }
 
     public Character[] GetClosestCharacters(Team team, Character kicker)
@@ -270,6 +270,55 @@ public class DeadBallManager : MonoBehaviour
         if (ballPos.z > 0f) 
             return BoundPlacement.Top;
         return BoundPlacement.Bottom;
+    }
+
+    public bool IsCornerKick(TeamSide teamSide)
+    {
+        BoundPlacement boundPlacement = GetBallEndPlacement(cachedBallPosition);
+
+        if (teamSide == TeamSide.Away && boundPlacement == BoundPlacement.Bottom)
+            return true;
+
+        if (teamSide == TeamSide.Home && boundPlacement == BoundPlacement.Top)
+            return true;
+
+        return false;
+    }
+
+    // Invert index order for away team so formations mirror correctly
+    private int GetTeamAdjustedIndex(int index, int length, TeamSide teamSide)
+    {
+        if (teamSide == TeamSide.Away)
+            return length - 1 - index;
+        return index;
+    }
+
+    public void SetCornerPositions(
+        Character[] characters,
+        Vector3[] basePositions,
+        TeamSide teamSide,
+        CornerPlacement cornerPlacement
+    )
+    {
+        int count = Mathf.Min(characters.Length, basePositions.Length);
+
+        for (int i = 0; i < count; i++)
+        {
+            int adjustedIndex = GetTeamAdjustedIndex(i, basePositions.Length, teamSide);
+
+            Vector3 basePos = basePositions[adjustedIndex];
+            Vector3 finalPos = FlipPositionOnCorner(basePos, cornerPlacement);
+
+            characters[i].Teleport(finalPos);
+        }
+    }
+
+    public int GetDefaultRecieverIndexInArray(Character[] array, Character characterKicker) 
+    {
+        if (characterKicker.IsEnemyAI)
+            return array.Length - 1;
+        else
+            return 0;
     }
 
     #endregion

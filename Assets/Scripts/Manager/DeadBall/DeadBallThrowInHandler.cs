@@ -17,6 +17,7 @@ public class DeadBallThrowInHandler : IDeadBallHandler
     private Character[] characterSupportOffense;
     private Character[] characterSupportDefense;
     private Vector3 ballPosition;
+    private int defaultRecieverIndex;
 
     private bool isBallReady;
     private bool isAutoBattleEnabled;
@@ -47,6 +48,8 @@ public class DeadBallThrowInHandler : IDeadBallHandler
         characterSupportDefense = deadBallManager.GetClosestCharacters(
             deadBallManager.DefenseTeam,
             characterKicker);
+
+        defaultRecieverIndex = deadBallManager.GetDefaultRecieverIndexInArray(characterSupportOffense, characterKicker);
 
         if (IsThrowInCorner()) 
             SetPositionsCorner();
@@ -87,7 +90,7 @@ public class DeadBallThrowInHandler : IDeadBallHandler
 
         if (!target || characterKicker.IsEnemyAI) 
         {
-            target = characterSupportOffense[0];
+            target = characterSupportOffense[defaultRecieverIndex];
             characterKicker.KickBallTo(target.transform.position);
             if (!characterKicker.IsEnemyAI)
                 CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
@@ -112,23 +115,20 @@ public class DeadBallThrowInHandler : IDeadBallHandler
     {
         CornerPlacement cornerPlacement = deadBallManager.GetBallCornerPlacement(ballPosition);
 
-        // Offensive supporters
-        for (int i = 0; i < characterSupportOffense.Length && i < deadBallManager.PositionConfig.ThrowInCornerOffense.Length; i++)
-        {
-            Vector3 basePos = deadBallManager.PositionConfig.ThrowInCornerOffense[i];
-            Vector3 finalPos = deadBallManager.FlipPositionOnCorner(basePos, cornerPlacement);
+        deadBallManager.SetCornerPositions(
+            characterSupportOffense,
+            deadBallManager.PositionConfig.ThrowInCornerOffense,
+            deadBallManager.OffenseTeam.TeamSide,
+            cornerPlacement
+        );
 
-            characterSupportOffense[i].Teleport(finalPos);
-        }
+        deadBallManager.SetCornerPositions(
+            characterSupportDefense,
+            deadBallManager.PositionConfig.ThrowInCornerDefense,
+            deadBallManager.DefenseTeam.TeamSide,
+            cornerPlacement
+        );
 
-        // Defensive supporters
-        for (int i = 0; i < characterSupportDefense.Length && i < deadBallManager.PositionConfig.ThrowInCornerDefense.Length; i++)
-        {
-            Vector3 basePos = deadBallManager.PositionConfig.ThrowInCornerDefense[i];
-            Vector3 finalPos = deadBallManager.FlipPositionOnCorner(basePos, cornerPlacement);
-
-            characterSupportDefense[i].Teleport(finalPos);
-        }
     }
 
     private void SetPositionsDefault() 
@@ -199,23 +199,25 @@ public class DeadBallThrowInHandler : IDeadBallHandler
     private Vector3 GetKickerPosition(Vector3 ballPosition)
     {
         BoundPlacement side = GetBallSidePlacement(ballPosition);
+        Vector3 pos = deadBallManager.PositionConfig.CornerKicker;
+        pos.z = ballPosition.z;
         switch (side)
         {
             case BoundPlacement.Right:
+                pos.x *= -1;
                 // Ball on right sideline → face left
-                return new Vector3 (6.5f, 0.35f, ballPosition.z);
+                return pos;
 
             case BoundPlacement.Left:
             default:
                 // Ball on left sideline → face right
-                return new Vector3 (-6.5f, 0.35f, ballPosition.z);
+                return pos;
         }
     }
 
     public Vector3 FlipPositionOnThrowIn(Vector3 basePos, BoundPlacement boundPlacement)
     {
         Vector3 pos = GetAdjustedDefaultPosition(basePos);
-
         switch (boundPlacement)
         {
             case BoundPlacement.Left:
@@ -226,7 +228,6 @@ public class DeadBallThrowInHandler : IDeadBallHandler
                 pos.x *= -1f;
                 break;
         }
-
         return pos;
     }
 

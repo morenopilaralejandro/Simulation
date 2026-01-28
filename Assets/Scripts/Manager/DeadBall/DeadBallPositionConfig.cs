@@ -14,14 +14,17 @@ public class DeadBallPositionConfig
     private Vector3[] throwInDefaultDefense;
     private Vector3[] cornerOffense;
     private Vector3[] cornerDefense;
+    private Vector3 throwIncornerKicker;
+    private Vector3 cornerKicker;
 
     public Vector3[] ThrowInCornerOffense => throwInCornerOffense;
     public Vector3[] ThrowInCornerDefense => throwInCornerDefense;
     public Vector3[] ThrowInDefaultOffense => throwInDefaultOffense;
     public Vector3[] ThrowInDefaultDefense => throwInDefaultDefense;
-
     public Vector3[] CornerOffense => cornerOffense;
     public Vector3[] CornerDefense => cornerDefense;
+    public Vector3 ThrowIncornerKicker => throwIncornerKicker;
+    public Vector3 CornerKicker => cornerKicker;
 
     public void Initialize()
     {
@@ -59,8 +62,8 @@ public class DeadBallPositionConfig
         cornerOffense = new[]
         {
             new Vector3(0.85f, 0.35f, 6.3f),
-            new Vector3(-2f, 0.35f, 5.50f),
-            new Vector3(-5.50f, 0.35f, 4.30f)
+            new Vector3(-2f, 0.35f, 5.00f),
+            new Vector3(-5.50f, 0.35f, 4.00f)
         };
 
         cornerDefense = new[]
@@ -69,5 +72,9 @@ public class DeadBallPositionConfig
             new Vector3(-0.80f, 0.35f, 5.70f),
             new Vector3(-3.40f, 0.35f, 4.70f)
         };
+
+        throwIncornerKicker = new Vector3(-6.5f, 0.35f, 0f);        
+        cornerKicker = new Vector3(-6.55f, 0.35f, 8.05f);
+
     }
 }
