@@ -35,7 +35,7 @@ public class BoundOut : MonoBehaviour
         BattleManager.Instance.Freeze();
         var ball = BattleManager.Instance.Ball;
         DeadBallManager.Instance.SetBallPosition(ball.transform.position);
-        TeamSide teamSide = DeadBallManager.Instance.GetDeadBallSide();
+        TeamSide teamSide = DeadBallManager.Instance.GetRestartTeamSide();
         //freeze
         //whistle sfx
 
@@ -47,8 +47,7 @@ public class BoundOut : MonoBehaviour
                 if(DeadBallManager.Instance.IsCornerKick(teamSide))
                     BattleManager.Instance.StartCornerKick(teamSide);
                 else
-                    Debug.LogError($"Goal kick {teamSide}");
-                    //BattleManager.Instance.StartCornerKick(teamSide);
+                    BattleManager.Instance.StartGoalKick(teamSide);
                 break;
 
             case BoundType.Sideline:

@@ -19,7 +19,7 @@ public class DeadBallKickoffHandler : IDeadBallHandler
     private bool isAutoBattleEnabled;
     private bool isMultiplayer;
 
-    public bool IsReady => deadBallManager.AreBothTeamsReady && isBallReady;
+    public bool IsReady => deadBallManager.TeamReadiness.AreBothReady && isBallReady;
 
     #endregion
 
@@ -50,9 +50,9 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         if (!InputManager.Instance.GetDown(CustomAction.Pass)) return;
 
         if (isMultiplayer) 
-            deadBallManager.SetUserTeamReady();
+            deadBallManager.TeamReadiness.SetUserReady();
         else 
-            deadBallManager.SetBothTeamsReady();
+            deadBallManager.TeamReadiness.SetBothReady();
     }
 
     private void OnBallGained(Character c)
@@ -67,7 +67,7 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         }
 
         if (isAutoBattleEnabled) 
-            deadBallManager.SetBothTeamsReady();
+            deadBallManager.TeamReadiness.SetBothReady();
     }
 
     public void Execute()
@@ -99,7 +99,7 @@ public class DeadBallKickoffHandler : IDeadBallHandler
             // warm ball on low end android devices
             // the on gain event will pass the ball to characterKicker
             PossessionManager.Instance.GiveBallToCharacter(characterReceiver);
-            deadBallManager.SetIsFirstKickoff(false);
+            deadBallManager.MarkFirstKickoffComplete();
         } else 
         {
             PossessionManager.Instance.GiveBallToCharacter(characterKicker);

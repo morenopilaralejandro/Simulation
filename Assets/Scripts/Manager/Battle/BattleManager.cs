@@ -385,6 +385,39 @@ public class BattleManager : MonoBehaviour
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.CornerKick, side);
     }
+
+    public void StartOffside(TeamSide side) 
+    {
+        StartCoroutine(OffsideSequence(side));
+    }
+
+    private IEnumerator OffsideSequence(TeamSide side)
+    {
+        AudioManager.Instance.PlaySfx("sfx-whistle_single");
+
+        BattleUIManager.Instance.SetMessageActive(MessageType.Offside, true);
+        yield return new WaitForSeconds(0.5f);
+        BattleUIManager.Instance.SetMessageActive(MessageType.Offside, false);
+
+        ResetDefaultPositions();
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.FreeKickIndirect, side);
+    }
+
+    public void StartGoalKick(TeamSide side) 
+    {
+        StartCoroutine(GoalKickSequence(side));
+    }
+
+    private IEnumerator GoalKickSequence(TeamSide side)
+    {
+        AudioManager.Instance.PlaySfx("sfx-whistle_single");
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide message
+        // BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
+        ResetDefaultPositions();
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.GoalKick, side);
+    }
     #endregion
 
     #region Team and Ball

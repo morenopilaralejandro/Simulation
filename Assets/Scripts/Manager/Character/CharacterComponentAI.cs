@@ -173,8 +173,9 @@ public class CharacterComponentAI : MonoBehaviour
             isEnemyAI = team.TeamSide == TeamSide.Away;
             ownGoal = GoalManager.Instance.GetOwnGoal(this.character);
             opponentGoal = GoalManager.Instance.GetOpponentGoal(this.character);
+            //TODO There is a bug. For some reason it is coded as if the opponents are the same as the teammates
             teammates = character.GetTeammates();
-            opponents = character.GetOpponents();
+            opponents = character.GetTeammates();
             InitializeDistances(formationCoord.Position);
             InitializeSupportForwardOffset(formationCoord.Position);
             isAIEnabled = true;

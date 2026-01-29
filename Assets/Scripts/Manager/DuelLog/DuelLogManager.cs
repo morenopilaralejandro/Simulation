@@ -183,9 +183,65 @@ public class DuelLogManager : MonoBehaviour
 
     public void AddDeadBallKickoff(Character character)
     {
+        if(character.PortraitSprite == null) return;
         AddEntry(
             "deadball_kickoff", 
-            LogLevel.Trace,
+            LogLevel.Info,
+            character,
+            null,
+            null
+        );
+    }
+
+    public void AddDeadBallThrowIn(Character character)
+    {
+        AddEntry(
+            "deadball_throw_in", 
+            LogLevel.Info,
+            character,
+            null,
+            null
+        );
+    }
+
+    public void AddDeadBallCornerKick(Character character)
+    {
+        AddEntry(
+            "deadball_corner_kick", 
+            LogLevel.Info,
+            character,
+            null,
+            null
+        );
+    }
+
+    public void AddDeadBallGoalKick(Character character)
+    {
+        AddEntry(
+            "deadball_goal_kick", 
+            LogLevel.Info,
+            character,
+            null,
+            null
+        );
+    }
+
+    public void AddDeadBallFreeKickDirect(Character character)
+    {
+        AddEntry(
+            "deadball_free_kick_direct", 
+            LogLevel.Info,
+            character,
+            null,
+            null
+        );
+    }
+
+    public void AddDeadBallFreeKickIndirect(Character character)
+    {
+        AddEntry(
+            "deadball_free_kick_indirect", 
+            LogLevel.Info,
             character,
             null,
             null
@@ -265,6 +321,7 @@ public class DuelLogManager : MonoBehaviour
             argsLong
         );
 
+        /*
         AddEntry(
             "action_command_short", 
             LogLevel.Info,
@@ -272,6 +329,7 @@ public class DuelLogManager : MonoBehaviour
             move,
             argsShort
         );
+        */
     }
 
     public void AddActionDamage(Character character, DuelAction action, float damage)

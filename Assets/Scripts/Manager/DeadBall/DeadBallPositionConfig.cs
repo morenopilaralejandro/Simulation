@@ -26,7 +26,7 @@ public class DeadBallPositionConfig
     public Vector3 ThrowIncornerKicker => throwIncornerKicker;
     public Vector3 CornerKicker => cornerKicker;
 
-    public void Initialize()
+    public DeadBallPositionConfig()
     {
         //based on top left
         throwInCornerOffense = new[]

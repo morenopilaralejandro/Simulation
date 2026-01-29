@@ -23,7 +23,7 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
     private bool isAutoBattleEnabled;
     private bool isMultiplayer;
 
-    public bool IsReady => deadBallManager.AreBothTeamsReady && isBallReady;
+    public bool IsReady => deadBallManager.TeamReadiness.AreBothReady && isBallReady;
 
     #endregion
 
@@ -40,18 +40,20 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
         isBallReady = false;
 
         team = BattleManager.Instance.Teams[teamSide];
-        characterKicker = deadBallManager.GetKickerCharacter(team);
-        characterSupportOffense = deadBallManager.GetClosestCharacters(
+        characterKicker = deadBallManager.CharacterSelector.GetKicker(team);
+        characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
             deadBallManager.OffenseTeam,
             characterKicker);
-        characterSupportDefense = deadBallManager.GetClosestCharacters(
+        characterSupportDefense = deadBallManager.CharacterSelector.GetClosestSupporters(
             deadBallManager.DefenseTeam,
             characterKicker);
 
-        defaultRecieverIndex = deadBallManager.GetDefaultRecieverIndexInArray(characterSupportOffense, characterKicker);
+        defaultRecieverIndex = deadBallManager.CharacterSelector.GetDefaultReceiverIndex(characterSupportOffense, characterKicker);
 
         SetPositions();
         SetKickerPosition();
+
+        DuelLogManager.Instance.AddDeadBallCornerKick(characterKicker);
 
         BallEvents.OnGained += OnBallGained;
         deadBallManager.SetState(DeadBallState.WaitingForReady);
@@ -62,9 +64,9 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
         if (!InputManager.Instance.GetDown(CustomAction.Pass)) return;
 
         if (isMultiplayer) 
-            deadBallManager.SetUserTeamReady();
+            deadBallManager.TeamReadiness.SetUserReady();
         else 
-            deadBallManager.SetBothTeamsReady();
+            deadBallManager.TeamReadiness.SetBothReady();
     }
 
     private void OnBallGained(Character c)
@@ -76,7 +78,7 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
         }
 
         if (isAutoBattleEnabled) 
-            deadBallManager.SetBothTeamsReady();
+            deadBallManager.TeamReadiness.SetBothReady();
     }
 
     public void Execute()
@@ -103,16 +105,16 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
 
     private void SetPositions() 
     {
-        CornerPlacement cornerPlacement = deadBallManager.GetBallCornerPlacement(ballPosition);
+        CornerPlacement cornerPlacement = deadBallManager.PositionUtils.GetBallCornerPlacement(ballPosition);
 
-        deadBallManager.SetCornerPositions(
+        deadBallManager.PositionUtils.SetCornerPositions(
             characterSupportOffense,
             deadBallManager.PositionConfig.ThrowInCornerOffense,
             deadBallManager.OffenseTeam.TeamSide,
             cornerPlacement
         );
 
-        deadBallManager.SetCornerPositions(
+        deadBallManager.PositionUtils.SetCornerPositions(
             characterSupportDefense,
             deadBallManager.PositionConfig.ThrowInCornerDefense,
             deadBallManager.DefenseTeam.TeamSide,
@@ -134,7 +136,7 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
 
     private Quaternion GetKickerCornerRotation(Vector3 ballPosition)
     {
-        CornerPlacement corner = deadBallManager.GetBallCornerPlacement(ballPosition);
+        CornerPlacement corner = deadBallManager.PositionUtils.GetBallCornerPlacement(ballPosition);
 
         switch (corner)
         {
@@ -157,9 +159,9 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
 
     private Vector3 GetKickerPosition(Vector3 ballPosition)
     {
-        CornerPlacement cornerPlacement = deadBallManager.GetBallCornerPlacement(ballPosition);
+        CornerPlacement cornerPlacement = deadBallManager.PositionUtils.GetBallCornerPlacement(ballPosition);
         Vector3 basePos = deadBallManager.PositionConfig.CornerKicker;
-        Vector3 finalPos = deadBallManager.FlipPositionOnCorner(basePos, cornerPlacement);
+        Vector3 finalPos = deadBallManager.PositionUtils.FlipPositionOnCorner(basePos, cornerPlacement);
         return finalPos;
     }
 

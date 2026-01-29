@@ -14,9 +14,14 @@ public static class DeadBallFactory
 
             case DeadBallType.CornerKick:
                 return new DeadBallCornerKickHandler();
+
+            case DeadBallType.FreeKickIndirect:
+                return new DeadBallFreeKickIndirectHandler();
+
+            case DeadBallType.GoalKick:
+                return new DeadBallGoalKickHandler();
+
 /*
-            case DeadBallType.FreeKick:
-                return new DeadBallFreeKickHandler();
 
             case DeadBallType.Penalty:
                 return new DeadBallPenaltyHandler();

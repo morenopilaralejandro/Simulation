@@ -15,7 +15,7 @@ namespace Simulation.Enums.DeadBall
         ThrowIn,
         CornerKick,
         GoalKick,
-        FreeKick,
+        FreeKickIndirect,
         Penalty
     }
 
