@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
+using Simulation.Enums.DeadBall;
 
 public class BattleManager : MonoBehaviour
 {
@@ -182,7 +183,7 @@ public class BattleManager : MonoBehaviour
         BattleUIManager.Instance.UpdateTimerHalfDisplay(timerHalf);
         DuelLogManager.Instance.AddMatchHalf();
         ResetDefaultPositions();
-        KickoffManager.Instance.StartKickoff(TeamSide.Away);
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Away);
     }
 
     public void GoalScored(Goal goal)
@@ -295,7 +296,7 @@ public class BattleManager : MonoBehaviour
         isTimeFrozen = false;
 
         ResetDefaultPositions();
-        KickoffManager.Instance.StartKickoff(kickoffTeamSide);
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, kickoffTeamSide);
     }
 
     private IEnumerator TimeOverSequence()
@@ -352,6 +353,71 @@ public class BattleManager : MonoBehaviour
         // Force end game — treat as loss for user
         ForceEndGame(winnerSide);
     }
+
+    public void StartThrowIn(TeamSide side) 
+    {
+        StartCoroutine(ThrowInSequence(side));
+    }
+
+    private IEnumerator ThrowInSequence(TeamSide side)
+    {
+        AudioManager.Instance.PlaySfx("sfx-whistle_single");
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide message
+        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
+        ResetDefaultPositions();
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.ThrowIn, side);
+    }
+
+    public void StartCornerKick(TeamSide side) 
+    {
+        StartCoroutine(CornerKickSequence(side));
+    }
+
+    private IEnumerator CornerKickSequence(TeamSide side)
+    {
+        AudioManager.Instance.PlaySfx("sfx-whistle_single");
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide message
+        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
+        ResetDefaultPositions();
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.CornerKick, side);
+    }
+
+    public void StartOffside(TeamSide side) 
+    {
+        StartCoroutine(OffsideSequence(side));
+    }
+
+    private IEnumerator OffsideSequence(TeamSide side)
+    {
+        AudioManager.Instance.PlaySfx("sfx-whistle_single");
+
+        BattleUIManager.Instance.SetMessageActive(MessageType.Offside, true);
+        yield return new WaitForSeconds(0.5f);
+        BattleUIManager.Instance.SetMessageActive(MessageType.Offside, false);
+
+        ResetDefaultPositions();
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.FreeKickIndirect, side);
+    }
+
+    public void StartGoalKick(TeamSide side) 
+    {
+        StartCoroutine(GoalKickSequence(side));
+    }
+
+    private IEnumerator GoalKickSequence(TeamSide side)
+    {
+        AudioManager.Instance.PlaySfx("sfx-whistle_single");
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide message
+        // BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
+        ResetDefaultPositions();
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.GoalKick, side);
+    }
     #endregion
 
     #region Team and Ball
@@ -359,7 +425,7 @@ public class BattleManager : MonoBehaviour
     {
         BattleEvents.RaiseBattleStart();
         ResetDefaultPositions();
-        KickoffManager.Instance.StartKickoff(TeamSide.Home);
+        DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Home);
     }
 
     private void PopulateTeamWithCharacters(Team team, int teamSize)
@@ -391,7 +457,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void ResetDefaultPositions()
+    public void ResetDefaultPositions()
     {
         AudioManager.Instance.PlayBgm("bgm-battle_crimson");
         ResetPlayerPositions();

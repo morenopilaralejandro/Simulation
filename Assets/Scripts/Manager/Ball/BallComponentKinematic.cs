@@ -145,7 +145,10 @@ public class BallComponentKinematic : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
-        ballRigidbody.velocity = Vector3.zero;
-        ballRigidbody.angularVelocity = Vector3.zero;
+        if (!ball.IsKinematic) 
+        {
+            ballRigidbody.velocity = Vector3.zero;
+            ballRigidbody.angularVelocity = Vector3.zero;
+        }
     }
 }

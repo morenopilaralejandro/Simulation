@@ -33,6 +33,7 @@ public class PossessionManager : MonoBehaviour
 
         Release();
         currentCharacter = character;
+        OffsideManager.Instance.OnBallTouched(character);
         LogManager.Info($"[PossessionManager] Possession gained by {character.CharacterId}", this);
         BallEvents.RaiseGained(character);
     }

@@ -93,7 +93,8 @@ public class BattleCharacterManager : MonoBehaviour
 
     public void ResetCharacterPosition(Character character)
     {
-        character.transform.position = character.FormationCoord.DefaultPosition;
+        character.ResetPhysics();
+        character.Teleport(character.FormationCoord.DefaultPosition);
 
         //rotation
         float yRotation = character.transform.position.z > 0f ? 180f : 0f;

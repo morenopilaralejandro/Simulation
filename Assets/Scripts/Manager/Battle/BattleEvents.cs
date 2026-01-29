@@ -28,6 +28,18 @@ public static class BattleEvents
         OnBattleEnd?.Invoke();
     }
 
+    public static event Action OnFreeze;
+    public static void RaiseFreeze()
+    {
+        OnFreeze?.Invoke();
+    }
+
+    public static event Action OnUnfreeze;
+    public static void RaiseUnfreeze()
+    {
+        OnUnfreeze?.Invoke();
+    }
+
     public static event Action<TeamSide> OnBattlePause;
     public static void RaiseBattlePause(TeamSide teamSide)
     {

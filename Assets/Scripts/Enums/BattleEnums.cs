@@ -5,7 +5,7 @@ namespace Simulation.Enums.Battle
         Battle,
         Selection,
         Cutscene,
-        Deadball,
+        DeadBall,
         End
     }
 
@@ -21,6 +21,24 @@ namespace Simulation.Enums.Battle
         Bottom,
         Left,
         Right
+    }
+
+    public enum CornerPlacement
+    {
+        TopLeft,
+        TopRight,
+        BottomLeft,
+        BottomRight
+    }
+
+    public enum BoundType
+    {
+        Wallbounce,
+        GoalPost,
+        GoalNet,
+        Endline,
+        Sideline,
+        Corner,
     }
 
     public enum TimerHalf 

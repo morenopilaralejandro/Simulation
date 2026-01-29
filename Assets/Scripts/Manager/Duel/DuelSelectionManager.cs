@@ -95,7 +95,7 @@ public class DuelSelectionManager : MonoBehaviour
         Trait? requiredTrait = DuelManager.Instance.GetRequiredTraitByCategory(selection.Category);
         DuelCommand command;
         Move move = null;
-        if (requiredTrait.HasValue) 
+        if (requiredTrait.HasValue)
         {
             command = character.GetCommandByTrait(requiredTrait.Value);
             move = character.GetMoveByCommandAndTrait(

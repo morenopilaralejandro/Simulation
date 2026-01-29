@@ -35,8 +35,16 @@ public class BallComponentKick : MonoBehaviour
         Vector3 ballPos = ball.transform.position;
         Vector3 toTarget = targetPos - ballPos;
 
+        Character kickCharacter = 
+            PossessionManager.Instance.CurrentCharacter == null ?
+                PossessionManager.Instance.LastCharacter :
+                PossessionManager.Instance.CurrentCharacter;
+
+        TakeSnapshot(kickCharacter);
+
         float distance = new Vector2(toTarget.x, toTarget.z).magnitude;
-        bool isOpponentInWay = IsOpponentInWay(ballPos, targetPos);
+        bool isOpponentInWay = IsOpponentInWay(kickCharacter, ballPos, targetPos);
+
 
         // Adjust angle based on distance and opponent presence
         float angle = 15f; // base low pass
@@ -81,7 +89,7 @@ public class BallComponentKick : MonoBehaviour
         return velocityVec;
     }
 
-    private bool IsOpponentInWay(Vector3 ballPos, Vector3 targetPos)
+    private bool IsOpponentInWay(Character kickCharacter, Vector3 ballPos, Vector3 targetPos)
     {
         float castHeight = ballPos.y;
 
@@ -117,12 +125,7 @@ public class BallComponentKick : MonoBehaviour
 
             if (presence == null || presence.IsStunned()) continue;
 
-            Character kickCharacter = 
-                PossessionManager.Instance.CurrentCharacter == null ?
-                    PossessionManager.Instance.LastCharacter :
-                    PossessionManager.Instance.CurrentCharacter;
-
-            if (!presence.IsSameTeam(kickCharacter))
+            if (kickCharacter && !presence.IsSameTeam(kickCharacter))
             {
     #if UNITY_EDITOR
                 debugHadHit = true;
@@ -133,6 +136,11 @@ public class BallComponentKick : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void TakeSnapshot(Character passer) 
+    {
+        OffsideManager.Instance.TakeSnapshot(passer);
     }
 
     #if UNITY_EDITOR
