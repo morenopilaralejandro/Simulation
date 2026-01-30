@@ -16,6 +16,8 @@ public class BoundManager : MonoBehaviour
     private float bottomOffsetCamera = -1f;
     private float leftOffsetCamera = 4f;
     private float rightOffsetCamera = 4f;
+    private float minCameraY = 3f;
+    private float maxCameraY = 3.5f;
 
     private Dictionary<BoundPlacement, Bound> bounds = new();
     public Dictionary<BoundPlacement, Bound> Bounds => bounds;
@@ -85,7 +87,7 @@ public class BoundManager : MonoBehaviour
     {
         return new Vector3(
             Mathf.Clamp(point.x, cameraMinX, cameraMaxX),
-            point.y,
+            Mathf.Clamp(point.y, minCameraY, maxCameraY),
             Mathf.Clamp(point.z, cameraMinZ, cameraMaxZ)
         );
     }

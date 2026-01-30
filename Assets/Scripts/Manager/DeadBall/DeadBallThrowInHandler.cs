@@ -42,6 +42,7 @@ public class DeadBallThrowInHandler : IDeadBallHandler
 
         team = BattleManager.Instance.Teams[teamSide];
         characterKicker = deadBallManager.CharacterSelector.GetKicker(team);
+        characterKicker.HasBallInHandThrowIn = true;
         characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
             deadBallManager.OffenseTeam,
             characterKicker);
@@ -102,6 +103,8 @@ public class DeadBallThrowInHandler : IDeadBallHandler
             characterKicker.KickBallTo(target.transform.position);
             CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
         }
+
+        characterKicker.HasBallInHandThrowIn = false;
     }
 
     #endregion
