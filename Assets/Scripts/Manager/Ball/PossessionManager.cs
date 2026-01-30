@@ -49,7 +49,11 @@ public class PossessionManager : MonoBehaviour
         currentCharacter = null;
     }
 
-    public void SetLastCharacter(Character character) => lastCharacter = character;
+    public void SetLastCharacter(Character character) 
+    {
+        lastCharacter = character;
+        OffsideManager.Instance.OnBallTouched(character);
+    }
 
     public void Reset()
     {
