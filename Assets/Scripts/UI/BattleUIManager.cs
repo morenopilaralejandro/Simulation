@@ -22,6 +22,8 @@ public class BattleUIManager : MonoBehaviour
     private BattleMenu battleMenu;
     private ForfeitMenu forfeitMenu;
 
+    private PassCrosshairIndicator passCrosshairIndicator;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -122,6 +124,16 @@ public class BattleUIManager : MonoBehaviour
     public void UnregisterForfeitMenu(ForfeitMenu forfeitMenu)
     {
         this.forfeitMenu = null;
+    }
+
+    public void RegisterPassCrosshairIndicator(PassCrosshairIndicator passCrosshairIndicator)
+    {
+        this.passCrosshairIndicator = passCrosshairIndicator;
+    }
+
+    public void UnregisterPassCrosshairIndicator(PassCrosshairIndicator passCrosshairIndicator)
+    {
+        this.passCrosshairIndicator = null;
     }
     #endregion
 
@@ -240,5 +252,9 @@ public class BattleUIManager : MonoBehaviour
     #region ForfeitMenu
     public bool IsForfeitMenuOpen => forfeitMenu.IsForfeitMenuOpen;
     public void OpenForfeitMenu() => MenuManager.Instance.ReplaceMenu(forfeitMenu);
+    #endregion
+
+    #region PassCrosshairIndicator
+    public void ShowCrosshairAtPosition(Vector3 worldPosition) => passCrosshairIndicator.ShowAtPosition(worldPosition);
     #endregion
 }

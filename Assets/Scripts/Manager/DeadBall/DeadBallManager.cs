@@ -156,6 +156,7 @@ public class DeadBallManager : MonoBehaviour
             return PossessionManager.Instance.CurrentCharacter.TeamSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
     }
 
+    // tell apart corner kick and goal kick when the ball crosses the end line
     public bool IsCornerKick(TeamSide teamSide)
     {
         BoundPlacement boundPlacement = positionUtils.GetBallEndPlacement(cachedBallPosition);

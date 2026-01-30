@@ -229,6 +229,8 @@ public class Character : MonoBehaviour
     public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this) && !IsStunned();
     public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this) || HasAffordableMoveWithTrait(Trait.Long);
     public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
+    public bool HasBallInHandThrowIn;
+
     //misc
     public bool CanMove() => !IsStunned();
     public bool CanDuel() => !IsStunned() && !HasBallInHand;

@@ -16,6 +16,7 @@ public class BallComponentKick : MonoBehaviour
     private float sphereCastRadius = 0.4f;
     private float opponentCheckStartOffset = 0.6f;
     //private float castHeightOffset = 0f;
+    private BattleUIManager battleUIManager;
 
     #if UNITY_EDITOR
     [SerializeField] private bool debugDraw = true;
@@ -28,6 +29,8 @@ public class BallComponentKick : MonoBehaviour
     public void Initialize(BallData ballData, Ball ball)
     {
         this.ball = ball;
+
+        battleUIManager = BattleUIManager.Instance;
     }
 
     public void KickBallTo(Vector3 targetPos)
@@ -69,6 +72,7 @@ public class BallComponentKick : MonoBehaviour
         ballRigidbody.velocity = velocity;
 
         AudioManager.Instance.PlaySfx("sfx-ball_kick");
+        battleUIManager.ShowCrosshairAtPosition(targetPos);
     }
 
     private Vector3 CalculateBallisticVelocity(Vector3 target, Vector3 origin, float launchAngle)

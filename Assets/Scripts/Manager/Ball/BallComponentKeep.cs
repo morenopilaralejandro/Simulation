@@ -46,7 +46,7 @@ public class BallComponentKeep : MonoBehaviour
 
         Vector3 forwardDir = character.Model.transform.forward;
         Vector3 targetPosition = character.transform.position + forwardDir * ballToPlayerDiscance;
-        targetPosition.y = character.HasBallInHand ? ballYHand : ballYDefault;
+        targetPosition.y = character.HasBallInHand || character.HasBallInHandThrowIn ? ballYHand : ballYDefault;
         transform.position = Vector3.Lerp(transform.position, targetPosition, keepSpeed * Time.deltaTime);
     }
 
