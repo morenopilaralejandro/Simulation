@@ -43,27 +43,32 @@ public class InputManager : MonoBehaviour
 
         input = new GameInputActions();
 
+        //BattleActions
+
         // Movement
-        input.BattleActions.Move.performed += OnMovePerformed;
-        input.BattleActions.Move.canceled += _ => move = Vector2.zero;
+        input.BattleActions.Battle_Move.performed += OnMovePerformed;
+        input.BattleActions.Battle_Move.canceled += _ => move = Vector2.zero;
 
         // Buttons
-        BindButton(input.BattleActions.Pass, CustomAction.Pass);
-        BindButton(input.BattleActions.Shoot, CustomAction.Shoot);
-        BindButton(input.BattleActions.Change, CustomAction.Change);
-        BindButton(input.BattleActions.Dribble, CustomAction.Dribble);
-        BindButton(input.BattleActions.Block, CustomAction.Block);
+        BindButton(input.BattleActions.Battle_Pass, CustomAction.Battle_Pass);
+        BindButton(input.BattleActions.Battle_Shoot, CustomAction.Battle_Shoot);
+        BindButton(input.BattleActions.Battle_ChangeManual, CustomAction.Battle_ChangeManual);
+        BindButton(input.BattleActions.Battle_ChangeAuto, CustomAction.Battle_ChangeAuto);
+        BindButton(input.BattleActions.Battle_Dribble, CustomAction.Battle_Dribble);
+        BindButton(input.BattleActions.Battle_Block, CustomAction.Battle_Block);
 
+        //BattleUIActions
         BindButton(input.BattleUIActions.BattleUI_ClickEastButton, CustomAction.BattleUI_ClickEastButton);
         BindButton(input.BattleUIActions.BattleUI_ClickWestButton, CustomAction.BattleUI_ClickWestButton);
         BindButton(input.BattleUIActions.BattleUI_ClickNorthButton, CustomAction.BattleUI_ClickNorthButton);
-        //click south
+        BindButton(input.BattleUIActions.BattleUI_ClickSouthButton, CustomAction.BattleUI_ClickSouthButton);
         BindButton(input.BattleUIActions.BattleUI_CloseMoveMenu, CustomAction.BattleUI_CloseMoveMenu);
         BindButton(input.BattleUIActions.BattleUI_NextMove, CustomAction.BattleUI_NextMove);
-
         BindButton(input.BattleUIActions.BattleUI_OpenBattleMenu, CustomAction.BattleUI_OpenBattleMenu);
         BindButton(input.BattleUIActions.BattleUI_CloseBattleMenu, CustomAction.BattleUI_CloseBattleMenu);
-        BindButton(input.BattleUIActions.BattleUI_BattleMenuShortcutPause, CustomAction.BattleUI_BattleMenuShortcutPause);
+        BindButton(input.BattleUIActions.BattleUI_OpenDimensionMenu, CustomAction.BattleUI_OpenDimensionMenu);
+        BindButton(input.BattleUIActions.BattleUI_CloseDimensionMenu, CustomAction.BattleUI_CloseDimensionMenu);
+        BindButton(input.BattleUIActions.BattleUI_DimensionShortcutPause, CustomAction.BattleUI_DimensionShortcutPause);
 
 
         // Enable once here
@@ -91,13 +96,14 @@ public class InputManager : MonoBehaviour
 
         if (input != null)
         {
-            input.BattleActions.Move.performed -= OnMovePerformed;
+            input.BattleActions.Battle_Move.performed -= OnMovePerformed;
 
-            UnbindButton(input.BattleActions.Pass);
-            UnbindButton(input.BattleActions.Shoot);
-            UnbindButton(input.BattleActions.Change);
-            UnbindButton(input.BattleActions.Dribble);
-            UnbindButton(input.BattleActions.Block);
+            UnbindButton(input.BattleActions.Battle_Pass);
+            UnbindButton(input.BattleActions.Battle_Shoot);
+            UnbindButton(input.BattleActions.Battle_ChangeManual);
+            UnbindButton(input.BattleActions.Battle_ChangeAuto);
+            UnbindButton(input.BattleActions.Battle_Dribble);
+            UnbindButton(input.BattleActions.Battle_Block);
 
             input.BattleActions.Disable();
             input.Dispose();
@@ -179,7 +185,7 @@ public class InputManager : MonoBehaviour
         var button = buttons[(int)customAction];
 
         float bufferDuration = 
-            (customAction == CustomAction.Shoot) ? 
+            (customAction == CustomAction.Battle_Shoot) ? 
             bufferDurationShoot : 0f;
 
         if (!BattleManager.Instance.IsTimeFrozen)

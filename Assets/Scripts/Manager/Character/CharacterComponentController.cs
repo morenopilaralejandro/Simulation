@@ -102,7 +102,7 @@ public class CharacterComponentController : MonoBehaviour
     #region Input
     private void BufferShootInput()
     {
-        InputManager.Instance.GetDown(CustomAction.Shoot);
+        InputManager.Instance.GetDown(CustomAction.Battle_Shoot);
     }
 
     private void ReadMovementInput()
@@ -167,13 +167,13 @@ public class CharacterComponentController : MonoBehaviour
         if (!character.HasBall())
             return;
 
-        if (InputManager.Instance.GetDown(CustomAction.Pass))
+        if (InputManager.Instance.GetDown(CustomAction.Battle_Pass))
             BeginPass();
 
-        if (InputManager.Instance.GetHeld(CustomAction.Pass))
+        if (InputManager.Instance.GetHeld(CustomAction.Battle_Pass))
             UpdatePassAim();
 
-        if (InputManager.Instance.GetUp(CustomAction.Pass))
+        if (InputManager.Instance.GetUp(CustomAction.Battle_Pass))
             ExecutePass();
     }
 
@@ -251,7 +251,7 @@ public class CharacterComponentController : MonoBehaviour
     {
         if (!character.HasBall()) return;
 
-        if (!InputManager.Instance.ConsumeBuffered(CustomAction.Shoot, out bool isDirect))
+        if (!InputManager.Instance.ConsumeBuffered(CustomAction.Battle_Shoot, out bool isDirect))
             return;
 
         if (!character.CanShoot() || !DuelManager.Instance.IsResolved)

@@ -6,7 +6,7 @@
             "id": "ad536389-45ca-4cdb-b882-5f8ad8be7f12",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "Battle_Move",
                     "type": "Value",
                     "id": "b9a830c8-328b-4a73-9487-9cb928c48e0d",
                     "expectedControlType": "Vector2",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Pass",
+                    "name": "Battle_Pass",
                     "type": "Button",
                     "id": "50954c03-8e00-4f8c-ab05-4a1b9e0f1226",
                     "expectedControlType": "",
@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Shoot",
+                    "name": "Battle_Shoot",
                     "type": "Button",
                     "id": "26e9f961-aa4f-43b2-93b0-55830add8634",
                     "expectedControlType": "",
@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Change",
+                    "name": "Battle_ChangeManual",
                     "type": "Button",
                     "id": "82ce4dd3-18c4-44aa-b9d7-314c523ce5a2",
                     "expectedControlType": "",
@@ -42,7 +42,16 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Dribble",
+                    "name": "Battle_ChangeAuto",
+                    "type": "Button",
+                    "id": "314d3ff7-f886-4207-b44c-b7a601626ce9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Battle_Dribble",
                     "type": "Button",
                     "id": "c23afaae-ffaa-4389-b20d-4a52ab6b9313",
                     "expectedControlType": "",
@@ -51,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Block",
+                    "name": "Battle_Block",
                     "type": "Button",
                     "id": "0982b186-8e81-4ec8-b9f1-b8edf5546457",
                     "expectedControlType": "",
@@ -68,7 +77,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Battle_Move",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -79,7 +88,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Battle_Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -90,7 +99,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Battle_Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -101,7 +110,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Battle_Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -112,7 +121,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Battle_Move",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -123,7 +132,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "Battle_Move",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -134,7 +143,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pass",
+                    "action": "Battle_Pass",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -145,7 +154,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pass",
+                    "action": "Battle_Pass",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -156,7 +165,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "Battle_Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -167,7 +176,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "Battle_Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bbf64623-aa7f-4fa1-8b4f-7338b3007ff0",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Battle_ChangeAuto",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2064be72-aa4e-4609-bd10-62908f9ae986",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Battle_ChangeAuto",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -178,7 +209,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Change",
+                    "action": "Battle_ChangeManual",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -189,7 +220,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Change",
+                    "action": "Battle_ChangeManual",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -200,7 +231,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Dribble",
+                    "action": "Battle_Dribble",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -211,7 +242,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Dribble",
+                    "action": "Battle_Dribble",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -222,7 +253,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Block",
+                    "action": "Battle_Block",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -233,7 +264,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Block",
+                    "action": "Battle_Block",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -316,7 +347,25 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "BattleUI_BattleMenuShortcutPause",
+                    "name": "BattleUI_OpenDimensionMenu",
+                    "type": "Button",
+                    "id": "3cd6b68c-9153-4559-ae2c-dfc0205fd9a3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BattleUI_CloseDimensionMenu",
+                    "type": "Button",
+                    "id": "4828200e-77d5-4350-88f6-4035ed694851",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BattleUI_DimensionShortcutPause",
                     "type": "Button",
                     "id": "e54f6eb6-18ce-47d6-9f52-cc0d5ccbca35",
                     "expectedControlType": "",
@@ -450,7 +499,7 @@
                 {
                     "name": "",
                     "id": "0a36d5af-20d0-47ba-8fcf-db36a0489cd0",
-                    "path": "<Keyboard>/tab",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -461,7 +510,7 @@
                 {
                     "name": "",
                     "id": "45653903-ab53-403e-952f-aff97a6fcd01",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -472,17 +521,6 @@
                 {
                     "name": "",
                     "id": "b9dc8e5f-850d-4b10-add7-21b3b7f3b4c3",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "BattleUI_CloseBattleMenu",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "04c5c765-f851-49d3-9ee6-7e0d46387fa8",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
@@ -493,8 +531,8 @@
                 },
                 {
                     "name": "",
-                    "id": "6a0a74c7-9b7d-4e42-87c0-e2d2fb1d725b",
-                    "path": "<Gamepad>/buttonWest",
+                    "id": "04c5c765-f851-49d3-9ee6-7e0d46387fa8",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -509,7 +547,51 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "BattleUI_BattleMenuShortcutPause",
+                    "action": "BattleUI_DimensionShortcutPause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "539037c4-2d00-41b3-ada5-34087a1d0263",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_OpenDimensionMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ba956f2c-f3b4-4cac-aa3d-1ebcf260b83a",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_OpenDimensionMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "570848c6-7198-4a22-b1a5-90ce9c3888ee",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_CloseDimensionMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd11bbf3-bf04-48cb-88c6-b166afdc2bb8",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_CloseDimensionMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

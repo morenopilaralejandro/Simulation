@@ -54,10 +54,10 @@ public class CharacterChangeControlManager : MonoBehaviour
     {
         if (!CanChangeCharacter()) return;
 
-        if (inputManager.GetDown(CustomAction.Change))
+        if (inputManager.GetDown(CustomAction.Battle_ChangeManual))
             TryChangeCharacterManual();
 
-        if (inputManager.GetDown(CustomAction.Shoot))
+        if (inputManager.GetDown(CustomAction.Battle_ChangeAuto))
             TryChangeCharacterAuto();
     }
 

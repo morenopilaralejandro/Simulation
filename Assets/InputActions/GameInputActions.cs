@@ -92,7 +92,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             ""id"": ""ad536389-45ca-4cdb-b882-5f8ad8be7f12"",
             ""actions"": [
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""Battle_Move"",
                     ""type"": ""Value"",
                     ""id"": ""b9a830c8-328b-4a73-9487-9cb928c48e0d"",
                     ""expectedControlType"": ""Vector2"",
@@ -101,7 +101,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Pass"",
+                    ""name"": ""Battle_Pass"",
                     ""type"": ""Button"",
                     ""id"": ""50954c03-8e00-4f8c-ab05-4a1b9e0f1226"",
                     ""expectedControlType"": """",
@@ -110,7 +110,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Shoot"",
+                    ""name"": ""Battle_Shoot"",
                     ""type"": ""Button"",
                     ""id"": ""26e9f961-aa4f-43b2-93b0-55830add8634"",
                     ""expectedControlType"": """",
@@ -119,7 +119,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Change"",
+                    ""name"": ""Battle_ChangeManual"",
                     ""type"": ""Button"",
                     ""id"": ""82ce4dd3-18c4-44aa-b9d7-314c523ce5a2"",
                     ""expectedControlType"": """",
@@ -128,7 +128,16 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Dribble"",
+                    ""name"": ""Battle_ChangeAuto"",
+                    ""type"": ""Button"",
+                    ""id"": ""314d3ff7-f886-4207-b44c-b7a601626ce9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Battle_Dribble"",
                     ""type"": ""Button"",
                     ""id"": ""c23afaae-ffaa-4389-b20d-4a52ab6b9313"",
                     ""expectedControlType"": """",
@@ -137,7 +146,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Block"",
+                    ""name"": ""Battle_Block"",
                     ""type"": ""Button"",
                     ""id"": ""0982b186-8e81-4ec8-b9f1-b8edf5546457"",
                     ""expectedControlType"": """",
@@ -154,7 +163,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Battle_Move"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -165,7 +174,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Battle_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -176,7 +185,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Battle_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -187,7 +196,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Battle_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -198,7 +207,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Battle_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -209,7 +218,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move"",
+                    ""action"": ""Battle_Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -220,7 +229,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pass"",
+                    ""action"": ""Battle_Pass"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -231,7 +240,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Pass"",
+                    ""action"": ""Battle_Pass"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -242,7 +251,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Shoot"",
+                    ""action"": ""Battle_Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -253,7 +262,29 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Shoot"",
+                    ""action"": ""Battle_Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bbf64623-aa7f-4fa1-8b4f-7338b3007ff0"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Battle_ChangeAuto"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2064be72-aa4e-4609-bd10-62908f9ae986"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Battle_ChangeAuto"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -264,7 +295,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Change"",
+                    ""action"": ""Battle_ChangeManual"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -275,7 +306,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Change"",
+                    ""action"": ""Battle_ChangeManual"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -286,7 +317,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Dribble"",
+                    ""action"": ""Battle_Dribble"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -297,7 +328,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Dribble"",
+                    ""action"": ""Battle_Dribble"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -308,7 +339,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Block"",
+                    ""action"": ""Battle_Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -319,7 +350,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Block"",
+                    ""action"": ""Battle_Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -402,7 +433,25 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""BattleUI_BattleMenuShortcutPause"",
+                    ""name"": ""BattleUI_OpenDimensionMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""3cd6b68c-9153-4559-ae2c-dfc0205fd9a3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_CloseDimensionMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""4828200e-77d5-4350-88f6-4035ed694851"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_DimensionShortcutPause"",
                     ""type"": ""Button"",
                     ""id"": ""e54f6eb6-18ce-47d6-9f52-cc0d5ccbca35"",
                     ""expectedControlType"": """",
@@ -536,7 +585,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0a36d5af-20d0-47ba-8fcf-db36a0489cd0"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -547,7 +596,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""45653903-ab53-403e-952f-aff97a6fcd01"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -558,17 +607,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b9dc8e5f-850d-4b10-add7-21b3b7f3b4c3"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BattleUI_CloseBattleMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""04c5c765-f851-49d3-9ee6-7e0d46387fa8"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -579,8 +617,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6a0a74c7-9b7d-4e42-87c0-e2d2fb1d725b"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""id"": ""04c5c765-f851-49d3-9ee6-7e0d46387fa8"",
+                    ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -595,7 +633,51 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""BattleUI_BattleMenuShortcutPause"",
+                    ""action"": ""BattleUI_DimensionShortcutPause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""539037c4-2d00-41b3-ada5-34087a1d0263"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_OpenDimensionMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ba956f2c-f3b4-4cac-aa3d-1ebcf260b83a"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_OpenDimensionMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""570848c6-7198-4a22-b1a5-90ce9c3888ee"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseDimensionMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd11bbf3-bf04-48cb-88c6-b166afdc2bb8"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseDimensionMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -606,12 +688,13 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
 }");
         // BattleActions
         m_BattleActions = asset.FindActionMap("BattleActions", throwIfNotFound: true);
-        m_BattleActions_Move = m_BattleActions.FindAction("Move", throwIfNotFound: true);
-        m_BattleActions_Pass = m_BattleActions.FindAction("Pass", throwIfNotFound: true);
-        m_BattleActions_Shoot = m_BattleActions.FindAction("Shoot", throwIfNotFound: true);
-        m_BattleActions_Change = m_BattleActions.FindAction("Change", throwIfNotFound: true);
-        m_BattleActions_Dribble = m_BattleActions.FindAction("Dribble", throwIfNotFound: true);
-        m_BattleActions_Block = m_BattleActions.FindAction("Block", throwIfNotFound: true);
+        m_BattleActions_Battle_Move = m_BattleActions.FindAction("Battle_Move", throwIfNotFound: true);
+        m_BattleActions_Battle_Pass = m_BattleActions.FindAction("Battle_Pass", throwIfNotFound: true);
+        m_BattleActions_Battle_Shoot = m_BattleActions.FindAction("Battle_Shoot", throwIfNotFound: true);
+        m_BattleActions_Battle_ChangeManual = m_BattleActions.FindAction("Battle_ChangeManual", throwIfNotFound: true);
+        m_BattleActions_Battle_ChangeAuto = m_BattleActions.FindAction("Battle_ChangeAuto", throwIfNotFound: true);
+        m_BattleActions_Battle_Dribble = m_BattleActions.FindAction("Battle_Dribble", throwIfNotFound: true);
+        m_BattleActions_Battle_Block = m_BattleActions.FindAction("Battle_Block", throwIfNotFound: true);
         // BattleUIActions
         m_BattleUIActions = asset.FindActionMap("BattleUIActions", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_ClickEastButton = m_BattleUIActions.FindAction("BattleUI_ClickEastButton", throwIfNotFound: true);
@@ -622,7 +705,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_BattleUIActions_BattleUI_NextMove = m_BattleUIActions.FindAction("BattleUI_NextMove", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_OpenBattleMenu = m_BattleUIActions.FindAction("BattleUI_OpenBattleMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_CloseBattleMenu = m_BattleUIActions.FindAction("BattleUI_CloseBattleMenu", throwIfNotFound: true);
-        m_BattleUIActions_BattleUI_BattleMenuShortcutPause = m_BattleUIActions.FindAction("BattleUI_BattleMenuShortcutPause", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_OpenDimensionMenu = m_BattleUIActions.FindAction("BattleUI_OpenDimensionMenu", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_CloseDimensionMenu = m_BattleUIActions.FindAction("BattleUI_CloseDimensionMenu", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_DimensionShortcutPause = m_BattleUIActions.FindAction("BattleUI_DimensionShortcutPause", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -704,12 +789,13 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     // BattleActions
     private readonly InputActionMap m_BattleActions;
     private List<IBattleActionsActions> m_BattleActionsActionsCallbackInterfaces = new List<IBattleActionsActions>();
-    private readonly InputAction m_BattleActions_Move;
-    private readonly InputAction m_BattleActions_Pass;
-    private readonly InputAction m_BattleActions_Shoot;
-    private readonly InputAction m_BattleActions_Change;
-    private readonly InputAction m_BattleActions_Dribble;
-    private readonly InputAction m_BattleActions_Block;
+    private readonly InputAction m_BattleActions_Battle_Move;
+    private readonly InputAction m_BattleActions_Battle_Pass;
+    private readonly InputAction m_BattleActions_Battle_Shoot;
+    private readonly InputAction m_BattleActions_Battle_ChangeManual;
+    private readonly InputAction m_BattleActions_Battle_ChangeAuto;
+    private readonly InputAction m_BattleActions_Battle_Dribble;
+    private readonly InputAction m_BattleActions_Battle_Block;
     /// <summary>
     /// Provides access to input actions defined in input action map "BattleActions".
     /// </summary>
@@ -722,29 +808,33 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public BattleActionsActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "BattleActions/Move".
+        /// Provides access to the underlying input action "BattleActions/Battle_Move".
         /// </summary>
-        public InputAction @Move => m_Wrapper.m_BattleActions_Move;
+        public InputAction @Battle_Move => m_Wrapper.m_BattleActions_Battle_Move;
         /// <summary>
-        /// Provides access to the underlying input action "BattleActions/Pass".
+        /// Provides access to the underlying input action "BattleActions/Battle_Pass".
         /// </summary>
-        public InputAction @Pass => m_Wrapper.m_BattleActions_Pass;
+        public InputAction @Battle_Pass => m_Wrapper.m_BattleActions_Battle_Pass;
         /// <summary>
-        /// Provides access to the underlying input action "BattleActions/Shoot".
+        /// Provides access to the underlying input action "BattleActions/Battle_Shoot".
         /// </summary>
-        public InputAction @Shoot => m_Wrapper.m_BattleActions_Shoot;
+        public InputAction @Battle_Shoot => m_Wrapper.m_BattleActions_Battle_Shoot;
         /// <summary>
-        /// Provides access to the underlying input action "BattleActions/Change".
+        /// Provides access to the underlying input action "BattleActions/Battle_ChangeManual".
         /// </summary>
-        public InputAction @Change => m_Wrapper.m_BattleActions_Change;
+        public InputAction @Battle_ChangeManual => m_Wrapper.m_BattleActions_Battle_ChangeManual;
         /// <summary>
-        /// Provides access to the underlying input action "BattleActions/Dribble".
+        /// Provides access to the underlying input action "BattleActions/Battle_ChangeAuto".
         /// </summary>
-        public InputAction @Dribble => m_Wrapper.m_BattleActions_Dribble;
+        public InputAction @Battle_ChangeAuto => m_Wrapper.m_BattleActions_Battle_ChangeAuto;
         /// <summary>
-        /// Provides access to the underlying input action "BattleActions/Block".
+        /// Provides access to the underlying input action "BattleActions/Battle_Dribble".
         /// </summary>
-        public InputAction @Block => m_Wrapper.m_BattleActions_Block;
+        public InputAction @Battle_Dribble => m_Wrapper.m_BattleActions_Battle_Dribble;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleActions/Battle_Block".
+        /// </summary>
+        public InputAction @Battle_Block => m_Wrapper.m_BattleActions_Battle_Block;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -771,24 +861,27 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_BattleActionsActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_BattleActionsActionsCallbackInterfaces.Add(instance);
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
-            @Pass.started += instance.OnPass;
-            @Pass.performed += instance.OnPass;
-            @Pass.canceled += instance.OnPass;
-            @Shoot.started += instance.OnShoot;
-            @Shoot.performed += instance.OnShoot;
-            @Shoot.canceled += instance.OnShoot;
-            @Change.started += instance.OnChange;
-            @Change.performed += instance.OnChange;
-            @Change.canceled += instance.OnChange;
-            @Dribble.started += instance.OnDribble;
-            @Dribble.performed += instance.OnDribble;
-            @Dribble.canceled += instance.OnDribble;
-            @Block.started += instance.OnBlock;
-            @Block.performed += instance.OnBlock;
-            @Block.canceled += instance.OnBlock;
+            @Battle_Move.started += instance.OnBattle_Move;
+            @Battle_Move.performed += instance.OnBattle_Move;
+            @Battle_Move.canceled += instance.OnBattle_Move;
+            @Battle_Pass.started += instance.OnBattle_Pass;
+            @Battle_Pass.performed += instance.OnBattle_Pass;
+            @Battle_Pass.canceled += instance.OnBattle_Pass;
+            @Battle_Shoot.started += instance.OnBattle_Shoot;
+            @Battle_Shoot.performed += instance.OnBattle_Shoot;
+            @Battle_Shoot.canceled += instance.OnBattle_Shoot;
+            @Battle_ChangeManual.started += instance.OnBattle_ChangeManual;
+            @Battle_ChangeManual.performed += instance.OnBattle_ChangeManual;
+            @Battle_ChangeManual.canceled += instance.OnBattle_ChangeManual;
+            @Battle_ChangeAuto.started += instance.OnBattle_ChangeAuto;
+            @Battle_ChangeAuto.performed += instance.OnBattle_ChangeAuto;
+            @Battle_ChangeAuto.canceled += instance.OnBattle_ChangeAuto;
+            @Battle_Dribble.started += instance.OnBattle_Dribble;
+            @Battle_Dribble.performed += instance.OnBattle_Dribble;
+            @Battle_Dribble.canceled += instance.OnBattle_Dribble;
+            @Battle_Block.started += instance.OnBattle_Block;
+            @Battle_Block.performed += instance.OnBattle_Block;
+            @Battle_Block.canceled += instance.OnBattle_Block;
         }
 
         /// <summary>
@@ -800,24 +893,27 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="BattleActionsActions" />
         private void UnregisterCallbacks(IBattleActionsActions instance)
         {
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
-            @Pass.started -= instance.OnPass;
-            @Pass.performed -= instance.OnPass;
-            @Pass.canceled -= instance.OnPass;
-            @Shoot.started -= instance.OnShoot;
-            @Shoot.performed -= instance.OnShoot;
-            @Shoot.canceled -= instance.OnShoot;
-            @Change.started -= instance.OnChange;
-            @Change.performed -= instance.OnChange;
-            @Change.canceled -= instance.OnChange;
-            @Dribble.started -= instance.OnDribble;
-            @Dribble.performed -= instance.OnDribble;
-            @Dribble.canceled -= instance.OnDribble;
-            @Block.started -= instance.OnBlock;
-            @Block.performed -= instance.OnBlock;
-            @Block.canceled -= instance.OnBlock;
+            @Battle_Move.started -= instance.OnBattle_Move;
+            @Battle_Move.performed -= instance.OnBattle_Move;
+            @Battle_Move.canceled -= instance.OnBattle_Move;
+            @Battle_Pass.started -= instance.OnBattle_Pass;
+            @Battle_Pass.performed -= instance.OnBattle_Pass;
+            @Battle_Pass.canceled -= instance.OnBattle_Pass;
+            @Battle_Shoot.started -= instance.OnBattle_Shoot;
+            @Battle_Shoot.performed -= instance.OnBattle_Shoot;
+            @Battle_Shoot.canceled -= instance.OnBattle_Shoot;
+            @Battle_ChangeManual.started -= instance.OnBattle_ChangeManual;
+            @Battle_ChangeManual.performed -= instance.OnBattle_ChangeManual;
+            @Battle_ChangeManual.canceled -= instance.OnBattle_ChangeManual;
+            @Battle_ChangeAuto.started -= instance.OnBattle_ChangeAuto;
+            @Battle_ChangeAuto.performed -= instance.OnBattle_ChangeAuto;
+            @Battle_ChangeAuto.canceled -= instance.OnBattle_ChangeAuto;
+            @Battle_Dribble.started -= instance.OnBattle_Dribble;
+            @Battle_Dribble.performed -= instance.OnBattle_Dribble;
+            @Battle_Dribble.canceled -= instance.OnBattle_Dribble;
+            @Battle_Block.started -= instance.OnBattle_Block;
+            @Battle_Block.performed -= instance.OnBattle_Block;
+            @Battle_Block.canceled -= instance.OnBattle_Block;
         }
 
         /// <summary>
@@ -863,7 +959,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_BattleUIActions_BattleUI_NextMove;
     private readonly InputAction m_BattleUIActions_BattleUI_OpenBattleMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_CloseBattleMenu;
-    private readonly InputAction m_BattleUIActions_BattleUI_BattleMenuShortcutPause;
+    private readonly InputAction m_BattleUIActions_BattleUI_OpenDimensionMenu;
+    private readonly InputAction m_BattleUIActions_BattleUI_CloseDimensionMenu;
+    private readonly InputAction m_BattleUIActions_BattleUI_DimensionShortcutPause;
     /// <summary>
     /// Provides access to input actions defined in input action map "BattleUIActions".
     /// </summary>
@@ -908,9 +1006,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @BattleUI_CloseBattleMenu => m_Wrapper.m_BattleUIActions_BattleUI_CloseBattleMenu;
         /// <summary>
-        /// Provides access to the underlying input action "BattleUIActions/BattleUI_BattleMenuShortcutPause".
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_OpenDimensionMenu".
         /// </summary>
-        public InputAction @BattleUI_BattleMenuShortcutPause => m_Wrapper.m_BattleUIActions_BattleUI_BattleMenuShortcutPause;
+        public InputAction @BattleUI_OpenDimensionMenu => m_Wrapper.m_BattleUIActions_BattleUI_OpenDimensionMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_CloseDimensionMenu".
+        /// </summary>
+        public InputAction @BattleUI_CloseDimensionMenu => m_Wrapper.m_BattleUIActions_BattleUI_CloseDimensionMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_DimensionShortcutPause".
+        /// </summary>
+        public InputAction @BattleUI_DimensionShortcutPause => m_Wrapper.m_BattleUIActions_BattleUI_DimensionShortcutPause;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -961,9 +1067,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_CloseBattleMenu.started += instance.OnBattleUI_CloseBattleMenu;
             @BattleUI_CloseBattleMenu.performed += instance.OnBattleUI_CloseBattleMenu;
             @BattleUI_CloseBattleMenu.canceled += instance.OnBattleUI_CloseBattleMenu;
-            @BattleUI_BattleMenuShortcutPause.started += instance.OnBattleUI_BattleMenuShortcutPause;
-            @BattleUI_BattleMenuShortcutPause.performed += instance.OnBattleUI_BattleMenuShortcutPause;
-            @BattleUI_BattleMenuShortcutPause.canceled += instance.OnBattleUI_BattleMenuShortcutPause;
+            @BattleUI_OpenDimensionMenu.started += instance.OnBattleUI_OpenDimensionMenu;
+            @BattleUI_OpenDimensionMenu.performed += instance.OnBattleUI_OpenDimensionMenu;
+            @BattleUI_OpenDimensionMenu.canceled += instance.OnBattleUI_OpenDimensionMenu;
+            @BattleUI_CloseDimensionMenu.started += instance.OnBattleUI_CloseDimensionMenu;
+            @BattleUI_CloseDimensionMenu.performed += instance.OnBattleUI_CloseDimensionMenu;
+            @BattleUI_CloseDimensionMenu.canceled += instance.OnBattleUI_CloseDimensionMenu;
+            @BattleUI_DimensionShortcutPause.started += instance.OnBattleUI_DimensionShortcutPause;
+            @BattleUI_DimensionShortcutPause.performed += instance.OnBattleUI_DimensionShortcutPause;
+            @BattleUI_DimensionShortcutPause.canceled += instance.OnBattleUI_DimensionShortcutPause;
         }
 
         /// <summary>
@@ -999,9 +1111,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_CloseBattleMenu.started -= instance.OnBattleUI_CloseBattleMenu;
             @BattleUI_CloseBattleMenu.performed -= instance.OnBattleUI_CloseBattleMenu;
             @BattleUI_CloseBattleMenu.canceled -= instance.OnBattleUI_CloseBattleMenu;
-            @BattleUI_BattleMenuShortcutPause.started -= instance.OnBattleUI_BattleMenuShortcutPause;
-            @BattleUI_BattleMenuShortcutPause.performed -= instance.OnBattleUI_BattleMenuShortcutPause;
-            @BattleUI_BattleMenuShortcutPause.canceled -= instance.OnBattleUI_BattleMenuShortcutPause;
+            @BattleUI_OpenDimensionMenu.started -= instance.OnBattleUI_OpenDimensionMenu;
+            @BattleUI_OpenDimensionMenu.performed -= instance.OnBattleUI_OpenDimensionMenu;
+            @BattleUI_OpenDimensionMenu.canceled -= instance.OnBattleUI_OpenDimensionMenu;
+            @BattleUI_CloseDimensionMenu.started -= instance.OnBattleUI_CloseDimensionMenu;
+            @BattleUI_CloseDimensionMenu.performed -= instance.OnBattleUI_CloseDimensionMenu;
+            @BattleUI_CloseDimensionMenu.canceled -= instance.OnBattleUI_CloseDimensionMenu;
+            @BattleUI_DimensionShortcutPause.started -= instance.OnBattleUI_DimensionShortcutPause;
+            @BattleUI_DimensionShortcutPause.performed -= instance.OnBattleUI_DimensionShortcutPause;
+            @BattleUI_DimensionShortcutPause.canceled -= instance.OnBattleUI_DimensionShortcutPause;
         }
 
         /// <summary>
@@ -1043,47 +1161,54 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     public interface IBattleActionsActions
     {
         /// <summary>
-        /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Battle_Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnMove(InputAction.CallbackContext context);
+        void OnBattle_Move(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Pass" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Battle_Pass" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnPass(InputAction.CallbackContext context);
+        void OnBattle_Pass(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Shoot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Battle_Shoot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShoot(InputAction.CallbackContext context);
+        void OnBattle_Shoot(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Change" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Battle_ChangeManual" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnChange(InputAction.CallbackContext context);
+        void OnBattle_ChangeManual(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Dribble" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Battle_ChangeAuto" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnDribble(InputAction.CallbackContext context);
+        void OnBattle_ChangeAuto(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Block" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Battle_Dribble" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnBlock(InputAction.CallbackContext context);
+        void OnBattle_Dribble(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Battle_Block" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattle_Block(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BattleUIActions" which allows adding and removing callbacks.
@@ -1149,11 +1274,25 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBattleUI_CloseBattleMenu(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "BattleUI_BattleMenuShortcutPause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "BattleUI_OpenDimensionMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnBattleUI_BattleMenuShortcutPause(InputAction.CallbackContext context);
+        void OnBattleUI_OpenDimensionMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_CloseDimensionMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_CloseDimensionMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_DimensionShortcutPause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_DimensionShortcutPause(InputAction.CallbackContext context);
     }
 }

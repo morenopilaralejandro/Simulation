@@ -47,7 +47,7 @@ public class DeadBallKickoffHandler : IDeadBallHandler
 
     public void HandleInput()
     {
-        if (!InputManager.Instance.GetDown(CustomAction.Pass)) return;
+        if (!InputManager.Instance.GetDown(CustomAction.Battle_Pass)) return;
 
         if (isMultiplayer) 
             deadBallManager.TeamReadiness.SetUserReady();
