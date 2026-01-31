@@ -13,6 +13,7 @@ public class CharacterChangeControlManager : MonoBehaviour
     private InputManager inputManager;
     private Ball ball => BattleManager.Instance.Ball;
     private int teamSize => BattleManager.Instance.CurrentTeamSize;
+    private const float MIN_BLOCK_DISTANCE = 0.5f;
 
     public Dictionary<TeamSide, Character> ControlledCharacter => controlledCharacter;
 
@@ -55,6 +56,9 @@ public class CharacterChangeControlManager : MonoBehaviour
 
         if (inputManager.GetDown(CustomAction.Change))
             TryChangeCharacterManual();
+
+        if (inputManager.GetDown(CustomAction.Shoot))
+            TryChangeCharacterAuto();
     }
 
     private bool CanChangeCharacter()
@@ -70,6 +74,15 @@ public class CharacterChangeControlManager : MonoBehaviour
     {
         Character current = GetUserControlledCharacter();
         Character target = battleManager.TargetedCharacter[current.TeamSide];
+
+        if (target != null)
+            SetControlledCharacter(target, target.TeamSide);
+    }
+
+    private void TryChangeCharacterAuto()
+    {
+        Character current = GetUserControlledCharacter();
+        Character target = GetTeammateForDefense(current);
 
         if (target != null)
             SetControlledCharacter(target, target.TeamSide);
@@ -135,8 +148,6 @@ public class CharacterChangeControlManager : MonoBehaviour
             if (teammate == character || !teammate.CanMove())
                 continue;
 
-            float teammateX = teammate.transform.position.x;
-
             float teammateToGoalDist = Vector3.Distance(
                 teammate.transform.position,
                 opponentGoalPos);
@@ -162,12 +173,22 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     public Character GetCharacterForShootBlock(Character opponent)
     {
+        // 1. If user-controlled character is ahead of the opponent, do not change
+        Character userControlled = GetUserControlledCharacter();
+        if (userControlled != null && !userControlled.CanMove() && IsCharacterAhead(opponent, userControlled))
+            return null;
+
         Vector3 goalPos =
             GoalManager.Instance.Goals[opponent.GetOpponentSide()].transform.position;
 
         List<Character> defenders = opponent.GetOpponents();
+
         Character bestBlocker = null;
         float closestDistance = Mathf.Infinity;
+
+        float opponentToGoalDist = Vector3.Distance(
+            opponent.transform.position,
+            goalPos);
 
         foreach (Character defender in defenders)
         {
@@ -178,10 +199,6 @@ public class CharacterChangeControlManager : MonoBehaviour
                 defender.transform.position,
                 goalPos);
 
-            float opponentToGoalDist = Vector3.Distance(
-                opponent.transform.position,
-                goalPos);
-
             // Must be between opponent and goal
             if (defenderToGoalDist >= opponentToGoalDist)
                 continue;
@@ -189,6 +206,10 @@ public class CharacterChangeControlManager : MonoBehaviour
             float distToOpponent = Vector3.Distance(
                 defender.transform.position,
                 opponent.transform.position);
+
+            // 2. Enforce minimum distance
+            if (distToOpponent < MIN_BLOCK_DISTANCE)
+                continue;
 
             if (distToOpponent < closestDistance)
             {
@@ -224,12 +245,89 @@ public class CharacterChangeControlManager : MonoBehaviour
         return closest;
     }
 
-    public void TryChangeOnShootCombo(Character character) 
+    public Character GetTeammateForDefense(Character character)
     {
-        Character newCharacter = GetTeammateForShootCombo(character);
-        if (newCharacter && !newCharacter.IsEnemyAI) 
-            SetControlledCharacter(newCharacter, newCharacter.TeamSide);
+        Character userControlled = GetUserControlledCharacter();
+
+        Vector3 ownGoalPos =
+            GoalManager.Instance.Goals[character.TeamSide].transform.position;
+
+        Vector3 ballPos = ball.transform.position;
+
+        List<Character> teammates = character.GetTeammates();
+
+        Character bestDefender = null;
+        float bestScore = Mathf.Infinity;
+
+        const float MIN_BLOCK_DISTANCE = 0.5f;
+
+        float ballToGoalDist = Vector3.Distance(ballPos, ownGoalPos);
+
+        foreach (Character teammate in teammates)
+        {
+            // Ignore current user-controlled character
+            if (teammate == userControlled || !teammate.CanMove())
+                continue;
+
+            float teammateToGoalDist = Vector3.Distance(
+                teammate.transform.position,
+                ownGoalPos);
+
+            // Must be between ball and own goal (goal-side)
+            if (teammateToGoalDist >= ballToGoalDist)
+                continue;
+
+            float distToBall = Vector3.Distance(
+                teammate.transform.position,
+                ballPos);
+
+            // Enforce minimum block distance
+            if (distToBall < MIN_BLOCK_DISTANCE)
+                continue;
+
+            /*
+             * Advantage score:
+             *  - Prefer closer to ball
+             *  - Slightly prefer closer to goal to block shooting lanes
+             */
+            float score =
+                distToBall +
+                (teammateToGoalDist * 0.5f);
+
+            if (score < bestScore)
+            {
+                bestScore = score;
+                bestDefender = teammate;
+            }
+        }
+
+        return bestDefender;
     }
 
+    public void TryChangeOnShootCombo(Character character) 
+    {
+        Character newCharacter = null;
+        if (character.IsEnemyAI)
+            newCharacter = GetCharacterForShootBlock(character);
+        else 
+            newCharacter = GetTeammateForShootCombo(character);
+
+        if(newCharacter == null) return;
+        SetControlledCharacter(newCharacter, newCharacter.TeamSide);
+
+    }
+
+    public void TryChangeOnDeadBallGeneric(Character opponent) 
+    {
+        Character newCharacter = GetCharacterForDeadBallGeneric(opponent);
+        Character controlledCharacter = GetUserControlledCharacter();
+        if (!opponent.IsEnemyAI || newCharacter == null) return;
+        SetControlledCharacter(newCharacter, newCharacter.TeamSide);
+    }
+
+    public bool IsCharacterAhead(Character character, Character other) =>
+        character.TeamSide == TeamSide.Home
+            ? character.transform.position.z > other.transform.position.z
+            : character.transform.position.z < other.transform.position.z;
 
 }

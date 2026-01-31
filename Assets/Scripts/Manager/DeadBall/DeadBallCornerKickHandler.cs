@@ -91,6 +91,8 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
             characterKicker.KickBallTo(target.transform.position);
             if (!characterKicker.IsEnemyAI)
                 CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
+            else
+                CharacterChangeControlManager.Instance.TryChangeOnDeadBallGeneric(target);
         }
         else 
         {

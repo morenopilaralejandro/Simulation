@@ -97,12 +97,16 @@ public class DeadBallThrowInHandler : IDeadBallHandler
             characterKicker.KickBallTo(target.transform.position);
             if (!characterKicker.IsEnemyAI)
                 CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
+            else
+                CharacterChangeControlManager.Instance.TryChangeOnDeadBallGeneric(target);
         }
         else 
         {
             characterKicker.KickBallTo(target.transform.position);
             CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
         }
+
+
 
         characterKicker.HasBallInHandThrowIn = false;
     }
