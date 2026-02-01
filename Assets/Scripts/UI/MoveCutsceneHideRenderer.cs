@@ -1,4 +1,5 @@
 using UnityEngine;
+using Simulation.Enums.Move;
 
 public class MoveCutsceneHideRenderer : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class MoveCutsceneHideRenderer : MonoBehaviour
         MoveEvents.OnMoveCutsceneEnd -= HandleMoveCutsceneEnd;
     }
 
-    private void HandleMoveCutsceneStart()
+    private void HandleMoveCutsceneStart(Move move)
     {
         if (targetRenderer != null)
         {

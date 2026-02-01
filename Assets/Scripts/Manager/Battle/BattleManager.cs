@@ -20,6 +20,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private float timeDefault = 0f;
     [SerializeField] private float timeCurrent = 0f;
     [SerializeField] private float timeLimit = 1800f;
+    [SerializeField] private float timeScale = 30f;
     [SerializeField] private TimerHalf timerHalf;
     [SerializeField] private Dictionary<TeamSide, int> scoreDict;
 
@@ -66,7 +67,6 @@ public class BattleManager : MonoBehaviour
     {
         if (isTimeFrozen) return;
             
-        float timeScale = 15f;
         timeCurrent += Time.deltaTime * timeScale;
         BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
         
