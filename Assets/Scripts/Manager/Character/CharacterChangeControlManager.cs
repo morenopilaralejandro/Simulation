@@ -11,6 +11,7 @@ public class CharacterChangeControlManager : MonoBehaviour
     [SerializeField] private Dictionary<TeamSide, Character> controlledCharacter = new ();
     private BattleManager battleManager;
     private InputManager inputManager;
+    private PossessionManager possessionManager;
     private Ball ball => BattleManager.Instance.Ball;
     private int teamSize => BattleManager.Instance.CurrentTeamSize;
     private const float MIN_BLOCK_DISTANCE = 0.5f;
@@ -38,6 +39,7 @@ public class CharacterChangeControlManager : MonoBehaviour
     {
         battleManager = BattleManager.Instance;
         inputManager = InputManager.Instance;
+        possessionManager = PossessionManager.Instance;
     }
 
     private void OnEnable()
@@ -57,6 +59,8 @@ public class CharacterChangeControlManager : MonoBehaviour
         if (inputManager.GetDown(CustomAction.Battle_ChangeManual))
             TryChangeCharacterManual();
 
+        if(!CanChangeCharacterAuto()) return;
+
         if (inputManager.GetDown(CustomAction.Battle_ChangeAuto))
             TryChangeCharacterAuto();
     }
@@ -68,6 +72,21 @@ public class CharacterChangeControlManager : MonoBehaviour
         return character != null &&
                !character.HasBall() &&
                !battleManager.IsTimeFrozen;
+    }
+
+    private bool CanChangeCharacterAuto()
+    {
+        Character controlledCharacter = GetUserControlledCharacter();
+        Character currentCharacter = possessionManager.CurrentCharacter;
+        Character lastCharacter = possessionManager.LastCharacter;
+
+        if (currentCharacter != null && !controlledCharacter.IsSameTeam(currentCharacter))
+            return true;
+
+        if (currentCharacter == null && lastCharacter != null && !controlledCharacter.IsSameTeam(lastCharacter))
+            return true;
+
+        return false;
     }
 
     private void TryChangeCharacterManual()
@@ -175,8 +194,8 @@ public class CharacterChangeControlManager : MonoBehaviour
     {
         // 1. If user-controlled character is ahead of the opponent, do not change
         Character userControlled = GetUserControlledCharacter();
-        if (userControlled != null && !userControlled.CanMove() && IsCharacterAhead(opponent, userControlled))
-            return null;
+        if (userControlled == null) return null;
+        if (userControlled.CanMove() && IsCharacterAhead(userControlled, opponent)) return null;
 
         Vector3 goalPos =
             GoalManager.Instance.Goals[opponent.GetOpponentSide()].transform.position;
@@ -327,7 +346,7 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     public bool IsCharacterAhead(Character character, Character other) =>
         character.TeamSide == TeamSide.Home
-            ? character.transform.position.z > other.transform.position.z
-            : character.transform.position.z < other.transform.position.z;
+            ? character.transform.position.z < other.transform.position.z
+            : character.transform.position.z > other.transform.position.z;
 
 }
