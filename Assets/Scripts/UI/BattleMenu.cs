@@ -58,7 +58,7 @@ public class BattleMenu : Menu
         }
 
         // Number shortcuts for specials (1, 2, 3…)
-        if (InputManager.Instance.GetDown(CustomAction.BattleUI_BattleMenuShortcutPause))
+        if (InputManager.Instance.GetDown(CustomAction.BattleUI_DimensionShortcutPause))
             OnButtonPauseTapped();
     }
 

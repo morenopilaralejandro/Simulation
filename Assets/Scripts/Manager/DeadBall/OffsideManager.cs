@@ -165,6 +165,8 @@ public class OffsideManager : MonoBehaviour
             return;
         }
 
+        if (BattleManager.Instance.Ball.IsTraveling) return;
+
         snapshot.isActive = false;
         snapshot.offsideCandidates.Clear();
         LogManager.Trace("[OffsideManager] [OnBallTouched] Legal touch.");
@@ -173,6 +175,7 @@ public class OffsideManager : MonoBehaviour
     private void CallOffside(Character offender)
     {
         BattleManager.Instance.Freeze();
+        BattleManager.Instance.Ball.CancelTravel();
         snapshot.isActive = false;
         snapshot.offsideCandidates.Clear();
         DeadBallManager.Instance.SetBallPosition(offender.transform.position);

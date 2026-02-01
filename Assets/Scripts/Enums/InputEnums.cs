@@ -9,12 +9,13 @@ namespace Simulation.Enums.Input
     public enum CustomAction
     {
         //BattleActions
-        Move,
-        Pass,
-        Shoot,
-        Change,
-        Dribble,
-        Block,
+        Battle_Move,
+        Battle_Pass,
+        Battle_Shoot,
+        Battle_ChangeManual,
+        Battle_ChangeAuto,
+        Battle_Dribble,
+        Battle_Block,
         //BattleUIActions
         BattleUI_ClickEastButton,
         BattleUI_ClickWestButton,
@@ -24,6 +25,8 @@ namespace Simulation.Enums.Input
         BattleUI_NextMove,
         BattleUI_OpenBattleMenu,
         BattleUI_CloseBattleMenu,
-        BattleUI_BattleMenuShortcutPause
+        BattleUI_OpenDimensionMenu,
+        BattleUI_CloseDimensionMenu,
+        BattleUI_DimensionShortcutPause
     }
 }

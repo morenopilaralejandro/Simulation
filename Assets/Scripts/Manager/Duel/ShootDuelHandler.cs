@@ -61,17 +61,22 @@ public class ShootDuelHandler : IDuelHandler
         if(offense.Move != null)
             await BattleEffectManager.Instance.PlayMoveParticle(offense.Move.Element, offense.Character.transform.position);
 
+
+ 
         if (isFirstParticipant) 
         {
             DuelManager.Instance.StartBallTravel(offense);
+            OffsideManager.Instance.TakeSnapshot(offense.Character);
+            BattleManager.Instance.Ball.UpdateTravelEffect(offense.Move, offense.CurrentElement);
         } else 
         {
-            PossessionManager.Instance.SetLastCharacter(offense.Character);     //keep track of the last character in the shoot chain to determine who scored
+            BattleManager.Instance.Ball.UpdateTravelEffect(offense.Move, offense.CurrentElement);
             BattleManager.Instance.Ball.ResumeTravel();
+            PossessionManager.Instance.SetLastCharacter(offense.Character);     //keep track of the last character in the shoot chain to determine who scored
         }
 
-        BattleManager.Instance.Ball.UpdateTravelEffect(offense.Move, offense.CurrentElement);
         HandleShootSfx(offense);
+        CharacterChangeControlManager.Instance.TryChangeOnShootCombo(offense.Character);
 
     }
     #endregion
