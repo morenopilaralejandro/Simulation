@@ -114,7 +114,7 @@ public class CharacterComponentAI : MonoBehaviour
     private const float COMMIT_FORCE_MULTIPLIER = 1.8f;
 
     // Movement physics
-    private const float AI_ACCELERATION = 45f;
+    private const float AI_ACCELERATION = 50f;
     private const float MIN_VELOCITY_SQR = 0.01f;
     private const float MIN_TARGET_DIST_SQR = 0.01f;
 
@@ -751,11 +751,11 @@ public class CharacterComponentAI : MonoBehaviour
             }
         }
 
-        bool isPrimaryDefender = CharacterChangeControlManager.Instance.GetClosestTeammateToBall(character, true) == character;
+        bool isPrimaryDefender = CharacterChangeControlManager.Instance.GetClosestTeammateToBall(character, true) == character || Vector3.Distance(character.transform.position, opponent.transform.position) < 1.5f;
 
         if (isPrimaryDefender)
         {
-            float dist = Vector3.Distance(transform.position, opponent.transform.position);
+            float dist = Vector3.Distance(character.transform.position, opponent.transform.position);
 
             // If already committing → charge directly
             if (character.FormationCoord.Position == Position.DF || isCommitting)
