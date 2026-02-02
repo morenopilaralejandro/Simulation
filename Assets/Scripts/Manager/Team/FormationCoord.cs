@@ -1,13 +1,20 @@
 using UnityEngine;
 using Simulation.Enums.Character;
 
-public class FormationCoord
+[System.Serializable]
+public struct FormationCoord
 {
+    private static readonly Quaternion FlippedRotation = Quaternion.Euler(0f, 180f, 0f);
+    private static readonly Quaternion DefaultRot = Quaternion.identity;
+
     [SerializeField] private string formationCoordId;
     public string FormationCoordId => formationCoordId;
 
     [SerializeField] private Vector3 defaultPosition;
     public Vector3 DefaultPosition => defaultPosition;
+
+    [SerializeField] private Quaternion defaultRotation;
+    public Quaternion DefaultRotation => defaultRotation;
 
     [SerializeField] private Position position;
     public Position Position => position;
@@ -17,18 +24,21 @@ public class FormationCoord
         this.formationCoordId = formationCoordId;
         this.defaultPosition = defaultPosition;
         this.position = position;
+        this.defaultRotation = DefaultRot;
     }
 
     public FormationCoord(FormationCoord other)
     {
-        this.formationCoordId = other.formationCoordId;
-        this.defaultPosition = other.defaultPosition;
-        this.position = other.position;
+        formationCoordId = other.formationCoordId;
+        defaultPosition = other.defaultPosition;
+        defaultRotation = other.defaultRotation;
+        position = other.position;
     }
 
     public void FlipDefaultPosition()
     {
-        defaultPosition.x *= -1;
-        defaultPosition.z *= -1;
+        defaultPosition.x = -defaultPosition.x;
+        defaultPosition.z = -defaultPosition.z;
+        defaultRotation = FlippedRotation;
     }
 }

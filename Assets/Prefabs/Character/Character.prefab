@@ -111,6 +111,7 @@ MonoBehaviour:
   teamIndicatorComponent: {fileID: 4891902300048776065}
   elementIndicatorComponent: {fileID: 7751876429139741252}
   speechBubbleComponent: {fileID: 3209649348049751416}
+  HasBallInHandThrowIn: 0
 --- !u!114 &1700100118279979926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +142,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teamSide: 0
+  formationCoord:
+    formationCoordId: 
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultRotation: {x: 0, y: 0, z: 0, w: 0}
+    position: 0
 --- !u!114 &8572061744133808409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,6 +277,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e863c9cd8a1a57abe8b9c8bce0e204da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 7496539539959397621}
   isEnemyAI: 0
   isAIEnabled: 0
   difficulty: 0
@@ -814,7 +821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &670645383895835369
 Transform:
   m_ObjectHideFlags: 0

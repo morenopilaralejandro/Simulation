@@ -77,6 +77,7 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         if (!target || characterKicker.IsEnemyAI) 
         {
             characterKicker.KickBallTo(characterReceiver.transform.position);
+            CharacterChangeControlManager.Instance.TryChangeOnDeadBallGeneric(characterReceiver);
         }
         else 
         {
