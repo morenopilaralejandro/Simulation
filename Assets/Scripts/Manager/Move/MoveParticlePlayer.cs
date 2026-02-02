@@ -10,10 +10,11 @@ public class MoveParticlePlayer : MonoBehaviour
 
     public bool IsPlayingMove => isPlayingMove;
 
-    public async Task Play(Element element, Vector3 position)
+    public async Task Play(Move move, Vector3 position)
     {
         if (SettingsManager.Instance.IsAutoBattleEnabled) return;
-        MoveEvents.RaiseMoveCutsceneStart();
+        MoveEvents.RaiseMoveCutsceneStart(move);
+        Element element = move.Element;
         BattleManager.Instance.Freeze();
         isPlayingMove = true;
 

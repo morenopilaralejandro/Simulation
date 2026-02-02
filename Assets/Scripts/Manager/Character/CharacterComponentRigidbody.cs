@@ -43,7 +43,7 @@ public class CharacterComponentRigidbody : MonoBehaviour
             ResumePhysics();
     }
 
-    private void HandleMoveCutsceneStart() => PausePhysics();
+    private void HandleMoveCutsceneStart(Move move) => PausePhysics();
     private void HandleMoveCutsceneEnd() => ResumePhysics();
 
     private void PausePhysics()

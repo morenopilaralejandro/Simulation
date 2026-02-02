@@ -92,7 +92,7 @@ public class FieldDuelHandler : IDuelHandler
                 BattleUIManager.Instance.SetDuelParticipant(winner.Character, duel.DefenseSupports);
             
             await BattleEffectManager.Instance.PlayMoveParticle(
-                winner.Move.Element,
+                winner.Move,
                 winner.Character.transform.position);
         }
 

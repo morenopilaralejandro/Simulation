@@ -57,7 +57,7 @@ public class BattleEffectManager : MonoBehaviour
     }
 
     public ParticleSystem GetMoveParticle(Element element) => spawnPoint.GetMoveParticle(element);
-    public async Task PlayMoveParticle(Element element, Vector3 position) => await moveParticlePlayer.Play(element, position);
+    public async Task PlayMoveParticle(Move move, Vector3 position) => await moveParticlePlayer.Play(move, position);
     public bool IsPlayingMove => moveParticlePlayer.IsPlayingMove;
 
 }

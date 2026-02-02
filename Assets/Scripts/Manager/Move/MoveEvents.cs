@@ -4,10 +4,10 @@ using Simulation.Enums.Move;
 
 public static class MoveEvents
 {
-    public static event Action OnMoveCutsceneStart;
-    public static void RaiseMoveCutsceneStart()
+    public static event Action<Move> OnMoveCutsceneStart;
+    public static void RaiseMoveCutsceneStart(Move move)
     {
-        OnMoveCutsceneStart?.Invoke();
+        OnMoveCutsceneStart?.Invoke(move);
     }
 
     public static event Action OnMoveCutsceneEnd;
