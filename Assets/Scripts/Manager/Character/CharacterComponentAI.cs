@@ -608,7 +608,18 @@ public class CharacterComponentAI : MonoBehaviour
             float distSqr = diff.sqrMagnitude;
             if (distSqr < OPPONENT_DODGE_DISTANCE_SQR)
             {
-                dodge = Vector3.Cross(Vector3.up, goalDir) * DRIBBLE_DODGE_STRENGTH;
+                Vector3 toOpp = (opp.transform.position - _transform.position);
+                toOpp.y = 0f;
+                toOpp.Normalize();
+
+                // perpendicular to opponent direction, not goal
+                Vector3 perp = Vector3.Cross(Vector3.up, toOpp);
+
+                // choose side that moves AWAY from opponent
+                if (Vector3.Dot(perp, goalDir) < 0f)
+                    perp = -perp;
+
+                dodge = perp * DRIBBLE_DODGE_STRENGTH;
             }
         }
 
