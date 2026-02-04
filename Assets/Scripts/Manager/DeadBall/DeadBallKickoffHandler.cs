@@ -14,6 +14,7 @@ public class DeadBallKickoffHandler : IDeadBallHandler
     private DeadBallManager deadBallManager;
     private Character characterKicker;
     private Character characterReceiver;
+    private int receiverIndex;
 
     private bool isBallReady;
     private bool isAutoBattleEnabled;
@@ -35,6 +36,7 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         team = BattleManager.Instance.Teams[teamSide];
         characterKicker = team.CharacterList[team.Formation.Kickoff0];
         characterReceiver = team.CharacterList[team.Formation.Kickoff1];
+        receiverIndex = deadBallManager.CharacterSelector.GetKickoffReceiverIndex(team.Formation.Kickoff0, team.Formation.Kickoff1);
 
         SetPositions();
 
@@ -76,8 +78,13 @@ public class DeadBallKickoffHandler : IDeadBallHandler
 
         if (!target || characterKicker.IsEnemyAI) 
         {
-            characterKicker.KickBallTo(characterReceiver.transform.position);
-            CharacterChangeControlManager.Instance.TryChangeOnDeadBallGeneric(characterReceiver);
+            if (characterKicker.IsEnemyAI)
+                target = team.CharacterList[receiverIndex];
+            else
+                target = characterReceiver;
+
+            characterKicker.KickBallTo(target.transform.position);
+            CharacterChangeControlManager.Instance.TryChangeOnDeadBallGeneric(target);
         }
         else 
         {

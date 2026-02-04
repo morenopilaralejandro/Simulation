@@ -12,14 +12,11 @@ public class CharacterComponentAI : MonoBehaviour
     // Target locking
     private Vector3 currentMoveTarget;
     private float targetLockUntil;
-    private const float TARGET_LOCK_TIME = 0.6f;
+    private const float TARGET_LOCK_TIME = 0.4f;
     private const float DEFENSIVE_TARGET_LOCK_TIME = 0.1f;
     private const float MARKING_TARGET_LOCK_TIME = 1.4f;
 
-    // General AI distances
-    private const float ATTACK_DISTANCE = 1f;
-    private const float DEFEND_DISTANCE = 0.4f;
-    private const float CLOSE_DISTANCE_OPP_GOAL = 1.5f;
+    // Ball & timing
     private const float BALL_TIME_AHEAD = 0.9f;
 
     // Passing logic
@@ -28,8 +25,8 @@ public class CharacterComponentAI : MonoBehaviour
     private const float REQUIRED_FORWARD_GAIN = 1.5f;
     private const float PASS_BLOCK_ANGLE_THRESHOLD = 0.8f;
     private const float PASS_BLOCK_DISTANCE = 0.4f;
+    private const float PASS_BLOCK_DISTANCE_SQR = PASS_BLOCK_DISTANCE * PASS_BLOCK_DISTANCE;
     private const float PASS_LOOP_COOLDOWN = 2f;
-    private const float MIN_PASS_RETURN_DISTANCE = 1.5f;
 
     // Decision & movement
     private const float ROTATION_SPEED = 12f;
@@ -46,7 +43,7 @@ public class CharacterComponentAI : MonoBehaviour
     private const float MIN_SPACING_BETWEEN_MATES = 1.5f;
 
     // Keeper
-    private const float KEEPER_INTERCEPT_RANGE = 3f;
+    private const float KEEPER_INTERCEPT_RANGE = 0.75f;
     private const float KEEPER_STANDING_OFFSET = 0.5f;
     private const float KEEPER_PREDICT_AHEAD = 0.3f;
 
@@ -57,7 +54,6 @@ public class CharacterComponentAI : MonoBehaviour
     private const float AWAY_DEFENSIVE_MAX_Z =  7.0f;
 
     // AI traits defaults
-    private const float DEFAULT_AWARENESS = 0.75f;
     private const float DEFAULT_CONFIDENCE = 0.6f;
 
     // Initialization distances by position
@@ -70,8 +66,8 @@ public class CharacterComponentAI : MonoBehaviour
     private const float SUPPORT_FORWARD_OFFSET_DF = -6f;
     private const float SUPPORT_FORWARD_OFFSET_MF_MIN = -2f;
     private const float SUPPORT_FORWARD_OFFSET_MF_MAX = 1f;
-    private const float SUPPORT_FORWARD_OFFSET_FW_MIN = 2f;
-    private const float SUPPORT_FORWARD_OFFSET_FW_MAX = 5f;
+    private const float SUPPORT_FORWARD_OFFSET_FW_MIN = 1.5f;
+    private const float SUPPORT_FORWARD_OFFSET_FW_MAX = 3f;
 
     // Misc small values
     private const float OPENNESS_DISTANCE_EPS = 0.1f;
@@ -81,7 +77,7 @@ public class CharacterComponentAI : MonoBehaviour
     private const float PASS_SCORE_BASE = 10f;
 
     // Ball prediction tuning
-    private const float BALL_PREDICT_DISTANCE_SCALE = 10f;
+    private const float BALL_PREDICT_DISTANCE_SCALE = 3f;
 
     // Dribble behavior
     private const float OPPONENT_DODGE_DISTANCE = 2f;
@@ -96,14 +92,11 @@ public class CharacterComponentAI : MonoBehaviour
     private const float CACHE_LERP_FACTOR = 0.01f;
 
     // Marking & defending
-    private const float MARK_OFFSET_DISTANCE = 1.2f;
-    private const float DEFENDER_ADVANCE_TOLERANCE = 0.5f;
-    private const float PRESS_BACKOFF_DISTANCE = 0.8f;
     private const float MARK_LOCK_TIME = 1.2f;
+    private const float PRESS_BACKOFF_DISTANCE = 0.8f;
     private const float PRESSURE_DISTANCE = 1f;
     private const float DEFENDER_MAX_ADVANCE_HOME = -6f;
     private const float DEFENDER_MAX_ADVANCE_AWAY = 6f;
-    private const float DEFENDER_ADVANCE_CLAMP_TOLERANCE = 2f;
 
     // Commit / tackle logic
     private float timeInCommitRange = 0f;
@@ -111,7 +104,6 @@ public class CharacterComponentAI : MonoBehaviour
 
     private const float COMMIT_DISTANCE = 1f;
     private const float COMMIT_TIME_REQUIRED = 0.25f;
-    private const float COMMIT_FORCE_MULTIPLIER = 1.8f;
 
     // Movement physics
     private const float AI_ACCELERATION = 50f;
@@ -120,9 +112,6 @@ public class CharacterComponentAI : MonoBehaviour
 
     // Cached / initial seed values
     private const float INIT_LAST_PASS_TIME = -100f;
-
-    // Pass/score tuning (GetBestPassTeammate)
-    private const float OPPONENT_DIST_PENALTY_BASE = 0.5f;
 
     // Duel defaults
     private const bool SHOOT_DIRECT_DEFAULT = false;
@@ -148,13 +137,16 @@ public class CharacterComponentAI : MonoBehaviour
 
     #endregion
 
-    #region FIELDS
+    #region FIELDS (CACHED FOR PERFORMANCE)
 
     private Character character;
 
     private Ball ball;
+    private Transform ballTf;
     private Goal ownGoal;
+    private Transform ownGoalTf;
     private Goal opponentGoal;
+    private Transform opponentGoalTf;
     private List<Character> teammates;
     private List<Character> opponents;
     private float closeDistanceBall;
@@ -167,6 +159,10 @@ public class CharacterComponentAI : MonoBehaviour
     private float forwardOffset;
     private Vector3 cachedSupportTarget;
 
+    // Cached transforms to reduce property calls and temporary allocations
+    private Transform _transform;
+    private Transform modelTf;
+
     #endregion
 
     #region INITIALIZATION
@@ -175,6 +171,9 @@ public class CharacterComponentAI : MonoBehaviour
     {
         this.character = character;
         this.difficulty = AIDifficulty.Hard;
+
+        _transform = character.transform;
+        modelTf = character.Model;
         InitializeDecisionDelay();
     }
 
@@ -234,16 +233,17 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void SetMoveTarget(Vector3 target)
     {
-        if (Time.time < targetLockUntil)
+        float timeNow = Time.time;
+        if (timeNow < targetLockUntil)
             return;
 
         float lockTime = TARGET_LOCK_TIME;
-        switch(currentState) 
+        switch (currentState)
         {
             case AIState.Defend:
-                if(character.FormationCoord.Position == Position.DF)
+                if (character.FormationCoord.Position == Position.DF)
                     lockTime = DEFENSIVE_TARGET_LOCK_TIME;
-                else 
+                else
                     lockTime = TARGET_LOCK_TIME;
                 break;
             case AIState.Mark:
@@ -255,7 +255,7 @@ public class CharacterComponentAI : MonoBehaviour
         }
 
         currentMoveTarget = target;
-        targetLockUntil = Time.time + lockTime;
+        targetLockUntil = timeNow + lockTime;
     }
 
     #endregion
@@ -291,6 +291,8 @@ public class CharacterComponentAI : MonoBehaviour
             isEnemyAI = team.TeamSide == TeamSide.Away;
             ownGoal = GoalManager.Instance.GetOwnGoal(this.character);
             opponentGoal = GoalManager.Instance.GetOpponentGoal(this.character);
+            ownGoalTf = ownGoal ? ownGoal.transform : null;
+            opponentGoalTf = opponentGoal ? opponentGoal.transform : null;
             teammates = character.GetTeammates();
             opponents = character.GetOpponents();
             InitializeDistances(formationCoord.Position);
@@ -300,7 +302,12 @@ public class CharacterComponentAI : MonoBehaviour
         }
     }
 
-    private void HandleBallSpawned(Ball ball) => this.ball = ball;
+    private void HandleBallSpawned(Ball ball)
+    {
+        this.ball = ball;
+        ballTf = ball ? ball.transform : null;
+    }
+
     private void HandleAutoBattleToggled(bool enable) => isAutoBattleEnabled = enable;
 
     public void EnableAI() => isAIEnabled = true;
@@ -313,14 +320,16 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // reduce repeated property lookups
         if ((character.IsControlled && !character.IsAutoBattleEnabled) ||
             !isAIEnabled ||
             BattleManager.Instance.IsTimeFrozen)
             return;
 
-        if (Time.time >= nextDecisionTime)
+        float timeNow = Time.time;
+        if (timeNow >= nextDecisionTime)
         {
-            nextDecisionTime = Time.time + Random.Range(minDecisionDelay, maxDecisionDelay);
+            nextDecisionTime = timeNow + Random.Range(minDecisionDelay, maxDecisionDelay);
             UpdateCurrentAIState();
         }
 
@@ -355,20 +364,23 @@ public class CharacterComponentAI : MonoBehaviour
             return;
         }
 
-        if (ball && ball.IsTraveling)
+        if (ball != null && ball.IsTraveling)
         {
-            float distToBall = Vector3.Distance(character.transform.position, ball.transform.position);
-            if (distToBall <= closeDistanceBall)
+            // use sqr magnitude for speed
+            Vector3 d = _transform.position - ballTf.position;
+            float distSqr = d.sqrMagnitude;
+            if (distSqr <= closeDistanceBall * closeDistanceBall)
             {
                 currentState = AIState.Combo;
                 return;
             }
         }
 
-        if (ball && ball.IsFree())
+        if (ball != null && ball.IsFree())
         {
-            float distToBall = Vector3.Distance(character.transform.position, ball.transform.position);
-            if (distToBall <= closeDistanceBall)
+            Vector3 d = _transform.position - ballTf.position;
+            float distSqr = d.sqrMagnitude;
+            if (distSqr <= closeDistanceBall * closeDistanceBall)
             {
                 currentState = AIState.ChaseBall;
                 return;
@@ -388,71 +400,99 @@ public class CharacterComponentAI : MonoBehaviour
 
     #region SENSING HELPERS
 
-    private float GetNearestOpponentDistanceTo(Character character)
+    private float GetNearestOpponentDistanceTo(Character c)
     {
-        float nearestDist = float.MaxValue;
-        foreach (Character opponent in opponents)
+        // returns real distance (not squared) because callers may expect it;
+        // use squared for comparisons, then sqrt at the end once.
+        float bestSqr = float.MaxValue;
+        if (opponents == null || opponents.Count == 0) return float.MaxValue;
+        Vector3 pos = c.transform.position;
+
+        var ops = opponents;
+        for (int i = 0; i < ops.Count; i++)
         {
+            Character opponent = ops[i];
             if (opponent == null || !opponent.CanMove()) continue;
-            float dist = Vector3.Distance(character.transform.position, opponent.transform.position);
-            if (dist < nearestDist) nearestDist = dist;
+            Vector3 d = opponent.transform.position - pos;
+            float sq = d.sqrMagnitude;
+            if (sq < bestSqr) bestSqr = sq;
         }
-        return nearestDist;
+
+        if (bestSqr == float.MaxValue) return float.MaxValue;
+        return Mathf.Sqrt(bestSqr);
     }
 
-    private Character GetNearestOpponentTo(Character character)
+    private Character GetNearestOpponentTo(Character c)
     {
-        Character nearestOpponent = null;
-        float nearestDist = float.MaxValue;
+        Character best = null;
+        float bestSqr = float.MaxValue;
+        if (opponents == null || opponents.Count == 0) return null;
+        Vector3 pos = c.transform.position;
 
-        foreach (Character opponent in opponents)
+        var ops = opponents;
+        for (int i = 0; i < ops.Count; i++)
         {
+            Character opponent = ops[i];
             if (opponent == null || !opponent.CanMove()) continue;
-            float dist = Vector3.Distance(character.transform.position, opponent.transform.position);
-            if (dist < nearestDist)
+            Vector3 d = opponent.transform.position - pos;
+            float sq = d.sqrMagnitude;
+            if (sq < bestSqr)
             {
-                nearestDist = dist;
-                nearestOpponent = opponent;
+                bestSqr = sq;
+                best = opponent;
             }
         }
-        return nearestOpponent;
+        return best;
     }
 
     private bool HasOpenTeammate()
     {
+        if (teammates == null || teammates.Count == 0) return false;
         Character openTeammate = null;
         float bestScore = float.MinValue;
 
-        foreach (Character teammate in teammates)
+        Vector3 myPos = _transform.position;
+        var mates = teammates;
+        var ops = opponents;
+
+        for (int i = 0; i < mates.Count; i++)
         {
-            if (teammate == null || teammate == character || !teammate.CanMove() || teammate.IsKeeper)
-                continue;
+            Character mate = mates[i];
+            if (mate == null || mate == character || !mate.CanMove() || mate.IsKeeper) continue;
 
-            if (teammate == lastPassReceiver && Time.time - lastPassTime < PASS_LOOP_COOLDOWN)
-                continue;
+            if (mate == lastPassReceiver && Time.time - lastPassTime < PASS_LOOP_COOLDOWN) continue;
 
-            float distance = Vector3.Distance(character.transform.position, teammate.transform.position);
-            if (distance < MIN_PASS_DISTANCE || distance > MAX_PASS_DISTANCE)
-                continue;
+            Vector3 matePos = mate.transform.position;
+            Vector3 toMate = matePos - myPos;
+            float dist = toMate.magnitude; // used for distance checks and openness; keep magnitude once
+            if (dist < MIN_PASS_DISTANCE || dist > MAX_PASS_DISTANCE) continue;
 
             float myDistToGoal = GoalManager.Instance.GetDistanceToOpponentGoalZ(character);
-            float mateDistToGoal = GoalManager.Instance.GetDistanceToOpponentGoalZ(teammate);
+            float mateDistToGoal = GoalManager.Instance.GetDistanceToOpponentGoalZ(mate);
             float forwardGain = myDistToGoal - mateDistToGoal;
-            if (forwardGain < REQUIRED_FORWARD_GAIN)
-                continue;
+            if (forwardGain < REQUIRED_FORWARD_GAIN) continue;
 
             bool blocked = false;
-            foreach (Character opponent in opponents)
+            // pre-normalize passDir once
+            Vector3 passDir = toMate / dist;
+
+            for (int j = 0; j < ops.Count; j++)
             {
+                Character opponent = ops[j];
                 if (opponent == null || !opponent.CanMove()) continue;
 
-                Vector3 passDir = (teammate.transform.position - character.transform.position).normalized;
-                Vector3 toOpponent = (opponent.transform.position - character.transform.position);
-                float proj = Vector3.Dot(passDir, toOpponent.normalized);
+                Vector3 toOpp = opponent.transform.position - myPos;
+                float toOppMag = toOpp.magnitude;
+                if (toOppMag <= 0f) continue;
+                Vector3 toOppN = toOpp / toOppMag;
+
+                float proj = Vector3.Dot(passDir, toOppN);
                 if (proj > PASS_BLOCK_ANGLE_THRESHOLD)
                 {
-                    float distToLine = Vector3.Cross(passDir, toOpponent).magnitude;
-                    if (distToLine < PASS_BLOCK_DISTANCE && toOpponent.magnitude < distance)
+                    // compare squared distance to line using cross.sqrMagnitude
+                    Vector3 cross = Vector3.Cross(passDir, toOpp);
+                    float distToLineSqr = cross.sqrMagnitude / (passDir.sqrMagnitude); // passDir.sqrMagnitude ==1 but keep safe
+                    if (distToLineSqr < PASS_BLOCK_DISTANCE_SQR && toOppMag < dist)
                     {
                         blocked = true;
                         break;
@@ -462,23 +502,24 @@ public class CharacterComponentAI : MonoBehaviour
 
             if (blocked) continue;
 
-            float forwardScore = myDistToGoal - mateDistToGoal;
-            float opennessScore = 1f / (distance + OPENNESS_DISTANCE_EPS);
+            float forwardScore = forwardGain;
+            float opennessScore = 1f / (dist + OPENNESS_DISTANCE_EPS);
             float totalScore = forwardScore * FORWARD_SCORE_WEIGHT + opennessScore;
 
             if (totalScore > bestScore)
             {
                 bestScore = totalScore;
-                openTeammate = teammate;
+                openTeammate = mate;
             }
         }
+
         return openTeammate != null;
     }
 
     private bool OpponentHasBall()
     {
         Character otherCharacter = PossessionManager.Instance.CurrentCharacter;
-        return otherCharacter && !otherCharacter.IsSameTeam(character);
+        return otherCharacter != null && !otherCharacter.IsSameTeam(character);
     }
 
     #endregion
@@ -508,9 +549,10 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void ActKeeper()
     {
-        if (!ball) return;
+        if (ball == null) return;
 
-        float distSqr = (transform.position - ball.transform.position).sqrMagnitude;
+        Vector3 d = _transform.position - ballTf.position;
+        float distSqr = d.sqrMagnitude;
 
         if (ball.IsFree() && distSqr < KEEPER_INTERCEPT_RANGE * KEEPER_INTERCEPT_RANGE)
         {
@@ -525,19 +567,26 @@ public class CharacterComponentAI : MonoBehaviour
         }
     }
 
-    private Vector3 PredictBallFuturePosition(float timeAhead) =>
-        ball.transform.position + ball.GetVelocity() * timeAhead;
+    private Vector3 PredictBallFuturePosition(float timeAhead)
+    {
+        if (ball == null) return Vector3.zero;
+        Vector3 vel = ball.GetVelocity();
+        return ballTf.position + vel * timeAhead;
+    }
 
     private void ActChaseBall()
     {
-        if (!ball) return;
+        if (ball == null) return;
         if (!ball.IsFree() && PossessionManager.Instance.CurrentCharacter != null) return;
 
         Character closestCharacter = CharacterChangeControlManager.Instance.GetClosestTeammateToBall(character, true);
         if (character != closestCharacter) return;
 
-        float distToBall = Vector3.Distance(transform.position, ball.transform.position);
-        Vector3 predicted = PredictBallFuturePosition(BALL_TIME_AHEAD * Mathf.Clamp01(distToBall / BALL_PREDICT_DISTANCE_SCALE));
+        Vector3 myPos = _transform.position;
+        Vector3 ballPos = ballTf.position;
+        float dist = (myPos - ballPos).magnitude;
+        float factor = Mathf.Clamp01(dist / BALL_PREDICT_DISTANCE_SCALE);
+        Vector3 predicted = PredictBallFuturePosition(BALL_TIME_AHEAD * factor);
         MoveTowards(predicted);
     }
 
@@ -547,18 +596,25 @@ public class CharacterComponentAI : MonoBehaviour
     {
         if (!character.HasBall()) return;
 
-        Vector3 goalDir = (opponentGoal.transform.position - transform.position).normalized;
+        Vector3 goalDir = (opponentGoalTf.position - _transform.position);
+        goalDir.y = 0f;
+        goalDir.Normalize();
         Vector3 dodge = Vector3.zero;
 
         Character opp = GetNearestOpponentTo(character);
-        if (opp)
+        if (opp != null)
         {
-            float dist = (opp.transform.position - transform.position).sqrMagnitude;
-            if (dist < OPPONENT_DODGE_DISTANCE_SQR)
+            Vector3 diff = opp.transform.position - _transform.position;
+            float distSqr = diff.sqrMagnitude;
+            if (distSqr < OPPONENT_DODGE_DISTANCE_SQR)
+            {
                 dodge = Vector3.Cross(Vector3.up, goalDir) * DRIBBLE_DODGE_STRENGTH;
+            }
         }
 
-        Vector3 target = transform.position + (goalDir + dodge).normalized * DRIBBLE_STEP_DISTANCE;
+        Vector3 sum = goalDir + dodge;
+        sum.Normalize();
+        Vector3 target = _transform.position + sum * DRIBBLE_STEP_DISTANCE;
         SetMoveTarget(target);
         MoveTowards(currentMoveTarget);
     }
@@ -586,11 +642,14 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void StopAndResetRotation()
     {
-        rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
+        Vector3 v = rb.velocity;
+        v.x = 0f;
+        v.z = 0f;
+        rb.velocity = v;
 
         Quaternion defaultRot = character.FormationCoord.DefaultRotation;
-        character.Model.rotation = Quaternion.Slerp(
-            character.Model.rotation,
+        modelTf.rotation = Quaternion.Slerp(
+            modelTf.rotation,
             defaultRot,
             ROTATION_SPEED * Time.fixedDeltaTime
         );
@@ -601,7 +660,7 @@ public class CharacterComponentAI : MonoBehaviour
         if (character.HasBall()) return;
 
         Character ballHolder = PossessionManager.Instance.CurrentCharacter;
-        if (!ballHolder || !ballHolder.IsSameTeam(character))
+        if (ballHolder == null || !ballHolder.IsSameTeam(character))
         {
             MoveTowards(character.FormationCoord.DefaultPosition);
             return;
@@ -609,7 +668,9 @@ public class CharacterComponentAI : MonoBehaviour
 
         float maxSideOffset = FIELD_HALF_WIDTH - SIDELINE_BUFFER;
 
-        Vector3 toGoal = (opponentGoal.transform.position - ballHolder.transform.position).normalized;
+        Vector3 toGoal = (opponentGoalTf.position - ballHolder.transform.position);
+        toGoal.y = 0f;
+        toGoal.Normalize();
         Vector3 lateral = Vector3.Cross(Vector3.up, toGoal);
 
         float lateralBias = character.FormationCoord.DefaultPosition.x;
@@ -617,23 +678,34 @@ public class CharacterComponentAI : MonoBehaviour
         Vector3 supportTarget = ballHolder.transform.position + toGoal * forwardOffset;
         float desiredX = Mathf.Lerp(ballHolder.transform.position.x + lateralBias, character.FormationCoord.DefaultPosition.x, SUPPORT_DESIREDX_LERP);
 
-        supportTarget.x = Mathf.Clamp(desiredX, -maxSideOffset, maxSideOffset);
+        // Clamp desired x
+        desiredX = Mathf.Clamp(desiredX, -maxSideOffset, maxSideOffset);
+        supportTarget.x = desiredX;
 
-        foreach (Character mate in teammates)
+        // separation adjustments (use for loop to avoid enumerator allocations)
+        if (teammates != null)
         {
-            if (mate == character || !mate.CanMove()) continue;
-            float dist = Vector3.Distance(character.transform.position, mate.transform.position);
-            if (dist < MIN_SPACING_BETWEEN_MATES)
+            Vector3 myPos = _transform.position;
+            var mates = teammates;
+            for (int i = 0; i < mates.Count; i++)
             {
-                Vector3 sepDir = (character.transform.position - mate.transform.position).normalized;
-                supportTarget += sepDir * (MIN_SPACING_BETWEEN_MATES - dist) * SEPARATION_ADJUST_FACTOR;
+                Character mate = mates[i];
+                if (mate == character || !mate.CanMove()) continue;
+                Vector3 diff = myPos - mate.transform.position;
+                float dist = diff.magnitude;
+                if (dist < MIN_SPACING_BETWEEN_MATES && dist > 0f)
+                {
+                    Vector3 sepDir = diff / dist;
+                    supportTarget += sepDir * (MIN_SPACING_BETWEEN_MATES - dist) * SEPARATION_ADJUST_FACTOR;
+                }
             }
         }
 
         if (character.FormationCoord.Position == Position.DF)
             supportTarget = ClampDefensiveLine(supportTarget);
 
-        if (Vector3.Distance(cachedSupportTarget, supportTarget) > CACHE_UPDATE_THRESHOLD)
+        // smoothing cached support target to reduce jitter allocations
+        if ((cachedSupportTarget - supportTarget).sqrMagnitude > CACHE_UPDATE_THRESHOLD * CACHE_UPDATE_THRESHOLD)
             cachedSupportTarget = supportTarget;
         else
             supportTarget = Vector3.Lerp(cachedSupportTarget, supportTarget, CACHE_LERP_FACTOR);
@@ -655,7 +727,6 @@ public class CharacterComponentAI : MonoBehaviour
         }
 
         // If there's no opponent ball-holder, fall back to default position.
-        // (You can swap DefaultPosition for GetDefensiveZonePosition() if you want ball-side shifting even in neutral.)
         if (!OpponentHasBall())
         {
             SetMoveTarget(character.FormationCoord.DefaultPosition);
@@ -665,11 +736,11 @@ public class CharacterComponentAI : MonoBehaviour
 
         // Pick a mark target (assignment system first; fallback to nearest locked)
         Character target = GetAssignedMarkTarget();
-        if (!target)
+        if (target == null)
             target = GetLockedMarkTarget();
 
         // If still none, recover.
-        if (!target)
+        if (target == null)
         {
             SetMoveTarget(character.FormationCoord.DefaultPosition);
             MoveTowards(currentMoveTarget);
@@ -682,20 +753,21 @@ public class CharacterComponentAI : MonoBehaviour
             zonePos = ClampDefensiveLine(zonePos);
 
         // --- Soft press logic for FW without ball ---
-        // Press them like ActDefend (jockey position), but WITHOUT committing.
         bool targetIsForward = target.FormationCoord.Position == Position.FW;
         bool targetHasBall = (PossessionManager.Instance.CurrentCharacter == target);
 
         Vector3 finalTargetPos;
 
-        if (targetIsForward && !targetHasBall)
+        if (targetIsForward)
         {
-            float distToTarget = Vector3.Distance(character.transform.position, target.transform.position);
+            float distToTarget = Vector3.Distance(_transform.position, target.transform.position);
 
             // If close enough, jockey (goal-side) like ActDefend, but no commit tracking
             if (distToTarget <= PRESSURE_DISTANCE)
             {
-                Vector3 pressDir = (target.transform.position - ownGoal.transform.position).normalized;
+                Vector3 pressDir = (target.transform.position - ownGoalTf.position);
+                pressDir.y = 0f;
+                pressDir.Normalize();
                 Vector3 pressTarget = target.transform.position - pressDir * PRESS_BACKOFF_DISTANCE;
 
                 // Keep some shape: don't get pulled wildly away from your zone
@@ -739,35 +811,36 @@ public class CharacterComponentAI : MonoBehaviour
         }
 
         Character opponent = PossessionManager.Instance.CurrentCharacter;
-        bool isOpponentValid = opponent && !opponent.IsSameTeam(character);
+        bool isOpponentValid = opponent != null && !opponent.IsSameTeam(character);
 
         if (!isOpponentValid)
         {
             opponent = GetNearestOpponentTo(character);
-            if (!opponent)
+            if (opponent == null)
             {
                 MoveTowards(character.FormationCoord.DefaultPosition);
                 return;
             }
         }
 
-        bool isPrimaryDefender = CharacterChangeControlManager.Instance.GetClosestTeammateToBall(character, true) == character || Vector3.Distance(character.transform.position, opponent.transform.position) < 1.5f;
+        bool isPrimaryDefender = CharacterChangeControlManager.Instance.GetPrimaryDefenderAI(character) == character;
 
         if (isPrimaryDefender)
         {
-            float dist = Vector3.Distance(character.transform.position, opponent.transform.position);
+            float dist = Vector3.Distance(_transform.position, opponent.transform.position);
 
             // If already committing → charge directly
             if (character.FormationCoord.Position == Position.DF || isCommitting)
             {
-                Vector3 chargeDir = (opponent.transform.position - transform.position).normalized;
                 SetMoveTarget(opponent.transform.position);
                 MoveTowards(currentMoveTarget);
                 return;
             }
 
             // Normal jockey / press
-            Vector3 pressDir = (opponent.transform.position - ownGoal.transform.position).normalized;
+            Vector3 pressDir = (opponent.transform.position - ownGoalTf.position);
+            pressDir.y = 0f;
+            pressDir.Normalize();
             Vector3 pressTarget = opponent.transform.position - pressDir * PRESS_BACKOFF_DISTANCE;
 
             SetMoveTarget(pressTarget);
@@ -804,7 +877,7 @@ public class CharacterComponentAI : MonoBehaviour
         if (!character.CanMove() || character.IsStateLocked)
             return;
 
-        Vector3 dir = target - transform.position;
+        Vector3 dir = target - _transform.position;
         dir.y = 0f;
 
         if (dir.sqrMagnitude < MIN_TARGET_DIST_SQR)
@@ -818,8 +891,10 @@ public class CharacterComponentAI : MonoBehaviour
         float speed = character.GetMovementSpeed();
         Vector3 desiredVelocity = dir * speed;
 
-        Vector3 currentVelocity = rb.velocity;
-        Vector3 horizontalVelocity = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
+        // use local copy to avoid creating many temporary Vector3s
+        Vector3 curVel = rb.velocity;
+        Vector3 horizontalVelocity = curVel;
+        horizontalVelocity.y = 0f;
 
         Vector3 velocityDelta = desiredVelocity - horizontalVelocity;
         rb.AddForce(velocityDelta * AI_ACCELERATION, ForceMode.Acceleration);
@@ -837,8 +912,8 @@ public class CharacterComponentAI : MonoBehaviour
             return;
 
         Quaternion targetRot = Quaternion.LookRotation(flatVelocity);
-        character.Model.rotation = Quaternion.Slerp(
-            character.Model.rotation,
+        modelTf.rotation = Quaternion.Slerp(
+            modelTf.rotation,
             targetRot,
             ROTATION_SPEED * Time.fixedDeltaTime
         );
@@ -851,7 +926,7 @@ public class CharacterComponentAI : MonoBehaviour
     private void ActPass()
     {
         Character teammate = GetBestPassTeammate();
-        if (!teammate || !character.HasBall()) return;
+        if (teammate == null || !character.HasBall()) return;
 
         character.KickBallTo(teammate.transform.position);
         lastPassReceiver = teammate;
@@ -860,18 +935,32 @@ public class CharacterComponentAI : MonoBehaviour
 
     public Character GetBestPassTeammate()
     {
+        if (teammates == null || teammates.Count == 0) return null;
+
         Character best = null;
         float bestScore = float.MinValue;
 
-        foreach (var mate in teammates)
+        Vector3 myPos = _transform.position;
+        Vector3 goalDir = (opponentGoalTf.position - myPos);
+        goalDir.y = 0f;
+        goalDir.Normalize();
+
+        var mates = teammates;
+        for (int i = 0; i < mates.Count; i++)
         {
+            Character mate = mates[i];
             if (mate == character || !mate.CanMove()) continue;
 
-            float angleScore = Vector3.Dot(
-                (mate.transform.position - character.transform.position).normalized,
-                (opponentGoal.transform.position - character.transform.position).normalized);
+            Vector3 matePos = mate.transform.position;
+            Vector3 toMate = matePos - myPos;
+            float toMateMag = toMate.magnitude;
+            if (toMateMag <= 0f) continue;
+            Vector3 toMateN = toMate / toMateMag;
 
-            float oppDistPenalty = -GetNearestOpponentDistanceTo(mate) * OPPONENT_DISTANCE_PENALTY_MULTIPLIER;
+            float angleScore = Vector3.Dot(toMateN, goalDir);
+
+            float oppDist = GetNearestOpponentDistanceTo(mate);
+            float oppDistPenalty = -oppDist * OPPONENT_DISTANCE_PENALTY_MULTIPLIER;
             float distToGoal = GoalManager.Instance.GetDistanceToOpponentGoalZ(mate);
 
             float score = angleScore * ANGLE_SCORE_WEIGHT + (PASS_SCORE_BASE - oppDistPenalty) - distToGoal;
@@ -904,7 +993,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     private Character GetLockedMarkTarget()
     {
-        if (currentMarkTarget &&
+        if (currentMarkTarget != null &&
             Time.time < markLockUntil &&
             currentMarkTarget.CanMove())
             return currentMarkTarget;
@@ -919,19 +1008,23 @@ public class CharacterComponentAI : MonoBehaviour
 
     private Character GetAssignedMarkTarget()
     {
-        // Clean invalid assignments
+        // Clean invalid assignments quickly: use TryGetValue to avoid extra lookup
         if (defensiveAssignments.TryGetValue(character, out var assigned))
         {
-            if (assigned && assigned.CanMove())
+            if (assigned != null && assigned.CanMove())
                 return assigned;
         }
 
         Character best = null;
         float bestScore = float.MaxValue;
 
-        foreach (var opp in opponents)
+        if (opponents == null) return null;
+
+        var ops = opponents;
+        for (int i = 0; i < ops.Count; i++)
         {
-            if (!opp || !opp.CanMove()) continue;
+            var opp = ops[i];
+            if (opp == null || !opp.CanMove()) continue;
 
             // Skip ball holder (primary defender handles)
             if (opp == PossessionManager.Instance.CurrentCharacter)
@@ -950,7 +1043,7 @@ public class CharacterComponentAI : MonoBehaviour
             }
         }
 
-        if (!best)
+        if (best == null)
             return null;
 
         defensiveAssignments[character] = best;
@@ -967,7 +1060,8 @@ public class CharacterComponentAI : MonoBehaviour
         Vector3 zone = character.FormationCoord.DefaultPosition;
 
         // Shift zone toward ball side
-        Vector3 ballPos = ball ? ball.transform.position : zone;
+        Vector3 ballPos = ball != null ? ballTf.position : zone;
+        // lerp only x to reduce computations
         zone.x = Mathf.Lerp(zone.x, ballPos.x, 0.35f);
 
         return zone;

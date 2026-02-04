@@ -349,4 +349,51 @@ public class CharacterChangeControlManager : MonoBehaviour
             ? character.transform.position.z < other.transform.position.z
             : character.transform.position.z > other.transform.position.z;
 
+    public Character GetPrimaryDefenderAI(Character character)
+    {
+        Vector3 ownGoalPos =
+            GoalManager.Instance.Goals[character.TeamSide].transform.position;
+
+        Vector3 ballPos = ball.transform.position;
+
+        List<Character> teammates = character.GetTeammates();
+
+        Character bestDefender = null;
+        float bestScore = Mathf.Infinity;
+
+        float ballToGoalDist = Vector3.Distance(ballPos, ownGoalPos);
+
+        foreach (Character teammate in teammates)
+        {
+            // Ignore current user-controlled character
+            if (!teammate.CanMove())
+                continue;
+
+            float teammateToGoalDist = Vector3.Distance(
+                teammate.transform.position,
+                ownGoalPos);
+
+            float distToBall = Vector3.Distance(
+                teammate.transform.position,
+                ballPos);
+
+            /*
+             * Advantage score:
+             *  - Prefer closer to ball
+             *  - Slightly prefer closer to goal to block shooting lanes
+             */
+            float score =
+                distToBall +
+                (teammateToGoalDist * 0.5f);
+
+            if (score < bestScore)
+            {
+                bestScore = score;
+                bestDefender = teammate;
+            }
+        }
+
+        return bestDefender;
+    }
+
 }

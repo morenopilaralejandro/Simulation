@@ -174,8 +174,8 @@ public class OffsideManager : MonoBehaviour
 
     private void CallOffside(Character offender)
     {
-        BattleManager.Instance.Freeze();
         BattleManager.Instance.Ball.CancelTravel();
+        BattleManager.Instance.Freeze();
         snapshot.isActive = false;
         snapshot.offsideCandidates.Clear();
         DeadBallManager.Instance.SetBallPosition(offender.transform.position);
