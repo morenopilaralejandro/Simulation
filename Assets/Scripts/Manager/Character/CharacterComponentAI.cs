@@ -955,6 +955,7 @@ public class CharacterComponentAI : MonoBehaviour
             Vector3 toMate = matePos - myPos;
             float toMateMag = toMate.magnitude;
             if (toMateMag <= 0f) continue;
+            if (toMateMag < MIN_PASS_DISTANCE || toMateMag > MAX_PASS_DISTANCE) continue;
             Vector3 toMateN = toMate / toMateMag;
 
             float angleScore = Vector3.Dot(toMateN, goalDir);
