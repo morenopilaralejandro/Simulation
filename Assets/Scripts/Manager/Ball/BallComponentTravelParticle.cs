@@ -45,6 +45,7 @@ public class BallComponentTravelParticle : MonoBehaviour
     private void HandleTravelStart(Vector3 startPosition)
     {
         travelDirection = (startPosition - transform.position).normalized;
+        particleTravel.transform.forward = -travelDirection;
     }
 
     private void HandleTravelCancel()
@@ -91,9 +92,6 @@ public class BallComponentTravelParticle : MonoBehaviour
 
         currentElement = element;
         SetElementColor(element);
-
-        if (travelDirection != Vector3.zero)
-            particleTravel.transform.forward = -travelDirection;
 
         particleTravel.Play(true);
         AudioManager.Instance.PlaySfxLoop("sfx-ball_energy");

@@ -135,4 +135,18 @@ public class DeadBallCharacterSelector
     {
         return kicker.IsEnemyAI ? receivers.Length - 1 : 0;
     }
+
+    public int GetKickoffReceiverIndex(int kickerIndex, int receiverIndex)
+    {
+        int baseValue = Mathf.Max(kickerIndex, receiverIndex);
+        int result;
+
+        int randomOffset = Random.Range(1, 5);
+        result = baseValue - randomOffset;
+
+        if (result == kickerIndex)
+            result = receiverIndex;
+
+        return result;
+    }
 }

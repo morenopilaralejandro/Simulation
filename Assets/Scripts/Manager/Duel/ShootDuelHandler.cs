@@ -185,7 +185,7 @@ public class ShootDuelHandler : IDuelHandler
         bool isActionOffense = participant.Action == DuelAction.Offense;
 
         DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
-        DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, participant.Damage);
+        DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, Mathf.Abs(participant.Damage));
         BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
 
         if(isActionOffense)

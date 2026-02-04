@@ -88,8 +88,12 @@ public static class DamageCalculator
         if (isKeeperDuel && character.IsKeeper)
             damage *= KEEPER_MULTIPLIER;
 
-        if ((category == Category.Shoot && move == null) || //move is null
-            (move != null && move.Trait != Trait.Long))     //move doesn't have long trait
+        bool appliesDistancePenalty =
+            category == Category.Shoot &&
+            move != null &&
+            (move.Trait == Trait.Long || move.Trait == Trait.Block);
+
+        if (appliesDistancePenalty)
             damage -= CalcDistanceReduction(character);
 
         if (isDirect)

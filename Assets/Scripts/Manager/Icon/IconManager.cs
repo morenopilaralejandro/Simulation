@@ -7,6 +7,7 @@ public class IconManager : MonoBehaviour
     public static IconManager Instance { get; private set; }
 
     public CategoryIconLibrary Category;
+    public TraitIconLibrary Trait;
     public ElementIconLibrary Element;
     public GenderIconLibrary Gender;
 

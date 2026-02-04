@@ -20,7 +20,7 @@ public class DuelManager : MonoBehaviour
     private int hpWinner = -20;
     private int hpLoser = -5;
 
-    private bool isShootReversalAllowed = false;
+    private bool isShootReversalAllowed = true;
 
     private void Awake()
     {
@@ -82,8 +82,8 @@ public class DuelManager : MonoBehaviour
     public Trait? GetRequiredTraitByCategory(Category category) 
     {
         //this method is for shoot duel only
-        return null;
-        /*
+        if (duel.DuelMode == DuelMode.Field) return null;
+
         if (category == Category.Shoot) 
         {
             if (duel.Participants.Count == 0) 
@@ -92,7 +92,8 @@ public class DuelManager : MonoBehaviour
                     return Trait.Long;
             } else 
             {
-                return Trait.Chain;
+                //return Trait.Chain;
+                return null;
             }
         } else if (category == Category.Block) 
         {
@@ -100,7 +101,6 @@ public class DuelManager : MonoBehaviour
         }
         
         return null;
-        */
     }
 
     public bool CanSelectMoveCommand(Category category) 
@@ -262,8 +262,10 @@ public class DuelManager : MonoBehaviour
         BattleUIManager.Instance.SetDuelParticipant(GoalManager.Instance.GetOpponentKeeper(participant.Character), null);
 
         //handle ball
+        OffsideManager.Instance.TakeSnapshot(participant.Character);
         ShootTriangleManager.Instance.SetTriangleFromCharacter(participant.Character);
         StartBallTravel(participant);
+        BattleManager.Instance.Ball.UpdateTravelEffect(participant.Move, participant.CurrentElement);
         PossessionManager.Instance.SetLastCharacter(participant.Character);
         //BattleManager.Instance.Ball.TryPlayParticle(participant.Move);
     }
