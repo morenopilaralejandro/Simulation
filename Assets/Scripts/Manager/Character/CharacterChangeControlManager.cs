@@ -12,6 +12,7 @@ public class CharacterChangeControlManager : MonoBehaviour
     private BattleManager battleManager;
     private InputManager inputManager;
     private PossessionManager possessionManager;
+    private AudioManager audioManager;
     private Ball ball => BattleManager.Instance.Ball;
     private int teamSize => BattleManager.Instance.CurrentTeamSize;
     private const float MIN_BLOCK_DISTANCE = 0.5f;
@@ -40,6 +41,7 @@ public class CharacterChangeControlManager : MonoBehaviour
         battleManager = BattleManager.Instance;
         inputManager = InputManager.Instance;
         possessionManager = PossessionManager.Instance;
+        audioManager = AudioManager.Instance;
     }
 
     private void OnEnable()
@@ -94,8 +96,9 @@ public class CharacterChangeControlManager : MonoBehaviour
         Character current = GetUserControlledCharacter();
         Character target = battleManager.TargetedCharacter[current.TeamSide];
 
-        if (target != null)
-            SetControlledCharacter(target, target.TeamSide);
+        if (target == null) return;
+        SetControlledCharacter(target, target.TeamSide);
+        audioManager.PlaySfx("sfx-ball_change_character");
     }
 
     private void TryChangeCharacterAuto()
@@ -103,8 +106,9 @@ public class CharacterChangeControlManager : MonoBehaviour
         Character current = GetUserControlledCharacter();
         Character target = GetTeammateForDefense(current);
 
-        if (target != null)
-            SetControlledCharacter(target, target.TeamSide);
+        if (target == null) return;
+        SetControlledCharacter(target, target.TeamSide);
+        audioManager.PlaySfx("sfx-ball_change_character");
     }
 
     public void SetControlledCharacter(Character character, TeamSide teamSide)

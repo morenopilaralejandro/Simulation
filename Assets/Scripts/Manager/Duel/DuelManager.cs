@@ -108,6 +108,13 @@ public class DuelManager : MonoBehaviour
         return !(duel.IsKeeperDuel && category == Category.Dribble);
     }
 
+    public bool CanSelectRegularCommands() 
+    {
+        //this method is for shoot duel only
+        if (duel.DuelMode == DuelMode.Field) return true;
+        return !(duel.IsLongShootStart && GetParticipantCount() == 0);
+    }
+
     public bool CanSelectRegularCommands(Category category) 
     {
         if (category == Category.Shoot) 

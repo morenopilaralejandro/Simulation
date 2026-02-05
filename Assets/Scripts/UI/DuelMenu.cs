@@ -102,9 +102,8 @@ public class DuelMenu : MonoBehaviour
     public void Show() 
     {
         SetCharacter();
-        SetMoveButtonInteractable(
-            CanSelectMoveCommand()
-        );
+        SetMoveButtonInteractable(CanSelectMoveCommand());
+        SetRegularButtonsInteractable(CanSelectRegularCommands());
         isOpen = true;
         this.gameObject.SetActive(true);
 
@@ -155,6 +154,12 @@ public class DuelMenu : MonoBehaviour
         buttonCommandMove.interactable = isInteractable;
     }
 
+    private void SetRegularButtonsInteractable(bool isInteractable) 
+    {
+        buttonCommandMelee.interactable = isInteractable;
+        buttonCommandRanged.interactable = isInteractable;
+    }
+
     private bool CanSelectMoveCommand() 
     {
         return 
@@ -164,7 +169,7 @@ public class DuelMenu : MonoBehaviour
 
     private bool CanSelectRegularCommands() 
     {  
-        return true;
+        return DuelManager.Instance.CanSelectRegularCommands();
     }
 
     public void OnButtonBackTapped()

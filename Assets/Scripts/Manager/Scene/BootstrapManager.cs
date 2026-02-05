@@ -32,8 +32,8 @@ public class BootstrapManager : MonoBehaviour
         SceneLoader.LoadDebugMainMenu();
         //SceneLoader.LoadMainMenu();
     #else
-        SceneLoader.LoadDebugMainMenu();        
-        //SceneLoader.LoadMainMenu();
+        //SceneLoader.LoadDebugMainMenu();        
+        SceneLoader.LoadMainMenu();
     #endif
     }
 
