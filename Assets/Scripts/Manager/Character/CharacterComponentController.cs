@@ -257,7 +257,8 @@ public class CharacterComponentController : MonoBehaviour
         if (!character.CanShoot() || !DuelManager.Instance.IsResolved)
             return;
 
-        DuelManager.Instance.StartShootDuel(character, isDirect, false);
+        bool isLongShootStart = !GoalManager.Instance.IsInShootDistance(character);
+        DuelManager.Instance.StartShootDuel(character, isDirect, isLongShootStart);
     }
     #endregion
 

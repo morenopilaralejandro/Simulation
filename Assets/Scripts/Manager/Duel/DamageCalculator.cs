@@ -90,8 +90,8 @@ public static class DamageCalculator
 
         bool appliesDistancePenalty =
             category == Category.Shoot &&
-            move != null &&
-            (move.Trait == Trait.Long || move.Trait == Trait.Block);
+            (move == null ||
+            (move.Trait != Trait.Long && move.Trait != Trait.Block));
 
         if (appliesDistancePenalty)
             damage -= CalcDistanceReduction(character);
