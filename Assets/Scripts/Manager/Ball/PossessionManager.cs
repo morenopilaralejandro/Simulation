@@ -88,6 +88,7 @@ public class PossessionManager : MonoBehaviour
 
         if(character.IsKeeper ||
             battleManager.CurrentPhase == BattlePhase.DeadBall || 
+            battleManager.IsTimeFrozen ||
             IsOnCooldownDuel(now)) return;
         if (IsPassCut())
             audioManager.PlaySfx("sfx-ball_pass_cut");
