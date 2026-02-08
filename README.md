@@ -6,8 +6,8 @@ for Android and PC featuring traditional controls and dream match battles.
 
 ## Generated With AI
 
-- **Code Generation:** GPT-5  
-- **Image Generation:** DALL·E 3  
+- **Code Generation:** GPT-5.2
+- **Image Generation:** DALL·E 3
 - **Music Generation:** [Enzostvs Ai-jukebox](https://huggingface.co/spaces/enzostvs/ai-jukebox)
 
 ---
