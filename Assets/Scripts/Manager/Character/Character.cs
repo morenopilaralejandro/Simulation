@@ -39,9 +39,9 @@ public class Character : MonoBehaviour
     #endregion
 
     #region Initialize
-    public void Initialize(CharacterData characterData)
+    public void Initialize(CharacterData characterData, CharacterSaveData characterSaveData = null)
     {
-        attributesComponent.Initialize(characterData, this);
+        attributesComponent.Initialize(characterData, this, characterSaveData);
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Character,
             characterData.CharacterId,
@@ -50,9 +50,9 @@ public class Character : MonoBehaviour
         teamMemberComponent.Initialize(characterData, this);
         appearanceComponent.Initialize(characterData, this);
         keeperComponent.Initialize(characterData, this);
-        levelsComponent.Initialize(characterData, this);
-        statsComponent.Initialize(characterData, this);
-        trainingComponent.Initialize(characterData, this);
+        levelsComponent.Initialize(characterData, this, characterSaveData);
+        statsComponent.Initialize(characterData, this, characterSaveData);
+        trainingComponent.Initialize(characterData, this, characterSaveData);
         fatigueComponent.Initialize(characterData, this);
         speedComponent.Initialize(characterData, this);
         statusEffectsComponent.Initialize(characterData, this);
@@ -73,6 +73,7 @@ public class Character : MonoBehaviour
             stats.ApplyLevel(def.StartingLevel);               
         */
     }
+
     #endregion
 
     #region API
@@ -113,8 +114,11 @@ public class Character : MonoBehaviour
     public void ActivateBallInHand() => keeperComponent.ActivateBallInHand();
     //levelsComponent
     public int Level => levelsComponent.Level;
+    public int CurrentExp => levelsComponent.CurrentExp;
+    public int ExpToNextLevel => levelsComponent.ExpToNextLevel;
     public int MaxLevel => CharacterComponentLevels.MAX_LEVEL;
-    public void LevelUp() => levelsComponent.LevelUp();
+    //public void LevelUp() => levelsComponent.LevelUp();
+    public void SetLevel(int level) => levelsComponent.SetLevel(level);
     //statsComponent    
     public int GetTrainedStat(Stat stat) => statsComponent.GetTrainedStat(stat);
     public int GetTrueStat(Stat stat) => statsComponent.GetTrueStat(stat);
@@ -133,6 +137,7 @@ public class Character : MonoBehaviour
     public bool IsStatTrainable(Stat stat) => trainingComponent.IsStatTrainable(stat);
     public int GetRemainingTrainingByStat(Stat stat) => trainingComponent.GetRemainingTrainingByStat(stat);
     public void ResetTraining() => trainingComponent.ResetTraining();
+    public int TrainingResetCount => trainingComponent.TrainingResetCount;
     //fatigueComponent
     public FatigueState FatigueState => fatigueComponent.FatigueState;
     public float FatigueSpeedMultiplier => fatigueComponent.FatigueSpeedMultiplier;

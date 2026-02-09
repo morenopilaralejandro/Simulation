@@ -18,7 +18,7 @@ public class CharacterComponentStats : MonoBehaviour
     [Range(0f, 1f)] private float minStatRatioSp = 0.4f; // 40% of base at level 1
     [Range(0f, 1f)] private float minStatRatioOther = 0.1f; // 10% of base at level 1
 
-    public void Initialize(CharacterData characterData, Character character) 
+    public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null) 
     {
         this.character = character;
 
@@ -31,7 +31,18 @@ public class CharacterComponentStats : MonoBehaviour
             battleStats[stat] = 0;
         }
 
-        UpdateStats();
+        if (characterSaveData != null) 
+        {
+            foreach (CharacterStatSaveData characterStatSaveData in characterSaveData.TrainedStats) 
+                ModifyTrainedStat(characterStatSaveData.Stat, characterStatSaveData.Val);
+
+            UpdateStats();
+
+            ModifyBattleStat(Stat.Hp, characterSaveData.CurrentHp);
+            ModifyBattleStat(Stat.Sp, characterSaveData.CurrentSp);
+        } else {
+            UpdateStats();
+        }
     }
 
     private int GetBaseStatValueFromData(Stat stat, CharacterData characterData)
@@ -61,6 +72,7 @@ public class CharacterComponentStats : MonoBehaviour
     {
         foreach (Stat stat in Enum.GetValues(typeof(Stat)))
         {
+            //ignore hp and sp or create another method to keep track of hp and sp after battle
             battleStats[stat] = trueStats[stat];
         }
     }

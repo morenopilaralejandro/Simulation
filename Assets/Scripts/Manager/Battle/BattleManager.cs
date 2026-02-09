@@ -445,6 +445,7 @@ public class BattleManager : MonoBehaviour
                 {
                     CharacterData characterData = team.CharacterDataList[characterIndex]; 
                     character.Initialize(characterData);
+                    character.SetLevel(character.MaxLevel);
                     BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
                     character.gameObject.name = character.CharacterId;
                     team.CharacterList.Add(character);
