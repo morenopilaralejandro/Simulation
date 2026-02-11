@@ -9,7 +9,7 @@ public class DataTransferManualManager : MonoBehaviour
 {
     public static DataTransferManualManager Instance;
 
-    private PersistanceManager persistanceManager;
+    private PersistenceManager persistenceManager;
     private HttpListener listener;
     private string currentPin;
 
@@ -29,7 +29,7 @@ public class DataTransferManualManager : MonoBehaviour
 
     private void Start()
     {
-        persistanceManager = PersistanceManager.Instance;
+        persistenceManager = PersistenceManager.Instance;
     }
 
     // =========================
@@ -132,7 +132,7 @@ public class DataTransferManualManager : MonoBehaviour
     // =========================
     string ExportSavePacket()
     {
-        SaveData save = persistanceManager.GetLastSaveData();
+        SaveData save = persistenceManager.GetLastSaveData();
         DataTransferPacket packet = new()
         {
             protocolVersion = PROTOCOL_VERSION,
@@ -155,7 +155,7 @@ public class DataTransferManualManager : MonoBehaviour
             return;
         }
 
-        persistanceManager.Save(packet.saveData);
+        persistenceManager.Save(packet.saveData);
     }
 
     public void StopServer()

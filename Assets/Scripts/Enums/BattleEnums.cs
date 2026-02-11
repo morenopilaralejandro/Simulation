@@ -11,8 +11,8 @@ namespace Simulation.Enums.Battle
 
     public enum BattleType
     {
-        Battle,
-        MiniBattle
+        Full,
+        Mini
     }
 
     public enum BoundPlacement

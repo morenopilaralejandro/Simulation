@@ -52,6 +52,8 @@ public class CharacterComponentLevels : MonoBehaviour
         level++;
         expToNextLevel = CalculateExpForNextLevel();
         character.UpdateStats();
+        character.CalculateSpeed();
+        character.CheckLearnMoveOnLevelUp();
     }
 
     private int CalculateExpForNextLevel()
@@ -69,6 +71,7 @@ public class CharacterComponentLevels : MonoBehaviour
         expToNextLevel = CalculateExpForNextLevel();
 
         character.UpdateStats();
+        character.CalculateSpeed();
         character.CheckLearnMoveOnLevelUp();
     }
 }

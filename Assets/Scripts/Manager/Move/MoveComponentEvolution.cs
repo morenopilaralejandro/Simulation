@@ -19,21 +19,31 @@ public class MoveComponentEvolution
     public int TimesUsedTotal { get; private set; }
     public int TimesUsedCurrentEvolution { get; private set; }
 
-    public MoveComponentEvolution(MoveData moveData, Move move)
+    public MoveComponentEvolution(MoveData moveData, Move move, MoveSaveData moveSaveData = null)
     {
-        Initialize(moveData, move);
+        Initialize(moveData, move, moveSaveData);
     }
 
-    public void Initialize(MoveData moveData, Move move)
+    public void Initialize(MoveData moveData, Move move, MoveSaveData moveSaveData = null)
     {
         this.move = move;
-        this.CurrentEvolution = MoveEvolution.None;
         this.GrowthType = moveData.GrowthType;
         this.GrowthRate = moveData.GrowthRate;
         this.growthProfile = MoveEvolutionGrowthProfileManager.Instance.GetMoveEvolutionGrowthProfile(moveData);
         this.path = MoveEvolutionPathManager.Instance.GetMoveEvolutionPath(moveData);
 
-        ForceMaxEvolution();
+        if (moveSaveData != null) 
+        {
+            this.CurrentEvolution = moveSaveData.CurrentEvolution;
+            this.TimesUsedTotal = moveSaveData.TimesUsedTotal;
+            this.TimesUsedCurrentEvolution = moveSaveData.TimesUsedCurrentEvolution;
+        } else 
+        {
+            this.CurrentEvolution = MoveEvolution.None;
+            this.TimesUsedTotal = 0;
+            this.TimesUsedCurrentEvolution = 0;
+        }
+
     }
 
     public bool IsAtFinalEvolution => !path.TryGetNextEvolution(this.CurrentEvolution, out _);

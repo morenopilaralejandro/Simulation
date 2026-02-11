@@ -12,7 +12,7 @@ public class DataTransferManager : MonoBehaviour
     [SerializeField] private DataTransferDiscoveryBroadcaster broadcaster;
     [SerializeField] private DataTransferDiscoveryListener discoveryListener;
 
-    private PersistanceManager persistanceManager;
+    private PersistenceManager persistenceManager;
     private HttpListener listener;
     private int activePort;
     private bool isClientConnected;
@@ -32,7 +32,7 @@ public class DataTransferManager : MonoBehaviour
 
     private void Start()
     {
-        persistanceManager = PersistanceManager.Instance;
+        persistenceManager = PersistenceManager.Instance;
         discoveryListener.OnServerFound += OnServerDiscovered;
     }
 
@@ -145,7 +145,7 @@ public class DataTransferManager : MonoBehaviour
     // =========================
     string ExportSavePacket()
     {
-        SaveData save = persistanceManager.GetLastSaveData();
+        SaveData save = persistenceManager.GetLastSaveData();
 
         DataTransferPacket packet = new()
         {
@@ -169,7 +169,7 @@ public class DataTransferManager : MonoBehaviour
             return;
         }
 
-        persistanceManager.Save(packet.saveData);
+        persistenceManager.Save(packet.saveData);
     }
 
     public void StopServer()

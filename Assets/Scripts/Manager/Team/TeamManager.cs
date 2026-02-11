@@ -13,8 +13,8 @@ public class TeamManager : MonoBehaviour
     public bool IsReady { get; private set; } = false;
 
     public int SizeMax = 16;
-    public int SizeBattle = 11;
-    public int SizeMiniBattle = 4;
+    public int SizeFull = 11;
+    public int SizeMini = 4;
 
     private void Awake()
     {

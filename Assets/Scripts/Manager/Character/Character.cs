@@ -32,6 +32,7 @@ public class Character : MonoBehaviour
     [SerializeField] private CharacterComponentStateLock stateLockComponent;
     [SerializeField] private CharacterComponentStateMachine stateMachineComponent;
     [SerializeField] private CharacterComponentRigidbody rigidbodyComponent;
+    [SerializeField] private CharacterComponentPersistence persistenceComponent;
 
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private CharacterComponentElementIndicator elementIndicatorComponent;
@@ -57,11 +58,12 @@ public class Character : MonoBehaviour
         speedComponent.Initialize(characterData, this);
         statusEffectsComponent.Initialize(characterData, this);
         statusIndicatorComponent.Initialize(characterData, this);
-        movesComponent.Initialize(characterData, this);
+        movesComponent.Initialize(characterData, this, characterSaveData);
         controllerComponent.Initialize(characterData, this);
         aiComponent.Initialize(characterData, this);
         stateLockComponent.Initialize(characterData, this);
         stateMachineComponent.Initialize(characterData, this);
+        persistenceComponent.Initialize(characterData, this);
 
         teamIndicatorComponent.Initialize(characterData, this);
         elementIndicatorComponent.Initialize(characterData, this);
@@ -79,6 +81,7 @@ public class Character : MonoBehaviour
     #region API
     //attributesComponent
     public string CharacterId => attributesComponent.CharacterId;
+    public string CharacterGuid => attributesComponent.CharacterGuid;
     public CharacterSize CharacterSize => attributesComponent.CharacterSize;
     public Gender Gender => attributesComponent.Gender;
     public Element Element => attributesComponent.Element;
@@ -143,7 +146,8 @@ public class Character : MonoBehaviour
     public float FatigueSpeedMultiplier => fatigueComponent.FatigueSpeedMultiplier;
     public void UpdateFatigue() => fatigueComponent.UpdateFatigue();
     //speedComponent
-    public float GetMovementSpeed() => speedComponent.GetMovementSpeed();
+    public float MovementSpeed => speedComponent.MovementSpeed;
+    public void CalculateSpeed() => speedComponent.CalculateSpeed();
     //statusEffectsComponent
     public HashSet<StatusEffect> ActiveStatusEffects => statusEffectsComponent.ActiveStatusEffects;
     public float StatusSpeedMultiplier => statusEffectsComponent.StatusSpeedMultiplier;
@@ -180,6 +184,7 @@ public class Character : MonoBehaviour
     public Move GetStrongestAffordableMoveByTrait(Trait trait) => movesComponent.GetStrongestAffordableMoveByTrait(trait);
     public List<Move> GetEquippedMovesByCategory(Category category) => movesComponent.GetEquippedMovesByCategory(category);
     public List<Move> GetEquippedMovesByTrait(Trait trait) => movesComponent.GetEquippedMovesByTrait(trait);
+    public void ForceMaxEvolutionOnEquippedMoves() => movesComponent.ForceMaxEvolutionOnEquippedMoves();
     //controllerComponent
     public bool IsControlled => controllerComponent.IsControlled;
     //aiComponent
@@ -214,7 +219,9 @@ public class Character : MonoBehaviour
     public void ResetPhysics() => rigidbodyComponent.ResetPhysics();
     public void StopVelocity() => rigidbodyComponent.StopVelocity();
     public void Teleport(Vector3 position) => rigidbodyComponent.Teleport(position);
-
+    //persistenceComponent
+    public void Import(CharacterSaveData characterSaveData) => persistenceComponent.Import(characterSaveData);
+    public CharacterSaveData Export() => persistenceComponent.Export();
 
     //elementIndicatorComponent
     public void SetElementIndicatorEnabled(bool enabled) => elementIndicatorComponent.SetEnabled(enabled);

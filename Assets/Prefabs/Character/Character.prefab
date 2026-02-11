@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 5753816166142112087}
   - component: {fileID: 8205756437304453066}
   - component: {fileID: 4588718368253062961}
+  - component: {fileID: -7549860451126463580}
   m_Layer: 6
   m_Name: Character
   m_TagString: Untagged
@@ -108,6 +109,7 @@ MonoBehaviour:
   stateLockComponent: {fileID: 5753816166142112087}
   stateMachineComponent: {fileID: 8205756437304453066}
   rigidbodyComponent: {fileID: 4588718368253062961}
+  persistenceComponent: {fileID: -7549860451126463580}
   teamIndicatorComponent: {fileID: 4891902300048776065}
   elementIndicatorComponent: {fileID: 7751876429139741252}
   speechBubbleComponent: {fileID: 3209649348049751416}
@@ -125,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterId: 
+  characterGuid: 
   characterSize: 0
   gender: 0
   element: 0
@@ -175,6 +178,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 0
+  currentExp: 0
+  expToNextLevel: 100
 --- !u!114 &2701994623599151113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseFreedom: 0
   trueFreedom: 0
+  trainingResetCount: 0
 --- !u!114 &1626520862545366885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,6 +328,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 7496539539959397621}
+--- !u!114 &-7549860451126463580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181741452733680261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a879ec139efb07cc8a1eced68d8297ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2176928981764195961
 GameObject:
   m_ObjectHideFlags: 0

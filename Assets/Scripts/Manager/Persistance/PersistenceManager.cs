@@ -1,9 +1,10 @@
 using UnityEngine;
+using System;
 using System.IO;
 
-public class PersistanceManager : MonoBehaviour
+public class PersistenceManager : MonoBehaviour
 {
-    public static PersistanceManager Instance { get; private set; }
+    public static PersistenceManager Instance { get; private set; }
 
     public const int CURRENT_SAVE_VERSION = 21;
 
@@ -132,14 +133,10 @@ public class PersistanceManager : MonoBehaviour
 
     private SaveData CreateSaveData()
     {
-        return new SaveData();
-        // TODO: Replace with real game state collection
-        /*
         return new SaveData
         {
-            saveVersion = CURRENT_SAVE_VERSION,
-            debugNote = "Placeholder save data"
+            SaveVersion = CURRENT_SAVE_VERSION,
+            SaveTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
         };
-        */
     }
 }

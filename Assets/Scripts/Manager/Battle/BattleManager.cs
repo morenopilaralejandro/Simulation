@@ -118,7 +118,7 @@ public class BattleManager : MonoBehaviour
 
     private void SetTeamSize()
     {
-        currentTeamSize = currentType == BattleType.Battle ? TeamManager.Instance.SizeBattle : TeamManager.Instance.SizeMiniBattle;
+        currentTeamSize = currentType == BattleType.Full ? TeamManager.Instance.SizeFull : TeamManager.Instance.SizeMini;
         charactersReadyMax = currentTeamSize*2;
     }
     #endregion
@@ -172,7 +172,7 @@ public class BattleManager : MonoBehaviour
         timerHalf = TimerHalf.First;
         BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
         BattleUIManager.Instance.UpdateTimerHalfDisplay(timerHalf);
-        if (currentType == BattleType.MiniBattle)
+        if (currentType == BattleType.Mini)
             BattleUIManager.Instance.HideTimerHalf();
     }
 
@@ -309,7 +309,7 @@ public class BattleManager : MonoBehaviour
 
         //Show message
         MessageType messageType = MessageType.TimeUp;
-        if (currentType == BattleType.Battle)
+        if (currentType == BattleType.Full)
             messageType =  
                 timerHalf == TimerHalf.First ?
                 MessageType.HalfTime :
@@ -332,7 +332,7 @@ public class BattleManager : MonoBehaviour
         BattleUIManager.Instance.SetMessageActive(messageType, false);
 
         //resolve
-        if (currentType == BattleType.MiniBattle ||
+        if (currentType == BattleType.Mini ||
             timerHalf == TimerHalf.Second) 
         {
             EndGame();
@@ -446,6 +446,7 @@ public class BattleManager : MonoBehaviour
                     CharacterData characterData = team.CharacterDataList[characterIndex]; 
                     character.Initialize(characterData);
                     character.SetLevel(character.MaxLevel);
+                    character.ForceMaxEvolutionOnEquippedMoves();
                     BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
                     character.gameObject.name = character.CharacterId;
                     team.CharacterList.Add(character);

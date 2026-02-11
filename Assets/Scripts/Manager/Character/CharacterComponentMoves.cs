@@ -6,6 +6,8 @@ using Simulation.Enums.Move;
 
 public class CharacterComponentMoves : MonoBehaviour
 {
+    #region Fields
+
     private Character character;
 
     public const int MAX_EQUIPPED_MOVES_DEFAULT = 6;
@@ -19,14 +21,31 @@ public class CharacterComponentMoves : MonoBehaviour
     public IReadOnlyList<Move> LearnedMoves => learnedMoves;
     public IReadOnlyList<Move> EquippedMoves => equippedMoves;
 
-    public void Initialize(CharacterData characterData, Character character)
+    #endregion
+
+    #region LifeCycle
+
+    public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData)
     {
         this.character = character;
         levelUpLearnset = GetLevelUpLearnSetByCharacterData(characterData);
         learnedMoves.Clear();
         equippedMoves.Clear();
-        CheckLearnMoveOnLevelUp();
+
+        if (characterSaveData != null) 
+        {
+            InitializeLearnedMovesFromSave(characterSaveData);
+            InitializeEquippedMovesFromSave(characterSaveData);
+        } else 
+        {
+            CheckLearnMoveOnLevelUp();
+        }
+
     }
+
+    #endregion
+
+    #region Learn
 
     private List<MoveLearnsetData> GetLevelUpLearnSetByCharacterData(CharacterData characterData)
     {
@@ -61,23 +80,6 @@ public class CharacterComponentMoves : MonoBehaviour
         EquipMove(move);
     }
 
-    public void EquipMove(Move move)
-    {
-        if (equippedMoves.Count < MAX_EQUIPPED_MOVES_DEFAULT) equippedMoves.Add(move);
-    }
-
-    public void UnequipMove(Move move)
-    {
-        equippedMoves.Remove(move);
-    }
-
-    public bool IsMoveEquipped(string moveId) => equippedMoves.Any(move => move.MoveId == moveId);
-    public bool IsMoveEquipped(Move move) => equippedMoves.Contains(move);
-
-
-    public bool IsMoveLearned(string moveId) => learnedMoves.Any(move => move.MoveId == moveId);
-    public bool IsMoveLearned(Move move) => learnedMoves.Contains(move);
-
     public bool CanLearnMove(string moveId)
     {
         if (IsMoveLearned(moveId)) return false;
@@ -89,6 +91,30 @@ public class CharacterComponentMoves : MonoBehaviour
         return true;
     }
 
+    public bool IsMoveLearned(string moveId) => learnedMoves.Any(move => move.MoveId == moveId);
+    public bool IsMoveLearned(Move move) => learnedMoves.Contains(move);
+
+    #endregion
+
+    #region Equip
+
+    public bool IsMoveEquipped(string moveId) => equippedMoves.Any(move => move.MoveId == moveId);
+    public bool IsMoveEquipped(Move move) => equippedMoves.Contains(move);
+
+    public void EquipMove(Move move)
+    {
+        if (equippedMoves.Count < MAX_EQUIPPED_MOVES_DEFAULT) equippedMoves.Add(move);
+    }
+
+    public void UnequipMove(Move move)
+    {
+        equippedMoves.Remove(move);
+    }
+
+    #endregion
+
+    #region Get Move data
+
     public bool CanPerformeMove(Move move)
     {
         //include sp and other things
@@ -97,11 +123,8 @@ public class CharacterComponentMoves : MonoBehaviour
     }
 
     public bool CanAffordMove(Move move) => this.character.GetBattleStat(Stat.Sp) >= move.Cost;
-
     public bool HasAffordableMove() => equippedMoves.Any(move => CanAffordMove(move));
-
     public bool HasAffordableMoveWithCategory(Category category) => equippedMoves.Any(move => move.Category == category && CanAffordMove(move));
- 
     public bool HasAffordableMoveWithTrait(Trait trait) => equippedMoves.Any(move => move.Trait == trait && CanAffordMove(move));
 
     public Move GetRandomAffordableMoveByCategory(Category category)
@@ -183,5 +206,45 @@ public class CharacterComponentMoves : MonoBehaviour
             .Where(move => move.Trait == trait)
             .ToList();
     }
+
+    #endregion
+
+    #region Evolution
+
+    public void ForceMaxEvolutionOnEquippedMoves() 
+    {
+        foreach (Move move in equippedMoves) 
+            move.ForceMaxEvolution();
+    }
+
+    #endregion
+
+    #region Persistence
+
+    private void InitializeLearnedMovesFromSave(CharacterSaveData characterSaveData)
+    {
+        foreach (var moveSaveData in characterSaveData.LearnedMoves)
+        {
+            MoveData moveData = MoveManager.Instance.GetMoveData(moveSaveData.MoveId);
+            Move move = new Move(moveData, moveSaveData);
+            learnedMoves.Add(move);
+        }
+    }
+
+    private void InitializeEquippedMovesFromSave(CharacterSaveData characterSaveData)
+    {
+        foreach (string moveId in characterSaveData.EquippedMovesIds)
+        {
+            Move learnedMove = learnedMoves
+                .FirstOrDefault(m => m.MoveId == moveId);
+
+            if (equippedMoves.Count >= MAX_EQUIPPED_MOVES_DEFAULT)
+                break;
+
+            equippedMoves.Add(learnedMove);
+        }
+    }
+
+    #endregion
 
 }

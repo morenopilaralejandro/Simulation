@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Simulation.Enums.Character;
 
 [System.Serializable]
 public class CharacterSaveData
@@ -24,8 +25,18 @@ public class CharacterSaveData
     public int TrainingResetCount;
 
     //moves
-    public List<MoveSaveData> learnedMoveIds;
-    public List<string> equippedMoveIds;
+    public List<MoveSaveData> LearnedMoves;
+    public List<string> EquippedMovesIds;
+
+    //avatar
+    public bool IsCustomAvatar;
+    public string CustomName;
+    public CharacterSize CustomCharacterSize;
+    public PortraitSize CustomPortraitSize;
+    public Gender CustomGender;
+    public Element CustomElement;
+    public Position CustomPosition;
+    public List<CharacterStatSaveData> CustomBaseStats;
 
     //TODO scouting with time stamp
 }

@@ -370,7 +370,7 @@ public class CharacterChangeControlManager : MonoBehaviour
         foreach (Character teammate in teammates)
         {
             // Ignore current user-controlled character
-            if (!teammate.CanMove())
+            if (!teammate.CanMove() || teammate.IsKeeper)
                 continue;
 
             float teammateToGoalDist = Vector3.Distance(
