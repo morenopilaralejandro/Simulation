@@ -1,29 +1,77 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class CharacterComponentLevels : MonoBehaviour
 {
     private Character character;
-    public const int MAX_LEVEL = 99;
 
-    [SerializeField] private int level;
+    public const int MAX_LEVEL = 99;
+    public const int MIN_LEVEL = 1;
+
+    [SerializeField] private int level = MIN_LEVEL;
+    [SerializeField] private int currentExp = 0;
+    [SerializeField] private int expToNextLevel = 100;
 
     public int Level => level;
+    public int CurrentExp => currentExp;
+    public int ExpToNextLevel => expToNextLevel;
 
-    public void Initialize(CharacterData characterData, Character character) 
+    public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
         this.character = character;
-        this.level = 99;
+
+        if (characterSaveData != null)
+        {
+            level = characterSaveData.Level;
+            currentExp = characterSaveData.CurrentExp;
+            expToNextLevel = characterSaveData.ExpToNextLevel;
+        } else 
+        {
+            level = MIN_LEVEL;
+            currentExp = 0;
+            expToNextLevel = CalculateExpForNextLevel();
+        }
+
     }
 
-    public void LevelUp()
+    public void AddExp(int amount)
     {
-        if(this.level < MAX_LEVEL)
+        if (level >= MAX_LEVEL)
+            return;
+
+        currentExp += amount;
+
+        while (currentExp >= expToNextLevel && level < MAX_LEVEL)
         {
-            this.level++;
-            this.character.UpdateStats();
+            currentExp -= expToNextLevel;
+            LevelUp();
         }
     }
 
+    private void LevelUp()
+    {
+        level++;
+        expToNextLevel = CalculateExpForNextLevel();
+        character.UpdateStats();
+        character.CalculateSpeed();
+        character.CheckLearnMoveOnLevelUp();
+    }
+
+    private int CalculateExpForNextLevel()
+    {
+        // Example scaling formula (tweak as needed)
+        return 100 + (level * 25);
+    }
+
+    public void SetLevel(int targetLevel)
+    {
+        targetLevel = Mathf.Clamp(targetLevel, MIN_LEVEL, MAX_LEVEL);
+        level = targetLevel;
+
+        currentExp = 0;
+        expToNextLevel = CalculateExpForNextLevel();
+
+        character.UpdateStats();
+        character.CalculateSpeed();
+        character.CheckLearnMoveOnLevelUp();
+    }
 }

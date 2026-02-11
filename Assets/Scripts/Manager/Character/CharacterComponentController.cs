@@ -129,7 +129,7 @@ public class CharacterComponentController : MonoBehaviour
     #region Movement
     private void HandleMovement()
     {
-        float speed = character.GetMovementSpeed();
+        float speed = character.MovementSpeed;
 
         Vector3 desiredVelocity = new Vector3(
             moveInput.x * speed,

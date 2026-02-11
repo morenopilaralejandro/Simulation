@@ -14,13 +14,14 @@ public class Move
     //private MoveComponentRestrictionLearn restrictionLearnComponent;
     private MoveComponentRestrictionParticipants restrictionParticipantsComponent;
     private MoveComponentEvolution evolutionComponent;
+    private MoveComponentPersistence persistenceComponent;
 
-    public Move(MoveData moveData)
+    public Move(MoveData moveData, MoveSaveData moveSaveData = null)
     {
-        Initialize(moveData);
+        Initialize(moveData, moveSaveData);
     }
 
-    public void Initialize(MoveData moveData)
+    public void Initialize(MoveData moveData, MoveSaveData moveSaveData = null)
     {
         attributesComponent = new MoveComponentAttributes(moveData, this);
 
@@ -33,7 +34,8 @@ public class Move
         participantsComponent = new MoveComponentParticipants(moveData, this);
         //restrictionLearnComponent = new MoveComponentRestrictionLearn(moveData);
         restrictionParticipantsComponent = new MoveComponentRestrictionParticipants(moveData, this);
-        evolutionComponent = new MoveComponentEvolution(moveData, this);
+        evolutionComponent = new MoveComponentEvolution(moveData, this, moveSaveData);
+        persistenceComponent = new MoveComponentPersistence(moveData, this);
     }
 
     #region API
@@ -86,6 +88,9 @@ public class Move
     public int GetExtraPower() => evolutionComponent.GetExtraPower();
     public int GetThreshold() => evolutionComponent.GetThreshold();
     public void ResetEvolution() => evolutionComponent.ResetEvolution();
+    //persistenceComponent
+    public void Import(MoveSaveData moveSaveData) => persistenceComponent.Import(moveSaveData);
+    public MoveSaveData Export() => persistenceComponent.Export();
     //misc
     public int Power => BasePower + GetExtraPower();
     #endregion

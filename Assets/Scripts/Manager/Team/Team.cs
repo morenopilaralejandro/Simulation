@@ -55,10 +55,10 @@ public class Team
     //appearanceComponent
     public Sprite TeamCrestSprite => appearanceComponent.TeamCrestSprite;
     //formationComponent
-    public Formation Formation => formationComponent.Formation;    
+    public Formation Formation => formationComponent.Formation;
     public void SetFormation(Formation formation) => formationComponent.SetFormation(formation);
     //kitComponent
-    public Kit Kit => kitComponent.Kit;    
+    public Kit Kit => kitComponent.Kit;
     public void SetKit(Kit kit) => kitComponent.SetKit(kit);
     //levelsComponent
     public int Level => levelsComponent.Level;

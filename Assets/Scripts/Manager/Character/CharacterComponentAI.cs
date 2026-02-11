@@ -43,9 +43,11 @@ public class CharacterComponentAI : MonoBehaviour
     private const float MIN_SPACING_BETWEEN_MATES = 1.5f;
 
     // Keeper
-    private const float KEEPER_INTERCEPT_RANGE = 0.75f;
+    private const float KEEPER_INTERCEPT_RANGE = 2f;
     private const float KEEPER_STANDING_OFFSET = 0.5f;
     private const float KEEPER_PREDICT_AHEAD = 0.3f;
+    private const float KEEPER_MIN_X = -0.8f;
+    private const float KEEPER_MAX_X =  0.8f;
 
     // Defensive line limits
     private const float HOME_DEFENSIVE_MIN_Z = -7.0f;
@@ -551,18 +553,30 @@ public class CharacterComponentAI : MonoBehaviour
     {
         if (ball == null) return;
 
-        Vector3 d = _transform.position - ballTf.position;
+        Vector3 keeperPos = _transform.position;
+        Vector3 ballPos = ballTf.position;
+
+        Vector3 d = keeperPos - ballPos;
         float distSqr = d.sqrMagnitude;
 
-        if (ball.IsFree() && distSqr < KEEPER_INTERCEPT_RANGE * KEEPER_INTERCEPT_RANGE)
+        float keeperZ = character.FormationCoord.DefaultPosition.z;
+
+        if (distSqr < KEEPER_INTERCEPT_RANGE * KEEPER_INTERCEPT_RANGE)
         {
-            Vector3 predicted = PredictBallFuturePosition(KEEPER_PREDICT_AHEAD);
-            SetMoveTarget(predicted);
+            Vector3 target = PredictBallFuturePosition(KEEPER_PREDICT_AHEAD);;
+            target.z = keeperZ;
+            target.x = Mathf.Clamp(target.x, KEEPER_MIN_X, KEEPER_MAX_X);
+
+            currentMoveTarget = target;
             MoveTowards(currentMoveTarget);
         }
         else
         {
-            SetMoveTarget(character.FormationCoord.DefaultPosition);
+            Vector3 home = character.FormationCoord.DefaultPosition;
+            home.z = keeperZ;
+            home.x = Mathf.Clamp(home.x, -1f, 1f);
+
+            currentMoveTarget = home;
             MoveTowards(currentMoveTarget);
         }
     }
@@ -899,7 +913,7 @@ public class CharacterComponentAI : MonoBehaviour
 
         dir.Normalize();
 
-        float speed = character.GetMovementSpeed();
+        float speed = character.MovementSpeed;
         Vector3 desiredVelocity = dir * speed;
 
         // use local copy to avoid creating many temporary Vector3s

@@ -10,15 +10,26 @@ public class CharacterComponentTraining : MonoBehaviour
     
     [SerializeField] private int baseFreedom;
     [SerializeField] private int trueFreedom;
+    [SerializeField] private int trainingResetCount;
 
     public int BaseFreedom => baseFreedom;
     public int TrueFreedom => trueFreedom;
+    public int TrainingResetCount => trainingResetCount;
 
-    public void Initialize(CharacterData characterData, Character character) 
+    public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData) 
     {
         this.character = character;
-        this.baseFreedom = characterData.Freedom;
-        this.trueFreedom = this.baseFreedom;
+        baseFreedom = characterData.Freedom;
+
+        if (characterSaveData != null) 
+        {
+            trueFreedom = characterSaveData.CurrentFreedom;
+            trainingResetCount = characterSaveData.TrainingResetCount;
+        } else 
+        {
+            trueFreedom = baseFreedom;
+            trainingResetCount = 0;
+        }
     }
 
     public void TrainStat(Stat stat, int amount)
@@ -46,6 +57,7 @@ public class CharacterComponentTraining : MonoBehaviour
     {
         this.trueFreedom = this.baseFreedom;
         this.character.ResetTrainedStats();
+        trainingResetCount++;
     }
 
 }
