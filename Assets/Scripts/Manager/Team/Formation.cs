@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
 using Simulation.Enums.Localization;
 
@@ -9,6 +10,9 @@ public class Formation
 {
     [SerializeField] private string formationId;
     public string FormationId => formationId;
+
+    [SerializeField] private BattleType battleType;
+    public BattleType BattleType => BattleType;
 
     [SerializeField] private LocalizationComponentString localizationStringComponent;
 
@@ -24,6 +28,7 @@ public class Formation
     public void Initialize(FormationData formationData)
     {
         formationId = formationData.FormationId;
+        battleType = formationData.BattleType;
 
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Formation,

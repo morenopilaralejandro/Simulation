@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
+using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
 
 public class CSVImporterFormation
@@ -32,6 +33,7 @@ public class CSVImporterFormation
         string[] headers = lines[0].Split(',');
 
         int formationIdIndex    = System.Array.IndexOf(headers, "FormationId");
+        int battleTypeIndex     = System.Array.IndexOf(headers, "BattleType");
         int c0Index             = System.Array.IndexOf(headers, "C0");
         int p0Index             = System.Array.IndexOf(headers, "P0");
         int c1Index             = System.Array.IndexOf(headers, "C1");
@@ -65,6 +67,7 @@ public class CSVImporterFormation
             FormationData formationData = ScriptableObject.CreateInstance<FormationData>();
 
             formationData.FormationId = values[formationIdIndex].Trim();
+            formationData.BattleType = EnumManager.StringToEnum<BattleType>(values[battleTypeIndex].Trim());
             formationData.CoordIds = new List<string>
             {
                 values[c0Index].Trim(),
