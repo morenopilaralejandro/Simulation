@@ -41,7 +41,7 @@ public class CharacterComponentController : MonoBehaviour
     #region Properties
     private bool IsControlledInternal =>
         BattleManager.Instance.ControlledCharacter[
-            BattleTeamManager.Instance.GetUserSide()] == character;
+        BattleTeamManager.Instance.GetUserSide()] == character;
 
     public bool IsControlled => IsControlledInternal;
 

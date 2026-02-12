@@ -51,7 +51,7 @@ public class OffsideManager : MonoBehaviour
         snapshot.isActive = true;
         snapshot.offsideCandidates.Clear();
         
-        PremarkOffsideCharacters(attacking.CharacterList, attacksPositiveZ, ballZ, offsideLineZ, passer);
+        PremarkOffsideCharacters(attacking.GetCharacterList(BattleManager.Instance.CurrentType), attacksPositiveZ, ballZ, offsideLineZ, passer);
 
         LogManager.Trace(
             $"[OffsideManager] [TakeSnapshot] Snapshot taken. AttackingTeam={attacking.TeamSide}, " +
@@ -95,7 +95,7 @@ public class OffsideManager : MonoBehaviour
         float last = attacksPositiveZ ? float.MinValue : float.MaxValue;
         float secondLast = last;
 
-        foreach (var defender in defending.CharacterList)
+        foreach (var defender in defending.GetCharacterList(BattleManager.Instance.CurrentType))
         {
             if (defender.IsStunned()) continue;
 

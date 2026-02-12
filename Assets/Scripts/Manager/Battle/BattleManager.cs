@@ -428,28 +428,29 @@ public class BattleManager : MonoBehaviour
         DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Home);
     }
 
+    //TODO create PopulateTeamFromData and PopulateTeamFromSaveData
     private void PopulateTeamWithCharacters(Team team, int teamSize)
     {
-        foreach (var character in team.CharacterList)
+        foreach (var character in team.GetCharacterList(currentType))
         {
             BattleCharacterManager.Instance.ReturnCharacterToPool(character);
         }
-        team.CharacterList.Clear();
+        team.ClearCharacterList(currentType);
 
         for (int i = 0; i < teamSize; i++)
         {
             int characterIndex = i;
             BattleCharacterManager.Instance.GetPooledCharacter((character) =>
             {
-                if (character != null && characterIndex < team.CharacterDataList.Count)
+                if (character != null && characterIndex < team.GetCharacterDataList(currentType).Count)
                 {
-                    CharacterData characterData = team.CharacterDataList[characterIndex]; 
+                    CharacterData characterData = team.GetCharacterDataList(currentType)[characterIndex]; 
                     character.Initialize(characterData);
                     character.SetLevel(character.MaxLevel);
                     character.ForceMaxEvolutionOnEquippedMoves();
                     BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
                     character.gameObject.name = character.CharacterId;
-                    team.CharacterList.Add(character);
+                    team.GetCharacterList(currentType).Add(character);
                 
                     charactersReady++;
                     if (charactersReady >= charactersReadyMax)
@@ -470,7 +471,7 @@ public class BattleManager : MonoBehaviour
     {
         foreach (Team team in Teams.Values) 
         {
-            foreach (var character in team.CharacterList)
+            foreach (var character in team.GetCharacterList(currentType))
             {
                 BattleCharacterManager.Instance.ResetCharacterPosition(character);
             }

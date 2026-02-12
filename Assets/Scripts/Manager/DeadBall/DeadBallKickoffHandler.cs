@@ -34,9 +34,9 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         isBallReady = false;
 
         team = BattleManager.Instance.Teams[teamSide];
-        characterKicker = team.CharacterList[team.Formation.Kickoff0];
-        characterReceiver = team.CharacterList[team.Formation.Kickoff1];
-        receiverIndex = deadBallManager.CharacterSelector.GetKickoffReceiverIndex(team.Formation.Kickoff0, team.Formation.Kickoff1);
+        characterKicker = team.GetCharacterList(BattleManager.Instance.CurrentType)[team.GetFormation(BattleManager.Instance.CurrentType).Kickoff0];
+        characterReceiver = team.GetCharacterList(BattleManager.Instance.CurrentType)[team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1];
+        receiverIndex = deadBallManager.CharacterSelector.GetKickoffReceiverIndex(team.GetFormation(BattleManager.Instance.CurrentType).Kickoff0, team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1);
 
         SetPositions();
 
@@ -79,7 +79,7 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         if (!target || characterKicker.IsEnemyAI) 
         {
             if (characterKicker.IsEnemyAI)
-                target = team.CharacterList[receiverIndex];
+                target = team.GetCharacterList(BattleManager.Instance.CurrentType)[receiverIndex];
             else
                 target = characterReceiver;
 

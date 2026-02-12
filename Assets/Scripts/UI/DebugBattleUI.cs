@@ -50,7 +50,7 @@ public class DebugBattleUI : MonoBehaviour
     {
         foreach (
             Character character in 
-            BattleManager.Instance.Teams[TeamSide.Away].CharacterList
+            BattleManager.Instance.Teams[TeamSide.Away].GetCharacterList(BattleManager.Instance.CurrentType)
         ) 
             character.EnableAI(!character.IsAIEnabled);
     }

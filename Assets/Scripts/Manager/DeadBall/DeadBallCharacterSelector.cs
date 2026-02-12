@@ -20,7 +20,7 @@ public class DeadBallCharacterSelector
         Character nearest = null;
         float closest = Mathf.Infinity;
 
-        foreach (var teammate in team.CharacterList)
+        foreach (var teammate in team.GetCharacterList(BattleManager.Instance.CurrentType))
         {
             if (teammate.IsKeeper) continue;
 
@@ -43,7 +43,7 @@ public class DeadBallCharacterSelector
         Character nearest = null;
         float closest = Mathf.Infinity;
 
-        foreach (var teammate in team.CharacterList)
+        foreach (var teammate in team.GetCharacterList(BattleManager.Instance.CurrentType))
         {
             if (teammate.IsKeeper) continue;
 
@@ -66,7 +66,7 @@ public class DeadBallCharacterSelector
         Character nearest = null;
         float closest = Mathf.Infinity;
 
-        foreach (var teammate in character.GetTeam().CharacterList)
+        foreach (var teammate in character.GetTeam().GetCharacterList(BattleManager.Instance.CurrentType))
         {
             //if (teammate.IsKeeper) continue;
 
@@ -97,7 +97,7 @@ public class DeadBallCharacterSelector
 
         Vector3 ballPos = manager.CachedBallPosition;
 
-        List<Character> characters = team.CharacterList;
+        List<Character> characters = team.GetCharacterList(BattleManager.Instance.CurrentType);
         int total = characters.Count;
 
         for (int i = 0; i < total; i++)

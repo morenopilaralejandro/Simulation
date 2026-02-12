@@ -87,7 +87,7 @@ public class BattleCharacterManager : MonoBehaviour
 
     public void AssignCharacterToTeamBattle(Character character, Team team, int characterIndex)
     {
-        FormationCoord formationCoord = team.Formation.FormationCoords[characterIndex];
+        FormationCoord formationCoord = team.GetFormation(BattleManager.Instance.CurrentType).FormationCoords[characterIndex];
         TeamEvents.RaiseAssignCharacterToTeamBattle(character, team, formationCoord);
     }
 

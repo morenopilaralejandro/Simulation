@@ -48,7 +48,7 @@ public class CharacterComponentTeamMember : MonoBehaviour
     public TeamSide GetOpponentSide() => this.character.TeamSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
     public Team GetTeam() => BattleTeamManager.Instance.Teams[this.teamSide];
     public Team GetOpponentTeam() => BattleTeamManager.Instance.Teams[GetOpponentSide()];
-    public List<Character> GetTeammates() => GetTeam().CharacterList;
-    public List<Character> GetOpponents() => GetOpponentTeam().CharacterList;
+    public List<Character> GetTeammates() => GetTeam().GetCharacterList(BattleManager.Instance.CurrentType);
+    public List<Character> GetOpponents() => GetOpponentTeam().GetCharacterList(BattleManager.Instance.CurrentType);
 
 }
