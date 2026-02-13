@@ -23,7 +23,7 @@ public class OffsideManager : MonoBehaviour
         snapshot = new OffsideSnapshot();
     }
 
-    public void TakeSnapshot(Character passer)
+    public void TakeSnapshot(CharacterEntityBattle passer)
     {
         if (snapshot.isActive) return;
         if (passer == null || IsDeadBallPlay()) return;
@@ -51,7 +51,12 @@ public class OffsideManager : MonoBehaviour
         snapshot.isActive = true;
         snapshot.offsideCandidates.Clear();
         
-        PremarkOffsideCharacters(attacking.GetCharacterList(BattleManager.Instance.CurrentType), attacksPositiveZ, ballZ, offsideLineZ, passer);
+        PremarkOffsideCharacters(
+            attacking.GetCharacterEntities(BattleManager.Instance.CurrentType), 
+            attacksPositiveZ, 
+            ballZ, 
+            offsideLineZ, 
+            passer);
 
         LogManager.Trace(
             $"[OffsideManager] [TakeSnapshot] Snapshot taken. AttackingTeam={attacking.TeamSide}, " +
@@ -60,11 +65,11 @@ public class OffsideManager : MonoBehaviour
     }
 
     private void PremarkOffsideCharacters(
-        List<Character> attackers, 
+        List<CharacterEntityBattle> attackers, 
         bool attacksPositiveZ,
         float ballZ,
         float offsideLineZ,
-        Character passer)
+        CharacterEntityBattle passer)
     {
         foreach (var attacker in attackers)
         {
@@ -95,7 +100,7 @@ public class OffsideManager : MonoBehaviour
         float last = attacksPositiveZ ? float.MinValue : float.MaxValue;
         float secondLast = last;
 
-        foreach (var defender in defending.GetCharacterList(BattleManager.Instance.CurrentType))
+        foreach (var defender in defending.GetCharacterEntities(BattleManager.Instance.CurrentType))
         {
             if (defender.IsStunned()) continue;
 
@@ -137,7 +142,7 @@ public class OffsideManager : MonoBehaviour
         return secondLast;
     }
 
-    private bool IsOffside(Character attacker)
+    private bool IsOffside(CharacterEntityBattle attacker)
     {
         return snapshot.isActive &&
                attacker.GetTeam() == snapshot.attackingTeam &&
@@ -145,7 +150,7 @@ public class OffsideManager : MonoBehaviour
     }
 
     // Called whenever ANY character gains possession
-    public void OnBallTouched(Character toucher)
+    public void OnBallTouched(CharacterEntityBattle toucher)
     {
         if (!snapshot.isActive) return;
 
@@ -172,7 +177,7 @@ public class OffsideManager : MonoBehaviour
         LogManager.Trace("[OffsideManager] [OnBallTouched] Legal touch.");
     }
 
-    private void CallOffside(Character offender)
+    private void CallOffside(CharacterEntityBattle offender)
     {
         BattleManager.Instance.Ball.CancelTravel();
         BattleManager.Instance.Freeze();

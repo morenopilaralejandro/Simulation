@@ -30,16 +30,28 @@ public class BallComponentCollider : MonoBehaviour
         //travel collision handle in player colliders
         if (ball.IsTraveling) return;
 
-        Character character = otherCollider.GetComponentInParent<Character>();
+        // keep vs keeper
+        CharacterEntityBattle character = null;
+        bool isCharacterKeepCollision = false;
+        bool isCharacterKeeperCollision = false;
+        bool isValidCollision = false;
 
-        if (character == null) return;
+        if (otherCollider.CompareTag(tagCharacterKeep)) 
+        {
+            character = otherCollider.GetComponent<CharacterComponentColliderKeep>().CharacterEntityBattle;
+            isCharacterKeepCollision = true;
+        }
+        else if (otherCollider.CompareTag(tagCharacterKeeper)) 
+        {
+            character = otherCollider.GetComponent<CharacterComponentColliderDuelKeeper>().CharacterEntityBattle;
+            isCharacterKeeperCollision = IsCharacterKeeperCollision(character, otherCollider);
+        }
 
-        bool isCharacterKeeperCollision = IsCharacterKeeperCollision(character, otherCollider);
-      
-        if (
-            character.CanGainBall() &&
-            (IsCharacterKeepCollision(character, otherCollider) || isCharacterKeeperCollision)
-        )
+        isValidCollision = isCharacterKeepCollision || isCharacterKeeperCollision;
+
+        if (!isValidCollision) return;
+
+        if (character.CanGainBall())
         {
             LogManager.Trace($"[BallComponentCollider] [OnTriggerEnter] {character.CharacterId}", this);
             PossessionManager.Instance.Gain(character);
@@ -71,19 +83,13 @@ public class BallComponentCollider : MonoBehaviour
         }
     }
 
-    private bool IsCharacterKeepCollision(
-        Character character, 
-        Collider otherCollider) =>
-        otherCollider.CompareTag(tagCharacterKeep);
-
     private bool IsCharacterKeeperCollision(
-        Character character, 
+        CharacterEntityBattle characterEntityBattle, 
         Collider otherCollider) =>
         //keeper won't stop a pass from a player in its same team
-        character.IsKeeper &&
-        character.IsInOwnPenaltyArea() &&
-        otherCollider.CompareTag(tagCharacterKeeper) &&
+        characterEntityBattle.IsKeeper &&
+        characterEntityBattle.IsInOwnPenaltyArea() &&
         PossessionManager.Instance.LastCharacter &&
-        !PossessionManager.Instance.LastCharacter.IsSameTeam(character);
+        !PossessionManager.Instance.LastCharacter.IsSameTeam(characterEntityBattle);
 
 }

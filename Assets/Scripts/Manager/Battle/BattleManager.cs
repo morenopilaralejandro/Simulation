@@ -33,8 +33,8 @@ public class BattleManager : MonoBehaviour
     public bool IsTimeFrozen => isTimeFrozen;
 
     public Dictionary<TeamSide, Team> Teams => BattleTeamManager.Instance.Teams;
-    public Dictionary<TeamSide, Character> TargetedCharacter => CharacterTargetManager.Instance.TargetedCharacter;
-    public Dictionary<TeamSide, Character> ControlledCharacter => CharacterChangeControlManager.Instance.ControlledCharacter;
+    public Dictionary<TeamSide, CharacterEntityBattle> TargetedCharacter => CharacterTargetManager.Instance.TargetedCharacter;
+    public Dictionary<TeamSide, CharacterEntityBattle> ControlledCharacter => CharacterChangeControlManager.Instance.ControlledCharacter;
     public Ball Ball => BattleBallManager.Instance.Ball;
     public TeamSide GetUserSide() => BattleTeamManager.Instance.GetUserSide();
 
@@ -431,11 +431,11 @@ public class BattleManager : MonoBehaviour
     //TODO create PopulateTeamFromData and PopulateTeamFromSaveData
     private void PopulateTeamWithCharacters(Team team, int teamSize)
     {
-        foreach (var character in team.GetCharacterList(currentType))
+        foreach (var character in team.GetCharacterEntities(currentType))
         {
             BattleCharacterManager.Instance.ReturnCharacterToPool(character);
         }
-        team.ClearCharacterList(currentType);
+        team.ClearCharacterEntities(currentType);
 
         for (int i = 0; i < teamSize; i++)
         {
@@ -450,7 +450,7 @@ public class BattleManager : MonoBehaviour
                     character.ForceMaxEvolutionOnEquippedMoves();
                     BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
                     character.gameObject.name = character.CharacterId;
-                    team.GetCharacterList(currentType).Add(character);
+                    team.GetCharacterEntities(currentType).Add(character);
                 
                     charactersReady++;
                     if (charactersReady >= charactersReadyMax)
@@ -471,7 +471,7 @@ public class BattleManager : MonoBehaviour
     {
         foreach (Team team in Teams.Values) 
         {
-            foreach (var character in team.GetCharacterList(currentType))
+            foreach (var character in team.GetCharacterEntities(currentType))
             {
                 BattleCharacterManager.Instance.ResetCharacterPosition(character);
             }

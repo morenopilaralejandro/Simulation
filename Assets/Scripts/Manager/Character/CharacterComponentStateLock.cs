@@ -5,6 +5,7 @@ using Simulation.Enums.Character;
 public class CharacterComponentStateLock : MonoBehaviour
 {
     private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     [SerializeField] private bool isStateLocked;
     private float controlMultiplier = 0.005f;
@@ -16,9 +17,10 @@ public class CharacterComponentStateLock : MonoBehaviour
 
     public bool IsStateLocked => isStateLocked;
 
-    public void Initialize(CharacterData characterData, Character character)
+    public void Initialize(CharacterEntityBattle characterEntityBattle)
     {
-        this.character = character;
+        this.characterEntityBattle = characterEntityBattle;
+        this.character = characterEntityBattle.Character;
     }
 
     private float GetStateDuration(CharacterState state)
@@ -32,7 +34,7 @@ public class CharacterComponentStateLock : MonoBehaviour
         };
 
         // Control stat adjustment
-        float control = character.GetBattleStat(Stat.Control); // e.g., range: 0–100
+        float control = characterEntityBattle.GetBattleStat(Stat.Control); // e.g., range: 0–100
         float adjustedDuration = baseDuration - (control * controlMultiplier);
         return Mathf.Max(adjustedDuration, minLockDuration);
     }
@@ -41,7 +43,7 @@ public class CharacterComponentStateLock : MonoBehaviour
     {
         if (isStateLocked) return;
 
-        character.StopVelocity();
+        characterEntityBattle.StopVelocity();
 
         isStateLocked = true;
         float duration = GetStateDuration(state);
@@ -58,7 +60,7 @@ public class CharacterComponentStateLock : MonoBehaviour
         
         StopCoroutine(stateLockCoroutine);
         stateLockCoroutine = null;
-        character.SetCharacterState(CharacterState.Idle);        
+        characterEntityBattle.SetCharacterState(CharacterState.Idle);        
     }
 
     private IEnumerator FailSafeUnlock(float duration)

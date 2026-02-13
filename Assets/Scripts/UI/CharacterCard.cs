@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Simulation.Enums.Character;
 
 public class CharacterCard : MonoBehaviour
 {
@@ -12,12 +13,12 @@ public class CharacterCard : MonoBehaviour
     [SerializeField] private Image imagePosition;
     [SerializeField] private TMP_Text textName;
 
-    public void SetCharacter(Character character)
+    public void SetCharacter(Character character, Position position)
     {
         characterPortrait.SetCharacter(character);
         imageElement.sprite = IconManager.Instance.Element.GetIcon(character.Element);
         imageGender.sprite = IconManager.Instance.Gender.GetIcon(character.Gender);
-        imagePosition.color = ColorManager.GetPositionColor(character.FormationCoord.Position);
+        imagePosition.color = ColorManager.GetPositionColor(position);
         textName.text = character.CharacterNick;
     }
 

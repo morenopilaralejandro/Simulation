@@ -4,17 +4,18 @@ using Simulation.Enums.Character;
 
 public class CharacterComponentTeamMember : MonoBehaviour
 {
-    private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     [SerializeField] private TeamSide teamSide;
     [SerializeField] private FormationCoord formationCoord;
+    private BattleManager battleManager;
 
     public TeamSide TeamSide => teamSide;
     public FormationCoord FormationCoord => formationCoord;
 
-    public void Initialize(CharacterData characterData, Character character)
+    public void Initialize(CharacterEntityBattle characterEntityBattle)
     {
-        this.character = character;
+        this.characterEntityBattle = characterEntityBattle;
     }
 
     private void OnEnable()
@@ -28,27 +29,34 @@ public class CharacterComponentTeamMember : MonoBehaviour
     }
 
     private void HandleAssignCharacterToTeamBattle(
-        Character character, 
+        CharacterEntityBattle characterEntityBattle, 
         Team team, 
         FormationCoord formationCoord)
     {
-        if (this.character != character) return;
+        if (this.characterEntityBattle != characterEntityBattle) return;
 
         this.teamSide = team.TeamSide;   
         this.formationCoord = new FormationCoord(formationCoord);
+        this.battleManager = BattleManager.Instance;
 
-        if (!character.IsOnUsersTeam())
+        if (!characterEntityBattle.IsOnUsersTeam())
             this.formationCoord.FlipDefaultPosition();
 
-        LogManager.Trace($"[CharacterComponentTeamMember] {this.character.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
+        this.characterEntityBattle.ApplyKit(
+            team.Kit,
+            team.Variant,
+            formationCoord.Position
+        );
+
+        LogManager.Trace($"[CharacterComponentTeamMember] {this.characterEntityBattle.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
     }
 
-    public bool IsOnUsersTeam() => this.teamSide == BattleTeamManager.Instance.GetUserSide();
-    public bool IsSameTeam(Character otherCharacter) => this.teamSide == otherCharacter.TeamSide;
-    public TeamSide GetOpponentSide() => this.character.TeamSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
-    public Team GetTeam() => BattleTeamManager.Instance.Teams[this.teamSide];
-    public Team GetOpponentTeam() => BattleTeamManager.Instance.Teams[GetOpponentSide()];
-    public List<Character> GetTeammates() => GetTeam().GetCharacterList(BattleManager.Instance.CurrentType);
-    public List<Character> GetOpponents() => GetOpponentTeam().GetCharacterList(BattleManager.Instance.CurrentType);
+    public bool IsOnUsersTeam() => teamSide == battleManager.GetUserSide();
+    public bool IsSameTeam(CharacterEntityBattle otherCharacter) => teamSide == otherCharacter.TeamSide;
+    public TeamSide GetOpponentSide() => teamSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
+    public Team GetTeam() => battleManager.Teams[teamSide];
+    public Team GetOpponentTeam() => battleManager.Teams[GetOpponentSide()];
+    public List<CharacterEntityBattle> GetTeammates() => GetTeam().GetCharacterEntities(battleManager.CurrentType);
+    public List<CharacterEntityBattle> GetOpponents() => GetOpponentTeam().GetCharacterEntities(battleManager.CurrentType);
 
 }

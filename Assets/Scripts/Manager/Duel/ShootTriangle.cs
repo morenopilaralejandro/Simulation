@@ -85,7 +85,7 @@ public class ShootTriangle : MonoBehaviour
     }
 
     public void SetTriangleFromCharacter(
-        Character character, 
+        CharacterEntityBattle character, 
         Vector3 worldCoord)
     {
         // --- The actual triangle math ---
@@ -117,7 +117,7 @@ public class ShootTriangle : MonoBehaviour
     /// Adjusts the base width of the triangle based on how far the tap is from the player's center (median)
     /// and the player's control stat (both serialized for inspector tuning).
     /// </summary>
-    private void AdjustBaseLengthByMedian(Character character)
+    private void AdjustBaseLengthByMedian(CharacterEntityBattle character)
     {
         float baseMedianX = (vertex1.x + vertex2.x) * 0.5f;
         float median = Mathf.Abs(vertex0.x - baseMedianX);

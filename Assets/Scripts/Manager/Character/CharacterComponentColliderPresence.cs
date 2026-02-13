@@ -12,8 +12,8 @@ public class CharacterComponentColliderPresence : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField] private Character character;
-    public Character Character => character;
+    [SerializeField] private CharacterEntityBattle characterEntityBattle;
+    public CharacterEntityBattle CharacterEntityBattle => characterEntityBattle;
 
     #endregion
 

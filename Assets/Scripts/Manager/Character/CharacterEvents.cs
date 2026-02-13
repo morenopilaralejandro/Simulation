@@ -3,16 +3,16 @@ using Simulation.Enums.Character;
 
 public static class CharacterEvents
 {
-    public static event Action<Character, TeamSide> OnControlChange;
-    public static void RaiseControlChange(Character character, TeamSide teamSide)
+    public static event Action<CharacterEntityBattle, TeamSide> OnControlChange;
+    public static void RaiseControlChange(CharacterEntityBattle characterEntityBattle, TeamSide teamSide)
     {
-        OnControlChange?.Invoke(character, teamSide);
+        OnControlChange?.Invoke(characterEntityBattle, teamSide);
     }
 
-    public static event Action<Character, TeamSide> OnTargetChange;
-    public static void RaiseTargetChange(Character character, TeamSide teamSide)
+    public static event Action<CharacterEntityBattle, TeamSide> OnTargetChange;
+    public static void RaiseTargetChange(CharacterEntityBattle characterEntityBattle, TeamSide teamSide)
     {
-        OnTargetChange?.Invoke(character, teamSide);
+        OnTargetChange?.Invoke(characterEntityBattle, teamSide);
     }
 
     public static event Action<Character> OnSpeechBubbleShown;

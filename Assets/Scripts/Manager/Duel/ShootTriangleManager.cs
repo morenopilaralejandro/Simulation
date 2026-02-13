@@ -44,7 +44,7 @@ public class ShootTriangleManager : MonoBehaviour
     }
 
     public void SetTriangleFromCharacter(
-        Character character)
+        CharacterEntityBattle character)
     {
         shootTriangle.SetTriangleFromCharacter(
             character, 

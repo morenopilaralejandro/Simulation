@@ -190,7 +190,7 @@ public class BattleUIManager : MonoBehaviour
     #endregion
 
     #region Duel Participants
-    public void SetDuelParticipant(Character character, List<Character> supports)
+    public void SetDuelParticipant(CharacterEntityBattle character, List<CharacterEntityBattle> supports)
     {
         if (duelParticantsPanel != null) 
             duelParticantsPanel.SetSide(character, supports);
@@ -215,7 +215,7 @@ public class BattleUIManager : MonoBehaviour
     }
 
     public void SetComboDamage(float damage) => duelParticantsPanel.SetComboDamage(damage);
-    public void SetFieldDamage(Character character, float damage, DuelAction action) => duelParticantsPanel.SetFieldDamage(character, damage, action);
+    public void SetFieldDamage(CharacterEntityBattle character, float damage, DuelAction action) => duelParticantsPanel.SetFieldDamage(character, damage, action);
 
     #endregion
 

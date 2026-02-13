@@ -8,7 +8,7 @@ public class CharacterChangeControlManager : MonoBehaviour
 {
     public static CharacterChangeControlManager Instance { get; private set; }
 
-    [SerializeField] private Dictionary<TeamSide, Character> controlledCharacter = new ();
+    [SerializeField] private Dictionary<TeamSide, CharacterEntityBattle> controlledCharacter = new ();
     private BattleManager battleManager;
     private InputManager inputManager;
     private PossessionManager possessionManager;
@@ -17,7 +17,7 @@ public class CharacterChangeControlManager : MonoBehaviour
     private int teamSize => BattleManager.Instance.CurrentTeamSize;
     private const float MIN_BLOCK_DISTANCE = 0.5f;
 
-    public Dictionary<TeamSide, Character> ControlledCharacter => controlledCharacter;
+    public Dictionary<TeamSide, CharacterEntityBattle> ControlledCharacter => controlledCharacter;
 
     private void Awake()
     {
@@ -29,7 +29,7 @@ public class CharacterChangeControlManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        controlledCharacter = new Dictionary<TeamSide, Character>
+        controlledCharacter = new Dictionary<TeamSide, CharacterEntityBattle>
         {
             { TeamSide.Home, null },
             { TeamSide.Away, null }
@@ -69,7 +69,7 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     private bool CanChangeCharacter()
     {
-        Character character = GetUserControlledCharacter();
+        CharacterEntityBattle character = GetUserControlledCharacter();
 
         return character != null &&
                !character.HasBall() &&
@@ -78,9 +78,9 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     private bool CanChangeCharacterAuto()
     {
-        Character controlledCharacter = GetUserControlledCharacter();
-        Character currentCharacter = possessionManager.CurrentCharacter;
-        Character lastCharacter = possessionManager.LastCharacter;
+        CharacterEntityBattle controlledCharacter = GetUserControlledCharacter();
+        CharacterEntityBattle currentCharacter = possessionManager.CurrentCharacter;
+        CharacterEntityBattle lastCharacter = possessionManager.LastCharacter;
 
         if (currentCharacter != null && !controlledCharacter.IsSameTeam(currentCharacter))
             return true;
@@ -93,8 +93,8 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     private void TryChangeCharacterManual()
     {
-        Character current = GetUserControlledCharacter();
-        Character target = battleManager.TargetedCharacter[current.TeamSide];
+        CharacterEntityBattle current = GetUserControlledCharacter();
+        CharacterEntityBattle target = battleManager.TargetedCharacter[current.TeamSide];
 
         if (target == null) return;
         SetControlledCharacter(target, target.TeamSide);
@@ -103,37 +103,37 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     private void TryChangeCharacterAuto()
     {
-        Character current = GetUserControlledCharacter();
-        Character target = GetTeammateForDefense(current);
+        CharacterEntityBattle current = GetUserControlledCharacter();
+        CharacterEntityBattle target = GetTeammateForDefense(current);
 
         if (target == null) return;
         SetControlledCharacter(target, target.TeamSide);
         audioManager.PlaySfx("sfx-ball_change_character");
     }
 
-    public void SetControlledCharacter(Character character, TeamSide teamSide)
+    public void SetControlledCharacter(CharacterEntityBattle character, TeamSide teamSide)
     {
         this.controlledCharacter[teamSide] = character;
         CharacterEvents.RaiseControlChange(character, character.TeamSide);
         LogManager.Trace($"[CharacterChangeControlManager] {character.TeamSide.ToString()} control assigned to {character.CharacterId}", this);
     }
 
-    private void HandleOnGained(Character character) 
+    private void HandleOnGained(CharacterEntityBattle character) 
     {
         SetControlledCharacter(character, character.TeamSide);
     }
 
-    public Character GetUserControlledCharacter() => controlledCharacter[battleManager.GetUserSide()];
+    public CharacterEntityBattle GetUserControlledCharacter() => controlledCharacter[battleManager.GetUserSide()];
 
-    public Character GetClosestTeammateToBall(Character character, bool includeSelf)
+    public CharacterEntityBattle GetClosestTeammateToBall(CharacterEntityBattle character, bool includeSelf)
     {
-        Character nearestCharacter = null;
-        List<Character> teammates = character.GetTeammates();
+        CharacterEntityBattle nearestCharacter = null;
+        List<CharacterEntityBattle> teammates = character.GetTeammates();
         float closestDistance = Mathf.Infinity;
 
         for (int i = 0; i < teamSize; i++)
         {
-            Character teammate = teammates[i];
+            CharacterEntityBattle teammate = teammates[i];
 
             // Skip self unless includeSelf is true
             if (!includeSelf && teammate == character || !teammate.CanMove())
@@ -151,13 +151,13 @@ public class CharacterChangeControlManager : MonoBehaviour
         return nearestCharacter ?? character;
     }
 
-    public Character GetTeammateForShootCombo(Character character)
+    public CharacterEntityBattle GetTeammateForShootCombo(CharacterEntityBattle character)
     {
         Vector3 opponentGoalPos =
             GoalManager.Instance.Goals[character.GetOpponentSide()].transform.position;
 
-        List<Character> teammates = character.GetTeammates();
-        Character bestCandidate = null;
+        List<CharacterEntityBattle> teammates = character.GetTeammates();
+        CharacterEntityBattle bestCandidate = null;
         float bestScore = Mathf.Infinity;
 
         float characterToGoalDist = Vector3.Distance(
@@ -166,7 +166,7 @@ public class CharacterChangeControlManager : MonoBehaviour
 
         float characterX = character.transform.position.x;
 
-        foreach (Character teammate in teammates)
+        foreach (CharacterEntityBattle teammate in teammates)
         {
             if (teammate == character || !teammate.CanMove())
                 continue;
@@ -194,26 +194,26 @@ public class CharacterChangeControlManager : MonoBehaviour
         return bestCandidate;
     }
 
-    public Character GetCharacterForShootBlock(Character opponent)
+    public CharacterEntityBattle GetCharacterForShootBlock(CharacterEntityBattle opponent)
     {
         // 1. If user-controlled character is ahead of the opponent, do not change
-        Character userControlled = GetUserControlledCharacter();
+        CharacterEntityBattle userControlled = GetUserControlledCharacter();
         if (userControlled == null) return null;
         if (userControlled.CanMove() && IsCharacterAhead(userControlled, opponent)) return null;
 
         Vector3 goalPos =
             GoalManager.Instance.Goals[opponent.GetOpponentSide()].transform.position;
 
-        List<Character> defenders = opponent.GetOpponents();
+        List<CharacterEntityBattle> defenders = opponent.GetOpponents();
 
-        Character bestBlocker = null;
+        CharacterEntityBattle bestBlocker = null;
         float closestDistance = Mathf.Infinity;
 
         float opponentToGoalDist = Vector3.Distance(
             opponent.transform.position,
             goalPos);
 
-        foreach (Character defender in defenders)
+        foreach (CharacterEntityBattle defender in defenders)
         {
             if (!defender.CanMove())
                 continue;
@@ -244,13 +244,13 @@ public class CharacterChangeControlManager : MonoBehaviour
         return bestBlocker;
     }
 
-    public Character GetCharacterForDeadBallGeneric(Character opponent)
+    public CharacterEntityBattle GetCharacterForDeadBallGeneric(CharacterEntityBattle opponent)
     {
-        List<Character> opponents = opponent.GetOpponents();
-        Character closest = null;
+        List<CharacterEntityBattle> opponents = opponent.GetOpponents();
+        CharacterEntityBattle closest = null;
         float closestDistance = Mathf.Infinity;
 
-        foreach (Character character in opponents)
+        foreach (CharacterEntityBattle character in opponents)
         {
             if (!character.CanMove()) continue;
 
@@ -268,25 +268,25 @@ public class CharacterChangeControlManager : MonoBehaviour
         return closest;
     }
 
-    public Character GetTeammateForDefense(Character character)
+    public CharacterEntityBattle GetTeammateForDefense(CharacterEntityBattle character)
     {
-        Character userControlled = GetUserControlledCharacter();
+        CharacterEntityBattle userControlled = GetUserControlledCharacter();
 
         Vector3 ownGoalPos =
             GoalManager.Instance.Goals[character.TeamSide].transform.position;
 
         Vector3 ballPos = ball.transform.position;
 
-        List<Character> teammates = character.GetTeammates();
+        List<CharacterEntityBattle> teammates = character.GetTeammates();
 
-        Character bestDefender = null;
+        CharacterEntityBattle bestDefender = null;
         float bestScore = Mathf.Infinity;
 
         const float MIN_BLOCK_DISTANCE = 0.5f;
 
         float ballToGoalDist = Vector3.Distance(ballPos, ownGoalPos);
 
-        foreach (Character teammate in teammates)
+        foreach (CharacterEntityBattle teammate in teammates)
         {
             // Ignore current user-controlled character
             if (teammate == userControlled || !teammate.CanMove())
@@ -327,9 +327,9 @@ public class CharacterChangeControlManager : MonoBehaviour
         return bestDefender;
     }
 
-    public void TryChangeOnShootCombo(Character character) 
+    public void TryChangeOnShootCombo(CharacterEntityBattle character) 
     {
-        Character newCharacter = null;
+        CharacterEntityBattle newCharacter = null;
         if (character.IsEnemyAI)
             newCharacter = GetCharacterForShootBlock(character);
         else 
@@ -340,34 +340,34 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     }
 
-    public void TryChangeOnDeadBallGeneric(Character opponent) 
+    public void TryChangeOnDeadBallGeneric(CharacterEntityBattle opponent) 
     {
-        Character newCharacter = GetCharacterForDeadBallGeneric(opponent);
-        Character controlledCharacter = GetUserControlledCharacter();
+        CharacterEntityBattle newCharacter = GetCharacterForDeadBallGeneric(opponent);
+        CharacterEntityBattle controlledCharacter = GetUserControlledCharacter();
         if (!opponent.IsEnemyAI || newCharacter == null) return;
         SetControlledCharacter(newCharacter, newCharacter.TeamSide);
     }
 
-    public bool IsCharacterAhead(Character character, Character other) =>
+    public bool IsCharacterAhead(CharacterEntityBattle character, CharacterEntityBattle other) =>
         character.TeamSide == TeamSide.Home
             ? character.transform.position.z < other.transform.position.z
             : character.transform.position.z > other.transform.position.z;
 
-    public Character GetPrimaryDefenderAI(Character character)
+    public CharacterEntityBattle GetPrimaryDefenderAI(CharacterEntityBattle character)
     {
         Vector3 ownGoalPos =
             GoalManager.Instance.Goals[character.TeamSide].transform.position;
 
         Vector3 ballPos = ball.transform.position;
 
-        List<Character> teammates = character.GetTeammates();
+        List<CharacterEntityBattle> teammates = character.GetTeammates();
 
-        Character bestDefender = null;
+        CharacterEntityBattle bestDefender = null;
         float bestScore = Mathf.Infinity;
 
         float ballToGoalDist = Vector3.Distance(ballPos, ownGoalPos);
 
-        foreach (Character teammate in teammates)
+        foreach (CharacterEntityBattle teammate in teammates)
         {
             // Ignore current user-controlled character
             if (!teammate.CanMove() || teammate.IsKeeper)

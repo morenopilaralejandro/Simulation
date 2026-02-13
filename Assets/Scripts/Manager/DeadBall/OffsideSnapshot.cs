@@ -9,5 +9,5 @@ public class OffsideSnapshot
     public float offsideLineZ;
     public bool isActive;
 
-    public readonly HashSet<Character> offsideCandidates = new(11);
+    public readonly HashSet<CharacterEntityBattle> offsideCandidates = new(11);
 }

@@ -11,15 +11,15 @@ public static class BallEvents
     }
 
     //possession
-    public static event Action<Character> OnGained;
-    public static void RaiseGained(Character character)
+    public static event Action<CharacterEntityBattle> OnGained;
+    public static void RaiseGained(CharacterEntityBattle characterEntityBattle)
     {
-        OnGained?.Invoke(character);
+        OnGained?.Invoke(characterEntityBattle);
     }
-    public static event Action<Character> OnReleased;
-    public static void RaiseReleased(Character character)
+    public static event Action<CharacterEntityBattle> OnReleased;
+    public static void RaiseReleased(CharacterEntityBattle characterEntityBattle)
     {
-        OnReleased?.Invoke(character);
+        OnReleased?.Invoke(characterEntityBattle);
     }
 
     //travel

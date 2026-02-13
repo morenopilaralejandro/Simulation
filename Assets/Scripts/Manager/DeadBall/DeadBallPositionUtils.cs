@@ -88,7 +88,7 @@ public class DeadBallPositionUtils
     }
 
     public void SetCornerPositions(
-        Character[] characters,
+        CharacterEntityBattle[] characters,
         Vector3[] basePositions,
         TeamSide teamSide,
         CornerPlacement cornerPlacement)

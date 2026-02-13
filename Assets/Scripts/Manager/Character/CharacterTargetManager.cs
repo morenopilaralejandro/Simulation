@@ -11,9 +11,9 @@ public class CharacterTargetManager : MonoBehaviour
     private int teamSize => BattleManager.Instance.CurrentTeamSize;
     private float angleThreshold = 30f;
     private CharacterTargetIndicator targetIndicator;
-    [SerializeField] private Dictionary<TeamSide, Character> targetedCharacter = new ();
+    [SerializeField] private Dictionary<TeamSide, CharacterEntityBattle> targetedCharacter = new ();
 
-    public Dictionary<TeamSide, Character> TargetedCharacter => targetedCharacter;
+    public Dictionary<TeamSide, CharacterEntityBattle> TargetedCharacter => targetedCharacter;
 
     private void Awake()
     {
@@ -39,7 +39,7 @@ public class CharacterTargetManager : MonoBehaviour
         CharacterEvents.OnTargetChange -= HandleOnTargetChange;
     }
 
-    private void HandleOnTargetChange(Character character, TeamSide teamSide)
+    private void HandleOnTargetChange(CharacterEntityBattle character, TeamSide teamSide)
     {
         this.targetedCharacter[teamSide] = character;
         //LogManager.Trace($"[CharacterTargetManager] {teamSide.ToString()} target assigned to {character?.CharacterId}", this);
@@ -56,16 +56,16 @@ public class CharacterTargetManager : MonoBehaviour
     }
 
 
-    public Character GetClosestTeammateInDirection(Character character, Vector3 direction)
+    public CharacterEntityBattle GetClosestTeammateInDirection(CharacterEntityBattle character, Vector3 direction)
     {
-        List<Character> teammates = character.GetTeammates();
+        List<CharacterEntityBattle> teammates = character.GetTeammates();
 
-        Character bestTarget = null;
+        CharacterEntityBattle bestTarget = null;
         float closestDistance = Mathf.Infinity;
 
         for (int i = 0; i < teamSize; i++)
         {
-            Character teammate = teammates[i];
+            CharacterEntityBattle teammate = teammates[i];
             if (teammate == character || !teammate.CanDuel()) continue;  // Skip self
 
             Vector3 toTeammate = teammate.transform.position - character.transform.position;
@@ -85,16 +85,16 @@ public class CharacterTargetManager : MonoBehaviour
         return bestTarget;
     }
 
-    public Character GetClosestTeammateToPoint(Character character, Vector3 point)
+    public CharacterEntityBattle GetClosestTeammateToPoint(CharacterEntityBattle character, Vector3 point)
     {
-        List<Character> teammates = character.GetTeammates();
+        List<CharacterEntityBattle> teammates = character.GetTeammates();
 
-        Character bestTarget = null;
+        CharacterEntityBattle bestTarget = null;
         float closestDistance = Mathf.Infinity;
 
         for (int i = 0; i < teamSize; i++)
         {
-            Character teammate = teammates[i];
+            CharacterEntityBattle teammate = teammates[i];
 
             // Skip self and invalid teammates
             if (!teammate.CanDuel())

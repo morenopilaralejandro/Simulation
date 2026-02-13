@@ -49,8 +49,8 @@ public class DebugBattleUI : MonoBehaviour
     private void ToggleAI() 
     {
         foreach (
-            Character character in 
-            BattleManager.Instance.Teams[TeamSide.Away].GetCharacterList(BattleManager.Instance.CurrentType)
+            CharacterEntityBattle character in 
+            BattleManager.Instance.Teams[TeamSide.Away].GetCharacterEntities(BattleManager.Instance.CurrentType)
         ) 
             character.EnableAI(!character.IsAIEnabled);
     }

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Simulation.Enums.Character;
 
-public class CharacterComponentPersistence : MonoBehaviour
+public class CharacterComponentPersistence
 {
     #region Fields
 
@@ -13,6 +13,11 @@ public class CharacterComponentPersistence : MonoBehaviour
     #endregion        
 
     #region LifeCycle
+
+    public CharacterComponentPersistence(CharacterData characterData, Character character)
+    {
+        Initialize(characterData, character);
+    }
 
     public void Initialize(CharacterData characterData, Character character)
     {

@@ -52,26 +52,26 @@ public static class BattleEvents
         OnBattleResume?.Invoke();
     }
 
-    public static event Action<Character> OnGoalScored;
-    public static void RaiseGoalScored(Character scorringCharacter)
+    public static event Action<CharacterEntityBattle> OnGoalScored;
+    public static void RaiseGoalScored(CharacterEntityBattle scorringCharacter)
     {
         OnGoalScored?.Invoke(scorringCharacter);
     }
 
-    public static event Action<Character> OnPassPerformed;
-    public static void RaisePassPerformed(Character character)
+    public static event Action<CharacterEntityBattle> OnPassPerformed;
+    public static void RaisePassPerformed(CharacterEntityBattle character)
     {
         OnPassPerformed?.Invoke(character);
     }
 
-    public static event Action<Character, bool> OnShootPerformed;
-    public static void RaiseShootPerformed(Character character, bool isDirect)
+    public static event Action<CharacterEntityBattle, bool> OnShootPerformed;
+    public static void RaiseShootPerformed(CharacterEntityBattle character, bool isDirect)
     {
         OnShootPerformed?.Invoke(character, isDirect);
     }
 
-    public static event Action<Character> OnShootStopped;
-    public static void RaiseShootStopped(Character character)
+    public static event Action<CharacterEntityBattle> OnShootStopped;
+    public static void RaiseShootStopped(CharacterEntityBattle character)
     {
         OnShootStopped?.Invoke(character);
     }

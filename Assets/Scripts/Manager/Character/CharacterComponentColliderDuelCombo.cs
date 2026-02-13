@@ -12,8 +12,8 @@ public class CharacterComponentColliderDuelCombo : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField] private Character character;
-    public Character Character => character;
+    [SerializeField] private CharacterEntityBattle characterEntityBattle;
+    public CharacterEntityBattle CharacterEntityBattle => characterEntityBattle;
 
     #endregion
 
@@ -34,8 +34,8 @@ public class CharacterComponentColliderDuelCombo : MonoBehaviour
             BattleManager.Instance.IsTimeFrozen || 
             DuelManager.Instance.IsResolved || 
             DuelManager.Instance.DuelMode != DuelMode.Shoot ||
-            !character.CanDuel() ||
-            (character.IsKeeper && character.IsInOwnPenaltyArea())
+            !characterEntityBattle.CanDuel() ||
+            (characterEntityBattle.IsKeeper && characterEntityBattle.IsInOwnPenaltyArea())
         )
             return;
 
@@ -43,17 +43,17 @@ public class CharacterComponentColliderDuelCombo : MonoBehaviour
         DuelParticipant lastDefense = DuelManager.Instance.GetLastDefense();
 
         //Prevent repeat triggers by the same defense player
-        if (lastDefense != null && lastDefense.Character == character)
+        if (lastDefense != null && lastDefense.CharacterEntityBattle == characterEntityBattle)
             return;
 
-        if (lastOffense == null || lastOffense.Character == character)
+        if (lastOffense == null || lastOffense.CharacterEntityBattle == characterEntityBattle)
             return;
 
-        Category category = PossessionManager.Instance.LastCharacter.IsSameTeam(character) ? 
+        Category category = PossessionManager.Instance.LastCharacter.IsSameTeam(characterEntityBattle) ? 
             Category.Shoot : 
             Category.Block;
 
-        DuelManager.Instance.StartShootDuelCombo(character, category);
+        DuelManager.Instance.StartShootDuelCombo(characterEntityBattle, category);
     }
 
     #endregion

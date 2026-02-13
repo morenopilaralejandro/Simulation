@@ -9,8 +9,8 @@ public class PossessionManager : MonoBehaviour
     #region Fields
     public static PossessionManager Instance { get; private set; }
 
-    [SerializeField] private Character currentCharacter;
-    [SerializeField] private Character lastCharacter;
+    [SerializeField] private CharacterEntityBattle currentCharacter;
+    [SerializeField] private CharacterEntityBattle lastCharacter;
     private float cooldown = 0.2f;
     private float cooldownSfxOnDuel = 0.5f;
     private float controlFeedbackKickTime = 0.2f;
@@ -21,8 +21,8 @@ public class PossessionManager : MonoBehaviour
     private BattleManager battleManager;
     private AudioManager audioManager;
 
-    public Character CurrentCharacter => currentCharacter;
-    public Character LastCharacter => lastCharacter;
+    public CharacterEntityBattle CurrentCharacter => currentCharacter;
+    public CharacterEntityBattle LastCharacter => lastCharacter;
     public float LastKickTime => lastKickTime;
 
     #endregion
@@ -73,9 +73,9 @@ public class PossessionManager : MonoBehaviour
     #endregion
 
     #region Possession Logic
-    public bool IsOnCooldown(Character character, float now) => character == lastCharacter && (now - lastKickTime) <= cooldown;
+    public bool IsOnCooldown(CharacterEntityBattle character, float now) => character == lastCharacter && (now - lastKickTime) <= cooldown;
 
-    public void Gain(Character character)
+    public void Gain(CharacterEntityBattle character)
     {
         float now = Time.time;
         if (character == null || character == currentCharacter || IsOnCooldown(character, now)) return;
@@ -107,10 +107,10 @@ public class PossessionManager : MonoBehaviour
         currentCharacter = null;
     }
 
-    public void SetLastCharacter(Character character) 
+    public void SetLastCharacter(CharacterEntityBattle characterEntityBattle) 
     {
-        lastCharacter = character;
-        offsideManager.OnBallTouched(character);
+        lastCharacter = characterEntityBattle;
+        offsideManager.OnBallTouched(characterEntityBattle);
     }
 
     public void Reset()
@@ -121,7 +121,7 @@ public class PossessionManager : MonoBehaviour
         lastDuelTime = -999f;
     }
 
-    public void GiveBallToCharacter(Character character) 
+    public void GiveBallToCharacter(CharacterEntityBattle character) 
     {
         battleManager.Ball.transform.position = character.transform.position;
     }
@@ -135,14 +135,14 @@ public class PossessionManager : MonoBehaviour
         lastCharacter != null &&
         currentCharacter != null &&
         !currentCharacter.IsSameTeam(lastCharacter);
-    private bool IsInControlFeedbackDistance(Character character) 
+    private bool IsInControlFeedbackDistance(CharacterEntityBattle character) 
     {
         float z = character.transform.position.z;
         return character.TeamSide == TeamSide.Home
             ? z > controlGoalDistance
             : z < controlGoalDistance;
     }
-    private bool ShowControlFeedback(Character character, float now) => 
+    private bool ShowControlFeedback(CharacterEntityBattle character, float now) => 
         (now - lastKickTime) > controlFeedbackKickTime && 
         IsInControlFeedbackDistance(character) && 
         !character.IsEnemyAI;

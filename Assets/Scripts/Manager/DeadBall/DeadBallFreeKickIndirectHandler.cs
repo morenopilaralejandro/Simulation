@@ -13,9 +13,9 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
 
     private Team team;
     private DeadBallManager deadBallManager;
-    private Character characterKicker;
-    private Character[] characterSupportOffense;
-    private Character[] characterSupportDefense;
+    private CharacterEntityBattle characterKicker;
+    private CharacterEntityBattle[] characterSupportOffense;
+    private CharacterEntityBattle[] characterSupportDefense;
     private Vector3 ballPosition;
 
     private bool isBallReady;
@@ -67,7 +67,7 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
             deadBallManager.TeamReadiness.SetBothReady();
     }
 
-    private void OnBallGained(Character c)
+    private void OnBallGained(CharacterEntityBattle c)
     {
         if (c == characterKicker) 
         {
@@ -81,7 +81,7 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
 
     public void Execute()
     {
-        Character target = BattleManager.Instance.TargetedCharacter[characterKicker.TeamSide];
+        CharacterEntityBattle target = BattleManager.Instance.TargetedCharacter[characterKicker.TeamSide];
 
         if (!target || characterKicker.IsEnemyAI) 
         {

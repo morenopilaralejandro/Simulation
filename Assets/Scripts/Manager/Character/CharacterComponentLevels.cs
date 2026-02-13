@@ -1,19 +1,24 @@
 using UnityEngine;
 
-public class CharacterComponentLevels : MonoBehaviour
+public class CharacterComponentLevels
 {
     private Character character;
 
     public const int MAX_LEVEL = 99;
     public const int MIN_LEVEL = 1;
 
-    [SerializeField] private int level = MIN_LEVEL;
-    [SerializeField] private int currentExp = 0;
-    [SerializeField] private int expToNextLevel = 100;
+    private int level = MIN_LEVEL;
+    private int currentExp = 0;
+    private int expToNextLevel = 100;
 
     public int Level => level;
     public int CurrentExp => currentExp;
     public int ExpToNextLevel => expToNextLevel;
+
+    public CharacterComponentLevels(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null) 
+    {
+        Initialize(characterData, character, characterSaveData);
+    }
 
     public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
@@ -52,7 +57,6 @@ public class CharacterComponentLevels : MonoBehaviour
         level++;
         expToNextLevel = CalculateExpForNextLevel();
         character.UpdateStats();
-        character.CalculateSpeed();
         character.CheckLearnMoveOnLevelUp();
     }
 
@@ -71,7 +75,6 @@ public class CharacterComponentLevels : MonoBehaviour
         expToNextLevel = CalculateExpForNextLevel();
 
         character.UpdateStats();
-        character.CalculateSpeed();
         character.CheckLearnMoveOnLevelUp();
     }
 }

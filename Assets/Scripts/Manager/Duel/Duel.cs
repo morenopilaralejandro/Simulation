@@ -17,8 +17,8 @@ public class Duel
     public DuelParticipant LastOffense;
     public DuelParticipant LastDefense;
 
-    public List<Character> OffenseSupports = new List<Character>();
-    public List<Character> DefenseSupports = new List<Character>();
+    public List<CharacterEntityBattle> OffenseSupports = new List<CharacterEntityBattle>();
+    public List<CharacterEntityBattle> DefenseSupports = new List<CharacterEntityBattle>();
 
     public float OffensePressure;
     public float DefensePressure;

@@ -44,9 +44,9 @@ public static class DamageCalculator
     }
 
     // Special for Shoot (minus distance)
-    private static float CalcDistanceReduction(Character character)
+    private static float CalcDistanceReduction(CharacterEntityBattle characterEntityBattle)
     {
-        return GoalManager.Instance.GetDistanceToOpponentGoal(character) * DISTANCE_MULTIPLIER;
+        return GoalManager.Instance.GetDistanceToOpponentGoal(characterEntityBattle) * DISTANCE_MULTIPLIER;
     }
 
     public static Dictionary<(Category, DuelCommand), Func<Character, Move, float>> damageFormulas =
@@ -76,16 +76,16 @@ public static class DamageCalculator
     public static float GetDamage(
         Category category, 
         DuelCommand command, 
-        Character character, 
+        CharacterEntityBattle characterEntityBattle, 
         Move move,
         bool isKeeperDuel,
         bool isDirect)
     {
         float damage = 0f;
         if (damageFormulas.TryGetValue((category, command), out var formula))
-            damage = formula(character, move);
+            damage = formula(characterEntityBattle.Character, move);
 
-        if (isKeeperDuel && character.IsKeeper)
+        if (isKeeperDuel && characterEntityBattle.IsKeeper)
             damage *= KEEPER_MULTIPLIER;
 
         bool appliesDistancePenalty =
@@ -94,7 +94,7 @@ public static class DamageCalculator
             (move.Trait != Trait.Long && move.Trait != Trait.Block));
 
         if (appliesDistancePenalty)
-            damage -= CalcDistanceReduction(character);
+            damage -= CalcDistanceReduction(characterEntityBattle);
 
         if (isDirect)
             damage += DIRECT_BONUS;

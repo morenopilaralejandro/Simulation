@@ -140,8 +140,7 @@ public class CharacterComponentAI : MonoBehaviour
     #endregion
 
     #region FIELDS (CACHED FOR PERFORMANCE)
-
-    private Character character;
+    private CharacterEntityBattle character;
 
     private Ball ball;
     private Transform ballTf;
@@ -149,10 +148,10 @@ public class CharacterComponentAI : MonoBehaviour
     private Transform ownGoalTf;
     private Goal opponentGoal;
     private Transform opponentGoalTf;
-    private List<Character> teammates;
-    private List<Character> opponents;
+    private List<CharacterEntityBattle> teammates;
+    private List<CharacterEntityBattle> opponents;
     private float closeDistanceBall;
-    private Character lastPassReceiver;
+    private CharacterEntityBattle lastPassReceiver;
     private float lastPassTime = INIT_LAST_PASS_TIME;
     private float nextDecisionTime = 0f;
     private float minDecisionDelay;
@@ -169,7 +168,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     #region INITIALIZATION
 
-    public void Initialize(CharacterData characterData, Character character)
+    public void Initialize(CharacterEntityBattle character)
     {
         this.character = character;
         this.difficulty = AIDifficulty.Hard;
@@ -280,19 +279,19 @@ public class CharacterComponentAI : MonoBehaviour
         BallEvents.OnGained -= HandleGained;
     }
 
-    private void HandleGained(Character gainedBy)
+    private void HandleGained(CharacterEntityBattle gainedBy)
     {
         ClearDefensiveAssignments();
         ResetCommit();
     }
 
-    private void HandleAssignCharacterToTeamBattle(Character character, Team team, FormationCoord formationCoord)
+    private void HandleAssignCharacterToTeamBattle(CharacterEntityBattle character, Team team, FormationCoord formationCoord)
     {
         if (this.character == character)
         {
             isEnemyAI = team.TeamSide == TeamSide.Away;
-            ownGoal = GoalManager.Instance.GetOwnGoal(this.character);
-            opponentGoal = GoalManager.Instance.GetOpponentGoal(this.character);
+            ownGoal = GoalManager.Instance.GetOwnGoal(character);
+            opponentGoal = GoalManager.Instance.GetOpponentGoal(character);
             ownGoalTf = ownGoal ? ownGoal.transform : null;
             opponentGoalTf = opponentGoal ? opponentGoal.transform : null;
             teammates = character.GetTeammates();
@@ -402,7 +401,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     #region SENSING HELPERS
 
-    private float GetNearestOpponentDistanceTo(Character c)
+    private float GetNearestOpponentDistanceTo(CharacterEntityBattle c)
     {
         // returns real distance (not squared) because callers may expect it;
         // use squared for comparisons, then sqrt at the end once.
@@ -413,7 +412,7 @@ public class CharacterComponentAI : MonoBehaviour
         var ops = opponents;
         for (int i = 0; i < ops.Count; i++)
         {
-            Character opponent = ops[i];
+            CharacterEntityBattle opponent = ops[i];
             if (opponent == null || !opponent.CanMove()) continue;
             Vector3 d = opponent.transform.position - pos;
             float sq = d.sqrMagnitude;
@@ -424,9 +423,9 @@ public class CharacterComponentAI : MonoBehaviour
         return Mathf.Sqrt(bestSqr);
     }
 
-    private Character GetNearestOpponentTo(Character c)
+    private CharacterEntityBattle GetNearestOpponentTo(CharacterEntityBattle c)
     {
-        Character best = null;
+        CharacterEntityBattle best = null;
         float bestSqr = float.MaxValue;
         if (opponents == null || opponents.Count == 0) return null;
         Vector3 pos = c.transform.position;
@@ -434,7 +433,7 @@ public class CharacterComponentAI : MonoBehaviour
         var ops = opponents;
         for (int i = 0; i < ops.Count; i++)
         {
-            Character opponent = ops[i];
+            CharacterEntityBattle opponent = ops[i];
             if (opponent == null || !opponent.CanMove()) continue;
             Vector3 d = opponent.transform.position - pos;
             float sq = d.sqrMagnitude;
@@ -450,7 +449,7 @@ public class CharacterComponentAI : MonoBehaviour
     private bool HasOpenTeammate()
     {
         if (teammates == null || teammates.Count == 0) return false;
-        Character openTeammate = null;
+        CharacterEntityBattle openTeammate = null;
         float bestScore = float.MinValue;
 
         Vector3 myPos = _transform.position;
@@ -459,7 +458,7 @@ public class CharacterComponentAI : MonoBehaviour
 
         for (int i = 0; i < mates.Count; i++)
         {
-            Character mate = mates[i];
+            CharacterEntityBattle mate = mates[i];
             if (mate == null || mate == character || !mate.CanMove() || mate.IsKeeper) continue;
 
             if (mate == lastPassReceiver && Time.time - lastPassTime < PASS_LOOP_COOLDOWN) continue;
@@ -480,7 +479,7 @@ public class CharacterComponentAI : MonoBehaviour
 
             for (int j = 0; j < ops.Count; j++)
             {
-                Character opponent = ops[j];
+                CharacterEntityBattle opponent = ops[j];
                 if (opponent == null || !opponent.CanMove()) continue;
 
                 Vector3 toOpp = opponent.transform.position - myPos;
@@ -520,7 +519,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     private bool OpponentHasBall()
     {
-        Character otherCharacter = PossessionManager.Instance.CurrentCharacter;
+        CharacterEntityBattle otherCharacter = PossessionManager.Instance.CurrentCharacter;
         return otherCharacter != null && !otherCharacter.IsSameTeam(character);
     }
 
@@ -593,7 +592,7 @@ public class CharacterComponentAI : MonoBehaviour
         if (ball == null) return;
         if (!ball.IsFree() && PossessionManager.Instance.CurrentCharacter != null) return;
 
-        Character closestCharacter = CharacterChangeControlManager.Instance.GetClosestTeammateToBall(character, true);
+        CharacterEntityBattle closestCharacter = CharacterChangeControlManager.Instance.GetClosestTeammateToBall(character, true);
         if (character != closestCharacter) return;
 
         Vector3 myPos = _transform.position;
@@ -615,7 +614,7 @@ public class CharacterComponentAI : MonoBehaviour
         goalDir.Normalize();
         Vector3 dodge = Vector3.zero;
 
-        Character opp = GetNearestOpponentTo(character);
+        CharacterEntityBattle opp = GetNearestOpponentTo(character);
         if (opp != null)
         {
             Vector3 diff = opp.transform.position - _transform.position;
@@ -684,7 +683,7 @@ public class CharacterComponentAI : MonoBehaviour
     {
         if (character.HasBall()) return;
 
-        Character ballHolder = PossessionManager.Instance.CurrentCharacter;
+        CharacterEntityBattle ballHolder = PossessionManager.Instance.CurrentCharacter;
         if (ballHolder == null || !ballHolder.IsSameTeam(character))
         {
             MoveTowards(character.FormationCoord.DefaultPosition);
@@ -714,7 +713,7 @@ public class CharacterComponentAI : MonoBehaviour
             var mates = teammates;
             for (int i = 0; i < mates.Count; i++)
             {
-                Character mate = mates[i];
+                CharacterEntityBattle mate = mates[i];
                 if (mate == character || !mate.CanMove()) continue;
                 Vector3 diff = myPos - mate.transform.position;
                 float dist = diff.magnitude;
@@ -760,7 +759,7 @@ public class CharacterComponentAI : MonoBehaviour
         }
 
         // Pick a mark target (assignment system first; fallback to nearest locked)
-        Character target = GetAssignedMarkTarget();
+        CharacterEntityBattle target = GetAssignedMarkTarget();
         if (target == null)
             target = GetLockedMarkTarget();
 
@@ -835,7 +834,7 @@ public class CharacterComponentAI : MonoBehaviour
             return;
         }
 
-        Character opponent = PossessionManager.Instance.CurrentCharacter;
+        CharacterEntityBattle opponent = PossessionManager.Instance.CurrentCharacter;
         bool isOpponentValid = opponent != null && !opponent.IsSameTeam(character);
 
         if (!isOpponentValid)
@@ -950,7 +949,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void ActPass()
     {
-        Character teammate = GetBestPassTeammate();
+        CharacterEntityBattle teammate = GetBestPassTeammate();
         if (teammate == null || !character.HasBall()) return;
 
         character.KickBallTo(teammate.transform.position);
@@ -958,11 +957,11 @@ public class CharacterComponentAI : MonoBehaviour
         lastPassTime = Time.time;
     }
 
-    public Character GetBestPassTeammate()
+    public CharacterEntityBattle GetBestPassTeammate()
     {
         if (teammates == null || teammates.Count == 0) return null;
 
-        Character best = null;
+        CharacterEntityBattle best = null;
         float bestScore = float.MinValue;
 
         Vector3 myPos = _transform.position;
@@ -973,7 +972,7 @@ public class CharacterComponentAI : MonoBehaviour
         var mates = teammates;
         for (int i = 0; i < mates.Count; i++)
         {
-            Character mate = mates[i];
+            CharacterEntityBattle mate = mates[i];
             if (mate == character || !mate.CanMove()) continue;
 
             Vector3 matePos = mate.transform.position;
@@ -1014,10 +1013,10 @@ public class CharacterComponentAI : MonoBehaviour
 
     #region DEFENSIVE ASSIGNMENTS & ZONES
 
-    private Character currentMarkTarget;
+    private CharacterEntityBattle currentMarkTarget;
     private float markLockUntil;
 
-    private Character GetLockedMarkTarget()
+    private CharacterEntityBattle GetLockedMarkTarget()
     {
         if (currentMarkTarget != null &&
             Time.time < markLockUntil &&
@@ -1030,9 +1029,9 @@ public class CharacterComponentAI : MonoBehaviour
         return currentMarkTarget;
     }
 
-    private static Dictionary<Character, Character> defensiveAssignments = new Dictionary<Character, Character>();
+    private static Dictionary<CharacterEntityBattle, CharacterEntityBattle> defensiveAssignments = new Dictionary<CharacterEntityBattle, CharacterEntityBattle>();
 
-    private Character GetAssignedMarkTarget()
+    private CharacterEntityBattle GetAssignedMarkTarget()
     {
         // Clean invalid assignments quickly: use TryGetValue to avoid extra lookup
         if (defensiveAssignments.TryGetValue(character, out var assigned))
@@ -1041,7 +1040,7 @@ public class CharacterComponentAI : MonoBehaviour
                 return assigned;
         }
 
-        Character best = null;
+        CharacterEntityBattle best = null;
         float bestScore = float.MaxValue;
 
         if (opponents == null) return null;

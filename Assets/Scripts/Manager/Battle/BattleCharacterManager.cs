@@ -9,10 +9,10 @@ public class BattleCharacterManager : MonoBehaviour
     public static BattleCharacterManager Instance { get; private set; }
 
     [Header("Character Settings")]
-    [SerializeField] private GameObject characterPrefab;    //inspector
+    [SerializeField] private GameObject characterEntityBattlePrefab;    //inspector
     [SerializeField] private int initialPoolSize = 22;
 
-    private Queue<Character> characterPool = new Queue<Character>();
+    private Queue<CharacterEntityBattle> characterPool = new Queue<CharacterEntityBattle>();
     private Transform spawnPoint;
 
     private void Awake()
@@ -47,7 +47,7 @@ public class BattleCharacterManager : MonoBehaviour
 
     private void PrewarmCharacterPool()
     {
-        if (characterPrefab == null)
+        if (characterEntityBattlePrefab == null)
         {
             LogManager.Error("[BattleCharacterManager] Character prefab missing!");
             return;
@@ -55,22 +55,22 @@ public class BattleCharacterManager : MonoBehaviour
 
         for (int i = 0; i < initialPoolSize; i++)
         {
-            var go = Instantiate(characterPrefab, spawnPoint);
-            var character = go.GetComponent<Character>();
+            var go = Instantiate(characterEntityBattlePrefab, spawnPoint);
+            var characterEntityBattle = go.GetComponent<CharacterEntityBattle>();
             go.SetActive(false);
-            characterPool.Enqueue(character);
+            characterPool.Enqueue(characterEntityBattle);
         }
 
         LogManager.Trace($"[BattleCharacterManager] Prewarmed {initialPoolSize} pooled characters");
     }
 
-    public void GetPooledCharacter(Action<Character> onCharacterReady)
+    public void GetPooledCharacter(Action<CharacterEntityBattle> onCharacterReady)
     {
         if (characterPool.Count == 0)
         {
-            var go = Instantiate(characterPrefab, spawnPoint);
-            var character = go.GetComponent<Character>();
-            characterPool.Enqueue(character);
+            var go = Instantiate(characterEntityBattlePrefab, spawnPoint);
+            var characterEntityBattle = go.GetComponent<CharacterEntityBattle>();
+            characterPool.Enqueue(characterEntityBattle);
         }
 
         var pooledCharacter = characterPool.Dequeue();
@@ -78,20 +78,20 @@ public class BattleCharacterManager : MonoBehaviour
         onCharacterReady?.Invoke(pooledCharacter);
     }
 
-    public void ReturnCharacterToPool(Character character)
+    public void ReturnCharacterToPool(CharacterEntityBattle character)
     {
         if (character == null) return;
         character.gameObject.SetActive(false);
         characterPool.Enqueue(character);
     }
 
-    public void AssignCharacterToTeamBattle(Character character, Team team, int characterIndex)
+    public void AssignCharacterToTeamBattle(CharacterEntityBattle character, Team team, int characterIndex)
     {
         FormationCoord formationCoord = team.GetFormation(BattleManager.Instance.CurrentType).FormationCoords[characterIndex];
         TeamEvents.RaiseAssignCharacterToTeamBattle(character, team, formationCoord);
     }
 
-    public void ResetCharacterPosition(Character character)
+    public void ResetCharacterPosition(CharacterEntityBattle character)
     {
         character.ResetPhysics();
         character.Teleport(character.FormationCoord.DefaultPosition);

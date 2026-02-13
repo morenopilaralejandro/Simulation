@@ -25,7 +25,7 @@ public class CharacterComponentController : MonoBehaviour
     #endregion
 
     #region State
-    private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     private Vector2 moveInput;
     private Vector3 moveDirection;
@@ -35,27 +35,27 @@ public class CharacterComponentController : MonoBehaviour
     private Vector3 aimedPassPosition;
 
     private bool useMouseAiming;
-    private Character cachedTarget;
+    private CharacterEntityBattle cachedTarget;
     #endregion
 
     #region Properties
     private bool IsControlledInternal =>
         BattleManager.Instance.ControlledCharacter[
-        BattleTeamManager.Instance.GetUserSide()] == character;
+        BattleTeamManager.Instance.GetUserSide()] == characterEntityBattle;
 
     public bool IsControlled => IsControlledInternal;
 
     private bool CanProcessInput =>
         IsControlledInternal &&
-        !character.IsAutoBattleEnabled &&
+        !characterEntityBattle.IsAutoBattleEnabled &&
         BattleManager.Instance.CurrentPhase == BattlePhase.Battle &&
         !BattleManager.Instance.IsTimeFrozen;
     #endregion
 
     #region Lifecycle
-    public void Initialize(CharacterData data, Character character)
+    public void Initialize(CharacterEntityBattle characterEntityBattle)
     {
-        this.character = character;
+        this.characterEntityBattle = characterEntityBattle;
         useMouseAiming = !InputManager.Instance.IsAndroid;
     }
 
@@ -73,7 +73,7 @@ public class CharacterComponentController : MonoBehaviour
 
     private void Update()
     {
-        if (IsControlledInternal && !character.IsAutoBattleEnabled) 
+        if (IsControlledInternal && !characterEntityBattle.IsAutoBattleEnabled) 
         {
             ReadMovementInput();
             UpdateTargeting();
@@ -83,7 +83,7 @@ public class CharacterComponentController : MonoBehaviour
 
         BufferShootInput();
 
-        if (!character.CanMove() || BattleUIManager.Instance.IsBattleMenuOpen) return;
+        if (!characterEntityBattle.CanMove() || BattleUIManager.Instance.IsBattleMenuOpen) return;
 
         HandlePassInput();
         HandleShootInput();
@@ -91,7 +91,7 @@ public class CharacterComponentController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!CanProcessInput || !character.CanMove() || character.IsStateLocked)
+        if (!CanProcessInput || !characterEntityBattle.CanMove() || characterEntityBattle.IsStateLocked)
             return;
 
         HandleMovement();
@@ -118,18 +118,18 @@ public class CharacterComponentController : MonoBehaviour
         if (isAimingPass || BattleEffectManager.Instance.IsPlayingMove || DeadBallManager.Instance.IsUserDefense)
             return;
 
-        Character target = moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE
-            ? CharacterTargetManager.Instance.GetClosestTeammateInDirection(character, moveDirection)
+        CharacterEntityBattle target = moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE
+            ? CharacterTargetManager.Instance.GetClosestTeammateInDirection(characterEntityBattle, moveDirection)
             : null;
 
-        CharacterEvents.RaiseTargetChange(target, character.TeamSide);
+        CharacterEvents.RaiseTargetChange(target, characterEntityBattle.TeamSide);
     }
     #endregion
 
     #region Movement
     private void HandleMovement()
     {
-        float speed = character.MovementSpeed;
+        float speed = characterEntityBattle.MovementSpeed;
 
         Vector3 desiredVelocity = new Vector3(
             moveInput.x * speed,
@@ -153,8 +153,8 @@ public class CharacterComponentController : MonoBehaviour
             return;
 
         Quaternion targetRotation = Quaternion.LookRotation(flatVelocity);
-        character.Model.rotation = Quaternion.Slerp(
-            character.Model.rotation,
+        characterEntityBattle.Model.rotation = Quaternion.Slerp(
+            characterEntityBattle.Model.rotation,
             targetRotation,
             rotationSpeed * Time.fixedDeltaTime
         );
@@ -164,7 +164,7 @@ public class CharacterComponentController : MonoBehaviour
     #region Pass
     private void HandlePassInput()
     {
-        if (!character.HasBall())
+        if (!characterEntityBattle.HasBall())
             return;
 
         if (InputManager.Instance.GetDown(CustomAction.Battle_Pass))
@@ -181,7 +181,7 @@ public class CharacterComponentController : MonoBehaviour
     {
         passHoldTimer = 0f;
         isAimingPass = false;
-        cachedTarget = BattleManager.Instance.TargetedCharacter[character.TeamSide];
+        cachedTarget = BattleManager.Instance.TargetedCharacter[characterEntityBattle.TeamSide];
     }
 
     private void UpdatePassAim()
@@ -192,7 +192,7 @@ public class CharacterComponentController : MonoBehaviour
 
         isAimingPass = true;
         cachedTarget = null;
-        CharacterEvents.RaiseTargetChange(null, character.TeamSide);
+        CharacterEvents.RaiseTargetChange(null, characterEntityBattle.TeamSide);
 
         Vector3 direction = GetPassDirection();
         aimedPassPosition = transform.position + direction * aimRadius;
@@ -213,7 +213,7 @@ public class CharacterComponentController : MonoBehaviour
 
         return moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE
             ? moveDirection.normalized
-            : character.Model.forward;
+            : characterEntityBattle.Model.forward;
     }
 
     private void ExecutePass()
@@ -228,44 +228,44 @@ public class CharacterComponentController : MonoBehaviour
         isAimingPass = false;
     }
 
-    private void PassToTeammate(Character target)
+    private void PassToTeammate(CharacterEntityBattle target)
     {
-        character.KickBallTo(target.transform.position);
+        characterEntityBattle.KickBallTo(target.transform.position);
         CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
     }
 
     private void PassToPosition(Vector3 position)
     {
-        Character receiver =
-            CharacterTargetManager.Instance.GetClosestTeammateToPoint(character, position);
+        CharacterEntityBattle receiver =
+            CharacterTargetManager.Instance.GetClosestTeammateToPoint(characterEntityBattle, position);
 
-        character.KickBallTo(position);
+        characterEntityBattle.KickBallTo(position);
 
         if (receiver != null)
-            CharacterChangeControlManager.Instance.SetControlledCharacter(receiver, character.TeamSide);
+            CharacterChangeControlManager.Instance.SetControlledCharacter(receiver, characterEntityBattle.TeamSide);
     }
     #endregion
 
     #region Shoot
     private void HandleShootInput()
     {
-        if (!character.HasBall()) return;
+        if (!characterEntityBattle.HasBall()) return;
 
         if (!InputManager.Instance.ConsumeBuffered(CustomAction.Battle_Shoot, out bool isDirect))
             return;
 
-        if (!character.CanShoot() || !DuelManager.Instance.IsResolved)
+        if (!characterEntityBattle.CanShoot() || !DuelManager.Instance.IsResolved)
             return;
 
-        bool isLongShootStart = !GoalManager.Instance.IsInShootDistance(character);
-        DuelManager.Instance.StartShootDuel(character, isDirect, isLongShootStart);
+        bool isLongShootStart = !GoalManager.Instance.IsInShootDistance(characterEntityBattle);
+        DuelManager.Instance.StartShootDuel(characterEntityBattle, isDirect, isLongShootStart);
     }
     #endregion
 
     #region Events
-    private void OnAssignCharacter(Character assigned, Team team, FormationCoord coord)
+    private void OnAssignCharacter(CharacterEntityBattle assigned, Team team, FormationCoord coord)
     {
-        if (assigned == character &&
+        if (assigned == characterEntityBattle &&
             team.TeamSide != BattleTeamManager.Instance.GetUserSide())
         {
             enabled = false;

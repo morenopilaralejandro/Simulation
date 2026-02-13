@@ -5,43 +5,43 @@ using Simulation.Enums.Character;
 using Simulation.Enums.Kit;
 using Simulation.Enums.SpriteLayer;
 
-public class CharacterComponentAppearance : MonoBehaviour, IAsyncSceneLoader
+public class CharacterComponentAppearance
 {
-    #region Serialized Fields
-
-    [SerializeField] private SpriteLayerRendererCharacter spriteLayerRenderer;
-
-    #endregion
-
-    #region Private Fields
+    #region Fields
 
     private Character character;
-    private CharacterData characterData;
-    private SpriteLayerState<CharacterSpriteLayer> state;
-    private Sprite portraitSprite;
-    private PortraitSize portraitSize;
 
-    #endregion
+    public string PortraitSpriteId { get; private set; }
+    public string HairStyleId { get; private set; }
+    public HairColorType HairColorType { get; private set; }
+    public EyeColorType EyeColorType { get; private set; }
+    public BodyColorType BodyColorType { get; private set; }
 
-    #region Public Properties
-
-    public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState => state;
-    public Sprite PortraitSprite => portraitSprite;
-    public PortraitSize PortraitSize => portraitSize;
+    public SpriteLayerState<CharacterSpriteLayer> State { get; set; }
+    public Sprite PortraitSprite { get; set; }
 
     #endregion
 
     #region Initialization
+    public CharacterComponentAppearance(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
+    {
+        Initialize(characterData, character, characterSaveData);
+    }
 
-    public void Initialize(CharacterData characterData, Character character)
+    public async void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
         this.character = character;
-        this.characterData = characterData;
 
-        state = new SpriteLayerState<CharacterSpriteLayer>();
-        portraitSize = characterData.PortraitSize;
+        PortraitSpriteId = characterData.CharacterId;
+        HairStyleId = characterData.HairStyle.ToString().ToLower();
+        HairColorType = characterData.HairColorType;
+        EyeColorType = characterData.EyeColorType;
+        BodyColorType = characterData.BodyColorType;
 
-        InitializeVisibility();
+        State = new SpriteLayerState<CharacterSpriteLayer>();
+
+        ApplyColors();
+        await LoadAsync();
     }
 
     #endregion
@@ -50,97 +50,60 @@ public class CharacterComponentAppearance : MonoBehaviour, IAsyncSceneLoader
 
     public async Task LoadAsync()
     {
-        await LoadSprites();
-
-        ApplyColors(characterData);
-
-        if (character.FormationCoord.Position != Position.GK)
-        {
-            state.VisibleLayers.Remove(CharacterSpriteLayer.Gloves);
-            spriteLayerRenderer.SetActive(CharacterSpriteLayer.Gloves, false);
-        }
-
-        ApplyKit();
-        ApplyStateToRenderer();
+        await LoadPortraitSprite();
     }
 
-    private async Task LoadSprites()
+    private async Task LoadPortraitSprite()
     {
-        state.Sprites[CharacterSpriteLayer.Hair] =
-            await SpriteAtlasManager.Instance.GetCharacterHair(
-                characterData.HairStyle.ToString().ToLower());
-
-        portraitSprite =
-            await SpriteAtlasManager.Instance.GetCharacterPortrait(
-                characterData.CharacterId);
+        PortraitSprite = await SpriteAtlasManager.Instance.GetCharacterPortrait(PortraitSpriteId);
     }
 
     #endregion
 
     #region Appearance Application
 
-    private void ApplyColors(CharacterData characterData)
+    private void ApplyColors()
     {
-        var hairColor = ColorManager.GetHairColor(characterData.HairColorType);
+        State.Colors[CharacterSpriteLayer.Hair] = ColorManager.GetHairColor(HairColorType);
+        State.Colors[CharacterSpriteLayer.EyeIris] = ColorManager.GetEyeColor(EyeColorType);
+        State.Colors[CharacterSpriteLayer.Body] = ColorManager.GetBodyColor(BodyColorType);
 
-        state.Colors[CharacterSpriteLayer.Hair] = hairColor;
-        state.Colors[CharacterSpriteLayer.EyeIris] = ColorManager.GetEyeColor(characterData.EyeColorType);
-        state.Colors[CharacterSpriteLayer.Body] = ColorManager.GetBodyColor(characterData.BodyColorType);
+        //prevent missing key
+        State.Colors[CharacterSpriteLayer.KitBase] = Color.black;
+        State.Colors[CharacterSpriteLayer.KitDetail] = Color.black;
+        State.Colors[CharacterSpriteLayer.KitShocks] = Color.black;
     }
 
-    public void ApplyKit()
+    public void ApplyKit(Kit kit, Variant variant, Position position)
     {
-        var kitColor = character.GetTeam().Kit.GetColors(GetKitVariant(), GetKitRole());
+        var kitColor = kit.GetColors(
+            variant, 
+            GetKitRole(position));
 
-        state.Colors[CharacterSpriteLayer.KitBase] = kitColor.Base;
-        state.Colors[CharacterSpriteLayer.KitDetail] = kitColor.Detail;
-        state.Colors[CharacterSpriteLayer.KitShocks] = kitColor.Shocks;
-    }
-
-    private void ApplyStateToRenderer()
-    {
-        foreach (var (layer, sprite) in state.Sprites)
-            spriteLayerRenderer.SetSprite(layer, sprite);
-
-        foreach (var (layer, color) in state.Colors)
-            spriteLayerRenderer.SetColor(layer, color);
-
-        foreach (CharacterSpriteLayer layer in Enum.GetValues(typeof(CharacterSpriteLayer)))
-            spriteLayerRenderer.SetVisible(layer, state.Contains(layer));
+        State.Colors[CharacterSpriteLayer.KitBase] = kitColor.Base;
+        State.Colors[CharacterSpriteLayer.KitDetail] = kitColor.Detail;
+        State.Colors[CharacterSpriteLayer.KitShocks] = kitColor.Shocks;
     }
 
     #endregion
 
     #region Visibility
 
-    private void InitializeVisibility()
+    public void InitializeVisibility()
     {
         foreach (CharacterSpriteLayer layer in Enum.GetValues(typeof(CharacterSpriteLayer)))
-            state.VisibleLayers.Add(layer);
+            State.VisibleLayers.Add(layer);
 
-        state.VisibleLayers.Remove(CharacterSpriteLayer.Aura);
-        state.VisibleLayers.Remove(CharacterSpriteLayer.Armor);
-    }
-
-    public void SetCharacterVisible(bool isVisible)
-    {
-        foreach (CharacterSpriteLayer layer in state.VisibleLayers)
-            spriteLayerRenderer.SetVisible(layer, isVisible);
+        State.VisibleLayers.Remove(CharacterSpriteLayer.Aura);
+        State.VisibleLayers.Remove(CharacterSpriteLayer.Armor);
     }
 
     #endregion
 
-    #region Kit Helpers
+    #region Helpers
 
-    public Role GetKitRole()
-    {
-        return character.FormationCoord.Position == Position.GK ? Role.Keeper : Role.Field;
-    }
-
-    public Variant GetKitVariant()
-    {
-        return character.GetTeam().Variant;
-    }
+    public Variant GetKitVariant(Team team) => team?.Variant ?? Variant.Home;
+    public Role GetKitRole(Position position) => position == Position.GK ? Role.Keeper : Role.Field;
 
     #endregion
 }

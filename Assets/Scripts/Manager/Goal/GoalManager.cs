@@ -16,10 +16,10 @@ public class GoalManager : MonoBehaviour
     private float keeperGoalDistanceZ = 3.05f;
     private float shootDistance = 4f;
     private Dictionary<TeamSide, Goal> goals = new ();
-    private Dictionary<TeamSide, Character> keepers = new ();
+    private Dictionary<TeamSide, CharacterEntityBattle> keepers = new ();
     
     public Dictionary<TeamSide, Goal> Goals => goals;
-    public Dictionary<TeamSide, Character> Keepers => keepers;
+    public Dictionary<TeamSide, CharacterEntityBattle> Keepers => keepers;
 
     private void Awake()
     {
@@ -49,75 +49,75 @@ public class GoalManager : MonoBehaviour
         goals[goal.TeamSide] = goal;
     }
 
-    public void SetKeeper(Character character, TeamSide teamSide) 
+    public void SetKeeper(CharacterEntityBattle character, TeamSide teamSide) 
     {
         keepers[teamSide] = character;
     }
 
-    public Goal GetOwnGoal(Character character)
+    public Goal GetOwnGoal(CharacterEntityBattle character)
     {
         return goals[character.TeamSide];  
     }
 
-    public Goal GetOpponentGoal(Character character)
+    public Goal GetOpponentGoal(CharacterEntityBattle character)
     {
         return goals[character.GetOpponentSide()];
     }
 
-    public float GetDistanceToOwnGoal(Character character)
+    public float GetDistanceToOwnGoal(CharacterEntityBattle character)
     {
         Transform goal = GetOwnGoal(character).transform;
         return Vector3.Distance(character.transform.position, goal.position);
     }
 
-    public float GetDistanceToOwnGoalX(Character character)
+    public float GetDistanceToOwnGoalX(CharacterEntityBattle character)
     {
         Transform goal = GetOwnGoal(character).transform;
         return Mathf.Abs(character.transform.position.x - goal.position.x);
     }
 
-    public float GetDistanceToOwnGoalZ(Character character)
+    public float GetDistanceToOwnGoalZ(CharacterEntityBattle character)
     {
         Transform goal = GetOwnGoal(character).transform;
         return Mathf.Abs(character.transform.position.z - goal.position.z);
     }
 
-    public float GetDistanceToOpponentGoal(Character character)
+    public float GetDistanceToOpponentGoal(CharacterEntityBattle character)
     {
         Transform goal = GetOpponentGoal(character).transform;
         return Vector3.Distance(character.transform.position, goal.position);
     }
 
-    public float GetDistanceToOpponentGoalX(Character character)
+    public float GetDistanceToOpponentGoalX(CharacterEntityBattle character)
     {
         Transform goal = GetOpponentGoal(character).transform;
         return Mathf.Abs(character.transform.position.x - goal.position.x);
     }
 
-    public float GetDistanceToOpponentGoalZ(Character character)
+    public float GetDistanceToOpponentGoalZ(CharacterEntityBattle character)
     {
         Transform goal = GetOpponentGoal(character).transform;
         return Mathf.Abs(character.transform.position.z - goal.position.z);
     }
 
-    public Character GetOwnKeeper(Character character)
+    public CharacterEntityBattle GetOwnKeeper(CharacterEntityBattle character)
     {
         return keepers[character.TeamSide];
     }
 
-    public Character GetOpponentKeeper(Character character)
+    public CharacterEntityBattle GetOpponentKeeper(CharacterEntityBattle character)
     {
         return keepers[character.GetOpponentSide()];
     }
 
-    public bool IsInOwnPenaltyArea(Character character)
+    public bool IsInOwnPenaltyArea(CharacterEntityBattle character)
     {
         float distanceX = GetDistanceToOwnGoalX(character);
         float distanceZ = GetDistanceToOwnGoalZ(character);
         return distanceX <= keeperGoalDistanceX && distanceZ <= keeperGoalDistanceZ;
     }
 
-    public bool IsInShootDistance(Character character)
+    public bool IsInShootDistance(CharacterEntityBattle character)
     {
         float distance = GetDistanceToOpponentGoalZ(character);
         return distance <= shootDistance;

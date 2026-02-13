@@ -4,6 +4,7 @@ using Simulation.Enums.Character;
 public class CharacterComponentStatusIndicator : MonoBehaviour
 {
     private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     [Header("Static Sprites")]
     [SerializeField] private SpriteRenderer indicatorRenderer;
@@ -16,11 +17,12 @@ public class CharacterComponentStatusIndicator : MonoBehaviour
     private string stunAnimationTrigger = "Stun";
 
     private StatusEffect? currentStatus;
-    private FatigueState currentFatigue => this.character.FatigueState;
+    private FatigueState currentFatigue => characterEntityBattle.FatigueState;
 
-    public void Initialize(CharacterData characterData, Character character) 
+    public void Initialize(CharacterEntityBattle characterEntityBattle) 
     {
-        this.character = character;
+        this.character = characterEntityBattle.Character;
+        this.characterEntityBattle = characterEntityBattle;
         UpdateStatusIndicator(null);
     }
 

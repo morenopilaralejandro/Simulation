@@ -5,8 +5,8 @@ using Simulation.Enums.Battle;
 public class CharacterTargetIndicator : MonoBehaviour
 {
     [SerializeField] private LineRenderer lineRenderer;
-    private Character controlledCharacter => BattleManager.Instance.ControlledCharacter[BattleManager.Instance.GetUserSide()];
-    private Character targetedCharacter => BattleManager.Instance.TargetedCharacter[BattleManager.Instance.GetUserSide()];
+    private CharacterEntityBattle controlledCharacter => BattleManager.Instance.ControlledCharacter[BattleManager.Instance.GetUserSide()];
+    private CharacterEntityBattle targetedCharacter => BattleManager.Instance.TargetedCharacter[BattleManager.Instance.GetUserSide()];
     private float lineY = 0.01f;
 
     private void Awake()

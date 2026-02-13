@@ -20,8 +20,8 @@ public class DuelLogPopup : MonoBehaviour
     private void Configure(DuelLogEntry entry)
     {
         messageText.text = entry.EntryString;
-        if (entry.Character != null)
-            characterPortrait.SetCharacter(entry.Character);
+        if (entry.CharacterEntityBattle != null)
+            characterPortrait.SetCharacter(entry.CharacterEntityBattle.Character);
         if (entry.Move != null && entry.Move.CurrentEvolution != MoveEvolution.None) 
         {
             imageEvolution.sprite = entry.Move.EvolutionSprite;
@@ -30,17 +30,17 @@ public class DuelLogPopup : MonoBehaviour
 
     private void UpdateActivePanels(DuelLogEntry entry)
     {
-        bool hasCharacter = entry.Character != null;
+        bool hasCharacter = entry.CharacterEntityBattle != null;
         bool hasMove = entry.Move != null && entry.Move.CurrentEvolution != MoveEvolution.None;
 
         panelPortraitCharacter.SetActive(hasCharacter);
         panelPortraitDefault.SetActive(!hasCharacter);
         panelEvolution.SetActive(hasMove);
 
-        UpdateBackgroundColor(hasCharacter, entry.Character);
+        UpdateBackgroundColor(hasCharacter, entry.CharacterEntityBattle);
     }
 
-    private void UpdateBackgroundColor(bool hasCharacter, Character character) 
+    private void UpdateBackgroundColor(bool hasCharacter, CharacterEntityBattle character) 
     {
         if (!hasCharacter) 
         {

@@ -4,19 +4,24 @@ using System.Collections;
 using System.Collections.Generic;
 using Simulation.Enums.Character;
 
-public class CharacterComponentStats : MonoBehaviour
+public class CharacterComponentStats
 {
     //trainedStats and freedom are used in training component
     private Character character;
 
-    [SerializeField] private Dictionary<Stat, int> baseStats = new();       //from character data
-    [SerializeField] private Dictionary<Stat, int> trainedStats = new();    //gained from training
-    [SerializeField] private Dictionary<Stat, int> trueStats = new();       //calculated after scaling baseStats
-    [SerializeField] private Dictionary<Stat, int> battleStats = new();     //used during battle
+    private Dictionary<Stat, int> baseStats = new();       //from character data
+    private Dictionary<Stat, int> trainedStats = new();    //gained from training
+    private Dictionary<Stat, int> trueStats = new();       //calculated after scaling baseStats
+    private Dictionary<Stat, int> battleStats = new();     //used during battle
 
     [Range(0f, 1f)] private float minStatRatioHp = 0.4f; // 40% of base at level 1
     [Range(0f, 1f)] private float minStatRatioSp = 0.4f; // 40% of base at level 1
     [Range(0f, 1f)] private float minStatRatioOther = 0.1f; // 10% of base at level 1
+
+    public CharacterComponentStats(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null) 
+    {
+        Initialize(characterData, character, characterSaveData);
+    }
 
     public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null) 
     {
@@ -82,7 +87,6 @@ public class CharacterComponentStats : MonoBehaviour
         if (stat == Stat.Hp && amount < 0) 
             amount = GetReducedHpAmount(amount);
         battleStats[stat] = Mathf.Clamp(battleStats[stat] + amount, 0, trueStats[stat]);
-        if (stat == Stat.Hp) this.character.UpdateFatigue();
     }
 
     public void ModifyTrainedStat(Stat stat, int amount)

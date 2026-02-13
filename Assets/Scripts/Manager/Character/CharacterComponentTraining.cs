@@ -3,18 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using Simulation.Enums.Character;
 
-public class CharacterComponentTraining : MonoBehaviour
+public class CharacterComponentTraining
 {
     private Character character;
     public const int MAX_TRAINING_PER_STAT = 50;
     
-    [SerializeField] private int baseFreedom;
-    [SerializeField] private int trueFreedom;
-    [SerializeField] private int trainingResetCount;
+    private int baseFreedom;
+    private int trueFreedom;
+    private int trainingResetCount;
 
     public int BaseFreedom => baseFreedom;
     public int TrueFreedom => trueFreedom;
     public int TrainingResetCount => trainingResetCount;
+
+    public CharacterComponentTraining(CharacterData characterData, Character character, CharacterSaveData characterSaveData) 
+    {
+        Initialize(characterData, character, characterSaveData);
+    }
 
     public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData) 
     {

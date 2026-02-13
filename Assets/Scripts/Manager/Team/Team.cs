@@ -72,14 +72,20 @@ public class Team
     public int Level => levelsComponent.Level;
     //playersComponent
     public List<CharacterData> FullBattleCharacterDataList => playersComponent.FullBattleCharacterDataList;
-    public List<Character> FullBattleCharacterList => playersComponent.FullBattleCharacterList;
+    public List<CharacterEntityBattle> FullBattleCharacterEntities => playersComponent.FullBattleCharacterEntities;
+    public List<string> FullBattleCharacterGuids => playersComponent.FullBattleCharacterGuids;
     public List<CharacterData> MiniBattleCharacterDataList => playersComponent.MiniBattleCharacterDataList;
-    public List<Character> MiniBattleCharacterList => playersComponent.MiniBattleCharacterList;
+    public List<CharacterEntityBattle> MiniBattleCharacterEntities => playersComponent.MiniBattleCharacterEntities;
+    public List<string> MiniBattleCharacterGuids => playersComponent.MiniBattleCharacterGuids;
     public List<CharacterData> GetCharacterDataList(BattleType battleType) => playersComponent.GetCharacterDataList(battleType);
-    public List<Character> GetCharacterList(BattleType battleType) => playersComponent.GetCharacterList(battleType);
-    public void ClearCharacterList(BattleType battleType) => playersComponent.ClearCharacterList(battleType);
-    public int GetCharacterCount(BattleType battleType) => playersComponent.GetCharacterCount(battleType);
-    public bool HasCharacters(BattleType battleType) => playersComponent.HasCharacters(battleType);
+    public List<CharacterEntityBattle> GetCharacterEntities(BattleType battleType) => playersComponent.GetCharacterEntities(battleType);
+    public List<string> GetCharacterGuids(BattleType battleType) => playersComponent.GetCharacterGuids(battleType);
+    public void ClearCharacterEntities(BattleType battleType) => playersComponent.ClearCharacterEntities(battleType);
+    public void ClearAll(BattleType battleType) => playersComponent.ClearAll(battleType);
+    public int GetCharacterDataCount(BattleType battleType) => playersComponent.GetCharacterDataCount(battleType);
+    public int GetCharacterEntityCount(BattleType battleType) => playersComponent.GetCharacterEntityCount(battleType);
+    public bool HasCharacterData(BattleType battleType) => playersComponent.HasCharacterData(battleType);
+    public bool HasCharacterEntities(BattleType battleType) => playersComponent.HasCharacterEntities(battleType);
     //sideComponent
     public TeamSide TeamSide => sideComponent.TeamSide;
     public Variant Variant => sideComponent.Variant;

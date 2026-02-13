@@ -24,7 +24,7 @@ public class DuelMenu : MonoBehaviour
     private bool isCommandOpen;
     private bool isMoveOpen;
     private int currentStartIndex = 0;
-    private Character character;
+    private CharacterEntityBattle character;
     private Category category;
     private List<Move> moves;
     private TeamSide userSide;

@@ -4,6 +4,7 @@ using Simulation.Enums.Character;
 public class CharacterComponentStateMachine : MonoBehaviour
 {
     private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     [SerializeField] private CharacterState currentState;
     private const float baseAnimationSpeed = 1f;
@@ -11,9 +12,10 @@ public class CharacterComponentStateMachine : MonoBehaviour
 
     public CharacterState CurrentState => currentState;
 
-    public void Initialize(CharacterData characterData, Character character)
+    public void Initialize(CharacterEntityBattle characterEntityBattle)
     {
-        this.character = character;
+        this.character = characterEntityBattle.Character;
+        this.characterEntityBattle = characterEntityBattle;
     }
 
     public void SetCharacterState(CharacterState state) => currentState = state;
@@ -21,19 +23,19 @@ public class CharacterComponentStateMachine : MonoBehaviour
     public void StartKick()
     {
         currentState = CharacterState.Kick;
-        float controlValue = character.GetBattleStat(Stat.Control);
+        float controlValue = characterEntityBattle.GetBattleStat(Stat.Control);
         //animator.speed = baseAnimationSpeed + controlValue * controlSpeedMultiplier;  // Faster animation for high control players
         //animator.SetTrigger("Kick");
-        character.StartStateLock(CharacterState.Kick);
+        characterEntityBattle.StartStateLock(CharacterState.Kick);
     }
 
     public void StartControl()
     {
         currentState = CharacterState.Control;
-        float controlValue = character.GetBattleStat(Stat.Control);
+        float controlValue = characterEntityBattle.GetBattleStat(Stat.Control);
         //animator.speed = baseAnimationSpeed + controlValue * controlSpeedMultiplier;
         //animator.SetTrigger("Control");
-        character.StartStateLock(CharacterState.Control);
+        characterEntityBattle.StartStateLock(CharacterState.Control);
     }
 
     public void StartMove()
@@ -47,7 +49,7 @@ public class CharacterComponentStateMachine : MonoBehaviour
     public void OnKickAnimationEnd()
     {
         //animator.speed = baseAnimationSpeed;
-        character.ReleaseStateLock();
+        characterEntityBattle.ReleaseStateLock();
         currentState = CharacterState.Idle;
     }
 
@@ -55,7 +57,7 @@ public class CharacterComponentStateMachine : MonoBehaviour
     public void OnControlAnimationEnd()
     {
         //animator.speed = baseAnimationSpeed;
-        character.ReleaseStateLock();
+        characterEntityBattle.ReleaseStateLock();
         currentState = CharacterState.Idle;
     }
 
