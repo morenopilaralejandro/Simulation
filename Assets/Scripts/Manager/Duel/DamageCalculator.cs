@@ -96,6 +96,8 @@ public static class DamageCalculator
         if (appliesDistancePenalty)
             damage -= CalcDistanceReduction(characterEntityBattle);
 
+        damage = Mathf.Max(damage, 0f); // Prevent negative damage
+
         if (isDirect)
             damage += DIRECT_BONUS;
 

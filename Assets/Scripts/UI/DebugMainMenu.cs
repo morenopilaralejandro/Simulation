@@ -21,6 +21,10 @@ public class DebugMainMenu : MonoBehaviour
         HandleButton1();
     }
 
+    public void OnButton2Tapped() {
+        HandleButton2();
+    }
+
     private void HandleButton1() {
         BattleArgs.TeamId0 = "faith_selection";
         BattleArgs.TeamId1 = "crimson_selection";
@@ -29,6 +33,18 @@ public class DebugMainMenu : MonoBehaviour
         BattleArgs.BattleType = BattleType.Full;
 
         SceneLoader.UnloadDebugMainMenu();
+        SceneLoader.LoadBattle();
+    }
+
+    private void HandleButton2() {
+        BattleArgs.TeamId0 = "faith_selection";
+        BattleArgs.TeamId1 = "crimson_selection";
+        BattleArgs.BallId = "crimson";
+        BattleArgs.FieldId = "stadium_main";
+        BattleArgs.BattleType = BattleType.Mini;
+
+        SceneLoader.UnloadDebugMainMenu();
+
         SceneLoader.LoadBattle();
     }
 }
