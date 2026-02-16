@@ -6,6 +6,7 @@ using Simulation.Enums.Character;
 public class CharacterComponentStatusEffects : MonoBehaviour
 {
     private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     private readonly HashSet<StatusEffect> activeStatusEffects = new HashSet<StatusEffect>();
     private float statusSpeedMultiplier = 1.0f;
@@ -18,9 +19,10 @@ public class CharacterComponentStatusEffects : MonoBehaviour
     public HashSet<StatusEffect> ActiveStatusEffects => activeStatusEffects;
     public float StatusSpeedMultiplier => statusSpeedMultiplier;
 
-    public void Initialize(CharacterData characterData, Character character)
+    public void Initialize(CharacterEntityBattle characterEntityBattle)
     {
-        this.character = character;
+        this.characterEntityBattle = characterEntityBattle;
+        this.character = characterEntityBattle.Character;
     }
 
     public void ApplyStatus(StatusEffect effect)
@@ -33,7 +35,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
         switch (effect)
         {
             case StatusEffect.Stunned:
-                if (character.HasBall())
+                if (characterEntityBattle.HasBall())
                     PossessionManager.Instance.Release();
                 stunCoroutine = StartCoroutine(HandleStun(3f));
                 break;
@@ -41,7 +43,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
                 tripCoroutine = StartCoroutine(HandleTrip(1f));
                 break;
         }
-        this.character.UpdateStatusIndicator(effect);
+        characterEntityBattle.UpdateStatusIndicator(effect);
     }
 
     public void ClearStatus(StatusEffect effect)
@@ -61,8 +63,8 @@ public class CharacterComponentStatusEffects : MonoBehaviour
         }
 
         activeStatusEffects.Remove(effect);
-        this.character.UpdateStatusIndicator(null);
-        this.character.UpdateFatigue();
+        characterEntityBattle.UpdateStatusIndicator(null);
+        characterEntityBattle.UpdateFatigue();
     }
 
     public void ClearAllStatus()
@@ -99,7 +101,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
 
         stunCoroutine = null;
         blinkCoroutine = null;
-        character.SetCharacterVisible(true);
+        characterEntityBattle.SetCharacterVisible(true);
     }
 
     private IEnumerator BlinkEffect(float duration)
@@ -118,19 +120,19 @@ public class CharacterComponentStatusEffects : MonoBehaviour
 
                 if (blinkElapsed >= blinkInterval)
                 {
-                    character.SetCharacterVisible(visible);
+                    characterEntityBattle.SetCharacterVisible(visible);
                     visible = !visible;
                     blinkElapsed = 0f;
                 }
             }
             else
             {
-                character.SetCharacterVisible(true);
+                characterEntityBattle.SetCharacterVisible(true);
             }
             yield return null;
         }
 
-        character.SetCharacterVisible(true);
+        characterEntityBattle.SetCharacterVisible(true);
     }
 
     private IEnumerator HandleTrip(float duration)

@@ -5,8 +5,12 @@ using System.Collections.Generic;
 public class TeamData : ScriptableObject
 {
     public string TeamId;
-    public string FormationId;
     public string KitId;
     public int Lv;
-    public List<string> CharacterIds = new List<string>();
+
+    public string FullBattleFormationId;
+    public List<string> FullBattleCharacterIds = new List<string>();
+
+    public string MiniBattleFormationId;
+    public List<string> MiniBattleCharacterIds = new List<string>();
 }

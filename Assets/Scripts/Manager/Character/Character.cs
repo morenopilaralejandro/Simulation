@@ -1,128 +1,74 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Simulation.Enums.Character;
-using Simulation.Enums.SpriteLayer;
 using Simulation.Enums.Kit;
 using Simulation.Enums.Move;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Battle;
 using Simulation.Enums.Localization;
+using Simulation.Enums.SpriteLayer;
 
-public class Character : MonoBehaviour
+public class Character
 {
     #region Components
-    [SerializeField] private CharacterComponentAttributes attributesComponent;
-    [SerializeField] private LocalizationComponentString localizationStringComponent;
-    [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
-    [SerializeField] private CharacterComponentAppearance appearanceComponent;
-    [SerializeField] private CharacterComponentModel modelComponent;
-    [SerializeField] private CharacterComponentKeeper keeperComponent;
-    [SerializeField] private CharacterComponentLevels levelsComponent;
-    [SerializeField] private CharacterComponentStats statsComponent;
-    [SerializeField] private CharacterComponentTraining trainingComponent;
-    [SerializeField] private CharacterComponentFatigue fatigueComponent;
-    [SerializeField] private CharacterComponentSpeed speedComponent;
-    [SerializeField] private CharacterComponentStatusEffects statusEffectsComponent;
-    [SerializeField] private CharacterComponentStatusIndicator statusIndicatorComponent;
-    [SerializeField] private CharacterComponentMoves movesComponent;
-    [SerializeField] private CharacterComponentController controllerComponent;
-    [SerializeField] private CharacterComponentAI aiComponent;
-    [SerializeField] private CharacterComponentStateLock stateLockComponent;
-    [SerializeField] private CharacterComponentStateMachine stateMachineComponent;
-    [SerializeField] private CharacterComponentRigidbody rigidbodyComponent;
-    [SerializeField] private CharacterComponentPersistence persistenceComponent;
 
-    [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
-    [SerializeField] private CharacterComponentElementIndicator elementIndicatorComponent;
-    [SerializeField] private CharacterComponentSpeechBubble speechBubbleComponent;
+    private CharacterComponentAttributes attributesComponent;
+    private LocalizationComponentString localizationStringComponent;
+    private CharacterComponentLevels levelsComponent;
+    private CharacterComponentStats statsComponent;
+    private CharacterComponentTraining trainingComponent;
+    private CharacterComponentMoves movesComponent;
+    private CharacterComponentPersistence persistenceComponent;
+    private CharacterComponentAppearance appearanceComponent;
+
     #endregion
 
     #region Initialize
+
+    public Character(CharacterData characterData, CharacterSaveData characterSaveData = null) 
+    {
+        Initialize(characterData, characterSaveData);
+    }
+
     public void Initialize(CharacterData characterData, CharacterSaveData characterSaveData = null)
     {
-        attributesComponent.Initialize(characterData, this, characterSaveData);
+        attributesComponent = new CharacterComponentAttributes(characterData, this, characterSaveData);
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Character,
             characterData.CharacterId,
-            new [] { LocalizationField.Name, LocalizationField.Nick, LocalizationField.Description }            
+            new[] { LocalizationField.Name, LocalizationField.Nick, LocalizationField.Description }
         );
-        teamMemberComponent.Initialize(characterData, this);
-        appearanceComponent.Initialize(characterData, this);
-        keeperComponent.Initialize(characterData, this);
-        levelsComponent.Initialize(characterData, this, characterSaveData);
-        statsComponent.Initialize(characterData, this, characterSaveData);
-        trainingComponent.Initialize(characterData, this, characterSaveData);
-        fatigueComponent.Initialize(characterData, this);
-        speedComponent.Initialize(characterData, this);
-        statusEffectsComponent.Initialize(characterData, this);
-        statusIndicatorComponent.Initialize(characterData, this);
-        movesComponent.Initialize(characterData, this, characterSaveData);
-        controllerComponent.Initialize(characterData, this);
-        aiComponent.Initialize(characterData, this);
-        stateLockComponent.Initialize(characterData, this);
-        stateMachineComponent.Initialize(characterData, this);
-        persistenceComponent.Initialize(characterData, this);
-
-        teamIndicatorComponent.Initialize(characterData, this);
-        elementIndicatorComponent.Initialize(characterData, this);
-        speechBubbleComponent.Initialize(characterData, this);
-        /*
-        if (isSave)
-            persistence.Apply(save);
-        else
-            stats.ApplyLevel(def.StartingLevel);               
-        */
+        levelsComponent = new CharacterComponentLevels(characterData, this, characterSaveData);
+        statsComponent = new CharacterComponentStats(characterData, this, characterSaveData);
+        trainingComponent = new CharacterComponentTraining(characterData, this, characterSaveData);
+        movesComponent = new CharacterComponentMoves(characterData, this, characterSaveData);
+        persistenceComponent = new CharacterComponentPersistence(characterData, this);
+        appearanceComponent = new CharacterComponentAppearance(characterData, this, characterSaveData);
     }
 
     #endregion
 
     #region API
-    //attributesComponent
+    // attributesComponent
     public string CharacterId => attributesComponent.CharacterId;
     public string CharacterGuid => attributesComponent.CharacterGuid;
     public CharacterSize CharacterSize => attributesComponent.CharacterSize;
+    public PortraitSize PortraitSize => attributesComponent.PortraitSize;
     public Gender Gender => attributesComponent.Gender;
     public Element Element => attributesComponent.Element;
     public Position Position => attributesComponent.Position;
-    //localizationComponent
+
+    // localizationComponent
     public string CharacterName => localizationStringComponent.GetString(LocalizationField.Name);
     public string CharacterNick => localizationStringComponent.GetString(LocalizationField.Nick);
     public string CharacterDescription => localizationStringComponent.GetString(LocalizationField.Description);
-    //teamMemberComponent
-    public TeamSide TeamSide => teamMemberComponent.TeamSide;
-    public FormationCoord FormationCoord => teamMemberComponent.FormationCoord;
-    public bool IsOnUsersTeam() => teamMemberComponent.IsOnUsersTeam();
-    public bool IsSameTeam(Character otherCharacter) => teamMemberComponent.IsSameTeam(otherCharacter);
-    public TeamSide GetOpponentSide() => teamMemberComponent.GetOpponentSide();
-    public Team GetTeam() => teamMemberComponent.GetTeam();
-    public Team GetOpponentTeam() => teamMemberComponent.GetOpponentTeam();
-    public List<Character> GetTeammates() => teamMemberComponent.GetTeammates();
-    public List<Character> GetOpponents() => teamMemberComponent.GetOpponents();
-    //appearanceComponent
-    public void SetCharacterVisible(bool isVisible) => appearanceComponent.SetCharacterVisible(isVisible);
-    public Role GetKitRole() => appearanceComponent.GetKitRole();
-    public Variant GetKitVariant() => appearanceComponent.GetKitVariant();
-    public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
-    public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
-    public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState => appearanceComponent.SpriteLayerState;
-    //modelComponent
-    public Transform Model => modelComponent.Model;
-    //keeperComponent
-    public bool IsKeeper => keeperComponent.IsKeeper;
-    public bool HasBallInHand => keeperComponent.HasBallInHand;
-    public void UpdateKeeperColliderState() => keeperComponent.UpdateKeeperColliderState();
-    public void PunchBall(Trait trait) => keeperComponent.PunchBall(trait);
-    public void ActivateBallInHand() => keeperComponent.ActivateBallInHand();
-    //levelsComponent
+
+    // levelsComponent
     public int Level => levelsComponent.Level;
     public int CurrentExp => levelsComponent.CurrentExp;
     public int ExpToNextLevel => levelsComponent.ExpToNextLevel;
     public int MaxLevel => CharacterComponentLevels.MAX_LEVEL;
-    //public void LevelUp() => levelsComponent.LevelUp();
     public void SetLevel(int level) => levelsComponent.SetLevel(level);
-    //statsComponent    
+
+    // statsComponent
     public int GetTrainedStat(Stat stat) => statsComponent.GetTrainedStat(stat);
     public int GetTrueStat(Stat stat) => statsComponent.GetTrueStat(stat);
     public int GetBattleStat(Stat stat) => statsComponent.GetBattleStat(stat);
@@ -131,7 +77,8 @@ public class Character : MonoBehaviour
     public void ModifyBattleStat(Stat stat, int amount) => statsComponent.ModifyBattleStat(stat, amount);
     public void ModifyTrainedStat(Stat stat, int amount) => statsComponent.ModifyTrainedStat(stat, amount);
     public void UpdateStats() => statsComponent.UpdateStats();
-    //trainingComponent
+
+    // trainingComponent
     public int MaxTrainingPerStat => CharacterComponentTraining.MAX_TRAINING_PER_STAT;
     public int BaseFreedom => trainingComponent.BaseFreedom;
     public int TrueFreedom => trainingComponent.TrueFreedom;
@@ -141,23 +88,7 @@ public class Character : MonoBehaviour
     public int GetRemainingTrainingByStat(Stat stat) => trainingComponent.GetRemainingTrainingByStat(stat);
     public void ResetTraining() => trainingComponent.ResetTraining();
     public int TrainingResetCount => trainingComponent.TrainingResetCount;
-    //fatigueComponent
-    public FatigueState FatigueState => fatigueComponent.FatigueState;
-    public float FatigueSpeedMultiplier => fatigueComponent.FatigueSpeedMultiplier;
-    public void UpdateFatigue() => fatigueComponent.UpdateFatigue();
-    //speedComponent
-    public float MovementSpeed => speedComponent.MovementSpeed;
-    public void CalculateSpeed() => speedComponent.CalculateSpeed();
-    //statusEffectsComponent
-    public HashSet<StatusEffect> ActiveStatusEffects => statusEffectsComponent.ActiveStatusEffects;
-    public float StatusSpeedMultiplier => statusEffectsComponent.StatusSpeedMultiplier;
-    public void ApplyStatus(StatusEffect effect) => statusEffectsComponent.ApplyStatus(effect);
-    public void ClearStatus(StatusEffect effect) => statusEffectsComponent.ClearStatus(effect);
-    public void ClearAllStatus() => statusEffectsComponent.ClearAllStatus();
-    public bool HasStatusEffect() => ActiveStatusEffects.Count != 0;
-    public bool IsStunned() => ActiveStatusEffects.Contains(StatusEffect.Stunned);
-    //statusIndicatorComponent
-    public void UpdateStatusIndicator(StatusEffect? newStatus) => statusIndicatorComponent.UpdateStatusIndicator(newStatus);
+
     // movesComponent
     public int MaxEquippedMovesDefault => CharacterComponentMoves.MAX_EQUIPPED_MOVES_DEFAULT;
     public int MaxEquippedMovesFusion => CharacterComponentMoves.MAX_EQUIPPED_MOVES_FUSION;
@@ -173,7 +104,7 @@ public class Character : MonoBehaviour
     public bool IsMoveLearned(string moveId) => movesComponent.IsMoveLearned(moveId);
     public bool IsMoveLearned(Move move) => movesComponent.IsMoveLearned(move);
     public bool CanLearnMove(string moveId) => movesComponent.CanLearnMove(moveId);
-    public bool CanPerformeMove(Move move) => movesComponent.CanPerformeMove(move);
+    //public bool CanPerformeMove(Move move) => movesComponent.CanPerformeMove(move);
     public bool CanAffordMove(Move move) => movesComponent.CanAffordMove(move);
     public bool HasAffordableMove() => movesComponent.HasAffordableMove();
     public bool HasAffordableMoveWithCategory(Category category) => movesComponent.HasAffordableMoveWithCategory(category);
@@ -185,68 +116,26 @@ public class Character : MonoBehaviour
     public List<Move> GetEquippedMovesByCategory(Category category) => movesComponent.GetEquippedMovesByCategory(category);
     public List<Move> GetEquippedMovesByTrait(Trait trait) => movesComponent.GetEquippedMovesByTrait(trait);
     public void ForceMaxEvolutionOnEquippedMoves() => movesComponent.ForceMaxEvolutionOnEquippedMoves();
-    //controllerComponent
-    public bool IsControlled => controllerComponent.IsControlled;
-    //aiComponent
-    public bool IsEnemyAI => aiComponent.IsEnemyAI;
-    public bool IsAIEnabled => aiComponent.IsAIEnabled;
-    public bool IsAutoBattleEnabled => aiComponent.IsAutoBattleEnabled;
-    public void EnableAI() => aiComponent.EnableAI();
-    public void EnableAI(bool isAIEnabled) => aiComponent.EnableAI(isAIEnabled);
-    public void DisableAI() => aiComponent.DisableAI();
-    public AIDifficulty AIDifficulty => aiComponent.AIDifficulty;
-    public AIState AIState => aiComponent.AIState;
-    public Character GetBestPassTeammate() => aiComponent.GetBestPassTeammate();
-    public DuelCommand GetRegularCommand() => aiComponent.GetRegularCommand();
-    public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);
-    public DuelCommand GetCommandByTrait(Trait trait) => aiComponent.GetCommandByTrait(trait);
-    public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
-    public Move GetMoveByCommandAndTrait(DuelCommand command, Trait trait) => aiComponent.GetMoveByCommandAndTrait(command, trait);
-    //stateLockComponent
-    public bool IsStateLocked => stateLockComponent.IsStateLocked;
-    public void StartStateLock(CharacterState state) => stateLockComponent.StartStateLock(state);
-    public void ReleaseStateLock() => stateLockComponent.ReleaseStateLock();
-    //stateMachineComponent
-    public CharacterState CurrentState => stateMachineComponent.CurrentState;
-    public void SetCharacterState(CharacterState state) => stateMachineComponent.SetCharacterState(state);
-    public void StartKick() => stateMachineComponent.StartKick();
-    public void StartControl() => stateMachineComponent.StartControl();
-    public void StartMove() => stateMachineComponent.StartMove();
-    public void OnKickAnimationEnd() => stateMachineComponent.OnKickAnimationEnd();
-    public void OnControlAnimationEnd() => stateMachineComponent.OnControlAnimationEnd();
-    public void OnMoveAnimationEnd() => stateMachineComponent.OnMoveAnimationEnd();
-    //rigidbodyComponent
-    public void ResetPhysics() => rigidbodyComponent.ResetPhysics();
-    public void StopVelocity() => rigidbodyComponent.StopVelocity();
-    public void Teleport(Vector3 position) => rigidbodyComponent.Teleport(position);
-    //persistenceComponent
+
+    // persistenceComponent
     public void Import(CharacterSaveData characterSaveData) => persistenceComponent.Import(characterSaveData);
     public CharacterSaveData Export() => persistenceComponent.Export();
 
-    //elementIndicatorComponent
-    public void SetElementIndicatorEnabled(bool enabled) => elementIndicatorComponent.SetEnabled(enabled);
-    public void SetElementIndicatorActive(bool active) => elementIndicatorComponent.SetActive(active);
-    //speechBubbleComponent
-    public void ShowSpeechBubble(SpeechMessage speechMessage) => speechBubbleComponent.ShowSpeechBubble(speechMessage);
-    public void HideSpeechBubble() => speechBubbleComponent.HideSpeechBubble();
-
-    //ball
-    public void KickBallTo(Vector3 targetPos) 
+    // appearanceComponent
+    public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
+    public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
+    public string HairStyleId => appearanceComponent.HairStyleId;
+    public HairColorType HairColorType => appearanceComponent.HairColorType;
+    public EyeColorType EyeColorType => appearanceComponent.EyeColorType;
+    public BodyColorType BodyColorType => appearanceComponent.BodyColorType;
+    public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState
     {
-        BattleManager.Instance.Ball.KickBallTo(targetPos);
-        BattleEvents.RaisePassPerformed(this);
-        StartKick();
+        get => appearanceComponent.State;
+        set => appearanceComponent.State = value;
     }
-    public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;
-    public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this, Time.time) && !IsStunned();
-    public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this) || HasAffordableMoveWithTrait(Trait.Long);
-    public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
-    public bool HasBallInHandThrowIn;
-
-    //misc
-    public bool CanMove() => !IsStunned();
-    public bool CanDuel() => !IsStunned() && !HasBallInHand;
-    
+    public void ApplyKit(Kit kit, Variant variant, Position position) => appearanceComponent.ApplyKit(kit, variant, position);
+    public void InitializeVisibility() => appearanceComponent.InitializeVisibility();
+    public Variant GetKitVariant(Team team) => appearanceComponent.GetKitVariant(team);
+    public Role GetKitRole(Position position) => appearanceComponent.GetKitRole(position);
     #endregion
-
 }

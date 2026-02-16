@@ -16,24 +16,24 @@ public class DuelSide : MonoBehaviour
     [SerializeField] private List<CharacterCardMini> characterCardMiniList;
     [SerializeField] private DuelFieldDamageIndicator fieldDamageIndicator;
 
-    public void SetSide(Character character, List<Character> supports)
+    public void SetSide(CharacterEntityBattle character, List<CharacterEntityBattle> supports)
     {
         HideMiniCards();
-        hpBar.SetCharacter(character, Stat.Hp);
-        spBar.SetCharacter(character, Stat.Sp);
+        hpBar.SetCharacter(character.Character, Stat.Hp);
+        spBar.SetCharacter(character.Character, Stat.Sp);
         SetPossessionCanvasState(character.HasBall());
-        characterCard.SetCharacter(character);
+        characterCard.SetCharacter(character.Character, character.FormationCoord.Position);
         if (supports != null)
             SetMiniCards(supports);
     }
 
-    private void SetMiniCards(List<Character> supports) 
+    private void SetMiniCards(List<CharacterEntityBattle> supports) 
     {
         for (int i = 0; i < supports.Count; i++) 
         {
-            Character character = supports[i];
+            CharacterEntityBattle character = supports[i];
             characterCardMiniList[i].SetCanvasState(true);
-            characterCardMiniList[i].SetCharacter(character);
+            characterCardMiniList[i].SetCharacter(character.Character, character.FormationCoord.Position);
         }
     }
 

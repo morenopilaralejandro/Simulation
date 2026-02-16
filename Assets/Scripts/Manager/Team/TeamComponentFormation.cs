@@ -1,27 +1,59 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Simulation.Enums.Battle;
 
 public class TeamComponentFormation
 {
     private Team team;
 
-    public Formation Formation { get; private set; }
+    public Formation FullBattleFormation { get; private set; }
+    public Formation MiniBattleFormation { get; private set; }
 
-    public TeamComponentFormation(TeamData teamData, Team team) 
+    public TeamComponentFormation(TeamData teamData, Team team, TeamSaveData teamSaveData = null)
     {
-        Initialize(teamData, team);
+        Initialize(teamData, team, teamSaveData);
     }
 
-    public void Initialize(TeamData teamData, Team team)
+    public void Initialize(TeamData teamData, Team team, TeamSaveData teamSaveData = null)
     {
         this.team = team;
-        this.Formation = FormationManager.Instance.GetFormation(teamData.FormationId);
+
+        if (teamSaveData != null)
+        {
+            FullBattleFormation = FormationManager.Instance.GetFormation(teamSaveData.CustomFullBattleFormationId);
+            MiniBattleFormation = FormationManager.Instance.GetFormation(teamSaveData.CustomMiniBattleFormationId);
+        } else 
+        {
+            FullBattleFormation = FormationManager.Instance.GetFormation(teamData.FullBattleFormationId);
+            MiniBattleFormation = FormationManager.Instance.GetFormation(teamData.MiniBattleFormationId);
+        }
     }
 
-    public void SetFormation(Formation formation)
+    public Formation GetFormation(BattleType battleType)
+    {
+        return battleType switch
+        {
+            BattleType.Full => FullBattleFormation,
+            BattleType.Mini => MiniBattleFormation,
+            _ => FullBattleFormation
+        };
+    }
+
+    public void SetFormation(Formation formation, BattleType battleType)
     {
         if (formation == null) return;
-        this.Formation = formation;
+        switch (battleType)
+        {
+            case BattleType.Full:
+                FullBattleFormation = formation;
+                break;
+            case BattleType.Mini:
+                MiniBattleFormation = formation;
+                break;
+            default:
+                LogManager.Warning($"[TeamComponentFormation] Unknown battle type: {battleType}");
+                return;
+        }
         TeamEvents.RaiseOnFormationChanged(team, formation);
     }
 }

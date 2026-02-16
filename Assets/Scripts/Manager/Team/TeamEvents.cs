@@ -22,13 +22,13 @@ public static class TeamEvents
         OnAssignCharacterToTeam?.Invoke(character, team, formationCoord);
     }
 
-    public static event Action<Character, Team, FormationCoord> OnAssignCharacterToTeamBattle;
+    public static event Action<CharacterEntityBattle, Team, FormationCoord> OnAssignCharacterToTeamBattle;
     public static void RaiseAssignCharacterToTeamBattle(
-        Character character, 
+        CharacterEntityBattle characterEntityBattle, 
         Team team,
         FormationCoord formationCoord)
     {
-        OnAssignCharacterToTeamBattle?.Invoke(character, team, formationCoord);
+        OnAssignCharacterToTeamBattle?.Invoke(characterEntityBattle, team, formationCoord);
     }
 
     public static event Action<Team, Formation> OnFormationChanged;

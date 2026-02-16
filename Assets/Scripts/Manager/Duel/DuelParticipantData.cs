@@ -7,7 +7,7 @@ using Simulation.Enums.Duel;
 
 public class DuelParticipantData
 {
-    public Character Character;
+    public CharacterEntityBattle CharacterEntityBattle;
     public Category? Category;
     public DuelAction? Action;
     public DuelCommand? Command;
@@ -16,7 +16,7 @@ public class DuelParticipantData
     public bool IsDirect;
 
     public bool IsComplete =>
-        Character != null &&
+        CharacterEntityBattle != null &&
         Category.HasValue &&
         Action.HasValue &&
         Command.HasValue;

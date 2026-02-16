@@ -5,6 +5,7 @@ public class BallComponentKeep : MonoBehaviour
     private Ball ball;
  
     private Character character;
+    private CharacterEntityBattle characterEntityBattle;
     private float keepSpeed = 30f;
     private float ballYDefault = 0.1f;
     private float ballYHand = 0.4f;
@@ -27,14 +28,15 @@ public class BallComponentKeep : MonoBehaviour
         BallEvents.OnReleased -= HandleOnReleased;
     }
 
-    private void HandleOnGained(Character character)
+    private void HandleOnGained(CharacterEntityBattle characterEntityBattle)
     {
-        this.character = character;
-        character.StartControl();
+        this.character = characterEntityBattle.Character;
+        this.characterEntityBattle = characterEntityBattle;
+        characterEntityBattle.StartControl();
         ball.SetKinematic();
     }
 
-    private void HandleOnReleased(Character character)
+    private void HandleOnReleased(CharacterEntityBattle characterEntityBattle)
     {
         if (!ball.IsTraveling)
             ball.SetDynamic();
@@ -42,11 +44,11 @@ public class BallComponentKeep : MonoBehaviour
 
     void Update() 
     {
-        if (this.ball.IsFree() || this.character == null) return;
+        if (ball.IsFree() || character == null) return;
 
-        Vector3 forwardDir = character.Model.transform.forward;
-        Vector3 targetPosition = character.transform.position + forwardDir * ballToPlayerDiscance;
-        targetPosition.y = character.HasBallInHand || character.HasBallInHandThrowIn ? ballYHand : ballYDefault;
+        Vector3 forwardDir = characterEntityBattle.Model.transform.forward;
+        Vector3 targetPosition = characterEntityBattle.transform.position + forwardDir * ballToPlayerDiscance;
+        targetPosition.y = characterEntityBattle.HasBallInHand || characterEntityBattle.HasBallInHandThrowIn ? ballYHand : ballYDefault;
         transform.position = Vector3.Lerp(transform.position, targetPosition, keepSpeed * Time.deltaTime);
     }
 

@@ -13,6 +13,7 @@ public class Ball : MonoBehaviour
     [SerializeField] private BallComponentCollider colliderComponent;
     [SerializeField] private BallComponentKeep keepComponent;
     [SerializeField] private BallComponentKick kickComponent;
+    [SerializeField] private BallComponentUnstuck unstuckComponent;
 
     [SerializeField] private BallComponentTravel travelComponent;
     [SerializeField] private BallComponentTravelParticle travelParticleComponent;
@@ -27,6 +28,7 @@ public class Ball : MonoBehaviour
         colliderComponent.Initialize(ballData, this);
         keepComponent.Initialize(ballData, this);
         kickComponent.Initialize(ballData, this);
+        unstuckComponent.Initialize(ballData, this);
 
         travelComponent.Initialize(ballData, this);
         travelParticleComponent.Initialize(ballData, this);

@@ -63,13 +63,13 @@ public class DuelParticantsPanel : MonoBehaviour
         canvasGroup.blocksRaycasts = isVisible;
     }
 
-    public void SetSide(Character character, List<Character> supports) 
+    public void SetSide(CharacterEntityBattle character, List<CharacterEntityBattle> supports) 
     {
         duelSideDict[character.TeamSide].SetSide(character, supports);
     }
 
     public void SetCategory(Category category) => categoryImage.sprite = IconManager.Instance.Category.GetIcon(category);
     public void SetComboDamage(float damage) => comboDamageIndicator.SetDamage(damage);
-    public void SetFieldDamage(Character character, float damage, DuelAction action) => duelSideDict[character.TeamSide].SetFieldDamage(damage, action);
+    public void SetFieldDamage(CharacterEntityBattle character, float damage, DuelAction action) => duelSideDict[character.TeamSide].SetFieldDamage(damage, action);
 
 }

@@ -7,7 +7,7 @@ public class CharacterComponentKeeper : MonoBehaviour
 {
     #region Fields
 
-    private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     [SerializeField] private Collider keeperCollider;   //inspector
     [SerializeField] private bool isKeeper;
@@ -25,9 +25,9 @@ public class CharacterComponentKeeper : MonoBehaviour
 
     #region Lifecycle
 
-    public void Initialize(CharacterData characterData, Character character)
+    public void Initialize(CharacterEntityBattle characterEntityBattle)
     {
-        this.character = character;
+        this.characterEntityBattle = characterEntityBattle;
     }
 
     #endregion
@@ -47,23 +47,23 @@ public class CharacterComponentKeeper : MonoBehaviour
     }
 
     private void HandleAssignCharacterToTeamBattle(
-        Character character, 
+        CharacterEntityBattle character, 
         Team team, 
         FormationCoord formationCoord)
     {
-        if (this.character == character)
+        if (this.characterEntityBattle == character)
         {
             this.isKeeper = formationCoord.Position == Position.GK ? true : false;
             if (this.isKeeper)
-                GoalManager.Instance.SetKeeper(this.character, team.TeamSide);
+                GoalManager.Instance.SetKeeper(this.characterEntityBattle, team.TeamSide);
             UpdateKeeperColliderState();
         }
     }
 
-    private void HandleOnReleased(Character character)
+    private void HandleOnReleased(CharacterEntityBattle character)
     {
         if (!hasBallInHand) return;
-        if (this.character != character) return;
+        if (this.characterEntityBattle != character) return;
 
         DeactivateBallInHand();
     }
@@ -91,7 +91,7 @@ public class CharacterComponentKeeper : MonoBehaviour
                 break;
 
             case Trait.Punch2:
-                Character teammate = character.GetBestPassTeammate();
+                CharacterEntityBattle teammate = characterEntityBattle.GetBestPassTeammate();
                 if (teammate != null)
                     PunchToTeammate(teammate);
                 else
@@ -103,12 +103,12 @@ public class CharacterComponentKeeper : MonoBehaviour
     private void PunchRandomArc() 
     {
         Vector3 center = BattleManager.Instance.Ball.transform.position;
-        Vector3 direction = GetRandomDirectionInArc(character.transform);
+        Vector3 direction = GetRandomDirectionInArc(characterEntityBattle.transform);
         Vector3 punchPosition = center + direction * punchingRadius;
         PunchBallTo(punchPosition);
     }
 
-    private void PunchToTeammate(Character teammate) 
+    private void PunchToTeammate(CharacterEntityBattle teammate) 
     {
         PunchBallTo(teammate.transform.position);
     }

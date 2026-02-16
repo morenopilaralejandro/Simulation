@@ -7,7 +7,7 @@ using Simulation.Enums.Battle;
 public class DuelSelection
 {
     public int ParticipantIndex;
-    public Character Character;
+    public CharacterEntityBattle CharacterEntityBattle;
     public Category Category;
 
     public DuelCommand Command;

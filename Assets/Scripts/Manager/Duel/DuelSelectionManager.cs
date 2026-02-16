@@ -21,7 +21,7 @@ public class DuelSelectionManager : MonoBehaviour
     public event Action OnSelectionsComplete;
 
     public Category GetUserCategory() =>  selections[BattleManager.Instance.GetUserSide()].Category;
-    public Character GetUserCharacter() =>  selections[BattleManager.Instance.GetUserSide()].Character;
+    public CharacterEntityBattle GetUserCharacter() =>  selections[BattleManager.Instance.GetUserSide()].CharacterEntityBattle;
 
     #region Initialization
     private void Awake()
@@ -87,7 +87,7 @@ public class DuelSelectionManager : MonoBehaviour
     private void SelectionMadeAi()
     {
         var selection = selections[TeamSide.Away];
-        Character character = selection.Character;
+        CharacterEntityBattle character = selection.CharacterEntityBattle;
 
         if (duelMode == DuelMode.Shoot)
             BattleUIManager.Instance.SetDuelCategory(selection.Category);
@@ -121,12 +121,12 @@ public class DuelSelectionManager : MonoBehaviour
         TeamSide teamSide, 
         Category category, 
         int participantIndex, 
-        Character character) 
+        CharacterEntityBattle character) 
     {
         var selection = selections[teamSide];
         selection.ParticipantIndex = participantIndex;
         selection.Category = category;
-        selection.Character = character;
+        selection.CharacterEntityBattle = character;
     }
 
     public void SelectionMadeHuman(TeamSide teamSide, DuelCommand command, Move move)
@@ -139,7 +139,7 @@ public class DuelSelectionManager : MonoBehaviour
     public void SelectionMadeAuto(TeamSide teamSide)
     {
         var selection = selections[teamSide];
-        Character character = selection.Character;
+        CharacterEntityBattle character = selection.CharacterEntityBattle;
         DuelCommand command = character.GetRegularCommand();
         FinalizeSelection(teamSide, command, null);
     }

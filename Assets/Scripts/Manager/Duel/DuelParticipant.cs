@@ -8,7 +8,7 @@ using Simulation.Enums.Duel;
 public class DuelParticipant
 {
     #region Shared
-    public Character Character { get; }
+    public CharacterEntityBattle CharacterEntityBattle { get; }
     public Category Category { get; }
     public DuelAction Action { get; }
     public DuelCommand Command { get; }
@@ -26,7 +26,7 @@ public class DuelParticipant
     #endregion
 
     public DuelParticipant(
-        Character character,
+        CharacterEntityBattle characterEntityBattle,
         Category category,
         DuelAction action,
         DuelCommand command,
@@ -34,7 +34,7 @@ public class DuelParticipant
         bool isKeeperDuel,
         bool isDirect)
     {
-        Character = character;
+        CharacterEntityBattle = characterEntityBattle;
         Category = category;
         Action = DuelManager.Instance.GetActionByCategory(category);
         Command = command;
@@ -42,11 +42,11 @@ public class DuelParticipant
         IsDirect = isDirect;
         IsKeeperDuel = isKeeperDuel;
 
-        CurrentElement = move == null ? character.Element : Move.Element;
+        CurrentElement = move == null ? characterEntityBattle.Element : Move.Element;
         Damage = DamageCalculator.GetDamage(
             Category, 
             Command, 
-            character, 
+            characterEntityBattle, 
             Move,
             IsDirect,
             IsKeeperDuel);        

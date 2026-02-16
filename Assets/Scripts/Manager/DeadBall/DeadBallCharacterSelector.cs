@@ -15,12 +15,12 @@ public class DeadBallCharacterSelector
         this.manager = manager;
     }
 
-    public Character GetKicker(Team team)
+    public CharacterEntityBattle GetKicker(Team team)
     {
-        Character nearest = null;
+        CharacterEntityBattle nearest = null;
         float closest = Mathf.Infinity;
 
-        foreach (var teammate in team.CharacterList)
+        foreach (var teammate in team.GetCharacterEntities(BattleManager.Instance.CurrentType))
         {
             if (teammate.IsKeeper) continue;
 
@@ -38,12 +38,12 @@ public class DeadBallCharacterSelector
         return nearest;
     }
 
-    public Character GetKickerIndirectFreeKick(Team team)
+    public CharacterEntityBattle GetKickerIndirectFreeKick(Team team)
     {
-        Character nearest = null;
+        CharacterEntityBattle nearest = null;
         float closest = Mathf.Infinity;
 
-        foreach (var teammate in team.CharacterList)
+        foreach (var teammate in team.GetCharacterEntities(BattleManager.Instance.CurrentType))
         {
             if (teammate.IsKeeper) continue;
 
@@ -61,12 +61,12 @@ public class DeadBallCharacterSelector
         return nearest;
     }
 
-    public Character GetClosestTeammate(Character character)
+    public CharacterEntityBattle GetClosestTeammate(CharacterEntityBattle character)
     {
-        Character nearest = null;
+        CharacterEntityBattle nearest = null;
         float closest = Mathf.Infinity;
 
-        foreach (var teammate in character.GetTeam().CharacterList)
+        foreach (var teammate in character.GetTeam().GetCharacterEntities(BattleManager.Instance.CurrentType))
         {
             //if (teammate.IsKeeper) continue;
 
@@ -84,12 +84,12 @@ public class DeadBallCharacterSelector
         return nearest;
     }
 
-    public Character[] GetClosestSupporters(
+    public CharacterEntityBattle[] GetClosestSupporters(
         Team team,
-        Character kicker,
+        CharacterEntityBattle kicker,
         int count = 3)
     {
-        Character[] closest = new Character[count];
+        CharacterEntityBattle[] closest = new CharacterEntityBattle[count];
         float[] closestDistances = new float[count];
 
         for (int i = 0; i < count; i++)
@@ -97,12 +97,12 @@ public class DeadBallCharacterSelector
 
         Vector3 ballPos = manager.CachedBallPosition;
 
-        List<Character> characters = team.CharacterList;
+        List<CharacterEntityBattle> characters = team.GetCharacterEntities(BattleManager.Instance.CurrentType);
         int total = characters.Count;
 
         for (int i = 0; i < total; i++)
         {
-            Character c = characters[i];
+            CharacterEntityBattle c = characters[i];
 
             if (c == kicker || c.IsKeeper)
                 continue;
@@ -131,17 +131,26 @@ public class DeadBallCharacterSelector
         return closest;
     }
 
-    public int GetDefaultReceiverIndex(Character[] receivers, Character kicker)
+    public int GetDefaultReceiverIndex(CharacterEntityBattle[] receivers, CharacterEntityBattle kicker)
     {
         return kicker.IsEnemyAI ? receivers.Length - 1 : 0;
     }
 
     public int GetKickoffReceiverIndex(int kickerIndex, int receiverIndex)
     {
+        
         int baseValue = Mathf.Max(kickerIndex, receiverIndex);
         int result;
+        int randomOffset;
 
-        int randomOffset = Random.Range(1, 5);
+        if(BattleManager.Instance.CurrentType == BattleType.Full) 
+        {
+            randomOffset = Random.Range(1, 5);
+        } else 
+        {
+            randomOffset = Random.Range(1, 2);
+        }
+
         result = baseValue - randomOffset;
 
         if (result == kickerIndex)

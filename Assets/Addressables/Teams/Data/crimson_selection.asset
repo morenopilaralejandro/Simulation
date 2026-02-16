@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: crimson_selection
   m_EditorClassIdentifier: 
   TeamId: crimson_selection
-  FormationId: crimson
   KitId: crimson
   Lv: 99
-  CharacterIds:
+  FullBattleFormationId: crimson
+  FullBattleCharacterIds:
   - ali
   - inquina
   - apa
@@ -33,3 +33,9 @@ MonoBehaviour:
   - 
   - 
   - 
+  MiniBattleFormationId: offense
+  MiniBattleCharacterIds:
+  - ali
+  - nina
+  - meiga
+  - mohamed

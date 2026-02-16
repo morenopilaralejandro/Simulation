@@ -12,8 +12,8 @@ public class CharacterComponentColliderDuelKeeper : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField] private Character character;
-    public Character Character => character;
+    [SerializeField] private CharacterEntityBattle characterEntityBattle;
+    public CharacterEntityBattle CharacterEntityBattle => characterEntityBattle;
 
     #endregion
 
@@ -35,11 +35,11 @@ public class CharacterComponentColliderDuelKeeper : MonoBehaviour
     }
 
     private void HandleAssignCharacterToTeamBattle(
-        Character character, 
+        CharacterEntityBattle characterEntityBattle, 
         Team team, 
         FormationCoord formationCoord)
     {
-        if (this.character == character)
+        if (this.characterEntityBattle == characterEntityBattle)
         {
             this.gameObject.SetActive(formationCoord.Position == Position.GK);
         }
@@ -55,9 +55,9 @@ public class CharacterComponentColliderDuelKeeper : MonoBehaviour
             BattleManager.Instance.IsTimeFrozen ||
             DuelManager.Instance.IsResolved ||
             DuelManager.Instance.DuelMode != DuelMode.Shoot ||
-            !character.CanDuel() ||
-            !character.IsKeeper ||
-            !character.IsInOwnPenaltyArea()
+            !characterEntityBattle.CanDuel() ||
+            !characterEntityBattle.IsKeeper ||
+            !characterEntityBattle.IsInOwnPenaltyArea()
         )
             return;
 
@@ -65,16 +65,16 @@ public class CharacterComponentColliderDuelKeeper : MonoBehaviour
         DuelParticipant lastOffense = DuelManager.Instance.GetLastOffense();
 
         // Prevent repeat triggers and self defense
-        if (lastDefense != null && lastDefense.Character == character)
+        if (lastDefense != null && lastDefense.CharacterEntityBattle == characterEntityBattle)
             return;
-        if (lastOffense != null && lastOffense.Character == character)
+        if (lastOffense != null && lastOffense.CharacterEntityBattle == characterEntityBattle)
             return;
 
         // Prevent catching friendly fire
-        if (lastOffense.Character.IsSameTeam(character))
+        if (lastOffense.CharacterEntityBattle   .IsSameTeam(characterEntityBattle))
             return;
 
-        DuelManager.Instance.StartShootDuelCombo(character, Category.Catch);
+        DuelManager.Instance.StartShootDuelCombo(characterEntityBattle, Category.Catch);
     }
 
     #endregion

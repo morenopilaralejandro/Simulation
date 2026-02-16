@@ -46,7 +46,7 @@ public class PassCrosshairIndicator : MonoBehaviour
         hideCoroutine = null;
     }
 
-    private void OnBallGained(Character character)
+    private void OnBallGained(CharacterEntityBattle character)
     {
         HideImmediately();
     }

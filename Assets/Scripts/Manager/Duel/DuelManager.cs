@@ -138,7 +138,7 @@ public class DuelManager : MonoBehaviour
     }
 
     #region Field
-    public void StartFieldDuel(Character offense, Character defense) 
+    public void StartFieldDuel(CharacterEntityBattle offense, CharacterEntityBattle defense) 
     {
         LogManager.Info(
             $"[DuelManager] " +  
@@ -155,8 +155,8 @@ public class DuelManager : MonoBehaviour
             defense.IsInOwnPenaltyArea();
 
         //Support
-        List<Character> offenseSupports = FindNearbySupporters(offense);
-        List<Character> defenseSupports = FindNearbySupporters(defense);
+        List<CharacterEntityBattle> offenseSupports = FindNearbySupporters(offense);
+        List<CharacterEntityBattle> defenseSupports = FindNearbySupporters(defense);
         duel.OffenseSupports.AddRange(offenseSupports);
         duel.DefenseSupports.AddRange(defenseSupports);
 
@@ -189,7 +189,7 @@ public class DuelManager : MonoBehaviour
     #endregion
 
     #region Shoot
-    public void StartShootDuel(Character character, bool isDirect, bool isLongShootStart) 
+    public void StartShootDuel(CharacterEntityBattle character, bool isDirect, bool isLongShootStart) 
     {
         LogManager.Info($"[DuelManager] " +
             $"Shoot duel started by " +
@@ -222,7 +222,7 @@ public class DuelManager : MonoBehaviour
         DuelSelectionManager.Instance.StartSelectionPhase();        
     }
 
-    public void StartShootDuelCombo(Character character, Category category) 
+    public void StartShootDuelCombo(CharacterEntityBattle character, Category category) 
     {
         int participantIndex = duel.Participants.Count;
         LogManager.Info(
@@ -265,15 +265,15 @@ public class DuelManager : MonoBehaviour
 
         //UI
         BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
-        BattleUIManager.Instance.SetDuelParticipant(participant.Character, null);
-        BattleUIManager.Instance.SetDuelParticipant(GoalManager.Instance.GetOpponentKeeper(participant.Character), null);
+        BattleUIManager.Instance.SetDuelParticipant(participant.CharacterEntityBattle, null);
+        BattleUIManager.Instance.SetDuelParticipant(GoalManager.Instance.GetOpponentKeeper(participant.CharacterEntityBattle), null);
 
         //handle ball
-        OffsideManager.Instance.TakeSnapshot(participant.Character);
-        ShootTriangleManager.Instance.SetTriangleFromCharacter(participant.Character);
+        OffsideManager.Instance.TakeSnapshot(participant.CharacterEntityBattle);
+        ShootTriangleManager.Instance.SetTriangleFromCharacter(participant.CharacterEntityBattle);
         StartBallTravel(participant);
         BattleManager.Instance.Ball.UpdateTravelEffect(participant.Move, participant.CurrentElement);
-        PossessionManager.Instance.SetLastCharacter(participant.Character);
+        PossessionManager.Instance.SetLastCharacter(participant.CharacterEntityBattle);
         //BattleManager.Instance.Ball.TryPlayParticle(participant.Move);
     }
 
@@ -322,17 +322,17 @@ public class DuelManager : MonoBehaviour
 
     public void EndDuel(DuelParticipant winner, DuelParticipant loser)
     {
-        bool isWinnerUser = winner.Character.TeamSide == BattleManager.Instance.GetUserSide();
+        bool isWinnerUser = winner.CharacterEntityBattle.TeamSide == BattleManager.Instance.GetUserSide();
         LogManager.Info(
             $"[DuelManager] EndDuel " +
-            $"Winner {winner.Character?.CharacterId}, " +
-            $"TeamSide {winner.Character?.TeamSide}, " +
+            $"Winner {winner.CharacterEntityBattle?.CharacterId}, " +
+            $"TeamSide {winner.CharacterEntityBattle?.TeamSide}, " +
             $"Action {winner.Action}, " +
             $"Category {winner.Category}", this);
         DuelEvents.RaiseDuelEnd(duel.DuelMode, winner, loser, isWinnerUser);
 
-        winner.Character.ModifyBattleStat(Stat.Hp, hpWinner);
-        loser.Character.ModifyBattleStat(Stat.Hp, hpLoser);
+        winner.CharacterEntityBattle.ModifyBattleStat(Stat.Hp, hpWinner);
+        loser.CharacterEntityBattle.ModifyBattleStat(Stat.Hp, hpLoser);
 
         if (isWinnerUser)
             AudioManager.Instance.PlaySfx("sfx-duel_win");
@@ -352,7 +352,7 @@ public class DuelManager : MonoBehaviour
         if (DamageCalculator.IsEffective(defense.CurrentElement, offense.CurrentElement))
         {
             defense.Damage *= DamageCalculator.ELEMENT_EFFECTIVE_MULTIPLIER;
-            DuelLogManager.Instance.AddElementDefense(defense.Character);
+            DuelLogManager.Instance.AddElementDefense(defense.CharacterEntityBattle);
             LogManager.Info("[DuelManager] Defense element is effective", this);
         }
         else if (DamageCalculator.IsEffective(offense.CurrentElement, defense.CurrentElement))
@@ -362,17 +362,17 @@ public class DuelManager : MonoBehaviour
             offense.Damage *= DamageCalculator.ELEMENT_EFFECTIVE_MULTIPLIER;
             if (duel.DuelMode == DuelMode.Shoot)
                 duel.OffensePressure += offense.Damage;
-            DuelLogManager.Instance.AddElementOffense(offense.Character);
+            DuelLogManager.Instance.AddElementOffense(offense.CharacterEntityBattle);
             LogManager.Info("[DuelManager] Offense element is effective", this);
         }
     }
     #endregion
 
     #region Support
-    public List<Character> FindNearbySupporters(Character character)
+    public List<CharacterEntityBattle> FindNearbySupporters(CharacterEntityBattle character)
     {
-        List<Character> supporters = new List<Character>();
-        HashSet<Character> uniqueCharacters = new HashSet<Character>();
+        List<CharacterEntityBattle> supporters = new List<CharacterEntityBattle>();
+        HashSet<CharacterEntityBattle> uniqueCharacters = new HashSet<CharacterEntityBattle>();
 
 
         Collider[] nearbyColliders = Physics.OverlapSphere(
@@ -385,9 +385,9 @@ public class DuelManager : MonoBehaviour
             if (supporters.Count >= maxSupporters) break;
 
             if (!collider.gameObject.CompareTag("Character-Duel-Field")) continue;
-            Character nearbyCharacter = collider.GetComponent
+            CharacterEntityBattle nearbyCharacter = collider.GetComponent
                 <CharacterComponentColliderDuelField>().
-                Character;
+                CharacterEntityBattle;
 
             if (nearbyCharacter == null ||
                 !uniqueCharacters.Add(nearbyCharacter) ||
@@ -409,11 +409,11 @@ public class DuelManager : MonoBehaviour
 
     #region Participant Registration
     public void RegisterTrigger(
-        Character character, 
+        CharacterEntityBattle character, 
         bool isDirect)
     {
         var pd = new DuelParticipantData { 
-            Character = character, 
+            CharacterEntityBattle = character, 
             IsDirect = isDirect };
         stagedParticipants.Add(pd);
         TryFinalizeParticipant(pd);
@@ -445,7 +445,7 @@ public class DuelManager : MonoBehaviour
         if (!pd.IsComplete) return;
 
         var participant = new DuelParticipant(
-            pd.Character,
+            pd.CharacterEntityBattle,
             pd.Category.Value,
             pd.Action.Value,
             pd.Command.Value,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Simulation.Enums.Character;
 
 public class CharacterCardMini : MonoBehaviour
 {
@@ -11,11 +12,11 @@ public class CharacterCardMini : MonoBehaviour
     [SerializeField] private Image imagePosition;
     [SerializeField] private CanvasGroup canvasGroup;
 
-    public void SetCharacter(Character character)
+    public void SetCharacter(Character character, Position position)
     {
         characterPortrait.SetCharacter(character);
         imageElement.sprite = IconManager.Instance.Element.GetIcon(character.Element);
-        imagePosition.color = ColorManager.GetPositionColor(character.FormationCoord.Position);
+        imagePosition.color = ColorManager.GetPositionColor(position);
     }
 
     public void SetCanvasState(bool isVisible)

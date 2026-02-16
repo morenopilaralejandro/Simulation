@@ -50,7 +50,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 680a95587434d8fc293fa5838cdeea0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineMaterial: {fileID: 2100000, guid: ca434245676a0cf8698ba54d5edb459c, type: 2}
 --- !u!1001 &3973534875490098896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61,7 +60,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5174962430448086526, guid: 63de7d126bce2139a9981244343f3e84, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.81
+      value: 1.01
       objectReference: {fileID: 0}
     - target: {fileID: 5174962430448086526, guid: 63de7d126bce2139a9981244343f3e84, type: 3}
       propertyPath: m_LocalPosition.x
@@ -127,7 +126,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5174962430448086526, guid: 63de7d126bce2139a9981244343f3e84, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.81
+      value: 1.01
       objectReference: {fileID: 0}
     - target: {fileID: 5174962430448086526, guid: 63de7d126bce2139a9981244343f3e84, type: 3}
       propertyPath: m_LocalPosition.x
@@ -209,7 +208,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3873555420886689027, guid: 6a42f0e998562b02b9c6d0a3a6238cb2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 3873555420886689027, guid: 6a42f0e998562b02b9c6d0a3a6238cb2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -275,7 +274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3873555420886689027, guid: 6a42f0e998562b02b9c6d0a3a6238cb2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3873555420886689027, guid: 6a42f0e998562b02b9c6d0a3a6238cb2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -326,14 +325,6 @@ PrefabInstance:
     - target: {fileID: 4394561861816055857, guid: 9aa99e1602f1a79e7ae7feda9c7da197, type: 3}
       propertyPath: m_Name
       value: LineCenterCircle
-      objectReference: {fileID: 0}
-    - target: {fileID: 8982060390721024916, guid: 9aa99e1602f1a79e7ae7feda9c7da197, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8982060390721024916, guid: 9aa99e1602f1a79e7ae7feda9c7da197, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8982060390721024916, guid: 9aa99e1602f1a79e7ae7feda9c7da197, type: 3}
       propertyPath: m_LocalPosition.x

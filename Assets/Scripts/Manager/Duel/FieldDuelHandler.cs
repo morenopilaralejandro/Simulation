@@ -21,7 +21,7 @@ public class FieldDuelHandler : IDuelHandler
     public void AddParticipant(DuelParticipant participant) {
 
         duel.Participants.Add(participant);
-        LogManager.Trace($"[FieldDuelHandler] AddParticipant {participant.Character.CharacterId}");
+        LogManager.Trace($"[FieldDuelHandler] AddParticipant {participant.CharacterEntityBattle.CharacterId}");
 
         if (participant.Action == DuelAction.Offense) 
             duel.LastOffense = participant;
@@ -65,11 +65,11 @@ public class FieldDuelHandler : IDuelHandler
         //UI
         /*
         BattleUIManager.Instance.SetFieldDamage(
-            duel.LastOffense.Character,
+            duel.LastOffense.CharacterEntityBattle,
             duel.OffensePressure,
             duel.LastOffense.Action);
         BattleUIManager.Instance.SetFieldDamage(
-            duel.LastDefense.Character,
+            duel.LastDefense.CharacterEntityBattle,
             duel.DefensePressure,
             duel.LastDefense.Action);
         */
@@ -84,24 +84,24 @@ public class FieldDuelHandler : IDuelHandler
     { 
         if (winner.Move != null) 
         {
-            winner.Character.ModifyBattleStat(Stat.Sp, -winner.Move.Cost);
+            winner.CharacterEntityBattle.ModifyBattleStat(Stat.Sp, -winner.Move.Cost);
 
             if (winner.Action == DuelAction.Offense) 
-                BattleUIManager.Instance.SetDuelParticipant(winner.Character, duel.OffenseSupports);
+                BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.OffenseSupports);
             else
-                BattleUIManager.Instance.SetDuelParticipant(winner.Character, duel.DefenseSupports);
+                BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.DefenseSupports);
             
             await BattleEffectManager.Instance.PlayMoveParticle(
                 winner.Move,
-                winner.Character.transform.position);
+                winner.CharacterEntityBattle.transform.position);
         }
 
-        if (winner.Character.IsOnUsersTeam())
-            BattleEffectManager.Instance.PlayDuelWinEffect(winner.Character.transform); 
+        if (winner.CharacterEntityBattle.IsOnUsersTeam())
+            BattleEffectManager.Instance.PlayDuelWinEffect(winner.CharacterEntityBattle.transform); 
         
-        loser.Character.ApplyStatus(StatusEffect.Stunned);
+        loser.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
         StunSupports(loser.Action);
-        PossessionManager.Instance.GiveBallToCharacter(winner.Character);
+        PossessionManager.Instance.GiveBallToCharacter(winner.CharacterEntityBattle);
         DuelManager.Instance.EndDuel(winner, loser);
     }
 
@@ -111,12 +111,12 @@ public class FieldDuelHandler : IDuelHandler
     #region Support
     private float GetSupportDamage(
         DuelParticipant participant, 
-        List<Character> supports) 
+        List<CharacterEntityBattle> supports) 
     {
         float damage = 0;
         int elementMatchingSupports = 1;
 
-        foreach(Character support in supports) 
+        foreach(CharacterEntityBattle support in supports) 
         {
             damage += DamageCalculator.GetDamage(
                 participant.Category,
@@ -125,7 +125,7 @@ public class FieldDuelHandler : IDuelHandler
                 null,
                 false,
                 false);
-            if(participant.Character.Element == support.Element) 
+            if(participant.CharacterEntityBattle.Element == support.Element) 
                 elementMatchingSupports++;
         }
 
@@ -143,7 +143,7 @@ public class FieldDuelHandler : IDuelHandler
             duel.OffenseSupports :
             duel.DefenseSupports;
             
-        foreach(Character support in supports) 
+        foreach(CharacterEntityBattle support in supports) 
             support.ApplyStatus(StatusEffect.Stunned);
     }
     #endregion
@@ -151,8 +151,8 @@ public class FieldDuelHandler : IDuelHandler
     #region Helpers
     private void LogParticipantAction(DuelParticipant participant)
     {
-        DuelLogManager.Instance.AddActionCommand(participant.Character, participant.Command, participant.Move);
-        DuelLogManager.Instance.AddActionDamage(participant.Character, participant.Action, participant.Damage);
+        DuelLogManager.Instance.AddActionCommand(participant.CharacterEntityBattle, participant.Command, participant.Move);
+        DuelLogManager.Instance.AddActionDamage(participant.CharacterEntityBattle, participant.Action, participant.Damage);
     }
     #endregion
 

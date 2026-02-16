@@ -88,25 +88,25 @@ public class DuelLogManager : MonoBehaviour
     private void HandleBattlePause(TeamSide teamSide) => AddMatchPause(GoalManager.Instance.Keepers[teamSide]);
     private void HandleBattleResume() => AddMatchResume();
 
-    private void HandlePassPerformed(Character character) => AddActionPass(character);
-    private void HandleShootPerformed(Character character, bool isDirect) 
+    private void HandlePassPerformed(CharacterEntityBattle character) => AddActionPass(character);
+    private void HandleShootPerformed(CharacterEntityBattle character, bool isDirect) 
     {
         AddActionShoot(character);
         if (isDirect) AddActionDirect(character);
     }
-    private void HandleGoalScored(Character scorringCharacter) => AddActionScore(scorringCharacter);
-    private void HandleShootStopped(Character character) => AddActionStop(character);
+    private void HandleGoalScored(CharacterEntityBattle scorringCharacter) => AddActionScore(scorringCharacter);
+    private void HandleShootStopped(CharacterEntityBattle character) => AddActionStop(character);
 
     private void HandleDuelStart(DuelMode duelMode) => AddDuelStart();
     private void HandleDuelEnd(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser)
     {
         if (isWinnerUser)
-            AddDuelWin(winner.Character);
+            AddDuelWin(winner.CharacterEntityBattle);
         else
-            AddDuelLose(winner.Character);
+            AddDuelLose(winner.CharacterEntityBattle);
     }
     private void HandleDuelCancel(DuelMode duelMode) => AddDuelCancel();
-    private void HandleGained(Character character) => AddPossessionGained(character);
+    private void HandleGained(CharacterEntityBattle character) => AddPossessionGained(character);
         
 
 
@@ -115,7 +115,7 @@ public class DuelLogManager : MonoBehaviour
 
     #region Add Methods
 
-    private void AddEntry(string entryId, LogLevel logLevel, Character character, Move move, object args) 
+    private void AddEntry(string entryId, LogLevel logLevel, CharacterEntityBattle character, Move move, object args) 
     {
         DuelLogEntry entry = new DuelLogEntry(entryId, logLevel, character, move, args);
         DuelLogEntries.Add(entry);
@@ -156,7 +156,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddMatchPause(Character character)
+    public void AddMatchPause(CharacterEntityBattle character)
     {
         var args = new { 
             teamName = character.GetTeam().TeamName
@@ -181,7 +181,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddDeadBallKickoff(Character character)
+    public void AddDeadBallKickoff(CharacterEntityBattle character)
     {
         if(character.PortraitSprite == null) return;
         AddEntry(
@@ -193,7 +193,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddDeadBallThrowIn(Character character)
+    public void AddDeadBallThrowIn(CharacterEntityBattle character)
     {
         AddEntry(
             "deadball_throw_in", 
@@ -204,7 +204,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddDeadBallCornerKick(Character character)
+    public void AddDeadBallCornerKick(CharacterEntityBattle character)
     {
         AddEntry(
             "deadball_corner_kick", 
@@ -215,7 +215,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddDeadBallGoalKick(Character character)
+    public void AddDeadBallGoalKick(CharacterEntityBattle character)
     {
         AddEntry(
             "deadball_goal_kick", 
@@ -226,7 +226,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddDeadBallFreeKickDirect(Character character)
+    public void AddDeadBallFreeKickDirect(CharacterEntityBattle character)
     {
         AddEntry(
             "deadball_free_kick_direct", 
@@ -237,7 +237,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddDeadBallFreeKickIndirect(Character character)
+    public void AddDeadBallFreeKickIndirect(CharacterEntityBattle character)
     {
         AddEntry(
             "deadball_free_kick_indirect", 
@@ -248,7 +248,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddActionPass(Character character)
+    public void AddActionPass(CharacterEntityBattle character)
     {
         if (DeadBallManager.Instance.IsFirstKickoff) return;
 
@@ -264,7 +264,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddActionShoot(Character character)
+    public void AddActionShoot(CharacterEntityBattle character)
     {
         var args = new { 
             characterName = character.CharacterNick
@@ -278,7 +278,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddActionDirect(Character character)
+    public void AddActionDirect(CharacterEntityBattle character)
     {
         AddEntry(
             "action_direct", 
@@ -289,7 +289,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddActionCommand(Character character, DuelCommand command, Move move)
+    public void AddActionCommand(CharacterEntityBattle character, DuelCommand command, Move move)
     {
         string characterName = character.CharacterNick;
         string commandName;
@@ -332,7 +332,7 @@ public class DuelLogManager : MonoBehaviour
         */
     }
 
-    public void AddActionDamage(Character character, DuelAction action, float damage)
+    public void AddActionDamage(CharacterEntityBattle character, DuelAction action, float damage)
     {
         string actionSymbol = (action == DuelAction.Offense)
             ? "+"
@@ -353,7 +353,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddActionScore(Character character)
+    public void AddActionScore(CharacterEntityBattle character)
     {
         var args = new { 
             characterName = character.CharacterNick
@@ -367,7 +367,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddActionStop(Character character)
+    public void AddActionStop(CharacterEntityBattle character)
     {
         var args = new { 
             characterName = character.CharacterNick
@@ -381,7 +381,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddElementOffense(Character character)
+    public void AddElementOffense(CharacterEntityBattle character)
     {
         AddEntry(
             "element_offense", 
@@ -392,7 +392,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddElementDefense(Character character)
+    public void AddElementDefense(CharacterEntityBattle character)
     {
         AddEntry(
             "element_defense", 
@@ -414,7 +414,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddDuelWin(Character character)
+    public void AddDuelWin(CharacterEntityBattle character)
     {
         AddEntry(
             "duel_win", 
@@ -425,7 +425,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddDuelLose(Character character)
+    public void AddDuelLose(CharacterEntityBattle character)
     {
         AddEntry(
             "duel_lose", 
@@ -458,7 +458,7 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
-    public void AddPossessionGained(Character character)
+    public void AddPossessionGained(CharacterEntityBattle character)
     {
         if (BattleManager.Instance.CurrentPhase == BattlePhase.DeadBall) return;
 

@@ -38,7 +38,7 @@ public class BallComponentKick : MonoBehaviour
         Vector3 ballPos = ball.transform.position;
         Vector3 toTarget = targetPos - ballPos;
 
-        Character kickCharacter = 
+        CharacterEntityBattle kickCharacter = 
             PossessionManager.Instance.CurrentCharacter == null ?
                 PossessionManager.Instance.LastCharacter :
                 PossessionManager.Instance.CurrentCharacter;
@@ -93,7 +93,7 @@ public class BallComponentKick : MonoBehaviour
         return velocityVec;
     }
 
-    private bool IsOpponentInWay(Character kickCharacter, Vector3 ballPos, Vector3 targetPos)
+    private bool IsOpponentInWay(CharacterEntityBattle kickCharacter, Vector3 ballPos, Vector3 targetPos)
     {
         float castHeight = ballPos.y;
 
@@ -125,7 +125,7 @@ public class BallComponentKick : MonoBehaviour
             if(!col.gameObject.CompareTag(tagCharacterPresence)) continue;
             var presence = col.GetComponent
                 <CharacterComponentColliderPresence>().
-                Character;
+                CharacterEntityBattle;
 
             if (presence == null || presence.IsStunned()) continue;
 
@@ -142,7 +142,7 @@ public class BallComponentKick : MonoBehaviour
         return false;
     }
 
-    public void TakeSnapshot(Character passer) 
+    public void TakeSnapshot(CharacterEntityBattle passer) 
     {
         OffsideManager.Instance.TakeSnapshot(passer);
     }

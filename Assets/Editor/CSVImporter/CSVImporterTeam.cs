@@ -8,7 +8,6 @@ public class CSVImporterTeam
     [MenuItem("Tools/Import CSV/Team")]
     public static void ImportTeamsFromCSV()
     {
-       
         string assetFolder = "Assets/Addressables/Teams/Data";
         string csvFolder = "Csv";
         string defaultPath = Path.Combine(Application.dataPath, csvFolder);
@@ -31,26 +30,35 @@ public class CSVImporterTeam
         // Get CSV header index mapping
         string[] headers = lines[0].Split(',');
 
-        int teamIdIndex         = System.Array.IndexOf(headers, "TeamId");
-        int formationIdIndex    = System.Array.IndexOf(headers, "FormationId");
-        int kitIdIndex          = System.Array.IndexOf(headers, "KitId");
-        int lvIndex             = System.Array.IndexOf(headers, "Lv");
-        int characterId0Index   = System.Array.IndexOf(headers, "CharacterId0");
-        int characterId1Index   = System.Array.IndexOf(headers, "CharacterId1");
-        int characterId2Index   = System.Array.IndexOf(headers, "CharacterId2");
-        int characterId3Index   = System.Array.IndexOf(headers, "CharacterId3");
-        int characterId4Index   = System.Array.IndexOf(headers, "CharacterId4");
-        int characterId5Index   = System.Array.IndexOf(headers, "CharacterId5");
-        int characterId6Index   = System.Array.IndexOf(headers, "CharacterId6");
-        int characterId7Index   = System.Array.IndexOf(headers, "CharacterId7");
-        int characterId8Index   = System.Array.IndexOf(headers, "CharacterId8");
-        int characterId9Index   = System.Array.IndexOf(headers, "CharacterId9");
-        int characterId10Index  = System.Array.IndexOf(headers, "CharacterId10");
-        int characterId11Index  = System.Array.IndexOf(headers, "CharacterId11");
-        int characterId12Index  = System.Array.IndexOf(headers, "CharacterId12");
-        int characterId13Index  = System.Array.IndexOf(headers, "CharacterId13");
-        int characterId14Index  = System.Array.IndexOf(headers, "CharacterId14");
-        int characterId15Index  = System.Array.IndexOf(headers, "CharacterId15");
+        int teamIdIndex = System.Array.IndexOf(headers, "TeamId");
+        int kitIdIndex = System.Array.IndexOf(headers, "KitId");
+        int lvIndex = System.Array.IndexOf(headers, "Lv");
+        
+        // Full Battle fields
+        int fullBattleFormationIdIndex = System.Array.IndexOf(headers, "FullBattleFormationId");
+        int fullBattleCharacterId0Index = System.Array.IndexOf(headers, "FullBattleCharacterId0");
+        int fullBattleCharacterId1Index = System.Array.IndexOf(headers, "FullBattleCharacterId1");
+        int fullBattleCharacterId2Index = System.Array.IndexOf(headers, "FullBattleCharacterId2");
+        int fullBattleCharacterId3Index = System.Array.IndexOf(headers, "FullBattleCharacterId3");
+        int fullBattleCharacterId4Index = System.Array.IndexOf(headers, "FullBattleCharacterId4");
+        int fullBattleCharacterId5Index = System.Array.IndexOf(headers, "FullBattleCharacterId5");
+        int fullBattleCharacterId6Index = System.Array.IndexOf(headers, "FullBattleCharacterId6");
+        int fullBattleCharacterId7Index = System.Array.IndexOf(headers, "FullBattleCharacterId7");
+        int fullBattleCharacterId8Index = System.Array.IndexOf(headers, "FullBattleCharacterId8");
+        int fullBattleCharacterId9Index = System.Array.IndexOf(headers, "FullBattleCharacterId9");
+        int fullBattleCharacterId10Index = System.Array.IndexOf(headers, "FullBattleCharacterId10");
+        int fullBattleCharacterId11Index = System.Array.IndexOf(headers, "FullBattleCharacterId11");
+        int fullBattleCharacterId12Index = System.Array.IndexOf(headers, "FullBattleCharacterId12");
+        int fullBattleCharacterId13Index = System.Array.IndexOf(headers, "FullBattleCharacterId13");
+        int fullBattleCharacterId14Index = System.Array.IndexOf(headers, "FullBattleCharacterId14");
+        int fullBattleCharacterId15Index = System.Array.IndexOf(headers, "FullBattleCharacterId15");
+        
+        // Mini Battle fields
+        int miniBattleFormationIdIndex = System.Array.IndexOf(headers, "MiniBattleFormationId");
+        int miniBattleCharacterId0Index = System.Array.IndexOf(headers, "MiniBattleCharacterId0");
+        int miniBattleCharacterId1Index = System.Array.IndexOf(headers, "MiniBattleCharacterId1");
+        int miniBattleCharacterId2Index = System.Array.IndexOf(headers, "MiniBattleCharacterId2");
+        int miniBattleCharacterId3Index = System.Array.IndexOf(headers, "MiniBattleCharacterId3");
 
         for (int i = 1; i < lines.Length; i++)
         {
@@ -59,28 +67,40 @@ public class CSVImporterTeam
             string[] values = lines[i].Split(',');
             TeamData teamData = ScriptableObject.CreateInstance<TeamData>();
 
-            teamData.TeamId         = values[teamIdIndex].Trim();
-            teamData.FormationId    = values[formationIdIndex].Trim();
-            teamData.KitId          = values[kitIdIndex].Trim();
-            teamData.Lv             = int.Parse(values[lvIndex].Trim());
-            teamData.CharacterIds   = new List<string>
+            teamData.TeamId = values[teamIdIndex].Trim();
+            teamData.KitId = values[kitIdIndex].Trim();
+            teamData.Lv = int.Parse(values[lvIndex].Trim());
+            
+            // Full Battle data
+            teamData.FullBattleFormationId = values[fullBattleFormationIdIndex].Trim();
+            teamData.FullBattleCharacterIds = new List<string>
             {
-                values[characterId0Index].Trim(),
-                values[characterId1Index].Trim(),
-                values[characterId2Index].Trim(),
-                values[characterId3Index].Trim(),
-                values[characterId4Index].Trim(),
-                values[characterId5Index].Trim(),
-                values[characterId6Index].Trim(),
-                values[characterId7Index].Trim(),
-                values[characterId8Index].Trim(),
-                values[characterId9Index].Trim(),
-                values[characterId10Index].Trim(),
-                values[characterId11Index].Trim(),
-                values[characterId12Index].Trim(),
-                values[characterId13Index].Trim(),
-                values[characterId14Index].Trim(),
-                values[characterId15Index].Trim()
+                values[fullBattleCharacterId0Index].Trim(),
+                values[fullBattleCharacterId1Index].Trim(),
+                values[fullBattleCharacterId2Index].Trim(),
+                values[fullBattleCharacterId3Index].Trim(),
+                values[fullBattleCharacterId4Index].Trim(),
+                values[fullBattleCharacterId5Index].Trim(),
+                values[fullBattleCharacterId6Index].Trim(),
+                values[fullBattleCharacterId7Index].Trim(),
+                values[fullBattleCharacterId8Index].Trim(),
+                values[fullBattleCharacterId9Index].Trim(),
+                values[fullBattleCharacterId10Index].Trim(),
+                values[fullBattleCharacterId11Index].Trim(),
+                values[fullBattleCharacterId12Index].Trim(),
+                values[fullBattleCharacterId13Index].Trim(),
+                values[fullBattleCharacterId14Index].Trim(),
+                values[fullBattleCharacterId15Index].Trim()
+            };
+            
+            // Mini Battle data
+            teamData.MiniBattleFormationId = values[miniBattleFormationIdIndex].Trim();
+            teamData.MiniBattleCharacterIds = new List<string>
+            {
+                values[miniBattleCharacterId0Index].Trim(),
+                values[miniBattleCharacterId1Index].Trim(),
+                values[miniBattleCharacterId2Index].Trim(),
+                values[miniBattleCharacterId3Index].Trim()
             };
 
             string safeName = teamData.TeamId.Replace(" ", "_").Replace("/", "_");

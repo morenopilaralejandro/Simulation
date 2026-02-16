@@ -9,7 +9,7 @@ public class CharacterComponentSpeechBubble : MonoBehaviour
 
     [SerializeField] private SpeechBubble speechBubble;
 
-    public void Initialize(CharacterData characterData, Character character) 
+    public void Initialize(Character character) 
     {
         this.character = character;
     }
@@ -26,39 +26,17 @@ public class CharacterComponentSpeechBubble : MonoBehaviour
 
     private void OnEnable()
     {
-        CharacterEvents.OnSpeechBubbleShown += HandleSpeechBubbleShown;
-        CharacterEvents.OnSpeechBubbleHidden += HandleSpeechBubbleHidden;
-
         BattleEvents.OnShootPerformed += HandleShootPerformed;
     }
 
     private void OnDisable()
     {
-        CharacterEvents.OnSpeechBubbleShown -= HandleSpeechBubbleShown;
-        CharacterEvents.OnSpeechBubbleHidden -= HandleSpeechBubbleHidden;
-
         BattleEvents.OnShootPerformed -= HandleShootPerformed;
     }
 
-    private void HandleSpeechBubbleShown(Character character)
+    private void HandleShootPerformed(CharacterEntityBattle characterEntityBattle, bool isDirect)
     {
-        if (this.character == character)
-        {
-            character.SetElementIndicatorEnabled(false);
-        }
-    }
-
-    private void HandleSpeechBubbleHidden(Character character)
-    {
-        if (this.character == character)
-        {
-            character.SetElementIndicatorEnabled(true);
-        }
-    }
-
-    private void HandleShootPerformed(Character character, bool isDirect)
-    {
-        if (this.character == character && isDirect)
+        if (this.character == characterEntityBattle.Character && isDirect)
             ShowSpeechBubble(SpeechMessage.Direct);
     }
 }

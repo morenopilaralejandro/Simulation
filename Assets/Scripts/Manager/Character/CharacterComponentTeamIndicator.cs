@@ -5,13 +5,13 @@ using Simulation.Enums.Character;
 
 public class CharacterComponentTeamIndicator : MonoBehaviour
 {
-    private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     [SerializeField] private SpriteRenderer indicatorRenderer;
 
-    public void Initialize(CharacterData characterData, Character character) 
+    public void Initialize(CharacterEntityBattle characterEntityBattle) 
     {
-        this.character = character;
+        this.characterEntityBattle = characterEntityBattle;
     }
 
     private void OnEnable()
@@ -27,25 +27,25 @@ public class CharacterComponentTeamIndicator : MonoBehaviour
     }
 
     private void HandleAssignCharacterToTeamBattle(
-        Character character, 
+        CharacterEntityBattle character, 
         Team team, 
         FormationCoord formationCoord)
     {
-        if (this.character == character)
+        if (this.characterEntityBattle == character)
         {
             ChangeColor(team.TeamSide, false);
         }
     }
 
-    private void HandleOnControlChange(Character character, TeamSide teamSide)
+    private void HandleOnControlChange(CharacterEntityBattle character, TeamSide teamSide)
     {
-        if (teamSide != this.character.TeamSide) return;
+        if (teamSide != this.characterEntityBattle.TeamSide) return;
 
-        if (this.character == character && !character.IsEnemyAI)
+        if (this.characterEntityBattle == character && !characterEntityBattle.IsEnemyAI)
         {
-            ChangeColor(this.character.TeamSide, true);
+            ChangeColor(this.characterEntityBattle.TeamSide, true);
         } else {
-            ChangeColor(this.character.TeamSide, false);
+            ChangeColor(this.characterEntityBattle.TeamSide, false);
         }
     }
 

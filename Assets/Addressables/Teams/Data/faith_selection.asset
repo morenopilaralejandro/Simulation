@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: faith_selection
   m_EditorClassIdentifier: 
   TeamId: faith_selection
-  FormationId: faith
   KitId: faith
   Lv: 99
-  CharacterIds:
+  FullBattleFormationId: faith
+  FullBattleCharacterIds:
   - navarro
   - ainara
   - teruel
@@ -33,3 +33,9 @@ MonoBehaviour:
   - 
   - 
   - 
+  MiniBattleFormationId: defense
+  MiniBattleCharacterIds:
+  - navarro
+  - alexander
+  - fran
+  - almu

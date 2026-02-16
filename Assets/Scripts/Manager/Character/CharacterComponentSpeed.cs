@@ -3,7 +3,7 @@ using Simulation.Enums.Character;
 
 public class CharacterComponentSpeed : MonoBehaviour
 {
-    private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     private float defaultSpeedMultiplier = 0.025f;
     private float minSpeed = 1f;
@@ -12,21 +12,21 @@ public class CharacterComponentSpeed : MonoBehaviour
 
     public float MovementSpeed => cachedMovementSpeed;
 
-    public void Initialize(CharacterData characterData, Character character) 
+    public void Initialize(CharacterEntityBattle characterEntityBattle) 
     {
-        this.character = character;
+        this.characterEntityBattle = characterEntityBattle;
     }
 
     public void CalculateSpeed()
     {
         float baseSpeed = 
-            character.GetBattleStat(Stat.Speed) * 
+            characterEntityBattle.GetBattleStat(Stat.Speed) * 
             defaultSpeedMultiplier;
 
         float modifiedSpeed =
             baseSpeed *
-            character.FatigueSpeedMultiplier *
-            character.StatusSpeedMultiplier;
+            characterEntityBattle.FatigueSpeedMultiplier *
+            characterEntityBattle.StatusSpeedMultiplier;
 
         cachedMovementSpeed = Mathf.Clamp(modifiedSpeed, minSpeed, maxSpeed);
     }

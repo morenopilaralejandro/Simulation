@@ -3,7 +3,7 @@ using Simulation.Enums.Character;
 
 public class CharacterComponentFatigue : MonoBehaviour
 {
-    private Character character;
+    private CharacterEntityBattle characterEntityBattle;
 
     [SerializeField] private FatigueState fatigueState;
     private int tiredThreshold = 20;
@@ -16,14 +16,14 @@ public class CharacterComponentFatigue : MonoBehaviour
     public FatigueState FatigueState => fatigueState;
     public float FatigueSpeedMultiplier => fatigueSpeedMultiplier;
 
-    public void Initialize(CharacterData characterData, Character character) 
+    public void Initialize(CharacterEntityBattle characterEntityBattle) 
     {
-        this.character = character;
+        this.characterEntityBattle = characterEntityBattle;
     }
 
     public void UpdateFatigue()
     {
-        int hp = character.GetBattleStat(Stat.Hp);
+        int hp = characterEntityBattle.GetBattleStat(Stat.Hp);
         if (hp <= exhaustedThreshold)
         {
             fatigueState = FatigueState.Exhausted;
@@ -39,10 +39,10 @@ public class CharacterComponentFatigue : MonoBehaviour
             fatigueState = FatigueState.Normal;
             fatigueSpeedMultiplier = normalSpeedMultiplier;
         }
-        if (!character.HasStatusEffect()) 
-            character.UpdateStatusIndicator(null);
+        if (!characterEntityBattle.HasStatusEffect()) 
+            characterEntityBattle.UpdateStatusIndicator(null);
 
-        character.CalculateSpeed();
+        characterEntityBattle.CalculateSpeed();
     }
 
 }

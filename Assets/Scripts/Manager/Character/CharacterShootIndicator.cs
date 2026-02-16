@@ -7,7 +7,7 @@ public class CharacterShootIndicator : MonoBehaviour
     [SerializeField] private Color colorRegular;
     [SerializeField] private Color colorLong;
 
-    private Character character;
+    private CharacterEntityBattle character;
 
     private void Awake() 
     {
@@ -69,12 +69,12 @@ public class CharacterShootIndicator : MonoBehaviour
         AudioManager.Instance.StopSfxLoop("sfx-shoot_aura_long");
     }
 
-    private void HandleOnGained(Character currentCharacter) 
+    private void HandleOnGained(CharacterEntityBattle currentCharacter) 
     {
         character = currentCharacter;
     }
 
-    private void HandleOnReleased(Character lastCharacter) 
+    private void HandleOnReleased(CharacterEntityBattle lastCharacter) 
     {
         if (lastCharacter != character) return;
 

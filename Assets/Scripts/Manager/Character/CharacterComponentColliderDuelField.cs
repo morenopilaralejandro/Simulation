@@ -12,8 +12,8 @@ public class CharacterComponentColliderDuelField : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField] private Character character;
-    public Character Character => character;
+    [SerializeField] private CharacterEntityBattle character;
+    public CharacterEntityBattle CharacterEntityBattle => character;
 
     #endregion
 
@@ -42,10 +42,10 @@ public class CharacterComponentColliderDuelField : MonoBehaviour
             BattleManager.Instance.IsTimeFrozen)
             return;
 
-        Character otherCharacter = 
+        CharacterEntityBattle otherCharacter = 
             other.GetComponent
                 <CharacterComponentColliderDuelField>().
-                Character;
+                CharacterEntityBattle;
 
         if (otherCharacter.IsSameTeam(character) ||
             !otherCharacter.CanDuel()) 

@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Simulation.Enums.Battle;
 
 public class Field : MonoBehaviour
 {
     [Header("Renderer")]
-    [SerializeField] private FieldLine fieldLine;
+    [SerializeField] private FieldLine fieldLineFull;
+    [SerializeField] private FieldLine fieldLineMini;
     [SerializeField] private MeshRenderer rendererInner;
     [SerializeField] private MeshRenderer rendererOuter;
 
@@ -35,7 +37,14 @@ public class Field : MonoBehaviour
         propertyBlock.SetTexture("_MainTex", fieldData.TextureOuter);
         rendererOuter.SetPropertyBlock(propertyBlock);
 
-        fieldLine.SetColor(fieldData.LineColor);
+        BattleType battleType = BattleManager.Instance.CurrentType;
+        if (battleType == BattleType.Full) 
+        {
+            fieldLineFull.SetColor(fieldData.LineColor);
+        } else
+        {
+            fieldLineMini.SetColor(fieldData.LineColor);
+        }
     }
 
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 using Simulation.Enums.Character;
 using Simulation.Enums.Move;
 
-public class CharacterComponentMoves : MonoBehaviour
+public class CharacterComponentMoves
 {
     #region Fields
 
@@ -25,7 +25,12 @@ public class CharacterComponentMoves : MonoBehaviour
 
     #region LifeCycle
 
-    public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData)
+    public CharacterComponentMoves(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
+    {
+        Initialize(characterData, character, characterSaveData);
+    }
+
+    public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
         this.character = character;
         levelUpLearnset = GetLevelUpLearnSetByCharacterData(characterData);
@@ -40,7 +45,6 @@ public class CharacterComponentMoves : MonoBehaviour
         {
             CheckLearnMoveOnLevelUp();
         }
-
     }
 
     #endregion
@@ -115,12 +119,14 @@ public class CharacterComponentMoves : MonoBehaviour
 
     #region Get Move data
 
+    /*
     public bool CanPerformeMove(Move move)
     {
         //include sp and other things
         return move.TryFinalizeParticipants(this.character, this.character.GetTeammates()) &&
             CanAffordMove(move);
     }
+    */
 
     public bool CanAffordMove(Move move) => this.character.GetBattleStat(Stat.Sp) >= move.Cost;
     public bool HasAffordableMove() => equippedMoves.Any(move => CanAffordMove(move));
