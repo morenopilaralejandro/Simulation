@@ -12,6 +12,11 @@ public class FieldLine : MonoBehaviour
         ApplyToChildren();
     }
 
+    void Start()
+    {
+        ApplyToChildren();
+    }
+
     public void SetColor(Color color)
     {
         lineColor = color;

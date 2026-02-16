@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
 using Simulation.Enums.DeadBall;
 
@@ -179,6 +180,7 @@ public class OffsideManager : MonoBehaviour
 
     private void CallOffside(CharacterEntityBattle offender)
     {
+        if (BattleManager.Instance.CurrentType == BattleType.Mini) return;
         BattleManager.Instance.Ball.CancelTravel();
         BattleManager.Instance.Freeze();
         snapshot.isActive = false;

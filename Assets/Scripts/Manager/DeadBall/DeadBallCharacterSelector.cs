@@ -138,10 +138,19 @@ public class DeadBallCharacterSelector
 
     public int GetKickoffReceiverIndex(int kickerIndex, int receiverIndex)
     {
+        
         int baseValue = Mathf.Max(kickerIndex, receiverIndex);
         int result;
+        int randomOffset;
 
-        int randomOffset = Random.Range(1, 5);
+        if(BattleManager.Instance.CurrentType == BattleType.Full) 
+        {
+            randomOffset = Random.Range(1, 5);
+        } else 
+        {
+            randomOffset = Random.Range(1, 2);
+        }
+
         result = baseValue - randomOffset;
 
         if (result == kickerIndex)

@@ -36,8 +36,8 @@ public class BattleCharacterManager : MonoBehaviour
     {
         spawnPoint = spawner;
 
-        if (characterPool.Count == 0)
-            PrewarmCharacterPool();
+        ClearPool();
+        PrewarmCharacterPool();
     }
 
     public void UnregisterSpawnPoint()
@@ -103,8 +103,11 @@ public class BattleCharacterManager : MonoBehaviour
 
     public void ClearPool()
     {
-        foreach (var character in characterPool)
-            Destroy(character.gameObject);
+        foreach (var character in characterPool) 
+        {
+            if (character != null)
+                Destroy(character.gameObject);
+        }
         characterPool.Clear();
     }
 }

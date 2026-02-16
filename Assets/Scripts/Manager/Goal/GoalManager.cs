@@ -15,6 +15,8 @@ public class GoalManager : MonoBehaviour
     private float keeperGoalDistanceX = 4.05f;
     private float keeperGoalDistanceZ = 3.05f;
     private float shootDistance = 4f;
+    private float shootDistanceFull = 4f;
+    private float shootDistanceMini = 2.5f;
     private Dictionary<TeamSide, Goal> goals = new ();
     private Dictionary<TeamSide, CharacterEntityBattle> keepers = new ();
     
@@ -36,6 +38,30 @@ public class GoalManager : MonoBehaviour
     private void Start()
     {
 
+    }
+
+    private void OnEnable()
+    {
+        BattleEvents.OnBattleStart += HandleBattleStart;
+    }
+
+    private void OnDisable()
+    {
+        BattleEvents.OnBattleStart -= HandleBattleStart;
+    }
+
+    private void HandleBattleStart()
+    {
+        BattleType currentMode = BattleManager.Instance.CurrentType;
+
+        if (currentMode == BattleType.Mini)
+        {
+            shootDistance = shootDistanceMini;
+        }
+        else
+        {
+            shootDistance = shootDistanceFull;
+        }
     }
 
     public void Reset() 

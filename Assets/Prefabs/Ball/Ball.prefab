@@ -4865,6 +4865,7 @@ GameObject:
   - component: {fileID: 6841826563529960518}
   - component: {fileID: 4496064182420158913}
   - component: {fileID: 7859782067247808067}
+  - component: {fileID: -1260105350711586389}
   m_Layer: 7
   m_Name: Ball
   m_TagString: Ball
@@ -5005,6 +5006,7 @@ MonoBehaviour:
   colliderComponent: {fileID: 9140488592994096277}
   keepComponent: {fileID: 6841826563529960518}
   kickComponent: {fileID: 4496064182420158913}
+  unstuckComponent: {fileID: -1260105350711586389}
   travelComponent: {fileID: 7859782067247808067}
   travelParticleComponent: {fileID: 3807386073291337686}
 --- !u!114 &6259206983814756930
@@ -5102,6 +5104,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isTraveling: 0
   isTravelPaused: 0
+--- !u!114 &-1260105350711586389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3943723051539713078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87fdf270a7f536e3cad9dffa9bdce04c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 5253260481467331066}
 --- !u!1 &8927970197273950713
 GameObject:
   m_ObjectHideFlags: 0

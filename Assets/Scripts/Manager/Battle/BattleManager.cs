@@ -431,10 +431,6 @@ public class BattleManager : MonoBehaviour
     //TODO create PopulateTeamFromData and PopulateTeamFromSaveData
     private void PopulateTeamWithCharacters(Team team, int teamSize)
     {
-        foreach (var character in team.GetCharacterEntities(currentType))
-        {
-            BattleCharacterManager.Instance.ReturnCharacterToPool(character);
-        }
         team.ClearCharacterEntities(currentType);
 
         for (int i = 0; i < teamSize; i++)

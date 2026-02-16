@@ -50,10 +50,20 @@ public class CharacterComponentAI : MonoBehaviour
     private const float KEEPER_MAX_X =  0.8f;
 
     // Defensive line limits
-    private const float HOME_DEFENSIVE_MIN_Z = -7.0f;
-    private const float HOME_DEFENSIVE_MAX_Z = -4.0f;
-    private const float AWAY_DEFENSIVE_MIN_Z =  4.0f;
-    private const float AWAY_DEFENSIVE_MAX_Z =  7.0f;
+    private float HOME_DEFENSIVE_MIN_Z;
+    private float HOME_DEFENSIVE_MAX_Z;
+    private float AWAY_DEFENSIVE_MIN_Z;
+    private float AWAY_DEFENSIVE_MAX_Z;
+
+    private const float HOME_DEFENSIVE_MIN_Z_FULL = -7.0f;
+    private const float HOME_DEFENSIVE_MAX_Z_FULL = -4.0f;
+    private const float AWAY_DEFENSIVE_MIN_Z_FULL =  4.0f;
+    private const float AWAY_DEFENSIVE_MAX_Z_FULL =  7.0f;
+
+    private const float HOME_DEFENSIVE_MIN_Z_MINI = -3.0f;
+    private const float HOME_DEFENSIVE_MAX_Z_MINI = -1.0f;
+    private const float AWAY_DEFENSIVE_MIN_Z_MINI =  1.0f;
+    private const float AWAY_DEFENSIVE_MAX_Z_MINI =  3.0f;
 
     // AI traits defaults
     private const float DEFAULT_CONFIDENCE = 0.6f;
@@ -300,6 +310,22 @@ public class CharacterComponentAI : MonoBehaviour
             InitializeSupportForwardOffset(formationCoord.Position);
             isAIEnabled = true;
             isAutoBattleEnabled = SettingsManager.Instance.IsAutoBattleEnabled;
+
+            BattleType currentMode = BattleManager.Instance.CurrentType;
+            if (currentMode == BattleType.Mini)
+            {
+                HOME_DEFENSIVE_MIN_Z = HOME_DEFENSIVE_MIN_Z_MINI;
+                HOME_DEFENSIVE_MAX_Z = HOME_DEFENSIVE_MAX_Z_MINI;
+                AWAY_DEFENSIVE_MIN_Z = AWAY_DEFENSIVE_MIN_Z_MINI;
+                AWAY_DEFENSIVE_MAX_Z = AWAY_DEFENSIVE_MAX_Z_MINI;
+            }
+            else
+            {
+                HOME_DEFENSIVE_MIN_Z = HOME_DEFENSIVE_MIN_Z_FULL;
+                HOME_DEFENSIVE_MAX_Z = HOME_DEFENSIVE_MAX_Z_FULL;
+                AWAY_DEFENSIVE_MIN_Z = AWAY_DEFENSIVE_MIN_Z_FULL;
+                AWAY_DEFENSIVE_MAX_Z = AWAY_DEFENSIVE_MAX_Z_FULL;
+            }
         }
     }
 
