@@ -26,25 +26,20 @@ public class DebugMainMenu : MonoBehaviour
     }
 
     private void HandleButton1() {
-        BattleArgs.TeamId0 = "faith_selection";
-        BattleArgs.TeamId1 = "crimson_selection";
-        BattleArgs.BallId = "crimson";
-        BattleArgs.FieldId = "stadium_main";
-        BattleArgs.BattleType = BattleType.Full;
+        BattleArgs.SetFull(
+            "faith_selection", 
+            "crimson_selection");
 
         SceneLoader.UnloadDebugMainMenu();
         SceneLoader.LoadBattle();
     }
 
     private void HandleButton2() {
-        BattleArgs.TeamId0 = "faith_selection";
-        BattleArgs.TeamId1 = "crimson_selection";
-        BattleArgs.BallId = "crimson";
-        BattleArgs.FieldId = "stadium_main";
-        BattleArgs.BattleType = BattleType.Mini;
+        BattleArgs.SetMini(
+            "faith_selection", 
+            "crimson_selection");
 
         SceneLoader.UnloadDebugMainMenu();
-
         SceneLoader.LoadBattle();
     }
 }
