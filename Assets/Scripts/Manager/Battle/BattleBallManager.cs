@@ -38,6 +38,7 @@ public class BattleBallManager : MonoBehaviour
     public void UnregisterSpawnPoint()
     {
         spawnPoint = null;
+        ball = null;
     }
 
     public void Spawn()

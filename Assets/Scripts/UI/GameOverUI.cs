@@ -8,17 +8,25 @@ public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private GameObject defaultSelected;
 
+    [Header("Scenes")]
+    [SerializeField] private SceneGroup sceneMainMenu;
+    [SerializeField] private SceneGroup sceneGameOver;
+    private SceneLoader sceneLoader;
+    private AudioManager audioManager;
+
     private void Start() 
     {
-        AudioManager.Instance.PlayBgm("bgm-gameover");    
+        sceneLoader = SceneLoader.Instance;
+        audioManager = AudioManager.Instance;
+
+        audioManager.PlayBgm("bgm-gameover");    
         EventSystem.current.SetSelectedGameObject(defaultSelected);
     }
 
     public void OnButtonContinueTapped() 
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
-        SceneLoader.UnloadGameOver();
-        SceneLoader.LoadMainMenu();
+        audioManager.PlaySfx("sfx-menu_tap");
+        sceneLoader.LoadGroup(sceneMainMenu);
     }
 
 }

@@ -2,54 +2,98 @@ using UnityEngine;
 
 public class BattleCameraTarget : MonoBehaviour
 {
-    [Header("Offsets")]
-    private Vector3 offset = new Vector3(0, 3, -6);
-    private Vector3 homeOffset = new Vector3(0, 3, -3.8f);
-    private Vector3 awayOffset = new Vector3(0, 3, -6);
+    // Offsets
+    private readonly Vector3 homeOffset = new Vector3(0f, 3f, -3.8f);
+    private readonly Vector3 awayOffset = new Vector3(0f, 3f, -6f);
 
-    [Header("Smoothing")]
-    private float currentSmoothSpeed = 2f;
-    private float normalSmoothSpeed = 5.5f;
-    private float fastSmoothSpeed = 100f;
-    private float distanceThreshold = 15f;
+    // Smoothing
+    private const float NormalSmoothSpeed = 5.5f;
+    private const float FastSmoothSpeed = 100f;
+    private const float DistanceThresholdSqr = 15f * 15f; // squared to avoid sqrt
 
-    void LateUpdate()
+    // Cached references (re-resolved once per frame block, not per property call)
+    private BattleManager _battleMgr;
+    private PossessionManager _possessionMgr;
+    private BoundManager _boundMgr;
+
+    private Vector3 _offset;
+    private Transform _transform; // cache own transform
+
+    private void Awake()
     {
+        _transform = transform;
+        _offset = awayOffset;
+    }
+
+    private void Start()
+    {
+        // Cache singletons once; they persist for the scene lifetime
+        _battleMgr = BattleManager.Instance;
+        _possessionMgr = PossessionManager.Instance;
+        _boundMgr = BoundManager.Instance;
+    }
+
+    private void LateUpdate()
+    {
+        // Early-out: cache ball reference once
+        var ball = _battleMgr.Ball;
+        if (ball == null) return;
+
+        bool isTraveling = ball.IsTraveling;
         Transform followTarget;
 
-        // Decide who to follow depending on possession
-        if (PossessionManager.Instance.CurrentCharacter != null && 
-            PossessionManager.Instance.CurrentCharacter.IsOnUsersTeam() || 
-            (PossessionManager.Instance.CurrentCharacter == null && 
-             PossessionManager.Instance.LastCharacter != null &&
-             PossessionManager.Instance.LastCharacter.IsOnUsersTeam()) && 
-            !BattleManager.Instance.Ball.IsTraveling) 
+        // ── Decide who to follow ──
+        // NOTE: Original had an operator-precedence bug.
+        // Fixed: parentheses now match the intended logic.
+        var current = _possessionMgr.CurrentCharacter;
+        bool followHome;
+
+        if (current != null)
         {
-            offset = homeOffset;
-            followTarget = BattleManager.Instance.ControlledCharacter[BattleTeamManager.Instance.GetUserSide()].transform;
+            followHome = current.IsOnUsersTeam() && !isTraveling;
         }
         else
         {
-            if (!BattleManager.Instance.Ball.IsTraveling)
-                offset = awayOffset;
-            followTarget = BattleManager.Instance?.Ball.transform;
+            var last = _possessionMgr.LastCharacter;
+            followHome = last != null && last.IsOnUsersTeam() && !isTraveling;
         }
 
-        // Base target position = followed object position + correct offset
-        Vector3 desiredPosition = followTarget.position;
-        desiredPosition += offset;
+        if (followHome)
+        {
+            _offset = homeOffset;
+            followTarget = _battleMgr.ControlledCharacter[_battleMgr.GetUserSide()].transform;
+        }
+        else
+        {
+            if (!isTraveling)
+                _offset = awayOffset;
 
-        // Clamp to field boundaries
-        Vector3 clamped = BoundManager.Instance.ClampCamera(desiredPosition);
+            followTarget = ball.transform;
+        }
 
-        float distance = Vector3.Distance(transform.position, clamped);
-        currentSmoothSpeed = distance > distanceThreshold ? fastSmoothSpeed : normalSmoothSpeed;
+        // ── Compute desired position ──
+        Vector3 desired;
+        desired.x = followTarget.position.x + _offset.x;
+        desired.y = followTarget.position.y + _offset.y;
+        desired.z = followTarget.position.z + _offset.z;
 
-        // Smoothly move camera
-        transform.position = Vector3.Lerp(
-            transform.position,
-            clamped,
-            Time.deltaTime * currentSmoothSpeed
-        );
+        Vector3 clamped = _boundMgr.ClampCamera(desired);
+
+        // ── Adaptive smooth speed (sqr magnitude avoids sqrt) ──
+        float dx = _transform.position.x - clamped.x;
+        float dy = _transform.position.y - clamped.y;
+        float dz = _transform.position.z - clamped.z;
+        float sqrDist = dx * dx + dy * dy + dz * dz;
+
+        float speed = sqrDist > DistanceThresholdSqr ? FastSmoothSpeed : NormalSmoothSpeed;
+        float t = Time.deltaTime * speed;
+
+        // ── Lerp manually (avoids Vector3.Lerp method-call overhead) ──
+        Vector3 pos = _transform.position;
+        pos.x += (clamped.x - pos.x) * t;
+        pos.y += (clamped.y - pos.y) * t;
+        pos.z += (clamped.z - pos.z) * t;
+
+        _transform.position = pos;
     }
 }

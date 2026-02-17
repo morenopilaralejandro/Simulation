@@ -5,16 +5,17 @@ using Simulation.Enums.Battle;
 
 public class DebugMainMenu : MonoBehaviour
 {
+    [Header("Scenes")]
+    [SerializeField] private SceneGroup sceneBattle;
+    [SerializeField] private SceneGroup sceneDebugMainMenu;
+    private SceneLoader sceneLoader;
+    private AudioManager audioManager;
+
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        sceneLoader = SceneLoader.Instance;
+        audioManager = AudioManager.Instance;
     }
 
     public void OnButton1Tapped() {
@@ -29,17 +30,13 @@ public class DebugMainMenu : MonoBehaviour
         BattleArgs.SetFull(
             "faith_selection", 
             "crimson_selection");
-
-        SceneLoader.UnloadDebugMainMenu();
-        SceneLoader.LoadBattle();
+        sceneLoader.LoadGroup(sceneBattle);
     }
 
     private void HandleButton2() {
         BattleArgs.SetMini(
             "faith_selection", 
             "crimson_selection");
-
-        SceneLoader.UnloadDebugMainMenu();
-        SceneLoader.LoadBattle();
+        sceneLoader.LoadGroup(sceneBattle);
     }
 }
