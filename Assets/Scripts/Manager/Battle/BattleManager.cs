@@ -38,6 +38,9 @@ public class BattleManager : MonoBehaviour
     public Ball Ball => BattleBallManager.Instance.Ball;
     public TeamSide GetUserSide() => BattleTeamManager.Instance.GetUserSide();
 
+    // Win condition
+    private WinCondition winCondition;
+    public WinCondition WinCondition => winCondition;
 
     private int charactersReadyMax;
     private int charactersReady;
@@ -119,7 +122,7 @@ public class BattleManager : MonoBehaviour
     private void SetTeamSize()
     {
         currentTeamSize = currentType == BattleType.Full ? TeamManager.Instance.SizeFull : TeamManager.Instance.SizeMini;
-        charactersReadyMax = currentTeamSize*2;
+        charactersReadyMax = currentTeamSize * 2;
     }
     #endregion
 
@@ -128,7 +131,13 @@ public class BattleManager : MonoBehaviour
     {
         Freeze();
         SetBattleType(BattleArgs.BattleType);
-        //SetBattlePhase(BattlePhase.Battle);
+        
+        // Initialize win condition from BattleArgs
+        winCondition = WinCondition.Create(
+            BattleArgs.WinConditionType, 
+            BattleArgs.WinConditionParams);
+        LogManager.Info($"[BattleManager] WinCondition: {winCondition.Type}", this);
+
         ResetBattle();
 
         BattleFieldManager.Instance.InitializeField();
@@ -172,7 +181,11 @@ public class BattleManager : MonoBehaviour
         timerHalf = TimerHalf.First;
         BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
         BattleUIManager.Instance.UpdateTimerHalfDisplay(timerHalf);
-        if (currentType == BattleType.Mini)
+
+        // Hide half indicator if the win condition doesn't use two halves
+        if (winCondition != null && !winCondition.HasTwoHalves)
+            BattleUIManager.Instance.HideTimerHalf();
+        else if (currentType == BattleType.Mini)
             BattleUIManager.Instance.HideTimerHalf();
     }
 
@@ -188,22 +201,33 @@ public class BattleManager : MonoBehaviour
 
     public void GoalScored(Goal goal)
     {
-        Team scorringTeam = null;
+        Team scoringTeam = null;
         if (goal.TeamSide == TeamSide.Home) 
         {
-            scorringTeam = Teams[TeamSide.Away];
+            scoringTeam = Teams[TeamSide.Away];
         }
-        else {
-            scorringTeam = Teams[TeamSide.Home];
+        else 
+        {
+            scoringTeam = Teams[TeamSide.Home];
         }
     
-        scoreDict[scorringTeam.TeamSide]++;
+        scoreDict[scoringTeam.TeamSide]++;
         BattleUIManager.Instance.UpdateScoreDisplay(
-            scorringTeam, 
-            scoreDict[scorringTeam.TeamSide]);
+            scoringTeam, 
+            scoreDict[scoringTeam.TeamSide]);
 
         BattleEvents.RaiseGoalScored(PossessionManager.Instance.LastCharacter);
-        StartCoroutine(GoalSequence(goal.TeamSide));
+
+        // Check if the win condition triggers an immediate end on goal
+        if (winCondition.ShouldEndOnGoal(scoreDict, timerHalf))
+        {
+            Freeze();
+            StartCoroutine(GoalWinSequence(scoringTeam.TeamSide));
+        }
+        else
+        {
+            StartCoroutine(GoalSequence(goal.TeamSide));
+        }
     }
 
     private void CheckEndGame() 
@@ -217,33 +241,38 @@ public class BattleManager : MonoBehaviour
 
     private void EndGame()
     {   
-        // Determine which side won
+        WinConditionResult result = winCondition.EvaluateResult(scoreDict, timerHalf);
+        
         int homeScore = scoreDict[TeamSide.Home];
         int awayScore = scoreDict[TeamSide.Away];
-
-        TeamSide? winningSide = null;
-        if (homeScore > awayScore)
-            winningSide = TeamSide.Home;
-        else if (awayScore > homeScore)
-            winningSide = TeamSide.Away;
-        else
-            winningSide = null; // tie
-
         TeamSide userSide = GetUserSide();
-        LogManager.Info($"[BattleManager] Game Ended — Home: {homeScore} Away: {awayScore}, User side: {userSide}, Winner: {winningSide}", this);
+
+        LogManager.Info($"[BattleManager] Game Ended — Home: {homeScore} Away: {awayScore}, " +
+            $"User side: {userSide}, Result: {result}, WinCondition: {winCondition.Type}", this);
 
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnd();
         SceneLoader.UnloadBattle();
-        if (winningSide == userSide)
+
+        switch (result)
         {
-            // User won
-            SceneLoader.LoadBattleResults();
-        }
-        else
-        {
-            // User lost
-            SceneLoader.LoadGameOver();
+            case WinConditionResult.HomeWin:
+                if (userSide == TeamSide.Home)
+                    SceneLoader.LoadBattleResults();
+                else
+                    SceneLoader.LoadGameOver();
+                break;
+            case WinConditionResult.AwayWin:
+                if (userSide == TeamSide.Away)
+                    SceneLoader.LoadBattleResults();
+                else
+                    SceneLoader.LoadGameOver();
+                break;
+            case WinConditionResult.Draw:
+            default:
+                // Handle draw — you may want a different scene or fallback
+                SceneLoader.LoadGameOver();
+                break;
         }
     }
 
@@ -266,16 +295,11 @@ public class BattleManager : MonoBehaviour
     {
         LogManager.Info("[BattleManager] User forfeits the battle.", this);
         
-        Freeze(); // Stop movement/time
+        Freeze();
         
-        // Determine user’s side, so the opponent wins
         TeamSide userSide = GetUserSide();
         TeamSide opponentSide = (userSide == TeamSide.Home) ? TeamSide.Away : TeamSide.Home;
 
-        // Optional: update UI message
-        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, true);
-
-        // Wait briefly before ending the game (optional)
         StartCoroutine(ForfeitSequence(opponentSide));
     }
 
@@ -299,24 +323,47 @@ public class BattleManager : MonoBehaviour
         DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, kickoffTeamSide);
     }
 
+    /// <summary>
+    /// Goal was scored and the win condition says the game should end immediately.
+    /// Show goal celebration, then end the game.
+    /// </summary>
+    private IEnumerator GoalWinSequence(TeamSide winningSide)
+    {
+        float duration = 
+            SettingsManager.Instance.IsAutoBattleEnabled ? 0.8f : 2f;
+        
+        AudioManager.Instance.PlayBgm("bgm-ole");
+        BattleUIManager.Instance.SetMessageActive(MessageType.Goal, true);
+
+        yield return new WaitForSeconds(duration);
+
+        BattleUIManager.Instance.SetMessageActive(MessageType.Goal, false);
+
+        EndGame();
+    }
+
     private IEnumerator TimeOverSequence()
     {
         float duration = 1.5f;
 
-        //cancel lingering duel
+        // Cancel lingering duel
         if (!DuelManager.Instance.IsResolved)
             Ball.CancelTravel();
 
-        //Show message
+        // Determine the message to show
         MessageType messageType = MessageType.TimeUp;
-        if (currentType == BattleType.Full)
-            messageType =  
-                timerHalf == TimerHalf.First ?
-                MessageType.HalfTime :
-                MessageType.FullTime;
+
+        // Only show HalfTime/FullTime if the win condition uses two halves
+        if (winCondition.HasTwoHalves)
+        {
+            messageType = timerHalf == TimerHalf.First 
+                ? MessageType.HalfTime 
+                : MessageType.FullTime;
+        }
+
         BattleUIManager.Instance.SetMessageActive(messageType, true);
 
-        //play sound effect
+        // Play sound effect
         if (messageType == MessageType.HalfTime)
         {
             AudioManager.Instance.PlaySfx("sfx-whistle_single");
@@ -331,26 +378,21 @@ public class BattleManager : MonoBehaviour
 
         BattleUIManager.Instance.SetMessageActive(messageType, false);
 
-        //resolve
-        if (currentType == BattleType.Mini ||
-            timerHalf == TimerHalf.Second) 
+        // Ask the win condition whether the game should end
+        if (winCondition.ShouldEndOnTimeOver(scoreDict, timerHalf))
         {
             EndGame();
-        } else {
+        }
+        else
+        {
+            // Win condition says continue — start the second half
             StartSecondHalf();
         }
-
     }
 
     private IEnumerator ForfeitSequence(TeamSide winnerSide)
     {
-        //AudioManager.Instance.PlaySfx("sfx-whistle_triple");
         yield return new WaitForSeconds(0.5f);
-
-        // Hide message
-        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
-
-        // Force end game — treat as loss for user
         ForceEndGame(winnerSide);
     }
 
@@ -363,9 +405,6 @@ public class BattleManager : MonoBehaviour
     {
         AudioManager.Instance.PlaySfx("sfx-whistle_single");
         yield return new WaitForSeconds(0.5f);
-
-        // Hide message
-        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.ThrowIn, side);
     }
@@ -379,9 +418,6 @@ public class BattleManager : MonoBehaviour
     {
         AudioManager.Instance.PlaySfx("sfx-whistle_single");
         yield return new WaitForSeconds(0.5f);
-
-        // Hide message
-        //BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.CornerKick, side);
     }
@@ -412,9 +448,6 @@ public class BattleManager : MonoBehaviour
     {
         AudioManager.Instance.PlaySfx("sfx-whistle_single");
         yield return new WaitForSeconds(0.5f);
-
-        // Hide message
-        // BattleUIManager.Instance.SetMessageActive(MessageType.Forfeit, false);
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.GoalKick, side);
     }
@@ -428,7 +461,6 @@ public class BattleManager : MonoBehaviour
         DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Home);
     }
 
-    //TODO create PopulateTeamFromData and PopulateTeamFromSaveData
     private void PopulateTeamWithCharacters(Team team, int teamSize)
     {
         team.ClearCharacterEntities(currentType);
@@ -474,5 +506,4 @@ public class BattleManager : MonoBehaviour
         }
     }
     #endregion
-
 }

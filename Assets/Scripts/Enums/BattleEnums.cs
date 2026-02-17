@@ -57,5 +57,20 @@ namespace Simulation.Enums.Battle
         Offside
     }
 
+    public enum WinConditionType
+    {
+        WinMatch,
+        ScoreGoals,
+        WinByMargin
+    }
+
+    public enum WinConditionResult
+    {
+        Undecided,      // Game still in progress
+        HomeWin,
+        AwayWin,
+        Draw
+    }
+
 }
 
