@@ -34,6 +34,7 @@ public class DataLoadManager : MonoBehaviour
         Task loadMoveEvolutionPath =  MoveEvolutionPathManager.Instance.LoadAllMoveEvolutionPathAsync();
         Task loadCharacters = CharacterManager.Instance.LoadAllCharacterDataAsync();
         Task loadKits = KitManager.Instance.LoadAllKitsAsync();   
+        Task loadScenes = SceneGroupRegistry.Instance.LoadAllSceneGroupAsync();   
         // SpriteAtlas
         await loadSpriteAtlas;
         // Formation     
@@ -52,7 +53,8 @@ public class DataLoadManager : MonoBehaviour
             loadMoves,
             loadMoveEvolutionGrowthProfile,
             loadMoveEvolutionPath,
-            loadTeams);
+            loadTeams, 
+            loadScenes);
 
         IsReady = true;
         LogManager.Trace("[DataLoadManager] All data loaded.");

@@ -24,6 +24,13 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private TimerHalf timerHalf;
     [SerializeField] private Dictionary<TeamSide, int> scoreDict;
 
+    [Header("Scenes")]
+    [SerializeField] private SceneGroup sceneBattle;
+    [SerializeField] private SceneGroup sceneMainMenu;
+    [SerializeField] private SceneGroup sceneGameOver;
+    [SerializeField] private SceneGroup sceneBattleResults;
+    private SceneLoader sceneLoader;
+
     public BattlePhase CurrentPhase => currentPhase;
     public BattlePhase LastPhase => lastPhase;
     public BattleType CurrentType => currentType;
@@ -62,6 +69,7 @@ public class BattleManager : MonoBehaviour
 
     void Start()
     {
+        sceneLoader = SceneLoader.Instance;
         Freeze();
         SetTeamSize();
     }
@@ -252,28 +260,30 @@ public class BattleManager : MonoBehaviour
 
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnd();
-        SceneLoader.UnloadBattle();
 
+        var nextScene = sceneGameOver;
         switch (result)
         {
             case WinConditionResult.HomeWin:
                 if (userSide == TeamSide.Home)
-                    SceneLoader.LoadBattleResults();
+                    nextScene = sceneBattleResults;
                 else
-                    SceneLoader.LoadGameOver();
+                    nextScene = sceneGameOver;
                 break;
             case WinConditionResult.AwayWin:
                 if (userSide == TeamSide.Away)
-                    SceneLoader.LoadBattleResults();
+                    nextScene = sceneBattleResults;
                 else
-                    SceneLoader.LoadGameOver();
+                    nextScene = sceneGameOver;
                 break;
             case WinConditionResult.Draw:
             default:
                 // Handle draw — you may want a different scene or fallback
-                SceneLoader.LoadGameOver();
+                nextScene = sceneGameOver;
                 break;
         }
+
+        sceneLoader.LoadGroup(nextScene);
     }
 
     private void ForceEndGame(TeamSide winnerSide)
@@ -282,13 +292,16 @@ public class BattleManager : MonoBehaviour
 
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnd();
-        SceneLoader.UnloadBattle();
+
+        var nextScene = sceneGameOver;
 
         TeamSide userSide = GetUserSide();
         if (winnerSide == userSide)
-            SceneLoader.LoadBattleResults();
+            nextScene = sceneBattleResults;
         else
-            SceneLoader.LoadGameOver();
+            nextScene = sceneGameOver;
+
+        sceneLoader.LoadGroup(nextScene);
     }
 
     public void ForfeitBattle()

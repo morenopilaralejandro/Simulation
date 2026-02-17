@@ -8,17 +8,25 @@ public class BattleResultsUI : MonoBehaviour
 {
     [SerializeField] private GameObject defaultSelected;
 
+    [Header("Scenes")]
+    [SerializeField] private SceneGroup sceneMainMenu;
+    [SerializeField] private SceneGroup sceneBattleResults;
+    private SceneLoader sceneLoader;
+    private AudioManager audioManager;
+
     private void Start() 
     {
-        AudioManager.Instance.PlayBgm("bgm-fanfare");    
+        sceneLoader = SceneLoader.Instance;
+        audioManager = AudioManager.Instance;
+
+        audioManager.PlayBgm("bgm-fanfare");    
         EventSystem.current.SetSelectedGameObject(defaultSelected);
     }
 
     public void OnButtonContinueTapped() 
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
-        SceneLoader.UnloadBattleResults();
-        SceneLoader.LoadMainMenu();
+        audioManager.PlaySfx("sfx-menu_tap");
+        sceneLoader.LoadGroup(sceneMainMenu);
     }
 
 }

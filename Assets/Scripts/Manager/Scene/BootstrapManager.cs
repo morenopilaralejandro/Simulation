@@ -6,6 +6,9 @@ using System.Collections;
 
 public class BootstrapManager : MonoBehaviour
 {
+    [SerializeField] private SceneGroup sceneMainMenu;
+    [SerializeField] private SceneGroup sceneDebugMainMenu;
+
     private void Awake()
     {
         DontDestroyOnLoad(gameObject);
@@ -14,11 +17,11 @@ public class BootstrapManager : MonoBehaviour
 
     private IEnumerator LoadSystemAndInitialScenes()
     {
-        SceneManager.LoadScene(LoadingData.LoadingSceneName);
+        SceneManager.LoadScene("LoadingScene", LoadSceneMode.Single);
 
-        SceneLoader.LoadMainCamera();
-        SceneLoader.LoadSystemManager();
-        SceneLoader.LoadGlobalLighting();
+        SceneManager.LoadSceneAsync("MainCamera", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync("SystemManager", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync("GlobalLighting", LoadSceneMode.Additive);
 
         AsyncOperationHandle initAddressablesHandle = Addressables.InitializeAsync();
         yield return initAddressablesHandle;
@@ -26,14 +29,14 @@ public class BootstrapManager : MonoBehaviour
         yield return new WaitUntil(() => DataLoadManager.Instance != null);
         yield return new WaitUntil(() => DataLoadManager.Instance.IsReady);
 
-        SceneManager.UnloadSceneAsync(LoadingData.LoadingSceneName);
+        SceneManager.UnloadSceneAsync("LoadingScene");
 
     #if UNITY_EDITOR || DEVELOPMENT_BUILD
-        SceneLoader.LoadDebugMainMenu();
-        //SceneLoader.LoadMainMenu();
+        //SceneLoader.Instance.LoadGroup(sceneMainMenu);
+        SceneLoader.Instance.LoadGroup(sceneDebugMainMenu);
     #else
-        //SceneLoader.LoadDebugMainMenu();        
-        SceneLoader.LoadMainMenu();
+        SceneLoader.Instance.LoadGroup(sceneMainMenu);
+        //SceneLoader.Instance.LoadGroup(sceneDebugMainMenu);
     #endif
     }
 

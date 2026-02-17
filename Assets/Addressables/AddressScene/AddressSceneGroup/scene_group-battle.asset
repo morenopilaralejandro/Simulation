@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed7f1a3588e36cb978df1973c6ddfb20, type: 3}
+  m_Name: scene_group-battle
+  m_EditorClassIdentifier: 
+  groupName: Battle
+  scenes:
+  - {fileID: 11400000, guid: 2123bc87fd949948bbb3a06aacbe1377, type: 2}
+  - {fileID: 11400000, guid: ca7d54ab491a1a834a55463245daface, type: 2}
+  - {fileID: 11400000, guid: d2012506fcf67d483b83652a5b3553e7, type: 2}
+  - {fileID: 11400000, guid: a97bbeb5578165662962b0c9152857e9, type: 2}
+  - {fileID: 11400000, guid: fef744279a9585b6bb65bf50af2cba20, type: 2}
+  useLoadingScreen: 1

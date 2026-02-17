@@ -13,9 +13,18 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject firstSelectedSettings;
     [SerializeField] private GameObject firstSelectedCredits;
 
+    [Header("Scenes")]
+    [SerializeField] private SceneGroup sceneBattle;
+    [SerializeField] private SceneGroup sceneMainMenu;
+    private SceneLoader sceneLoader;
+    private AudioManager audioManager;
+
     private void Start() 
     {
-        AudioManager.Instance.PlayBgm("bgm-simulation");    
+        sceneLoader = SceneLoader.Instance;
+        audioManager = AudioManager.Instance;
+
+        audioManager.PlayBgm("bgm-simulation");    
         panelMain.SetActive(true);
         panelSettings.SetActive(false);
         panelCredits.SetActive(false);
@@ -24,18 +33,16 @@ public class MainMenu : MonoBehaviour
 
     public void OnButtonDreamMatchTapped() 
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        audioManager.PlaySfx("sfx-menu_tap");
         BattleArgs.SetFull(
             "faith_selection", 
             "crimson_selection");
-
-        SceneLoader.UnloadMainMenu();
-        SceneLoader.LoadBattle();
+        sceneLoader.LoadGroup(sceneBattle);
     }
 
     public void OnButtonSettingsTapped() 
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        audioManager.PlaySfx("sfx-menu_tap");
         panelMain.SetActive(false);
         panelSettings.SetActive(true);
         EventSystem.current.SetSelectedGameObject(firstSelectedSettings);
@@ -43,7 +50,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnButtonSettingsContinueTapped() 
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_back");
+        audioManager.PlaySfx("sfx-menu_back");
         panelSettings.SetActive(false);
         panelMain.SetActive(true);
         EventSystem.current.SetSelectedGameObject(firstSelectedMain);
@@ -51,7 +58,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnButtonCreditsTapped() 
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        audioManager.PlaySfx("sfx-menu_tap");
         panelMain.SetActive(false);
         panelCredits.SetActive(true);
         EventSystem.current.SetSelectedGameObject(firstSelectedCredits);
@@ -59,7 +66,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnButtonCreditsContinueTapped() 
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_back");
+        audioManager.PlaySfx("sfx-menu_back");
         panelCredits.SetActive(false);
         panelMain.SetActive(true);
         EventSystem.current.SetSelectedGameObject(firstSelectedMain);
@@ -67,7 +74,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnButtonQuitTapped() 
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        audioManager.PlaySfx("sfx-menu_tap");
         Application.Quit();
     }
 
