@@ -16,6 +16,7 @@ public class SceneLoader : MonoBehaviour
 
     private HashSet<string> loadedScenes = new HashSet<string>();
     private SceneGroup currentGroup;
+    private InputManager inputManager;
 
     private void Awake()
     {
@@ -32,33 +33,31 @@ public class SceneLoader : MonoBehaviour
     private void Start()
     {
         registry = SceneGroupRegistry.Instance;
+        inputManager = InputManager.Instance;
     }
 
     // ──────────────────────────────────────────────
     // Public API
     // ──────────────────────────────────────────────
 
-    /// <summary>
-    /// Loads a single scene by its SceneData asset.
-    /// </summary>
     public void LoadScene(SceneData sceneData, Action onComplete = null)
     {
         if (sceneData == null)
         {
-            Debug.LogError("SceneLoader: Attempted to load a null SceneData.");
+            LogManager.Error("[SceneLoader] Attempted to load a null SceneData.");
             return;
         }
 
         if (!IsValidForCurrentBuild(sceneData))
         {
-            Debug.LogWarning($"SceneLoader: Scene '{sceneData.sceneName}' is debug-only and excluded from this build.");
+            LogManager.Warning($"[SceneLoader] Scene '{sceneData.sceneName}' is debug-only and excluded from this build.");
             onComplete?.Invoke();
             return;
         }
 
         if (IsSceneLoaded(sceneData.sceneName))
         {
-            Debug.LogWarning($"SceneLoader: Scene '{sceneData.sceneName}' is already loaded.");
+            LogManager.Warning($"[SceneLoader] Scene '{sceneData.sceneName}' is already loaded.");
             onComplete?.Invoke();
             return;
         }
@@ -73,20 +72,17 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Unloads a single scene by its SceneData asset.
-    /// </summary>
     public void UnloadScene(SceneData sceneData, Action onComplete = null)
     {
         if (sceneData == null)
         {
-            Debug.LogError("SceneLoader: Attempted to unload a null SceneData.");
+            LogManager.Error("[SceneLoader] Attempted to unload a null SceneData.");
             return;
         }
 
         if (!IsSceneLoaded(sceneData.sceneName))
         {
-            Debug.LogWarning($"SceneLoader: Scene '{sceneData.sceneName}' is not loaded.");
+            LogManager.Warning($"[SceneLoader] Scene '{sceneData.sceneName}' is not loaded.");
             onComplete?.Invoke();
             return;
         }
@@ -94,15 +90,11 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(UnloadSceneAsync(sceneData.sceneName, onComplete));
     }
 
-    /// <summary>
-    /// Loads all valid scenes in a SceneGroup. 
-    /// Remembers what was loaded and automatically unloads it before loading the new group.
-    /// </summary>
     public void LoadGroup(SceneGroup group, Action onComplete = null)
     {
         if (group == null)
         {
-            Debug.LogError("SceneLoader: Attempted to load a null SceneGroup.");
+            LogManager.Error("[SceneLoader] Attempted to load a null SceneGroup.");
             return;
         }
 
@@ -110,7 +102,7 @@ public class SceneLoader : MonoBehaviour
 
         if (validScenes.Count == 0)
         {
-            Debug.LogWarning($"SceneLoader: Group '{group.groupName}' has no valid scenes.");
+            LogManager.Warning($"[SceneLoader] Group '{group.groupName}' has no valid scenes.");
             onComplete?.Invoke();
             return;
         }
@@ -134,14 +126,11 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Unloads all valid scenes in a SceneGroup.
-    /// </summary>
     public void UnloadGroup(SceneGroup group, Action onComplete = null)
     {
         if (group == null)
         {
-            Debug.LogError("SceneLoader: Attempted to unload a null SceneGroup.");
+            LogManager.Error("[SceneLoader] Attempted to unload a null SceneGroup.");
             return;
         }
 
@@ -149,9 +138,6 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(UnloadScenesSequentially(validScenes, onComplete));
     }
 
-    /// <summary>
-    /// Loads a scene group by name, looked up from the registry.
-    /// </summary>
     public void LoadGroupByName(string groupName, Action onComplete = null)
     {
         SceneGroup group = registry.GetGroupByName(groupName);
@@ -161,9 +147,6 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Unloads a scene group by name, looked up from the registry.
-    /// </summary>
     public void UnloadGroupByName(string groupName, Action onComplete = null)
     {
         SceneGroup group = registry.GetGroupByName(groupName);
@@ -173,15 +156,11 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Transitions from one group to another, unloading the old group 
-    /// and loading the new one, optionally using a loading screen.
-    /// </summary>
     public void TransitionGroups(SceneGroup fromGroup, SceneGroup toGroup, Action onComplete = null)
     {
         if (fromGroup == null || toGroup == null)
         {
-            Debug.LogError("SceneLoader: TransitionGroups requires both a 'from' and 'to' group.");
+            LogManager.Error("[SceneLoader] TransitionGroups requires both a 'from' and 'to' group.");
             return;
         }
 
@@ -201,7 +180,49 @@ public class SceneLoader : MonoBehaviour
     }
 
     // ──────────────────────────────────────────────
-    // Coroutines
+    // Guarded Coroutine Wrapper
+    // ──────────────────────────────────────────────
+
+    /// <summary>
+    /// Wraps any transition coroutine with input locking.
+    /// Guarantees UnlockInput is called even if the inner coroutine fails.
+    /// </summary>
+    private IEnumerator WithInputLock(IEnumerator innerCoroutine, Action onComplete = null)
+    {
+        inputManager?.LockInput();
+
+        Exception caughtException = null;
+
+        // Run the inner coroutine, catching any exception
+        while (true)
+        {
+            bool hasNext;
+            try
+            {
+                hasNext = innerCoroutine.MoveNext();
+            }
+            catch (Exception ex)
+            {
+                caughtException = ex;
+                break;
+            }
+
+            if (!hasNext) break;
+            yield return innerCoroutine.Current;
+        }
+
+        inputManager?.UnlockInput();
+
+        if (caughtException != null)
+        {
+            LogManager.Error($"[SceneLoader] Exception during scene transition: {caughtException}");
+        }
+
+        onComplete?.Invoke();
+    }
+
+    // ──────────────────────────────────────────────
+    // Core Coroutines (no input lock — wrapped above)
     // ──────────────────────────────────────────────
 
     private IEnumerator LoadSceneAsync(string sceneName, Action onComplete = null)
@@ -210,7 +231,7 @@ public class SceneLoader : MonoBehaviour
 
         if (operation == null)
         {
-            Debug.LogError($"SceneLoader: Failed to start loading scene '{sceneName}'.");
+            LogManager.Error($"[SceneLoader] Failed to start loading scene '{sceneName}'.");
             yield break;
         }
 
@@ -231,7 +252,7 @@ public class SceneLoader : MonoBehaviour
 
         if (operation == null)
         {
-            Debug.LogError($"SceneLoader: Failed to start unloading scene '{sceneName}'.");
+            LogManager.Error($"[SceneLoader] Failed to start unloading scene '{sceneName}'.");
             yield break;
         }
 
@@ -270,10 +291,25 @@ public class SceneLoader : MonoBehaviour
         onComplete?.Invoke();
     }
 
+    // ──────────────────────────────────────────────
+    // Transition Coroutines (WITH input locking)
+    // ──────────────────────────────────────────────
+
     private IEnumerator LoadWithLoadingScreen(
         List<SceneData> scenesToLoad,
         List<SceneData> scenesToUnload,
         Action onComplete = null)
+    {
+        // ★ Lock input for the entire loading screen transition
+        yield return WithInputLock(
+            LoadWithLoadingScreenInner(scenesToLoad, scenesToUnload),
+            onComplete
+        );
+    }
+
+    private IEnumerator LoadWithLoadingScreenInner(
+        List<SceneData> scenesToLoad,
+        List<SceneData> scenesToUnload)
     {
         // Show loading screen
         if (loadingScreenScene != null && !IsSceneLoaded(loadingScreenScene.sceneName))
@@ -281,10 +317,9 @@ public class SceneLoader : MonoBehaviour
             yield return LoadSceneAsync(loadingScreenScene.sceneName);
         }
 
-        // Allow loading screen to render
-        yield return null;
+        yield return null; // Let loading screen render
 
-        // Unload old scenes if provided
+        // Unload old scenes
         if (scenesToUnload != null)
         {
             yield return UnloadScenesSequentially(scenesToUnload);
@@ -301,8 +336,6 @@ public class SceneLoader : MonoBehaviour
         {
             yield return UnloadSceneAsync(loadingScreenScene.sceneName);
         }
-
-        onComplete?.Invoke();
     }
 
     private IEnumerator TransitionSequentially(
@@ -310,9 +343,19 @@ public class SceneLoader : MonoBehaviour
         List<SceneData> scenesToLoad,
         Action onComplete = null)
     {
+        // ★ Lock input for the entire sequential transition
+        yield return WithInputLock(
+            TransitionSequentiallyInner(scenesToUnload, scenesToLoad),
+            onComplete
+        );
+    }
+
+    private IEnumerator TransitionSequentiallyInner(
+        List<SceneData> scenesToUnload,
+        List<SceneData> scenesToLoad)
+    {
         yield return UnloadScenesSequentially(scenesToUnload);
         yield return LoadScenesSequentially(scenesToLoad);
-        onComplete?.Invoke();
     }
 
     // ──────────────────────────────────────────────

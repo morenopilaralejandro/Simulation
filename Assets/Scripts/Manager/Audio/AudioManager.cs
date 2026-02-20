@@ -119,6 +119,20 @@ public class AudioManager : MonoBehaviour
         src.Play();
     }
 
+    public void PlayBgmClip(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            LogManager.Error($"[AudioManager] Failed to load clip");
+            return;
+        }
+
+        var src = sourceBgm;
+        src.spatialBlend = 0f;
+        src.clip = clip;
+        src.Play();
+    }
+
     public void StopBgm() => sourceBgm.Stop();
 
     // --- ADDRESSABLE LOADING --- //
