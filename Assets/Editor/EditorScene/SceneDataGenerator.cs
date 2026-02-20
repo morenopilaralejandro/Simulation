@@ -28,7 +28,7 @@ public class SceneDataGenerator
             string sceneName = Path.GetFileNameWithoutExtension(scenePath).ToLower();
 
             // Skip scenes whose name starts with "~"
-            if (sceneName.StartsWith("~"))
+            if (sceneName.StartsWith("~") || sceneName.StartsWith("zone_"))
             {
                 ignored++;
                 continue;
