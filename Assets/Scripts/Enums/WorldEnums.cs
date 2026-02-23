@@ -24,5 +24,25 @@ namespace Simulation.Enums.World
         InInterior,
         Transitioning
     }
+
+    public enum PlayerWorldState
+    {
+        FreeRoam,
+        InDialogue,
+        InMenu,
+        InCutscene,
+        InBattle,
+        Transitioning,
+        Paused
+    }
+
+    // FacingDirection.cs
+    public enum FacingDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
 }
 

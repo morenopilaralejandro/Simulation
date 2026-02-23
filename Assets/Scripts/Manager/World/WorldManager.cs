@@ -308,16 +308,11 @@ public class WorldManager : MonoBehaviour
         return allZones.Find(z => z.zoneId == zoneId);
     }
 
-
-
     #region Helpers
 
     private void SetPlayerControlEnabled(bool enabled)
     {
-        if (enabled) 
-            InputManager.Instance.UnlockInput();
-        else 
-            InputManager.Instance.LockInput();
+        //enable or disable player overworld controller
     }
 
     private void SetPlayerPosition(Vector3 position) 

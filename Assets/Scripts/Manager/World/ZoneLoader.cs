@@ -14,11 +14,16 @@ public class ZoneLoader : MonoBehaviour
     public static ZoneLoader Instance { get; private set; }
 
     // Track loaded scene handles so we can unload them
-    private Dictionary<string, AsyncOperationHandle<SceneInstance>> _loadedScenes
+    private readonly Dictionary<string, AsyncOperationHandle<SceneInstance>> _loadedScenes
         = new Dictionary<string, AsyncOperationHandle<SceneInstance>>();
 
-    // Track in-flight loads to avoid duplicate loading
-    private HashSet<string> _loadingScenes = new HashSet<string>();
+    // Track in-flight loads — maps to the pending Task so duplicate callers
+    // can await the same operation instead of silently returning false
+    private readonly Dictionary<string, Task<bool>> _loadingScenes
+        = new Dictionary<string, Task<bool>>();
+
+    // Reusable list to avoid allocating in UnloadAllScenesAsync every call
+    private readonly List<string> _tempAddressList = new List<string>();
 
     private void Awake()
     {
@@ -33,31 +38,44 @@ public class ZoneLoader : MonoBehaviour
     /// <summary>
     /// Load a scene additively via Addressables.
     /// Returns true if the scene was newly loaded, false if already loaded.
+    /// Duplicate calls while loading await the same operation.
     /// </summary>
-    public async Task<bool> LoadSceneAsync(string sceneAddress)
+    public Task<bool> LoadSceneAsync(string sceneAddress)
     {
         if (_loadedScenes.ContainsKey(sceneAddress))
         {
-            LogManager.Trace($"[ZoneLoader] Scene already loaded: {sceneAddress}");
-            return false;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            LogManager.Trace(string.Concat("[ZoneLoader] Scene already loaded: ", sceneAddress));
+#endif
+            return Task.FromResult(false);
         }
 
-        if (_loadingScenes.Contains(sceneAddress))
+        Task<bool> pendingTask;
+        if (_loadingScenes.TryGetValue(sceneAddress, out pendingTask))
         {
-            LogManager.Trace($"[ZoneLoader] Scene already loading: {sceneAddress}");
-            return false;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            LogManager.Trace(string.Concat("[ZoneLoader] Scene already loading: ", sceneAddress));
+#endif
+            return pendingTask;
         }
 
-        _loadingScenes.Add(sceneAddress);
+        Task<bool> task = LoadSceneInternalAsync(sceneAddress);
+        _loadingScenes[sceneAddress] = task;
+        return task;
+    }
 
-        LogManager.Trace($"[ZoneLoader] Loading scene: {sceneAddress}");
+    private async Task<bool> LoadSceneInternalAsync(string sceneAddress)
+    {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        LogManager.Trace(string.Concat("[ZoneLoader] Loading scene: ", sceneAddress));
+#endif
 
         try
         {
-            var handle = Addressables.LoadSceneAsync(
+            AsyncOperationHandle<SceneInstance> handle = Addressables.LoadSceneAsync(
                 sceneAddress,
                 LoadSceneMode.Additive,
-                activateOnLoad: true
+                true // activateOnLoad
             );
 
             await handle.Task;
@@ -65,22 +83,23 @@ public class ZoneLoader : MonoBehaviour
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {
                 _loadedScenes[sceneAddress] = handle;
-                _loadingScenes.Remove(sceneAddress);
-                LogManager.Trace($"[ZoneLoader] Successfully loaded: {sceneAddress}");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                LogManager.Trace(string.Concat("[ZoneLoader] Successfully loaded: ", sceneAddress));
+#endif
                 return true;
             }
-            else
-            {
-                LogManager.Error($"[ZoneLoader] Failed to load scene: {sceneAddress}");
-                _loadingScenes.Remove(sceneAddress);
-                return false;
-            }
+
+            LogManager.Error(string.Concat("[ZoneLoader] Failed to load scene: ", sceneAddress));
+            return false;
         }
         catch (System.Exception e)
         {
-            LogManager.Error($"[ZoneLoader] Exception loading {sceneAddress}: {e.Message}");
-            _loadingScenes.Remove(sceneAddress);
+            LogManager.Error(string.Concat("[ZoneLoader] Exception loading ", sceneAddress, ": ", e.Message));
             return false;
+        }
+        finally
+        {
+            _loadingScenes.Remove(sceneAddress);
         }
     }
 
@@ -89,54 +108,65 @@ public class ZoneLoader : MonoBehaviour
     /// </summary>
     public async Task<bool> UnloadSceneAsync(string sceneAddress)
     {
-        if (!_loadedScenes.TryGetValue(sceneAddress, out var handle))
+        AsyncOperationHandle<SceneInstance> handle;
+        if (!_loadedScenes.TryGetValue(sceneAddress, out handle))
         {
-            LogManager.Warning($"[ZoneLoader] Cannot unload — not loaded: {sceneAddress}");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            LogManager.Warning(string.Concat("[ZoneLoader] Cannot unload — not loaded: ", sceneAddress));
+#endif
             return false;
         }
 
-        LogManager.Trace($"[ZoneLoader] Unloading scene: {sceneAddress}");
+        // Remove immediately to prevent double-unload from concurrent calls
+        _loadedScenes.Remove(sceneAddress);
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        LogManager.Trace(string.Concat("[ZoneLoader] Unloading scene: ", sceneAddress));
+#endif
 
         try
         {
-            var unloadHandle = Addressables.UnloadSceneAsync(handle, true);
+            AsyncOperationHandle<SceneInstance> unloadHandle = Addressables.UnloadSceneAsync(handle, true);
             await unloadHandle.Task;
-
-            _loadedScenes.Remove(sceneAddress);
 
             if (unloadHandle.Status == AsyncOperationStatus.Succeeded)
             {
-                LogManager.Trace($"[ZoneLoader] Successfully unloaded: {sceneAddress}");
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+                LogManager.Trace(string.Concat("[ZoneLoader] Successfully unloaded: ", sceneAddress));
+#endif
                 return true;
             }
-            else
-            {
-                LogManager.Error($"[ZoneLoader] Failed to unload: {sceneAddress}");
-                return false;
-            }
+
+            LogManager.Error(string.Concat("[ZoneLoader] Failed to unload: ", sceneAddress));
+            return false;
         }
         catch (System.Exception e)
         {
-            LogManager.Error($"[ZoneLoader] Exception unloading {sceneAddress}: {e.Message}");
-            _loadedScenes.Remove(sceneAddress);
+            LogManager.Error(string.Concat("[ZoneLoader] Exception unloading ", sceneAddress, ": ", e.Message));
             return false;
         }
     }
 
     /// <summary>
-    /// Unload all currently loaded scenes.
+    /// Unload all currently loaded scenes sequentially to limit memory spikes.
     /// </summary>
     public async Task UnloadAllScenesAsync()
     {
-        var addresses = new List<string>(_loadedScenes.Keys);
-
-        var tasks = new List<Task>();
-        foreach (var address in addresses)
+        // Copy keys into reusable list to avoid modifying dict while iterating
+        _tempAddressList.Clear();
+        Dictionary<string, AsyncOperationHandle<SceneInstance>>.KeyCollection keys = _loadedScenes.Keys;
+        foreach (string key in keys)
         {
-            tasks.Add(UnloadSceneAsync(address));
+            _tempAddressList.Add(key);
         }
 
-        await Task.WhenAll(tasks);
+        // Sequential unloading reduces peak memory pressure on low-end devices
+        for (int i = 0, count = _tempAddressList.Count; i < count; i++)
+        {
+            await UnloadSceneAsync(_tempAddressList[i]);
+        }
+
+        _tempAddressList.Clear();
     }
 
     public bool IsSceneLoaded(string sceneAddress)
@@ -146,6 +176,6 @@ public class ZoneLoader : MonoBehaviour
 
     public bool IsSceneLoading(string sceneAddress)
     {
-        return _loadingScenes.Contains(sceneAddress);
+        return _loadingScenes.ContainsKey(sceneAddress);
     }
 }

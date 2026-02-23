@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 using Simulation.Enums.World;
 
 /// <summary>
@@ -12,8 +11,11 @@ public class SpawnPointRegistry : MonoBehaviour
     public static SpawnPointRegistry Instance { get; private set; }
 
     // zoneId -> list of active spawn points in that zone
-    private Dictionary<string, List<SpawnPoint>> _spawnPointsByZone
+    private readonly Dictionary<string, List<SpawnPoint>> _spawnPointsByZone
         = new Dictionary<string, List<SpawnPoint>>();
+
+    // Reusable empty list returned by GetAllSpawnPoints to avoid allocation
+    private static readonly List<SpawnPoint> EmptyList = new List<SpawnPoint>(0);
 
     private void Awake()
     {
@@ -27,31 +29,49 @@ public class SpawnPointRegistry : MonoBehaviour
 
     public void RegisterSpawnPoints(string zoneId, SpawnPoint[] points)
     {
-        if (!_spawnPointsByZone.ContainsKey(zoneId))
+        List<SpawnPoint> list;
+        if (!_spawnPointsByZone.TryGetValue(zoneId, out list))
         {
-            _spawnPointsByZone[zoneId] = new List<SpawnPoint>();
+            list = new List<SpawnPoint>(points.Length);
+            _spawnPointsByZone[zoneId] = list;
         }
 
-        foreach (var sp in points)
+        for (int i = 0, len = points.Length; i < len; i++)
         {
-            if (!_spawnPointsByZone[zoneId].Contains(sp))
+            SpawnPoint sp = points[i];
+
+            // Linear Contains check — fine for small lists
+            bool alreadyRegistered = false;
+            for (int j = 0, count = list.Count; j < count; j++)
             {
-                _spawnPointsByZone[zoneId].Add(sp);
-                LogManager.Trace($"[SpawnRegistry] Registered spawn '{sp.spawnId}' in zone '{zoneId}'");
+                if (list[j] == sp)
+                {
+                    alreadyRegistered = true;
+                    break;
+                }
+            }
+
+            if (!alreadyRegistered)
+            {
+                list.Add(sp);
+                LogManager.Trace(string.Concat(
+                    "[SpawnRegistry] Registered spawn '", sp.spawnId,
+                    "' in zone '", zoneId, "'"));
             }
         }
     }
 
     public void UnregisterSpawnPoints(string zoneId, SpawnPoint[] points)
     {
-        if (!_spawnPointsByZone.ContainsKey(zoneId)) return;
+        List<SpawnPoint> list;
+        if (!_spawnPointsByZone.TryGetValue(zoneId, out list)) return;
 
-        foreach (var sp in points)
+        for (int i = 0, len = points.Length; i < len; i++)
         {
-            _spawnPointsByZone[zoneId].Remove(sp);
+            list.Remove(points[i]);
         }
 
-        if (_spawnPointsByZone[zoneId].Count == 0)
+        if (list.Count == 0)
         {
             _spawnPointsByZone.Remove(zoneId);
         }
@@ -59,29 +79,57 @@ public class SpawnPointRegistry : MonoBehaviour
 
     public SpawnPoint FindSpawnPoint(string zoneId, string spawnId)
     {
-        if (_spawnPointsByZone.TryGetValue(zoneId, out var points))
+        List<SpawnPoint> list;
+        if (_spawnPointsByZone.TryGetValue(zoneId, out list))
         {
-            return points.FirstOrDefault(sp => sp.spawnId == spawnId);
+            for (int i = 0, count = list.Count; i < count; i++)
+            {
+                if (list[i].spawnId == spawnId)
+                    return list[i];
+            }
         }
         return null;
     }
 
     public SpawnPoint FindSpawnPointByType(string zoneId, SpawnPointType type)
     {
-        if (_spawnPointsByZone.TryGetValue(zoneId, out var points))
+        List<SpawnPoint> list;
+        if (_spawnPointsByZone.TryGetValue(zoneId, out list))
         {
-            return points.FirstOrDefault(sp => sp.spawnType == type);
+            for (int i = 0, count = list.Count; i < count; i++)
+            {
+                if (list[i].spawnType == type)
+                    return list[i];
+            }
         }
         return null;
     }
 
+    /// <summary>
+    /// Returns the internal list directly. Do NOT modify the returned list.
+    /// If you need a safe copy, use GetAllSpawnPointsCopy instead.
+    /// </summary>
     public List<SpawnPoint> GetAllSpawnPoints(string zoneId)
     {
-        if (_spawnPointsByZone.TryGetValue(zoneId, out var points))
+        List<SpawnPoint> list;
+        if (_spawnPointsByZone.TryGetValue(zoneId, out list))
         {
-            return new List<SpawnPoint>(points);
+            return list;
         }
-        return new List<SpawnPoint>();
+        return EmptyList;
+    }
+
+    /// <summary>
+    /// Returns a new copy of the spawn point list for safe mutation.
+    /// </summary>
+    public List<SpawnPoint> GetAllSpawnPointsCopy(string zoneId)
+    {
+        List<SpawnPoint> list;
+        if (_spawnPointsByZone.TryGetValue(zoneId, out list))
+        {
+            return new List<SpawnPoint>(list);
+        }
+        return new List<SpawnPoint>(0);
     }
 
     public void Clear()

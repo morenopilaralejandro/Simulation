@@ -39,6 +39,7 @@ public class SpawnPoint : MonoBehaviour
         };
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = gizmoColor;
@@ -48,11 +49,11 @@ public class SpawnPoint : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(transform.position, (Vector3)facingDirection * 0.5f);
 
-        #if UNITY_EDITOR
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 0.5f,
             $"{spawnId} ({spawnType})"
         );
-        #endif
+
     }
+#endif
 }
