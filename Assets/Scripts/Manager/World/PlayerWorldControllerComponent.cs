@@ -1,41 +1,37 @@
 // PlayerMovementController.cs
 using UnityEngine;
+using Simulation.Enums.Input;
 using Simulation.Enums.World;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerWorldControllerComponent : MonoBehaviour
 {
-    [Header("Runtime — set by manager")]
-    [SerializeField] private PlayerWorldConfig config;
+    [SerializeField] private CharacterController _cc;
 
-    public FacingDirection CurrentFacing { get; private set; } = FacingDirection.Down;
+    private PlayerWorldEntity playerWorldEntity;
+    private PlayerWorldConfig config;
+
     public bool IsMoving { get; private set; }
     public Vector2 MoveInput { get; private set; }
     public bool IsRunning { get; private set; }
     public float DistanceTravelledSinceReset { get; private set; }
 
-    private CharacterController _cc;
-    private bool _enabled = true;
+    private bool _enabled = false;
     private Vector3 _velocity;
-
-    // Grid-based movement fields
     private bool _isGridMoving;
     private Vector3 _gridMoveTarget;
 
-    private void Awake()
+    public void Initialize(PlayerWorldEntity playerWorldEntity, PlayerWorldConfig cfg)
     {
-        _cc = GetComponent<CharacterController>();
-    }
-
-    public void Initialize(PlayerWorldConfig cfg)
-    {
+        this.playerWorldEntity = playerWorldEntity;
         config = cfg;
     }
 
-    // Called every frame by PlayerWorldManager
-    public void Tick(float deltaTime)
+    private void Update()
     {
         if (!_enabled) return;
+
+        float deltaTime = Time.deltaTime;
 
         ReadInput();
 
@@ -53,6 +49,7 @@ public class PlayerWorldControllerComponent : MonoBehaviour
 
     private void ReadInput()
     {
+        /*
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
 
@@ -62,9 +59,10 @@ public class PlayerWorldControllerComponent : MonoBehaviour
             if (Mathf.Abs(h) > 0.01f && Mathf.Abs(v) > 0.01f)
                 v = 0f;
         }
+        */
 
-        MoveInput = new Vector2(h, v);
-        IsRunning = Input.GetKey(KeyCode.LeftShift);
+        MoveInput = InputManager.Instance.GetMove();
+        IsRunning = InputManager.Instance.GetDown(CustomAction.Battle_Pass);
     }
 
     // ================================================================
@@ -73,14 +71,14 @@ public class PlayerWorldControllerComponent : MonoBehaviour
 
     private void HandleFreeMovement(float dt)
     {
-        Vector3 direction = new Vector3(MoveInput.x, 0f, MoveInput.y).normalized;
+        Vector3 direction = new Vector3(MoveInput.x, MoveInput.y, 0f).normalized;
         float speed = IsRunning ? config.runSpeed : config.walkSpeed;
 
         IsMoving = direction.sqrMagnitude > 0.01f;
 
         if (IsMoving)
         {
-            UpdateFacing(MoveInput);
+            playerWorldEntity.SetFacing(MoveInput);
 
             _velocity = direction * speed;
 
@@ -111,8 +109,7 @@ public class PlayerWorldControllerComponent : MonoBehaviour
         if (_isGridMoving)
         {
             float speed = IsRunning ? config.runSpeed : config.walkSpeed;
-            Vector3 newPos = Vector3.MoveTowards(transform.position,
-                                                  _gridMoveTarget, speed * dt);
+            Vector3 newPos = Vector3.MoveTowards(transform.position, _gridMoveTarget, speed * dt);
             _cc.Move(newPos - transform.position);
 
             if (Vector3.Distance(transform.position, _gridMoveTarget) < 0.01f)
@@ -124,12 +121,12 @@ public class PlayerWorldControllerComponent : MonoBehaviour
         }
         else if (MoveInput.sqrMagnitude > 0.01f)
         {
-            UpdateFacing(MoveInput);
+            playerWorldEntity.SetFacing(MoveInput);
 
             Vector3 dir = new Vector3(
                 Mathf.Round(MoveInput.x),
-                0f,
-                Mathf.Round(MoveInput.y)
+                Mathf.Round(MoveInput.y),
+                0f
             );
 
             Vector3 target = transform.position + dir * config.gridSize;
@@ -162,24 +159,6 @@ public class PlayerWorldControllerComponent : MonoBehaviour
     }
 
     // ================================================================
-    //  FACING
-    // ================================================================
-
-    private void UpdateFacing(Vector2 input)
-    {
-        if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
-            CurrentFacing = input.x > 0 ? FacingDirection.Right : FacingDirection.Left;
-        else
-            CurrentFacing = input.y > 0 ? FacingDirection.Up : FacingDirection.Down;
-    }
-
-    public void SetFacing(FacingDirection dir)
-    {
-        CurrentFacing = dir;
-        UpdateAnimation();
-    }
-
-    // ================================================================
     //  ANIMATION
     // ================================================================
     
@@ -196,21 +175,11 @@ public class PlayerWorldControllerComponent : MonoBehaviour
         */
     }
 
-    private Vector2 FacingToVector(FacingDirection dir) => dir switch
-    {
-        FacingDirection.Up    => Vector2.up,
-        FacingDirection.Down  => Vector2.down,
-        FacingDirection.Left  => Vector2.left,
-        FacingDirection.Right => Vector2.right,
-        _                     => Vector2.down
-    };
-
-
     // ================================================================
     //  PUBLIC API
     // ================================================================
 
-    public void SetEnabled(bool value) => _enabled = value;
+    public void SetControlEnabled(bool enabled) => _enabled = enabled;
 
     public void StopMovement()
     {

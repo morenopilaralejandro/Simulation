@@ -6,8 +6,8 @@ public class PlayerWorldConfig : ScriptableObject
     [Header("Movement")]
     public float walkSpeed = 2f;
     public float runSpeed = 4f;
-    public bool allowDiagonalMovement = false;
-    public bool gridBasedMovement = true;
+    public bool allowDiagonalMovement = true;
+    public bool gridBasedMovement = false;
     public float gridSize = 1f;
 
     [Header("Interaction")]

@@ -152,7 +152,7 @@ public class ChunkStreamingManager : MonoBehaviour
 
         try
         {
-            Transform player = WorldManager.Instance.Player.transform;
+            Transform player = WorldManager.Instance.PlayerWorldEntity.transform;
             if (player == null) return;
 
             // Calculate which chunk the player is in (multiply instead of divide)

@@ -11,9 +11,9 @@ public class WorldManager : MonoBehaviour
 {
     public static WorldManager Instance { get; private set; }
 
-    [Header("References")]
-    public GameObject Player;
-    public TransitionScreen transitionScreen;
+    private PlayerWorldEntity player;
+    public PlayerWorldEntity PlayerWorldEntity => player;
+    private TransitionScreen transitionScreen => WorldUIManager.Instance.TransitionScreen;
 
     [Header("Zone Database")]
     public List<ZoneDefinition> allZones = new List<ZoneDefinition>();
@@ -44,11 +44,13 @@ public class WorldManager : MonoBehaviour
     private async void Start()
     {
         // Disable player control during initial load
-        SetPlayerControlEnabled(false);
+        player = WorldManagerPlayer.Instance.PlayerWorldEntity;
+        player.SetControlEnabled(false);
 
         if (startingZone != null)
         {
             await LoadZone(startingZone, startingSpawnId);
+            player.SetControlEnabled(true);
         }
         else
         {
@@ -75,7 +77,7 @@ public class WorldManager : MonoBehaviour
         }
 
         _currentState = WorldState.Transitioning;
-        SetPlayerControlEnabled(false);
+        player.SetControlEnabled(false);
 
         // Fade out
         if (transitionScreen != null)
@@ -95,7 +97,7 @@ public class WorldManager : MonoBehaviour
             await transitionScreen.FadeIn();
         }
 
-        SetPlayerControlEnabled(true);
+        player.SetControlEnabled(true);
     }
 
     private async Task LoadZone(ZoneDefinition zone, string spawnId)
@@ -188,15 +190,15 @@ public class WorldManager : MonoBehaviour
 
         if (spawn != null)
         {
-            SetPlayerPosition(spawn.GetSpawnPosition());
-            SetPlayerFacingDirection(spawn.facingDirection);
+            player.TeleportPlayer(spawn.GetSpawnPosition());
+            player.SetFacing(spawn.facingDirection);
             LogManager.Trace($"[WorldManager] Player placed at '{spawnId}' -> {spawn.GetSpawnPosition()}");
         }
         else
         {
             // Even this shouldn't happen now, but just in case
             LogManager.Warning($"[WorldManager] Spawn '{spawnId}' not found after loading chunk!");
-            SetPlayerPosition(spawnChunk.GetWorldBounds().center);
+            player.TeleportPlayer(spawnChunk.GetWorldBounds().center);
         }
 
         // =====================================================
@@ -232,8 +234,8 @@ public class WorldManager : MonoBehaviour
 
         if (spawn != null)
         {
-            SetPlayerPosition(spawn.GetSpawnPosition());
-            SetPlayerFacingDirection(spawn.facingDirection);
+            player.TeleportPlayer(spawn.GetSpawnPosition());
+            player.SetFacing(spawn.facingDirection);
         }
         else
         {
@@ -286,8 +288,8 @@ public class WorldManager : MonoBehaviour
 
         if (spawn != null)
         {
-            SetPlayerPosition(spawn.GetSpawnPosition());
-            SetPlayerFacingDirection(spawn.facingDirection);
+            player.TeleportPlayer(spawn.GetSpawnPosition());
+            player.SetFacing(spawn.facingDirection);
             LogManager.Trace($"[WorldManager] Player placed at spawn '{spawnId}' -> {spawn.GetSpawnPosition()}");
         }
         else
@@ -298,7 +300,7 @@ public class WorldManager : MonoBehaviour
             var defaultSpawn = SpawnPointRegistry.Instance.FindSpawnPointByType(zoneId, SpawnPointType.Default);
             if (defaultSpawn != null)
             {
-                SetPlayerPosition(spawn.GetSpawnPosition());
+                player.TeleportPlayer(spawn.GetSpawnPosition());
             }
         }
     }
@@ -309,27 +311,6 @@ public class WorldManager : MonoBehaviour
     }
 
     #region Helpers
-
-    private void SetPlayerControlEnabled(bool enabled)
-    {
-        //enable or disable player overworld controller
-    }
-
-    private void SetPlayerPosition(Vector3 position) 
-    {
-        //Player.transform.position = position;
-    }
-
-    private void SetPlayerFacingDirection(Vector2 direction) 
-    {
-        /*
-        var playerController = Player.GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.SetFacingDirection(direction);
-        }
-        */
-    }
 
     #endregion
 }

@@ -1,9 +1,22 @@
 using UnityEngine;
 
-public class WorldEncounterSystem : MonoBehaviour
+public class WorldManagerEncounter : MonoBehaviour
 {
+    public static WorldManagerEncounter Instance { get; private set; }
+
     public void Tick(bool isMoving, float deltaTime) {}
     public void ResetStepCounter() {}
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     /*
     //use current zone
@@ -96,6 +109,26 @@ public class WorldEncounterSystem : MonoBehaviour
         }
 
         return encounters[^1];
+    }
+
+    public void TriggerEncounter(EncounterData encounter)
+    {
+        if (CurrentState != PlayerWorldState.FreeRoam) return;
+
+        SetState(PlayerWorldState.InBattle);
+        OnEncounterTriggered?.Invoke(encounter);
+        Debug.Log($"[PlayerWorldManager] Encounter triggered: {encounter.encounterName}");
+
+        // Hand off to your battle system
+        // BattleManager.Instance.StartBattle(encounter, OnBattleComplete);
+    }
+
+
+    public void OnBattleComplete(bool playerWon)
+    {
+        // Resume overworld
+        SetState(PlayerWorldState.FreeRoam);
+        encounterSystem?.ResetStepCounter();
     }
     
     */
