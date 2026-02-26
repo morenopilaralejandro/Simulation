@@ -9,10 +9,19 @@ public class PlayerWorldPersistenceComponent : MonoBehaviour
     private PlayerWorldEntity playerWorldEntity;
     private PlayerWorldConfig config;
 
+    private bool isPersistent = false;
+
     public void Initialize(PlayerWorldEntity playerWorldEntity, PlayerWorldConfig cfg)
     {
         this.playerWorldEntity = playerWorldEntity;
         config = cfg;
+    }
+
+    public void MakePersistent()
+    {
+        if (isPersistent) return;
+        DontDestroyOnLoad(playerWorldEntity);
+        isPersistent = true;
     }
 
     /*

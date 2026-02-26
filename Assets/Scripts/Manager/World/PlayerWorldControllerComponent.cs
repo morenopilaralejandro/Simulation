@@ -62,7 +62,7 @@ public class PlayerWorldControllerComponent : MonoBehaviour
         */
 
         MoveInput = InputManager.Instance.GetMove();
-        IsRunning = InputManager.Instance.GetDown(CustomAction.Battle_Pass);
+        IsRunning = !InputManager.Instance.GetHeld(CustomAction.Battle_Pass); //auto run by default and walk when held
     }
 
     // ================================================================
@@ -82,21 +82,25 @@ public class PlayerWorldControllerComponent : MonoBehaviour
 
             _velocity = direction * speed;
 
+            /*
             // Apply gravity
             if (!_cc.isGrounded)
                 _velocity.y -= 9.81f * dt;
+            */
 
             _cc.Move(_velocity * dt);
             DistanceTravelledSinceReset += speed * dt;
         }
         else
         {
+            /*
             // Still apply gravity
             if (!_cc.isGrounded)
             {
                 _velocity.y -= 9.81f * dt;
                 _cc.Move(_velocity * dt);
             }
+            */
         }
     }
 

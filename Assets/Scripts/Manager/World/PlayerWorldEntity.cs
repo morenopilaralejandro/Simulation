@@ -16,42 +16,26 @@ public class PlayerWorldEntity : MonoBehaviour
     private static PlayerWorldEntity instance;
 
     #region Components
-    [SerializeField] private Character character;
 
-    //[SerializeField] private PlayerWorldAppearanceComponent appearanceComponent;
+    [SerializeField] private Character character;
+    [SerializeField] private PlayerWorldAppearanceComponent appearanceComponent;
     [SerializeField] private PlayerWorldControllerComponent controllerComponent;
     [SerializeField] private PlayerWorldInteractionComponent interactionComponent;
     [SerializeField] private PlayerWorldModelComponent modelComponent;
     [SerializeField] private PlayerWorldPersistenceComponent persistenceComponent;
     [SerializeField] private PlayerWorldStateMachineComponent stateMachineComponent;
+
     #endregion
 
     #region Initialize
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
-    public void Initialize(CharacterData characterData, Character character = null)
+    public void Initialize(CharacterData characterData, Kit kit)
     {
         PlayerWorldConfig config = WorldManagerPlayer.Instance.PlayerWorldConfig;
-        if (character != null)
-        {
-            this.character = character;
-        } else
-        {
-            //this.character = new Character(characterData); from data
-        }
+        character = new Character(characterData);
+        character.ApplyKit(kit, Variant.Home, Position.FW);
 
-        //appearanceBattleComponent.Initialize(this);
+        appearanceComponent.Initialize(this);
         controllerComponent.Initialize(this, config);
         controllerComponent.Initialize(this, config);
         interactionComponent.Initialize(this, config);
@@ -63,6 +47,10 @@ public class PlayerWorldEntity : MonoBehaviour
     #endregion
 
     #region API Character
+    public Character Character => character;
+    #endregion
+
+    #region API PlayerWorldEntity
     //appearanceComponent
     //controllerComponent
     public bool IsMoving => controllerComponent.IsMoving;
@@ -79,6 +67,7 @@ public class PlayerWorldEntity : MonoBehaviour
     public void SetFacing(Vector2 input) => modelComponent.SetFacing(input);
     public void SetFacing(FacingDirection dir) => modelComponent.SetFacing(dir);
     //persistenceComponent
+    public void MakePersistent() => persistenceComponent.MakePersistent();
     //stateMachineComponent
     public PlayerWorldState PlayerWorldState => stateMachineComponent.PlayerWorldState;
     public void SetState(PlayerWorldState newState) => stateMachineComponent.SetState(newState);

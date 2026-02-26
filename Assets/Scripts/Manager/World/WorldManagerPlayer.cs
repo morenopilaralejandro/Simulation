@@ -34,7 +34,9 @@ public class WorldManagerPlayer : MonoBehaviour
 
     private void Start()
     {
-        playerWorldEntity.Initialize(null);
+        CharacterData characterData = CharacterManager.Instance.GetCharacterData("are");
+        Kit kit = KitManager.Instance.GetKit("faith");
+        playerWorldEntity.Initialize(characterData, kit);
     }
 
 }

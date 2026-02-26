@@ -396,6 +396,7 @@ public class SceneLoader : MonoBehaviour
             .SelectMany(go => go.GetComponentsInChildren<IAsyncSceneLoader>())
             .ToList();
 
+        LogManager.Trace($"[SceneLoader] [{sceneName}] Found {loaders.Count} IAsyncSceneLoader(s):");
         await Task.WhenAll(loaders.Select(l => l.LoadAsync()));
     }
 }

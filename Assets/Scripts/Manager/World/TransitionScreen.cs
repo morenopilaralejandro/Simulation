@@ -18,7 +18,7 @@ public class TransitionScreen : MonoBehaviour
     {
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
-        WorldUIManager.Instance.RegisterTransitionScreen(this);
+        WorldUIManager.Instance?.RegisterTransitionScreen(this);
     }
 
     private void Destroy() 
