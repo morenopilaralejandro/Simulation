@@ -26,6 +26,9 @@ public class PlayerWorldEntity : MonoBehaviour
     [SerializeField] private PlayerWorldComponentRigidbody rigidbodyComponent;
     [SerializeField] private PlayerWorldComponentStateMachine stateMachineComponent;
 
+    [SerializeField] private GameObject modelObject;
+    [SerializeField] private GameObject collidersObject;
+
     #endregion
 
     #region Initialize
@@ -43,15 +46,21 @@ public class PlayerWorldEntity : MonoBehaviour
         persistenceComponent.Initialize(this, config);
         //rigidbodyComponent.Initialize(this, config);
         stateMachineComponent.Initialize(this, config);
+
+        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleEnd += HandleBattleEnd;
     }
 
     #endregion
 
     #region API Character
+
     public Character Character => character;
+
     #endregion
 
     #region API PlayerWorldEntity
+
     //appearanceComponent
     //controllerComponent
     public bool IsMoving => controllerComponent.IsMoving;
@@ -74,6 +83,26 @@ public class PlayerWorldEntity : MonoBehaviour
     //stateMachineComponent
     public PlayerWorldState PlayerWorldState => stateMachineComponent.PlayerWorldState;
     public void SetState(PlayerWorldState newState) => stateMachineComponent.SetState(newState);
+
     #endregion
 
+    #region Events
+
+    private void OnDisable()
+    {
+        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+    }
+
+    private void SetEnable(bool enable) 
+    {
+        modelObject.SetActive(enable);
+        collidersObject.SetActive(enable);
+        controllerComponent.enabled = enable;
+    }
+
+    private void HandleBattleStart() => SetEnable(false);
+    private void HandleBattleEnd() => SetEnable(true);
+
+    #endregion
 }
