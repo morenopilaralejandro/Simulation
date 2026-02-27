@@ -2,8 +2,7 @@
 using UnityEngine;
 using Simulation.Enums.World;
 
-[RequireComponent(typeof(CharacterController))]
-public class PlayerWorldStateMachineComponent : MonoBehaviour
+public class PlayerWorldComponentStateMachine : MonoBehaviour
 {
     private PlayerWorldEntity playerWorldEntity;
     private PlayerWorldConfig config;

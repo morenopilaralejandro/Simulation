@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerWorldInteractionComponent : MonoBehaviour
+public class PlayerWorldComponentInteraction : MonoBehaviour
 {
     private PlayerWorldEntity playerWorldEntity;
     private PlayerWorldConfig config;

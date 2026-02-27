@@ -5,7 +5,7 @@ using Simulation.Enums.Character;
 using Simulation.Enums.Kit;
 using Simulation.Enums.SpriteLayer;
 
-public class PlayerWorldAppearanceComponent : MonoBehaviour, IAsyncSceneLoader
+public class PlayerWorldComponentAppearance : MonoBehaviour, IAsyncSceneLoader
 {
     #region Fields
 

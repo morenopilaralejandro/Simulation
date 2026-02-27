@@ -3,13 +3,11 @@ using UnityEngine;
 using Simulation.Enums.Input;
 using Simulation.Enums.World;
 
-[RequireComponent(typeof(CharacterController))]
-public class PlayerWorldControllerComponent : MonoBehaviour
+public class PlayerWorldComponentController : MonoBehaviour
 {
-    [SerializeField] private CharacterController _cc;
-
     private PlayerWorldEntity playerWorldEntity;
     private PlayerWorldConfig config;
+    private Rigidbody2D rb;
 
     public bool IsMoving { get; private set; }
     public Vector2 MoveInput { get; private set; }
@@ -18,13 +16,15 @@ public class PlayerWorldControllerComponent : MonoBehaviour
 
     private bool _enabled = false;
     private Vector3 _velocity;
-    private bool _isGridMoving;
+    //private bool _isGridMoving;
     private Vector3 _gridMoveTarget;
+    private float acceleration = 50f;
 
     public void Initialize(PlayerWorldEntity playerWorldEntity, PlayerWorldConfig cfg)
     {
         this.playerWorldEntity = playerWorldEntity;
         config = cfg;
+        rb = playerWorldEntity.Rb;
     }
 
     private void Update()
@@ -71,37 +71,12 @@ public class PlayerWorldControllerComponent : MonoBehaviour
 
     private void HandleFreeMovement(float dt)
     {
-        Vector3 direction = new Vector3(MoveInput.x, MoveInput.y, 0f).normalized;
         float speed = IsRunning ? config.runSpeed : config.walkSpeed;
 
-        IsMoving = direction.sqrMagnitude > 0.01f;
+        Vector2 desiredVelocity = MoveInput * speed;
 
-        if (IsMoving)
-        {
-            playerWorldEntity.SetFacing(MoveInput);
-
-            _velocity = direction * speed;
-
-            /*
-            // Apply gravity
-            if (!_cc.isGrounded)
-                _velocity.y -= 9.81f * dt;
-            */
-
-            _cc.Move(_velocity * dt);
-            DistanceTravelledSinceReset += speed * dt;
-        }
-        else
-        {
-            /*
-            // Still apply gravity
-            if (!_cc.isGrounded)
-            {
-                _velocity.y -= 9.81f * dt;
-                _cc.Move(_velocity * dt);
-            }
-            */
-        }
+        Vector2 velocityDelta = desiredVelocity - rb.velocity;
+        rb.AddForce(velocityDelta * acceleration, ForceMode2D.Force);
     }
 
     // ================================================================
@@ -110,6 +85,7 @@ public class PlayerWorldControllerComponent : MonoBehaviour
 
     private void HandleGridMovement(float dt)
     {
+        /*
         if (_isGridMoving)
         {
             float speed = IsRunning ? config.runSpeed : config.walkSpeed;
@@ -143,6 +119,7 @@ public class PlayerWorldControllerComponent : MonoBehaviour
                 IsMoving = true;
             }
         }
+        */
     }
 
     private Vector3 SnapToGrid(Vector3 pos)
@@ -189,7 +166,7 @@ public class PlayerWorldControllerComponent : MonoBehaviour
     {
         IsMoving = false;
         _velocity = Vector3.zero;
-        _isGridMoving = false;
+        //_isGridMoving = false;
         UpdateAnimation();
     }
 

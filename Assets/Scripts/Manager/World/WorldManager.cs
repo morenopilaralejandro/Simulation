@@ -190,7 +190,7 @@ public class WorldManager : MonoBehaviour
 
         if (spawn != null)
         {
-            player.TeleportPlayer(spawn.GetSpawnPosition());
+            player.Teleport(spawn.GetSpawnPosition());
             player.SetFacing(spawn.facingDirection);
             LogManager.Trace($"[WorldManager] Player placed at '{spawnId}' -> {spawn.GetSpawnPosition()}");
         }
@@ -198,7 +198,7 @@ public class WorldManager : MonoBehaviour
         {
             // Even this shouldn't happen now, but just in case
             LogManager.Warning($"[WorldManager] Spawn '{spawnId}' not found after loading chunk!");
-            player.TeleportPlayer(spawnChunk.GetWorldBounds().center);
+            player.Teleport(spawnChunk.GetWorldBounds().center);
         }
 
         // =====================================================
@@ -234,7 +234,7 @@ public class WorldManager : MonoBehaviour
 
         if (spawn != null)
         {
-            player.TeleportPlayer(spawn.GetSpawnPosition());
+            player.Teleport(spawn.GetSpawnPosition());
             player.SetFacing(spawn.facingDirection);
         }
         else
@@ -288,7 +288,7 @@ public class WorldManager : MonoBehaviour
 
         if (spawn != null)
         {
-            player.TeleportPlayer(spawn.GetSpawnPosition());
+            player.Teleport(spawn.GetSpawnPosition());
             player.SetFacing(spawn.facingDirection);
             LogManager.Trace($"[WorldManager] Player placed at spawn '{spawnId}' -> {spawn.GetSpawnPosition()}");
         }
@@ -300,7 +300,7 @@ public class WorldManager : MonoBehaviour
             var defaultSpawn = SpawnPointRegistry.Instance.FindSpawnPointByType(zoneId, SpawnPointType.Default);
             if (defaultSpawn != null)
             {
-                player.TeleportPlayer(spawn.GetSpawnPosition());
+                player.Teleport(spawn.GetSpawnPosition());
             }
         }
     }

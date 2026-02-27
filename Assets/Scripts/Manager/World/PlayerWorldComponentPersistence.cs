@@ -2,8 +2,7 @@
 using UnityEngine;
 using Simulation.Enums.World;
 
-[RequireComponent(typeof(CharacterController))]
-public class PlayerWorldPersistenceComponent : MonoBehaviour
+public class PlayerWorldComponentPersistence : MonoBehaviour
 {
     //pull from manager
     private PlayerWorldEntity playerWorldEntity;

@@ -2,8 +2,7 @@
 using UnityEngine;
 using Simulation.Enums.World;
 
-[RequireComponent(typeof(CharacterController))]
-public class PlayerWorldModelComponent : MonoBehaviour
+public class PlayerWorldComponentModel : MonoBehaviour
 {
     private PlayerWorldEntity playerWorldEntity;
     private PlayerWorldConfig config;
@@ -15,14 +14,6 @@ public class PlayerWorldModelComponent : MonoBehaviour
     {
         this.playerWorldEntity = playerWorldEntity;
         config = cfg;
-    }
-
-    public void TeleportPlayer(Vector3 destination)
-    {
-        //SetControlEnabled(false);
-        playerWorldEntity.transform.position = destination;
-        //SetControlEnabled(true);
-        WorldEvents.RaisePlayerTeleported(destination);
     }
 
     public void SetFacing(Vector2 input)
