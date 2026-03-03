@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Simulation.Enums.World;
 
 /// <summary>
 /// Manages streaming of overworld chunks based on player position.
-/// Only loads chunks within the configured radius.
+/// Chunks can belong to ANY zone — the overworld is a seamless collection
+/// of chunks across zone boundaries.
 /// </summary>
 public class ChunkStreamingManager : MonoBehaviour
 {
@@ -13,16 +13,16 @@ public class ChunkStreamingManager : MonoBehaviour
 
     [Header("Settings")]
     [Tooltip("How often to check player position for chunk updates (seconds)")]
-    private float updateInterval = 1f;
+    [SerializeField] private float updateInterval = 1f;
 
-    private ZoneDefinition _currentOverworldZone;
+    private OverworldDefinition _overworld;
     private Vector2Int _lastPlayerChunkCoord;
     private float _updateTimer;
     private bool _isActive;
     private bool _isUpdating;
 
-    // Cached 1/CHUNK_SIZE to replace divisions with multiplications
     private float _invChunkSize;
+    private int _chunkLoadRadius;
 
     // Track which chunks are currently loaded
     private readonly HashSet<string> _loadedChunkIds = new HashSet<string>();
@@ -30,6 +30,10 @@ public class ChunkStreamingManager : MonoBehaviour
     // O(1) chunk lookup built once at StartStreaming
     private readonly Dictionary<string, ChunkDefinition> _chunkLookup
         = new Dictionary<string, ChunkDefinition>();
+
+    // Spatial lookup: chunk coord → chunk (for fast radius queries)
+    private readonly Dictionary<Vector2Int, ChunkDefinition> _coordLookup
+        = new Dictionary<Vector2Int, ChunkDefinition>();
 
     // --- Reusable collections to avoid per-update allocations ---
     private readonly HashSet<string> _desiredChunks = new HashSet<string>();
@@ -51,32 +55,43 @@ public class ChunkStreamingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Start streaming chunks for a given overworld zone.
+    /// Start streaming chunks for the entire overworld.
+    /// All zones' chunks are available for streaming.
     /// </summary>
-    public void StartStreaming(ZoneDefinition zone)
+    public void StartStreaming(OverworldDefinition overworld)
     {
-        if (zone.zoneType != ZoneType.Overworld)
+        if (overworld == null)
         {
-            LogManager.Error("[ChunkStreamingManager] Cannot stream a non-overworld zone!");
+            LogManager.Error("[ChunkStreamingManager] OverworldDefinition is null!");
             return;
         }
 
-        _currentOverworldZone = zone;
+        _overworld = overworld;
+        _chunkLoadRadius = overworld.chunkLoadRadius;
         _lastPlayerChunkCoord = new Vector2Int(int.MinValue, int.MinValue);
         _isActive = true;
         _updateTimer = 0f;
 
-        // Build O(1) lookup table once
+        // Build O(1) lookup tables once
         _chunkLookup.Clear();
+        _coordLookup.Clear();
 
-        List<ChunkDefinition> chunks = zone.chunks;
+        List<ChunkDefinition> chunks = overworld.allChunks;
         for (int i = 0, len = chunks.Count; i < len; i++)
         {
-            _chunkLookup[chunks[i].chunkId] = chunks[i];
+            ChunkDefinition chunk = chunks[i];
+            _chunkLookup[chunk.chunkId] = chunk;
+            _coordLookup[chunk.chunkCoord] = chunk;
         }
 
+        // Initialize zone tracking
+        ZoneTracker.Instance.Initialize(overworld);
+
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-        LogManager.Trace(string.Concat("[ChunkStreamingManager] Started streaming for zone: ", zone.zoneName));
+        LogManager.Trace(string.Concat(
+            "[ChunkStreamingManager] Started streaming overworld with ",
+            chunks.Count.ToString(), " chunks across ",
+            overworld.allZones.Count.ToString(), " zones."));
 #endif
 
         // Force immediate update
@@ -84,21 +99,19 @@ public class ChunkStreamingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Stop streaming and unload all chunks sequentially to limit memory spikes.
+    /// Stop streaming and unload all chunks sequentially.
     /// </summary>
     public async Task StopStreaming()
     {
         _isActive = false;
-        _currentOverworldZone = null;
+        _overworld = null;
 
-        // Copy into reusable list to iterate safely
         _tempUnloadAll.Clear();
         foreach (string chunkId in _loadedChunkIds)
         {
             _tempUnloadAll.Add(chunkId);
         }
 
-        // Sequential unloading — safer on low-end devices
         for (int i = 0, count = _tempUnloadAll.Count; i < count; i++)
         {
             ChunkDefinition chunk;
@@ -111,6 +124,7 @@ public class ChunkStreamingManager : MonoBehaviour
         _loadedChunkIds.Clear();
         _tempUnloadAll.Clear();
         _chunkLookup.Clear();
+        _coordLookup.Clear();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         LogManager.Trace("[ChunkStreamingManager] Stopped streaming, all chunks unloaded.");
@@ -119,7 +133,7 @@ public class ChunkStreamingManager : MonoBehaviour
 
     private void Update()
     {
-        if (!_isActive || _currentOverworldZone == null) return;
+        if (!_isActive || _overworld == null) return;
 
         _updateTimer += Time.deltaTime;
         if (_updateTimer >= updateInterval)
@@ -129,10 +143,6 @@ public class ChunkStreamingManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Wraps the async update with basic error logging so fire-and-forget
-    /// doesn't silently swallow exceptions.
-    /// </summary>
     private async void UpdateChunksAroundPlayerFireAndForget()
     {
         try
@@ -141,7 +151,8 @@ public class ChunkStreamingManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            LogManager.Error(string.Concat("[ChunkStreamingManager] Chunk update exception: ", e.Message));
+            LogManager.Error(string.Concat(
+                "[ChunkStreamingManager] Chunk update exception: ", e.Message));
         }
     }
 
@@ -155,8 +166,7 @@ public class ChunkStreamingManager : MonoBehaviour
             Transform player = WorldManager.Instance.PlayerWorldEntity.transform;
             if (player == null) return;
 
-            // Calculate which chunk the player is in (multiply instead of divide)
-            Vector3 pos = player.transform.position;
+            Vector3 pos = player.position;
             int cx = Mathf.FloorToInt(pos.x * _invChunkSize);
             int cy = Mathf.FloorToInt(pos.y * _invChunkSize);
 
@@ -164,28 +174,27 @@ public class ChunkStreamingManager : MonoBehaviour
             _lastPlayerChunkCoord.x = cx;
             _lastPlayerChunkCoord.y = cy;
 
-            int radius = _currentOverworldZone.chunkLoadRadius;
-            List<ChunkDefinition> chunks = _currentOverworldZone.chunks;
+            // Notify zone tracker of player's new position
+            ZoneTracker.Instance.UpdatePlayerPosition(pos);
 
-            // Build set of chunks that SHOULD be loaded (reuse set)
+            int radius = _chunkLoadRadius;
+
+            // Build set of desired chunks using spatial lookup (O(radius²) instead of O(n))
             _desiredChunks.Clear();
-            for (int i = 0, len = chunks.Count; i < len; i++)
+            for (int dx = -radius; dx <= radius; dx++)
             {
-                ChunkDefinition chunk = chunks[i];
-                int dx = chunk.chunkCoord.x - cx;
-                int dy = chunk.chunkCoord.y - cy;
-
-                // Branchless abs via ternary; avoids Mathf.Abs call overhead
-                if (dx < 0) dx = -dx;
-                if (dy < 0) dy = -dy;
-
-                if (dx <= radius && dy <= radius)
+                for (int dy = -radius; dy <= radius; dy++)
                 {
-                    _desiredChunks.Add(chunk.chunkId);
+                    Vector2Int coord = new Vector2Int(cx + dx, cy + dy);
+                    ChunkDefinition chunk;
+                    if (_coordLookup.TryGetValue(coord, out chunk))
+                    {
+                        _desiredChunks.Add(chunk.chunkId);
+                    }
                 }
             }
 
-            // Determine which to unload (loaded but not desired)
+            // Determine which to unload
             _chunksToUnload.Clear();
             foreach (string loadedId in _loadedChunkIds)
             {
@@ -195,7 +204,7 @@ public class ChunkStreamingManager : MonoBehaviour
                 }
             }
 
-            // Determine which to load (desired but not loaded)
+            // Determine which to load
             _chunksToLoad.Clear();
             foreach (string desiredId in _desiredChunks)
             {
@@ -205,7 +214,7 @@ public class ChunkStreamingManager : MonoBehaviour
                 }
             }
 
-            // Unload first to free memory before loading new chunks
+            // Unload first to free memory
             for (int i = 0, count = _chunksToUnload.Count; i < count; i++)
             {
                 string chunkId = _chunksToUnload[i];
@@ -218,7 +227,7 @@ public class ChunkStreamingManager : MonoBehaviour
                 }
             }
 
-            // Then load new chunks sequentially to limit memory spikes
+            // Then load new chunks
             for (int i = 0, count = _chunksToLoad.Count; i < count; i++)
             {
                 string chunkId = _chunksToLoad[i];
@@ -238,25 +247,53 @@ public class ChunkStreamingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Force load a specific chunk (e.g., for spawning).
+    /// Force load a specific chunk at a world position (e.g., for spawning).
+    /// Works across any zone's chunks.
     /// </summary>
     public async Task ForceLoadChunkAt(Vector3 worldPos)
     {
-        if (_currentOverworldZone == null) return;
+        if (_overworld == null) return;
 
-        List<ChunkDefinition> chunks = _currentOverworldZone.chunks;
-        for (int i = 0, len = chunks.Count; i < len; i++)
+        int cx = Mathf.FloorToInt(worldPos.x * _invChunkSize);
+        int cy = Mathf.FloorToInt(worldPos.y * _invChunkSize);
+        Vector2Int coord = new Vector2Int(cx, cy);
+
+        ChunkDefinition chunk;
+        if (_coordLookup.TryGetValue(coord, out chunk))
         {
-            ChunkDefinition chunk = chunks[i];
-            if (chunk.GetWorldBounds().Contains(worldPos))
+            if (!_loadedChunkIds.Contains(chunk.chunkId))
             {
-                if (!_loadedChunkIds.Contains(chunk.chunkId))
-                {
-                    _loadedChunkIds.Add(chunk.chunkId);
-                    await ZoneLoader.Instance.LoadSceneAsync(chunk.sceneAddress);
-                }
-                return;
+                _loadedChunkIds.Add(chunk.chunkId);
+                await ZoneLoader.Instance.LoadSceneAsync(chunk.sceneAddress);
             }
         }
+    }
+
+    /// <summary>
+    /// Force load the chunk at a spawn point's position and return the spawn data.
+    /// </summary>
+    /*
+    public async Task<SpawnPointDefinition> LoadAndResolveSpawn(
+        string zoneId, string spawnId = null)
+    {
+        SpawnPointDefinition spawn = ZoneTracker.Instance.ResolveSpawnPoint(zoneId, spawnId);
+        if (spawn == null)
+        {
+            LogManager.Error(string.Concat(
+                "[ChunkStreamingManager] Could not resolve spawn in zone: ", zoneId));
+            return null;
+        }
+
+        await ForceLoadChunkAt(spawn.worldPosition);
+        return spawn;
+    }
+    */
+
+    /// <summary>
+    /// Get the zone the player is currently in (delegates to ZoneTracker).
+    /// </summary>
+    public ZoneDefinition GetCurrentPlayerZone()
+    {
+        return ZoneTracker.Instance != null ? ZoneTracker.Instance.CurrentZone : null;
     }
 }

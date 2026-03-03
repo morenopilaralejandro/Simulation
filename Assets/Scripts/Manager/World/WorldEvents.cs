@@ -4,10 +4,10 @@ using Simulation.Enums.World;
 
 public static class WorldEvents
 {
-    public static event Action OnZoneChanged;
-    public static void RaiseZoneChanged()
+    public static event Action<ZoneDefinition, ZoneDefinition> OnZoneChanged;
+    public static void RaiseZoneChanged(ZoneDefinition previousZone, ZoneDefinition newZone)
     {
-        OnZoneChanged?.Invoke();
+        OnZoneChanged?.Invoke(previousZone, newZone);
     }
 
     public static event Action<PlayerWorldState, PlayerWorldState> OnPlayerStateChanged;

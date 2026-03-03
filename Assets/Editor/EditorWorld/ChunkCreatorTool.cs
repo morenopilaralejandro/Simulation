@@ -8,6 +8,7 @@ using Simulation.Enums.World;
 
 public class ChunkCreatorTool : EditorWindow
 {
+    private OverworldDefinition _overworld;
     private ZoneDefinition _zone;
     private Vector2Int _newChunkCoord;
     private string _sceneSavePath = "Assets/Addressables/AddressScene/AddressSceneWorld";
@@ -23,6 +24,9 @@ public class ChunkCreatorTool : EditorWindow
     {
         GUILayout.Label("Create New Chunk", EditorStyles.boldLabel);
 
+        _overworld = (OverworldDefinition)EditorGUILayout.ObjectField(
+            "Overworld", _overworld, typeof(OverworldDefinition), false
+        );
         _zone = (ZoneDefinition)EditorGUILayout.ObjectField(
             "Zone", _zone, typeof(ZoneDefinition), false
         );
@@ -45,6 +49,16 @@ public class ChunkCreatorTool : EditorWindow
             );
         }
 
+        // Validate zone belongs to overworld
+        if (_overworld != null && _zone != null
+            && !_overworld.allZones.Contains(_zone))
+        {
+            EditorGUILayout.HelpBox(
+                "Selected zone is not part of the overworld definition!",
+                MessageType.Warning
+            );
+        }
+
         // Show where this chunk will appear in world space
         Vector2 worldPos = new Vector2(
             _newChunkCoord.x * WorldConstants.CHUNK_SIZE,
@@ -58,16 +72,16 @@ public class ChunkCreatorTool : EditorWindow
             MessageType.Info
         );
 
-        // Check if chunk already exists
-        if (_zone != null)
+        // Check if chunk already exists in the overworld
+        if (_overworld != null)
         {
-            bool exists = _zone.chunks.Exists(
+            bool exists = _overworld.allChunks.Exists(
                 c => c.chunkCoord == _newChunkCoord
             );
             if (exists)
             {
                 EditorGUILayout.HelpBox(
-                    "A chunk at this coordinate already exists!",
+                    "A chunk at this coordinate already exists in the overworld!",
                     MessageType.Warning
                 );
             }
@@ -82,8 +96,9 @@ public class ChunkCreatorTool : EditorWindow
 
         GUILayout.Space(10);
 
-        GUI.enabled = _gridPrefab != null 
-            && _gridPrefab.GetComponent<Grid>() != null;
+        GUI.enabled = _gridPrefab != null
+            && _gridPrefab.GetComponent<Grid>() != null
+            && _overworld != null;
         if (GUILayout.Button("Create Chunk Scene"))
         {
             CreateChunkScene();
@@ -94,7 +109,7 @@ public class ChunkCreatorTool : EditorWindow
     private void ShowNeighborStatus(Vector2Int dir, string label)
     {
         Vector2Int neighborCoord = _newChunkCoord + dir;
-        bool exists = _zone.chunks.Exists(
+        bool exists = _overworld.allChunks.Exists(
             c => c.chunkCoord == neighborCoord
         );
         string status = exists ? "exists" : "empty";
@@ -106,6 +121,14 @@ public class ChunkCreatorTool : EditorWindow
 
     private void CreateChunkScene()
     {
+        if (_overworld == null)
+        {
+            EditorUtility.DisplayDialog(
+                "Error", "Assign an overworld definition first!", "OK"
+            );
+            return;
+        }
+
         if (_zone == null)
         {
             EditorUtility.DisplayDialog("Error", "Assign a zone first!", "OK");
@@ -115,8 +138,8 @@ public class ChunkCreatorTool : EditorWindow
         if (_gridPrefab == null || _gridPrefab.GetComponent<Grid>() == null)
         {
             EditorUtility.DisplayDialog(
-                "Error", 
-                "Assign a valid Grid prefab first!", 
+                "Error",
+                "Assign a valid Grid prefab first!",
                 "OK"
             );
             return;
@@ -161,31 +184,38 @@ public class ChunkCreatorTool : EditorWindow
         EditorSceneManager.SaveScene(newScene, scenePath);
         EditorSceneManager.CloseScene(newScene, true);
 
-        // Add chunk to zone definition
+        // Add chunk to overworld definition
         var newChunkDef = new ChunkDefinition
         {
-            chunkId = chunkId,
+            chunkId = sceneName,
+            parentZone = _zone,
             chunkCoord = _newChunkCoord,
             sceneAddress = sceneName,
             containedSpawnIds = new List<string>()
         };
-        _zone.chunks.Add(newChunkDef);
-        EditorUtility.SetDirty(_zone);
+        _overworld.allChunks.Add(newChunkDef);
+        EditorUtility.SetDirty(_overworld);
+
         AssetDatabase.SaveAssets();
 
         // Mark scene as addressable
-        // (You may need to do this manually or use 
+        // (You may need to do this manually or use
         //  Addressables API to add to a group)
 
         EditorUtility.DisplayDialog(
             "Success",
             $"Created chunk scene at:\n{scenePath}\n\n" +
+            $"Added to overworld: {_overworld.name}\n" +
+            $"Zone: {_zone.zoneId}\n\n" +
             $"Remember to mark it as Addressable\n" +
             $"with address: {sceneName}",
             "OK"
         );
 
-        Debug.Log($"Created chunk: {chunkId} at coord {_newChunkCoord}");
+        Debug.Log(
+            $"Created chunk: {chunkId} at coord {_newChunkCoord} " +
+            $"(overworld: {_overworld.name}, zone: {_zone.zoneId})"
+        );
     }
 }
 #endif

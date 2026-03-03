@@ -10,15 +10,8 @@ public class ZoneDefinition : ScriptableObject
     public string zoneName;
     public ZoneType zoneType;
 
-    [Header("Overworld Chunks (only for Overworld zones)")]
-    public List<ChunkDefinition> chunks = new List<ChunkDefinition>();
-
     [Header("Interior Scene (only for Interior zones)")]
     public string interiorSceneAddress;
-
-    [Header("Zone Settings")]
-    public int chunkLoadRadius = 1; // How many chunks around player to load
-    public string defaultSpawnId;
 
     [Header("Audio")]
     public AudioClip backgroundMusic;

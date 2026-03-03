@@ -15,12 +15,8 @@ public class WorldManager : MonoBehaviour
     public PlayerWorldEntity PlayerWorldEntity => player;
     private TransitionScreen transitionScreen => WorldUIManager.Instance.TransitionScreen;
 
-    [Header("Zone Database")]
-    public List<ZoneDefinition> allZones = new List<ZoneDefinition>();
-
-    [Header("Starting Zone")]
-    public ZoneDefinition startingZone;
-    public string startingSpawnId;
+    [SerializeField] private OverworldDefinition overworldDefinition;
+    public OverworldDefinition OverworldDefinition => overworldDefinition;
 
     [Header("State")]
     [SerializeField] private WorldState _currentState = WorldState.None;
@@ -50,9 +46,9 @@ public class WorldManager : MonoBehaviour
         player = WorldManagerPlayer.Instance.PlayerWorldEntity;
         player.SetControlEnabled(false);
 
-        if (startingZone != null)
+        if (overworldDefinition.startingZone != null)
         {
-            await LoadZone(startingZone, startingSpawnId);
+            await LoadZone(overworldDefinition.startingZone, overworldDefinition.startingSpawnId);
             player.SetControlEnabled(true);
         }
         else
@@ -173,7 +169,7 @@ public class WorldManager : MonoBehaviour
 
         // Search through all chunks in this zone to find which
         // one has our target spawn ID
-        foreach (var chunk in zone.chunks)
+        foreach (var chunk in overworldDefinition.allChunks)
         {
             if (chunk.containedSpawnIds.Contains(spawnId))
             {
@@ -189,7 +185,7 @@ public class WorldManager : MonoBehaviour
                 $"[WorldManager] No chunk claims spawn '{spawnId}'. " +
                 $"Falling back to first chunk."
             );
-            spawnChunk = zone.chunks[0];
+            spawnChunk = overworldDefinition.allChunks[0];
         }
 
         // =====================================================
@@ -246,7 +242,7 @@ public class WorldManager : MonoBehaviour
         //     double-load it (ZoneLoader checks for duplicates)
         //   - Neighboring chunks load in the background
 
-        ChunkStreamingManager.Instance.StartStreaming(zone);
+        ChunkStreamingManager.Instance.StartStreaming(overworldDefinition);
 
         _currentState = WorldState.InOverworld;
     }
@@ -254,6 +250,7 @@ public class WorldManager : MonoBehaviour
     private async Task LoadInteriorZone(ZoneDefinition zone, string spawnId)
     {
         // STEP 1: Load the single interior scene
+        ZoneTracker.Instance.SetZone(zone);
         await ZoneLoader.Instance.LoadSceneAsync(zone.interiorSceneAddress);
 
         await Task.Yield();
@@ -358,7 +355,7 @@ public class WorldManager : MonoBehaviour
 
     public ZoneDefinition FindZone(string zoneId)
     {
-        return allZones.Find(z => z.zoneId == zoneId);
+        return overworldDefinition.allZones.Find(z => z.zoneId == zoneId);
     }
 
     #region Helpers

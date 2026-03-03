@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class ChunkDefinition
 {
     public string chunkId;
+    public ZoneDefinition parentZone;
     public Vector2Int chunkCoord;
     public string sceneAddress;
     public List<string> containedSpawnIds = new List<string>();
