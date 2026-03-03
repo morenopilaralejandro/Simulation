@@ -18,13 +18,7 @@ public class ChunkSceneRoot : MonoBehaviour
 
     private void Awake()
     {
-        // Auto-position the entire chunk based on its coordinate
-        Vector3 worldPosition = new Vector3(
-            chunkCoord.x * WorldConstants.CHUNK_SIZE,
-            chunkCoord.y * WorldConstants.CHUNK_SIZE,
-            0f
-        );
-        transform.position = worldPosition;
+        SnapToChunkPosition();
     }
 
     private void Start()
@@ -35,6 +29,16 @@ public class ChunkSceneRoot : MonoBehaviour
     private void OnDestroy()
     {
         SpawnPointRegistry.Instance?.UnregisterSpawnPoints(zoneId, _spawnPoints.ToArray());
+    }
+
+    private void SnapToChunkPosition()
+    {
+        Vector3 worldPosition = new Vector3(
+            chunkCoord.x * WorldConstants.CHUNK_SIZE,
+            chunkCoord.y * WorldConstants.CHUNK_SIZE,
+            0f
+        );
+        transform.position = worldPosition;
     }
 
     public SpawnPoint GetSpawnPoint(string spawnId)
@@ -54,6 +58,14 @@ public class ChunkSceneRoot : MonoBehaviour
         _spawnPoints = GetComponentsInChildren<SpawnPoint>(true).ToList();
         UnityEditor.EditorUtility.SetDirty(this);
         Debug.Log($"[ChunkSceneRoot] Collected {_spawnPoints.Count} spawn points for {chunkId} at {zoneId}.");
+    }
+#endif
+
+#if UNITY_EDITOR
+    [ContextMenu("SnapToChunkPosition")]
+    private void SnapToChunkPositionContext()
+    {
+        SnapToChunkPosition();
     }
 #endif
 

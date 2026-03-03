@@ -35,8 +35,7 @@ public class PlayerWorldComponentController : MonoBehaviour
         rb = playerWorldEntity.Rb;
 
         // Kinematic + interpolation gives the cleanest MovePosition behaviour
-        rb.bodyType = RigidbodyType2D.Kinematic;
-        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        rb.bodyType = RigidbodyType2D.Kinematic; //only for grid
     }
 
     // ================================================================
@@ -227,7 +226,7 @@ public class PlayerWorldComponentController : MonoBehaviour
     private void CancelGridStep()
     {
         // snap back to the nearest grid point behind us
-        rb.MovePosition(SnapToGrid(rb.position));
+        //rb.MovePosition(SnapToGrid(rb.position));
         _isGridMoving = false;
         IsMoving = false;
         _stuckTimer = 0f;
