@@ -384,9 +384,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a39d160de03ea5ef97ae870809cd718, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allZones: []
-  startingZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
-  startingSpawnId: spawn_park_start
+  allZones:
+  - {fileID: 11400000, guid: d294154c7772a28708224aa34c9533b9, type: 2}
+  - {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
+  startingZone: {fileID: 11400000, guid: d294154c7772a28708224aa34c9533b9, type: 2}
+  startingSpawnId: spawn_hospital_checkpoint
   _currentState: 0
 --- !u!4 &1684964276
 Transform:
@@ -459,13 +461,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerWorldEntity
       objectReference: {fileID: 0}
+    - target: {fileID: 5344193445462302068, guid: 7d3768bc13cdabf2fba080fceb346afa, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 6604199107533432935, guid: 7d3768bc13cdabf2fba080fceb346afa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6604199107533432935, guid: 7d3768bc13cdabf2fba080fceb346afa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6604199107533432935, guid: 7d3768bc13cdabf2fba080fceb346afa, type: 3}
       propertyPath: m_LocalPosition.z

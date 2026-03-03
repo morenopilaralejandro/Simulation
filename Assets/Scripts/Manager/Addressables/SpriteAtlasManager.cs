@@ -16,6 +16,7 @@ public class SpriteAtlasManager : MonoBehaviour
     private const string TEAM_CREST_ATLAS_ID = "atlases-teams-crests";
     private const string CHARACTER_PORTRAIT_ATLAS_ID = "atlases-characters-portraits";
     private const string CHARACTER_COMMON_ATLAS_ID = "atlases-characters-common";
+    private const string CHARACTER_WORLD_ATLAS_ID = "atlases-characters-world";
 
     private void Awake()
     {
@@ -66,6 +67,13 @@ public class SpriteAtlasManager : MonoBehaviour
     {
         var atlasId = CHARACTER_COMMON_ATLAS_ID;
         var spriteId = AddressableLoader.GetCharacterHairAddress(id);;
+        return GetSpriteAsync(atlasId, spriteId);
+    }
+
+    public Task<Sprite> GetCharacterHairWorld(string id)
+    {
+        var atlasId = CHARACTER_WORLD_ATLAS_ID;
+        var spriteId = AddressableLoader.GetCharacterHairWorldAddress(id);;
         return GetSpriteAsync(atlasId, spriteId);
     }
 

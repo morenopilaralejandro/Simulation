@@ -40,5 +40,6 @@ public class PlayerWorldComponentRigidbody : MonoBehaviour
         rb.Sleep();
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb.WakeUp();
+        WorldEvents.RaisePlayerTeleported(new Vector3(position.x, position.y, 0f));
     }
 }

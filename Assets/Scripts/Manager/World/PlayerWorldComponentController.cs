@@ -1,4 +1,3 @@
-// PlayerMovementController.cs
 using UnityEngine;
 using Simulation.Enums.Input;
 using Simulation.Enums.World;
@@ -16,31 +15,55 @@ public class PlayerWorldComponentController : MonoBehaviour
 
     private bool _enabled = false;
     private Vector3 _velocity;
-    //private bool _isGridMoving;
-    private Vector3 _gridMoveTarget;
+    private bool _isGridMoving;
+    private Vector2 _gridMoveTarget;
     private float acceleration = 50f;
+
+    [Header("Collision Settings")]
+    [SerializeField] private LayerMask collisionMask;   // walls / obstacles
+    [SerializeField] private float castRadius = 0.4f;   // slightly smaller than half a tile
+
+    // stuck detection
+    private Vector2 _lastPosition;
+    private float _stuckTimer;
+    private const float STUCK_THRESHOLD = 0.15f; // seconds with no progress
 
     public void Initialize(PlayerWorldEntity playerWorldEntity, PlayerWorldConfig cfg)
     {
         this.playerWorldEntity = playerWorldEntity;
         config = cfg;
         rb = playerWorldEntity.Rb;
+
+        // Kinematic + interpolation gives the cleanest MovePosition behaviour
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
     }
+
+    // ================================================================
+    //  UPDATE  — input only
+    // ================================================================
 
     private void Update()
     {
         if (!_enabled) return;
-
-        float deltaTime = Time.deltaTime;
-
         ReadInput();
+        UpdateAnimation();
+    }
+
+    // ================================================================
+    //  FIXED UPDATE  — physics movement
+    // ================================================================
+
+    private void FixedUpdate()
+    {
+        if (!_enabled) return;
+
+        float dt = Time.fixedDeltaTime;
 
         if (config.gridBasedMovement)
-            HandleGridMovement(deltaTime);
+            HandleGridMovement(dt);
         else
-            HandleFreeMovement(deltaTime);
-
-        UpdateAnimation();
+            HandleFreeMovement(dt);
     }
 
     // ================================================================
@@ -49,20 +72,8 @@ public class PlayerWorldComponentController : MonoBehaviour
 
     private void ReadInput()
     {
-        /*
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        if (!config.allowDiagonalMovement)
-        {
-            // Prioritise horizontal if both pressed
-            if (Mathf.Abs(h) > 0.01f && Mathf.Abs(v) > 0.01f)
-                v = 0f;
-        }
-        */
-
         MoveInput = InputManager.Instance.GetMove();
-        IsRunning = !InputManager.Instance.GetHeld(CustomAction.Battle_Pass); //auto run by default and walk when held
+        IsRunning = !InputManager.Instance.GetHeld(CustomAction.Battle_Pass);
     }
 
     // ================================================================
@@ -71,12 +82,14 @@ public class PlayerWorldComponentController : MonoBehaviour
 
     private void HandleFreeMovement(float dt)
     {
+        // For free movement switch to Dynamic so colliders respond normally
         float speed = IsRunning ? config.runSpeed : config.walkSpeed;
 
         Vector2 desiredVelocity = MoveInput * speed;
-
         Vector2 velocityDelta = desiredVelocity - rb.velocity;
         rb.AddForce(velocityDelta * acceleration, ForceMode2D.Force);
+
+        IsMoving = rb.velocity.sqrMagnitude > 0.01f;
     }
 
     // ================================================================
@@ -85,75 +98,177 @@ public class PlayerWorldComponentController : MonoBehaviour
 
     private void HandleGridMovement(float dt)
     {
-        /*
         if (_isGridMoving)
         {
             float speed = IsRunning ? config.runSpeed : config.walkSpeed;
-            Vector3 newPos = Vector3.MoveTowards(transform.position, _gridMoveTarget, speed * dt);
-            _cc.Move(newPos - transform.position);
+            float stepBudget = speed * dt;
 
-            if (Vector3.Distance(transform.position, _gridMoveTarget) < 0.01f)
+            // Use newPos for ALL logic — rb.position is stale until next sim step
+            Vector2 newPos = Vector2.MoveTowards(
+                rb.position, _gridMoveTarget, stepBudget);
+
+            // ---- stuck detection (use newPos, not rb.position) ----
+            if (Vector2.Distance(newPos, _lastPosition) < 0.001f)
             {
-                _isGridMoving = false;
-                IsMoving = false;
+                _stuckTimer += dt;
+                if (_stuckTimer >= STUCK_THRESHOLD)
+                {
+                    CancelGridStep();
+                    return;
+                }
+            }
+            else
+            {
+                _stuckTimer = 0f;
+            }
+            _lastPosition = newPos;
+
+            // ---- arrival check (use newPos, not rb.position) ----
+            if (Vector2.Distance(newPos, _gridMoveTarget) < 0.005f)
+            {
                 DistanceTravelledSinceReset += config.gridSize;
+
+                // If input is held, chain directly into the next step
+                // WITHOUT ever setting IsMoving = false
+                if (MoveInput.sqrMagnitude > 0.01f)
+                {
+                    // Use the exact grid target as the origin for the next step
+                    // so rounding errors never accumulate
+                    Vector2 arrivedAt = _gridMoveTarget;
+
+                    if (TryStartGridStepFrom(arrivedAt))
+                    {
+                        // Spend leftover movement budget on the new step
+                        float distUsed = Vector2.Distance(rb.position, arrivedAt);
+                        float leftover = stepBudget - distUsed;
+
+                        if (leftover > 0f)
+                        {
+                            Vector2 continued = Vector2.MoveTowards(
+                                arrivedAt, _gridMoveTarget, leftover);
+                            rb.MovePosition(continued);
+                        }
+                        else
+                        {
+                            rb.MovePosition(arrivedAt);
+                        }
+                    }
+                    else
+                    {
+                        // Next step was blocked — snap and stop
+                        rb.MovePosition(arrivedAt);
+                        _isGridMoving = false;
+                        IsMoving = false;
+                    }
+                }
+                else
+                {
+                    // No input — snap to tile and stop
+                    rb.MovePosition(_gridMoveTarget);
+                    _isGridMoving = false;
+                    IsMoving = false;
+                }
+            }
+            else
+            {
+                rb.MovePosition(newPos);
             }
         }
         else if (MoveInput.sqrMagnitude > 0.01f)
         {
-            playerWorldEntity.SetFacing(MoveInput);
-
-            Vector3 dir = new Vector3(
-                Mathf.Round(MoveInput.x),
-                Mathf.Round(MoveInput.y),
-                0f
-            );
-
-            Vector3 target = transform.position + dir * config.gridSize;
-            target = SnapToGrid(target);
-
-            if (!IsGridBlocked(target))
-            {
-                _gridMoveTarget = target;
-                _isGridMoving = true;
-                IsMoving = true;
-            }
+            TryStartGridStepFrom(SnapToGrid(rb.position));
         }
-        */
+    }   
+
+    // ================================================================
+    //  GRID STEP HELPERS
+    // ================================================================
+
+    /// <summary>
+    /// Attempts to begin a new grid step from the given origin.
+    /// Returns true if the step started, false if blocked or no input.
+    /// </summary>
+    private bool TryStartGridStepFrom(Vector2 fromPosition)
+    {
+        Vector2 cardinal = GetCardinalDirection(MoveInput);
+        if (cardinal == Vector2.zero) return false;
+
+        playerWorldEntity.SetFacing(cardinal);
+
+        Vector2 target = SnapToGrid(fromPosition + cardinal * config.gridSize);
+
+        if (IsPathBlocked(fromPosition, cardinal, config.gridSize))
+            return false;
+
+        _gridMoveTarget = target;
+        _isGridMoving = true;
+        IsMoving = true;
+        _stuckTimer = 0f;
+        _lastPosition = fromPosition;
+        return true;
     }
 
-    private Vector3 SnapToGrid(Vector3 pos)
+    /// <summary>
+    /// CircleCast along the step direction. Returns true if something
+    /// on <see cref="collisionMask"/> is in the way.
+    /// </summary>
+    private bool IsPathBlocked(Vector2 origin, Vector2 direction, float distance)
+    {
+        RaycastHit2D hit = Physics2D.CircleCast(
+            origin,
+            castRadius,
+            direction,
+            distance,
+            collisionMask
+        );
+        return hit.collider != null;
+    }
+
+    private void CancelGridStep()
+    {
+        // snap back to the nearest grid point behind us
+        rb.MovePosition(SnapToGrid(rb.position));
+        _isGridMoving = false;
+        IsMoving = false;
+        _stuckTimer = 0f;
+    }
+
+    private void CancelFreeMovement()
+    {
+        IsMoving = false;
+        _velocity = Vector3.zero;
+        _isGridMoving = false;
+        _stuckTimer = 0f;
+    }
+
+    private static Vector2 GetCardinalDirection(Vector2 raw)
+    {
+        if (raw.sqrMagnitude < 0.01f) return Vector2.zero;
+
+        if (Mathf.Abs(raw.x) >= Mathf.Abs(raw.y))
+            return new Vector2(Mathf.Sign(raw.x), 0f);
+        else
+            return new Vector2(0f, Mathf.Sign(raw.y));
+    }
+
+    private Vector2 SnapToGrid(Vector2 pos)
     {
         float g = config.gridSize;
-        return new Vector3(
-            Mathf.Round(pos.x / g) * g,
-            pos.y,
-            Mathf.Round(pos.z / g) * g
-        );
-    }
+        float half = g * 0.5f;
 
-    private bool IsGridBlocked(Vector3 target)
-    {
-        // Raycast or overlap check for collisions on the grid
-        return Physics.CheckSphere(target + Vector3.up * 0.5f, 0.2f,
-                                    LayerMask.GetMask("Obstacles"));
+        return new Vector2(
+            Mathf.Round((pos.x - half) / g) * g + half,
+            Mathf.Round((pos.y - half) / g) * g + half
+        );
     }
 
     // ================================================================
     //  ANIMATION
     // ================================================================
-    
+
     private void UpdateAnimation()
     {
-        /*
-        if (_animator == null) return;
-
-        Vector2 facingVec = FacingToVector(CurrentFacing);
-        _animator.SetFloat(AnimMoveX, facingVec.x);
-        _animator.SetFloat(AnimMoveY, facingVec.y);
-        _animator.SetBool(AnimIsMoving, IsMoving);
-        _animator.SetBool(AnimIsRunning, IsRunning && IsMoving);
-        */
+        // ...
     }
 
     // ================================================================
@@ -164,10 +279,14 @@ public class PlayerWorldComponentController : MonoBehaviour
 
     public void StopMovement()
     {
-        IsMoving = false;
-        _velocity = Vector3.zero;
-        //_isGridMoving = false;
-        UpdateAnimation();
+        if (config.gridBasedMovement)
+            CancelGridStep();
+        else
+            CancelFreeMovement();
+        //UpdateAnimation();
+
+        MoveInput = Vector2.zero;
+        _enabled = false;
     }
 
     public void ResetDistance() => DistanceTravelledSinceReset = 0f;

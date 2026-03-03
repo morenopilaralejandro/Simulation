@@ -10,18 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 932e71b6eee9aaffb9c6a6d87f1c032e, type: 3}
-  m_Name: zone_overworld_park
+  m_Name: zone_interior_hospital
   m_EditorClassIdentifier: 
-  zoneId: zone_overworld_park
-  zoneName: park
-  zoneType: 0
-  chunks:
-  - chunkId: chunk_0_0
-    chunkCoord: {x: 0, y: 0}
-    sceneAddress: zone_overworld_park_chunk_0_0
-    containedSpawnIds:
-    - spawn_park_hospital_exit
-  interiorSceneAddress: 
+  zoneId: zone_interior_hospital
+  zoneName: hospital
+  zoneType: 1
+  chunks: []
+  interiorSceneAddress: zone_interior_hospital_scene
   chunkLoadRadius: 1
   defaultSpawnId: 
   backgroundMusic: {fileID: 8300000, guid: 38d24e005d5aed9b685085695e76cae0, type: 3}

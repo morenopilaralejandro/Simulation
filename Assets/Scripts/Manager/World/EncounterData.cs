@@ -1,7 +1,7 @@
 // EncounterData.cs
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EncounterData", menuName = "RPG/Encounter Data")]
+[CreateAssetMenu(fileName = "EncounterData", menuName = "ScriptableObject/World/Encounter Data")]
 public class EncounterData : ScriptableObject
 {
     public string encounterName;

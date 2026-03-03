@@ -31,6 +31,9 @@ public class WorldManager : MonoBehaviour
 
     private string _pendingSpawnId;
 
+    // Guard against re-entrant transitions
+    private bool _isTransitioning = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -63,6 +66,13 @@ public class WorldManager : MonoBehaviour
     /// </summary>
     public async void TransitionToZone(string zoneId, string spawnId)
     {
+        // Guard: prevent overlapping transitions
+        if (_isTransitioning)
+        {
+            LogManager.Warning("[WorldManager] Transition already in progress, ignoring.");
+            return;
+        }
+
         if (_currentState == WorldState.Transitioning || _currentState == WorldState.Loading)
         {
             LogManager.Warning("[WorldManager] Already transitioning!");
@@ -76,28 +86,51 @@ public class WorldManager : MonoBehaviour
             return;
         }
 
+        _isTransitioning = true;
         _currentState = WorldState.Transitioning;
         player.SetControlEnabled(false);
 
-        // Fade out
-        if (transitionScreen != null)
+        try
         {
-            await transitionScreen.FadeOut();
+            // Fade out
+            if (transitionScreen != null)
+            {
+                await transitionScreen.FadeOut();
+            }
+
+            // Unload current zone — await fully before proceeding
+            bool unloadSuccess = await UnloadCurrentZone();
+            if (!unloadSuccess)
+            {
+                LogManager.Warning("[WorldManager] Unload reported failure, proceeding with load anyway.");
+            }
+
+            // Load new zone
+            await LoadZone(targetZone, spawnId);
+
+            // Fade in
+            if (transitionScreen != null)
+            {
+                await transitionScreen.FadeIn();
+            }
+
+            player.SetControlEnabled(true);
         }
-
-        // Unload current zone
-        await UnloadCurrentZone();
-
-        // Load new zone
-        await LoadZone(targetZone, spawnId);
-
-        // Fade in
-        if (transitionScreen != null)
+        catch (System.Exception e)
         {
-            await transitionScreen.FadeIn();
-        }
+            LogManager.Error($"[WorldManager] Exception during transition: {e.Message}\n{e.StackTrace}");
 
-        player.SetControlEnabled(true);
+            // Attempt recovery: re-enable player and fade in so the game isn't stuck
+            player.SetControlEnabled(true);
+            if (transitionScreen != null)
+            {
+                await transitionScreen.FadeIn();
+            }
+        }
+        finally
+        {
+            _isTransitioning = false;
+        }
     }
 
     private async Task LoadZone(ZoneDefinition zone, string spawnId)
@@ -135,7 +168,7 @@ public class WorldManager : MonoBehaviour
         // That spawn point is a GameObject inside one specific 
         // chunk scene. We need to figure out WHICH chunk scene
         // before we can load anything.
-        
+
         ChunkDefinition spawnChunk = null;
 
         // Search through all chunks in this zone to find which
@@ -184,7 +217,7 @@ public class WorldManager : MonoBehaviour
         // up the actual world position.
 
         SpawnPoint spawn = SpawnPointRegistry.Instance.FindSpawnPoint(
-            zone.zoneId, 
+            zone.zoneId,
             spawnId
         );
 
@@ -222,13 +255,13 @@ public class WorldManager : MonoBehaviour
     {
         // STEP 1: Load the single interior scene
         await ZoneLoader.Instance.LoadSceneAsync(zone.interiorSceneAddress);
-        
+
         await Task.Yield();
         await Task.Yield();
 
         // STEP 2: Find spawn and place player
         SpawnPoint spawn = SpawnPointRegistry.Instance.FindSpawnPoint(
-            zone.zoneId, 
+            zone.zoneId,
             spawnId
         );
 
@@ -246,22 +279,47 @@ public class WorldManager : MonoBehaviour
         _currentState = WorldState.InInterior;
     }
 
-    private async Task UnloadCurrentZone()
+    /// <summary>
+    /// Unloads the current zone. Returns true if unload succeeded or there was nothing to unload.
+    /// </summary>
+    private async Task<bool> UnloadCurrentZone()
     {
-        if (_currentZone == null) return;
+        if (_currentZone == null)
+        {
+            return true;
+        }
+
+        // Capture a local reference in case something clears _currentZone unexpectedly
+        ZoneDefinition zoneToUnload = _currentZone;
 
         SpawnPointRegistry.Instance.Clear();
 
-        if (_currentZone.zoneType == ZoneType.Overworld)
+        bool success = true;
+
+        try
         {
-            await ChunkStreamingManager.Instance.StopStreaming();
+            if (zoneToUnload.zoneType == ZoneType.Overworld)
+            {
+                await ChunkStreamingManager.Instance.StopStreaming();
+            }
+            else if (zoneToUnload.zoneType == ZoneType.Interior)
+            {
+                bool unloaded = await ZoneLoader.Instance.UnloadSceneAsync(zoneToUnload.interiorSceneAddress);
+                if (!unloaded)
+                {
+                    LogManager.Warning($"[WorldManager] Failed to unload interior scene: {zoneToUnload.interiorSceneAddress}");
+                    success = false;
+                }
+            }
         }
-        else if (_currentZone.zoneType == ZoneType.Interior)
+        catch (System.Exception e)
         {
-            await ZoneLoader.Instance.UnloadSceneAsync(_currentZone.interiorSceneAddress);
+            LogManager.Error($"[WorldManager] Exception during zone unload: {e.Message}\n{e.StackTrace}");
+            success = false;
         }
 
         _currentZone = null;
+        return success;
     }
 
     private async Task PlacePlayerAtSpawn(string zoneId, string spawnId)
@@ -273,13 +331,6 @@ public class WorldManager : MonoBehaviour
         for (int i = 0; i < maxRetries; i++)
         {
             spawn = SpawnPointRegistry.Instance.FindSpawnPoint(zoneId, spawnId);
-
-            if (spawn == null && !string.IsNullOrEmpty(spawnId))
-            {
-                // Also search without zone prefix in case of chunk scenes
-                // that register under the zone id
-                spawn = SpawnPointRegistry.Instance.FindSpawnPoint(zoneId, spawnId);
-            }
 
             if (spawn != null) break;
 
@@ -300,7 +351,7 @@ public class WorldManager : MonoBehaviour
             var defaultSpawn = SpawnPointRegistry.Instance.FindSpawnPointByType(zoneId, SpawnPointType.Default);
             if (defaultSpawn != null)
             {
-                player.Teleport(spawn.GetSpawnPosition());
+                player.Teleport(defaultSpawn.GetSpawnPosition());
             }
         }
     }

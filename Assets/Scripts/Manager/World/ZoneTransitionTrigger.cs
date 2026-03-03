@@ -20,7 +20,6 @@ public class ZoneTransitionTrigger : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
-
         if (requireInteraction)
         {
             //_playerInTrigger = true;
@@ -42,6 +41,7 @@ public class ZoneTransitionTrigger : MonoBehaviour
 
     private void InitiateTransition()
     {
+        WorldManager.Instance.PlayerWorldEntity.StopMovement();
         //_playerInTrigger = false;
         WorldManager.Instance.TransitionToZone(targetZone.zoneId, targetSpawnId);
     }
