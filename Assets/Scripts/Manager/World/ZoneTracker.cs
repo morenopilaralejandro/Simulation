@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Simulation.Enums.Localization;
 
 /// <summary>
 /// Tracks which zone the player is currently in based on loaded chunks
@@ -19,6 +20,9 @@ public class ZoneTracker : MonoBehaviour
         = new Dictionary<Vector2Int, ZoneDefinition>();
 
     private float _invChunkSize;
+
+    private LocalizationComponentString localizationStringComponent;
+    public string ZoneName => localizationStringComponent.GetString(LocalizationField.Name);
 
     private void Awake()
     {
@@ -97,7 +101,8 @@ public class ZoneTracker : MonoBehaviour
         
         PreviousZone = CurrentZone;
         CurrentZone = newZone;
-        WorldEvents.RaiseZoneChanged(PreviousZone, newZone);
+        UpdateLocalization();
+        WorldEvents.RaiseZoneChanged(PreviousZone, newZone, ZoneName);
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         string prevId = PreviousZone != null ? PreviousZone.zoneId : "null";
@@ -108,11 +113,22 @@ public class ZoneTracker : MonoBehaviour
 
     #region Events
 
-    private void HandleZoneChanged(ZoneDefinition previousZone, ZoneDefinition newZone) 
+    private void HandleZoneChanged(ZoneDefinition previousZone, ZoneDefinition newZone, string newName) 
     {
         if (previousZone == newZone) return;
     }
 
+    #endregion
+
+    #region Localization
+    private void UpdateLocalization() 
+    {
+        localizationStringComponent = new LocalizationComponentString(
+            LocalizationEntity.Zone,
+            CurrentZone.zoneId,
+            new [] { LocalizationField.Name }
+        );
+    }
     #endregion
 
 }

@@ -17,7 +17,13 @@ MonoBehaviour:
   allowDiagonalMovement: 1
   gridBasedMovement: 1
   gridSize: 1
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  collisionCastRadius: 0.4
   interactionRange: 1.5
   interactableLayer:
     serializedVersion: 2
     m_Bits: 0
+  minStepsBetweenEncounters: 10
+  maxStepsBetweenEncounters: 30

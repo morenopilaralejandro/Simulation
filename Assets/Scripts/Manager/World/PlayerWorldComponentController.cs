@@ -19,10 +19,6 @@ public class PlayerWorldComponentController : MonoBehaviour
     private Vector2 _gridMoveTarget;
     private float acceleration = 50f;
 
-    [Header("Collision Settings")]
-    [SerializeField] private LayerMask collisionMask;   // walls / obstacles
-    [SerializeField] private float castRadius = 0.4f;   // slightly smaller than half a tile
-
     // stuck detection
     private Vector2 _lastPosition;
     private float _stuckTimer;
@@ -211,16 +207,16 @@ public class PlayerWorldComponentController : MonoBehaviour
 
     /// <summary>
     /// CircleCast along the step direction. Returns true if something
-    /// on <see cref="collisionMask"/> is in the way.
+    /// on collisionMask is in the way.
     /// </summary>
     private bool IsPathBlocked(Vector2 origin, Vector2 direction, float distance)
     {
         RaycastHit2D hit = Physics2D.CircleCast(
             origin,
-            castRadius,
+            config.collisionCastRadius,
             direction,
             distance,
-            collisionMask
+            config.collisionMask
         );
         return hit.collider != null;
     }

@@ -7,7 +7,8 @@ namespace Simulation.Enums.Localization
         Kit,
         Move,
         Team,
-        Duel_Log
+        Duel_Log,
+        Zone
     }
 
     public enum LocalizationField

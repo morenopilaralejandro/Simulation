@@ -10,6 +10,10 @@ public class PlayerWorldConfig : ScriptableObject
     public bool gridBasedMovement = true;
     public float gridSize = 1f;
 
+    [Header("Collision")]
+    public LayerMask collisionMask;   // obstacles
+    public float collisionCastRadius = 0.4f;   // slightly smaller than half a tile
+
     [Header("Interaction")]
     public float interactionRange = 1.5f;
     public LayerMask interactableLayer;
