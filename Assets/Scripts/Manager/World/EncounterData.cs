@@ -1,11 +1,10 @@
-// EncounterData.cs
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EncounterData", menuName = "ScriptableObject/World/Encounter Data")]
-public class EncounterData : ScriptableObject
+[System.Serializable]
+public class EncounterData
 {
-    public string encounterName;
-    public Team[] possibleGroups;
+    public string teamId;
+    public int level;
     public string bgmId;
 
     [Range(0f, 1f)]

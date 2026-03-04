@@ -18,8 +18,9 @@ public class WorldManager : MonoBehaviour
     [SerializeField] private OverworldDefinition overworldDefinition;
     public OverworldDefinition OverworldDefinition => overworldDefinition;
 
-    [Header("State")]
-    [SerializeField] private WorldState _currentState = WorldState.None;
+    [SerializeField] private SceneGroup sceneBattle;
+
+    private WorldState _currentState = WorldState.None;
     public WorldState CurrentState => _currentState;
 
     private ZoneDefinition _currentZone;
@@ -40,6 +41,16 @@ public class WorldManager : MonoBehaviour
         Instance = this;
     }
 
+    private void OnEnable()
+    {
+        WorldEvents.OnEncounterTriggered += HandleEncounterTriggered;
+    }
+
+    private void OnDisable()
+    {
+        WorldEvents.OnEncounterTriggered -= HandleEncounterTriggered;
+    }
+
     private async void Start()
     {
         // Disable player control during initial load
@@ -56,6 +67,141 @@ public class WorldManager : MonoBehaviour
             LogManager.Error("[WorldManager] No starting zone assigned!");
         }
     }
+
+    // =========================================================
+    // Encounter Handling
+    // =========================================================
+
+    /// <summary>
+    /// Called when an encounter is triggered. Disables player control,
+    /// unloads all zones, stops chunk streaming, and transitions
+    /// the world state to InEncounter.
+    /// </summary>
+    private async void HandleEncounterTriggered(EncounterData encounterData)
+    {
+        if (_isTransitioning)
+        {
+            LogManager.Warning("[WorldManager] Encounter triggered during transition, ignoring.");
+            return;
+        }
+
+        if (_currentState == WorldState.InEncounter)
+        {
+            LogManager.Warning("[WorldManager] Already in encounter, ignoring.");
+            return;
+        }
+
+        _isTransitioning = true;
+
+        LogManager.Trace($"[WorldManager] Encounter triggered: {encounterData}. Tearing down world zones.");
+
+        // Immediately freeze the player
+        player.SetControlEnabled(false);
+
+        try
+        {
+            // Fade out so the player doesn't see scenes disappearing
+            if (transitionScreen != null)
+            {
+                await transitionScreen.FadeOut();
+            }
+
+            // Stop chunk streaming first (prevents new chunks from loading
+            // while we're tearing things down)
+            if (_currentZone != null && _currentZone.zoneType == ZoneType.Overworld)
+            {
+                await ChunkStreamingManager.Instance.StopStreaming();
+            }
+
+            // Unload whatever zone is currently loaded
+            bool unloadSuccess = await UnloadCurrentZone();
+            if (!unloadSuccess)
+            {
+                LogManager.Warning("[WorldManager] Zone unload reported failure during encounter transition.");
+            }
+
+            _currentState = WorldState.InEncounter;
+
+            LogManager.Trace("[WorldManager] World zones unloaded. Ready for encounter scene.");
+
+            BattleArgs.SetMini(
+                "faith_selection", 
+                encounterData.teamId);
+            SceneLoader.Instance.LoadGroup(sceneBattle);
+
+            // NOTE: At this point the encounter system (e.g. EncounterManager)
+            // should take over — load its own scene, run combat, etc.
+            // When the encounter ends(results), it should call WorldManager.ReturnFromEncounter()
+            // to reload the zone the player was in.
+        }
+        catch (System.Exception e)
+        {
+            LogManager.Error($"[WorldManager] Exception during encounter teardown: {e.Message}\n{e.StackTrace}");
+
+            // Attempt recovery so the game isn't permanently stuck
+            _currentState = WorldState.None;
+            if (transitionScreen != null)
+            {
+                await transitionScreen.FadeIn();
+            }
+            player.SetControlEnabled(true);
+        }
+        finally
+        {
+            _isTransitioning = false;
+        }
+    }
+
+    /// <summary>
+    /// Called by the encounter system when combat ends.
+    /// Reloads the zone the player was in and restores control.
+    /// </summary>
+    public async void ReturnFromEncounter(string zoneId, string spawnId)
+    {
+        if (_isTransitioning)
+        {
+            LogManager.Warning("[WorldManager] Transition already in progress, ignoring return.");
+            return;
+        }
+
+        _isTransitioning = true;
+
+        try
+        {
+            var targetZone = FindZone(zoneId);
+            if (targetZone == null)
+            {
+                LogManager.Error($"[WorldManager] Cannot return to zone '{zoneId}' — not found!");
+                return;
+            }
+
+            await LoadZone(targetZone, spawnId);
+
+            if (transitionScreen != null)
+            {
+                await transitionScreen.FadeIn();
+            }
+
+            player.SetControlEnabled(true);
+        }
+        catch (System.Exception e)
+        {
+            LogManager.Error($"[WorldManager] Exception returning from encounter: {e.Message}\n{e.StackTrace}");
+            player.SetControlEnabled(true);
+            if (transitionScreen != null)
+            {
+                await transitionScreen.FadeIn();
+            }
+        }
+        finally
+        {
+            _isTransitioning = false;
+        }
+    }
+
+    // =========================================================
+    // Zone Transitions
+    // =========================================================
 
     /// <summary>
     /// Public entry point for zone transitions (called by triggers, doors, etc.)
@@ -129,6 +275,10 @@ public class WorldManager : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // Zone Loading / Unloading
+    // =========================================================
+
     private async Task LoadZone(ZoneDefinition zone, string spawnId)
     {
         _currentState = WorldState.Loading;
@@ -138,12 +288,10 @@ public class WorldManager : MonoBehaviour
 
         if (zone.zoneType == ZoneType.Overworld)
         {
-            // Loads the right chunk, places player, starts streaming
             await LoadOverworldZone(zone, spawnId);
         }
         else if (zone.zoneType == ZoneType.Interior)
         {
-            // Loads single scene, places player
             await LoadInteriorZone(zone, spawnId);
         }
 
@@ -155,20 +303,8 @@ public class WorldManager : MonoBehaviour
 
     private async Task LoadOverworldZone(ZoneDefinition zone, string spawnId)
     {
-        // =====================================================
-        // STEP 1: Find which chunk contains our target spawn
-        // =====================================================
-        // 
-        // The player needs to appear at a specific spawn point
-        // (e.g., "house_01_exit" after leaving a house).
-        // That spawn point is a GameObject inside one specific 
-        // chunk scene. We need to figure out WHICH chunk scene
-        // before we can load anything.
-
         ChunkDefinition spawnChunk = null;
 
-        // Search through all chunks in this zone to find which
-        // one has our target spawn ID
         foreach (var chunk in overworldDefinition.allChunks)
         {
             if (chunk.containedSpawnIds.Contains(spawnId))
@@ -178,7 +314,6 @@ public class WorldManager : MonoBehaviour
             }
         }
 
-        // Fallback: if spawn not found, use the chunk at (0,0)
         if (spawnChunk == null)
         {
             LogManager.Warning(
@@ -188,29 +323,10 @@ public class WorldManager : MonoBehaviour
             spawnChunk = overworldDefinition.allChunks[0];
         }
 
-        // =====================================================
-        // STEP 2: Load the spawn chunk FIRST and wait for it
-        // =====================================================
-        //
-        // We MUST load this chunk before anything else because
-        // the SpawnPoint component is inside this scene.
-        // When the scene loads, ChunkSceneRoot.Start() runs
-        // and registers all its SpawnPoints with the registry.
-
         await ZoneLoader.Instance.LoadSceneAsync(spawnChunk.sceneAddress);
 
-        // Wait two frames for Unity to initialize the scene
-        // (Awake runs on load, Start runs next frame)
-        await Task.Yield(); // frame 1: Awake
-        await Task.Yield(); // frame 2: Start (SpawnPoints register)
-
-        // =====================================================
-        // STEP 3: Find the spawn point and place the player
-        // =====================================================
-        //
-        // Now the chunk scene is loaded and its SpawnPoint 
-        // components have registered themselves. We can look 
-        // up the actual world position.
+        await Task.Yield();
+        await Task.Yield();
 
         SpawnPoint spawn = SpawnPointRegistry.Instance.FindSpawnPoint(
             zone.zoneId,
@@ -225,22 +341,9 @@ public class WorldManager : MonoBehaviour
         }
         else
         {
-            // Even this shouldn't happen now, but just in case
             LogManager.Warning($"[WorldManager] Spawn '{spawnId}' not found after loading chunk!");
             player.Teleport(spawnChunk.GetWorldBounds().center);
         }
-
-        // =====================================================
-        // STEP 4: Start chunk streaming from player's position
-        // =====================================================
-        //
-        // Now the player is positioned correctly. We start the
-        // streaming system which will:
-        //   - See the player is at chunk (x,y)
-        //   - Load all chunks within chunkLoadRadius
-        //   - The spawn chunk is already loaded, so it won't
-        //     double-load it (ZoneLoader checks for duplicates)
-        //   - Neighboring chunks load in the background
 
         ChunkStreamingManager.Instance.StartStreaming(overworldDefinition);
 
@@ -249,14 +352,12 @@ public class WorldManager : MonoBehaviour
 
     private async Task LoadInteriorZone(ZoneDefinition zone, string spawnId)
     {
-        // STEP 1: Load the single interior scene
         ZoneTracker.Instance.SetZone(zone);
         await ZoneLoader.Instance.LoadSceneAsync(zone.interiorSceneAddress);
 
         await Task.Yield();
         await Task.Yield();
 
-        // STEP 2: Find spawn and place player
         SpawnPoint spawn = SpawnPointRegistry.Instance.FindSpawnPoint(
             zone.zoneId,
             spawnId
@@ -272,7 +373,6 @@ public class WorldManager : MonoBehaviour
             LogManager.Warning($"[WorldManager] Spawn '{spawnId}' not found in interior '{zone.zoneId}'");
         }
 
-        // No chunk streaming for interiors — the whole scene is loaded
         _currentState = WorldState.InInterior;
     }
 
@@ -286,7 +386,6 @@ public class WorldManager : MonoBehaviour
             return true;
         }
 
-        // Capture a local reference in case something clears _currentZone unexpectedly
         ZoneDefinition zoneToUnload = _currentZone;
 
         SpawnPointRegistry.Instance.Clear();
@@ -321,7 +420,6 @@ public class WorldManager : MonoBehaviour
 
     private async Task PlacePlayerAtSpawn(string zoneId, string spawnId)
     {
-        // Wait for spawn points to register (scenes just loaded)
         int maxRetries = 20;
         SpawnPoint spawn = null;
 
@@ -344,7 +442,6 @@ public class WorldManager : MonoBehaviour
         {
             LogManager.Warning($"[WorldManager] Spawn point '{spawnId}' not found in zone '{zoneId}'. Using fallback.");
 
-            // Try default spawn
             var defaultSpawn = SpawnPointRegistry.Instance.FindSpawnPointByType(zoneId, SpawnPointType.Default);
             if (defaultSpawn != null)
             {

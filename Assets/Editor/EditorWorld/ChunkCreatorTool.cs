@@ -158,7 +158,7 @@ public class ChunkCreatorTool : EditorWindow
         // Create root object
         GameObject root = new GameObject("ChunkRoot");
         var chunkRoot = root.AddComponent<ChunkSceneRoot>();
-        chunkRoot.chunkId = chunkId;
+        chunkRoot.chunkId = sceneName;
         chunkRoot.zoneId = _zone.zoneId;
         chunkRoot.chunkCoord = _newChunkCoord;
 

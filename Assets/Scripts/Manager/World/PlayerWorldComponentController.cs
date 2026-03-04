@@ -122,6 +122,8 @@ public class PlayerWorldComponentController : MonoBehaviour
             }
             _lastPosition = newPos;
 
+            WorldManagerEncounter.Instance.Tick(_isGridMoving, speed, dt);
+
             // ---- arrival check (use newPos, not rb.position) ----
             if (Vector2.Distance(newPos, _gridMoveTarget) < 0.005f)
             {

@@ -1,12 +1,17 @@
 using UnityEngine;
+using System.Collections.Generic;
+using Simulation.Enums.Battle;
+using Simulation.Enums.World;
 
 public class WorldManagerEncounter : MonoBehaviour
 {
+    //TODO have csv from excel to know the encounter info for each zone
     public static WorldManagerEncounter Instance { get; private set; }
 
-    public void Tick(bool isMoving, float deltaTime) {}
-    public void ResetStepCounter() {}
-
+    private PlayerWorldEntity playerWorldEntity;
+    private PlayerWorldConfig config;
+    private ZoneTracker zoneTracker;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -16,40 +21,43 @@ public class WorldManagerEncounter : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        BattleEvents.OnBattleEnd += HandleBattleEnd;
     }
 
-    /*
-    //use current zone
-    //have csv from excel to know the encounter info for each zone
-
-
-    [SerializeField] private PlayerWorldConfig config;
-    private int minStepsBetweenEncounters = 10;
-    private int maxStepsBetweenEncounters = 30;
-
-    private int _stepsUntilEncounter;
-    private float _distanceAccumulator;
-    private EncounterZone _currentZone;
-
-    private const float STEP_DISTANCE = 1f; // 1 unit = 1 "step"
-
-    private void Start()
+    private void Start() 
     {
+        config = WorldManagerPlayer.Instance.PlayerWorldConfig;
+        playerWorldEntity = WorldManagerPlayer.Instance.PlayerWorldEntity;
+        zoneTracker = ZoneTracker.Instance;
+
         ResetStepCounter();
     }
 
-    /// <summary>Called each frame from PlayerWorldManager.</summary>
-    public void Tick(bool isMoving, float deltaTime)
+    private void Destroy() 
     {
-        if (!isMoving || _currentZone == null) return;
+        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+    }
 
-        var movement = PlayerWorldManager.Instance
-                        .GetComponent<PlayerMovementController>()
-                        ?? FindObjectOfType<PlayerMovementController>();
+    #region Events
+    private void HandleBattleEnd() 
+    {
+        //Resume overworld
+        playerWorldEntity.SetState(PlayerWorldState.FreeRoam);
+        ResetStepCounter();
+        //WorldManager.ReturnFromEncounter()
+    }
+    #endregion
 
-        if (movement == null) return;
+    private int _stepsUntilEncounter;
+    private float _distanceAccumulator;
+    private const float STEP_DISTANCE = 1f;
 
-        float speed = movement.IsRunning ? 7f : 4f; // simplified
+    /// <summary>Called from PlayerWorldComponentController.</summary>
+    public void Tick(bool isMoving, float speed, float deltaTime)
+    {
+        if (!isMoving || zoneTracker.CurrentZone == null) return;
+
         _distanceAccumulator += speed * deltaTime;
 
         while (_distanceAccumulator >= STEP_DISTANCE)
@@ -66,9 +74,6 @@ public class WorldManagerEncounter : MonoBehaviour
         }
     }
 
-    public void SetEncounterZone(EncounterZone zone) => _currentZone = zone;
-    public void ClearEncounterZone() => _currentZone = null;
-
     public void ResetStepCounter()
     {
         _stepsUntilEncounter = Random.Range(
@@ -80,18 +85,16 @@ public class WorldManagerEncounter : MonoBehaviour
 
     private void TryTriggerEncounter()
     {
-        if (_currentZone == null) return;
-
-        EncounterData encounter = _currentZone.GetRandomEncounter();
-        if (encounter != null)
-        {
-            PlayerWorldManager.Instance.TriggerEncounter(encounter);
-        }
+        EncounterData encounter = GetRandomEncounter();
+        if (encounter == null) return;
+        TriggerEncounter(encounter);
     }
 
     public EncounterData GetRandomEncounter()
     {
-        if (encounters == null || encounters.Length == 0) return null;
+        if (zoneTracker.CurrentZone == null) return null;
+        List<EncounterData> encounters = zoneTracker.CurrentZone.encounters;
+        if (encounters == null || encounters.Count == 0) return null;
 
         // Weighted random selection by encounterRate
         float totalWeight = 0f;
@@ -113,23 +116,11 @@ public class WorldManagerEncounter : MonoBehaviour
 
     public void TriggerEncounter(EncounterData encounter)
     {
-        if (CurrentState != PlayerWorldState.FreeRoam) return;
+        if (playerWorldEntity.PlayerWorldState != PlayerWorldState.FreeRoam) return;
 
-        SetState(PlayerWorldState.InBattle);
-        OnEncounterTriggered?.Invoke(encounter);
-        Debug.Log($"[PlayerWorldManager] Encounter triggered: {encounter.encounterName}");
-
-        // Hand off to your battle system
-        // BattleManager.Instance.StartBattle(encounter, OnBattleComplete);
+        playerWorldEntity.SetState(PlayerWorldState.InBattle);
+        WorldEvents.RaiseEncounterTriggered(encounter);
+        LogManager.Trace($"[WorldManagerEncounter] Encounter triggered");
     }
 
-
-    public void OnBattleComplete(bool playerWon)
-    {
-        // Resume overworld
-        SetState(PlayerWorldState.FreeRoam);
-        encounterSystem?.ResetStepCounter();
-    }
-    
-    */
 }

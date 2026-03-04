@@ -22,7 +22,8 @@ namespace Simulation.Enums.World
         Loading,
         InOverworld,
         InInterior,
-        Transitioning
+        Transitioning,
+        InEncounter
     }
 
     public enum PlayerWorldState

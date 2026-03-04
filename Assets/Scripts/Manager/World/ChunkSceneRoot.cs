@@ -9,6 +9,9 @@ public class ChunkSceneRoot : MonoBehaviour
     public string zoneId;
     public Vector2Int chunkCoord;
 
+    [Header("OverworldDefinition")]
+    [SerializeField] private OverworldDefinition _overworldDefinition;
+
     [Header("Spawn Points")]
     [SerializeField] private List<SpawnPoint> _spawnPoints = new List<SpawnPoint>();
 
@@ -55,9 +58,49 @@ public class ChunkSceneRoot : MonoBehaviour
     [ContextMenu("Collect Spawn Points")]
     private void CollectSpawnPoints()
     {
+        // 1. Collect spawn points from children
         _spawnPoints = GetComponentsInChildren<SpawnPoint>(true).ToList();
         UnityEditor.EditorUtility.SetDirty(this);
         Debug.Log($"[ChunkSceneRoot] Collected {_spawnPoints.Count} spawn points for {chunkId} at {zoneId}.");
+
+        // 2. Update the corresponding ChunkDefinition in the OverworldDefinition
+        if (_overworldDefinition == null)
+        {
+            Debug.LogWarning($"[ChunkSceneRoot] No OverworldDefinition assigned on {chunkId}. " +
+                             $"Cannot sync spawn IDs to ChunkDefinition.");
+            return;
+        }
+
+        ChunkDefinition matchingChunk = _overworldDefinition.allChunks
+            .FirstOrDefault(c => c.chunkId == chunkId);
+
+        if (matchingChunk == null)
+        {
+            Debug.LogWarning($"[ChunkSceneRoot] Could not find ChunkDefinition with chunkId '{chunkId}' " +
+                             $"in OverworldDefinition '{_overworldDefinition.name}'.");
+            return;
+        }
+
+        // 3. Sync the spawn IDs
+        matchingChunk.containedSpawnIds.Clear();
+        foreach (SpawnPoint sp in _spawnPoints)
+        {
+            if (!string.IsNullOrEmpty(sp.spawnId))
+            {
+                matchingChunk.containedSpawnIds.Add(sp.spawnId);
+            }
+            else
+            {
+                Debug.LogWarning($"[ChunkSceneRoot] SpawnPoint '{sp.gameObject.name}' in chunk '{chunkId}' " +
+                                 $"has an empty spawnId. Skipping.");
+            }
+        }
+
+        UnityEditor.EditorUtility.SetDirty(_overworldDefinition);
+        UnityEditor.AssetDatabase.SaveAssets();
+
+        Debug.Log($"[ChunkSceneRoot] Synced {matchingChunk.containedSpawnIds.Count} spawn IDs " +
+                  $"to ChunkDefinition '{chunkId}' in OverworldDefinition '{_overworldDefinition.name}'.");
     }
 #endif
 

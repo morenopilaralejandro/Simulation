@@ -13,4 +13,8 @@ public class PlayerWorldConfig : ScriptableObject
     [Header("Interaction")]
     public float interactionRange = 1.5f;
     public LayerMask interactableLayer;
+
+    [Header("Encounter")]
+    public int minStepsBetweenEncounters = 10;
+    public int maxStepsBetweenEncounters = 30;
 }

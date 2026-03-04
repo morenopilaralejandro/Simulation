@@ -15,6 +15,12 @@ namespace Simulation.Enums.Battle
         Mini
     }
 
+    public enum BattleContext
+    {
+        Story,
+        Online
+    }
+
     public enum BoundPlacement
     {
         Top,
