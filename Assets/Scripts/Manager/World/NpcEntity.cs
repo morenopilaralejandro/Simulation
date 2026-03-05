@@ -1,12 +1,15 @@
 using UnityEngine;
 using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
 
 public class NpcEntity : MonoBehaviour
 {
     #region Fields
-    [SerializeField] private NpcData npcData;
-    [SerializeField] private string characterId;
     [SerializeField] private bool isGeneric;
+    [SerializeField] private NpcData npcData;
+    [SerializeField] private CharacterData characterData;
+    [SerializeField] private KitData kitData;
+    [SerializeField] private Role role;
     private Character character;
     private Npc npc;
     #endregion
@@ -23,13 +26,9 @@ public class NpcEntity : MonoBehaviour
     public void Start() 
     {
         if (isGeneric) 
-        {
             Initialize(npcData);
-        } else 
-        {
-            CharacterData characterData = CharacterManager.Instance.GetCharacterData(characterId);
+        else 
             Initialize(characterData);
-        }
     }
 
     public void Initialize(CharacterData characterData)
@@ -39,6 +38,9 @@ public class NpcEntity : MonoBehaviour
 
         if (interactableComponent != null)
             interactableComponent.Initialize(this);
+
+        Kit kit = KitManager.Instance.GetKit(kitData.KitId);
+        character.ApplyKit(kit, Variant.Home, role);
     }
 
     public void Initialize(NpcData npcData)
@@ -48,21 +50,27 @@ public class NpcEntity : MonoBehaviour
 
         if (interactableComponent != null)
             interactableComponent.Initialize(this);
+
+        appearanceComponent.ApplyClothes(npcData);
     }
 
     #endregion
 
     #region API
+
     public Character Character => character;
     public Npc Npc => npc;
     public bool IsGeneric => isGeneric;
 
     public string NpcName => isGeneric ? npc.NpcName : character.CharacterNick;
-    public Sprite PortraitSprite => isGeneric ? npc.PortraitSprite : character.PortraitSprite;
+    public Sprite PortraitSprite => isGeneric ? npcData.PortraitSprite : character.PortraitSprite;
     public PortraitSize PortraitSize => isGeneric ? npc.PortraitSize : character.PortraitSize;
+
     #endregion
 
     #region API Npc
+
     public string NpcId => isGeneric ? npc.NpcId : null;
+
     #endregion
 }

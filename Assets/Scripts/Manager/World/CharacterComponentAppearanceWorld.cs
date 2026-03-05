@@ -60,6 +60,12 @@ public class CharacterComponentAppearanceWorld : MonoBehaviour, IAsyncSceneLoade
             spriteLayerRenderer.SetVisible(layer, appearanceComponent.State.Contains(layer));
     }
 
+    public void ApplyClothes(NpcData data)
+    {
+        appearanceComponent.State.Colors[CharacterSpriteLayer.KitBase] = ColorManager.GetKitColor(data.KitBaseColor);
+        appearanceComponent.State.Colors[CharacterSpriteLayer.KitDetail] = ColorManager.GetKitColor(data.KitDetailColor);
+    }
+
     #endregion
 
 }

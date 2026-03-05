@@ -47,7 +47,7 @@ public class CharacterComponentAppearance
 
     public async void Initialize(NpcData data)
     {
-        PortraitSpriteId = data.NpcId;
+        PortraitSpriteId = null;
         HairStyleId = data.HairStyle.ToString().ToLower();
         HairColorType = data.HairColorType;
         EyeColorType = data.EyeColorType;
@@ -70,6 +70,7 @@ public class CharacterComponentAppearance
 
     private async Task LoadPortraitSprite()
     {
+        if (PortraitSpriteId == null) return;
         PortraitSprite = await SpriteAtlasManager.Instance.GetCharacterPortrait(PortraitSpriteId);
     }
 
@@ -91,9 +92,12 @@ public class CharacterComponentAppearance
 
     public void ApplyKit(Kit kit, Variant variant, Position position)
     {
-        var kitColor = kit.GetColors(
-            variant, 
-            GetKitRole(position));
+        ApplyKit(kit, variant, GetKitRole(position));
+    }
+
+    public void ApplyKit(Kit kit, Variant variant, Role role)
+    {
+        var kitColor = kit.GetColors(variant, role);
 
         State.Colors[CharacterSpriteLayer.KitBase] = kitColor.Base;
         State.Colors[CharacterSpriteLayer.KitDetail] = kitColor.Detail;
