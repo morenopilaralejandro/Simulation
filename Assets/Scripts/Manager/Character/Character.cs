@@ -122,6 +122,7 @@ public class Character
     public CharacterSaveData Export() => persistenceComponent.Export();
 
     // appearanceComponent
+    public CharacterComponentAppearance AppearanceComponent => appearanceComponent;
     public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
     public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
     public string HairStyleId => appearanceComponent.HairStyleId;

@@ -379,7 +379,7 @@ public class SceneLoader : MonoBehaviour
         #endif
     }
 
-    private IEnumerator AwaitTask(Task task)
+    public IEnumerator AwaitTask(Task task)
     {
         while (!task.IsCompleted)
             yield return null;
@@ -388,7 +388,7 @@ public class SceneLoader : MonoBehaviour
             Debug.LogException(task.Exception);
     }
 
-    private async Task AwaitSceneObjectLoaders(string sceneName)
+    public async Task AwaitSceneObjectLoaders(string sceneName)
     {
         Scene scene = SceneManager.GetSceneByName(sceneName);
 

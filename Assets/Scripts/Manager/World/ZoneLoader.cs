@@ -83,6 +83,7 @@ public class ZoneLoader : MonoBehaviour
             );
 
             await handle.Task;
+            await SceneLoader.Instance.AwaitSceneObjectLoaders(sceneAddress);
 
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {

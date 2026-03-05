@@ -9,8 +9,6 @@ public class CharacterComponentAppearance
 {
     #region Fields
 
-    private Character character;
-
     public string PortraitSpriteId { get; private set; }
     public string HairStyleId { get; private set; }
     public HairColorType HairColorType { get; private set; }
@@ -30,13 +28,30 @@ public class CharacterComponentAppearance
 
     public async void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
-        this.character = character;
-
         PortraitSpriteId = characterData.CharacterId;
         HairStyleId = characterData.HairStyle.ToString().ToLower();
         HairColorType = characterData.HairColorType;
         EyeColorType = characterData.EyeColorType;
         BodyColorType = characterData.BodyColorType;
+
+        State = new SpriteLayerState<CharacterSpriteLayer>();
+
+        ApplyColors();
+        await LoadAsync();
+    }
+
+    public CharacterComponentAppearance(NpcData npcData)
+    {
+        Initialize(npcData);
+    }
+
+    public async void Initialize(NpcData data)
+    {
+        PortraitSpriteId = data.NpcId;
+        HairStyleId = data.HairStyle.ToString().ToLower();
+        HairColorType = data.HairColorType;
+        EyeColorType = data.EyeColorType;
+        BodyColorType = data.BodyColorType;
 
         State = new SpriteLayerState<CharacterSpriteLayer>();
 

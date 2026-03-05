@@ -5,23 +5,23 @@ using Simulation.Enums.Character;
 using Simulation.Enums.Kit;
 using Simulation.Enums.SpriteLayer;
 
-public class PlayerWorldComponentAppearance : MonoBehaviour, IAsyncSceneLoader
+public class CharacterComponentAppearanceWorld : MonoBehaviour, IAsyncSceneLoader
 {
     #region Fields
 
     [SerializeField] private SpriteLayerRendererCharacter spriteLayerRenderer;
 
+    private CharacterComponentAppearance appearanceComponent;
     private PlayerWorldEntity playerWorldEntity;
-    private Character character;
 
     #endregion
 
     #region Initialization
 
-    public void Initialize(PlayerWorldEntity playerWorldEntity)
+    public void Initialize(CharacterComponentAppearance appearanceComponent, PlayerWorldEntity playerWorldEntity = null)
     {
+        this.appearanceComponent = appearanceComponent;
         this.playerWorldEntity = playerWorldEntity;
-        this.character = playerWorldEntity.Character;
     }
 
     #endregion
@@ -29,18 +29,19 @@ public class PlayerWorldComponentAppearance : MonoBehaviour, IAsyncSceneLoader
     #region Async Loading
 
     public async Task LoadAsync()
-    {       
-        while (character == null) await Task.Yield();
+    {
+        while (appearanceComponent == null) await Task.Yield();
         await LoadSprites();
-        character.InitializeVisibility();
+        appearanceComponent.InitializeVisibility();
         ApplyStateToRenderer();
-        playerWorldEntity.MakePersistent();
+        if (playerWorldEntity != null)
+            playerWorldEntity.MakePersistent();
     }
 
     private async Task LoadSprites()
     {
-        character.SpriteLayerState.Sprites[CharacterSpriteLayer.Hair] =
-            await SpriteAtlasManager.Instance.GetCharacterHairWorld(character.HairStyleId);
+        appearanceComponent.State.Sprites[CharacterSpriteLayer.Hair] =
+            await SpriteAtlasManager.Instance.GetCharacterHairWorld(appearanceComponent.HairStyleId);
     }
 
     #endregion
@@ -49,23 +50,16 @@ public class PlayerWorldComponentAppearance : MonoBehaviour, IAsyncSceneLoader
 
     private void ApplyStateToRenderer()
     {
-        foreach (var (layer, sprite) in character.SpriteLayerState.Sprites)
+        foreach (var (layer, sprite) in appearanceComponent.State.Sprites)
             spriteLayerRenderer.SetSprite(layer, sprite);
 
-        foreach (var (layer, color) in character.SpriteLayerState.Colors)
+        foreach (var (layer, color) in appearanceComponent.State.Colors)
             spriteLayerRenderer.SetColor(layer, color);
 
         foreach (CharacterSpriteLayer layer in Enum.GetValues(typeof(CharacterSpriteLayer)))
-            spriteLayerRenderer.SetVisible(layer, character.SpriteLayerState.Contains(layer));
+            spriteLayerRenderer.SetVisible(layer, appearanceComponent.State.Contains(layer));
     }
 
     #endregion
 
-    #region Visibility
-
-    #endregion
-
-    #region Helpers
-
-    #endregion
 }

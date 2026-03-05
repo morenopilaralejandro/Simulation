@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b07d7e4cdd6689c5ba94198f23944787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  appearanceComponent: {fileID: 5423638618452628451}
+  appearanceComponent: {fileID: 7001022184778659116}
   controllerComponent: {fileID: 2559223339330732102}
   interactionComponent: {fileID: 1594363760966341151}
   modelComponent: {fileID: 8386819740559424487}
@@ -101,10 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e98478ae639618d78bf6d3a6e192b04d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 4096
-  castRadius: 0.4
 --- !u!114 &1594363760966341151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,20 +323,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterAppearanceWorld
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4268640387859011291, guid: 15fbfb5284234ea75ad7f4a02664680a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15fbfb5284234ea75ad7f4a02664680a, type: 3}
---- !u!114 &5423638618452628451 stripped
+--- !u!114 &7001022184778659116 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4268640387859011291, guid: 15fbfb5284234ea75ad7f4a02664680a, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1247853145117241364, guid: 15fbfb5284234ea75ad7f4a02664680a, type: 3}
   m_PrefabInstance: {fileID: 8104758900438156600}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f39379375550bbf4c924dbdf263d3102, type: 3}
+  m_Script: {fileID: 11500000, guid: 01ffeaab92ea04f9ca7576e73534f62f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &8623017613030196359 stripped
