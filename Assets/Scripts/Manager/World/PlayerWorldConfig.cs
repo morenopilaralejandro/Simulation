@@ -15,8 +15,10 @@ public class PlayerWorldConfig : ScriptableObject
     public float collisionCastRadius = 0.4f;   // slightly smaller than half a tile
 
     [Header("Interaction")]
-    public float interactionRange = 1.5f;
     public LayerMask interactableLayer;
+    public float interactionRange = 0.75f;
+    public float castRadius = 0.3f;
+    public int detectionInterval = 5;
 
     [Header("Encounter")]
     public int minStepsBetweenEncounters = 10;

@@ -176,6 +176,10 @@ public class ChunkCreatorTool : EditorWindow
         GameObject npcContainer = new GameObject("NPCs");
         npcContainer.transform.SetParent(root.transform);
 
+        // Create Interactables container
+        GameObject interactablesContainer = new GameObject("Interactables");
+        interactablesContainer.transform.SetParent(root.transform);
+
         // Create Transitions container
         GameObject transContainer = new GameObject("Transitions");
         transContainer.transform.SetParent(root.transform);

@@ -30,7 +30,7 @@ public class PlayerWorldComponentModel : MonoBehaviour
         //UpdateAnimation();
     }
 
-    private Vector3 VectorToFacing()
+    public Vector3 VectorToFacing()
     {
         return facingDirection switch
         {
@@ -42,7 +42,7 @@ public class PlayerWorldComponentModel : MonoBehaviour
         };
     }
 
-    private Vector2 FacingToVector(FacingDirection dir) => dir switch
+    public Vector2 FacingToVector(FacingDirection dir) => dir switch
     {
         FacingDirection.Up    => Vector2.up,
         FacingDirection.Down  => Vector2.down,

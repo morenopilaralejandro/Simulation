@@ -70,11 +70,15 @@ public class PlayerWorldEntity : MonoBehaviour
     public void SetControlEnabled(bool value) => controllerComponent.SetControlEnabled(value);
     public void StopMovement() => controllerComponent.StopMovement();
     public void ResetDistance() => controllerComponent.ResetDistance();
+    public bool IsEnabled => controllerComponent.IsEnabled;
     //interactionComponent
+    public Interactable CurrentInteractionTarget => interactionComponent.CurrentTarget;
     //modelComponent
     public FacingDirection FacingDirection => modelComponent.FacingDirection;
     public void SetFacing(Vector2 input) => modelComponent.SetFacing(input);
     public void SetFacing(FacingDirection dir) => modelComponent.SetFacing(dir);
+    public Vector3 VectorToFacing() => modelComponent.VectorToFacing();
+    public Vector2 FacingToVector(FacingDirection dir) => modelComponent.FacingToVector(dir);
     //persistenceComponent
     public void MakePersistent() => persistenceComponent.MakePersistent();
     //rigidbodyComponent

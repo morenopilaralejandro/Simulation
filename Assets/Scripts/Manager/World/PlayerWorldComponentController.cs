@@ -12,6 +12,7 @@ public class PlayerWorldComponentController : MonoBehaviour
     public Vector2 MoveInput { get; private set; }
     public bool IsRunning { get; private set; }
     public float DistanceTravelledSinceReset { get; private set; }
+    public bool IsEnabled => _enabled;
 
     private bool _enabled = false;
     private Vector3 _velocity;

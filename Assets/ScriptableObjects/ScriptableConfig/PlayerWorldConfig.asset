@@ -19,11 +19,13 @@ MonoBehaviour:
   gridSize: 1
   collisionMask:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 20480
   collisionCastRadius: 0.4
-  interactionRange: 1.5
   interactableLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 24576
+  interactionRange: 1
+  castRadius: 0.3
+  detectionInterval: 5
   minStepsBetweenEncounters: 10
   maxStepsBetweenEncounters: 30
