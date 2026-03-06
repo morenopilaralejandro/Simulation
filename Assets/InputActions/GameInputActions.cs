@@ -682,6 +682,359 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""WorldActions"",
+            ""id"": ""f7671c52-df1f-4408-9b89-c0456cb44b4b"",
+            ""actions"": [
+                {
+                    ""name"": ""World_Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""de98b5d0-2189-44a7-b953-0dc12c35f16b"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""World_Run"",
+                    ""type"": ""Button"",
+                    ""id"": ""50d9bb0b-7e1d-40ed-aee3-56307e02cd1a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""World_Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""b746efc8-855d-4533-b3b7-4e803cfce154"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""World_Submit"",
+                    ""type"": ""Button"",
+                    ""id"": ""95c94de3-dfd0-4f4b-a2d2-043e4ddbc856"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""World_Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""fee97557-a0e5-4eac-acc6-9c9f2e4869be"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""World_OpenSideMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""28fd09a2-0de9-4b78-b602-ace7ebf48616"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""World_CloseSideMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""4960a69a-9790-487c-a3cc-1c2a4ada4d76"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""World_OpenPauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""349abb84-ee89-4c4c-86fa-41a37d694535"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""World_ClosePauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""fd08f0ea-e942-4366-8de5-01a300b2dcd0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""b6e467f5-82c5-42fe-9b8e-ea9b5a611244"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""f68729f4-e8d2-464d-9f6c-1bf5eeba771d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""c9316dd3-ba65-489f-b7a2-0d7e39102234"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""5520fead-8edd-4e06-9986-a5f714c18d7f"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""578cba70-0a66-4c2a-8007-051d66cbf59e"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cecb76b2-3151-4da7-a239-df7f8b9e8021"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""141d2e5d-1617-4834-acca-7d201538bb66"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d526dc63-4d30-46ee-9116-fad958b9b659"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""612062f1-7cb4-432d-b798-c68709862c1b"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_OpenSideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""82bfdabb-5cda-40ad-8cbc-15ebeacff6c6"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_OpenSideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""627e3175-ae63-4c1f-a4fd-e743d4f463f2"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_CloseSideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9602d318-d410-4db3-a2d6-d1be5085255f"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_CloseSideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8bb639c-a68d-4b0f-ac3d-33122bb218ba"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_CloseSideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2fa8ff1e-aabf-4064-83ff-2ad1e14296ed"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_OpenPauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e161361d-552a-4b8d-b92e-ad5ad1d4b7ec"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_OpenPauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""59ffc547-454d-442f-9ef6-1880bb3e2eb2"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_ClosePauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6d1c16b-4c88-49cc-b616-28b4298d6461"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_ClosePauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c8a11a0f-b346-433d-81da-98fb914a49ff"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_ClosePauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d2858e79-d008-4df4-86c3-4b0d6a1bae02"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ca12bceb-e124-40b0-8b46-6b7d7648917e"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d83c0dc9-3ec3-4a59-be65-33b8d41e6587"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""283433cf-349d-4dce-b940-a48937308086"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""89c1d1e9-cef4-485a-9c7a-50ba8b2cb4c7"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0af752b5-7ace-4875-ad54-1bb222d6d18d"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -708,12 +1061,24 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_BattleUIActions_BattleUI_OpenDimensionMenu = m_BattleUIActions.FindAction("BattleUI_OpenDimensionMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_CloseDimensionMenu = m_BattleUIActions.FindAction("BattleUI_CloseDimensionMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_DimensionShortcutPause = m_BattleUIActions.FindAction("BattleUI_DimensionShortcutPause", throwIfNotFound: true);
+        // WorldActions
+        m_WorldActions = asset.FindActionMap("WorldActions", throwIfNotFound: true);
+        m_WorldActions_World_Move = m_WorldActions.FindAction("World_Move", throwIfNotFound: true);
+        m_WorldActions_World_Run = m_WorldActions.FindAction("World_Run", throwIfNotFound: true);
+        m_WorldActions_World_Interact = m_WorldActions.FindAction("World_Interact", throwIfNotFound: true);
+        m_WorldActions_World_Submit = m_WorldActions.FindAction("World_Submit", throwIfNotFound: true);
+        m_WorldActions_World_Cancel = m_WorldActions.FindAction("World_Cancel", throwIfNotFound: true);
+        m_WorldActions_World_OpenSideMenu = m_WorldActions.FindAction("World_OpenSideMenu", throwIfNotFound: true);
+        m_WorldActions_World_CloseSideMenu = m_WorldActions.FindAction("World_CloseSideMenu", throwIfNotFound: true);
+        m_WorldActions_World_OpenPauseMenu = m_WorldActions.FindAction("World_OpenPauseMenu", throwIfNotFound: true);
+        m_WorldActions_World_ClosePauseMenu = m_WorldActions.FindAction("World_ClosePauseMenu", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
     {
         UnityEngine.Debug.Assert(!m_BattleActions.enabled, "This will cause a leak and performance issues, GameInputActions.BattleActions.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_BattleUIActions.enabled, "This will cause a leak and performance issues, GameInputActions.BattleUIActions.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_WorldActions.enabled, "This will cause a leak and performance issues, GameInputActions.WorldActions.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1153,6 +1518,190 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="BattleUIActionsActions" /> instance referencing this action map.
     /// </summary>
     public BattleUIActionsActions @BattleUIActions => new BattleUIActionsActions(this);
+
+    // WorldActions
+    private readonly InputActionMap m_WorldActions;
+    private List<IWorldActionsActions> m_WorldActionsActionsCallbackInterfaces = new List<IWorldActionsActions>();
+    private readonly InputAction m_WorldActions_World_Move;
+    private readonly InputAction m_WorldActions_World_Run;
+    private readonly InputAction m_WorldActions_World_Interact;
+    private readonly InputAction m_WorldActions_World_Submit;
+    private readonly InputAction m_WorldActions_World_Cancel;
+    private readonly InputAction m_WorldActions_World_OpenSideMenu;
+    private readonly InputAction m_WorldActions_World_CloseSideMenu;
+    private readonly InputAction m_WorldActions_World_OpenPauseMenu;
+    private readonly InputAction m_WorldActions_World_ClosePauseMenu;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "WorldActions".
+    /// </summary>
+    public struct WorldActionsActions
+    {
+        private @GameInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public WorldActionsActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "WorldActions/World_Move".
+        /// </summary>
+        public InputAction @World_Move => m_Wrapper.m_WorldActions_World_Move;
+        /// <summary>
+        /// Provides access to the underlying input action "WorldActions/World_Run".
+        /// </summary>
+        public InputAction @World_Run => m_Wrapper.m_WorldActions_World_Run;
+        /// <summary>
+        /// Provides access to the underlying input action "WorldActions/World_Interact".
+        /// </summary>
+        public InputAction @World_Interact => m_Wrapper.m_WorldActions_World_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "WorldActions/World_Submit".
+        /// </summary>
+        public InputAction @World_Submit => m_Wrapper.m_WorldActions_World_Submit;
+        /// <summary>
+        /// Provides access to the underlying input action "WorldActions/World_Cancel".
+        /// </summary>
+        public InputAction @World_Cancel => m_Wrapper.m_WorldActions_World_Cancel;
+        /// <summary>
+        /// Provides access to the underlying input action "WorldActions/World_OpenSideMenu".
+        /// </summary>
+        public InputAction @World_OpenSideMenu => m_Wrapper.m_WorldActions_World_OpenSideMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "WorldActions/World_CloseSideMenu".
+        /// </summary>
+        public InputAction @World_CloseSideMenu => m_Wrapper.m_WorldActions_World_CloseSideMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "WorldActions/World_OpenPauseMenu".
+        /// </summary>
+        public InputAction @World_OpenPauseMenu => m_Wrapper.m_WorldActions_World_OpenPauseMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "WorldActions/World_ClosePauseMenu".
+        /// </summary>
+        public InputAction @World_ClosePauseMenu => m_Wrapper.m_WorldActions_World_ClosePauseMenu;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_WorldActions; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="WorldActionsActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(WorldActionsActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="WorldActionsActions" />
+        public void AddCallbacks(IWorldActionsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_WorldActionsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_WorldActionsActionsCallbackInterfaces.Add(instance);
+            @World_Move.started += instance.OnWorld_Move;
+            @World_Move.performed += instance.OnWorld_Move;
+            @World_Move.canceled += instance.OnWorld_Move;
+            @World_Run.started += instance.OnWorld_Run;
+            @World_Run.performed += instance.OnWorld_Run;
+            @World_Run.canceled += instance.OnWorld_Run;
+            @World_Interact.started += instance.OnWorld_Interact;
+            @World_Interact.performed += instance.OnWorld_Interact;
+            @World_Interact.canceled += instance.OnWorld_Interact;
+            @World_Submit.started += instance.OnWorld_Submit;
+            @World_Submit.performed += instance.OnWorld_Submit;
+            @World_Submit.canceled += instance.OnWorld_Submit;
+            @World_Cancel.started += instance.OnWorld_Cancel;
+            @World_Cancel.performed += instance.OnWorld_Cancel;
+            @World_Cancel.canceled += instance.OnWorld_Cancel;
+            @World_OpenSideMenu.started += instance.OnWorld_OpenSideMenu;
+            @World_OpenSideMenu.performed += instance.OnWorld_OpenSideMenu;
+            @World_OpenSideMenu.canceled += instance.OnWorld_OpenSideMenu;
+            @World_CloseSideMenu.started += instance.OnWorld_CloseSideMenu;
+            @World_CloseSideMenu.performed += instance.OnWorld_CloseSideMenu;
+            @World_CloseSideMenu.canceled += instance.OnWorld_CloseSideMenu;
+            @World_OpenPauseMenu.started += instance.OnWorld_OpenPauseMenu;
+            @World_OpenPauseMenu.performed += instance.OnWorld_OpenPauseMenu;
+            @World_OpenPauseMenu.canceled += instance.OnWorld_OpenPauseMenu;
+            @World_ClosePauseMenu.started += instance.OnWorld_ClosePauseMenu;
+            @World_ClosePauseMenu.performed += instance.OnWorld_ClosePauseMenu;
+            @World_ClosePauseMenu.canceled += instance.OnWorld_ClosePauseMenu;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="WorldActionsActions" />
+        private void UnregisterCallbacks(IWorldActionsActions instance)
+        {
+            @World_Move.started -= instance.OnWorld_Move;
+            @World_Move.performed -= instance.OnWorld_Move;
+            @World_Move.canceled -= instance.OnWorld_Move;
+            @World_Run.started -= instance.OnWorld_Run;
+            @World_Run.performed -= instance.OnWorld_Run;
+            @World_Run.canceled -= instance.OnWorld_Run;
+            @World_Interact.started -= instance.OnWorld_Interact;
+            @World_Interact.performed -= instance.OnWorld_Interact;
+            @World_Interact.canceled -= instance.OnWorld_Interact;
+            @World_Submit.started -= instance.OnWorld_Submit;
+            @World_Submit.performed -= instance.OnWorld_Submit;
+            @World_Submit.canceled -= instance.OnWorld_Submit;
+            @World_Cancel.started -= instance.OnWorld_Cancel;
+            @World_Cancel.performed -= instance.OnWorld_Cancel;
+            @World_Cancel.canceled -= instance.OnWorld_Cancel;
+            @World_OpenSideMenu.started -= instance.OnWorld_OpenSideMenu;
+            @World_OpenSideMenu.performed -= instance.OnWorld_OpenSideMenu;
+            @World_OpenSideMenu.canceled -= instance.OnWorld_OpenSideMenu;
+            @World_CloseSideMenu.started -= instance.OnWorld_CloseSideMenu;
+            @World_CloseSideMenu.performed -= instance.OnWorld_CloseSideMenu;
+            @World_CloseSideMenu.canceled -= instance.OnWorld_CloseSideMenu;
+            @World_OpenPauseMenu.started -= instance.OnWorld_OpenPauseMenu;
+            @World_OpenPauseMenu.performed -= instance.OnWorld_OpenPauseMenu;
+            @World_OpenPauseMenu.canceled -= instance.OnWorld_OpenPauseMenu;
+            @World_ClosePauseMenu.started -= instance.OnWorld_ClosePauseMenu;
+            @World_ClosePauseMenu.performed -= instance.OnWorld_ClosePauseMenu;
+            @World_ClosePauseMenu.canceled -= instance.OnWorld_ClosePauseMenu;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="WorldActionsActions.UnregisterCallbacks(IWorldActionsActions)" />.
+        /// </summary>
+        /// <seealso cref="WorldActionsActions.UnregisterCallbacks(IWorldActionsActions)" />
+        public void RemoveCallbacks(IWorldActionsActions instance)
+        {
+            if (m_Wrapper.m_WorldActionsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="WorldActionsActions.AddCallbacks(IWorldActionsActions)" />
+        /// <seealso cref="WorldActionsActions.RemoveCallbacks(IWorldActionsActions)" />
+        /// <seealso cref="WorldActionsActions.UnregisterCallbacks(IWorldActionsActions)" />
+        public void SetCallbacks(IWorldActionsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_WorldActionsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_WorldActionsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="WorldActionsActions" /> instance referencing this action map.
+    /// </summary>
+    public WorldActionsActions @WorldActions => new WorldActionsActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BattleActions" which allows adding and removing callbacks.
     /// </summary>
@@ -1294,5 +1843,76 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBattleUI_DimensionShortcutPause(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "WorldActions" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="WorldActionsActions.AddCallbacks(IWorldActionsActions)" />
+    /// <seealso cref="WorldActionsActions.RemoveCallbacks(IWorldActionsActions)" />
+    public interface IWorldActionsActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "World_Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWorld_Move(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "World_Run" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWorld_Run(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "World_Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWorld_Interact(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "World_Submit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWorld_Submit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "World_Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWorld_Cancel(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "World_OpenSideMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWorld_OpenSideMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "World_CloseSideMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWorld_CloseSideMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "World_OpenPauseMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWorld_OpenPauseMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "World_ClosePauseMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWorld_ClosePauseMenu(InputAction.CallbackContext context);
     }
 }

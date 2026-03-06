@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Simulation.Enums.Input;
+using Simulation.Enums.World;
 
 /*
     menu things
@@ -12,6 +13,7 @@ using Simulation.Enums.Input;
 public class MenuPauseOverworld : Menu
 {
     private MenuManager menuManager;
+    private WorldManager worldManager;
     private bool isOpen => menuManager.IsMenuOpen(this);
     public bool IsPauseOverworldOpen => isOpen;
 
@@ -28,6 +30,7 @@ public class MenuPauseOverworld : Menu
     void Start()
     {
         menuManager = MenuManager.Instance;
+        worldManager = WorldManager.Instance;
         base.Hide();
         base.SetInteractable(false);
     }
@@ -39,9 +42,13 @@ public class MenuPauseOverworld : Menu
 
     private void HandleInput()
     {
-        if (!isOpen)
+        if (isOpen)
         {
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_OpenBattleMenu))
+            if (InputManager.Instance.GetDown(CustomAction.World_ClosePauseMenu))
+                Close();
+        } else 
+        {
+            if (InputManager.Instance.GetDown(CustomAction.World_OpenPauseMenu))
                 Open();
         }
     }
@@ -67,12 +74,14 @@ public class MenuPauseOverworld : Menu
         if (isOpen) return;
 
         menuManager.OpenMenu(this);
+        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.InMenu);
     }
 
     public void Close()
     {
         if (!isOpen) return;
         menuManager.CloseMenu();
+        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.FreeRoam);
     }
 
     public void OnButtonTapped()

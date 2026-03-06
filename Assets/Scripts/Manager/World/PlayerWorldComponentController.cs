@@ -73,8 +73,8 @@ public class PlayerWorldComponentController : MonoBehaviour
 
     private void ReadInput()
     {
-        MoveInput = InputManager.Instance.GetMove();
-        IsRunning = !InputManager.Instance.GetHeld(CustomAction.Battle_Pass);
+        MoveInput = InputManager.Instance.GetMoveWorld();
+        IsRunning = !InputManager.Instance.GetHeld(CustomAction.World_Run);
     }
 
     // ================================================================

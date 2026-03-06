@@ -43,7 +43,7 @@ public class PlayerWorldComponentInteraction : MonoBehaviour
             DetectInteractable();
         }
 
-        if (_currentTarget != null && InputManager.Instance.GetDown(CustomAction.Battle_Pass))
+        if (_currentTarget != null && InputManager.Instance.GetDown(CustomAction.World_Interact))
         {
             _currentTarget.Interact();
         }

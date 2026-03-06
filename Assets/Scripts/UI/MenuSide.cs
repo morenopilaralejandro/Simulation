@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Simulation.Enums.Input;
+using Simulation.Enums.World;
 
 /*
     menu things
@@ -12,6 +13,7 @@ using Simulation.Enums.Input;
 public class MenuSide : Menu
 {
     private MenuManager menuManager;
+    private WorldManager worldManager;
     private bool isOpen => menuManager.IsMenuOpen(this);
     public bool IsSideMenuOpen => isOpen;
 
@@ -28,6 +30,7 @@ public class MenuSide : Menu
     void Start()
     {
         menuManager = MenuManager.Instance;
+        worldManager = WorldManager.Instance;
         base.Hide();
         base.SetInteractable(false);
     }
@@ -41,11 +44,11 @@ public class MenuSide : Menu
     {
         if (isOpen)
         {
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_CloseBattleMenu))
+            if (InputManager.Instance.GetDown(CustomAction.World_CloseSideMenu))
                 Close();
         } else 
         {
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_OpenBattleMenu))
+            if (InputManager.Instance.GetDown(CustomAction.World_OpenSideMenu))
                 Open();
         }
     }
@@ -71,12 +74,14 @@ public class MenuSide : Menu
         if (isOpen) return;
 
         menuManager.OpenMenu(this);
+        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.InMenu);
     }
 
     public void Close()
     {
         if (!isOpen) return;
         menuManager.CloseMenu();
+        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.FreeRoam);
     }
 
     public void OnButtonTapped()
