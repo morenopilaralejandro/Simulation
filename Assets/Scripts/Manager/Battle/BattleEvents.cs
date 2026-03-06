@@ -1,6 +1,7 @@
 using System;
-using Simulation.Enums.Character;
 using Simulation.Enums.Battle;
+using Simulation.Enums.Character;
+using Simulation.Enums.Input;
 
 public static class BattleEvents
 {
@@ -20,12 +21,14 @@ public static class BattleEvents
     public static void RaiseBattleStart()
     {
         OnBattleStart?.Invoke();
+        InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
     }
 
     public static event Action OnBattleEnd;
     public static void RaiseBattleEnd()
     {
         OnBattleEnd?.Invoke();
+        InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Dpad);
     }
 
     public static event Action OnFreeze;

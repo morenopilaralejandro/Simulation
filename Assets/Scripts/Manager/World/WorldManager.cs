@@ -18,8 +18,6 @@ public class WorldManager : MonoBehaviour
     [SerializeField] private OverworldDefinition overworldDefinition;
     public OverworldDefinition OverworldDefinition => overworldDefinition;
 
-    [SerializeField] private SceneGroup sceneBattle;
-
     private WorldState _currentState = WorldState.None;
     public WorldState CurrentState => _currentState;
 
@@ -56,6 +54,12 @@ public class WorldManager : MonoBehaviour
         // Disable player control during initial load
         player = WorldManagerPlayer.Instance.PlayerWorldEntity;
         player.SetControlEnabled(false);
+
+        if(WorldArgs.WorldState == WorldState.InEncounter) 
+        {
+            ReturnFromEncounter();
+            return;
+        }
 
         if (overworldDefinition.startingZone != null)
         {
@@ -100,6 +104,13 @@ public class WorldManager : MonoBehaviour
 
         try
         {
+            WorldArgs.Set(
+                zoneId : _currentZone != null ? _currentZone.zoneId : null,
+                playerPosition : player.transform.position,
+                facingDirection : player.FacingToVector(player.FacingDirection),
+                worldState : WorldState.InEncounter
+            );
+
             // Fade out so the player doesn't see scenes disappearing
             if (transitionScreen != null)
             {
@@ -124,10 +135,7 @@ public class WorldManager : MonoBehaviour
 
             LogManager.Trace("[WorldManager] World zones unloaded. Ready for encounter scene.");
 
-            BattleArgs.SetMini(
-                "faith_selection", 
-                encounterData.teamId);
-            SceneLoader.Instance.LoadGroup(sceneBattle);
+            WorldManagerEncounter.Instance.StartEncounterBattle(encounterData);
 
             // NOTE: At this point the encounter system (e.g. EncounterManager)
             // should take over — load its own scene, run combat, etc.
@@ -152,46 +160,34 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Called by the encounter system when combat ends.
-    /// Reloads the zone the player was in and restores control.
-    /// </summary>
-    public async void ReturnFromEncounter(string zoneId, string spawnId)
+    public async void ReturnFromEncounter()
     {
-        if (_isTransitioning)
-        {
-            LogManager.Warning("[WorldManager] Transition already in progress, ignoring return.");
-            return;
-        }
-
         _isTransitioning = true;
 
         try
         {
-            var targetZone = FindZone(zoneId);
+            var targetZone = FindZone(WorldArgs.ZoneId);
             if (targetZone == null)
             {
-                LogManager.Error($"[WorldManager] Cannot return to zone '{zoneId}' — not found!");
+                LogManager.Error($"[WorldManager] Cannot return to zone '{WorldArgs.ZoneId}'");
                 return;
             }
 
-            await LoadZone(targetZone, spawnId);
+            // Load the zone but place the player at the SAVED position
+            await LoadZoneAtPosition(targetZone, WorldArgs.PlayerPosition, WorldArgs.FacingDirection);
 
             if (transitionScreen != null)
-            {
                 await transitionScreen.FadeIn();
-            }
 
             player.SetControlEnabled(true);
+            player.SetState(PlayerWorldState.FreeRoam);
+            WorldManagerEncounter.Instance.ResetStepCounter();
         }
         catch (System.Exception e)
         {
             LogManager.Error($"[WorldManager] Exception returning from encounter: {e.Message}\n{e.StackTrace}");
             player.SetControlEnabled(true);
-            if (transitionScreen != null)
-            {
-                await transitionScreen.FadeIn();
-            }
+            if (transitionScreen != null) await transitionScreen.FadeIn();
         }
         finally
         {
@@ -323,6 +319,7 @@ public class WorldManager : MonoBehaviour
             spawnChunk = overworldDefinition.allChunks[0];
         }
 
+        // Load the spawn chunk first so we can place the player
         await ZoneLoader.Instance.LoadSceneAsync(spawnChunk.sceneAddress);
 
         await Task.Yield();
@@ -345,6 +342,15 @@ public class WorldManager : MonoBehaviour
             player.Teleport(spawnChunk.GetWorldBounds().center);
         }
 
+        // ============================================================
+        // PRE-LOAD all chunks within load radius BEFORE starting
+        // the streaming manager and BEFORE fading in.
+        // This eliminates the pop-in of adjacent chunks.
+        // ============================================================
+        await PreloadChunksAroundPosition(player.transform.position);
+
+        // Now start the streaming manager — it will see that the chunks
+        // are already loaded and won't double-load them.
         ChunkStreamingManager.Instance.StartStreaming(overworldDefinition);
 
         _currentState = WorldState.InOverworld;
@@ -454,6 +460,138 @@ public class WorldManager : MonoBehaviour
     {
         return overworldDefinition.allZones.Find(z => z.zoneId == zoneId);
     }
+
+    /// <summary>
+    /// Loads all chunks within the overworld's load radius around the given
+    /// world position. Awaits ALL loads so nothing pops in after fade-in.
+    /// </summary>
+    private async Task PreloadChunksAroundPosition(Vector3 worldPos)
+    {
+        if (overworldDefinition == null) return;
+
+        float invChunkSize = 1f / WorldConstants.CHUNK_SIZE;
+        int cx = Mathf.FloorToInt(worldPos.x * invChunkSize);
+        int cy = Mathf.FloorToInt(worldPos.y * invChunkSize);
+        int radius = overworldDefinition.chunkLoadRadius;
+
+        // Build a coord -> chunk lookup (same structure ChunkStreamingManager uses)
+        // We build a temporary one here since streaming hasn't started yet.
+        Dictionary<Vector2Int, ChunkDefinition> coordLookup 
+            = new Dictionary<Vector2Int, ChunkDefinition>();
+        
+        for (int i = 0; i < overworldDefinition.allChunks.Count; i++)
+        {
+            ChunkDefinition chunk = overworldDefinition.allChunks[i];
+            coordLookup[chunk.chunkCoord] = chunk;
+        }
+
+        // Gather all load tasks so they run concurrently
+        List<Task> loadTasks = new List<Task>();
+
+        for (int dx = -radius; dx <= radius; dx++)
+        {
+            for (int dy = -radius; dy <= radius; dy++)
+            {
+                Vector2Int coord = new Vector2Int(cx + dx, cy + dy);
+                ChunkDefinition chunk;
+                if (coordLookup.TryGetValue(coord, out chunk))
+                {
+                    // ZoneLoader.LoadSceneAsync already skips if already loaded
+                    loadTasks.Add(ZoneLoader.Instance.LoadSceneAsync(chunk.sceneAddress));
+                }
+            }
+        }
+
+        // Wait for ALL chunks to finish loading
+        if (loadTasks.Count > 0)
+        {
+            LogManager.Trace($"[WorldManager] Pre-loading {loadTasks.Count} chunks around player...");
+            await Task.WhenAll(loadTasks);
+            LogManager.Trace("[WorldManager] All nearby chunks pre-loaded.");
+        }
+    }
+
+    // =========================================================
+    // New: Load zone and place player at an exact position
+    // =========================================================
+
+    private async Task LoadZoneAtPosition(ZoneDefinition zone, Vector3 position, Vector2 facing)
+    {
+        _currentState = WorldState.Loading;
+        _currentZone = zone;
+
+        LogManager.Trace($"[WorldManager] Loading zone '{zone.zoneName}' at position {position}");
+
+        if (zone.zoneType == ZoneType.Overworld)
+        {
+            await LoadOverworldZoneAtPosition(zone, position, facing);
+        }
+        else if (zone.zoneType == ZoneType.Interior)
+        {
+            await LoadInteriorZoneAtPosition(zone, position, facing);
+        }
+
+        if (zone.backgroundMusic != null)
+            AudioManager.Instance.PlayBgmClip(zone.backgroundMusic);
+    }
+
+    private async Task LoadOverworldZoneAtPosition(ZoneDefinition zone, Vector3 position, Vector2 facing)
+    {
+        // Find which chunk contains this position
+        float invChunkSize = 1f / WorldConstants.CHUNK_SIZE;
+        int cx = Mathf.FloorToInt(position.x * invChunkSize);
+        int cy = Mathf.FloorToInt(position.y * invChunkSize);
+        Vector2Int targetCoord = new Vector2Int(cx, cy);
+
+        ChunkDefinition spawnChunk = null;
+        foreach (var chunk in overworldDefinition.allChunks)
+        {
+            if (chunk.chunkCoord == targetCoord)
+            {
+                spawnChunk = chunk;
+                break;
+            }
+        }
+
+        if (spawnChunk == null)
+        {
+            LogManager.Warning($"[WorldManager] No chunk at coord {targetCoord}, falling back to first chunk.");
+            spawnChunk = overworldDefinition.allChunks[0];
+        }
+
+        // Load the chunk that contains the player's saved position
+        await ZoneLoader.Instance.LoadSceneAsync(spawnChunk.sceneAddress);
+        await Task.Yield();
+        await Task.Yield();
+
+        // Place player at exact saved position
+        player.Teleport(position);
+        player.SetFacing(facing);
+
+        LogManager.Trace($"[WorldManager] Player restored at {position}");
+
+        // Pre-load surrounding chunks before fade-in
+        await PreloadChunksAroundPosition(position);
+
+        // Start streaming
+        ChunkStreamingManager.Instance.StartStreaming(overworldDefinition);
+
+        _currentState = WorldState.InOverworld;
+    }
+
+    private async Task LoadInteriorZoneAtPosition(ZoneDefinition zone, Vector3 position, Vector2 facing)
+    {
+        ZoneTracker.Instance.SetZone(zone);
+        await ZoneLoader.Instance.LoadSceneAsync(zone.interiorSceneAddress);
+        await Task.Yield();
+        await Task.Yield();
+
+        player.Teleport(position);
+        player.SetFacing(facing);
+
+        _currentState = WorldState.InInterior;
+    }
+
 
     #region Helpers
 

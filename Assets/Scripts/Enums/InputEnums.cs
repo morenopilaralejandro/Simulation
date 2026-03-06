@@ -6,6 +6,13 @@ namespace Simulation.Enums.Input
         Touch
     }
 
+    public enum DirectionalInputMode
+    {
+        Joystick,
+        Dpad,
+        Both
+    }
+
     public enum CustomAction
     {
         //BattleActions

@@ -13,7 +13,7 @@ using Simulation.Enums.World;
 
 public class PlayerWorldEntity : MonoBehaviour
 {
-    private static PlayerWorldEntity instance;
+    public static PlayerWorldEntity Instance;
 
     #region Components
 
@@ -32,6 +32,16 @@ public class PlayerWorldEntity : MonoBehaviour
     #endregion
 
     #region Initialize
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     public void Initialize(CharacterData characterData, Kit kit)
     {

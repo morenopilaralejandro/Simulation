@@ -84,15 +84,32 @@ public class ChunkStreamingManager : MonoBehaviour
             _coordLookup[chunk.chunkCoord] = chunk;
         }
 
+        // ============================================================
+        // Seed _loadedChunkIds with chunks that ZoneLoader already has
+        // loaded (e.g., from PreloadChunksAroundPosition).
+        // This prevents the streaming manager from ignoring them during
+        // unload decisions or trying to double-load them.
+        // ============================================================
+        _loadedChunkIds.Clear();
+        for (int i = 0, len = chunks.Count; i < len; i++)
+        {
+            ChunkDefinition chunk = chunks[i];
+            if (ZoneLoader.Instance.IsSceneLoaded(chunk.sceneAddress))
+            {
+                _loadedChunkIds.Add(chunk.chunkId);
+            }
+        }
+
         // Initialize zone tracking
         ZoneTracker.Instance.Initialize(overworld);
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+    #if UNITY_EDITOR || DEVELOPMENT_BUILD
         LogManager.Trace(string.Concat(
             "[ChunkStreamingManager] Started streaming overworld with ",
-            chunks.Count.ToString(), " chunks across ",
+            chunks.Count.ToString(), " chunks (",
+            _loadedChunkIds.Count.ToString(), " pre-loaded) across ",
             overworld.allZones.Count.ToString(), " zones."));
-#endif
+    #endif
 
         // Force immediate update
         UpdateChunksAroundPlayerFireAndForget();

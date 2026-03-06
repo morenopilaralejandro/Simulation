@@ -15,10 +15,10 @@ namespace Simulation.Enums.Battle
         Mini
     }
 
-    public enum BattleContext
+    public enum BattleResultsType
     {
-        Story,
-        Online
+        Drop,
+        Summary
     }
 
     public enum BoundPlacement

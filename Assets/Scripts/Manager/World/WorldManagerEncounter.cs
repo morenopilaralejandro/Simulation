@@ -8,6 +8,8 @@ public class WorldManagerEncounter : MonoBehaviour
     //TODO have csv from excel to know the encounter info for each zone
     public static WorldManagerEncounter Instance { get; private set; }
 
+    [SerializeField] private SceneGroup sceneBattle;
+
     private PlayerWorldEntity playerWorldEntity;
     private PlayerWorldConfig config;
     private ZoneTracker zoneTracker;
@@ -20,7 +22,6 @@ public class WorldManagerEncounter : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         BattleEvents.OnBattleEnd += HandleBattleEnd;
     }
@@ -34,7 +35,7 @@ public class WorldManagerEncounter : MonoBehaviour
         ResetStepCounter();
     }
 
-    private void Destroy() 
+    private void OnDestroy() 
     {
         BattleEvents.OnBattleEnd -= HandleBattleEnd;
     }
@@ -43,8 +44,7 @@ public class WorldManagerEncounter : MonoBehaviour
     private void HandleBattleEnd() 
     {
         //Resume overworld
-        playerWorldEntity.SetState(PlayerWorldState.FreeRoam);
-        ResetStepCounter();
+        //playerWorldEntity.SetState(PlayerWorldState.FreeRoam);
         //WorldManager.ReturnFromEncounter()
     }
     #endregion
@@ -114,13 +114,24 @@ public class WorldManagerEncounter : MonoBehaviour
         return encounters[^1];
     }
 
+    //event handled in WorldManager
     public void TriggerEncounter(EncounterData encounter)
     {
         if (playerWorldEntity.PlayerWorldState != PlayerWorldState.FreeRoam) return;
 
+        playerWorldEntity.StopMovement();
         playerWorldEntity.SetState(PlayerWorldState.InBattle);
         WorldEvents.RaiseEncounterTriggered(encounter);
         LogManager.Trace($"[WorldManagerEncounter] Encounter triggered");
+    }
+
+    public void StartEncounterBattle(EncounterData encounter) 
+    {
+        BattleArgs.SetMini(
+            "faith_selection", 
+            encounter.teamId,
+            battleResultsType : BattleResultsType.Drop);
+        SceneLoader.Instance.LoadGroup(sceneBattle);
     }
 
 }
