@@ -74,13 +74,29 @@ public class WorldManagerEncounter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called once each time the player arrives on a new grid tile.
+    /// </summary>
+    public void OnTileArrived(bool isRunning)
+    {
+        if (zoneTracker.CurrentZone == null) return;
+
+        int stepValue = isRunning ? config.runStepMultiplier : 1;
+        _stepsUntilEncounter -= stepValue;
+
+        if (_stepsUntilEncounter <= 0)
+        {
+            TryTriggerEncounter();
+            ResetStepCounter();
+        }
+    }
+
     public void ResetStepCounter()
     {
         _stepsUntilEncounter = Random.Range(
             config.minStepsBetweenEncounters,
             config.maxStepsBetweenEncounters + 1
         );
-        _distanceAccumulator = 0f;
     }
 
     private void TryTriggerEncounter()

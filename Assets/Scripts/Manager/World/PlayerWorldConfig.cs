@@ -9,6 +9,7 @@ public class PlayerWorldConfig : ScriptableObject
     public bool allowDiagonalMovement = true;
     public bool gridBasedMovement = true;
     public float gridSize = 1f;
+    public int runStepMultiplier = 2;
 
     [Header("Collision")]
     public LayerMask collisionMask;   // obstacles

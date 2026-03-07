@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56a3ba71aa4e878f484dd456ed5e78d2, type: 3}
   m_Name: PlayerWorldConfig
   m_EditorClassIdentifier: 
-  walkSpeed: 2
+  walkSpeed: 3
   runSpeed: 5
   allowDiagonalMovement: 1
   gridBasedMovement: 1
   gridSize: 1
+  runStepMultiplier: 2
   collisionMask:
     serializedVersion: 2
     m_Bits: 20480

@@ -13,6 +13,11 @@ public class PlayerWorldComponentController : MonoBehaviour
     public bool IsRunning { get; private set; }
     public float DistanceTravelledSinceReset { get; private set; }
     public bool IsEnabled => _enabled;
+    public Vector2 CurrentTilePosition { get; private set; }
+    public Vector3 CurrentTilePosition3d()
+    {
+        return new Vector3(CurrentTilePosition.x, CurrentTilePosition.y, transform.position.z);
+    }
 
     private bool _enabled = false;
     private Vector3 _velocity;
@@ -26,9 +31,9 @@ public class PlayerWorldComponentController : MonoBehaviour
     private const float STUCK_THRESHOLD = 0.15f;
 
     // ---- INPUT BUFFER ----
-    private Vector2 _bufferedDirection;       // the cardinal direction that was buffered
-    private float _bufferTimer;               // time remaining on the current buffer
-    private const float INPUT_BUFFER_WINDOW = 0.1f; // how long (seconds) a buffered input stays valid
+    private Vector2 _bufferedDirection;
+    private float _bufferTimer;
+    private const float INPUT_BUFFER_WINDOW = 0.1f;
 
     public void Initialize(PlayerWorldEntity playerWorldEntity, PlayerWorldConfig cfg)
     {
@@ -37,6 +42,9 @@ public class PlayerWorldComponentController : MonoBehaviour
         rb = playerWorldEntity.Rb;
 
         rb.bodyType = RigidbodyType2D.Kinematic;
+
+        // Cache initial tile position
+        CurrentTilePosition = SnapToGrid(rb.position);
     }
 
     // ================================================================
@@ -81,20 +89,13 @@ public class PlayerWorldComponentController : MonoBehaviour
     //  INPUT BUFFER
     // ================================================================
 
-    /// <summary>
-    /// Called every Update. If the player is currently mid-step and presses
-    /// a direction, we store it so it can be consumed the instant the
-    /// current step finishes.
-    /// </summary>
     private void UpdateInputBuffer()
     {
         if (!config.gridBasedMovement) return;
 
-        // Tick down the buffer timer
         if (_bufferTimer > 0f)
             _bufferTimer -= Time.deltaTime;
 
-        // If there's directional input right now, refresh the buffer
         Vector2 cardinal = GetCardinalDirection(MoveInput);
         if (cardinal != Vector2.zero)
         {
@@ -103,10 +104,6 @@ public class PlayerWorldComponentController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Tries to consume the buffered input. Returns the buffered cardinal
-    /// direction and clears the buffer, or Vector2.zero if nothing is buffered.
-    /// </summary>
     private Vector2 ConsumeBuffer()
     {
         if (_bufferTimer > 0f && _bufferedDirection != Vector2.zero)
@@ -169,11 +166,6 @@ public class PlayerWorldComponentController : MonoBehaviour
             }
             _lastPosition = newPos;
 
-            WorldManagerEncounter.Instance.Tick(_isGridMoving, speed, dt);
-
-            // Tick() may have triggered an encounter and called StopMovement()
-            if (!_isGridMoving || !_enabled) return;
-
             // ---- arrival check ----
             if (Vector2.Distance(newPos, _gridMoveTarget) < 0.005f)
             {
@@ -182,8 +174,16 @@ public class PlayerWorldComponentController : MonoBehaviour
                 _isGridMoving = false;
                 IsMoving = false;
 
+                // Cache the tile we just arrived on
+                CurrentTilePosition = _gridMoveTarget;
+
+                // Tick encounter system once per tile arrival
+                WorldManagerEncounter.Instance.OnTileArrived(IsRunning);
+
+                // If an encounter was triggered, stop here
+                if (!_enabled) return;
+
                 // === INPUT BUFFER: try to chain immediately ===
-                // 1) Try the buffered direction first (was pressed during the step)
                 Vector2 buffered = ConsumeBuffer();
                 if (buffered != Vector2.zero)
                 {
@@ -191,7 +191,6 @@ public class PlayerWorldComponentController : MonoBehaviour
                         return;
                 }
 
-                // 2) If buffer didn't produce a step, try current live input
                 if (MoveInput.sqrMagnitude > 0.01f)
                 {
                     TryStartGridStepFrom(_gridMoveTarget);
@@ -204,7 +203,6 @@ public class PlayerWorldComponentController : MonoBehaviour
         }
         else if (MoveInput.sqrMagnitude > 0.01f)
         {
-            // Not moving — start a fresh step from current position
             TryStartGridStepFrom(SnapToGrid(rb.position));
         }
     }
@@ -213,22 +211,12 @@ public class PlayerWorldComponentController : MonoBehaviour
     //  GRID STEP HELPERS
     // ================================================================
 
-    /// <summary>
-    /// Attempts to begin a new grid step from the given origin using the
-    /// current MoveInput to determine direction.
-    /// Returns true if the step started, false if blocked or no input.
-    /// </summary>
     private bool TryStartGridStepFrom(Vector2 fromPosition)
     {
         Vector2 cardinal = GetCardinalDirection(MoveInput);
         return TryStartGridStepInDirection(fromPosition, cardinal);
     }
 
-    /// <summary>
-    /// Attempts to begin a new grid step from the given origin in an
-    /// explicit cardinal direction.
-    /// Returns true if the step started, false if blocked or direction is zero.
-    /// </summary>
     private bool TryStartGridStepInDirection(Vector2 fromPosition, Vector2 cardinal)
     {
         if (cardinal == Vector2.zero) return false;
@@ -248,10 +236,6 @@ public class PlayerWorldComponentController : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// CircleCast along the step direction. Returns true if something
-    /// on collisionMask is in the way.
-    /// </summary>
     private bool IsPathBlocked(Vector2 origin, Vector2 direction, float distance)
     {
         RaycastHit2D hit = Physics2D.CircleCast(
@@ -330,6 +314,9 @@ public class PlayerWorldComponentController : MonoBehaviour
         {
             CancelFreeMovement();
         }
+
+        // Cache tile position on stop
+        CurrentTilePosition = SnapToGrid(rb.position);
 
         MoveInput = Vector2.zero;
         ClearBuffer();

@@ -106,7 +106,7 @@ public class WorldManager : MonoBehaviour
         {
             WorldArgs.Set(
                 zoneId : _currentZone != null ? _currentZone.zoneId : null,
-                playerPosition : player.transform.position,
+                playerPosition : player.CurrentTilePosition3d(),
                 facingDirection : player.FacingToVector(player.FacingDirection),
                 worldState : WorldState.InEncounter
             );

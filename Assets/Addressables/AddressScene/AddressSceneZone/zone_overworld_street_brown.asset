@@ -15,37 +15,10 @@ MonoBehaviour:
   zoneId: zone_overworld_street_brown
   zoneName: brown street
   zoneType: 0
-  chunks:
-  - chunkId: chunk_0_0
-    chunkCoord: {x: 0, y: 0}
-    sceneAddress: zone_overworld_street_brown_chunk_0_0
-    containedSpawnIds:
-    - spawn_hospital_exit
-  - chunkId: chunk_0_-1
-    chunkCoord: {x: 0, y: -1}
-    sceneAddress: zone_overworld_street_brown_chunk_0_-1
-    containedSpawnIds: []
-  - chunkId: chunk_1_0
-    chunkCoord: {x: 1, y: 0}
-    sceneAddress: zone_overworld_street_brown_chunk_1_0
-    containedSpawnIds: []
-  - chunkId: chunk_1_-1
-    chunkCoord: {x: 1, y: -1}
-    sceneAddress: zone_overworld_street_brown_chunk_1_-1
-    containedSpawnIds: []
-  - chunkId: chunk_-1_-1
-    chunkCoord: {x: -1, y: -1}
-    sceneAddress: zone_overworld_street_brown_chunk_-1_-1
-    containedSpawnIds: []
-  - chunkId: chunk_-1_0
-    chunkCoord: {x: -1, y: 0}
-    sceneAddress: zone_overworld_street_brown_chunk_-1_0
-    containedSpawnIds: []
-  - chunkId: chunk_0_1
-    chunkCoord: {x: 0, y: 1}
-    sceneAddress: zone_overworld_street_brown_chunk_0_1
-    containedSpawnIds: []
   interiorSceneAddress: 
-  chunkLoadRadius: 1
-  defaultSpawnId: 
   backgroundMusic: {fileID: 8300000, guid: 38d24e005d5aed9b685085695e76cae0, type: 3}
+  encounters:
+  - teamId: crimson_selection
+    level: 99
+    bgmId: 
+    encounterRate: 0

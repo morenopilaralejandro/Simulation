@@ -54,7 +54,7 @@ public class PlayerWorldEntity : MonoBehaviour
         interactionComponent.Initialize(this, config);
         modelComponent.Initialize(this, config);
         persistenceComponent.Initialize(this, config);
-        //rigidbodyComponent.Initialize(this, config);
+        rigidbodyComponent.Initialize(this);
         stateMachineComponent.Initialize(this, config);
 
         BattleEvents.OnBattleStart += HandleBattleStart;
@@ -81,6 +81,9 @@ public class PlayerWorldEntity : MonoBehaviour
     public void StopMovement() => controllerComponent.StopMovement();
     public void ResetDistance() => controllerComponent.ResetDistance();
     public bool IsEnabled => controllerComponent.IsEnabled;
+    public Vector2 CurrentTilePosition => controllerComponent.CurrentTilePosition;
+    public Vector3 CurrentTilePosition3d() => controllerComponent.CurrentTilePosition3d();
+
     //interactionComponent
     public Interactable CurrentInteractionTarget => interactionComponent.CurrentTarget;
     //modelComponent
@@ -94,6 +97,8 @@ public class PlayerWorldEntity : MonoBehaviour
     //rigidbodyComponent
     public Rigidbody2D Rb => rigidbodyComponent.Rb;
     public void Teleport(Vector3 position) => rigidbodyComponent.Teleport(position);
+    public Vector2 GetPosition2d() => rigidbodyComponent.GetPosition2d();
+    public Vector3 GetPosition3d() => rigidbodyComponent.GetPosition3d();
     //stateMachineComponent
     public PlayerWorldState PlayerWorldState => stateMachineComponent.PlayerWorldState;
     public void SetState(PlayerWorldState newState) => stateMachineComponent.SetState(newState);
