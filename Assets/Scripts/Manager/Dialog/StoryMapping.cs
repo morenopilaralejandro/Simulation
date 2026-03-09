@@ -1,4 +1,3 @@
-/*
 using UnityEngine;
 using Ink.Runtime;
 using System;
@@ -10,4 +9,3 @@ public class StoryMapping
     public string storyId;
     public TextAsset storyJson;
 }
-*/

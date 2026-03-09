@@ -4,315 +4,254 @@ using System.Text.RegularExpressions;
 using Simulation.Enums.Localization;
 
 /// <summary>
-/// Bridges Ink's localization keys to Unity's Localization system
-/// using LocalizationComponentString as the underlying lookup mechanism.
+/// Bridges Ink localization keys to your LocalizationComponentString system.
 /// 
-/// HOW IT WORKS:
-/// 1. Ink outputs a line with tag #loc:elder_oak_greeting_01
-/// 2. This bridge creates/caches a LocalizationComponentString for that key
-/// 3. The localized string is returned (with smart string + variable substitution)
-/// 4. If the key isn't found, falls back to the raw ink text
+/// Each unique localization key gets a cached LocalizationComponentString.
+/// Variables are injected via SetArguments using anonymous objects,
+/// which Unity Smart Strings resolve automatically.
+/// 
+/// SMART STRING FORMAT IN YOUR TABLES:
+///   "Hello, {player_name}! You have {gold_amount} gold."
+/// These get resolved when SetArguments passes the matching object.
 /// </summary>
 public class DialogLocalizationBridge : MonoBehaviour
 {
-    // ─────────────────────────────────────────────
-    // Cached localization components, keyed by their localization ID.
-    // We lazily create and cache these so we don't re-allocate
-    // a LocalizationComponentString every frame.
-    // ─────────────────────────────────────────────
-    private readonly Dictionary<string, LocalizationComponentString> _dialogCache    
+    // ============ CACHES ============
+    // We cache LocalizationComponentString per key to avoid
+    // recreating them every line. Dialog keys are reusable
+    // (e.g., revisiting an NPC shows the same keys).
+
+    private Dictionary<string, LocalizationComponentString> _dialogCache
         = new Dictionary<string, LocalizationComponentString>();
 
-    private readonly Dictionary<string, LocalizationComponentString> _choiceCache    
+    private Dictionary<string, LocalizationComponentString> _choiceCache
         = new Dictionary<string, LocalizationComponentString>();
 
-    private readonly Dictionary<string, LocalizationComponentString> _charNameCache  
+    private Dictionary<string, LocalizationComponentString> _characterNameCache
         = new Dictionary<string, LocalizationComponentString>();
 
-    private readonly Dictionary<string, LocalizationComponentString> _itemNameCache  
+    private Dictionary<string, LocalizationComponentString> _itemNameCache
         = new Dictionary<string, LocalizationComponentString>();
 
-    // Variable sources for manual {variable} substitution
-    // (for variables coming from Ink, not from Smart Strings)
-    private readonly Dictionary<string, string> _variableOverrides 
-        = new Dictionary<string, string>();
+    // ============ VARIABLES ============
+    // Collected from ink state, passed as arguments to Smart Strings.
 
-    // ─────────────────────────────────────────────
-    // Cache helpers
-    // ─────────────────────────────────────────────
+    private Dictionary<string, object> _variables = new Dictionary<string, object>();
 
-    /// <summary>
-    /// Gets or creates a cached LocalizationComponentString for the given
-    /// entity type, ID, field, and cache dictionary.
-    /// </summary>
-    private LocalizationComponentString GetOrCreate(
-        Dictionary<string, LocalizationComponentString> cache,
-        LocalizationEntity entity,
-        string id,
-        LocalizationField field)
-    {
-        if (string.IsNullOrEmpty(id)) return null;
+    // ============ VARIABLE MANAGEMENT ============
 
-        if (!cache.TryGetValue(id, out var component))
-        {
-            component = new LocalizationComponentString(
-                entity,
-                id,
-                new[] { field }
-            );
-            cache[id] = component;
-        }
-
-        return component;
-    }
-
-    // ─────────────────────────────────────────────
-    // Variable management (for Ink-driven variables)
-    // ─────────────────────────────────────────────
-
-    /// <summary>
-    /// Set a variable that will be substituted in localized strings.
-    /// For variables that come from Ink's runtime (player_name, etc.)
-    /// </summary>
     public void SetVariable(string key, string value)
     {
-        _variableOverrides[key] = value;
+        _variables[key] = value;
     }
 
     public void SetVariable(string key, int value)
     {
-        _variableOverrides[key] = value.ToString();
+        _variables[key] = value;
+    }
+
+    public void SetVariable(string key, float value)
+    {
+        _variables[key] = value;
+    }
+
+    public void SetVariable(string key, bool value)
+    {
+        _variables[key] = value;
     }
 
     public void ClearVariables()
     {
-        _variableOverrides.Clear();
+        _variables.Clear();
     }
 
-    // ─────────────────────────────────────────────
-    // Smart String argument helpers
-    // ─────────────────────────────────────────────
+    // ============ RESOLVE METHODS ============
 
     /// <summary>
-    /// Sets Smart String arguments on a dialog line's localization component.
-    /// Use this when your Unity Localization table entries use Smart String
-    /// syntax like "{0}" or named references.
-    /// 
-    /// Example:
-    ///   SetDialogSmartArgs("elder_oak_greeting_01", new { player_name = "Ash", badge_count = 3 });
-    /// </summary>
-    public void SetDialogSmartArgs(string localizationKey, object args)
-    {
-        var component = GetOrCreate(
-            _dialogCache, 
-            LocalizationEntity.Dialog, 
-            localizationKey, 
-            LocalizationField.Text
-        );
-        component?.SetArguments(LocalizationField.Text, args);
-    }
-
-    public void SetChoiceSmartArgs(string localizationKey, object args)
-    {
-        var component = GetOrCreate(
-            _choiceCache, 
-            LocalizationEntity.Dialog, 
-            localizationKey, 
-            LocalizationField.Text
-        );
-        component?.SetArguments(LocalizationField.Text, args);
-    }
-
-    // ─────────────────────────────────────────────
-    // Resolution methods
-    // ─────────────────────────────────────────────
-
-    /// <summary>
-    /// Resolve a dialog line: look up localization key, substitute variables.
+    /// Resolve a dialog line's text.
+    /// Looks up #loc: key in DialogTable, injects variables, falls back to raw text.
     /// </summary>
     public string ResolveDialogText(DialogLine line)
     {
-        string text = line.RawText; // default fallback
+        if (!line.HasLocalization)
+            return SubstituteVariablesFallback(line.RawText);
 
-        if (line.HasLocalization)
+        var locComponent = GetOrCreateDialog(line.LocalizationKey);
+        InjectArguments(locComponent, LocalizationField.Text);
+
+        string result = locComponent.GetString(LocalizationField.Text);
+
+        if (string.IsNullOrEmpty(result))
         {
-            var component = GetOrCreate(
-                _dialogCache,
-                LocalizationEntity.Dialog,
-                line.LocalizationKey,
-                LocalizationField.Text
-            );
-
-            if (component != null)
-            {
-                string localized = component.GetString(LocalizationField.Text);
-
-                if (!string.IsNullOrEmpty(localized))
-                {
-                    text = localized;
-                }
-                else
-                {
-                    LogManager.Trace(
-                        $"[DialogLocalizationBridge] Localization key not found: " +
-                        $"{line.LocalizationKey}. Using raw text.");
-                }
-            }
+            Debug.LogWarning(
+                $"[DialogLocBridge] Key not found: {line.LocalizationKey}. Using raw text.");
+            return SubstituteVariablesFallback(line.RawText);
         }
 
-        return SubstituteVariables(text);
+        return result;
     }
 
     /// <summary>
-    /// Resolve a choice option's display text.
+    /// Resolve a choice's display text.
     /// </summary>
     public string ResolveChoiceText(DialogChoice choice)
     {
-        string text = choice.RawText;
+        if (string.IsNullOrEmpty(choice.LocalizationKey))
+            return SubstituteVariablesFallback(choice.RawText);
 
-        if (!string.IsNullOrEmpty(choice.LocalizationKey))
-        {
-            var component = GetOrCreate(
-                _choiceCache,
-                LocalizationEntity.Dialog,
-                choice.LocalizationKey,
-                LocalizationField.Text
-            );
+        var locComponent = GetOrCreateChoice(choice.LocalizationKey);
+        InjectArguments(locComponent, LocalizationField.Text);
 
-            if (component != null)
-            {
-                string localized = component.GetString(LocalizationField.Text);
-                if (!string.IsNullOrEmpty(localized))
-                    text = localized;
-            }
-        }
+        string result = locComponent.GetString(LocalizationField.Text);
 
-        return SubstituteVariables(text);
+        if (string.IsNullOrEmpty(result))
+            return SubstituteVariablesFallback(choice.RawText);
+
+        return result;
     }
 
     /// <summary>
-    /// Resolve a character's display name from their ID.
+    /// Resolve a character's display name.
     /// </summary>
     public string ResolveCharacterName(string characterId)
     {
-        if (string.IsNullOrEmpty(characterId)) return characterId;
+        if (string.IsNullOrEmpty(characterId))
+            return string.Empty;
 
-        var component = GetOrCreate(
-            _charNameCache,
-            LocalizationEntity.Character,
-            characterId,
-            LocalizationField.Name
-        );
+        var locComponent = GetOrCreateCharacterName(characterId);
+        string result = locComponent.GetString(LocalizationField.Name);
 
-        if (component != null)
-        {
-            string localized = component.GetString(LocalizationField.Name);
-            if (!string.IsNullOrEmpty(localized))
-                return localized;
-        }
-
-        return characterId; // fallback to raw ID
+        // Fallback to raw ID if not found
+        return string.IsNullOrEmpty(result) ? characterId : result;
     }
 
     /// <summary>
-    /// Resolve an item's display name from its ID.
+    /// Resolve an item's display name.
     /// </summary>
     public string ResolveItemName(string itemId)
     {
+        if (string.IsNullOrEmpty(itemId))
+            return string.Empty;
+
+        var locComponent = GetOrCreateItemName(itemId);
+        string result = locComponent.GetString(LocalizationField.Name);
+
+        return string.IsNullOrEmpty(result) ? itemId : result;
+    }
+
+    // ============ CACHE MANAGEMENT ============
+
+    private LocalizationComponentString GetOrCreateDialog(string locKey)
+    {
+        if (!_dialogCache.TryGetValue(locKey, out var component))
+        {
+            component = new LocalizationComponentString(
+                LocalizationEntity.Dialog,
+                locKey,
+                new[] { LocalizationField.Text }
+            );
+            _dialogCache[locKey] = component;
+        }
+        return component;
+    }
+
+    private LocalizationComponentString GetOrCreateChoice(string locKey)
+    {
+        if (!_choiceCache.TryGetValue(locKey, out var component))
+        {
+            component = new LocalizationComponentString(
+                LocalizationEntity.Dialog,
+                locKey,
+                new[] { LocalizationField.Text }
+            );
+            _choiceCache[locKey] = component;
+        }
+        return component;
+    }
+
+    private LocalizationComponentString GetOrCreateCharacterName(string characterId)
+    {
+        if (!_characterNameCache.TryGetValue(characterId, out var component))
+        {
+            component = new LocalizationComponentString(
+                LocalizationEntity.Character,
+                characterId,
+                new[] { LocalizationField.Name }
+            );
+            _characterNameCache[characterId] = component;
+        }
+        return component;
+    }
+
+    private LocalizationComponentString GetOrCreateItemName(string itemId)
+    {
         return null;
         /*
-        if (string.IsNullOrEmpty(itemId)) return itemId;
-
-        var component = GetOrCreate(
-            _itemNameCache,
-            LocalizationEntity.Item,
-            itemId,
-            LocalizationField.Name
-        );
-
-        if (component != null)
+        if (!_itemNameCache.TryGetValue(itemId, out var component))
         {
-            string localized = component.GetString(LocalizationField.Name);
-            if (!string.IsNullOrEmpty(localized))
-                return localized;
+            component = new LocalizationComponentString(
+                LocalizationEntity.Item,
+                itemId,
+                new[] { LocalizationField.Name }
+            );
+            _itemNameCache[itemId] = component;
         }
-
-        return itemId;
+        return component;
         */
     }
 
-    // ─────────────────────────────────────────────
-    // Variable substitution (for Ink-driven {var} patterns)
-    // ─────────────────────────────────────────────
+    // ============ ARGUMENT INJECTION ============
 
     /// <summary>
-    /// Replaces {variable_name} patterns with values from _variableOverrides.
-    /// This handles Ink-sourced variables that aren't part of Unity's 
-    /// Smart String system.
+    /// Injects all current variables into a LocalizationComponentString
+    /// as a dynamic object for Unity Smart String resolution.
+    /// 
+    /// Your localization table entry:
+    ///   "Hello, {player_name}! You got {item_name} x{item_count}!"
+    /// 
+    /// We build an anonymous object with all variables so Smart Strings
+    /// can resolve any of them.
     /// </summary>
-    private string SubstituteVariables(string text)
+    private void InjectArguments(LocalizationComponentString component, LocalizationField field)
     {
-        if (string.IsNullOrEmpty(text) || _variableOverrides.Count == 0) 
+        if (_variables.Count == 0) return;
+
+        // Build a Dictionary that Unity Smart Strings can read.
+        // Smart Strings support Dictionary<string, object> as arguments.
+        var args = new Dictionary<string, object>(_variables);
+
+        component.SetArguments(field, args);
+    }
+
+    /// <summary>
+    /// Fallback regex substitution for raw ink text (when no loc key exists).
+    /// Replaces {variable_name} with values from our variable dictionary.
+    /// </summary>
+    private string SubstituteVariablesFallback(string text)
+    {
+        if (string.IsNullOrEmpty(text) || _variables.Count == 0)
             return text;
 
         return Regex.Replace(text, @"\{(\w+)\}", match =>
         {
             string varName = match.Groups[1].Value;
-            if (_variableOverrides.TryGetValue(varName, out string value))
-                return value;
-            return match.Value; // leave as-is if not found
+            if (_variables.TryGetValue(varName, out object value))
+                return value.ToString();
+            return match.Value;
         });
     }
 
-    // ─────────────────────────────────────────────
-    // Cache management
-    // ─────────────────────────────────────────────
+    // ============ CLEANUP ============
 
     /// <summary>
-    /// Clear all caches. Call when changing scenes or conversation contexts
-    /// to free memory from accumulated localization components.
+    /// Clear all caches. Call on scene change or when memory is a concern.
+    /// Usually not needed since cached entries are lightweight.
     /// </summary>
     public void ClearCaches()
     {
         _dialogCache.Clear();
         _choiceCache.Clear();
-        _charNameCache.Clear();
+        _characterNameCache.Clear();
         _itemNameCache.Clear();
-        _variableOverrides.Clear();
-    }
-
-    /// <summary>
-    /// Pre-warm the dialog cache for a set of known localization keys.
-    /// Call before a conversation starts to avoid allocation during dialogue.
-    /// </summary>
-    public void PrewarmDialogKeys(IEnumerable<string> localizationKeys)
-    {
-        foreach (var key in localizationKeys)
-        {
-            GetOrCreate(
-                _dialogCache, 
-                LocalizationEntity.Dialog, 
-                key, 
-                LocalizationField.Text
-            );
-        }
-    }
-
-    public void PrewarmChoiceKeys(IEnumerable<string> localizationKeys)
-    {
-        foreach (var key in localizationKeys)
-        {
-            GetOrCreate(
-                _choiceCache, 
-                LocalizationEntity.Dialog, 
-                key, 
-                LocalizationField.Text
-            );
-        }
-    }
-
-    private void OnDestroy()
-    {
-        ClearCaches();
     }
 }
