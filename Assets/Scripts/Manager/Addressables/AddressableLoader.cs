@@ -82,6 +82,8 @@ public static class AddressableLoader
         $"{AddressableConfig.CharacterPortraitPath}{AddressableConfig.PathSeparator}{id}";
     public static string GetCharacterHairAddress(string id) =>
         $"{AddressableConfig.CharacterHairPath}{AddressableConfig.PathSeparator}{id}";
+    public static string GetCharacterHairWorldAddress(string id) =>
+        $"{AddressableConfig.CharacterHairWorldPath}{AddressableConfig.PathSeparator}{id}";
 
 
     public static string GetKitBodyAddress(string kitId, string variant, string role) =>

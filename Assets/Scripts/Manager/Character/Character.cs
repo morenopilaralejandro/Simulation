@@ -122,6 +122,7 @@ public class Character
     public CharacterSaveData Export() => persistenceComponent.Export();
 
     // appearanceComponent
+    public CharacterComponentAppearance AppearanceComponent => appearanceComponent;
     public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
     public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
     public string HairStyleId => appearanceComponent.HairStyleId;
@@ -134,6 +135,7 @@ public class Character
         set => appearanceComponent.State = value;
     }
     public void ApplyKit(Kit kit, Variant variant, Position position) => appearanceComponent.ApplyKit(kit, variant, position);
+    public void ApplyKit(Kit kit, Variant variant, Role role) => appearanceComponent.ApplyKit(kit, variant, role);
     public void InitializeVisibility() => appearanceComponent.InitializeVisibility();
     public Variant GetKitVariant(Team team) => appearanceComponent.GetKitVariant(team);
     public Role GetKitRole(Position position) => appearanceComponent.GetKitRole(position);

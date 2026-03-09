@@ -6,6 +6,13 @@ namespace Simulation.Enums.Input
         Touch
     }
 
+    public enum DirectionalInputMode
+    {
+        Joystick,
+        Dpad,
+        Both
+    }
+
     public enum CustomAction
     {
         //BattleActions
@@ -27,6 +34,16 @@ namespace Simulation.Enums.Input
         BattleUI_CloseBattleMenu,
         BattleUI_OpenDimensionMenu,
         BattleUI_CloseDimensionMenu,
-        BattleUI_DimensionShortcutPause
+        BattleUI_DimensionShortcutPause,
+        //WorldActions
+        World_Move,
+        World_Run,
+        World_Interact,
+        World_Submit,
+        World_Cancel,
+        World_OpenSideMenu,
+        World_CloseSideMenu,
+        World_OpenPauseMenu,
+        World_ClosePauseMenu
     }
 }

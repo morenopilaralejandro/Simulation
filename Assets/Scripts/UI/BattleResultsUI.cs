@@ -6,13 +6,25 @@ using Simulation.Enums.Battle;
 
 public class BattleResultsUI : MonoBehaviour
 {
-    [SerializeField] private GameObject defaultSelected;
+    [SerializeField] private GameObject defaultSelectedDrop;
+    [SerializeField] private GameObject defaultSelectedSummary;
 
     [Header("Scenes")]
     [SerializeField] private SceneGroup sceneMainMenu;
-    [SerializeField] private SceneGroup sceneBattleResults;
+    [SerializeField] private SceneGroup sceneWorld;
+
+    [Header("Panels")]
+    [SerializeField] private GameObject panelDrop;
+    [SerializeField] private GameObject panelSummary;
+
     private SceneLoader sceneLoader;
     private AudioManager audioManager;
+
+    private void Awake() 
+    {
+        panelDrop.SetActive(false);
+        panelSummary.SetActive(false);
+    }
 
     private void Start() 
     {
@@ -20,13 +32,30 @@ public class BattleResultsUI : MonoBehaviour
         audioManager = AudioManager.Instance;
 
         audioManager.PlayBgm("bgm-fanfare");    
-        EventSystem.current.SetSelectedGameObject(defaultSelected);
+        switch (BattleArgs.BattleResultsType) 
+        {
+            case BattleResultsType.Drop:
+                panelDrop.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(defaultSelectedDrop);
+                break;
+            default:
+                panelSummary.SetActive(true);
+                EventSystem.current.SetSelectedGameObject(defaultSelectedSummary);
+                break;
+        }
+
     }
 
-    public void OnButtonContinueTapped() 
+    public void OnButtonTappedContinueFromSummary() 
     {
         audioManager.PlaySfx("sfx-menu_tap");
         sceneLoader.LoadGroup(sceneMainMenu);
+    }
+
+    public void OnButtonTappedContinueFromDrop() 
+    {
+        audioManager.PlaySfx("sfx-menu_tap");
+        sceneLoader.LoadGroup(sceneWorld);
     }
 
 }

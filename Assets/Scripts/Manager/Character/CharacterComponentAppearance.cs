@@ -9,8 +9,6 @@ public class CharacterComponentAppearance
 {
     #region Fields
 
-    private Character character;
-
     public string PortraitSpriteId { get; private set; }
     public string HairStyleId { get; private set; }
     public HairColorType HairColorType { get; private set; }
@@ -30,13 +28,30 @@ public class CharacterComponentAppearance
 
     public async void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
-        this.character = character;
-
         PortraitSpriteId = characterData.CharacterId;
         HairStyleId = characterData.HairStyle.ToString().ToLower();
         HairColorType = characterData.HairColorType;
         EyeColorType = characterData.EyeColorType;
         BodyColorType = characterData.BodyColorType;
+
+        State = new SpriteLayerState<CharacterSpriteLayer>();
+
+        ApplyColors();
+        await LoadAsync();
+    }
+
+    public CharacterComponentAppearance(NpcData npcData)
+    {
+        Initialize(npcData);
+    }
+
+    public async void Initialize(NpcData data)
+    {
+        PortraitSpriteId = null;
+        HairStyleId = data.HairStyle.ToString().ToLower();
+        HairColorType = data.HairColorType;
+        EyeColorType = data.EyeColorType;
+        BodyColorType = data.BodyColorType;
 
         State = new SpriteLayerState<CharacterSpriteLayer>();
 
@@ -55,6 +70,7 @@ public class CharacterComponentAppearance
 
     private async Task LoadPortraitSprite()
     {
+        if (PortraitSpriteId == null) return;
         PortraitSprite = await SpriteAtlasManager.Instance.GetCharacterPortrait(PortraitSpriteId);
     }
 
@@ -76,9 +92,12 @@ public class CharacterComponentAppearance
 
     public void ApplyKit(Kit kit, Variant variant, Position position)
     {
-        var kitColor = kit.GetColors(
-            variant, 
-            GetKitRole(position));
+        ApplyKit(kit, variant, GetKitRole(position));
+    }
+
+    public void ApplyKit(Kit kit, Variant variant, Role role)
+    {
+        var kitColor = kit.GetColors(variant, role);
 
         State.Colors[CharacterSpriteLayer.KitBase] = kitColor.Base;
         State.Colors[CharacterSpriteLayer.KitDetail] = kitColor.Detail;

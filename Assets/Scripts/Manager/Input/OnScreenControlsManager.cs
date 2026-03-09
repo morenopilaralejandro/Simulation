@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Simulation.Enums.Input;
 
 /// <summary>
 /// Manages the scaling and opacity of the joystick and buttons.
@@ -9,6 +10,10 @@ public class OnScreenControlsManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject onScreenControlsRoot;
+
+    [SerializeField] private GameObject joystickObject;
+    [SerializeField] private GameObject dpadObject;
+
     [SerializeField] private RectTransform onScreenJoystick;
     [SerializeField] private RectTransform onScreenButtons;
 
@@ -24,6 +29,10 @@ public class OnScreenControlsManager : MonoBehaviour
     [Range(0f, 1f)] public float joystickOpacity = 1f;
     [Range(0f, 1f)] public float buttonsOpacity = 1f;
 
+    private DirectionalInputMode directionalInputMode = DirectionalInputMode.Dpad;
+    public DirectionalInputMode DirectionalInputMode => directionalInputMode;
+
+
     private void Awake()
     {
         if (onScreenJoystick == null) 
@@ -33,6 +42,7 @@ public class OnScreenControlsManager : MonoBehaviour
             onScreenButtons = transform.Find("OnScreenButtons")?.GetComponent<RectTransform>();
 
         InputManager.Instance.RegisterScreenControls(onScreenControlsRoot);
+        ShowDpadOnly();
     }
 
     private void OnDestroy() 
@@ -112,5 +122,68 @@ public class OnScreenControlsManager : MonoBehaviour
         if (InputManager.Instance)
             InputManager.Instance.UpdateOnScreenVisibility();            
     }
+    #endregion
+
+    #region Directional Input Mode
+
+    /// <summary>
+    /// Switch between Joystick, DPad, or Both at runtime.
+    /// Call this from gameplay code when the context changes.
+    /// </summary>
+    private void SetInputMode(DirectionalInputMode mode)
+    {
+        directionalInputMode = mode;
+        ApplyInputMode(mode);
+    }
+
+    /// <summary>Convenience shortcut – show only the joystick.</summary>
+    public void ShowJoystickOnly() => SetInputMode(DirectionalInputMode.Joystick);
+
+    /// <summary>Convenience shortcut – show only the D-Pad.</summary>
+    public void ShowDpadOnly() => SetInputMode(DirectionalInputMode.Dpad);
+
+    /// <summary>Convenience shortcut – show both controls.</summary>
+    public void ShowBothDirectionalInput() => SetInputMode(DirectionalInputMode.Both);
+
+    private void ApplyInputMode(DirectionalInputMode mode)
+    {
+        switch (mode)
+        {
+            case DirectionalInputMode.Joystick:
+                joystickObject.SetActive(true);
+                dpadObject.SetActive(false);
+                break;
+
+            case DirectionalInputMode.Dpad:
+                joystickObject.SetActive(false);
+                dpadObject.SetActive(true);
+                break;
+
+            case DirectionalInputMode.Both:
+                joystickObject.SetActive(true);
+                dpadObject.SetActive(true);
+                break;
+        }
+    }
+
+    #endregion
+
+    #region Event
+
+    private void OnEnable() 
+    {
+        InputEvents.OnDirectionalInputModeChanged += HandleDirectionalInputModeChanged;
+    }
+
+    private void OnDisable() 
+    {
+        InputEvents.OnDirectionalInputModeChanged -= HandleDirectionalInputModeChanged;
+    }
+
+    private void HandleDirectionalInputModeChanged(DirectionalInputMode directionalInputMode) 
+    {
+        SetInputMode(directionalInputMode);
+    }
+
     #endregion
 }

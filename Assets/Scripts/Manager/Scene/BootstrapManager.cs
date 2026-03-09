@@ -22,6 +22,7 @@ public class BootstrapManager : MonoBehaviour
         SceneManager.LoadSceneAsync("MainCamera", LoadSceneMode.Additive);
         SceneManager.LoadSceneAsync("SystemManager", LoadSceneMode.Additive);
         SceneManager.LoadSceneAsync("GlobalLighting", LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync("InputScreenUI", LoadSceneMode.Additive);
 
         AsyncOperationHandle initAddressablesHandle = Addressables.InitializeAsync();
         yield return initAddressablesHandle;

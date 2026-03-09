@@ -102,7 +102,7 @@ public static class DamageCalculator
         if (damage == 666 || damage == 665 || damage == 667)
             damage -= 10; 
 
-        damage = Mathf.Max(damage, 0f); // Prevent negative damage
+        damage = Mathf.Max(damage, 1f); // Prevent negative damage
 
         return damage;
     }

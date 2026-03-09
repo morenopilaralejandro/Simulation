@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a6b23617d6cf38c796a1bb9cabc1e24, type: 3}
+  m_Name: OverworldDefinition
+  m_EditorClassIdentifier: 
+  allChunks:
+  - chunkId: zone_overworld_street_brown_chunk_0_0
+    parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
+    chunkCoord: {x: 0, y: 0}
+    sceneAddress: zone_overworld_street_brown_chunk_0_0
+    containedSpawnIds:
+    - spawn_hospital_exit
+  - chunkId: zone_overworld_park_chunk_-1_1
+    parentZone: {fileID: 11400000, guid: 9ab28db5360670a65b27185ad4ef259d, type: 2}
+    chunkCoord: {x: -1, y: 1}
+    sceneAddress: zone_overworld_park_chunk_-1_1
+    containedSpawnIds: []
+  - chunkId: zone_overworld_street_brown_chunk_-1_-1
+    parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
+    chunkCoord: {x: -1, y: -1}
+    sceneAddress: zone_overworld_street_brown_chunk_-1_-1
+    containedSpawnIds: []
+  - chunkId: zone_overworld_street_brown_chunk_-1_0
+    parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
+    chunkCoord: {x: -1, y: 0}
+    sceneAddress: zone_overworld_street_brown_chunk_-1_0
+    containedSpawnIds: []
+  - chunkId: zone_overworld_street_brown_chunk_0_-1
+    parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
+    chunkCoord: {x: 0, y: -1}
+    sceneAddress: zone_overworld_street_brown_chunk_0_-1
+    containedSpawnIds: []
+  - chunkId: zone_overworld_street_brown_chunk_0_1
+    parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
+    chunkCoord: {x: 0, y: 1}
+    sceneAddress: zone_overworld_street_brown_chunk_0_1
+    containedSpawnIds: []
+  - chunkId: zone_overworld_street_brown_chunk_1_-1
+    parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
+    chunkCoord: {x: 1, y: -1}
+    sceneAddress: zone_overworld_street_brown_chunk_1_-1
+    containedSpawnIds: []
+  - chunkId: zone_overworld_street_brown_chunk_1_0
+    parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
+    chunkCoord: {x: 1, y: 0}
+    sceneAddress: zone_overworld_street_brown_chunk_1_0
+    containedSpawnIds: []
+  - chunkId: zone_overworld_park_chunk_-2_1
+    parentZone: {fileID: 11400000, guid: 9ab28db5360670a65b27185ad4ef259d, type: 2}
+    chunkCoord: {x: -2, y: 1}
+    sceneAddress: zone_overworld_park_chunk_-2_1
+    containedSpawnIds: []
+  allZones:
+  - {fileID: 11400000, guid: d294154c7772a28708224aa34c9533b9, type: 2}
+  - {fileID: 11400000, guid: 9ab28db5360670a65b27185ad4ef259d, type: 2}
+  - {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
+  startingZone: {fileID: 11400000, guid: d294154c7772a28708224aa34c9533b9, type: 2}
+  startingSpawnId: spawn_hospital_checkpoint
+  chunkLoadRadius: 1

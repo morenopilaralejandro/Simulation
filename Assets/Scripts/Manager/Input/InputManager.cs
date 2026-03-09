@@ -17,6 +17,7 @@ public class InputManager : MonoBehaviour
 
     private GameInputActions input;   
     private Vector2 move;
+    private Vector2 moveWorld;
     private readonly ButtonState[] buttons = new ButtonState[System.Enum.GetValues(typeof(CustomAction)).Length];
     private readonly Dictionary<InputAction, CustomAction> actionLookup = new();
     private GameObject onScreenControlsRoot;
@@ -70,10 +71,23 @@ public class InputManager : MonoBehaviour
         BindButton(input.BattleUIActions.BattleUI_CloseDimensionMenu, CustomAction.BattleUI_CloseDimensionMenu);
         BindButton(input.BattleUIActions.BattleUI_DimensionShortcutPause, CustomAction.BattleUI_DimensionShortcutPause);
 
+        //WorldActions
+        input.WorldActions.World_Move.performed += OnMoveWorldPerformed;
+        input.WorldActions.World_Move.canceled += _ => moveWorld = Vector2.zero;
+
+        BindButton(input.WorldActions.World_Run, CustomAction.World_Run);
+        BindButton(input.WorldActions.World_Interact, CustomAction.World_Interact);
+        BindButton(input.WorldActions.World_Submit, CustomAction.World_Submit);
+        BindButton(input.WorldActions.World_Cancel, CustomAction.World_Cancel);
+        BindButton(input.WorldActions.World_OpenSideMenu, CustomAction.World_OpenSideMenu);
+        BindButton(input.WorldActions.World_CloseSideMenu, CustomAction.World_CloseSideMenu);
+        BindButton(input.WorldActions.World_OpenPauseMenu, CustomAction.World_OpenPauseMenu);
+        BindButton(input.WorldActions.World_ClosePauseMenu, CustomAction.World_ClosePauseMenu);
 
         // Enable once here
         input.BattleActions.Enable();
         input.BattleUIActions.Enable();
+        input.WorldActions.Enable();
 
         // Respond to control scheme changes (requires a PlayerInput component on the same GO)
         playerInput = GetComponent<PlayerInput>();
@@ -97,7 +111,9 @@ public class InputManager : MonoBehaviour
         if (input != null)
         {
             input.BattleActions.Battle_Move.performed -= OnMovePerformed;
+            input.WorldActions.World_Move.performed -= OnMoveWorldPerformed;
 
+            //BattleActions
             UnbindButton(input.BattleActions.Battle_Pass);
             UnbindButton(input.BattleActions.Battle_Shoot);
             UnbindButton(input.BattleActions.Battle_ChangeManual);
@@ -105,7 +121,32 @@ public class InputManager : MonoBehaviour
             UnbindButton(input.BattleActions.Battle_Dribble);
             UnbindButton(input.BattleActions.Battle_Block);
 
+            //BattleUIActions
+            UnbindButton(input.BattleUIActions.BattleUI_ClickEastButton);
+            UnbindButton(input.BattleUIActions.BattleUI_ClickWestButton);
+            UnbindButton(input.BattleUIActions.BattleUI_ClickNorthButton);
+            UnbindButton(input.BattleUIActions.BattleUI_ClickSouthButton);
+            UnbindButton(input.BattleUIActions.BattleUI_CloseMoveMenu);
+            UnbindButton(input.BattleUIActions.BattleUI_NextMove);
+            UnbindButton(input.BattleUIActions.BattleUI_OpenBattleMenu);
+            UnbindButton(input.BattleUIActions.BattleUI_CloseBattleMenu);
+            UnbindButton(input.BattleUIActions.BattleUI_OpenDimensionMenu);
+            UnbindButton(input.BattleUIActions.BattleUI_CloseDimensionMenu);
+            UnbindButton(input.BattleUIActions.BattleUI_DimensionShortcutPause);
+
+            //WorldActions
+            UnbindButton(input.WorldActions.World_Run);
+            UnbindButton(input.WorldActions.World_Interact);
+            UnbindButton(input.WorldActions.World_Submit);
+            UnbindButton(input.WorldActions.World_Cancel);
+            UnbindButton(input.WorldActions.World_OpenSideMenu);
+            UnbindButton(input.WorldActions.World_CloseSideMenu);
+            UnbindButton(input.WorldActions.World_OpenPauseMenu);
+            UnbindButton(input.WorldActions.World_ClosePauseMenu);
+
             input.BattleActions.Disable();
+            input.BattleUIActions.Disable();
+            input.WorldActions.Disable();
             input.Dispose();
         }
 
@@ -167,6 +208,11 @@ public class InputManager : MonoBehaviour
         move = ctx.ReadValue<Vector2>();
     }
 
+    private void OnMoveWorldPerformed(InputAction.CallbackContext ctx)
+    {
+        moveWorld = ctx.ReadValue<Vector2>();
+    }
+
     private void OnAnyButtonStarted(InputAction.CallbackContext ctx)
     {
         if (actionLookup.TryGetValue(ctx.action, out var customAction))
@@ -220,6 +266,7 @@ public class InputManager : MonoBehaviour
 
     #region API
     public Vector2 GetMove() => move;
+    public Vector2 GetMoveWorld() => moveWorld;
     public Vector2 GetMouse() => Mouse.current.position.ReadValue();
     public bool GetDown(CustomAction customAction) => buttons[(int)customAction].DownFrame == (uint)Time.frameCount;
     public bool GetHeld(CustomAction customAction) => buttons[(int)customAction].Held;
@@ -281,6 +328,7 @@ public class InputManager : MonoBehaviour
         // Clear buffered inputs so nothing fires on unlock
         InvalidateAllBuffers();
         move = Vector2.zero;
+        moveWorld = Vector2.zero;
 
         LogManager.Trace("[InputManager] Input locked");
     }

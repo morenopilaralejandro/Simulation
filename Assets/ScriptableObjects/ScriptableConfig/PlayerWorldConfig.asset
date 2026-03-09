@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56a3ba71aa4e878f484dd456ed5e78d2, type: 3}
+  m_Name: PlayerWorldConfig
+  m_EditorClassIdentifier: 
+  walkSpeed: 3
+  runSpeed: 5
+  allowDiagonalMovement: 1
+  gridBasedMovement: 1
+  gridSize: 1
+  runStepMultiplier: 2
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 20480
+  collisionCastRadius: 0.4
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 24576
+  interactionRange: 1
+  castRadius: 0.3
+  detectionInterval: 5
+  minStepsBetweenEncounters: 10
+  maxStepsBetweenEncounters: 30

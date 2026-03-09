@@ -15,6 +15,12 @@ namespace Simulation.Enums.Battle
         Mini
     }
 
+    public enum BattleResultsType
+    {
+        Drop,
+        Summary
+    }
+
     public enum BoundPlacement
     {
         Top,
