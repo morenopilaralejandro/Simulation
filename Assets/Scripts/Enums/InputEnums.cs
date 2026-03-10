@@ -44,6 +44,9 @@ namespace Simulation.Enums.Input
         World_OpenSideMenu,
         World_CloseSideMenu,
         World_OpenPauseMenu,
-        World_ClosePauseMenu
+        World_ClosePauseMenu,
+        //DialogActions
+        Dialog_Submit,
+        Dialog_Cancel
     }
 }

@@ -34,6 +34,18 @@ public static class WorldEvents
         OnInteractionEnded?.Invoke();
     }
 
+    public static event Action OnMenuOpened;
+    public static void RaiseMenuOpened()
+    {
+        OnMenuOpened?.Invoke();
+    }
+
+    public static event Action OnMenuClosed;
+    public static void RaiseMenuClosed()
+    {
+        OnMenuClosed?.Invoke();
+    }
+
     public static event Action<Vector3> OnPlayerTeleported;
     public static void RaisePlayerTeleported(Vector3 position)
     {

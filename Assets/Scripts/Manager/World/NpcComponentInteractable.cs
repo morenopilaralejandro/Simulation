@@ -6,7 +6,7 @@ public class NpcComponentInteractable : Interactable
 {
     private NpcEntity npcEntity;
 
-    public void Initialize(NpcEntity npcEntity)
+    public virtual void Initialize(NpcEntity npcEntity)
     {
         this.npcEntity = npcEntity;
     }

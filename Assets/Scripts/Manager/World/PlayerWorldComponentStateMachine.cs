@@ -50,4 +50,29 @@ public class PlayerWorldComponentStateMachine : MonoBehaviour
         LogManager.Trace($"[PlayerWorldManager] State: {previous} → {newState}");
     }
 
+    #region Events
+
+    private void OnEnable()
+    {
+        DialogEvents.OnDialogStarted += HandleDialogStarted;
+        DialogEvents.OnDialogEnded += HandleDialogEnded;
+
+        WorldEvents.OnMenuOpened += HandleMenuOpened;
+        WorldEvents.OnMenuClosed -= HandleMenuClosed;
+    }
+
+    private void OnDisable()
+    {
+        DialogEvents.OnDialogStarted += HandleDialogStarted;
+        DialogEvents.OnDialogEnded += HandleDialogEnded;
+    }
+
+    private void HandleDialogStarted() => SetState(PlayerWorldState.InDialogue);
+    private void HandleDialogEnded() => SetState(PlayerWorldState.FreeRoam);
+
+    private void HandleMenuOpened() => SetState(PlayerWorldState.InMenu);
+    private void HandleMenuClosed() => SetState(PlayerWorldState.FreeRoam);
+
+    #endregion
+
 }

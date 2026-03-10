@@ -66,4 +66,10 @@ public static class DialogEvents
     {
         OnCommandExecuted?.Invoke(command);
     }
+
+    public static event Action OnDialogMenuClosed;
+    public static void RaiseDialogMenuClosed()
+    {
+        OnDialogMenuClosed?.Invoke();
+    }
 }

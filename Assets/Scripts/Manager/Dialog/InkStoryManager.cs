@@ -33,7 +33,7 @@ public class InkStoryManager : MonoBehaviour
     private IDialogGameDataProvider _gameData;
 
     public bool IsActive { get; private set; }
-    public bool CanContinue => _currentStory != null && _currentStory.canContinue;
+    public bool CanContinue => _currentStory != null && _currentStory.canContinue && !_isPaused;
     public bool HasChoices => _currentStory != null && _currentStory.currentChoices.Count > 0;
 
     public void Initialize(DialogLocalizationBridge locBridge, IDialogGameDataProvider gameData)
@@ -188,28 +188,30 @@ public class InkStoryManager : MonoBehaviour
     public void ContinueDialog()
     {
         if (_currentStory == null) return;
+        if (_isPaused) return; // ← ADD THIS
 
         if (_currentStory.canContinue)
         {
-            // Continue() gets the next line of text
             string text = _currentStory.Continue();
-
-            // currentTags contains all #tags from that line
             var tags = _currentStory.currentTags;
-
-            // Parse into our structured format
             DialogLine line = InkTagParser.ParseLine(text.Trim(), tags);
 
-            // Sync localization variables from ink state
+            // Check if this line has an open_menu command
+            bool shouldPause = line.Commands.Exists(
+                c => c.CommandName == "open_menu"
+            );
+
             SyncLocalizationVariables();
-
-            // Resolve localized text
             line.ResolvedText = _locBridge.ResolveDialogText(line);
-
-            // Process commands (sfx, animations, etc.)
             ProcessCommands(line);
 
-            // Notify UI
+            if (shouldPause)
+            {
+                // Don't show this line in dialog box
+                // The menu handles everything
+                return;
+            }
+
             DialogEvents.RaiseLineReady(line);
         }
         else if (_currentStory.currentChoices.Count > 0)
@@ -278,7 +280,7 @@ public class InkStoryManager : MonoBehaviour
         {
             _currentStory.variablesState["player_name"] = _gameData.GetPlayerName();
             _currentStory.variablesState["gold_amount"] = _gameData.GetGold();
-            _currentStory.variablesState["has_forest_key"] = _gameData.HasItem("forest_key");
+            //_currentStory.variablesState["has_forest_key"] = _gameData.HasItem("forest_key");
         }
         catch (Exception e)
         {
@@ -386,5 +388,26 @@ public class InkStoryManager : MonoBehaviour
         {
             story.state.LoadJson(stateJson);
         }
+    }
+
+    private bool _isPaused = false;
+
+    public bool IsPaused => _isPaused;
+
+    /// <summary>
+    /// Pause dialog. It won't advance until Resume() is called.
+    /// </summary>
+    public void Pause()
+    {
+        _isPaused = true;
+    }
+
+    /// <summary>
+    /// Resume dialog after a menu or cutscene.
+    /// </summary>
+    public void Resume()
+    {
+        _isPaused = false;
+        ContinueDialog();
     }
 }

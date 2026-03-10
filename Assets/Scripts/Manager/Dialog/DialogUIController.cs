@@ -48,12 +48,25 @@ public class DialogUIController : MonoBehaviour
     // State
     private bool _isTyping = false;
     private bool _skipRequested = false;
+    private bool _isFading = false;
     private Coroutine _typewriterCoroutine;
     private List<GameObject> _spawnedChoiceButtons = new List<GameObject>();
     private DialogLocalizationBridge _locBridge;
+    private Coroutine _fadeCoroutine;
 
     public bool IsVisible => _dialogBoxRoot.activeSelf;
     public bool IsTyping => _isTyping;
+    public bool IsFading => _isFading;
+
+    private void Awake()
+    {
+        DialogManager.Instance.RegisterUIController(this);
+    }
+
+    private void OnDestroy()
+    {
+        DialogManager.Instance.UnregisterUIController();
+    }
 
     public void Initialize(DialogLocalizationBridge locBridge)
     {
@@ -62,7 +75,11 @@ public class DialogUIController : MonoBehaviour
         _yesButton.onClick.AddListener(() => DialogEvents.RaiseChoiceSelected(GetYesChoiceIndex()));
         _noButton.onClick.AddListener(() => DialogEvents.RaiseChoiceSelected(GetNoChoiceIndex()));
 
-        Hide();
+        // Immediately hide — no fade needed at startup
+        _dialogBoxRoot.SetActive(false);
+        if (_dialogBoxCanvasGroup != null)
+            _dialogBoxCanvasGroup.alpha = 0f;
+        _isFading = false;
     }
 
     private int _yesChoiceIndex = 0;
@@ -73,27 +90,49 @@ public class DialogUIController : MonoBehaviour
 
     public void Show()
     {
+        // Cancel any in-progress fade (prevents the race condition)
+        if (_fadeCoroutine != null && gameObject.activeInHierarchy)
+            StopCoroutine(_fadeCoroutine);
+
         _dialogBoxRoot.SetActive(true);
+        _isFading = false;
+
         if (_dialogBoxCanvasGroup != null)
         {
-            StartCoroutine(FadeCanvasGroup(_dialogBoxCanvasGroup, 0f, 1f, _fadeSpeed));
+            _isFading = true;
+            _fadeCoroutine = StartCoroutine(FadeCanvasGroup(_dialogBoxCanvasGroup, 0f, 1f, _fadeSpeed, () =>
+            {
+                _isFading = false;
+                _fadeCoroutine = null;
+            }));
         }
     }
 
     public void Hide()
     {
+        // Cancel any in-progress fade
+        if (_fadeCoroutine != null && gameObject.activeInHierarchy)
+            StopCoroutine(_fadeCoroutine);
+        _fadeCoroutine = null;
+
         HideChoices();
         _continueIndicator.SetActive(false);
 
-        if (_dialogBoxCanvasGroup != null)
+        // Guard: can't start coroutines on an inactive GameObject
+        if (_dialogBoxCanvasGroup != null && gameObject.activeInHierarchy)
         {
-            StartCoroutine(FadeCanvasGroup(_dialogBoxCanvasGroup, 1f, 0f, _fadeSpeed, () =>
+            _isFading = true;
+            _fadeCoroutine = StartCoroutine(FadeCanvasGroup(_dialogBoxCanvasGroup, 1f, 0f, _fadeSpeed, () =>
             {
+                _isFading = false;
+                _fadeCoroutine = null;
                 _dialogBoxRoot.SetActive(false);
             }));
         }
         else
         {
+            // Already inactive or no canvas group — just deactivate immediately
+            _isFading = false;
             _dialogBoxRoot.SetActive(false);
         }
     }
@@ -243,14 +282,11 @@ public class DialogUIController : MonoBehaviour
     /// </summary>
     public void HandleAdvanceInput()
     {
+        if (_isFading) return;
         if (_isTyping)
-        {
             _skipRequested = true;
-        }
         else
-        {
             DialogEvents.RaiseContinueRequested();
-        }
     }
 
     private IEnumerator TypewriterEffect(string fullText)

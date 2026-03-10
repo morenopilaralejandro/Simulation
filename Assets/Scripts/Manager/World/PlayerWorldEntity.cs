@@ -105,6 +105,11 @@ public class PlayerWorldEntity : MonoBehaviour
 
     #endregion
 
+    #region API Misc
+    public bool CanInteract => PlayerWorldState == PlayerWorldState.FreeRoam && !IsMoving && IsEnabled;
+    public bool CanOpenMenu => PlayerWorldState == PlayerWorldState.FreeRoam && !IsMoving && IsEnabled;
+    #endregion
+
     #region Events
 
     private void OnDisable()

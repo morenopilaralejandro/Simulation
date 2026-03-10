@@ -13,7 +13,8 @@ public class WorldManager : MonoBehaviour
 
     private PlayerWorldEntity player;
     public PlayerWorldEntity PlayerWorldEntity => player;
-    private TransitionScreen transitionScreen => WorldUIManager.Instance.TransitionScreen;
+    public bool PlayerCanInteract => player.CanInteract;
+    public bool PlayerCanOpenMenu => player.CanOpenMenu;
 
     [SerializeField] private OverworldDefinition overworldDefinition;
     public OverworldDefinition OverworldDefinition => overworldDefinition;
@@ -25,6 +26,7 @@ public class WorldManager : MonoBehaviour
     public ZoneDefinition CurrentZone => _currentZone;
 
     private string _pendingSpawnId;
+    private TransitionScreen transitionScreen => WorldUIManager.Instance.TransitionScreen;
 
     // Guard against re-entrant transitions
     private bool _isTransitioning = false;

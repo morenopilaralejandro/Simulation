@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 using System;
 using System.Collections.Generic;
 using Simulation.Enums.Dialog;
+using Simulation.Enums.Input;
+using Simulation.Enums.World;
 
 /// <summary>
 /// Main entry point for the dialog system.
@@ -18,18 +20,15 @@ public class DialogManager : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private InkStoryManager _storyManager;
-    [SerializeField] private DialogUIController _uiController;
     [SerializeField] private DialogLocalizationBridge _locBridge;
     [SerializeField] private DialogGameDataProvider _gameDataProvider;
 
-    [Header("Input")]
-    [SerializeField] private InputActionReference _confirmAction;
-    [SerializeField] private InputActionReference _cancelAction;
-
+    private DialogUIController _uiController;
     private DialogState _state = DialogState.Inactive;
     private AudioManager audioManager;
 
     public bool IsDialogActive => _state != DialogState.Inactive;
+    public bool CanAcceptInput => IsDialogActive && !_uiController.IsFading;
     public DialogGameDataProvider DialogGameDataProvider => _gameDataProvider;
 
     private void Awake()
@@ -42,12 +41,18 @@ public class DialogManager : MonoBehaviour
         Instance = this;
 
         _storyManager.Initialize(_locBridge, _gameDataProvider);
-        _uiController.Initialize(_locBridge);
     }
 
     private void Start()
     {
 
+    }
+
+    private void Update()
+    {
+        if (!CanAcceptInput) return;
+        if (InputManager.Instance.GetDown(CustomAction.Dialog_Submit))
+            SubmitPressed();
     }
 
     private void OnEnable()
@@ -63,12 +68,8 @@ public class DialogManager : MonoBehaviour
         DialogEvents.OnChoiceSelected += HandleChoiceSelected;
         DialogEvents.OnContinueRequested += HandleContinueRequested;
 
-        // Input
-        if (_confirmAction != null)
-        {
-            _confirmAction.action.Enable();
-            _confirmAction.action.performed += OnConfirmPressed;
-        }
+        DialogEvents.OnDialogMenuClosed += HandleDialogMenuClosed;
+
     }
 
     private void OnDisable()
@@ -82,10 +83,19 @@ public class DialogManager : MonoBehaviour
         DialogEvents.OnChoiceSelected -= HandleChoiceSelected;
         DialogEvents.OnContinueRequested -= HandleContinueRequested;
 
-        if (_confirmAction != null)
-        {
-            _confirmAction.action.performed -= OnConfirmPressed;
-        }
+        DialogEvents.OnDialogMenuClosed -= HandleDialogMenuClosed;
+    }
+
+    // ============ Registration ============
+    public void RegisterUIController(DialogUIController dialogUIController)
+    {
+        _uiController = dialogUIController;
+        _uiController.Initialize(_locBridge);
+    }
+
+    public void UnregisterUIController()
+    {
+        _uiController = null;
     }
 
     // ============ PUBLIC API ============
@@ -104,9 +114,13 @@ public class DialogManager : MonoBehaviour
         }
 
         _state = DialogState.Processing;
+
+        // >>> ACTION MAP SWITCH — this is the key fix <<<
+        InputManager.Instance.DisableWorldActions();
+        InputManager.Instance.EnableDialogActions();
+
         _uiController.Show();
         DialogEvents.RaiseDialogStarted();
-
         _storyManager.StartDialog(storyId, knotName);
     }
 
@@ -117,14 +131,19 @@ public class DialogManager : MonoBehaviour
     {
         _state = DialogState.Inactive;
         _uiController.Hide();
+
+        // >>> Restore action maps <<<
+        InputManager.Instance.DisableDialogActions();
+        InputManager.Instance.EnableWorldActions();
+
         DialogEvents.RaiseDialogEnded();
     }
 
     // ============ INPUT ============
 
-    private void OnConfirmPressed(InputAction.CallbackContext ctx)
+    private void SubmitPressed()
     {
-        if (!IsDialogActive) return;
+        if (!CanAcceptInput) return;
 
         switch (_state)
         {
@@ -200,8 +219,15 @@ public class DialogManager : MonoBehaviour
 
     private void HandleDialogComplete()
     {
+        if (_state == DialogState.Inactive) return; // Already completed
+
         _state = DialogState.Inactive;
         _uiController.Hide();
+
+        // >>> Restore action maps <<<
+        InputManager.Instance.DisableDialogActions();
+        InputManager.Instance.EnableWorldActions();
+
         DialogEvents.RaiseDialogEnded();
     }
 
@@ -232,9 +258,51 @@ public class DialogManager : MonoBehaviour
                 // Hook into camera system
                 break;
 
+            case "open_menu":
+                HandleOpenMenu(command.Parameters);
+                break;
+
             default:
                 LogManager.Trace($"[DialogManager] Unhandled command: {command.CommandName}");
                 break;
         }
+    }
+
+    private void HandleOpenMenu(string[] parameters)
+    {
+        // parameters[0] = menu type ("shop", "inventory", "crafting")
+        // parameters[1] = context id ("blacksmith", "potion_seller")
+        
+        string menuType = parameters[0];
+        string contextId = parameters.Length > 1 ? parameters[1] : "";
+
+        // 1. Pause the dialog
+        _storyManager.Pause();
+
+        // 2. Optionally hide the dialog box
+        _uiController.Hide();
+
+        // 3. Open the menu
+        switch (menuType)
+        {
+            case "shop":
+                //ShopManager.Instance.OpenShop(contextId);
+                break;
+            case "inventory":
+                //InventoryUI.Instance.Open();
+                break;
+            case "crafting":
+                //CraftingUI.Instance.Open(contextId);
+                break;
+        }
+    }
+
+    private void HandleDialogMenuClosed()
+    {
+        // 1. Show dialog box again
+        _uiController.Show();
+
+        // 2. Resume dialog
+        _storyManager.Resume();
     }
 }
