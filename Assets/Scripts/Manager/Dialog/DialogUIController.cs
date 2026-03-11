@@ -149,21 +149,21 @@ public class DialogUIController : MonoBehaviour
         HideChoices();
         _continueIndicator.SetActive(false);
 
-        /*
-
         // Set character info
         if (!line.IsSystemMessage && !string.IsNullOrEmpty(line.SpeakerId))
         {
-            var character = _characterDb.GetCharacter(line.SpeakerId);
-            if (character != null)
+            var speaker = DialogManager.Instance.GetSpeakerById(line.SpeakerId);
+            if (speaker != null)
             {
                 // Character name (localized)
-                _characterNameText.text = _locBridge.ResolveCharacterName(line.SpeakerId);
-                _characterNameText.color = character.nameColor;
+                //_characterNameText.text = _locBridge.ResolveCharacterName(line.SpeakerId);
+                //_characterNameText.color = character.nameColor;
+                _characterNameText.text = speaker.SpeakerName;
                 _characterNamePanel.SetActive(true);
 
                 // Portrait
-                var portrait = character.GetPortrait(line.Mood);
+                //var portrait = character.GetPortrait(line.Mood);
+                var portrait = speaker.PortraitSprite;
                 if (portrait != null)
                 {
                     _characterPortrait.sprite = portrait;
@@ -189,7 +189,6 @@ public class DialogUIController : MonoBehaviour
                 _characterNameText.text = ""; // or "System" if you want
             _portraitPanel.SetActive(false);
         }
-        */
 
         // Start typewriter
         _typewriterCoroutine = StartCoroutine(TypewriterEffect(line.ResolvedText));

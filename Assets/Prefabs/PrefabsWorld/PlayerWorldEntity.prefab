@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5161441364604645200}
   - component: {fileID: 2559223339330732102}
   - component: {fileID: 1594363760966341151}
+  - component: {fileID: 5078519338831307720}
   - component: {fileID: 8386819740559424487}
   - component: {fileID: 4834728507361033659}
   - component: {fileID: 3025819698428858400}
@@ -56,6 +57,7 @@ MonoBehaviour:
   appearanceComponent: {fileID: 7001022184778659116}
   controllerComponent: {fileID: 2559223339330732102}
   interactionComponent: {fileID: 1594363760966341151}
+  dialogComponent: {fileID: 5078519338831307720}
   modelComponent: {fileID: 8386819740559424487}
   persistenceComponent: {fileID: 4834728507361033659}
   rigidbodyComponent: {fileID: 3025819698428858400}
@@ -111,6 +113,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b8481405d956a2769ab563fd7e3bae7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5078519338831307720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5344193445462302068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18c6e1d81bdfee3bbae6ab9b885d3a7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8386819740559424487

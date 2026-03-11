@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System;
 using System.Collections.Generic;
 using Simulation.Enums.Dialog;
@@ -22,6 +21,7 @@ public class DialogManager : MonoBehaviour
     [SerializeField] private InkStoryManager _storyManager;
     [SerializeField] private DialogLocalizationBridge _locBridge;
     [SerializeField] private DialogGameDataProvider _gameDataProvider;
+    [SerializeField] private DialogSpeakerCache _speakerCache;
 
     private DialogUIController _uiController;
     private DialogState _state = DialogState.Inactive;
@@ -41,18 +41,6 @@ public class DialogManager : MonoBehaviour
         Instance = this;
 
         _storyManager.Initialize(_locBridge, _gameDataProvider);
-    }
-
-    private void Start()
-    {
-
-    }
-
-    private void Update()
-    {
-        if (!CanAcceptInput) return;
-        if (InputManager.Instance.GetDown(CustomAction.Dialog_Submit))
-            SubmitPressed();
     }
 
     private void OnEnable()
@@ -139,9 +127,12 @@ public class DialogManager : MonoBehaviour
         DialogEvents.RaiseDialogEnded();
     }
 
+    public Speaker Speaker => _speakerCache.Speaker;
+    public Speaker GetSpeakerById(string speakerId) => _speakerCache.GetSpeakerById(speakerId);
+
     // ============ INPUT ============
 
-    private void SubmitPressed()
+    public void InputPressed()
     {
         if (!CanAcceptInput) return;
 

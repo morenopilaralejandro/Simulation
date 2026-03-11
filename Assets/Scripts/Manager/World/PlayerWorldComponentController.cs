@@ -12,14 +12,12 @@ public class PlayerWorldComponentController : MonoBehaviour
     public Vector2 MoveInput { get; private set; }
     public bool IsRunning { get; private set; }
     public float DistanceTravelledSinceReset { get; private set; }
-    public bool IsEnabled => _enabled;
     public Vector2 CurrentTilePosition { get; private set; }
     public Vector3 CurrentTilePosition3d()
     {
         return new Vector3(CurrentTilePosition.x, CurrentTilePosition.y, transform.position.z);
     }
 
-    private bool _enabled = false;
     private Vector3 _velocity;
     private bool _isGridMoving;
     private Vector2 _gridMoveTarget;
@@ -53,7 +51,7 @@ public class PlayerWorldComponentController : MonoBehaviour
 
     private void Update()
     {
-        if (!_enabled) return;
+        if (!playerWorldEntity.IsControlEnabled) return;
         ReadInput();
         UpdateInputBuffer();
         UpdateAnimation();
@@ -65,7 +63,7 @@ public class PlayerWorldComponentController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_enabled) return;
+        if (!playerWorldEntity.IsControlEnabled) return;
 
         float dt = Time.fixedDeltaTime;
 
@@ -181,7 +179,7 @@ public class PlayerWorldComponentController : MonoBehaviour
                 WorldManagerEncounter.Instance.OnTileArrived(IsRunning);
 
                 // If an encounter was triggered, stop here
-                if (!_enabled) return;
+                if (!playerWorldEntity.IsControlEnabled) return;
 
                 // === INPUT BUFFER: try to chain immediately ===
                 Vector2 buffered = ConsumeBuffer();
@@ -298,8 +296,6 @@ public class PlayerWorldComponentController : MonoBehaviour
     //  PUBLIC API
     // ================================================================
 
-    public void SetControlEnabled(bool enabled) => _enabled = enabled;
-
     public void StopMovement()
     {
         if (config.gridBasedMovement)
@@ -320,7 +316,7 @@ public class PlayerWorldComponentController : MonoBehaviour
 
         MoveInput = Vector2.zero;
         ClearBuffer();
-        _enabled = false;
+        playerWorldEntity.SetControlEnabled(false);
     }
 
     public void ResetDistance() => DistanceTravelledSinceReset = 0f;

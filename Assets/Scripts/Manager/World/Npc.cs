@@ -42,6 +42,7 @@ public class Npc
     public PortraitSize PortraitSize => attributesComponent.PortraitSize;
     public Gender Gender => attributesComponent.Gender;
     // localizationComponent
+    public LocalizationComponentString LocalizationComponent => localizationStringComponent;
     public string NpcName => localizationStringComponent.GetString(LocalizationField.Name);
     // appearanceComponent
     public CharacterComponentAppearance AppearanceComponent => appearanceComponent;

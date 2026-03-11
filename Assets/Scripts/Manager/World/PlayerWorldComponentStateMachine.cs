@@ -14,6 +14,12 @@ public class PlayerWorldComponentStateMachine : MonoBehaviour
     {
         this.playerWorldEntity = playerWorldEntity;
         config = cfg;
+
+        DialogEvents.OnDialogStarted += HandleDialogStarted;
+        DialogEvents.OnDialogEnded += HandleDialogEnded;
+
+        WorldEvents.OnMenuOpened += HandleMenuOpened;
+        WorldEvents.OnMenuClosed += HandleMenuClosed;
     }
 
     public void SetState(PlayerWorldState newState)
@@ -52,19 +58,12 @@ public class PlayerWorldComponentStateMachine : MonoBehaviour
 
     #region Events
 
-    private void OnEnable()
-    {
-        DialogEvents.OnDialogStarted += HandleDialogStarted;
-        DialogEvents.OnDialogEnded += HandleDialogEnded;
-
-        WorldEvents.OnMenuOpened += HandleMenuOpened;
-        WorldEvents.OnMenuClosed -= HandleMenuClosed;
-    }
-
     private void OnDisable()
     {
-        DialogEvents.OnDialogStarted += HandleDialogStarted;
-        DialogEvents.OnDialogEnded += HandleDialogEnded;
+        DialogEvents.OnDialogStarted -= HandleDialogStarted;
+        DialogEvents.OnDialogEnded   -= HandleDialogEnded;
+        WorldEvents.OnMenuOpened     -= HandleMenuOpened;
+        WorldEvents.OnMenuClosed     -= HandleMenuClosed;
     }
 
     private void HandleDialogStarted() => SetState(PlayerWorldState.InDialogue);

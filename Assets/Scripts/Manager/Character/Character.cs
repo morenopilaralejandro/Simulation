@@ -57,6 +57,7 @@ public class Character
     public Position Position => attributesComponent.Position;
 
     // localizationComponent
+    public LocalizationComponentString LocalizationComponent => localizationStringComponent;
     public string CharacterName => localizationStringComponent.GetString(LocalizationField.Name);
     public string CharacterNick => localizationStringComponent.GetString(LocalizationField.Nick);
     public string CharacterDescription => localizationStringComponent.GetString(LocalizationField.Description);
