@@ -17,6 +17,8 @@ public class DialogLine
     /// The final resolved text after localization and variable substitution.
     /// </summary>
     public string ResolvedText { get; set; }
+
+    public DialogKit DialogKit { get; set; } = new DialogKit();
         
     public bool IsSystemMessage => SpeakerId == "system";
     public bool HasLocalization => !string.IsNullOrEmpty(LocalizationKey);

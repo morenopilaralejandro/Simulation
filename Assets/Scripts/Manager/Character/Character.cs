@@ -51,7 +51,6 @@ public class Character
     public string CharacterId => attributesComponent.CharacterId;
     public string CharacterGuid => attributesComponent.CharacterGuid;
     public CharacterSize CharacterSize => attributesComponent.CharacterSize;
-    public PortraitSize PortraitSize => attributesComponent.PortraitSize;
     public Gender Gender => attributesComponent.Gender;
     public Element Element => attributesComponent.Element;
     public Position Position => attributesComponent.Position;
@@ -125,6 +124,7 @@ public class Character
     // appearanceComponent
     public CharacterComponentAppearance AppearanceComponent => appearanceComponent;
     public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
+    public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
     public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
     public string HairStyleId => appearanceComponent.HairStyleId;
     public HairColorType HairColorType => appearanceComponent.HairColorType;

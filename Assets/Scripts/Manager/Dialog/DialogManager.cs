@@ -25,7 +25,8 @@ public class DialogManager : MonoBehaviour
 
     private DialogUIController _uiController;
     private DialogState _state = DialogState.Inactive;
-    private AudioManager audioManager;
+    private AudioManager _audioManager;
+    private InputManager _inputManager;
 
     public bool IsDialogActive => _state != DialogState.Inactive;
     public bool CanAcceptInput => IsDialogActive && !_uiController.IsFading;
@@ -41,6 +42,12 @@ public class DialogManager : MonoBehaviour
         Instance = this;
 
         _storyManager.Initialize(_locBridge, _gameDataProvider);
+    }
+
+    private void Start() 
+    {
+        _audioManager = AudioManager.Instance;
+        _inputManager = InputManager.Instance;
     }
 
     private void OnEnable()
@@ -104,8 +111,8 @@ public class DialogManager : MonoBehaviour
         _state = DialogState.Processing;
 
         // >>> ACTION MAP SWITCH — this is the key fix <<<
-        InputManager.Instance.DisableWorldActions();
-        InputManager.Instance.EnableDialogActions();
+        _inputManager.DisableWorldActions();
+        _inputManager.EnableDialogActions();
 
         _uiController.Show();
         DialogEvents.RaiseDialogStarted();
@@ -121,14 +128,14 @@ public class DialogManager : MonoBehaviour
         _uiController.Hide();
 
         // >>> Restore action maps <<<
-        InputManager.Instance.DisableDialogActions();
-        InputManager.Instance.EnableWorldActions();
+        _inputManager.DisableDialogActions();
+        _inputManager.EnableWorldActions();
 
         DialogEvents.RaiseDialogEnded();
     }
 
     public Speaker Speaker => _speakerCache.Speaker;
-    public Speaker GetSpeakerById(string speakerId) => _speakerCache.GetSpeakerById(speakerId);
+    public Speaker GetSpeaker(DialogLine dialogLine) => _speakerCache.GetSpeaker(dialogLine);
 
     // ============ INPUT ============
 
@@ -216,8 +223,8 @@ public class DialogManager : MonoBehaviour
         _uiController.Hide();
 
         // >>> Restore action maps <<<
-        InputManager.Instance.DisableDialogActions();
-        InputManager.Instance.EnableWorldActions();
+        _inputManager.DisableDialogActions();
+        _inputManager.EnableWorldActions();
 
         DialogEvents.RaiseDialogEnded();
     }
@@ -229,7 +236,7 @@ public class DialogManager : MonoBehaviour
         switch (command.CommandName)
         {
             case "sfx":
-                audioManager.PlaySfx(command.Parameters[0]);
+                _audioManager.PlaySfx(command.Parameters[0]);
                 break;
 
             case "anim":
@@ -251,6 +258,10 @@ public class DialogManager : MonoBehaviour
 
             case "open_menu":
                 HandleOpenMenu(command.Parameters);
+                break;
+            
+            case "clear_cache_speaker":
+                _speakerCache.ClearCache();
                 break;
 
             default:

@@ -23,6 +23,7 @@ public class DialogUIController : MonoBehaviour
     [SerializeField] private Image _characterPortrait;
     [SerializeField] private GameObject _characterNamePanel;
     [SerializeField] private GameObject _portraitPanel;
+    [SerializeField] private CharacterPortraitSpeaker _portraitSpeaker;
     [SerializeField] private GameObject _continueIndicator; // little arrow/triangle
 
     [Header("Yes/No Panel")]
@@ -42,7 +43,6 @@ public class DialogUIController : MonoBehaviour
     [SerializeField] private float _fastTypewriterSpeed = 0.005f;
     [SerializeField] private float _fadeSpeed = 0.3f;
     [SerializeField] private AudioClip _typewriterSFX;
-    [SerializeField] private AudioSource _audioSource;
     [SerializeField] private int _typewriterSFXInterval = 2; // play sfx every N characters
 
     // State
@@ -53,6 +53,8 @@ public class DialogUIController : MonoBehaviour
     private List<GameObject> _spawnedChoiceButtons = new List<GameObject>();
     private DialogLocalizationBridge _locBridge;
     private Coroutine _fadeCoroutine;
+    private AudioManager _audioManager;
+    private DialogManager _dialogManager;
 
     public bool IsVisible => _dialogBoxRoot.activeSelf;
     public bool IsTyping => _isTyping;
@@ -60,12 +62,13 @@ public class DialogUIController : MonoBehaviour
 
     private void Awake()
     {
-        DialogManager.Instance.RegisterUIController(this);
+        _dialogManager = DialogManager.Instance;
+        _dialogManager.RegisterUIController(this);
     }
 
     private void OnDestroy()
     {
-        DialogManager.Instance.UnregisterUIController();
+        _dialogManager.UnregisterUIController();
     }
 
     public void Initialize(DialogLocalizationBridge locBridge)
@@ -80,6 +83,8 @@ public class DialogUIController : MonoBehaviour
         if (_dialogBoxCanvasGroup != null)
             _dialogBoxCanvasGroup.alpha = 0f;
         _isFading = false;
+
+        _audioManager = AudioManager.Instance;
     }
 
     private int _yesChoiceIndex = 0;
@@ -152,7 +157,7 @@ public class DialogUIController : MonoBehaviour
         // Set character info
         if (!line.IsSystemMessage && !string.IsNullOrEmpty(line.SpeakerId))
         {
-            var speaker = DialogManager.Instance.GetSpeakerById(line.SpeakerId);
+            var speaker = _dialogManager.GetSpeaker(line);
             if (speaker != null)
             {
                 // Character name (localized)
@@ -166,7 +171,7 @@ public class DialogUIController : MonoBehaviour
                 var portrait = speaker.PortraitSprite;
                 if (portrait != null)
                 {
-                    _characterPortrait.sprite = portrait;
+                    _portraitSpeaker.SetSpeaker(speaker);
                     _portraitPanel.SetActive(true);
                 }
                 else
@@ -316,10 +321,9 @@ public class DialogUIController : MonoBehaviour
 
             // Typewriter sound
             sfxCounter++;
-            if (_typewriterSFX != null && _audioSource != null
-                && sfxCounter >= _typewriterSFXInterval)
+            if (_typewriterSFX != null && sfxCounter >= _typewriterSFXInterval)
             {
-                _audioSource.PlayOneShot(_typewriterSFX);
+                _audioManager.PlaySfxClip(_typewriterSFX);
                 sfxCounter = 0;
             }
 

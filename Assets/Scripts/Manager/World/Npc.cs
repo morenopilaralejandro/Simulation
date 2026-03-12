@@ -39,7 +39,6 @@ public class Npc
     #region API
     // attributesComponent
     public string NpcId => attributesComponent.NpcId;
-    public PortraitSize PortraitSize => attributesComponent.PortraitSize;
     public Gender Gender => attributesComponent.Gender;
     // localizationComponent
     public LocalizationComponentString LocalizationComponent => localizationStringComponent;
@@ -48,6 +47,7 @@ public class Npc
     public CharacterComponentAppearance AppearanceComponent => appearanceComponent;
     public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
     public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
+    public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
     public string HairStyleId => appearanceComponent.HairStyleId;
     public HairColorType HairColorType => appearanceComponent.HairColorType;
     public EyeColorType EyeColorType => appearanceComponent.EyeColorType;

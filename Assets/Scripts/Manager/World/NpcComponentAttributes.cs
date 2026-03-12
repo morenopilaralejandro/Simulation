@@ -4,7 +4,6 @@ using Simulation.Enums.Character;
 public class NpcComponentAttributes
 {
     public string NpcId  { get; private set; }
-    public PortraitSize PortraitSize { get; private set; }
     public Gender Gender { get; private set; }
 
     public NpcComponentAttributes(NpcData npcData)
@@ -15,7 +14,6 @@ public class NpcComponentAttributes
     public void Initialize(NpcData npcData)
     {
         NpcId = npcData.NpcId;
-        PortraitSize = npcData.PortraitSize;
         Gender = npcData.Gender;
     }
 }

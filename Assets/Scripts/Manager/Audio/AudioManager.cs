@@ -69,6 +69,19 @@ public class AudioManager : MonoBehaviour
         src.PlayOneShot(clip);
     }
 
+    public void PlaySfxClip(AudioClip clip)
+    {
+        if (clip == null)
+        {
+            LogManager.Error($"[AudioManager] Failed to load clip");
+            return;
+        }
+
+        var src = sourceSfx;
+        src.spatialBlend = 0f;
+        src.PlayOneShot(clip);
+    }
+
     public async void PlaySfxLoop(string address)
     {
         if (sourceSfxLoop.isPlaying && 

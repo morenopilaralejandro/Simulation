@@ -4,85 +4,101 @@ using System.Collections.Generic;
 public class DialogSpeakerCache : MonoBehaviour
 {
     private const int CACHE_SIZE = 5;
-    private Dictionary<string, Speaker> speakerCacheDict = new Dictionary<string, Speaker>();
+
+    // LRU cache: LinkedList for order tracking + Dictionary for O(1) lookup
+    private readonly Dictionary<string, LinkedListNode<KeyValuePair<string, Speaker>>> speakerCacheDict
+        = new Dictionary<string, LinkedListNode<KeyValuePair<string, Speaker>>>(CACHE_SIZE);
+    private readonly LinkedList<KeyValuePair<string, Speaker>> lruList
+        = new LinkedList<KeyValuePair<string, Speaker>>();
+
+    // Reusable objects to avoid per-resolve allocations
+    private Character reusableCharacter;
+    private Npc reusableNpc;
 
     private Speaker speaker;
     public Speaker Speaker => speaker;
 
-    public Speaker GetSpeakerById(string speakerId)
+    public Speaker GetSpeaker(DialogLine dialogLine)
     {
-        // Try to get from cache first
-        if (speakerCacheDict.TryGetValue(speakerId, out Speaker cachedSpeaker))
+        if (speakerCacheDict.TryGetValue(dialogLine.SpeakerId, out var node))
         {
-            speaker = cachedSpeaker;
+            // Move to front (most recently used)
+            lruList.Remove(node);
+            lruList.AddFirst(node);
+            speaker = node.Value.Value;
             return speaker;
         }
 
-        // If not in cache, resolve and cache it
-        speaker = ResolveSpeaker(speakerId);
+        speaker = ResolveSpeaker(dialogLine);
         return speaker;
     }
 
-    private Speaker ResolveSpeaker(string speakerId)
+    private Speaker ResolveSpeaker(DialogLine dialogLine)
     {
-        // Try Character first
-        Character character = new Character(CharacterManager.Instance.GetCharacterData(speakerId));
-        if (character != null)
+        CharacterData characterData = CharacterManager.Instance.GetCharacterData(dialogLine.SpeakerId);
+        if (characterData != null)
         {
+            reusableCharacter = new Character(characterData);
+
             return AddToCache(
-                character.CharacterId,
-                character.LocalizationComponent,
-                character.AppearanceComponent
+                reusableCharacter.CharacterId,
+                reusableCharacter.LocalizationComponent,
+                reusableCharacter.AppearanceComponent,
+                dialogLine.DialogKit
             );
         }
 
-        // Fall back to NPC
-        Npc npc = new Npc(NpcManager.Instance.GetNpcData(speakerId));
-        if (npc != null)
+        NpcData npcData = NpcManager.Instance.GetNpcData(dialogLine.SpeakerId);
+        if (npcData != null)
         {
+            reusableNpc = new Npc(npcData);
+
             return AddToCache(
-                npc.NpcId,
-                npc.LocalizationComponent,
-                npc.AppearanceComponent
+                reusableNpc.NpcId,
+                reusableNpc.LocalizationComponent,
+                reusableNpc.AppearanceComponent,
+                dialogLine.DialogKit
             );
         }
 
-        Debug.LogWarning($"[DialogSpeakerCache] No Character or NPC found for speakerId: {speakerId}");
+        // Avoid string interpolation allocation in non-error path
+        LogManager.Error(string.Concat("[DialogSpeakerCache] No Character or NPC found for speakerId: ", dialogLine.SpeakerId));
         return null;
     }
 
     private Speaker AddToCache(
         string id,
         LocalizationComponentString localizationComponent,
-        CharacterComponentAppearance appearanceComponent)
+        CharacterComponentAppearance appearanceComponent,
+        DialogKit dialogKit)
     {
-        // Evict oldest entry if cache is full
+        // Evict LRU entry if cache is full
         if (speakerCacheDict.Count >= CACHE_SIZE)
         {
             EvictOldestEntry();
         }
 
-        Speaker newSpeaker = new Speaker(id, localizationComponent, appearanceComponent);
-        speakerCacheDict[id] = newSpeaker;
+        Speaker newSpeaker = new Speaker(id, localizationComponent, appearanceComponent, dialogKit);
+        var kvp = new KeyValuePair<string, Speaker>(id, newSpeaker);
+        var node = lruList.AddFirst(kvp);
+        speakerCacheDict[id] = node;
         return newSpeaker;
     }
 
     private void EvictOldestEntry()
     {
-        // Dictionary doesn't guarantee order, so we use an enumerator to remove the first entry
-        // For a proper LRU cache, consider using a LinkedList + Dictionary combo
-        using (var enumerator = speakerCacheDict.GetEnumerator())
+        var lastNode = lruList.Last;
+        if (lastNode != null)
         {
-            if (enumerator.MoveNext())
-            {
-                speakerCacheDict.Remove(enumerator.Current.Key);
-            }
+            speakerCacheDict.Remove(lastNode.Value.Key);
+            lruList.RemoveLast();
         }
     }
 
     public void ClearCache()
     {
         speakerCacheDict.Clear();
+        lruList.Clear();
         speaker = null;
     }
 }

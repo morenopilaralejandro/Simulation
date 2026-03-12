@@ -6,7 +6,6 @@ public class CharacterComponentAttributes
     public string CharacterId { get; private set; }
     public string CharacterGuid { get; private set; }
     public CharacterSize CharacterSize { get; private set; }
-    public PortraitSize PortraitSize { get; private set; }
     public Gender Gender { get; private set; }
     public Element Element { get; private set; }
     public Position Position { get; private set; }
@@ -20,7 +19,6 @@ public class CharacterComponentAttributes
     {
         CharacterId = characterData.CharacterId;
         CharacterSize = characterData.CharacterSize;
-        PortraitSize = characterData.PortraitSize;
         Gender = characterData.Gender;
         Element = characterData.Element;
         Position = characterData.Position;
