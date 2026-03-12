@@ -17,9 +17,9 @@ public class GoalManager : MonoBehaviour
     private float shootDistance = 4f;
     private float shootDistanceFull = 4f;
     private float shootDistanceMini = 2.5f;
-    private Dictionary<TeamSide, Goal> goals = new ();
-    private Dictionary<TeamSide, CharacterEntityBattle> keepers = new ();
-    
+    private Dictionary<TeamSide, Goal> goals = new();
+    private Dictionary<TeamSide, CharacterEntityBattle> keepers = new();
+
     public Dictionary<TeamSide, Goal> Goals => goals;
     public Dictionary<TeamSide, CharacterEntityBattle> Keepers => keepers;
 
@@ -64,80 +64,125 @@ public class GoalManager : MonoBehaviour
         }
     }
 
-    public void Reset() 
+    public void Reset()
     {
         goals.Clear();
         keepers.Clear();
     }
 
-    public void SetGoal(Goal goal) 
+    public void SetGoal(Goal goal)
     {
         goals[goal.TeamSide] = goal;
     }
 
-    public void SetKeeper(CharacterEntityBattle character, TeamSide teamSide) 
+    public void SetKeeper(CharacterEntityBattle character, TeamSide teamSide)
     {
         keepers[teamSide] = character;
     }
 
+    public bool HasGoal(TeamSide side)
+    {
+        return goals.ContainsKey(side);
+    }
+
+    public bool HasKeeper(TeamSide side)
+    {
+        return keepers.ContainsKey(side);
+    }
+
     public Goal GetOwnGoal(CharacterEntityBattle character)
     {
-        return goals[character.TeamSide];  
+        if (goals.TryGetValue(character.TeamSide, out Goal goal))
+            return goal;
+
+        LogManager.Warning($"[GoalManager] No goal found for team side: {character.TeamSide}");
+        return null;
     }
 
     public Goal GetOpponentGoal(CharacterEntityBattle character)
     {
-        return goals[character.GetOpponentSide()];
+        TeamSide opponentSide = character.GetOpponentSide();
+
+        if (goals.TryGetValue(opponentSide, out Goal goal))
+            return goal;
+
+        LogManager.Warning($"[GoalManager] No goal found for opponent side: {opponentSide}");
+        return null;
     }
 
     public float GetDistanceToOwnGoal(CharacterEntityBattle character)
     {
-        Transform goal = GetOwnGoal(character).transform;
-        return Vector3.Distance(character.transform.position, goal.position);
+        Goal goal = GetOwnGoal(character);
+        if (goal == null) return float.MaxValue;
+
+        return Vector3.Distance(character.transform.position, goal.transform.position);
     }
 
     public float GetDistanceToOwnGoalX(CharacterEntityBattle character)
     {
-        Transform goal = GetOwnGoal(character).transform;
-        return Mathf.Abs(character.transform.position.x - goal.position.x);
+        Goal goal = GetOwnGoal(character);
+        if (goal == null) return float.MaxValue;
+
+        return Mathf.Abs(character.transform.position.x - goal.transform.position.x);
     }
 
     public float GetDistanceToOwnGoalZ(CharacterEntityBattle character)
     {
-        Transform goal = GetOwnGoal(character).transform;
-        return Mathf.Abs(character.transform.position.z - goal.position.z);
+        Goal goal = GetOwnGoal(character);
+        if (goal == null) return float.MaxValue;
+
+        return Mathf.Abs(character.transform.position.z - goal.transform.position.z);
     }
 
     public float GetDistanceToOpponentGoal(CharacterEntityBattle character)
     {
-        Transform goal = GetOpponentGoal(character).transform;
-        return Vector3.Distance(character.transform.position, goal.position);
+        Goal goal = GetOpponentGoal(character);
+        if (goal == null) return float.MaxValue;
+
+        return Vector3.Distance(character.transform.position, goal.transform.position);
     }
 
     public float GetDistanceToOpponentGoalX(CharacterEntityBattle character)
     {
-        Transform goal = GetOpponentGoal(character).transform;
-        return Mathf.Abs(character.transform.position.x - goal.position.x);
+        Goal goal = GetOpponentGoal(character);
+        if (goal == null) return float.MaxValue;
+
+        return Mathf.Abs(character.transform.position.x - goal.transform.position.x);
     }
 
     public float GetDistanceToOpponentGoalZ(CharacterEntityBattle character)
     {
-        Transform goal = GetOpponentGoal(character).transform;
-        return Mathf.Abs(character.transform.position.z - goal.position.z);
+        Goal goal = GetOpponentGoal(character);
+        if (goal == null) return float.MaxValue;
+
+        return Mathf.Abs(character.transform.position.z - goal.transform.position.z);
     }
 
     public CharacterEntityBattle GetOwnKeeper(CharacterEntityBattle character)
     {
-        return keepers[character.TeamSide];
+        if (keepers.TryGetValue(character.TeamSide, out CharacterEntityBattle keeper))
+            return keeper;
+
+        LogManager.Warning($"[GoalManager] No keeper found for team side: {character.TeamSide}");
+        return null;
     }
 
     public CharacterEntityBattle GetOpponentKeeper(CharacterEntityBattle character)
     {
-        return keepers[character.GetOpponentSide()];
+        TeamSide opponentSide = character.GetOpponentSide();
+
+        if (keepers.TryGetValue(opponentSide, out CharacterEntityBattle keeper))
+            return keeper;
+
+        LogManager.Warning($"[GoalManager] No keeper found for opponent side: {opponentSide}");
+        return null;
     }
 
     public bool IsInOwnPenaltyArea(CharacterEntityBattle character)
     {
+        Goal goal = GetOwnGoal(character);
+        if (goal == null) return false;
+
         float distanceX = GetDistanceToOwnGoalX(character);
         float distanceZ = GetDistanceToOwnGoalZ(character);
         return distanceX <= keeperGoalDistanceX && distanceZ <= keeperGoalDistanceZ;
@@ -145,13 +190,16 @@ public class GoalManager : MonoBehaviour
 
     public bool IsInShootDistance(CharacterEntityBattle character)
     {
+        Goal goal = GetOpponentGoal(character);
+        if (goal == null) return false;
+
         float distance = GetDistanceToOpponentGoalZ(character);
         return distance <= shootDistance;
     }
 
     #region Gizmos
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if (goals == null || goals.Count == 0)
@@ -204,7 +252,7 @@ public class GoalManager : MonoBehaviour
             Gizmos.DrawWireCube(shootCenter, shootSize);
         }
     }
-    #endif
+#endif
 
     #endregion
 }

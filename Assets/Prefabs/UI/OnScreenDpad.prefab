@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 7303887388474096195}
   - component: {fileID: 7331207567404462875}
   - component: {fileID: 5938736325724045477}
+  - component: {fileID: 174906345253000353}
   m_Layer: 5
   m_Name: OnScreenDpad
   m_TagString: Untagged
@@ -402,8 +403,24 @@ MonoBehaviour:
   imgDown: {fileID: 7234536363796612966}
   imgLeft: {fileID: 6943768899435482291}
   imgRight: {fileID: 6796820197462975201}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  pressedColor: {r: 1, g: 1, b: 1, a: 0.47058824}
+  normalTint: {r: 1, g: 1, b: 1, a: 1}
+  pressedTint: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+--- !u!114 &174906345253000353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7721604581557889968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388295c9e9700def8867a159e6e4c362, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultScale: 0.3
+  defaultOpacity: 0.5
+  currentScale: 0.01
+  currentOpacity: 0
 --- !u!1 &8113469792765671974
 GameObject:
   m_ObjectHideFlags: 0
