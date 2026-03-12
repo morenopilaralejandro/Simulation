@@ -21,6 +21,7 @@ public class PlayerWorldEntity : MonoBehaviour
     [SerializeField] private CharacterComponentAppearanceWorld appearanceComponent;
     [SerializeField] private PlayerWorldComponentController controllerComponent;
     [SerializeField] private PlayerWorldComponentInteraction interactionComponent;
+    [SerializeField] private PlayerWorldComponentDialog dialogComponent;
     [SerializeField] private PlayerWorldComponentModel modelComponent;
     [SerializeField] private PlayerWorldComponentPersistence persistenceComponent;
     [SerializeField] private PlayerWorldComponentRigidbody rigidbodyComponent;
@@ -52,6 +53,8 @@ public class PlayerWorldEntity : MonoBehaviour
         appearanceComponent.Initialize(character.AppearanceComponent, this);
         controllerComponent.Initialize(this, config);
         interactionComponent.Initialize(this, config);
+        dialogComponent.Initialize(this, config);
+        SetDialogEnabled(false);
         modelComponent.Initialize(this, config);
         persistenceComponent.Initialize(this, config);
         rigidbodyComponent.Initialize(this);
@@ -59,6 +62,18 @@ public class PlayerWorldEntity : MonoBehaviour
 
         BattleEvents.OnBattleStart += HandleBattleStart;
         BattleEvents.OnBattleEnd += HandleBattleEnd;
+
+        DialogEvents.OnDialogStarted += HandleDialogStarted;
+        DialogEvents.OnDialogEnded += HandleDialogEnded;
+    }
+
+    private void OnDestroy()
+    {
+        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+
+        DialogEvents.OnDialogStarted -= HandleDialogStarted;
+        DialogEvents.OnDialogEnded -= HandleDialogEnded;
     }
 
     #endregion
@@ -73,19 +88,21 @@ public class PlayerWorldEntity : MonoBehaviour
 
     //appearanceComponent
     //controllerComponent
+    private bool isControlEnabled;
+    public bool IsControlEnabled => isControlEnabled;
+    public void SetControlEnabled(bool enable) => isControlEnabled = enable;
     public bool IsMoving => controllerComponent.IsMoving;
     public Vector2 MoveInput => controllerComponent.MoveInput;
     public bool IsRunning => controllerComponent.IsRunning;
     public float DistanceTravelledSinceReset => controllerComponent.DistanceTravelledSinceReset;
-    public void SetControlEnabled(bool value) => controllerComponent.SetControlEnabled(value);
     public void StopMovement() => controllerComponent.StopMovement();
     public void ResetDistance() => controllerComponent.ResetDistance();
-    public bool IsEnabled => controllerComponent.IsEnabled;
     public Vector2 CurrentTilePosition => controllerComponent.CurrentTilePosition;
     public Vector3 CurrentTilePosition3d() => controllerComponent.CurrentTilePosition3d();
-
     //interactionComponent
     public Interactable CurrentInteractionTarget => interactionComponent.CurrentTarget;
+    //dialogComponent
+    public void SetDialogEnabled(bool enable) => dialogComponent.enabled = enable;
     //modelComponent
     public FacingDirection FacingDirection => modelComponent.FacingDirection;
     public void SetFacing(Vector2 input) => modelComponent.SetFacing(input);
@@ -105,23 +122,26 @@ public class PlayerWorldEntity : MonoBehaviour
 
     #endregion
 
-    #region Events
+    #region API Misc
+    public bool CanInteract => PlayerWorldState == PlayerWorldState.FreeRoam && !IsMoving && IsControlEnabled;
+    public bool CanOpenMenu => PlayerWorldState == PlayerWorldState.FreeRoam && !IsMoving && IsControlEnabled;
+    #endregion
 
-    private void OnDisable()
-    {
-        BattleEvents.OnBattleStart -= HandleBattleStart;
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
-    }
+    #region Events
 
     private void SetEnable(bool enable) 
     {
         modelObject.SetActive(enable);
         collidersObject.SetActive(enable);
         controllerComponent.enabled = enable;
+        interactionComponent.enabled = enable;
     }
 
     private void HandleBattleStart() => SetEnable(false);
     private void HandleBattleEnd() => SetEnable(true);
+
+    private void HandleDialogStarted() => SetDialogEnabled(true);
+    private void HandleDialogEnded() => SetDialogEnabled(false);
 
     #endregion
 }

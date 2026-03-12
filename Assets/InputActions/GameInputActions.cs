@@ -1035,6 +1035,76 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""DialogActions"",
+            ""id"": ""6451fcf5-39e3-49c2-bfc2-5e96c8572274"",
+            ""actions"": [
+                {
+                    ""name"": ""Dialog_Submit"",
+                    ""type"": ""Button"",
+                    ""id"": ""d91e0159-7c35-43cd-ab06-1fe7225b526d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dialog_Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""e5285f26-1ae8-4dc9-a20f-67bdc7e77827"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""39974327-94af-4968-aa11-6d3768ba0cef"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dialog_Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""739d0939-2b59-4217-8e50-01d19201ca75"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dialog_Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""40dae726-f467-469e-9aac-ee7bcab6329d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dialog_Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""74e355a8-e8a3-430c-b4b4-5bba01848448"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dialog_Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -1072,6 +1142,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_WorldActions_World_CloseSideMenu = m_WorldActions.FindAction("World_CloseSideMenu", throwIfNotFound: true);
         m_WorldActions_World_OpenPauseMenu = m_WorldActions.FindAction("World_OpenPauseMenu", throwIfNotFound: true);
         m_WorldActions_World_ClosePauseMenu = m_WorldActions.FindAction("World_ClosePauseMenu", throwIfNotFound: true);
+        // DialogActions
+        m_DialogActions = asset.FindActionMap("DialogActions", throwIfNotFound: true);
+        m_DialogActions_Dialog_Submit = m_DialogActions.FindAction("Dialog_Submit", throwIfNotFound: true);
+        m_DialogActions_Dialog_Cancel = m_DialogActions.FindAction("Dialog_Cancel", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -1079,6 +1153,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_BattleActions.enabled, "This will cause a leak and performance issues, GameInputActions.BattleActions.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_BattleUIActions.enabled, "This will cause a leak and performance issues, GameInputActions.BattleUIActions.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_WorldActions.enabled, "This will cause a leak and performance issues, GameInputActions.WorldActions.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_DialogActions.enabled, "This will cause a leak and performance issues, GameInputActions.DialogActions.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1702,6 +1777,113 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="WorldActionsActions" /> instance referencing this action map.
     /// </summary>
     public WorldActionsActions @WorldActions => new WorldActionsActions(this);
+
+    // DialogActions
+    private readonly InputActionMap m_DialogActions;
+    private List<IDialogActionsActions> m_DialogActionsActionsCallbackInterfaces = new List<IDialogActionsActions>();
+    private readonly InputAction m_DialogActions_Dialog_Submit;
+    private readonly InputAction m_DialogActions_Dialog_Cancel;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "DialogActions".
+    /// </summary>
+    public struct DialogActionsActions
+    {
+        private @GameInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public DialogActionsActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "DialogActions/Dialog_Submit".
+        /// </summary>
+        public InputAction @Dialog_Submit => m_Wrapper.m_DialogActions_Dialog_Submit;
+        /// <summary>
+        /// Provides access to the underlying input action "DialogActions/Dialog_Cancel".
+        /// </summary>
+        public InputAction @Dialog_Cancel => m_Wrapper.m_DialogActions_Dialog_Cancel;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_DialogActions; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="DialogActionsActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(DialogActionsActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="DialogActionsActions" />
+        public void AddCallbacks(IDialogActionsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DialogActionsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DialogActionsActionsCallbackInterfaces.Add(instance);
+            @Dialog_Submit.started += instance.OnDialog_Submit;
+            @Dialog_Submit.performed += instance.OnDialog_Submit;
+            @Dialog_Submit.canceled += instance.OnDialog_Submit;
+            @Dialog_Cancel.started += instance.OnDialog_Cancel;
+            @Dialog_Cancel.performed += instance.OnDialog_Cancel;
+            @Dialog_Cancel.canceled += instance.OnDialog_Cancel;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="DialogActionsActions" />
+        private void UnregisterCallbacks(IDialogActionsActions instance)
+        {
+            @Dialog_Submit.started -= instance.OnDialog_Submit;
+            @Dialog_Submit.performed -= instance.OnDialog_Submit;
+            @Dialog_Submit.canceled -= instance.OnDialog_Submit;
+            @Dialog_Cancel.started -= instance.OnDialog_Cancel;
+            @Dialog_Cancel.performed -= instance.OnDialog_Cancel;
+            @Dialog_Cancel.canceled -= instance.OnDialog_Cancel;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DialogActionsActions.UnregisterCallbacks(IDialogActionsActions)" />.
+        /// </summary>
+        /// <seealso cref="DialogActionsActions.UnregisterCallbacks(IDialogActionsActions)" />
+        public void RemoveCallbacks(IDialogActionsActions instance)
+        {
+            if (m_Wrapper.m_DialogActionsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="DialogActionsActions.AddCallbacks(IDialogActionsActions)" />
+        /// <seealso cref="DialogActionsActions.RemoveCallbacks(IDialogActionsActions)" />
+        /// <seealso cref="DialogActionsActions.UnregisterCallbacks(IDialogActionsActions)" />
+        public void SetCallbacks(IDialogActionsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DialogActionsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DialogActionsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="DialogActionsActions" /> instance referencing this action map.
+    /// </summary>
+    public DialogActionsActions @DialogActions => new DialogActionsActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BattleActions" which allows adding and removing callbacks.
     /// </summary>
@@ -1914,5 +2096,27 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnWorld_ClosePauseMenu(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "DialogActions" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="DialogActionsActions.AddCallbacks(IDialogActionsActions)" />
+    /// <seealso cref="DialogActionsActions.RemoveCallbacks(IDialogActionsActions)" />
+    public interface IDialogActionsActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Dialog_Submit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDialog_Submit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Dialog_Cancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDialog_Cancel(InputAction.CallbackContext context);
     }
 }

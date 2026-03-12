@@ -9,7 +9,8 @@ namespace Simulation.Enums.Localization
         Team,
         Duel_Log,
         Zone,
-        Npc
+        Npc,
+        Dialog
     }
 
     public enum LocalizationField
@@ -19,7 +20,8 @@ namespace Simulation.Enums.Localization
         Description,
         Evolution,
         Entry,
-        Speech
+        Speech,
+        Text
     }
 
     public enum LocalizationStyle

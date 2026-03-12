@@ -949,6 +949,76 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "DialogActions",
+            "id": "6451fcf5-39e3-49c2-bfc2-5e96c8572274",
+            "actions": [
+                {
+                    "name": "Dialog_Submit",
+                    "type": "Button",
+                    "id": "d91e0159-7c35-43cd-ab06-1fe7225b526d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Dialog_Cancel",
+                    "type": "Button",
+                    "id": "e5285f26-1ae8-4dc9-a20f-67bdc7e77827",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "39974327-94af-4968-aa11-6d3768ba0cef",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dialog_Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "739d0939-2b59-4217-8e50-01d19201ca75",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dialog_Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "40dae726-f467-469e-9aac-ee7bcab6329d",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dialog_Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74e355a8-e8a3-430c-b4b4-5bba01848448",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dialog_Cancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

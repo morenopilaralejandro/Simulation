@@ -42,7 +42,7 @@ public class LocalizationComponentString
         if (localizedStrings.TryGetValue(field, out var localizedString))
             return localizedString.GetLocalizedString();
 
-        Debug.LogWarning($"[LocalizationComponentString] Missing localized string for field {field}");
+        LogManager.Trace($"[LocalizationComponentString] Missing localized string for field {field}");
         return string.Empty;
     }
 
@@ -56,7 +56,7 @@ public class LocalizationComponentString
         if (localizedStrings.TryGetValue(field, out var localizedString))
             localizedString.Arguments = new object[] { args };
         else
-            Debug.LogWarning($"[LocalizationComponentString] Cannot set arguments - missing localized string for field {field}");
+            LogManager.Trace($"[LocalizationComponentString] Cannot set arguments - missing localized string for field {field}");
     }
 
 }

@@ -51,12 +51,12 @@ public class Character
     public string CharacterId => attributesComponent.CharacterId;
     public string CharacterGuid => attributesComponent.CharacterGuid;
     public CharacterSize CharacterSize => attributesComponent.CharacterSize;
-    public PortraitSize PortraitSize => attributesComponent.PortraitSize;
     public Gender Gender => attributesComponent.Gender;
     public Element Element => attributesComponent.Element;
     public Position Position => attributesComponent.Position;
 
     // localizationComponent
+    public LocalizationComponentString LocalizationComponent => localizationStringComponent;
     public string CharacterName => localizationStringComponent.GetString(LocalizationField.Name);
     public string CharacterNick => localizationStringComponent.GetString(LocalizationField.Nick);
     public string CharacterDescription => localizationStringComponent.GetString(LocalizationField.Description);
@@ -124,6 +124,7 @@ public class Character
     // appearanceComponent
     public CharacterComponentAppearance AppearanceComponent => appearanceComponent;
     public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
+    public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
     public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
     public string HairStyleId => appearanceComponent.HairStyleId;
     public HairColorType HairColorType => appearanceComponent.HairColorType;

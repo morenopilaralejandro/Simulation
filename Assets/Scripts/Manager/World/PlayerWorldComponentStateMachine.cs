@@ -14,6 +14,12 @@ public class PlayerWorldComponentStateMachine : MonoBehaviour
     {
         this.playerWorldEntity = playerWorldEntity;
         config = cfg;
+
+        DialogEvents.OnDialogStarted += HandleDialogStarted;
+        DialogEvents.OnDialogEnded += HandleDialogEnded;
+
+        WorldEvents.OnMenuOpened += HandleMenuOpened;
+        WorldEvents.OnMenuClosed += HandleMenuClosed;
     }
 
     public void SetState(PlayerWorldState newState)
@@ -49,5 +55,23 @@ public class PlayerWorldComponentStateMachine : MonoBehaviour
         WorldEvents.RaisePlayerStateChanged(previous, newState);
         LogManager.Trace($"[PlayerWorldManager] State: {previous} → {newState}");
     }
+
+    #region Events
+
+    private void OnDisable()
+    {
+        DialogEvents.OnDialogStarted -= HandleDialogStarted;
+        DialogEvents.OnDialogEnded   -= HandleDialogEnded;
+        WorldEvents.OnMenuOpened     -= HandleMenuOpened;
+        WorldEvents.OnMenuClosed     -= HandleMenuClosed;
+    }
+
+    private void HandleDialogStarted() => SetState(PlayerWorldState.InDialogue);
+    private void HandleDialogEnded() => SetState(PlayerWorldState.FreeRoam);
+
+    private void HandleMenuOpened() => SetState(PlayerWorldState.InMenu);
+    private void HandleMenuClosed() => SetState(PlayerWorldState.FreeRoam);
+
+    #endregion
 
 }

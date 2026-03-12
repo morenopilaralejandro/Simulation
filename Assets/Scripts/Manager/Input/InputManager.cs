@@ -84,10 +84,15 @@ public class InputManager : MonoBehaviour
         BindButton(input.WorldActions.World_OpenPauseMenu, CustomAction.World_OpenPauseMenu);
         BindButton(input.WorldActions.World_ClosePauseMenu, CustomAction.World_ClosePauseMenu);
 
+        //DialogActions
+        BindButton(input.DialogActions.Dialog_Submit, CustomAction.Dialog_Submit);
+        BindButton(input.DialogActions.Dialog_Cancel, CustomAction.Dialog_Cancel);
+
         // Enable once here
         input.BattleActions.Enable();
         input.BattleUIActions.Enable();
         input.WorldActions.Enable();
+        input.DialogActions.Disable();
 
         // Respond to control scheme changes (requires a PlayerInput component on the same GO)
         playerInput = GetComponent<PlayerInput>();
@@ -144,9 +149,14 @@ public class InputManager : MonoBehaviour
             UnbindButton(input.WorldActions.World_OpenPauseMenu);
             UnbindButton(input.WorldActions.World_ClosePauseMenu);
 
+            //DialogActions
+            UnbindButton(input.DialogActions.Dialog_Submit);
+            UnbindButton(input.DialogActions.Dialog_Cancel);      
+
             input.BattleActions.Disable();
             input.BattleUIActions.Disable();
             input.WorldActions.Disable();
+            input.DialogActions.Disable();
             input.Dispose();
         }
 
@@ -343,6 +353,49 @@ public class InputManager : MonoBehaviour
             playerInput.ActivateInput();
 
         LogManager.Trace("[InputManager] Input unlocked");
+    }
+    #endregion
+
+    #region Map switch
+    public void DisableWorldActions()
+    {
+        input.WorldActions.Disable();
+        moveWorld = Vector2.zero;
+        LogManager.Trace("[InputManager] WorldActions disabled");
+    }
+
+    public void EnableWorldActions()
+    {
+        input.WorldActions.Enable();
+        // Clear any stale button state from before the disable
+        ClearWorldButtonStates();
+        LogManager.Trace("[InputManager] WorldActions enabled");
+    }
+
+    private void ClearWorldButtonStates()
+    {
+        buttons[(int)CustomAction.World_Interact].SetUp();
+        buttons[(int)CustomAction.World_Submit].SetUp();
+        buttons[(int)CustomAction.World_Cancel].SetUp();
+        buttons[(int)CustomAction.World_Run].SetUp();
+        buttons[(int)CustomAction.World_OpenSideMenu].SetUp();
+        buttons[(int)CustomAction.World_CloseSideMenu].SetUp();
+        buttons[(int)CustomAction.World_OpenPauseMenu].SetUp();
+        buttons[(int)CustomAction.World_ClosePauseMenu].SetUp();
+    }
+
+    public void EnableDialogActions()
+    {
+        input.DialogActions.Enable();
+        LogManager.Trace("[InputManager] DialogActions enabled");
+    }
+
+    public void DisableDialogActions()
+    {
+        input.DialogActions.Disable();
+        buttons[(int)CustomAction.Dialog_Submit].SetUp();
+        buttons[(int)CustomAction.Dialog_Cancel].SetUp();
+        LogManager.Trace("[InputManager] DialogActions disabled");
     }
     #endregion
 }

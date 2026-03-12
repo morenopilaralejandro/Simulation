@@ -32,9 +32,7 @@ public class PlayerWorldComponentInteraction : MonoBehaviour
 
     private void Update()
     {
-        if (playerWorldEntity == null) return;
-        if (!playerWorldEntity.IsEnabled) return;
-        if (playerWorldEntity.PlayerWorldState != PlayerWorldState.FreeRoam) return;
+        if (!playerWorldEntity.CanInteract) return;
 
         _frameCounter++;
         if (_frameCounter >= config.detectionInterval)

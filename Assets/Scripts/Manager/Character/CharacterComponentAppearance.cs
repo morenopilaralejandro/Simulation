@@ -17,6 +17,7 @@ public class CharacterComponentAppearance
 
     public SpriteLayerState<CharacterSpriteLayer> State { get; set; }
     public Sprite PortraitSprite { get; set; }
+    public PortraitSize PortraitSize { get; private set; }
 
     #endregion
 
@@ -33,6 +34,7 @@ public class CharacterComponentAppearance
         HairColorType = characterData.HairColorType;
         EyeColorType = characterData.EyeColorType;
         BodyColorType = characterData.BodyColorType;
+        PortraitSize = characterData.PortraitSize;
 
         State = new SpriteLayerState<CharacterSpriteLayer>();
 
@@ -52,10 +54,12 @@ public class CharacterComponentAppearance
         HairColorType = data.HairColorType;
         EyeColorType = data.EyeColorType;
         BodyColorType = data.BodyColorType;
+        PortraitSize = data.PortraitSize;
 
         State = new SpriteLayerState<CharacterSpriteLayer>();
 
         ApplyColors();
+        PortraitSprite = data.PortraitSprite;
         await LoadAsync();
     }
 
