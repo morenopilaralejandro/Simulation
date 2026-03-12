@@ -1,188 +1,160 @@
 using UnityEngine;
-using UnityEngine.UI;
 using Simulation.Enums.Input;
-
-/// <summary>
-/// Manages the scaling and opacity of the joystick and buttons.
-/// </summary>
 
 public class OnScreenControlsManager : MonoBehaviour
 {
-    [Header("References")]
+    #region Fields
+
+    [Header("Root")]
     [SerializeField] private GameObject onScreenControlsRoot;
 
+    [Header("Directional Input GameObjects (for show/hide)")]
     [SerializeField] private GameObject joystickObject;
     [SerializeField] private GameObject dpadObject;
 
-    [SerializeField] private RectTransform onScreenJoystick;
-    [SerializeField] private RectTransform onScreenButtons;
-
-    [Header("Default Scales")]
-    [SerializeField] private float joystickDefaultScale = 0.18f;
-    [SerializeField] private float buttonsDefaultScale = 0.2f;
-    [SerializeField] private float joystickDefaultOpacity = 1f;
-    [SerializeField] private float buttonsDefaultOpacity = 1f;
-
-    [Header("Current Settings (Runtime)")]
-    [Range(0.01f, 0.5f)] public float joystickScale = 0.18f;
-    [Range(0.01f, 0.5f)] public float buttonsScale = 0.2f;
-    [Range(0f, 1f)] public float joystickOpacity = 1f;
-    [Range(0f, 1f)] public float buttonsOpacity = 1f;
+    [Header("Control Groups")]
+    [SerializeField] private OnScreenControlGroup joystickGroup;
+    [SerializeField] private OnScreenControlGroup dpadGroup;
+    [SerializeField] private OnScreenControlGroup buttonsGroup;
+    [SerializeField] private OnScreenControlGroup shoulderGroup;
+    [SerializeField] private OnScreenControlGroup miscGroup;
 
     private DirectionalInputMode directionalInputMode = DirectionalInputMode.Dpad;
     public DirectionalInputMode DirectionalInputMode => directionalInputMode;
 
+    // Collect all groups for bulk operations
+    private OnScreenControlGroup[] allGroups;
+
+    #endregion
+
+    #region Lifecycle
 
     private void Awake()
     {
-        if (onScreenJoystick == null) 
-            onScreenJoystick = transform.Find("OnScreenJoystick")?.GetComponent<RectTransform>();
-        
-        if (onScreenButtons == null) 
-            onScreenButtons = transform.Find("OnScreenButtons")?.GetComponent<RectTransform>();
+        allGroups = new[]
+        {
+            joystickGroup,
+            dpadGroup,
+            buttonsGroup,
+            shoulderGroup,
+            miscGroup
+        };
 
         InputManager.Instance.RegisterScreenControls(onScreenControlsRoot);
         ShowDpadOnly();
     }
 
-    private void OnDestroy() 
+    private void OnDestroy()
     {
         InputManager.Instance?.UnregisterScreenControls();
     }
 
-    #region Scale Controls
-    public void SetJoystickScale(float scale)
+    private void OnEnable()
     {
-        joystickScale = scale;
-        if (onScreenJoystick != null)
-            onScreenJoystick.localScale = Vector3.one * scale;
+        InputEvents.OnDirectionalInputModeChanged += HandleDirectionalInputModeChanged;
     }
 
-    public void ResetJoystickScale() => SetJoystickScale(joystickDefaultScale);
-
-    public void SetButtonsScale(float scale)
+    private void OnDisable()
     {
-        buttonsScale = scale;
-        if (onScreenButtons != null)
-            onScreenButtons.localScale = Vector3.one * scale;
+        InputEvents.OnDirectionalInputModeChanged -= HandleDirectionalInputModeChanged;
     }
 
-    public void ResetButtonsScale() => SetButtonsScale(buttonsDefaultScale);
     #endregion
 
-    #region Opacity Controls
-    public void SetJoystickOpacity(float alpha)
-    {
-        joystickOpacity = alpha;
-        if (onScreenJoystick != null)
-            SetChildrenImageAlpha(onScreenJoystick, alpha);
-    }
+    #region Per-Group Accessors
 
-    public void ResetJoystickOpacity() => SetJoystickOpacity(joystickDefaultOpacity);
+    // --- Joystick ---
+    public void SetJoystickScale(float s) => joystickGroup?.SetScale(s);
+    public void SetJoystickOpacity(float a) => joystickGroup?.SetOpacity(a);
+    public void ResetJoystickScale() => joystickGroup?.ResetScale();
+    public void ResetJoystickOpacity() => joystickGroup?.ResetOpacity();
 
-    public void SetButtonsOpacity(float alpha)
-    {
-        buttonsOpacity = alpha;
-        if (onScreenButtons != null)
-            SetChildrenImageAlpha(onScreenButtons, alpha);
-    }
+    // --- Dpad ---
+    public void SetDpadScale(float s) => dpadGroup?.SetScale(s);
+    public void SetDpadOpacity(float a) => dpadGroup?.SetOpacity(a);
+    public void ResetDpadScale() => dpadGroup?.ResetScale();
+    public void ResetDpadOpacity() => dpadGroup?.ResetOpacity();
 
-    public void ResetButtonsOpacity() => SetButtonsOpacity(buttonsDefaultOpacity);
+    // --- Buttons ---
+    public void SetButtonsScale(float s) => buttonsGroup?.SetScale(s);
+    public void SetButtonsOpacity(float a) => buttonsGroup?.SetOpacity(a);
+    public void ResetButtonsScale() => buttonsGroup?.ResetScale();
+    public void ResetButtonsOpacity() => buttonsGroup?.ResetOpacity();
 
+    // --- Shoulder ---
+    public void SetShoulderScale(float s) => shoulderGroup?.SetScale(s);
+    public void SetShoulderOpacity(float a) => shoulderGroup?.SetOpacity(a);
+    public void ResetShoulderScale() => shoulderGroup?.ResetScale();
+    public void ResetShoulderOpacity() => shoulderGroup?.ResetOpacity();
 
-    private void SetChildrenImageAlpha(Transform parent, float alpha)
-    {
-        foreach (var image in parent.GetComponentsInChildren<Image>())
-        {
-            Color color = image.color;
-            color.a = alpha;
-            image.color = color;
-        }
-    }
+    // --- Misc ---
+    public void SetMiscScale(float s) => miscGroup?.SetScale(s);
+    public void SetMiscOpacity(float a) => miscGroup?.SetOpacity(a);
+    public void ResetMiscScale() => miscGroup?.ResetScale();
+    public void ResetMiscOpacity() => miscGroup?.ResetOpacity();
+
     #endregion
 
-    #region ResetAll
+    #region Bulk Operations
+
+    /// <summary>Set opacity for ALL groups at once (e.g., from a global slider).</summary>
+    public void SetAllOpacity(float alpha)
+    {
+        foreach (var g in allGroups)
+            g?.SetOpacity(alpha);
+    }
+
+    /// <summary>Set scale for ALL groups at once.</summary>
+    public void SetAllScale(float scale)
+    {
+        foreach (var g in allGroups)
+            g?.SetScale(scale);
+    }
+
     public void ResetAll()
     {
-        ResetJoystickScale();
-        ResetButtonsScale();
-        ResetJoystickOpacity();
-        ResetButtonsOpacity();
+        foreach (var g in allGroups)
+            g?.ResetAll();
     }
+
     #endregion
-    
+
     #region Visibility
-    public void HideOnScreenControls() 
+
+    public void HideOnScreenControls()
     {
         onScreenControlsRoot.SetActive(false);
     }
 
-    public void ShowOnScreenControls() 
+    public void ShowOnScreenControls()
     {
         if (InputManager.Instance)
-            InputManager.Instance.UpdateOnScreenVisibility();            
+            InputManager.Instance.UpdateOnScreenVisibility();
     }
+
     #endregion
 
     #region Directional Input Mode
 
-    /// <summary>
-    /// Switch between Joystick, DPad, or Both at runtime.
-    /// Call this from gameplay code when the context changes.
-    /// </summary>
     private void SetInputMode(DirectionalInputMode mode)
     {
         directionalInputMode = mode;
         ApplyInputMode(mode);
     }
 
-    /// <summary>Convenience shortcut – show only the joystick.</summary>
     public void ShowJoystickOnly() => SetInputMode(DirectionalInputMode.Joystick);
-
-    /// <summary>Convenience shortcut – show only the D-Pad.</summary>
     public void ShowDpadOnly() => SetInputMode(DirectionalInputMode.Dpad);
-
-    /// <summary>Convenience shortcut – show both controls.</summary>
     public void ShowBothDirectionalInput() => SetInputMode(DirectionalInputMode.Both);
 
     private void ApplyInputMode(DirectionalInputMode mode)
     {
-        switch (mode)
-        {
-            case DirectionalInputMode.Joystick:
-                joystickObject.SetActive(true);
-                dpadObject.SetActive(false);
-                break;
-
-            case DirectionalInputMode.Dpad:
-                joystickObject.SetActive(false);
-                dpadObject.SetActive(true);
-                break;
-
-            case DirectionalInputMode.Both:
-                joystickObject.SetActive(true);
-                dpadObject.SetActive(true);
-                break;
-        }
+        joystickObject.SetActive(mode == DirectionalInputMode.Joystick || mode == DirectionalInputMode.Both);
+        dpadObject.SetActive(mode == DirectionalInputMode.Dpad || mode == DirectionalInputMode.Both);
     }
 
-    #endregion
-
-    #region Event
-
-    private void OnEnable() 
+    private void HandleDirectionalInputModeChanged(DirectionalInputMode mode)
     {
-        InputEvents.OnDirectionalInputModeChanged += HandleDirectionalInputModeChanged;
-    }
-
-    private void OnDisable() 
-    {
-        InputEvents.OnDirectionalInputModeChanged -= HandleDirectionalInputModeChanged;
-    }
-
-    private void HandleDirectionalInputModeChanged(DirectionalInputMode directionalInputMode) 
-    {
-        SetInputMode(directionalInputMode);
+        SetInputMode(mode);
     }
 
     #endregion
