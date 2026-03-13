@@ -30,11 +30,14 @@ public class Team
     {
         attributesComponent = new TeamComponentAttributes(teamData, this, teamSaveData);
 
-        localizationStringComponent = new LocalizationComponentString(
-            LocalizationEntity.Team,
-            teamData.TeamId,
-            new [] { LocalizationField.Name }
-        );
+        if (teamData != null) 
+        {
+            localizationStringComponent = new LocalizationComponentString(
+                LocalizationEntity.Team,
+                teamData.TeamId,
+                new [] { LocalizationField.Name }
+            );
+        }
 
         appearanceComponent = new TeamComponentAppearance(teamData, this, teamSaveData);
         formationComponent = new TeamComponentFormation(teamData, this, teamSaveData);
@@ -57,7 +60,10 @@ public class Team
     public string TeamId => attributesComponent.TeamId;
     public string TeamGuid => attributesComponent.TeamGuid;
     //localizationComponent
-    public string TeamName => localizationStringComponent.GetString(LocalizationField.Name);
+    public string TeamName => 
+        IsCustomLoadout ? 
+            CustomName : 
+            localizationStringComponent.GetString(LocalizationField.Name);
     //appearanceComponent
     public Sprite TeamCrestSprite => appearanceComponent.TeamCrestSprite;
     //formationComponent
@@ -80,6 +86,8 @@ public class Team
     public List<CharacterData> GetCharacterDataList(BattleType battleType) => playersComponent.GetCharacterDataList(battleType);
     public List<CharacterEntityBattle> GetCharacterEntities(BattleType battleType) => playersComponent.GetCharacterEntities(battleType);
     public List<string> GetCharacterGuids(BattleType battleType) => playersComponent.GetCharacterGuids(battleType);
+    public void SetCharacterGuid(BattleType battleType, int slotIndex, string characterGuid) => playersComponent.SetCharacterGuid(battleType, slotIndex, characterGuid);
+    public void RemoveCharacterGuid(BattleType battleType, string characterGuid) => playersComponent.RemoveCharacterGuid(battleType, characterGuid);
     public void ClearCharacterEntities(BattleType battleType) => playersComponent.ClearCharacterEntities(battleType);
     public void ClearAll(BattleType battleType) => playersComponent.ClearAll(battleType);
     public int GetCharacterDataCount(BattleType battleType) => playersComponent.GetCharacterDataCount(battleType);

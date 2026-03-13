@@ -1,5 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
+using Simulation.Enums.Move;
+using Simulation.Enums.Localization;
 
 public class TeamComponentCustomLoadout
 {
@@ -16,8 +20,8 @@ public class TeamComponentCustomLoadout
     private string defaultName = "custom team";
     private string defaultCrestId = "faith";
     private string defaultKitId = "faith";
-    public string defaultBattleFormationId = "faith";
-    public string defaultMiniBattleFormationId = "faith";
+    private string defaultBattleFormationId = "faith";
+    private string defaultMiniBattleFormationId = "offense";
 
     public TeamComponentCustomLoadout(TeamData teamData, Team team, TeamSaveData teamSaveData = null)
     {
@@ -39,9 +43,9 @@ public class TeamComponentCustomLoadout
         } else 
         {
             if (teamData != null)
-                IsCustomLoadout = true;
-            else 
                 IsCustomLoadout = false;
+            else 
+                IsCustomLoadout = true;
 
             CustomName = defaultName;
             CustomCrestId = defaultCrestId;

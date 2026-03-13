@@ -24,8 +24,15 @@ public class TeamComponentFormation
             MiniBattleFormation = FormationManager.Instance.GetFormation(teamSaveData.CustomMiniBattleFormationId);
         } else 
         {
-            FullBattleFormation = FormationManager.Instance.GetFormation(teamData.FullBattleFormationId);
-            MiniBattleFormation = FormationManager.Instance.GetFormation(teamData.MiniBattleFormationId);
+            if (teamData != null) 
+            {
+                FullBattleFormation = FormationManager.Instance.GetFormation(teamData.FullBattleFormationId);
+                MiniBattleFormation = FormationManager.Instance.GetFormation(teamData.MiniBattleFormationId);
+            } else 
+            {
+                FullBattleFormation = FormationManager.Instance.GetFormation("crimson");
+                MiniBattleFormation = FormationManager.Instance.GetFormation("offense");
+            }
         }
     }
 
@@ -54,6 +61,6 @@ public class TeamComponentFormation
                 LogManager.Warning($"[TeamComponentFormation] Unknown battle type: {battleType}");
                 return;
         }
-        TeamEvents.RaiseOnFormationChanged(team, formation);
+        TeamEvents.RaiseFormationChanged(team, formation);
     }
 }

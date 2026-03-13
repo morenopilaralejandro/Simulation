@@ -62,4 +62,41 @@ public class BattleTeamManager : MonoBehaviour
     {
         teams.Clear();
     }
+
+    public Team ResolveTeamForSide(TeamSide side)
+    {
+        string teamId = null;
+        string teamGuid = null;
+        
+        if (side == TeamSide.Home) 
+        {
+            teamId = BattleArgs.HomeTeamId;
+            teamGuid = BattleArgs.HomeTeamGuid;
+        } else 
+        {
+            teamId = BattleArgs.AwayTeamId;
+            teamGuid = BattleArgs.AwayTeamGuid;
+        }
+
+        bool usesLoadout = teamGuid != null;
+
+        if (usesLoadout)
+            return CreateTeamFromLoadout(teamGuid, side);
+        else
+            return CreateTeamFromData(teamId);
+    }
+
+    private Team CreateTeamFromLoadout(string teamGuid, TeamSide side)
+    {
+        // Different for each user depending on the side
+        Team team = TeamLoadoutManager.Instance.GetLoadout(teamGuid);
+        return team;
+    }
+
+    private Team CreateTeamFromData(string teamId)
+    {
+        Team team = TeamManager.Instance.GetTeam(teamId);
+        return team;
+    }
+
 }

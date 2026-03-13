@@ -15,7 +15,13 @@ public class TeamComponentLevels
     public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
-        this.Level = teamData.Lv;
+        if (teamData != null) 
+        {
+            this.Level = teamData.Lv;
+        } else 
+        {
+            this.Level = 1;
+        }
     }
 
 }

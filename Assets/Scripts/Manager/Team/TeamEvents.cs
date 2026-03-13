@@ -32,14 +32,38 @@ public static class TeamEvents
     }
 
     public static event Action<Team, Formation> OnFormationChanged;
-    public static void RaiseOnFormationChanged(Team team, Formation formation)
+    public static void RaiseFormationChanged(Team team, Formation formation)
     {
         OnFormationChanged?.Invoke(team, formation);
     }
 
     public static event Action<Team, Kit> OnKitChanged;
-    public static void RaiseOnKitChanged(Team team, Kit kit)
+    public static void RaiseKitChanged(Team team, Kit kit)
     {
         OnKitChanged?.Invoke(team, kit);
+    }
+
+    public static event Action<Team> OnLoadoutCreated;
+    public static void RaiseLoadoutCreated(Team team)
+    {
+        OnLoadoutCreated?.Invoke(team);
+    }
+
+    public static event Action<Team> OnLoadoutDeleted;
+    public static void RaiseLoadoutDeleted(Team team)
+    {
+        OnLoadoutDeleted?.Invoke(team);
+    }
+
+    public static event Action<Team> OnLoadoutUpdated;
+    public static void RaiseLoadoutUpdated(Team team)
+    {
+        OnLoadoutUpdated?.Invoke(team);
+    }
+
+    public static event Action<Team> OnActiveLoadoutChanged;
+    public static void RaiseActiveLoadoutChanged(Team team)
+    {
+        OnActiveLoadoutChanged?.Invoke(team);
     }
 }

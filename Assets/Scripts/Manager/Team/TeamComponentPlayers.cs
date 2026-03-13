@@ -34,8 +34,11 @@ public class TeamComponentPlayers
         
         if (teamSaveData == null) 
         {
-            PopulateFromData(FullBattleCharacterDataList, teamData.FullBattleCharacterIds);
-            PopulateFromData(MiniBattleCharacterDataList, teamData.MiniBattleCharacterIds);
+            if (teamData != null) 
+            {
+                PopulateFromData(FullBattleCharacterDataList, teamData.FullBattleCharacterIds);
+                PopulateFromData(MiniBattleCharacterDataList, teamData.MiniBattleCharacterIds);                
+            }
         }
         else
         {
@@ -113,6 +116,24 @@ public class TeamComponentPlayers
             BattleType.Mini => MiniBattleCharacterGuids,
             _ => FullBattleCharacterGuids
         };
+    }
+
+    public void SetCharacterGuid(BattleType battleType, int slotIndex, string characterGuid)
+    {
+        List<string> guids = GetCharacterGuids(battleType);
+        
+        while (guids.Count <= slotIndex)
+            guids.Add(null);
+
+        guids[slotIndex] = characterGuid;
+    }
+
+    public void RemoveCharacterGuid(BattleType battleType, string characterGuid)
+    {
+        List<string> guids = GetCharacterGuids(battleType);
+        int index = guids.IndexOf(characterGuid);
+        if (index >= 0)
+            guids[index] = null;
     }
 
     public void ClearCharacterEntities(BattleType battleType)

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Simulation.Enums.Character;
 
@@ -23,7 +25,18 @@ public class CharacterComponentAttributes
         Element = characterData.Element;
         Position = characterData.Position;
 
-        if (characterSaveData != null)
+        if (characterSaveData != null) 
+        {
             CharacterGuid = characterSaveData.CharacterGuid;
+        } else 
+        {
+            if (characterData != null) 
+            {
+                CharacterGuid = characterData.CharacterId;
+            } else 
+            {
+                CharacterGuid = Guid.NewGuid().ToString();
+            }
+        }
     }
 }

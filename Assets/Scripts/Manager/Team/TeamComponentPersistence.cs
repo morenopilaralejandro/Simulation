@@ -44,9 +44,9 @@ public class TeamComponentPersistence
             CustomName = team.CustomName,
             CustomCrestId = team.CustomCrestId,
             CustomKitId = team.CustomKitId,
-            CustomFullBattleFormationId = team.CustomFullBattleFormationId,
+            CustomFullBattleFormationId = team.FullBattleFormation.FormationId,
             CustomFullBattleCharacterGuids = null,
-            CustomMiniBattleFormationId = team.CustomMiniBattleFormationId,
+            CustomMiniBattleFormationId = team.MiniBattleFormation.FormationId,
             CustomMiniBattleCharacterGuids = null
         };
     }

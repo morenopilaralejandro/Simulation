@@ -39,11 +39,11 @@ public class BattleManager : MonoBehaviour
     public bool IsMovementFrozen => isMovementFrozen;
     public bool IsTimeFrozen => isTimeFrozen;
 
-    public Dictionary<TeamSide, Team> Teams => BattleTeamManager.Instance.Teams;
+    public Dictionary<TeamSide, Team> Teams => battleTeamManager.Teams;
     public Dictionary<TeamSide, CharacterEntityBattle> TargetedCharacter => CharacterTargetManager.Instance.TargetedCharacter;
     public Dictionary<TeamSide, CharacterEntityBattle> ControlledCharacter => CharacterChangeControlManager.Instance.ControlledCharacter;
     public Ball Ball => BattleBallManager.Instance.Ball;
-    public TeamSide GetUserSide() => BattleTeamManager.Instance.GetUserSide();
+    public TeamSide GetUserSide() => battleTeamManager.GetUserSide();
 
     // Win condition
     private WinCondition winCondition;
@@ -51,6 +51,8 @@ public class BattleManager : MonoBehaviour
 
     private int charactersReadyMax;
     private int charactersReady;
+
+    private BattleTeamManager battleTeamManager;
 
     #region Lifecycle
     private void Awake()
@@ -70,6 +72,7 @@ public class BattleManager : MonoBehaviour
     void Start()
     {
         sceneLoader = SceneLoader.Instance;
+        battleTeamManager = BattleTeamManager.Instance;
         Freeze();
         SetTeamSize();
     }
@@ -150,13 +153,13 @@ public class BattleManager : MonoBehaviour
 
         BattleFieldManager.Instance.InitializeField();
 
-        BattleTeamManager.Instance.AssignTeamToSide(
-            TeamManager.Instance.GetTeam(BattleArgs.TeamId0), 
+        battleTeamManager.AssignTeamToSide(
+            battleTeamManager.ResolveTeamForSide(TeamSide.Home), 
             TeamSide.Home);
-        BattleTeamManager.Instance.AssignTeamToSide(
-            TeamManager.Instance.GetTeam(BattleArgs.TeamId1), 
+        battleTeamManager.AssignTeamToSide(
+            battleTeamManager.ResolveTeamForSide(TeamSide.Away), 
             TeamSide.Away);
-        BattleTeamManager.Instance.AssignVariants();
+        battleTeamManager.AssignVariants();
 
         foreach (Team team in Teams.Values)
         {
@@ -167,7 +170,7 @@ public class BattleManager : MonoBehaviour
 
     private void ResetBattle()
     {
-        BattleTeamManager.Instance.Reset();
+        battleTeamManager.Reset();
         charactersReady = 0;
         ResetScore();
         ResetTimer();
@@ -478,6 +481,16 @@ public class BattleManager : MonoBehaviour
     {
         team.ClearCharacterEntities(currentType);
 
+        TeamSide side = team.TeamSide;
+
+        if (team.IsCustomLoadout)
+            PopulateTeamWithCharactersFromLoadout(team, teamSize, side);
+        else
+            PopulateTeamWithCharactersFromData(team, teamSize);
+    }
+
+    private void PopulateTeamWithCharactersFromData(Team team, int teamSize)
+    {
         for (int i = 0; i < teamSize; i++)
         {
             int characterIndex = i;
@@ -487,8 +500,34 @@ public class BattleManager : MonoBehaviour
                 {
                     CharacterData characterData = team.GetCharacterDataList(currentType)[characterIndex]; 
                     character.Initialize(characterData);
+
                     character.SetLevel(character.MaxLevel);
                     character.ForceMaxEvolutionOnEquippedMoves();
+                    BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
+                    character.gameObject.name = character.CharacterId;
+                    team.GetCharacterEntities(currentType).Add(character);
+                
+                    charactersReady++;
+                    if (charactersReady >= charactersReadyMax)
+                        BattleEvents.RaiseAllCharactersReady();
+                }
+            });
+        }
+    }
+
+    private void PopulateTeamWithCharactersFromLoadout(Team team, int teamSize, TeamSide side)
+    {
+        for (int i = 0; i < teamSize; i++)
+        {
+            int characterIndex = i;
+            BattleCharacterManager.Instance.GetPooledCharacter((character) =>
+            {
+                if (character != null && characterIndex < team.GetCharacterGuids(currentType).Count)
+                {
+                    Character characterObject = CharacterStorageManager.Instance.GetCharacter(team.GetCharacterGuids(CurrentType)[characterIndex]);
+                    character.Initialize(null, characterObject); //Initialize the CharacterEntityBattle with a characterObject
+
+                    character.CalculateSpeed();
                     BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
                     character.gameObject.name = character.CharacterId;
                     team.GetCharacterEntities(currentType).Add(character);
