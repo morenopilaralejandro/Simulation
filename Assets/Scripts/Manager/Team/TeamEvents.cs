@@ -66,4 +66,5 @@ public static class TeamEvents
     {
         OnActiveLoadoutChanged?.Invoke(team);
     }
+
 }

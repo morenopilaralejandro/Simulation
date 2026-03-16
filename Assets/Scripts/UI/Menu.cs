@@ -48,9 +48,10 @@ public abstract class Menu : MonoBehaviour
         }
     }
 
+    /*  
     private void Update()
     {
-        /*
+
         if (EventSystem.current.currentSelectedGameObject == null && lastSelected != null)
         {
             EventSystem.current.SetSelectedGameObject(lastSelected);
@@ -59,6 +60,6 @@ public abstract class Menu : MonoBehaviour
         {
             lastSelected = EventSystem.current.currentSelectedGameObject;
         }
-        */
     }
+    */
 }

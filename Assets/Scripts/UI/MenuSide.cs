@@ -12,6 +12,8 @@ using Simulation.Enums.World;
 
 public class MenuSide : Menu
 {
+    [SerializeField] private MenuTeam menuTeam;
+
     private MenuManager menuManager;
     private WorldManager worldManager;
     private bool isOpen => menuManager.IsMenuOpen(this);
@@ -80,6 +82,7 @@ public class MenuSide : Menu
 
     public void Close()
     {
+        if (!menuManager.IsMenuOnTop(this)) return;
         if (!isOpen) return;
         menuManager.CloseMenu();
         worldManager.PlayerWorldEntity.SetState(PlayerWorldState.FreeRoam);
@@ -89,6 +92,11 @@ public class MenuSide : Menu
     {
         //AutoBattleManager.Instance.ToggleAutoBattle();
         Close();
+    }
+
+    public void OnButtonTeamTapped()
+    {
+        menuManager.OpenMenu(menuTeam);
     }
 
 }

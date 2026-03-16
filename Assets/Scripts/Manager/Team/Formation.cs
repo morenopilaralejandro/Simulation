@@ -12,7 +12,7 @@ public class Formation
     public string FormationId => formationId;
 
     [SerializeField] private BattleType battleType;
-    public BattleType BattleType => BattleType;
+    public BattleType BattleType => battleType;
 
     [SerializeField] private LocalizationComponentString localizationStringComponent;
 
