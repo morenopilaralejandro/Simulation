@@ -30,7 +30,10 @@ public class CharacterComponentPersistence
 
     public void Import(CharacterSaveData characterSaveData)
     {
-        CharacterData characterData = CharacterManager.Instance.GetCharacterData(characterSaveData.CharacterId);
+        CharacterData characterData = CharacterManager.Instance.GetCharacterData(
+            characterSaveData.IsCustomAvatar ? 
+                characterSaveData.CustomAvatarId : 
+                characterSaveData.CharacterId);
         character.Initialize(characterData, characterSaveData);
     }
 
@@ -61,18 +64,22 @@ public class CharacterComponentPersistence
             TrainingResetCount = character.TrainingResetCount,
 
             // moves
-            LearnedMoves = GetLearnedMovesForSave(),
-            EquippedMovesIds = GetEquippedMoveIdsForSave(),
+            LearnedMoves = ExportLearnedMoves(),
+            EquippedMovesIds = ExportEquippedMoveIds(),
 
             //avatar
-            IsCustomAvatar = false,
-            CustomName = null,
-            CustomCharacterSize = CharacterSize.S,
-            CustomPortraitSize = PortraitSize.S,
-            CustomGender = Gender.M,
-            CustomElement = Element.Fire,
-            CustomPosition = Position.FW,
-            CustomBaseStats = null
+            IsCustomAvatar = character.IsCustomAvatar,
+            CustomAvatarId = character.CustomAvatarId,
+            CustomName = character.CustomName,
+            CustomCharacterSize = character.CustomCharacterSize,
+            CustomGender = character.CustomGender,
+            CustomElement = character.CustomElement,
+            CustomPosition = character.CustomPosition,
+            CustomHairStyle = character.CustomHairStyle,
+            CustomHairColorType = character.CustomHairColorType,
+            CustomEyeColorType = character.CustomEyeColorType,
+            CustomBodyColorType = character.CustomBodyColorType,
+            CustomPortraitSize = character.CustomPortraitSize
         };
     }
 
@@ -94,7 +101,7 @@ public class CharacterComponentPersistence
         return trainedStats;
     }
 
-    private List<MoveSaveData> GetLearnedMovesForSave()
+    private List<MoveSaveData> ExportLearnedMoves()
     {
         List<MoveSaveData> learnedMoves = new List<MoveSaveData>();
         foreach (Move move in character.LearnedMoves)
@@ -103,7 +110,7 @@ public class CharacterComponentPersistence
         return learnedMoves;
     }
 
-    private List<string> GetEquippedMoveIdsForSave()
+    private List<string> ExportEquippedMoveIds()
     {
         List<string> equippedMoveIds = new List<string>();
         foreach (Move move in character.EquippedMoves)

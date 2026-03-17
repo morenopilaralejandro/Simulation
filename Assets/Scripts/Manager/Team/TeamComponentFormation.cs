@@ -24,15 +24,8 @@ public class TeamComponentFormation
             MiniBattleFormation = FormationManager.Instance.GetFormation(teamSaveData.CustomMiniBattleFormationId);
         } else 
         {
-            if (teamData != null) 
-            {
-                FullBattleFormation = FormationManager.Instance.GetFormation(teamData.FullBattleFormationId);
-                MiniBattleFormation = FormationManager.Instance.GetFormation(teamData.MiniBattleFormationId);
-            } else 
-            {
-                FullBattleFormation = FormationManager.Instance.GetFormation("crimson");
-                MiniBattleFormation = FormationManager.Instance.GetFormation("offense");
-            }
+            FullBattleFormation = FormationManager.Instance.GetFormation(teamData.FullBattleFormationId);
+            MiniBattleFormation = FormationManager.Instance.GetFormation(teamData.MiniBattleFormationId);
         }
     }
 

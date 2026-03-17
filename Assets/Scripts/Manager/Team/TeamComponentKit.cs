@@ -9,7 +9,7 @@ public class TeamComponentKit
 
     public TeamComponentKit(TeamData teamData, Team team, TeamSaveData teamSaveData = null) 
     {
-        Initialize(teamData, team);
+        Initialize(teamData, team, teamSaveData);
     }
 
     public void Initialize(TeamData teamData, Team team, TeamSaveData teamSaveData = null)
@@ -21,13 +21,7 @@ public class TeamComponentKit
             this.Kit = KitManager.Instance.GetKit(teamSaveData.CustomKitId);
         } else 
         {
-            if (teamData != null) 
-            {
-                this.Kit = KitManager.Instance.GetKit(teamData.KitId);
-            } else 
-            {
-                this.Kit = KitManager.Instance.GetKit("faith");
-            }
+            this.Kit = KitManager.Instance.GetKit(teamData.KitId);
         }
 
     }

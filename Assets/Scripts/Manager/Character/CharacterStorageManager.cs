@@ -34,7 +34,8 @@ public class CharacterStorageManager : MonoBehaviour
     /// <summary>
     /// Entry point for the scout system to add a new character.
     /// </summary>
-    public Character AddCharacter(CharacterData characterData, int level) => storage.AddCharacter(characterData, level);
+    public Character AddCharacter(Character character) => storage.AddCharacter(character);
+    public Character AddCharacterFromScout(CharacterData characterData, int level) => storage.AddCharacterFromScout(characterData, level);
     public Character GetCharacter(string characterGuid) => storage.GetCharacter(characterGuid);
     public bool HasCharacter(string characterGuid) => storage.HasCharacter(characterGuid);
     public bool RemoveCharacter(string characterGuid) => storage.RemoveCharacter(characterGuid);
@@ -44,21 +45,30 @@ public class CharacterStorageManager : MonoBehaviour
 
     #region Persistence
 
-    /*
+    public CharacterStorageSaveData Export() => storage.Export();
+    public void Import(CharacterStorageSaveData saveData) => storage.Import(saveData);
 
-    public void Save()
+    #endregion
+
+    #region Event
+
+    private void OnEnable() 
     {
-        CharacterStorageSaveData saveData = storage.Export();
-        // Integrate with your existing save system
-        // e.g., SaveManager.Instance.SetCharacterStorageData(saveData);
+        MoveEvents.OnMoveUsed += HandleMoveUsed;
     }
 
-    public void Load(CharacterStorageSaveData saveData)
+    private void OnDisable() 
     {
-        storage.Import(saveData);
+        MoveEvents.OnMoveUsed -= HandleMoveUsed;
     }
 
-    */
+    private void HandleMoveUsed(Move move, Character character)
+    {
+        if(!HasCharacter(character.CharacterGuid)) return;
+
+        move.ProgressEvolution();
+        LogManager.Trace($"[CharacterStorage] {character.CharacterName} used {move.MoveName}");
+    }
 
     #endregion
 }

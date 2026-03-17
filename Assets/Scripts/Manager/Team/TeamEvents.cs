@@ -67,4 +67,10 @@ public static class TeamEvents
         OnActiveLoadoutChanged?.Invoke(team);
     }
 
+    public static event Action<Team> OnTeamCrestSpriteUpdated;
+    public static void RaiseTeamCrestSpriteUpdated(Team team)
+    {
+        OnTeamCrestSpriteUpdated?.Invoke(team);
+    }
+
 }

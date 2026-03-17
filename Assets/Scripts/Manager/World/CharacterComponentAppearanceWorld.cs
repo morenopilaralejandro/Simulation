@@ -41,7 +41,7 @@ public class CharacterComponentAppearanceWorld : MonoBehaviour, IAsyncSceneLoade
     private async Task LoadSprites()
     {
         appearanceComponent.State.Sprites[CharacterSpriteLayer.Hair] =
-            await SpriteAtlasManager.Instance.GetCharacterHairWorld(appearanceComponent.HairStyleId);
+            await SpriteAtlasManager.Instance.GetCharacterHairWorld(appearanceComponent.HairStyle.ToString().ToLower());
     }
 
     #endregion

@@ -94,6 +94,8 @@ public class FieldDuelHandler : IDuelHandler
             await BattleEffectManager.Instance.PlayMoveParticle(
                 winner.Move,
                 winner.CharacterEntityBattle.transform.position);
+
+            MoveEvents.RaiseMoveUsed(winner.Move, winner.CharacterEntityBattle.Character);
         }
 
         if (winner.CharacterEntityBattle.IsOnUsersTeam())

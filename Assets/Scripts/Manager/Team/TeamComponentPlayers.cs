@@ -34,38 +34,22 @@ public class TeamComponentPlayers
         
         if (teamSaveData == null) 
         {
-            if (teamData != null) 
-            {
-                PopulateFromData(FullBattleCharacterDataList, teamData.FullBattleCharacterIds);
-                PopulateFromData(MiniBattleCharacterDataList, teamData.MiniBattleCharacterIds);                
-            }
+            PopulateFromData(FullBattleCharacterDataList, teamData.FullBattleCharacterIds);
+            PopulateFromData(MiniBattleCharacterDataList, teamData.MiniBattleCharacterIds);  
         }
         else
         {
-            PopulateFromSaveData(
-                FullBattleCharacterDataList, 
-                FullBattleCharacterGuids);
-            
-            PopulateFromSaveData(
-                MiniBattleCharacterDataList, 
-                MiniBattleCharacterGuids);
+            PopulateFromSaveData(FullBattleCharacterGuids, teamSaveData.CustomFullBattleCharacterGuids);
+            PopulateFromSaveData(MiniBattleCharacterGuids, teamSaveData.CustomMiniBattleCharacterGuids);
         }
     }
 
     private void PopulateFromSaveData(
-        List<CharacterData> characterDataList, 
-        List<string> characterGuidList)
+        List<string> characterGuidList, 
+        List<string> customCharacterGuidList)
     {
-        /*
-        foreach (CharacterSaveData saveData in characterSaveDataList)
-        {
-            characterGuidList.Add(saveData.CharacterGuid);
-
-            CharacterData characterData = CharacterManager.Instance.GetCharacterData(saveData.CharacterId);
-            if (characterData != null)
-                characterDataList.Add(characterData);
-        }
-        */
+        if (customCharacterGuidList == null) return;
+        characterGuidList = new List<string>(customCharacterGuidList);
     }
 
     private void PopulateFromData(

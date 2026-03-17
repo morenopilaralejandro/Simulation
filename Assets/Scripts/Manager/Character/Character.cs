@@ -11,6 +11,7 @@ public class Character
     #region Components
 
     private CharacterComponentAttributes attributesComponent;
+    private CharacterComponentCustomAvatar customAvatarComponent;
     private LocalizationComponentString localizationStringComponent;
     private CharacterComponentLevels levelsComponent;
     private CharacterComponentStats statsComponent;
@@ -31,6 +32,7 @@ public class Character
     public void Initialize(CharacterData characterData, CharacterSaveData characterSaveData = null)
     {
         attributesComponent = new CharacterComponentAttributes(characterData, this, characterSaveData);
+        customAvatarComponent = new CharacterComponentCustomAvatar(characterData, this, characterSaveData);
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Character,
             characterData.CharacterId,
@@ -54,6 +56,20 @@ public class Character
     public Gender Gender => attributesComponent.Gender;
     public Element Element => attributesComponent.Element;
     public Position Position => attributesComponent.Position;
+
+    // customAvatarComponent
+    public bool IsCustomAvatar => customAvatarComponent.IsCustomAvatar;
+    public string CustomAvatarId => customAvatarComponent.CustomAvatarId;
+    public string CustomName => customAvatarComponent.CustomName;
+    public CharacterSize CustomCharacterSize => customAvatarComponent.CustomCharacterSize;
+    public Gender CustomGender => customAvatarComponent.CustomGender;
+    public Element CustomElement => customAvatarComponent.CustomElement;
+    public Position CustomPosition => customAvatarComponent.CustomPosition;
+    public HairStyle CustomHairStyle => customAvatarComponent.CustomHairStyle;
+    public HairColorType CustomHairColorType => customAvatarComponent.CustomHairColorType;
+    public EyeColorType CustomEyeColorType => customAvatarComponent.CustomEyeColorType;
+    public BodyColorType CustomBodyColorType => customAvatarComponent.CustomBodyColorType;
+    public PortraitSize CustomPortraitSize => customAvatarComponent.CustomPortraitSize;
 
     // localizationComponent
     public LocalizationComponentString LocalizationComponent => localizationStringComponent;
@@ -126,7 +142,7 @@ public class Character
     public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
     public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
     public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
-    public string HairStyleId => appearanceComponent.HairStyleId;
+    public HairStyle HairStyle => appearanceComponent.HairStyle;
     public HairColorType HairColorType => appearanceComponent.HairColorType;
     public EyeColorType EyeColorType => appearanceComponent.EyeColorType;
     public BodyColorType BodyColorType => appearanceComponent.BodyColorType;

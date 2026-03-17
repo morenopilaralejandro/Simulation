@@ -20,11 +20,8 @@ public class TeamComponentAttributes
             TeamId = teamSaveData.TeamGuid;
         } else 
         {
-            TeamGuid = Guid.NewGuid().ToString();
-            if (teamData != null) 
-                TeamId = teamData.TeamId;
-            else 
-                TeamId = TeamGuid;
+            TeamGuid = teamData.TeamId;
+            TeamId = teamData.TeamId;
         }
     }
 }

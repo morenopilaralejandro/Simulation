@@ -150,7 +150,7 @@ public class CharacterEntityBattle : MonoBehaviour
     // appearanceComponent
     public Sprite PortraitSprite => character.PortraitSprite;
     public string PortraitSpriteId => character.PortraitSpriteId;
-    public string HairStyleId => character.HairStyleId;
+    public HairStyle HairStyle => character.HairStyle;
     public HairColorType HairColorType => character.HairColorType;
     public EyeColorType EyeColorType => character.EyeColorType;
     public BodyColorType BodyColorType => character.BodyColorType;

@@ -10,9 +10,9 @@ using Simulation.Enums.Battle;
 /// </summary>
 public class TeamLoadoutManager : MonoBehaviour
 {
-    public static TeamLoadoutManager Instance { get; private set; }
+    #region Fields
 
-    public const int MAX_LOADOUTS = 10;
+    public static TeamLoadoutManager Instance { get; private set; }
 
     [SerializeField] private LocalizedString defaultName;
 
@@ -23,6 +23,22 @@ public class TeamLoadoutManager : MonoBehaviour
     public IReadOnlyDictionary<string, Team> Loadouts => loadouts;
     public Team ActiveLoadout => GetLoadout(activeLoadoutGuid);
     public string ActiveLoadoutGuid => activeLoadoutGuid;
+
+    #endregion
+
+    public const int MAX_LOADOUTS = 10;
+
+    public string DEFAULT_NAME = "custom team";
+    public const string DEFAULT_CREST_ID = "faith_selection";
+    public const string TEAM_CREST_ID_COMMON = "generic_common";
+    public const string TEAM_CREST_ID_RARE = "generic_rare";
+    public const string DEFAULT_KIT_ID = "faith";
+    public const string DEFAULT_FULL_BATTLE_FORMATION_ID = "faith";
+    public const string DEFAULT_MINI_BATTLE_FORMATION_ID = "offense";
+
+    #region Constants
+
+    #endregion
 
     #region Lifecycle
 
@@ -35,6 +51,8 @@ public class TeamLoadoutManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        DEFAULT_NAME = defaultName.GetLocalizedString();
     }
 
     private void Start() 
@@ -54,7 +72,7 @@ public class TeamLoadoutManager : MonoBehaviour
             return null;
         }
 
-        Team loadout = new Team(null);
+        Team loadout = TeamFactory.Create();
         loadouts[loadout.TeamGuid] = loadout;
 
         // Auto-set as active if it's the first loadout

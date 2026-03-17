@@ -7,6 +7,7 @@ public class MoveCutscenePanel : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI textMoveName;
+    [SerializeField] private GameObject imageEvolutionGo;
     [SerializeField] private Image imageEvolution;
     [SerializeField] private CanvasGroup canvasGroup;
 
@@ -61,6 +62,14 @@ public class MoveCutscenePanel : MonoBehaviour
     {
         textMoveName.text = move.MoveName;
         textMoveName.color = ColorManager.GetElementColor(move.Element);
-        imageEvolution.sprite = move.EvolutionSprite;
+
+        if(move.CurrentEvolution == MoveEvolution.None) 
+        {
+            imageEvolutionGo.SetActive(false);
+        } else 
+        {
+            imageEvolutionGo.SetActive(true);
+            imageEvolution.sprite = move.EvolutionSprite;
+        }
     }
 }

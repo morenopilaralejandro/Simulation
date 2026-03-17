@@ -24,4 +24,6 @@ public class TeamComponentLevels
         }
     }
 
+    public void SetLevel(int level) => Level = level;
+
 }

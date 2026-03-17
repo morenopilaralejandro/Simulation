@@ -20,23 +20,22 @@ public class CharacterComponentAttributes
     public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
         CharacterId = characterData.CharacterId;
+        CharacterGuid = characterData.CharacterId;
         CharacterSize = characterData.CharacterSize;
         Gender = characterData.Gender;
         Element = characterData.Element;
         Position = characterData.Position;
 
-        if (characterSaveData != null) 
-        {
-            CharacterGuid = characterSaveData.CharacterGuid;
-        } else 
-        {
-            if (characterData != null) 
-            {
-                CharacterGuid = characterData.CharacterId;
-            } else 
-            {
-                CharacterGuid = Guid.NewGuid().ToString();
-            }
-        }
+        if (characterSaveData == null) return;
+
+        CharacterGuid = characterSaveData.CharacterGuid;
+
+        if (!characterSaveData.IsCustomAvatar) return;
+
+        CharacterId = characterSaveData.CustomAvatarId;
+        CharacterSize = characterSaveData.CustomCharacterSize;
+        Gender = characterSaveData.CustomGender;
+        Element = characterSaveData.CustomElement;
+        Position = characterSaveData.CustomPosition;
     }
 }

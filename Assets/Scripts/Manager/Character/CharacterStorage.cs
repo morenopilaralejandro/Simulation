@@ -29,28 +29,28 @@ public class CharacterStorage
     {
         CharacterManager characterManager = CharacterManager.Instance;
 
-        AddCharacter(characterManager.GetCharacterData("almu"), 50);
-        AddCharacter(characterManager.GetCharacterData("sofireca"), 50);
-        AddCharacter(characterManager.GetCharacterData("satu"), 50);
-        AddCharacter(characterManager.GetCharacterData("are"), 50);
-        AddCharacter(characterManager.GetCharacterData("fran"), 50);
-        AddCharacter(characterManager.GetCharacterData("rocinante"), 50);
-        AddCharacter(characterManager.GetCharacterData("ainara"), 50);
-        AddCharacter(characterManager.GetCharacterData("teruel"), 50);
-        AddCharacter(characterManager.GetCharacterData("alexander"), 50);
-        AddCharacter(characterManager.GetCharacterData("wang"), 50);
-        AddCharacter(characterManager.GetCharacterData("navarro"), 50);
-        AddCharacter(characterManager.GetCharacterData("mohamed"), 50);
-        AddCharacter(characterManager.GetCharacterData("meiga"), 50);
-        AddCharacter(characterManager.GetCharacterData("ruperta"), 50);
-        AddCharacter(characterManager.GetCharacterData("malaki"), 50);
-        AddCharacter(characterManager.GetCharacterData("ayud"), 50);
-        AddCharacter(characterManager.GetCharacterData("isa"), 50);
-        AddCharacter(characterManager.GetCharacterData("nina"), 50);
-        AddCharacter(characterManager.GetCharacterData("gambino"), 50);
-        AddCharacter(characterManager.GetCharacterData("inquina"), 50);
-        AddCharacter(characterManager.GetCharacterData("apa"), 50);
-        AddCharacter(characterManager.GetCharacterData("ali"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("almu"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("sofireca"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("satu"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("are"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("fran"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("rocinante"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("ainara"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("teruel"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("alexander"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("wang"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("navarro"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("mohamed"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("meiga"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("ruperta"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("malaki"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("ayud"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("isa"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("nina"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("gambino"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("inquina"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("apa"), 50);
+        AddCharacterFromScout(characterManager.GetCharacterData("ali"), 50);
 
         TeamLoadoutManager.Instance.InitializeFirstLoadout();
     }
@@ -58,16 +58,8 @@ public class CharacterStorage
     #endregion
 
     #region Add / Remove
-
-    /// <summary>
-    /// Entry point for the scout system or any other acquisition method.
-    /// Creates a Character from data and optional save data, stores it, and returns it.
-    /// </summary>
-    public Character AddCharacter(CharacterData characterData, int level)
+    public Character AddCharacter(Character character)
     {
-        Character character = new Character(characterData);
-        character.SetLevel(99);
-
         if (characters.ContainsKey(character.CharacterGuid))
         {
             LogManager.Warning($"[CharacterStorage] Character with GUID {character.CharacterGuid} already exists. Skipping.");
@@ -79,6 +71,17 @@ public class CharacterStorage
 
         LogManager.Info($"[CharacterStorage] Added character: {character.CharacterName} ({character.CharacterGuid})");
         return character;
+    }
+
+    /// <summary>
+    /// Entry point for the scout system or any other acquisition method.
+    /// Creates a Character from data and optional save data, stores it, and returns it.
+    /// </summary>
+    public Character AddCharacterFromScout(CharacterData characterData, int level)
+    {
+        Character character = new Character(characterData);
+        character.SetLevel(99);
+        return AddCharacter(character);
     }
 
     public bool RemoveCharacter(string characterGuid)
@@ -142,17 +145,13 @@ public class CharacterStorage
 
     #region Persistence
     
-    /*
-
     public CharacterStorageSaveData Export()
     {
         CharacterStorageSaveData saveData = new CharacterStorageSaveData();
         saveData.CharacterSaveDataList = new List<CharacterSaveData>();
 
         foreach (Character character in characters.Values)
-        {
             saveData.CharacterSaveDataList.Add(character.Export());
-        }
 
         return saveData;
     }
@@ -165,15 +164,7 @@ public class CharacterStorage
 
         foreach (CharacterSaveData characterSaveData in saveData.CharacterSaveDataList)
         {
-            CharacterData characterData = CharacterManager.Instance.GetCharacterData(characterSaveData.CharacterId);
-            if (characterData != null)
-            {
-                AddCharacter(characterData, characterSaveData);
-            }
-            else
-            {
-                LogManager.Warning($"[CharacterStorage] CharacterData not found for ID: {characterSaveData.CharacterId}");
-            }
+            AddCharacter(CharacterFactory.CreateFromSaveData(characterSaveData));
         }
     }
 
@@ -182,7 +173,6 @@ public class CharacterStorage
         characters.Clear();
     }
 
-    */
-
     #endregion
+
 }
