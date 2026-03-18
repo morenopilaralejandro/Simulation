@@ -62,12 +62,12 @@ public class CharacterStorageManager : MonoBehaviour
         MoveEvents.OnMoveUsed -= HandleMoveUsed;
     }
 
-    private void HandleMoveUsed(Move move, Character character)
+    private void HandleMoveUsed(Move move, CharacterEntityBattle character)
     {
-        if(!HasCharacter(character.CharacterGuid)) return;
+        if(!HasCharacter(character.Character.CharacterGuid)) return;
 
         move.ProgressEvolution();
-        LogManager.Trace($"[CharacterStorage] {character.CharacterName} used {move.MoveName}");
+        LogManager.Trace($"[CharacterStorage] {character.Character.CharacterName} used {move.MoveName}");
     }
 
     #endregion

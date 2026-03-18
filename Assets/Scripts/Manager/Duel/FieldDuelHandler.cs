@@ -95,7 +95,7 @@ public class FieldDuelHandler : IDuelHandler
                 winner.Move,
                 winner.CharacterEntityBattle.transform.position);
 
-            MoveEvents.RaiseMoveUsed(winner.Move, winner.CharacterEntityBattle.Character);
+            MoveEvents.RaiseMoveUsed(winner.Move, winner.CharacterEntityBattle);
         }
 
         if (winner.CharacterEntityBattle.IsOnUsersTeam())

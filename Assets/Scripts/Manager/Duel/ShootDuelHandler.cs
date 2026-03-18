@@ -61,7 +61,7 @@ public class ShootDuelHandler : IDuelHandler
         if(offense.Move != null) 
         {
             await BattleEffectManager.Instance.PlayMoveParticle(offense.Move, offense.CharacterEntityBattle.transform.position);
-            MoveEvents.RaiseMoveUsed(offense.Move, offense.CharacterEntityBattle.Character);
+            MoveEvents.RaiseMoveUsed(offense.Move, offense.CharacterEntityBattle);
         }
 
  
@@ -114,7 +114,7 @@ public class ShootDuelHandler : IDuelHandler
         if(defense.Move != null) 
         {
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
-            MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle.Character);
+            MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
         }
 
         // if is reversal start else end
@@ -150,7 +150,7 @@ public class ShootDuelHandler : IDuelHandler
         if(defense.Move != null) 
         {
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
-            MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle.Character);
+            MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
         }
 
         BattleManager.Instance.Ball.ResumeTravel();
