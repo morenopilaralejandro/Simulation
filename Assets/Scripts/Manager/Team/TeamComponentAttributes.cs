@@ -16,12 +16,12 @@ public class TeamComponentAttributes
     {
         if(teamSaveData != null)
         {
-            TeamId = teamSaveData.TeamGuid;;
             TeamGuid = teamSaveData.TeamGuid;
+            TeamId = teamSaveData.TeamGuid;
         } else 
         {
+            TeamGuid = teamData.TeamId;
             TeamId = teamData.TeamId;
-            TeamGuid = Guid.NewGuid().ToString();
         }
     }
 }

@@ -10,7 +10,7 @@ public class CharacterComponentAppearance
     #region Fields
 
     public string PortraitSpriteId { get; private set; }
-    public string HairStyleId { get; private set; }
+    public HairStyle HairStyle { get; private set; }
     public HairColorType HairColorType { get; private set; }
     public EyeColorType EyeColorType { get; private set; }
     public BodyColorType BodyColorType { get; private set; }
@@ -30,11 +30,21 @@ public class CharacterComponentAppearance
     public async void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
         PortraitSpriteId = characterData.CharacterId;
-        HairStyleId = characterData.HairStyle.ToString().ToLower();
+        HairStyle = characterData.HairStyle;
         HairColorType = characterData.HairColorType;
         EyeColorType = characterData.EyeColorType;
         BodyColorType = characterData.BodyColorType;
         PortraitSize = characterData.PortraitSize;
+
+        if (characterSaveData != null && characterSaveData.IsCustomAvatar) 
+        {
+            PortraitSpriteId = null;
+            HairStyle = characterSaveData.CustomHairStyle;
+            HairColorType = characterSaveData.CustomHairColorType;
+            EyeColorType = characterSaveData.CustomEyeColorType;
+            BodyColorType = characterSaveData.CustomBodyColorType;
+            PortraitSize = characterSaveData.CustomPortraitSize;
+        }
 
         State = new SpriteLayerState<CharacterSpriteLayer>();
 
@@ -50,7 +60,7 @@ public class CharacterComponentAppearance
     public async void Initialize(NpcData data)
     {
         PortraitSpriteId = null;
-        HairStyleId = data.HairStyle.ToString().ToLower();
+        HairStyle = data.HairStyle;
         HairColorType = data.HairColorType;
         EyeColorType = data.EyeColorType;
         BodyColorType = data.BodyColorType;

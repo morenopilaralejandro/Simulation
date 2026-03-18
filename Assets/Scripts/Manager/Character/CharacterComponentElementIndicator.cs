@@ -14,7 +14,7 @@ public class CharacterComponentElementIndicator : MonoBehaviour
     {
         this.characterEntityBattle = characterEntityBattle;
         this.character = characterEntityBattle.Character;
-        elementRenderer.sprite = IconManager.Instance.Element.GetIcon(characterData.Element);
+        elementRenderer.sprite = IconManager.Instance.Element.GetIcon(character.Element);
     }
 
     public void SetEnabled(bool enabled)

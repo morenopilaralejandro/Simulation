@@ -30,15 +30,18 @@ public class Team
     {
         attributesComponent = new TeamComponentAttributes(teamData, this, teamSaveData);
 
-        localizationStringComponent = new LocalizationComponentString(
-            LocalizationEntity.Team,
-            teamData.TeamId,
-            new [] { LocalizationField.Name }
-        );
+        if (teamData != null) 
+        {
+            localizationStringComponent = new LocalizationComponentString(
+                LocalizationEntity.Team,
+                teamData.TeamId,
+                new [] { LocalizationField.Name }
+            );
+        }
 
         appearanceComponent = new TeamComponentAppearance(teamData, this, teamSaveData);
         formationComponent = new TeamComponentFormation(teamData, this, teamSaveData);
-        kitComponent = new TeamComponentKit(teamData, this);
+        kitComponent = new TeamComponentKit(teamData, this, teamSaveData);
         levelsComponent = new TeamComponentLevels(teamData, this);
         playersComponent = new TeamComponentPlayers(teamData, this, teamSaveData);
         sideComponent = new TeamComponentSide(teamData, this);
@@ -57,9 +60,14 @@ public class Team
     public string TeamId => attributesComponent.TeamId;
     public string TeamGuid => attributesComponent.TeamGuid;
     //localizationComponent
-    public string TeamName => localizationStringComponent.GetString(LocalizationField.Name);
+    public string TeamName => 
+        IsCustomLoadout ? 
+            CustomName : 
+            localizationStringComponent.GetString(LocalizationField.Name);
     //appearanceComponent
     public Sprite TeamCrestSprite => appearanceComponent.TeamCrestSprite;
+    public string TeamCrestId => appearanceComponent.TeamCrestId;
+    public void UpdateAppeariance(string teamCrestId) => appearanceComponent.UpdateAppeariance(teamCrestId); 
     //formationComponent
     public Formation FullBattleFormation => formationComponent.FullBattleFormation;
     public Formation MiniBattleFormation => formationComponent.MiniBattleFormation;
@@ -70,6 +78,7 @@ public class Team
     public void SetKit(Kit kit) => kitComponent.SetKit(kit);
     //levelsComponent
     public int Level => levelsComponent.Level;
+    public void SetLevel(int level) => levelsComponent.SetLevel(level);
     //playersComponent
     public List<CharacterData> FullBattleCharacterDataList => playersComponent.FullBattleCharacterDataList;
     public List<CharacterEntityBattle> FullBattleCharacterEntities => playersComponent.FullBattleCharacterEntities;
@@ -80,6 +89,8 @@ public class Team
     public List<CharacterData> GetCharacterDataList(BattleType battleType) => playersComponent.GetCharacterDataList(battleType);
     public List<CharacterEntityBattle> GetCharacterEntities(BattleType battleType) => playersComponent.GetCharacterEntities(battleType);
     public List<string> GetCharacterGuids(BattleType battleType) => playersComponent.GetCharacterGuids(battleType);
+    public void SetCharacterGuid(BattleType battleType, int slotIndex, string characterGuid) => playersComponent.SetCharacterGuid(battleType, slotIndex, characterGuid);
+    public void RemoveCharacterGuid(BattleType battleType, string characterGuid) => playersComponent.RemoveCharacterGuid(battleType, characterGuid);
     public void ClearCharacterEntities(BattleType battleType) => playersComponent.ClearCharacterEntities(battleType);
     public void ClearAll(BattleType battleType) => playersComponent.ClearAll(battleType);
     public int GetCharacterDataCount(BattleType battleType) => playersComponent.GetCharacterDataCount(battleType);
@@ -92,20 +103,7 @@ public class Team
     //customLoadoutComponent
     public bool IsCustomLoadout => customLoadoutComponent.IsCustomLoadout;
     public string CustomName => customLoadoutComponent.CustomName;
-    public string CustomCrestId => customLoadoutComponent.CustomCrestId;
-    public string CustomKitId => customLoadoutComponent.CustomKitId;
-    public string CustomFullBattleFormationId => customLoadoutComponent.CustomFullBattleFormationId;
-    public List<string> CustomFullBattleCharacterGuids => customLoadoutComponent.CustomFullBattleCharacterGuids;
-    public string CustomMiniBattleFormationId => customLoadoutComponent.CustomMiniBattleFormationId;
-    public List<string> CustomMiniBattleCharacterGuids => customLoadoutComponent.CustomMiniBattleCharacterGuids;
-    public void SetIsCustomLoadout(bool value) => customLoadoutComponent.IsCustomLoadout = value;
-    public void SetCustomName(string name) => customLoadoutComponent.CustomName = name;
-    public void SetCustomCrestId(string crestId) => customLoadoutComponent.CustomCrestId = crestId;
-    public void SetCustomKitId(string kitId) => customLoadoutComponent.CustomKitId = kitId;
-    public void SetCustomFullBattleFormationId(string formationId) => customLoadoutComponent.CustomFullBattleFormationId = formationId;
-    public void SetCustomFullBattleCharacterGuids(List<string> guids) => customLoadoutComponent.CustomFullBattleCharacterGuids = guids;
-    public void SetCustomMiniBattleFormationId(string formationId) => customLoadoutComponent.CustomMiniBattleFormationId = formationId;
-    public void SetCustomMiniBattleCharacterGuids(List<string> guids) => customLoadoutComponent.CustomMiniBattleCharacterGuids = guids;
+    public void SetCustomName(string name) => customLoadoutComponent.SetCustomName(name);
     //persistenceComponent
     public void Import(TeamSaveData teamSaveData) => persistenceComponent.Import(teamSaveData);
     public TeamSaveData Export() => persistenceComponent.Export();

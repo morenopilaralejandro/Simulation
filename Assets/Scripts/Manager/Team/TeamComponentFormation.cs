@@ -54,6 +54,6 @@ public class TeamComponentFormation
                 LogManager.Warning($"[TeamComponentFormation] Unknown battle type: {battleType}");
                 return;
         }
-        TeamEvents.RaiseOnFormationChanged(team, formation);
+        TeamEvents.RaiseFormationChanged(team, formation);
     }
 }

@@ -4,7 +4,6 @@ using Simulation.Enums.Battle;
 [System.Serializable]
 public class TeamSaveData
 {
-
     public string TeamGuid;
     public bool IsCustomLoadout;
     public string CustomName;
@@ -14,5 +13,4 @@ public class TeamSaveData
     public List<string> CustomFullBattleCharacterGuids;
     public string CustomMiniBattleFormationId;
     public List<string> CustomMiniBattleCharacterGuids;
-
 }

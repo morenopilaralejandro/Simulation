@@ -1,23 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
+using Simulation.Enums.Move;
+using Simulation.Enums.Localization;
 
 public class TeamComponentCustomLoadout
 {
-
-    public bool IsCustomLoadout { get; set; }
-    public string CustomName { get; set; }
-    public string CustomCrestId { get; set; }
-    public string CustomKitId { get; set; }
-    public string CustomFullBattleFormationId { get; set; }
-    public List<string> CustomFullBattleCharacterGuids { get; set; }
-    public string CustomMiniBattleFormationId { get; set; }
-    public List<string> CustomMiniBattleCharacterGuids { get; set; }
-
-    private string defaultName = "custom team";
-    private string defaultCrestId = "faith";
-    private string defaultKitId = "faith";
-    public string defaultBattleFormationId = "faith";
-    public string defaultMiniBattleFormationId = "faith";
+    public bool IsCustomLoadout { get; private set; }
+    public string CustomName { get; private set; }
 
     public TeamComponentCustomLoadout(TeamData teamData, Team team, TeamSaveData teamSaveData = null)
     {
@@ -30,26 +21,12 @@ public class TeamComponentCustomLoadout
         {
             IsCustomLoadout = teamSaveData.IsCustomLoadout;
             CustomName = teamSaveData.CustomName;
-            CustomCrestId = teamSaveData.CustomCrestId;
-            CustomKitId = teamSaveData.CustomKitId;
-            CustomFullBattleFormationId = teamSaveData.CustomFullBattleFormationId;
-            CustomFullBattleCharacterGuids = teamSaveData.CustomFullBattleCharacterGuids;
-            CustomMiniBattleFormationId = teamSaveData.CustomMiniBattleFormationId;
-            CustomMiniBattleCharacterGuids = teamSaveData.CustomMiniBattleCharacterGuids;
         } else 
         {
-            if (teamData != null)
-                IsCustomLoadout = true;
-            else 
-                IsCustomLoadout = false;
-
-            CustomName = defaultName;
-            CustomCrestId = defaultCrestId;
-            CustomKitId = defaultKitId;
-            CustomFullBattleFormationId = defaultBattleFormationId;
-            CustomFullBattleCharacterGuids = new List<string>();
-            CustomMiniBattleFormationId = defaultMiniBattleFormationId;
-            CustomMiniBattleCharacterGuids = new List<string>();
+            IsCustomLoadout = false;
+            CustomName = TeamLoadoutManager.Instance.DEFAULT_NAME;
         }
     }
+
+    public void SetCustomName(string customName) => CustomName = customName;
 }

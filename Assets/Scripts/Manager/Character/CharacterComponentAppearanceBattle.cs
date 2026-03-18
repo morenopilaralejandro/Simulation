@@ -42,7 +42,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     private async Task LoadSprites()
     {
         characterEntityBattle.SpriteLayerState.Sprites[CharacterSpriteLayer.Hair] =
-            await SpriteAtlasManager.Instance.GetCharacterHair(characterEntityBattle.HairStyleId);
+            await SpriteAtlasManager.Instance.GetCharacterHair(characterEntityBattle.HairStyle.ToString().ToLower());
 
     }
 

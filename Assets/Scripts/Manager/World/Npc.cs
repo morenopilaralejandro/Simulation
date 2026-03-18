@@ -48,7 +48,7 @@ public class Npc
     public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
     public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
     public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
-    public string HairStyleId => appearanceComponent.HairStyleId;
+    public HairStyle HairStyle => appearanceComponent.HairStyle;
     public HairColorType HairColorType => appearanceComponent.HairColorType;
     public EyeColorType EyeColorType => appearanceComponent.EyeColorType;
     public BodyColorType BodyColorType => appearanceComponent.BodyColorType;

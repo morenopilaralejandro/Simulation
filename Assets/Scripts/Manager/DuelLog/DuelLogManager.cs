@@ -488,6 +488,35 @@ public class DuelLogManager : MonoBehaviour
         );
     }
 
+    public void AddNotifyMoveLevelUp(CharacterEntityBattle character, Move move)
+    {
+        string characterName = character.CharacterNick;
+        string moveName = move.MoveName;;
+
+        var args = new {
+            characterName = characterName,
+            moveName = moveName
+        };
+
+        AddEntry(
+            "notify_move_evolved", 
+            LogLevel.Info,
+            character,
+            null,
+            null
+        );
+
+        /*
+        AddEntry(
+            "notify_move_level_up", 
+            LogLevel.Info,
+            character,
+            move,
+            args
+        );
+        */
+    }
+
     #endregion
 
     #region Helper Methods

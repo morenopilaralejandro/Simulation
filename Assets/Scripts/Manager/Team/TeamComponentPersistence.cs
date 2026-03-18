@@ -42,12 +42,12 @@ public class TeamComponentPersistence
             TeamGuid = team.TeamGuid,
             IsCustomLoadout = team.IsCustomLoadout,
             CustomName = team.CustomName,
-            CustomCrestId = team.CustomCrestId,
-            CustomKitId = team.CustomKitId,
-            CustomFullBattleFormationId = team.CustomFullBattleFormationId,
-            CustomFullBattleCharacterGuids = null,
-            CustomMiniBattleFormationId = team.CustomMiniBattleFormationId,
-            CustomMiniBattleCharacterGuids = null
+            CustomCrestId = team.TeamCrestId,
+            CustomKitId = team.Kit.KitId,
+            CustomFullBattleFormationId = team.FullBattleFormation.FormationId,
+            CustomFullBattleCharacterGuids = team.FullBattleCharacterGuids,
+            CustomMiniBattleFormationId = team.MiniBattleFormation.FormationId,
+            CustomMiniBattleCharacterGuids = team.MiniBattleCharacterGuids
         };
     }
 

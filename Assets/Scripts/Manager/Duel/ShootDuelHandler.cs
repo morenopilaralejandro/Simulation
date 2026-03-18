@@ -58,9 +58,11 @@ public class ShootDuelHandler : IDuelHandler
         duel.OffensePressure += offense.Damage;
         LogParticipantAction(offense);
 
-        if(offense.Move != null)
+        if(offense.Move != null) 
+        {
             await BattleEffectManager.Instance.PlayMoveParticle(offense.Move, offense.CharacterEntityBattle.transform.position);
-
+            MoveEvents.RaiseMoveUsed(offense.Move, offense.CharacterEntityBattle);
+        }
 
  
         if (isFirstParticipant) 
@@ -109,8 +111,11 @@ public class ShootDuelHandler : IDuelHandler
         BattleEvents.RaiseShootStopped(defense.CharacterEntityBattle);
         offense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
 
-        if(defense.Move != null)
+        if(defense.Move != null) 
+        {
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
+            MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
+        }
 
         // if is reversal start else end
         if (isShootReversal) 
@@ -142,8 +147,11 @@ public class ShootDuelHandler : IDuelHandler
 
         defense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
 
-        if(defense.Move != null)
+        if(defense.Move != null) 
+        {
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
+            MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
+        }
 
         BattleManager.Instance.Ball.ResumeTravel();
 

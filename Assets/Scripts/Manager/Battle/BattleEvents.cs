@@ -17,6 +17,12 @@ public static class BattleEvents
         OnBattlePhaseChanged?.Invoke(newPhase, oldPhase);
     }
 
+    public static event Action<BattleType, BattleType> OnBattleTypeChanged;
+    public static void RaiseBattleTypeChanged(BattleType newType, BattleType oldType)
+    {
+        OnBattleTypeChanged?.Invoke(newType, oldType);
+    }
+
     public static event Action OnBattleStart;
     public static void RaiseBattleStart()
     {

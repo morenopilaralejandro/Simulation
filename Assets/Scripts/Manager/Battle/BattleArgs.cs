@@ -2,8 +2,10 @@ using Simulation.Enums.Battle;
 
 public static class BattleArgs
 {
-    public static string TeamId0;
-    public static string TeamId1;
+    public static string HomeTeamId;
+    public static string AwayTeamId;
+    public static string HomeTeamGuid;
+    public static string AwayTeamGuid;
     public static string BallId;
     public static string FieldId;
     public static BattleType BattleType;
@@ -13,14 +15,16 @@ public static class BattleArgs
 
     public static void Clear()
     {
-        TeamId0 = null;
-        TeamId1 = null;
+        HomeTeamId = null;
+        AwayTeamId = null;
         BallId = null;
     }
 
     public static void Set(
-        string teamId0, 
-        string teamId1, 
+        string homeTeamId = null,
+        string awayTeamId = null,
+        string homeTeamGuid = null,
+        string awayTeamGuid = null,
         string ballId = "crimson",
         string fieldId = "stadium_main",
         BattleType battleType = BattleType.Mini,
@@ -28,8 +32,10 @@ public static class BattleArgs
         WinConditionType winConditionType = WinConditionType.ScoreGoals,
         WinConditionParams winConditionParams = null)
     {
-        TeamId0 = teamId0;
-        TeamId1 = teamId1;
+        HomeTeamId = homeTeamId;
+        AwayTeamId = awayTeamId;
+        HomeTeamGuid = homeTeamGuid;
+        AwayTeamGuid = awayTeamGuid;
         BallId = ballId;
         FieldId = fieldId;
         BattleType = battleType;
@@ -39,8 +45,10 @@ public static class BattleArgs
     }
 
     public static void SetMini(
-        string teamId0, 
-        string teamId1, 
+        string homeTeamId = null,
+        string awayTeamId = null,
+        string homeTeamGuid = null,
+        string awayTeamGuid = null,
         string ballId = "crimson",
         string fieldId = "stadium_main",
         BattleType battleType = BattleType.Mini,
@@ -48,8 +56,10 @@ public static class BattleArgs
         WinConditionType winConditionType = WinConditionType.ScoreGoals,
         WinConditionParams winConditionParams = null)
     {
-        TeamId0 = teamId0;
-        TeamId1 = teamId1;
+        HomeTeamId = homeTeamId;
+        AwayTeamId = awayTeamId;
+        HomeTeamGuid = homeTeamGuid;
+        AwayTeamGuid = awayTeamGuid;
         BallId = ballId;
         FieldId = fieldId;
         BattleType = battleType;
@@ -59,8 +69,10 @@ public static class BattleArgs
     }
 
     public static void SetFull(
-        string teamId0, 
-        string teamId1, 
+        string homeTeamId = null,
+        string awayTeamId = null,
+        string homeTeamGuid = null,
+        string awayTeamGuid = null,
         string ballId = "crimson",
         string fieldId = "stadium_main",
         BattleType battleType = BattleType.Full,
@@ -68,8 +80,10 @@ public static class BattleArgs
         WinConditionType winConditionType = WinConditionType.WinMatch,
         WinConditionParams winConditionParams = null)
     {
-        TeamId0 = teamId0;
-        TeamId1 = teamId1;
+        HomeTeamId = homeTeamId;
+        AwayTeamId = awayTeamId;
+        HomeTeamGuid = homeTeamGuid;
+        AwayTeamGuid = awayTeamGuid;
         BallId = ballId;
         FieldId = fieldId;
         BattleType = battleType;

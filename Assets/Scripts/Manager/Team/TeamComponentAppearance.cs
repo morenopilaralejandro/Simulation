@@ -6,57 +6,68 @@ public class TeamComponentAppearance
     #region Sprite
 
     public Sprite TeamCrestSprite { get; private set; }
-
-    #endregion
-
-    #region Address
-
-    private string _teamCrestAddress;
+    public string TeamCrestId { get; private set; }
 
     #endregion
 
     #region Internal
 
     private Team team;
-    private string defaultIdCommon = "default";
-    //private string defaultIdRare = "default";
 
     #endregion
 
     public TeamComponentAppearance(TeamData teamData, Team team, TeamSaveData teamSaveData = null)
     {
-        Initialize(teamData, team);
+        Initialize(teamData, team, teamSaveData);
     }
 
     public void Initialize(TeamData teamData, Team team, TeamSaveData teamSaveData = null)
     {
         this.team = team;
-        _ = InitializeAsync(teamData, teamSaveData);
-    }
 
-    private void OnDestroy()
-    {
-        if (!string.IsNullOrEmpty(_teamCrestAddress)) AddressableLoader.Release(_teamCrestAddress);
-    }
-
-    private async Task InitializeAsync(TeamData teamData, TeamSaveData teamSaveData = null)
-    {
         if (teamSaveData != null) 
         {
-            TeamCrestSprite = await SpriteAtlasManager.Instance.GetTeamCrest(teamSaveData.CustomCrestId);
+            TeamCrestId = teamSaveData.CustomCrestId;
+            _ = InitializeAsync(TeamCrestId);
+            return;
+        }
+
+        TeamCrestId = teamData.TeamId;
+        _ = InitializeAsync(TeamCrestId);
+
+        /*
+        if (teamSaveData != null) 
+        {
+            TeamCrestId = teamSaveData.CustomCrestId;
+            _ = InitializeAsync(TeamCrestId);
             return;
         }
 
 
-        _teamCrestAddress = AddressableLoader.GetTeamCrestAddress(teamData.TeamId);
-        if (_teamCrestAddress != null) 
+        if (BattleArgs.Context == RandomEncounter) 
         {
-            TeamCrestSprite = await SpriteAtlasManager.Instance.GetTeamCrest(teamData.TeamId);
+            TeamCrestId = isRare ? TeamLoadoutManager.TEAM_CREST_ID_RARE : TeamLoadoutManager.TEAM_CREST_ID_COMMON
         } else 
         {
-            //TODO check common or rare
-            TeamCrestSprite = await SpriteAtlasManager.Instance.GetTeamCrest(defaultIdCommon);
+            TeamCrestId = teamData.TeamId;
         }
+
+        _ = InitializeAsync(TeamCrestId);
+
+        */
+
+    }
+
+    private async Task InitializeAsync(string teamCrestId)
+    { 
+        TeamCrestSprite = await SpriteAtlasManager.Instance.GetTeamCrest(teamCrestId);
+        TeamEvents.RaiseTeamCrestSpriteUpdated(team);
+    }
+
+    public void UpdateAppeariance(string teamCrestId) 
+    {
+        TeamCrestId = teamCrestId;
+        _ = InitializeAsync(TeamCrestId);
     }
 
 }

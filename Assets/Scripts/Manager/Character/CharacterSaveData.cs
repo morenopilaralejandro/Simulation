@@ -30,13 +30,17 @@ public class CharacterSaveData
 
     //avatar
     public bool IsCustomAvatar;
+    public string CustomAvatarId;
     public string CustomName;
     public CharacterSize CustomCharacterSize;
-    public PortraitSize CustomPortraitSize;
     public Gender CustomGender;
     public Element CustomElement;
     public Position CustomPosition;
-    public List<CharacterStatSaveData> CustomBaseStats;
+    public HairStyle CustomHairStyle;
+    public HairColorType CustomHairColorType;
+    public EyeColorType CustomEyeColorType;
+    public BodyColorType CustomBodyColorType;
+    public PortraitSize CustomPortraitSize;
 
     //TODO scouting with time stamp
 }

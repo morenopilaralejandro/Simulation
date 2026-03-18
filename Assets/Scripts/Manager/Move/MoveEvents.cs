@@ -16,8 +16,8 @@ public static class MoveEvents
         OnMoveCutsceneEnd?.Invoke();
     }
 
-    public static event Action<Move, Character> OnMoveUsed;
-    public static void RaiseMoveUsed(Move move, Character character)
+    public static event Action<Move, CharacterEntityBattle> OnMoveUsed;
+    public static void RaiseMoveUsed(Move move, CharacterEntityBattle character)
     {
         OnMoveUsed?.Invoke(move, character);
     }

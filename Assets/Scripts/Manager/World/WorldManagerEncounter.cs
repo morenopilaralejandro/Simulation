@@ -144,8 +144,8 @@ public class WorldManagerEncounter : MonoBehaviour
     public void StartEncounterBattle(EncounterData encounter) 
     {
         BattleArgs.SetMini(
-            "faith_selection", 
-            encounter.teamId,
+            homeTeamGuid : TeamLoadoutManager.Instance.ActiveLoadoutGuid, 
+            awayTeamId : encounter.teamId,
             battleResultsType : BattleResultsType.Drop);
         SceneLoader.Instance.LoadGroup(sceneBattle);
     }

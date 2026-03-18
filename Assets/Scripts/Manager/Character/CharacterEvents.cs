@@ -26,4 +26,17 @@ public static class CharacterEvents
     {
         OnSpeechBubbleHidden?.Invoke(character);
     }
+
+    public static event Action<Character> OnCharacterAdded;
+    public static void RaiseCharacterAdded(Character character)
+    {
+        OnCharacterAdded?.Invoke(character);
+    }
+
+    public static event Action<Character> OnCharacterRemoved;
+    public static void RaiseCharacterRemoved(Character character)
+    {
+        OnCharacterRemoved?.Invoke(character);
+    }
+
 }
