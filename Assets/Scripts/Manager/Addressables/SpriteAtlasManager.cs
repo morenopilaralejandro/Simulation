@@ -17,6 +17,7 @@ public class SpriteAtlasManager : MonoBehaviour
     private const string CHARACTER_PORTRAIT_ATLAS_ID = "atlases-characters-portraits";
     private const string CHARACTER_COMMON_ATLAS_ID = "atlases-characters-common";
     private const string CHARACTER_WORLD_ATLAS_ID = "atlases-characters-world";
+    private const string ITEM_ICON_ATLAS_ID = "atlases-items-icons";
 
     private void Awake()
     {
@@ -52,28 +53,35 @@ public class SpriteAtlasManager : MonoBehaviour
     public Task<Sprite> GetTeamCrest(string id)
     {
         var atlasId = TEAM_CREST_ATLAS_ID;
-        var spriteId = AddressableLoader.GetTeamCrestAddress(id);;
+        var spriteId = AddressableLoader.GetTeamCrestAddress(id);
         return GetSpriteAsync(atlasId, spriteId);
     }
 
     public Task<Sprite> GetCharacterPortrait(string id)
     {
         var atlasId = CHARACTER_PORTRAIT_ATLAS_ID;
-        var spriteId = AddressableLoader.GetCharacterPortraitAddress(id);;
+        var spriteId = AddressableLoader.GetCharacterPortraitAddress(id);
         return GetSpriteAsync(atlasId, spriteId);
     }
 
     public Task<Sprite> GetCharacterHair(string id)
     {
         var atlasId = CHARACTER_COMMON_ATLAS_ID;
-        var spriteId = AddressableLoader.GetCharacterHairAddress(id);;
+        var spriteId = AddressableLoader.GetCharacterHairAddress(id);
         return GetSpriteAsync(atlasId, spriteId);
     }
 
     public Task<Sprite> GetCharacterHairWorld(string id)
     {
         var atlasId = CHARACTER_WORLD_ATLAS_ID;
-        var spriteId = AddressableLoader.GetCharacterHairWorldAddress(id);;
+        var spriteId = AddressableLoader.GetCharacterHairWorldAddress(id);
+        return GetSpriteAsync(atlasId, spriteId);
+    }
+
+    public Task<Sprite> GetItemIcon(string id)
+    {
+        var atlasId = ITEM_ICON_ATLAS_ID;
+        var spriteId = AddressableLoader.GetItemIconAddress(id);
         return GetSpriteAsync(atlasId, spriteId);
     }
 

@@ -5,7 +5,6 @@ using Simulation.Enums.World;
 public class ChestComponentInteractable : Interactable
 {
     private ChestEntity chestEntity;
-    private bool opened;
 
     public void Initialize(ChestEntity chestEntity)
     {
@@ -14,9 +13,8 @@ public class ChestComponentInteractable : Interactable
 
     protected override void InteractInternal()
     {
-        if (opened) return;
-        opened = true;
-        LogManager.Error("Chest Opened!");
+        chestEntity.StartDialog();
+        LogManager.Trace("[ChestComponentInteractable] Chest interacted");
     }
 
 }

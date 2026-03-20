@@ -10,7 +10,8 @@ namespace Simulation.Enums.Localization
         Duel_Log,
         Zone,
         Npc,
-        Dialog
+        Dialog,
+        Item
     }
 
     public enum LocalizationField

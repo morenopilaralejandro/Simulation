@@ -8,7 +8,7 @@ public static class AddressableConfig
     public const string CharacterPortraitPath = "characters-portraits";
     public const string CharacterHairPath = "character-hair";
     public const string CharacterHairWorldPath = "character-world-hair";
-
+    public const string ItemIconPath = "item-icon";
 
     [Header("Kit Paths")]
     public const string KitBodyPath = "kits-bodies";

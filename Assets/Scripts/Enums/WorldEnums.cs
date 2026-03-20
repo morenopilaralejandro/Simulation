@@ -37,13 +37,19 @@ namespace Simulation.Enums.World
         Paused
     }
 
-    // FacingDirection.cs
     public enum FacingDirection
     {
         Up,
         Down,
         Left,
         Right
+    }
+
+    public enum ChestState
+    {
+        Closed,
+        Locked,
+        Opened
     }
 }
 

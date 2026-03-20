@@ -30,6 +30,8 @@ public class DialogManager : MonoBehaviour
 
     public bool IsDialogActive => _state != DialogState.Inactive;
     public bool CanAcceptInput => IsDialogActive && !_uiController.IsFading;
+    public InkStoryManager InkStoryManager=> _storyManager;
+    public DialogLocalizationBridge DialogLocalizationBridge=> _locBridge;
     public DialogGameDataProvider DialogGameDataProvider => _gameDataProvider;
 
     private void Awake()
