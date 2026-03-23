@@ -16,7 +16,8 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 20eafc7676cc8a7f583d02b667230b3c, type: 2}
   m_Metadata:
-    m_Items: []
+    m_Items:
+    - rid: 6474107469045432322
   m_TableData:
   - m_Id: 303530935853056
     m_Localized: a
@@ -26,6 +27,29 @@ MonoBehaviour:
     m_Localized: b
     m_Metadata:
       m_Items: []
+  - m_Id: 4266809588719616
+    m_Localized: You open the chest...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4266809592913920
+    m_Localized: You found {0[chest_item_name]}!
+    m_Metadata:
+      m_Items:
+      - rid: 6474107469045432322
+  - m_Id: 4266809592913921
+    m_Localized: The chest is empty.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4266809592913922
+    m_Localized: The chest is locked. You need a key.
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6474107469045432322
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 
+        m_SharedEntries:
+        - id: 4266809592913920

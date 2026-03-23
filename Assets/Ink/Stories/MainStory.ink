@@ -21,3 +21,7 @@ VAR chest_item_name = ""
 VAR chest_item_count = 0
 
 INCLUDE inknpcs/inknpc_test.ink
+
+INCLUDE inkchests/chest_open.ink
+INCLUDE inkchests/chest_empty.ink
+INCLUDE inkchests/chest_locked.ink

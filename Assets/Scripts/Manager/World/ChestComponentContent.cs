@@ -5,6 +5,7 @@ using Simulation.Enums.World;
 public class ChestComponentContent
 {
     public ItemData ItemData { get; private set; }
+    public string ItemId { get; private set; }
 
     public ChestComponentContent(ItemData itemData)
     {
@@ -14,6 +15,7 @@ public class ChestComponentContent
     public void Initialize(ItemData itemData)
     {
         ItemData = itemData;
+        ItemId = itemData.ItemId;
         //Item = ItemFactory.Create(itemData);
     }
 }

@@ -16,7 +16,7 @@ public class ChestComponentPersistence
 
     public void Initialize(Chest chest, bool isPersistent)
     {
-        this.Chest = chest;
+        this.chest = chest;
         chestStateManager = ChestStateManager.Instance;
         IsPersistent = isPersistent;
     }

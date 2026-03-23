@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 3085562737896802829}
   - component: {fileID: 2992403538696008100}
   - component: {fileID: 5046113435456412288}
+  - component: {fileID: 5424736442325053385}
   m_Layer: 0
   m_Name: ChestEntity
   m_TagString: Untagged
@@ -172,9 +173,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chestId: 
   itemData: {fileID: 11400000, guid: f93f44d48d758bcf6afe7295d9624c79, type: 2}
+  state: 0
   isPersistent: 1
   interactableComponent: {fileID: 5046113435456412288}
   appearanceComponent: {fileID: 1724042851352750714}
+  dialogComponent: {fileID: 5424736442325053385}
 --- !u!114 &5046113435456412288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,6 +188,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d1df20ddb60f48a79801808d46a2fbc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5424736442325053385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3511325258102028708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de741d9064c103e15bb6d2755a03bbad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &3603912737387543937

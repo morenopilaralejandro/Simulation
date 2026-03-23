@@ -8,14 +8,14 @@ public class ChestComponentStateMachine
     public bool IsOpened => State == ChestState.Opened;
     public bool IsLocked => State == ChestState.Locked;
 
-    public ChestComponentStateMachine(ChestState state)
+    public ChestComponentStateMachine()
     {
-        Initialize(state);
+        Initialize();
     }
 
-    public void Initialize(ChestState state)
+    public void Initialize()
     {
-        State = state;
+        State = ChestState.Closed;
     }
 
     public void SetState(ChestState newState) 

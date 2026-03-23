@@ -20,22 +20,20 @@ public class Chest
     public Chest(
         string chestId, 
         ItemData itemData,
-        ChestState state,
         bool isPersistent)
     {
-        Initialize(chestId, itemData);
+        Initialize(chestId, itemData, isPersistent);
     }
 
     public void Initialize(
         string chestId, 
         ItemData itemData,
-        ChestState state,
         bool isPersistent)
     {
         attributesComponent = new ChestComponentAttributes(chestId);
-        stateMachineComponent = new ChestComponentStateMachine(state);
+        stateMachineComponent = new ChestComponentStateMachine();
         contentComponent = new ChestComponentContent(itemData);
-        persistenceComponent = ChestComponentPersistence(this, isPersistent);
+        persistenceComponent = new ChestComponentPersistence(this, isPersistent);
     }
 
     #endregion
@@ -53,11 +51,12 @@ public class Chest
 
     // contentComponent
     public ItemData ItemData => contentComponent.ItemData;
+    public string ItemId => contentComponent.ItemId;
 
     //persistenceComponent
     public bool IsPersistent => persistenceComponent.IsPersistent;
     public bool IsOpenedPersistent => persistenceComponent.IsOpenedPersistent;
-    public void OpenPersistent() => persistenceComponent.OpenPersistent;
+    public void OpenPersistent() => persistenceComponent.OpenPersistent();
 
     #endregion
 }

@@ -20,13 +20,13 @@ public class DialogManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private InkStoryManager _storyManager;
     [SerializeField] private DialogLocalizationBridge _locBridge;
-    [SerializeField] private DialogGameDataProvider _gameDataProvider;
     [SerializeField] private DialogSpeakerCache _speakerCache;
 
     private DialogUIController _uiController;
     private DialogState _state = DialogState.Inactive;
     private AudioManager _audioManager;
     private InputManager _inputManager;
+    private DialogGameDataProvider _gameDataProvider;
 
     public bool IsDialogActive => _state != DialogState.Inactive;
     public bool CanAcceptInput => IsDialogActive && !_uiController.IsFading;
@@ -50,6 +50,7 @@ public class DialogManager : MonoBehaviour
     {
         _audioManager = AudioManager.Instance;
         _inputManager = InputManager.Instance;
+        _gameDataProvider = new DialogGameDataProvider();
     }
 
     private void OnEnable()

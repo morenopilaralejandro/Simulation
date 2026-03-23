@@ -26,7 +26,10 @@ public class ChestEntity : MonoBehaviour
     {
         Initialize(chestId, itemData);
         // Check if already opened
-        if (IsOpenedPersistent) Open();
+        if (IsOpenedPersistent) 
+            Open();
+        else 
+            SetState(state);
     }
 
     public void Initialize(string chestId, ItemData itemData)
@@ -34,7 +37,6 @@ public class ChestEntity : MonoBehaviour
         chest = new Chest(
             chestId, 
             itemData,
-            state,
             isPersistent);
 
         interactableComponent.Initialize(this);
@@ -58,14 +60,14 @@ public class ChestEntity : MonoBehaviour
     public void SetState(ChestState newState) 
     { 
         chest.SetState(newState);
-        switch (chestEntity.State) 
+        switch (newState) 
         {
-            case Opened:
+            case ChestState.Opened:
                 SetSpriteOpened();
                 break;
-            case Closed:
+            case ChestState.Closed:
                 SetSpriteClosed();
-                break:
+                break;
             /*
             default: //Opened
                 StartDialogEmpty();
@@ -75,12 +77,13 @@ public class ChestEntity : MonoBehaviour
     }
 
     // contentComponent
-    public ItemData ItemData => contentComponent.ItemData;
+    public ItemData ItemData => chest.ItemData;
+    public string ItemId => chest.ItemId;
 
     //persistenceComponent
-    public bool IsPersistent => persistenceComponent.IsPersistent;
-    public bool IsOpenedPersistent => persistenceComponent.IsOpenedPersistent;
-    public void OpenPersistent() => persistenceComponent.OpenPersistent;
+    public bool IsPersistent => chest.IsPersistent;
+    public bool IsOpenedPersistent => chest.IsOpenedPersistent;
+    public void OpenPersistent() => chest.OpenPersistent();
 
     #endregion
 

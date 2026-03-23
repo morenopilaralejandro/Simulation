@@ -18,7 +18,7 @@ public class ChestComponentDialog : MonoBehaviour
 
     public void Initialize(ChestEntity chestEntity)
     {
-        this.ChestEntity = chestEntity;
+        this.chestEntity = chestEntity;
         dialogManager = DialogManager.Instance;
         inkStoryManager = dialogManager.InkStoryManager;
         localizationBridge = dialogManager.DialogLocalizationBridge;
@@ -34,12 +34,12 @@ public class ChestComponentDialog : MonoBehaviour
     {
         switch (chestEntity.State) 
         {
-            case Locked:
+            case ChestState.Locked:
                 StartDialogLocked();
                 break;
-            case Closed:
+            case ChestState.Closed:
                 StartDialogOpen();
-                break:
+                break;
             default: //Opened
                 StartDialogEmpty();
                 break;
@@ -55,12 +55,13 @@ public class ChestComponentDialog : MonoBehaviour
     {
         inkStoryManager.SetVariable(
             "chest_item_name", 
-            localizationBridge.ResolveItemName(chestEntity.Item.ItemId));
+            localizationBridge.ResolveItemName(chestEntity.ItemId));
 
         inkStoryManager.SetVariable(
             "chest_item_count", 
             1);
 
+        chestEntity.Open();
         dialogManager.StartDialog(DIALOG_OPEN);
     }
 

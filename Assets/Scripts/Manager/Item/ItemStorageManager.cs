@@ -31,6 +31,8 @@ public class ItemStorageManager : MonoBehaviour
     public void FirstTimeInitialize() => storage.FirstTimeInitialize();
     public void AddItem(Item item, int count = 1) => storage.AddItem(item, count);
     public bool RemoveItem(Item item, int count = 1) => storage.RemoveItem(item, count);
+    public bool HasItem(Item item) => storage.HasItem(item);
+    public int GetItemCount(Item item) => storage.GetItemCount(item);
 
     #endregion
 
