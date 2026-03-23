@@ -185,8 +185,6 @@ public class DialogLocalizationBridge : MonoBehaviour
 
     private LocalizationComponentString GetOrCreateItemName(string itemId)
     {
-        return null;
-        /*
         if (!_itemNameCache.TryGetValue(itemId, out var component))
         {
             component = new LocalizationComponentString(
@@ -197,7 +195,6 @@ public class DialogLocalizationBridge : MonoBehaviour
             _itemNameCache[itemId] = component;
         }
         return component;
-        */
     }
 
     // ============ ARGUMENT INJECTION ============

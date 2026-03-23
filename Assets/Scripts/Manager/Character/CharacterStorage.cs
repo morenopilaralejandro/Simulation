@@ -18,10 +18,7 @@ public class CharacterStorage
     public IReadOnlyDictionary<string, Character> Characters => characters;
     public int Count => characters.Count;
 
-    public CharacterStorage() 
-    {
-
-    }
+    public CharacterStorage() { }
 
     #region First Time Initialize
 

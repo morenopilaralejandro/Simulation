@@ -4,37 +4,48 @@ using System.Collections.Generic;
 /// <summary>
 /// Implementation for IDialogGameDataProvider.
 /// </summary>
-public class DialogGameDataProvider : MonoBehaviour, IDialogGameDataProvider
+public class DialogGameDataProvider : IDialogGameDataProvider
 {
-    [SerializeField] private string _playerName = "Hero";
-    [SerializeField] private int _gold = 1000;
-    
+    private string _playerName = "Hero";
+    private int _gold = 1000;
+    private int _reputation = 0;
+
+    private ItemStorageManager _itemStorageManager;
+    private Item _cachedItem;
+
+    //placeholder
     private Dictionary<string, int> _inventory = new Dictionary<string, int>();
     private Dictionary<string, bool> _flags = new Dictionary<string, bool>();
-    private int _reputation = 0;
+
+    public DialogGameDataProvider() 
+    {
+        _itemStorageManager = ItemStorageManager.Instance;
+    }
 
     public string GetPlayerName() => _playerName;
     
-    public bool HasItem(string itemId) => 
-        _inventory.ContainsKey(itemId) && _inventory[itemId] > 0;
-    
-    public int GetItemCount(string itemId) => 
-        _inventory.TryGetValue(itemId, out int count) ? count : 0;
-    
-    public void GiveItem(string itemId, int count)
+    public bool HasItem(string itemId) 
     {
-        if (!_inventory.ContainsKey(itemId)) _inventory[itemId] = 0;
-            _inventory[itemId] += count;
-        LogManager.Trace($"[DialogGameDataProvider] Gave {count}x {itemId}. Total: {_inventory[itemId]}");
+        _cachedItem = ItemFactory.CreateById(itemId);
+        return _itemStorageManager.HasItem(_cachedItem);
+    }
+
+    public int GetItemCount(string itemId) 
+    {
+        _cachedItem = ItemFactory.CreateById(itemId);
+        return _itemStorageManager.GetItemCount(_cachedItem);
     }
     
-    public void RemoveItem(string itemId, int count)
+    public void GiveItem(string itemId, int count = 1)
     {
-        if (_inventory.ContainsKey(itemId))
-        {
-            _inventory[itemId] = Mathf.Max(0, _inventory[itemId] - count);
-            LogManager.Trace($"[DialogGameDataProvider] Removed {count}x {itemId}. Remaining: {_inventory[itemId]}");
-        }
+        _cachedItem = ItemFactory.CreateById(itemId);
+        _itemStorageManager.AddItem(_cachedItem, count);
+    }
+    
+    public void RemoveItem(string itemId, int count = 1)
+    {
+        _cachedItem = ItemFactory.CreateById(itemId);
+        _itemStorageManager.RemoveItem(_cachedItem, count);
     }
     
     public int GetGold() => _gold;

@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Gameplay-Item-Name-Localized Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Gameplay-Item-Name-Localized
+  m_TableCollectionNameGuidString: 3d54b529cb272137cb533391870dc3e6
+  m_Entries:
+  - m_Id: 198480502784
+    m_Key: spike_cool
+    m_Metadata:
+      m_Items: []
+  - m_Id: 198480502785
+    m_Key: cross_anti
+    m_Metadata:
+      m_Items: []
+  - m_Id: 198480502786
+    m_Key: faith
+    m_Metadata:
+      m_Items: []
+  - m_Id: 198480502787
+    m_Key: shard_one
+    m_Metadata:
+      m_Items: []
+  - m_Id: 198480502786
+    m_Key: faith
+    m_Metadata:
+      m_Items: []
+  - m_Id: 198484697088
+    m_Key: stone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 198484697089
+    m_Key: jewel_passion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 198484697090
+    m_Key: overlord_overhead
+    m_Metadata:
+      m_Items: []
+  - m_Id: 198484697091
+    m_Key: ham
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 6474107447933141000
+  references:
+    version: 2
+    RefIds:
+    - rid: 6474107447933141000
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1774020718206

@@ -20,7 +20,6 @@ public class DialogUIController : MonoBehaviour
     [SerializeField] private CanvasGroup _dialogBoxCanvasGroup;
     [SerializeField] private TextMeshProUGUI _dialogText;
     [SerializeField] private TextMeshProUGUI _characterNameText;
-    [SerializeField] private Image _characterPortrait;
     [SerializeField] private GameObject _characterNamePanel;
     [SerializeField] private GameObject _portraitPanel;
     [SerializeField] private CharacterPortraitSpeaker _portraitSpeaker;
@@ -182,14 +181,14 @@ public class DialogUIController : MonoBehaviour
             else
             {
                 _characterNameText.text = line.SpeakerId;
-                _characterNamePanel.SetActive(true);
+                _characterNamePanel.SetActive(false);
                 _portraitPanel.SetActive(false);
             }
         }
         else
         {
             // System message or no speaker
-            _characterNamePanel.SetActive(line.IsSystemMessage);
+            _characterNamePanel.SetActive(false);
             if (line.IsSystemMessage)
                 _characterNameText.text = ""; // or "System" if you want
             _portraitPanel.SetActive(false);

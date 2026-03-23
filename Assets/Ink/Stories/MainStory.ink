@@ -17,4 +17,11 @@ VAR item_name = ""
 VAR item_count = 0
 VAR gold_amount = 100
 
+VAR chest_item_name = ""
+VAR chest_item_count = 0
+
 INCLUDE inknpcs/inknpc_test.ink
+
+INCLUDE inkchests/chest_open.ink
+INCLUDE inkchests/chest_empty.ink
+INCLUDE inkchests/chest_locked.ink

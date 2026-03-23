@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
+using Simulation.Enums.Item;
 using Simulation.Enums.Move;
 using Simulation.Enums.Kit;
 
@@ -251,6 +252,19 @@ public static class ColorManager
     public static Color GetBattleMessageColor(MessageType messageType)
     {
         return battleMessageColors.TryGetValue(messageType, out var color)
+            ? color : Color.white;
+    }
+
+    private static readonly Dictionary<ItemSpriteColor, Color> itemSpriteColors =
+        new Dictionary<ItemSpriteColor, Color>()
+    {
+        { ItemSpriteColor.Move_Fire,    new Color(1f, 0.5948128f, 0.015686274f, 1f) },
+        { ItemSpriteColor.Spike_Red,    new Color(1f, 1f, 1f, 1f) }
+    };
+
+    public static Color GetItemSpriteColor(ItemSpriteColor itemSpriteColor)
+    {
+        return itemSpriteColors.TryGetValue(itemSpriteColor, out var color)
             ? color : Color.white;
     }
 

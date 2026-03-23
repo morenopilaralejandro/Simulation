@@ -306,6 +306,44 @@ public class InkStoryManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set an ink variable from C# before or during dialog.
+    /// Used by chests, events, cutscenes — anything that needs
+    /// to inject dynamic data into ink.
+    /// </summary>
+    public void SetVariable(string variableName, object value)
+    {
+        // Set in the current story
+        if (_currentStory != null)
+        {
+            try
+            {
+                _currentStory.variablesState[variableName] = value;
+            }
+            catch (System.Exception e)
+            {
+                LogManager.Trace(
+                    $"[InkStoryManager] Failed to set variable '{variableName}': {e.Message}");
+            }
+        }
+
+        // Also set in all cached stories (variable might be in any of them)
+        foreach (var kvp in _storyCache)
+        {
+            try
+            {
+                kvp.Value.variablesState[variableName] = value;
+            }
+            catch { /* Variable doesn't exist in this story, skip */ }
+        }
+
+        // Also push to localization bridge for {0[variable]} resolution
+        if (_locBridge != null)
+        {
+            _locBridge.SetVariable(variableName, value.ToString());
+        }
+    }
+
     private void ProcessCommands(DialogLine line)
     {
         // Process SFX tag

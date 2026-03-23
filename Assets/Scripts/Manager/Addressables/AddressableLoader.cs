@@ -93,4 +93,7 @@ public static class AddressableLoader
 
     public static string GetTeamCrestAddress(string id) =>
         $"{AddressableConfig.TeamCrestPath}{AddressableConfig.PathSeparator}{id}";
+
+    public static string GetItemIconAddress(string id) =>
+        $"{AddressableConfig.ItemIconPath}{AddressableConfig.PathSeparator}{id}";
 }

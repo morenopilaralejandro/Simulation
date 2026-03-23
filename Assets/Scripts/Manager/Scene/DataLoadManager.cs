@@ -36,6 +36,7 @@ public class DataLoadManager : MonoBehaviour
         Task loadKits = KitManager.Instance.LoadAllKitsAsync();   
         Task loadScenes = SceneGroupRegistry.Instance.LoadAllSceneGroupAsync();
         Task loadNpcs = NpcManager.Instance.LoadAllNpcDataAsync();
+        Task loadItems = ItemManager.Instance.LoadAllItemDataAsync();
         // SpriteAtlas
         await loadSpriteAtlas;
         // Formation     
@@ -56,7 +57,8 @@ public class DataLoadManager : MonoBehaviour
             loadMoveEvolutionPath,
             loadTeams, 
             loadScenes,
-            loadNpcs);
+            loadNpcs,
+            loadItems);
 
         IsReady = true;
         LogManager.Trace("[DataLoadManager] All data loaded.");
