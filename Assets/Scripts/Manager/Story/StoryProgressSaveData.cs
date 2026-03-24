@@ -9,6 +9,9 @@ public class StoryProgressSaveData
     public Dictionary<string, bool> storyFlags;
     public Dictionary<string, int> storyVariables;
     public List<QuestStateSaveData> questStates;
+
+    dictionaty quest id - quest save data
+
     public List<string> completedEvents;
     public int currentChapter;
     public string currentMainQuestId;

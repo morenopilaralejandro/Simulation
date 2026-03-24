@@ -5,8 +5,8 @@ using Simulation.Enums.Item;
 [System.Serializable]
 public class QuestRewards
 {
-    public int experiencePoints;
-    public int gold;
-    public List<ItemReward> items = new List<ItemReward>();
-    public List<StoryEffect> storyEffects = new List<StoryEffect>();
+    public int Exp;
+    public int Gold;
+    public List<ItemReward> ItemRewards = new List<ItemReward>();
+    public List<StoryEffect> StoryEffects = new List<StoryEffect>();
 }

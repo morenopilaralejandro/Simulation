@@ -6,24 +6,24 @@ using Simulation.Enums.Story;
 [CreateAssetMenu(fileName = "QuestData", menuName = "ScriptableObject/Quest/QuestData")]
 public class QuestData : ScriptableObject
 {
-    public string QuestId;
-    //location
-    //public string questName;
-    //public string description;
-    public QuestType questType;
-    public int recommendedLevel;
+    public string QuestId; //location: name, description
+    public QuestType QuestType;
+    public int RecommendedLevel;
 
     [Header("Objectives")]
-    public List<QuestObjective> objectives = new List<QuestObjective>();
+    public List<string> ObjectiveIds = new List<string>();
 
     [Header("Prerequisites")]
-    public List<StoryPrerequisite> prerequisites = new List<StoryPrerequisite>();
+    public List<StoryPrerequisite> Prerequisites = new List<StoryPrerequisite>();
 
     [Header("Rewards")]
-    public QuestRewards rewards;
+    public int RewardExp;
+    public int RewardGold;
+    public List<ItemReward> ItemRewards = new List<ItemReward>();
+    public List<StoryEffect> StoryEffects = new List<StoryEffect>();
 
     [Header("Flow")]
-    public List<string> followUpQuestIds = new List<string>();
+    public List<string> FollowUpQuestIds = new List<string>();
 
     /*
     [Header("Dialogue")]

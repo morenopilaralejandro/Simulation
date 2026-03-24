@@ -1,6 +1,6 @@
 namespace Simulation.Enums.Quest
 {
-    public enum QuestStatus
+    public enum QuestState
     {
         NotStarted,
         Started,
