@@ -1,22 +1,22 @@
-// StoryEvent.cs
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "StoryEventData", menuName = "ScriptableObject/Story/StoryEventData")]
 public class StoryEventData : ScriptableObject
 {
-    public string eventId;
-    //public string eventName;
-    //public string description; location
+    public string StoryEventId; //location name description
 
     [Header("Prerequisites")]
-    public List<StoryPrerequisite> prerequisites = new List<StoryPrerequisite>();
+    public List<StoryPrerequisite> Prerequisites = new List<StoryPrerequisite>();
 
     [Header("Effects")]
-    public List<StoryEffect> effects = new List<StoryEffect>();
+    public List<StoryEffect> Effects = new List<StoryEffect>();
 
     [Header("Cutscene")]
-    public bool hasCutscene;
-    public string cutsceneId;
-    public AudioClip eventMusic;
+    public string CutsceneId;
+
+    [Header("ScriptedEvent")]
+    public string ScriptedEventId;
+
+    public AudioClip BgmClip;
 }

@@ -41,7 +41,9 @@ public class QuestSystemPersistence
     {
         return new QuestSystemSaveData
         {
-            QuestSaveDataDict = GetQuestSaveDataDict(),
+            CurrentMainQuestId = questSystemManager.CurrentMainQuestId,
+            CurrentActiveQuestId = questSystemManager.CurrentActiveQuestId,
+            QuestSaveDataDict = GetQuestSaveDataDict()
         };
     }
 

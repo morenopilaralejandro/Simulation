@@ -1,0 +1,12 @@
+using System.Collections.Generic;
+using Simulation.Enums.Quest;
+using Simulation.Enums.Story;
+
+[CreateAssetMenu(fileName = "StoryChapterData", menuName = "ScriptableObject/Story/StoryChapterData")]
+public class StoryChapterData : ScriptableObject
+{
+    public string StoryChapterId;
+    public int StoryChapterNumber; //location title description
+    public string IntroEventId;
+    public List<string> ChapterQuestIds = new List<string>();
+}

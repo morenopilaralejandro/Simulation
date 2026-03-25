@@ -30,6 +30,7 @@ public class QuestSystemManager : MonoBehaviour
         => questSystemController.UpdateQuestObjectiveProgress(questId, objectiveId, amount)
     public void CompleteQuest(string questId) => questSystemController.CompleteQuest(questId)
     public void FailQuest(string questId) => questSystemController.FailQuest(questId)
+    public Quest GetQuest(string questId) => questSystemController.GetQuest(questId)
     public QuestState GetQuestState(string questId) => questSystemController.GetQuestState(questId)
     public List<Quest> GetQuestsByState(QuestState state) => questSystemController.GetQuestsByState(state)
     public List<Quest> GetQuestsByType(QuestType questType) => questSystemController.GetQuestsByType(questType)

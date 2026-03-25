@@ -86,6 +86,11 @@ public class QuestSystemController
         LogManager.Trace($"[QuestSystemController] Failed: {questId}");
     }
 
+    public Quest GetQuest(string questId)
+    {
+        return questDict.TryGetValue(questId, out auxQuest) ? auxQuest : null;
+    }
+
     public QuestState GetQuestState(string questId)
     {
         return questDict.TryGetValue(questId, out auxQuest) ? auxQuest.State : QuestState.NotStarted;

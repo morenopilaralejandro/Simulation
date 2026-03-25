@@ -3,7 +3,7 @@ using UnityEngine;
 using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
-public class NPCQuestGiver : MonoBehaviour
+public class StoryExampleNPCQuestGiver : MonoBehaviour
 {
     [Header("NPC Info")]
     [SerializeField] private string npcId;

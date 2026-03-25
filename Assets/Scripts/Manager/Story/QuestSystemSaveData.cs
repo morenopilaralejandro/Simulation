@@ -6,6 +6,8 @@ using Simulation.Enums.Story;
 [Serializable]
 public class QuestSystemSaveData
 {
+    public string CurrentMainQuestId;
+    public string CurrentActiveQuestId;
     public Dictionary<string, QuestSaveData> QuestSaveDataDict;
 }
 

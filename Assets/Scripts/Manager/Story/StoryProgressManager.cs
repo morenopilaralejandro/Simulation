@@ -17,11 +17,9 @@ public class StoryProgressManager : MonoBehaviour
     [SerializeField] private StoryDatabase storyDatabase;
 
     // Story state
-    private Dictionary<string, bool> storyFlags = new Dictionary<string, bool>();
-    private Dictionary<string, int> storyVariables = new Dictionary<string, int>();
+
+
     private Dictionary<string, QuestState> questStates = new Dictionary<string, QuestState>();
-    private List<string> completedEvents = new List<string>();
-    private int currentChapter = 0;
     private string currentMainQuestId = "";
 
     private void Awake()

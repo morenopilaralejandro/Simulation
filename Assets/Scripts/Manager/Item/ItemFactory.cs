@@ -40,7 +40,7 @@ public static class ItemFactory
 
     public static Item CreateById(string itemId) 
     {
-        auxItemData = ItemManager.Instance.GetItemData("spike_cool");
+        auxItemData = ItemManager.Instance.GetItemData(itemId);
         return Create(auxItemData);
     }
 
