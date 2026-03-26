@@ -29,7 +29,7 @@ public class StorySystemTriggers
         return triggeredHashSet.Contains(storyAutoTriggerId);
     }
 
-    private void EvaluateTriggers()
+    public void EvaluateTriggers()
     {
         foreach (var storyAutoTrigger in storyAutoTriggerDatabase.StoryAutoTriggerDict.Values)
         {
@@ -37,7 +37,12 @@ public class StorySystemTriggers
             if (!questSystemManager.CheckPrerequisites(storyAutoTrigger.Prerequisites)) continue;
 
             TriggerAutoTrigger(storyAutoTrigger.StoryAutoTriggerId);
-            TriggerStoryEvent(storyAutoTrigger.StoryEvent.StoryEventId);
+            storySystemManager.TriggerStoryEvent(storyAutoTrigger.StoryEvent.StoryEventId);
         }
+    }
+
+    public void Import(StorySystemSaveData saveData) 
+    {
+        triggeredHashSet = new HashSet<string>(saveData.TriggeredList);
     }
 }

@@ -8,17 +8,17 @@ public class QuestComponentObjectives
 {
     private QuestObjective auxObjective;
 
-    private Dictionary<string, QuestObjective> objectives = new Dictionary<string, bool>();
+    private Dictionary<string, QuestObjective> objectives = new Dictionary<string, QuestObjective>();
     public IReadOnlyDictionary<string, QuestObjective> QuestObjectiveDict => objectives;
 
     public QuestComponentObjectives(QuestData questData, Quest quest, QuestSaveData questSaveData = null)
     {
         QuestObjectiveDatabase questObjectiveDatabase = QuestObjectiveDatabase.Instance;
-        foreach (string objectiveId questData.ObjectiveIds)
+        foreach (string objectiveId in questData.ObjectiveIds)
         {
-            questObjectiveData = questObjectiveDatabase.GetQuestObjectiveData(objectiveId);
-            questObjectiveData = questSaveData?.QuestObjectiveSaveDataDict[objectiveId];
-            objectives[objectiveId] = new QuestObjective(questObjectiveData, questObjectiveData);
+            var questObjectiveData = questObjectiveDatabase.GetQuestObjectiveData(objectiveId);
+            var questObjectiveSaveData = questSaveData?.QuestObjectiveSaveDataDict[objectiveId];
+            objectives[objectiveId] = new QuestObjective(questObjectiveData, questObjectiveSaveData);
         }
     }
 
@@ -30,24 +30,22 @@ public class QuestComponentObjectives
 
     public bool IsObjectiveComplete(string objectiveId)
     {
-        if(objectives.TryGetValue(objectiveId, out auxObjective) 
-            auxObjective.IsCompleted;
+        if(objectives.TryGetValue(objectiveId, out auxObjective))
+            return auxObjective.IsCompleted;
         else 
             return false;
     }
 
     public void UpdateObjectiveProgress(string objectiveId, int amount)
     {
-        if(objectives.TryGetValue(objectiveId, out auxObjective) 
+        if(objectives.TryGetValue(objectiveId, out auxObjective))
             auxObjective.UpdateProgress(amount);
-        else 
-            return false;
     }
 
     public int GetObjectiveProgress(string objectiveId)
     {
-        if(objectives.TryGetValue(objectiveId, out auxObjective) 
-            auxObjective.CurrentAmount;
+        if(objectives.TryGetValue(objectiveId, out auxObjective))
+            return auxObjective.CurrentAmount;
         else 
             return 0;
     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Simulation.Enums.Localization;
 using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
@@ -22,7 +23,7 @@ public class Quest
 
     public Quest(QuestData questData, QuestSaveData questSaveData = null) 
     {
-        Initialize(characterData, characterSaveData);
+        Initialize(questData, questSaveData);
     }
 
     public void Initialize(QuestData questData, QuestSaveData questSaveData = null)
@@ -70,7 +71,7 @@ public class Quest
     public bool AreAllObjectivesComplete() => objectivesComponent.AreAllObjectivesComplete();
 
     // prerequisitesComponent
-    public IReadOnlyList<StoryPrerequisite> Prerequisites => prerequisitesComponent.Prerequisites;
+    public IReadOnlyList<StoryPrerequisite> StoryPrerequisites => prerequisitesComponent.StoryPrerequisites;
 
     // rewardsComponent
     public QuestRewards Rewards => rewardsComponent.Rewards;

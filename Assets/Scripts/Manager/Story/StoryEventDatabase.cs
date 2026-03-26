@@ -3,15 +3,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Simulation.Enums.StoryEvent;
+using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
 public class StoryEventDatabase : MonoBehaviour
 {
     public static StoryEventDatabase Instance { get; private set; }
 
-    private readonly Dictionary<string, StoryEventData> storyEventDataDict = new();
-    public readonly Dictionary<string, StoryEventData> StoryEventDataDict => storyEventDataDict;
+    private Dictionary<string, StoryEventData> storyEventDataDict = new();
+    public IReadOnlyDictionary<string, StoryEventData> StoryEventDataDict => storyEventDataDict;
 
     public bool IsReady { get; private set; } = false;
 
@@ -29,7 +29,7 @@ public class StoryEventDatabase : MonoBehaviour
     public async Task LoadAllStoryEventDataAsync()
     {
         var handle = Addressables.LoadAssetsAsync<StoryEventData>(
-            "StoryEvents-Data",
+            "StoryEvent-Data",
             data => storyEventDataDict[data.StoryEventId] = data
         );
         await handle.Task;

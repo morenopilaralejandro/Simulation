@@ -5,6 +5,6 @@ using Simulation.Enums.Item;
 [System.Serializable]
 public class ItemReward
 {
-    public string itemId;
-    public int quantity = 1;
+    public string ItemId;
+    public int Quantity = 1;
 }

@@ -8,12 +8,12 @@ public class StoryEventComponentScriptedEvent
 {
     public string ScriptedEventId { get; private set; }
     public bool HasScriptedEvent { get; private set; }
-    public AudioClip ScriptedEventBgmClip { get; private set; }
+    public string ScriptedEventBgmId { get; private set; }
 
     public StoryEventComponentScriptedEvent(StoryEventData storyEventData, StoryEvent storyEvent)
     {
         ScriptedEventId = storyEventData.ScriptedEventId;
         HasScriptedEvent = !string.IsNullOrEmpty(ScriptedEventId);
-        ScriptedEventBgmClip = storyEventData.BgmClip;
+        ScriptedEventBgmId = storyEventData.BgmId;
     }
 }

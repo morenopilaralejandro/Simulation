@@ -9,6 +9,7 @@ using Simulation.Enums.Story;
 /// </summary>
 public class StoryConditionalObject : MonoBehaviour
 {
+    /*
     [Header("Conditions")]
     [SerializeField] private List<StoryPrerequisite> showConditions = new List<StoryPrerequisite>();
     [SerializeField] private bool hideWhenConditionsMet = false;
@@ -60,4 +61,5 @@ public class StoryConditionalObject : MonoBehaviour
             StoryProgressManager.Instance.OnChapterChanged -= _ => EvaluateConditions();
         }
     }
+    */
 }

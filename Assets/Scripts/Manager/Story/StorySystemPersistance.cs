@@ -23,24 +23,14 @@ public class StorySystemPersistance
 
     #region Import
     
-    public void Import(StorySystemSaveData data)
+    public void Import(StorySystemSaveData saveData)
     {
-        /*
-        storyFlags = new Dictionary<string, bool>(data.storyFlags);
-        storyVariables = new Dictionary<string, int>(data.storyVariables);
-        completedEvents = new List<string>(data.completedEvents);
-        currentChapter = data.currentChapter;
-        currentMainQuestId = data.currentMainQuestId;
-
-        questStates.Clear();
-        foreach (var questSave in data.questStates)
-        {
-            var state = QuestState.FromSaveData(questSave);
-            questStates[state.QuestId] = state;
-        }
-
-        Debug.Log("[Story] Save data loaded successfully.");
-        */
+        storySystemManager.ImportFlagSystem(saveData);
+        storySystemManager.ImportVariableSystem(saveData);
+        storySystemManager.ImportEventSystem(saveData);
+        storySystemManager.ImportTriggerSystem(saveData);
+        storySystemManager.ImportChapterSystem(saveData);
+        LogManager.Trace("[StorySystemPersistance] Save data loaded successfully.");
     }
 
     #endregion
@@ -51,8 +41,8 @@ public class StorySystemPersistance
     {
         return new StorySystemSaveData
         {
-            FlagsDict = storySystemManager.FlagsDict,
-            VariablesDict = storySystemManager.VariablesDict,
+            FlagsDict = new Dictionary<string, bool>(storySystemManager.FlagsDict),
+            VariablesDict = new Dictionary<string, int>(storySystemManager.VariablesDict),
             CompletedEventsList = new List<string>(storySystemManager.CompletedEventsCollection),
             TriggeredList = new List<string>(storySystemManager.TriggeredCollection),
             ChapterNumber = storySystemManager.CurrentChapter.StoryChapterNumber
@@ -65,4 +55,4 @@ public class StorySystemPersistance
 
     #endregion
 
-
+}

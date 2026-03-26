@@ -8,7 +8,7 @@ public class StoryAutoTriggerComponentStoryEvent
 {
     public StoryEvent StoryEvent { get; private set; }
 
-    public StoryAutoTriggerComponentAttributes(StoryAutoTriggerData storyAutoTriggerData, StoryAutoTrigger storyAutoTrigger)
+    public StoryAutoTriggerComponentStoryEvent(StoryAutoTriggerData storyAutoTriggerData, StoryAutoTrigger storyAutoTrigger)
     {
         StoryEvent = StoryEventFactory.CreateById(storyAutoTriggerData.StoryAutoTriggerId);
     }

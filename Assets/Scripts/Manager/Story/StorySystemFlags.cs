@@ -9,7 +9,7 @@ public class StorySystemFlags
     private StorySystemManager storySystemManager;
 
     private Dictionary<string, bool> flagsDict = new Dictionary<string, bool>();
-    public IReadOnlyDictionaryDictionary<string, bool> FlagsDict => flagsDict;
+    public IReadOnlyDictionary<string, bool> FlagsDict => flagsDict;
 
     public StorySystemFlags() 
     {
@@ -32,5 +32,10 @@ public class StorySystemFlags
     public bool HasFlag(string flagId)
     {
         return flagsDict.ContainsKey(flagId);
+    }
+
+    public void Import(StorySystemSaveData saveData) 
+    {
+        flagsDict = saveData.FlagsDict;
     }
 }

@@ -6,6 +6,7 @@ using Simulation.Enums.Story;
 
 public class StoryTriggerZone : MonoBehaviour
 {
+    /*
     [Header("Trigger Settings")]
     [SerializeField] private string triggerId;
     [SerializeField] private bool triggerOnce = true;
@@ -87,4 +88,5 @@ public class StoryTriggerZone : MonoBehaviour
 
         onTriggered?.Invoke();
     }
+    */
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.StoryEvent;
+using Simulation.Enums.Localization;
+using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
 public class StoryEvent
@@ -22,22 +23,22 @@ public class StoryEvent
 
     public StoryEvent(StoryEventData storyEventData) 
     {
-        Initialize(characterData, characterSaveData);
+        Initialize(storyEventData);
     }
 
     public void Initialize(StoryEventData storyEventData)
     {
-        attributesComponent = new StoryEventComponentAttributes(storyEventData, this, storyEventSaveData);
+        attributesComponent = new StoryEventComponentAttributes(storyEventData, this);
         localizationStringComponent = new LocalizationComponentString(
-            LocalizationEntity.StoryEvent,
+            LocalizationEntity.Story_Event,
             storyEventData.StoryEventId,
             new[] { LocalizationField.Name, LocalizationField.Description }
         );
-        prerequisitesComponent = new StoryEventComponentPrerequisites(storyEventData, this, storyEventSaveData);
-        effectsComponent = new StoryEventComponentEffects(storyEventData, this, storyEventSaveData);
-        cutsceneComponent = new StoryEventComponentCutscene(storyEventData, this, storyEventSaveData);
-        scriptedEventComponent = new StoryEventComponentScriptedEvent(storyEventData, this, storyEventSaveData);
-        persistenceComponent = new StoryEventComponentPersistence(storyEventData, this, storyEventSaveData);
+        prerequisitesComponent = new StoryEventComponentPrerequisites(storyEventData, this);
+        effectsComponent = new StoryEventComponentEffects(storyEventData, this);
+        cutsceneComponent = new StoryEventComponentCutscene(storyEventData, this);
+        scriptedEventComponent = new StoryEventComponentScriptedEvent(storyEventData, this);
+        persistenceComponent = new StoryEventComponentPersistence(storyEventData, this);
     }
 
     #endregion
@@ -45,7 +46,7 @@ public class StoryEvent
     #region API
 
     // attributesComponent
-    public string StoryEventId => attributesComponent.StoryEventId();
+    public string StoryEventId => attributesComponent.StoryEventId;
 
     // localizationComponent
     public LocalizationComponentString LocalizationComponent => localizationStringComponent;
@@ -53,20 +54,20 @@ public class StoryEvent
     public string StoryEventDescription => localizationStringComponent.GetString(LocalizationField.Description);
 
     // prerequisitesComponent;
-    public IReadOnlyList<StoryPrerequisite> Prerequisites => prerequisitesComponent.Prerequisites;
+    public IReadOnlyList<StoryPrerequisite> StoryPrerequisites => prerequisitesComponent.StoryPrerequisites;
 
     // effectsComponent;
-    public IReadOnlyList<StoryEffect> Effects => effectsComponent.Effects;
+    public IReadOnlyList<StoryEffect> StoryEffects => effectsComponent.StoryEffects;
 
     // cutsceneComponent;
     public string CutsceneId => cutsceneComponent.CutsceneId;
     public bool HasCutscene => cutsceneComponent.HasCutscene;
-    public AudioClip CutsceneBgmClip => cutsceneComponent.CutsceneBgmClip;
+    public string CutsceneBgmId => cutsceneComponent.CutsceneBgmId;
 
     // scriptedEventComponent;
     public string ScriptedEventId => scriptedEventComponent.ScriptedEventId;
     public bool HasScriptedEvent => scriptedEventComponent.HasScriptedEvent;
-    public AudioClip ScriptedEventBgmClip => scriptedEventComponent.ScriptedEventBgmClip;
+    public string ScriptedEventBgmId => scriptedEventComponent.ScriptedEventBgmId;
 
     // persistenceComponent;
     public bool IsCompleted => persistenceComponent.IsCompleted;

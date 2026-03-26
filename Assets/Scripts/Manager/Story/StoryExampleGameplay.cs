@@ -7,6 +7,7 @@ using Simulation.Enums.Story;
 /// </summary>
 public class StoryExampleGameplay : MonoBehaviour
 {
+    /*
     private void Start()
     {
         var story = StoryProgressManager.Instance;
@@ -76,4 +77,5 @@ public class StoryExampleGameplay : MonoBehaviour
     {
         Debug.Log($"[UI] Quest Complete: {questId}!");
     }
+    */
 }

@@ -6,6 +6,7 @@ using Simulation.Enums.Story;
 
 public class QuestTrackerHUD : MonoBehaviour
 {
+    /*
     [SerializeField] private Transform trackerContainer;
     [SerializeField] private GameObject trackerEntryPrefab;
     [SerializeField] private StoryDatabase storyDatabase;
@@ -81,4 +82,5 @@ public class QuestTrackerHUD : MonoBehaviour
         if (StoryProgressManager.Instance != null)
             StoryProgressManager.Instance.OnQuestStatusChanged -= OnQuestStatusChanged;
     }
+    */
 }

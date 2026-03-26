@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.StoryAutoTrigger;
+using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
 public class StoryAutoTrigger
@@ -18,16 +18,15 @@ public class StoryAutoTrigger
 
     public StoryAutoTrigger(StoryAutoTriggerData storyAutoTriggerData) 
     {
-        Initialize(characterData, characterSaveData);
+        Initialize(storyAutoTriggerData);
     }
 
     public void Initialize(StoryAutoTriggerData storyAutoTriggerData)
     {
-        attributesComponent = new StoryAutoTriggerComponentAttributes(storyAutoTriggerData, this, storyAutoTriggerSaveData);
-
-        StoryAutoTriggerComponentStoryEvent
-        StoryAutoTriggerComponentPrerequisites
-        private StoryAutoTriggerComponentPersistence persistenceComponent;
+        attributesComponent = new StoryAutoTriggerComponentAttributes(storyAutoTriggerData, this);
+        storyEventComponent = new StoryAutoTriggerComponentStoryEvent(storyAutoTriggerData, this);
+        prerequisitesComponent = new StoryAutoTriggerComponentPrerequisites(storyAutoTriggerData, this);
+        persistenceComponent = new StoryAutoTriggerComponentPersistence(storyAutoTriggerData, this);
     }
 
     #endregion

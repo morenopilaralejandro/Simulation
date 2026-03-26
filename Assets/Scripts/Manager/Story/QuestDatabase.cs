@@ -10,8 +10,8 @@ public class QuestDatabase : MonoBehaviour
 {
     public static QuestDatabase Instance { get; private set; }
 
-    private readonly Dictionary<string, QuestData> questDataDict = new();
-    public readonly Dictionary<string, QuestData> QuestDataDict => questDataDict;
+    private Dictionary<string, QuestData> questDataDict = new();
+    public IReadOnlyDictionary<string, QuestData> QuestDataDict => questDataDict;
 
     public bool IsReady { get; private set; } = false;
 
@@ -29,7 +29,7 @@ public class QuestDatabase : MonoBehaviour
     public async Task LoadAllQuestDataAsync()
     {
         var handle = Addressables.LoadAssetsAsync<QuestData>(
-            "Quests-Data",
+            "Quest-Data",
             data => questDataDict[data.QuestId] = data
         );
         await handle.Task;

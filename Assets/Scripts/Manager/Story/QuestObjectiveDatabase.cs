@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Simulation.Enums.QuestObjective;
+using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
 public class QuestObjectiveDatabase : MonoBehaviour
@@ -28,7 +28,7 @@ public class QuestObjectiveDatabase : MonoBehaviour
     public async Task LoadAllQuestObjectiveDataAsync()
     {
         var handle = Addressables.LoadAssetsAsync<QuestObjectiveData>(
-            "Quests-Objective-Data",
+            "QuestObjective-Data",
             data => questObjectiveDataDict[data.QuestObjectiveId] = data
         );
         await handle.Task;

@@ -8,6 +8,7 @@ using Simulation.Enums.Story;
 /// </summary>
 public class StoryDialogueBridge : MonoBehaviour
 {
+    /*
     public static StoryDialogueBridge Instance { get; private set; }
 
     private void Awake()
@@ -54,4 +55,5 @@ public class StoryDialogueBridge : MonoBehaviour
     {
         return StoryProgressManager.Instance.GetVariable($"relationship_{npcId}");
     }
+    */
 }

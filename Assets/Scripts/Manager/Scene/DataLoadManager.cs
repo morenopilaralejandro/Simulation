@@ -37,6 +37,7 @@ public class DataLoadManager : MonoBehaviour
         Task loadScenes = SceneGroupRegistry.Instance.LoadAllSceneGroupAsync();
         Task loadNpcs = NpcManager.Instance.LoadAllNpcDataAsync();
         Task loadItems = ItemManager.Instance.LoadAllItemDataAsync();
+
         // SpriteAtlas
         await loadSpriteAtlas;
         // Formation     
@@ -48,7 +49,7 @@ public class DataLoadManager : MonoBehaviour
             loadCharacters,
             loadFormations);
         Task loadTeams = TeamManager.Instance.LoadAllTeamsAsync();
-        // Finish
+        // Misc
         await Task.WhenAll(
             loadBalls, 
             loadFields,
@@ -59,6 +60,27 @@ public class DataLoadManager : MonoBehaviour
             loadScenes,
             loadNpcs,
             loadItems);
+
+
+
+
+
+
+
+
+        //Quest
+        Task loadQuestObjective = QuestObjectiveDatabase.Instance.LoadAllQuestObjectiveDataAsync();
+        await loadQuestObjective;
+        Task loadQuest = QuestDatabase.Instance.LoadAllQuestDataAsync();
+        //Story
+        Task loadStoryEvent = StoryEventDatabase.Instance.LoadAllStoryEventDataAsync();
+        await loadStoryEvent;
+        Task loadStoryAutoTrigger = StoryAutoTriggerDatabase.Instance.LoadAllStoryAutoTriggerDataAsync();
+        Task loadStoryChapter = StoryChapterDatabase.Instance.LoadAllStoryChapterDataAsync();
+        await Task.WhenAll(
+            loadQuest,
+            loadStoryAutoTrigger,
+            loadStoryChapter);
 
         IsReady = true;
         LogManager.Trace("[DataLoadManager] All data loaded.");

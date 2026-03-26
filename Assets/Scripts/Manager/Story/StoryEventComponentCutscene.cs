@@ -8,12 +8,12 @@ public class StoryEventComponentCutscene
 {
     public string CutsceneId { get; private set; }
     public bool HasCutscene { get; private set; }
-    public AudioClip CutsceneBgmClip { get; private set; }
+    public string CutsceneBgmId { get; private set; }
 
-    public StoryEventComponentAttributes(StoryEventData storyEventData, StoryEvent storyEvent)
+    public StoryEventComponentCutscene(StoryEventData storyEventData, StoryEvent storyEvent)
     {
         CutsceneId = storyEventData.CutsceneId;
         HasCutscene = !string.IsNullOrEmpty(CutsceneId);
-        CutsceneBgmClip = storyEventData.BgmClip;
+        CutsceneBgmId = storyEventData.BgmId;
     }
 }

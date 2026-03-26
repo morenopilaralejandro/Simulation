@@ -11,7 +11,11 @@ namespace Simulation.Enums.Localization
         Zone,
         Npc,
         Dialog,
-        Item
+        Item,
+        Quest,
+        Quest_Objective,
+        Story_Chapter,
+        Story_Event
     }
 
     public enum LocalizationField
@@ -22,7 +26,8 @@ namespace Simulation.Enums.Localization
         Evolution,
         Entry,
         Speech,
-        Text
+        Text,
+        Title
     }
 
     public enum LocalizationStyle

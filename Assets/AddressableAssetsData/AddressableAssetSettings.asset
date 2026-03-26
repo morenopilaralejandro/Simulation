@@ -45,6 +45,7 @@ MonoBehaviour:
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: 14ad2775b289efda2b529ca58de2af37, type: 2}
+  - {fileID: 11400000, guid: 9d9c3abe487d49b0292d89c4148e526d, type: 2}
   - {fileID: 11400000, guid: f3318168b5fe0fefe98be2bbf2c0ff11, type: 2}
   - {fileID: 11400000, guid: a5f3190c7ab26614e8c7e618b77f8bbc, type: 2}
   - {fileID: 11400000, guid: 4d42a122dd0333d0c82bb6250514b075, type: 2}
@@ -67,6 +68,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 91975a136fc837ffab86b5847f1a891e, type: 2}
   - {fileID: 11400000, guid: 9db161dd40262fb7091d44de8472709a, type: 2}
   - {fileID: 11400000, guid: c762f5ad1468e62949303a7b275bbe38, type: 2}
+  - {fileID: 11400000, guid: dffece12a763824f9a8ffe867988f146, type: 2}
   - {fileID: 11400000, guid: 73b04ba1036b759ea9bebb60bb4e930b, type: 2}
   - {fileID: 11400000, guid: 61ff7f740becdc175a29eca912ac35f2, type: 2}
   - {fileID: 11400000, guid: 4b55ebb31e780640fa3ec0eb5f539af8, type: 2}
@@ -78,9 +80,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8b423cb5ebef363c08627b7245c55c67, type: 2}
   - {fileID: 11400000, guid: a9434511464dc2455b9184d0ee54c08f, type: 2}
   - {fileID: 11400000, guid: 84eba08445af222429add9aa16fc4e38, type: 2}
+  - {fileID: 11400000, guid: 1feda0bdf286c0b2b995298572ded903, type: 2}
   - {fileID: 11400000, guid: 85c76be586b1343d983356dd136893f5, type: 2}
   - {fileID: 11400000, guid: e7d1337403028c0219c4c504d3016df4, type: 2}
   - {fileID: 11400000, guid: f91444a2035496d71bd5353d18f0ee57, type: 2}
+  - {fileID: 11400000, guid: 6cb94447dabf54a33b93924966513daa, type: 2}
+  - {fileID: 11400000, guid: e5e49387c48cb2665a51902c54f33f22, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -141,6 +146,11 @@ MonoBehaviour:
     - SceneGroup-Data
     - Npcs-Data
     - Items-Data
+    - Quest-Data
+    - QuestObjective-Data
+    - StoryAutoTrigger-Data
+    - StoryChapter-Data
+    - StoryEvent-Data
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 7c5394c970d916acd94dde95d049b628, type: 2}

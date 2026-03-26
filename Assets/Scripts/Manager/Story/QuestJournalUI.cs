@@ -7,6 +7,7 @@ using Simulation.Enums.Story;
 
 public class QuestJournalUI : MonoBehaviour
 {
+    /*
     [Header("UI References")]
     [SerializeField] private GameObject journalPanel;
     [SerializeField] private Transform questListContainer;
@@ -131,4 +132,5 @@ public class QuestJournalUI : MonoBehaviour
         if (StoryProgressManager.Instance != null)
             StoryProgressManager.Instance.OnQuestStatusChanged -= OnQuestStatusChanged;
     }
+    */
 }

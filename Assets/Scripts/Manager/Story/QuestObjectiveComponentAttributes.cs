@@ -6,7 +6,7 @@ using Simulation.Enums.Story;
 
 public class QuestObjectiveComponentAttributes
 {
-    public string ObjectiveId { get; private set; }
+    public string QuestObjectiveId { get; private set; }
     public ObjectiveType ObjectiveType { get; private set; }
     public string TargetId { get; private set; }
     public int RequiredAmount { get; private set; }
@@ -18,7 +18,7 @@ public class QuestObjectiveComponentAttributes
         QuestObjective questObjective, 
         QuestObjectiveSaveData questObjectiveSaveData)
     {
-        ObjectiveId = questObjectiveData.ObjectiveId;
+        QuestObjectiveId = questObjectiveData.QuestObjectiveId;
         ObjectiveType = questObjectiveData.ObjectiveType;
         TargetId = questObjectiveData.TargetId;
         RequiredAmount = questObjectiveData.RequiredAmount;

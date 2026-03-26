@@ -5,7 +5,7 @@ public static class QuestFactory
 {
     public static Quest Create(QuestData data)
     {
-        new Quest(data);
+        return new Quest(data);
     }
 
     public static Quest CreateById(string questId) 

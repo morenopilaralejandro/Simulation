@@ -12,11 +12,24 @@ namespace Simulation.Enums.Quest
 
     public enum QuestType
     {
-        MainStory,
+        MainQuest,
         SideQuest,
         DailyQuest,
         BasicQuest,
         HiddenQuest
     }
 
+    public enum ObjectiveType
+    {
+        Talk,
+        Interact,
+        Defeat,
+        Kill,
+        Collect,
+        Explore,
+        Discover,
+        Escort,
+        Survive,
+        Custom
+    }
 }

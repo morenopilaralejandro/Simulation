@@ -7,10 +7,10 @@ public class StoryEventData : ScriptableObject
     public string StoryEventId; //location name description
 
     [Header("Prerequisites")]
-    public List<StoryPrerequisite> Prerequisites = new List<StoryPrerequisite>();
+    public List<StoryPrerequisite> StoryPrerequisites = new List<StoryPrerequisite>();
 
     [Header("Effects")]
-    public List<StoryEffect> Effects = new List<StoryEffect>();
+    public List<StoryEffect> StoryEffects = new List<StoryEffect>();
 
     [Header("Cutscene")]
     public string CutsceneId;
@@ -18,5 +18,5 @@ public class StoryEventData : ScriptableObject
     [Header("ScriptedEvent")]
     public string ScriptedEventId;
 
-    public AudioClip BgmClip;
+    public string BgmId;
 }

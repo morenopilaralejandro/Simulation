@@ -12,7 +12,7 @@ public class QuestObjectiveComponentProgress
     public int CurrentAmount { get; private set; }
     public bool IsCompleted { get; private set; }
 
-    public QuestObjectiveComponentAttributes(
+    public QuestObjectiveComponentProgress(
         QuestObjectiveData questObjectiveData, 
         QuestObjective questObjective, 
         QuestObjectiveSaveData questObjectiveSaveData)
@@ -24,7 +24,7 @@ public class QuestObjectiveComponentProgress
         IsCompleted = false;
 
         if (questObjectiveSaveData != null)
-            questObjectiveData.Import(questObjectiveSaveData);
+            questObjective.Import(questObjectiveSaveData);
     }
 
     public void MarkAsCompleted()

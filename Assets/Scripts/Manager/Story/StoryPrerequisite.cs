@@ -6,6 +6,6 @@ using Simulation.Enums.Item;
 public class StoryPrerequisite
 {
     public PrerequisiteType PrerequisiteType;
-    public string TargetName;
-    public int IntValue;
+    public string TargetId;
+    public int IntValue = 0;
 }

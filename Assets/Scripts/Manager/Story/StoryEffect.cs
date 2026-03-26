@@ -5,7 +5,7 @@ using Simulation.Enums.Story;
 public class StoryEffect
 {
     public StoryEffectType EffectType;
-    public string TargetName;
-    public bool BoolValue;
-    public int IntValue;
+    public string TargetId;
+    public bool BoolValue = false;
+    public int IntValue = 0;
 }

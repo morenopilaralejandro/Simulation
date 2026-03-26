@@ -1,3 +1,4 @@
+using UnityEngine;
 using System.Collections.Generic;
 using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
@@ -7,5 +8,5 @@ public class StoryAutoTriggerData : ScriptableObject
 {
     public string StoryAutoTriggerId;
     public string StoryEventId;
-    public List<StoryPrerequisite> Prerequisites = new List<StoryPrerequisite>();
+    public List<StoryPrerequisite> StoryPrerequisites = new List<StoryPrerequisite>();
 }

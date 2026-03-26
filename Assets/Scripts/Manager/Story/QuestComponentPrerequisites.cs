@@ -6,12 +6,12 @@ using Simulation.Enums.Story;
 
 public class QuestComponentPrerequisites
 {
-    public List<StoryPrerequisite> prerequisites = new List<StoryPrerequisite>();
-    public IReadOnlyList<StoryPrerequisite> Prerequisites => prerequisites;
+    public List<StoryPrerequisite> storyPrerequisites = new List<StoryPrerequisite>();
+    public IReadOnlyList<StoryPrerequisite> StoryPrerequisites => storyPrerequisites;
 
     public QuestComponentPrerequisites(QuestData questData, Quest quest, QuestSaveData questSaveData = null)
     {
-        prerequisites = questData.Prerequisites;
+        storyPrerequisites = questData.StoryPrerequisites;
     }
 
 }

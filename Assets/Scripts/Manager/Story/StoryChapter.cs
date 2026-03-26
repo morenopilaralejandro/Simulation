@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.StoryChapter;
+using Simulation.Enums.Localization;
+using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
 public class StoryChapter
@@ -19,14 +20,14 @@ public class StoryChapter
 
     public StoryChapter(StoryChapterData storyChapterData) 
     {
-        Initialize(characterData, characterSaveData);
+        Initialize(storyChapterData);
     }
 
     public void Initialize(StoryChapterData storyChapterData)
     {
         attributesComponent = new StoryChapterComponentAttributes(storyChapterData, this);
         localizationStringComponent = new LocalizationComponentString(
-            LocalizationEntity.StoryChapter,
+            LocalizationEntity.Story_Chapter,
             storyChapterData.StoryChapterId,
             new[] { LocalizationField.Title, LocalizationField.Description }
         );
@@ -48,7 +49,7 @@ public class StoryChapter
     public string StoryChapterDescription => localizationStringComponent.GetString(LocalizationField.Description);
 
     // storyEventsComponent
-    public StoryEvents IntroEvent => storyEventsComponent.IntroEvent;
+    public StoryEvent IntroEvent => storyEventsComponent.IntroEvent;
 
     // questsComponent
     public IReadOnlyList<string> ChapterQuestIds => questsComponent.ChapterQuestIds;

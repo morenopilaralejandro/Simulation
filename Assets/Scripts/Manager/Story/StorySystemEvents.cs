@@ -18,7 +18,7 @@ public class StorySystemEvents
     {
         storySystemManager = StorySystemManager.Instance;
         questSystemManager = QuestSystemManager.Instance;
-        storyEventDatabase = storyEventDatabase.Instance;
+        storyEventDatabase = StoryEventDatabase.Instance;
     }
 
     public void TriggerStoryEvent(string storyEventId)
@@ -29,7 +29,7 @@ public class StorySystemEvents
             return;
         }
 
-        completedEventsList.Add(storyEventId);
+        completedEventsHashSet.Add(storyEventId);
         StoryEvents.RaiseStoryEventTriggered(storyEventId);
         LogManager.Trace($"[StorySystemEvents] Event '{storyEventId}' triggered.");
 
@@ -45,34 +45,39 @@ public class StorySystemEvents
 
     public bool IsEventCompleted(string storyEventId)
     {
-        return completedEventsList.Contains(storyEventId);
+        return completedEventsHashSet.Contains(storyEventId);
     }
 
     private void ProcessStoryEvent(StoryEvent storyEvent)
     {
-        foreach (var effect in storyEvent.Effects)
+        foreach (var effect in storyEvent.StoryEffects)
         {
             switch (effect.EffectType)
             {
                 case StoryEffectType.SetFlag:
-                    storySystemManager.SetFlag(effect.targetName, effect.boolValue);
+                    storySystemManager.SetFlag(effect.TargetId, effect.BoolValue);
                     break;
                 case StoryEffectType.SetVariable:
-                    storySystemManager.SetVariable(effect.targetName, effect.intValue);
+                    storySystemManager.SetVariable(effect.TargetId, effect.IntValue);
                     break;
                 case StoryEffectType.IncrementVariable:
-                    storySystemManager.IncrementVariable(effect.targetName, effect.intValue);
+                    storySystemManager.IncrementVariable(effect.TargetId, effect.IntValue);
                     break;
                 case StoryEffectType.StartQuest:
-                    questSystemManager.StartQuest(effect.targetName);
+                    questSystemManager.StartQuest(effect.TargetId);
                     break;
                 case StoryEffectType.CompleteQuest:
-                    questSystemManager.CompleteQuest(effect.targetName);
+                    questSystemManager.CompleteQuest(effect.TargetId);
                     break;
                 case StoryEffectType.AdvanceChapter:
                     storySystemManager.AdvanceChapter();
                     break;
             }
         }
+    }
+
+    public void Import(StorySystemSaveData saveData) 
+    {
+        completedEventsHashSet = new HashSet<string>(saveData.CompletedEventsList);
     }
 }

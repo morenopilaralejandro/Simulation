@@ -16,15 +16,15 @@ public static class StoryEvents
         OnStoryVariableChanged?.Invoke(varibaleId, intValue);
     }
 
-    public static event Action<int> OnChapterChanged;
-    public static void RaiseChapterChanged(int intValue)
+    public static event Action<StoryChapter> OnChapterChanged;
+    public static void RaiseChapterChanged(StoryChapter storyChapter)
     {
-        OnChapterChanged?.Invoke(intValue);
+        OnChapterChanged?.Invoke(storyChapter);
     }
 
     public static event Action<string> OnStoryEventTriggered;
     public static void RaiseStoryEventTriggered(string storyEventId)
     {
-        OnStoryEventTriggered?.Invoke(intValue);
+        OnStoryEventTriggered?.Invoke(storyEventId);
     }
 }

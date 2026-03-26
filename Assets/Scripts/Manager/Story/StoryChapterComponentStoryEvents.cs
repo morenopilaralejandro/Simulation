@@ -6,7 +6,7 @@ using Simulation.Enums.Story;
 
 public class StoryChapterComponentStoryEvents
 {
-    public StoryEvents IntroEvent { get; private set; }
+    public StoryEvent IntroEvent { get; private set; }
 
     public StoryChapterComponentStoryEvents(StoryChapterData storyChapterData, StoryChapter storyChapter)
     {

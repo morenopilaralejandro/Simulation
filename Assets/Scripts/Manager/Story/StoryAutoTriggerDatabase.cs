@@ -3,18 +3,18 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Simulation.Enums.StoryAutoTrigger;
+using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
 public class StoryAutoTriggerDatabase : MonoBehaviour
 {
     public static StoryAutoTriggerDatabase Instance { get; private set; }
 
-    private readonly Dictionary<string, StoryAutoTriggerData> storyAutoTriggerDataDict = new();
-    public readonly Dictionary<string, StoryAutoTriggerData> StoryAutoTriggerDataDict => storyAutoTriggerDataDict;
+    private Dictionary<string, StoryAutoTriggerData> storyAutoTriggerDataDict = new();
+    public IReadOnlyDictionary<string, StoryAutoTriggerData> StoryAutoTriggerDataDict => storyAutoTriggerDataDict;
 
-    private readonly Dictionary<string, StoryAutoTrigger> storyAutoTriggerDict = new();
-    public readonly Dictionary<string, StoryAutoTrigger> StoryAutoTriggerDict => storyAutoTriggerDict;
+    private Dictionary<string, StoryAutoTrigger> storyAutoTriggerDict = new();
+    public IReadOnlyDictionary<string, StoryAutoTrigger> StoryAutoTriggerDict => storyAutoTriggerDict;
 
     public bool IsReady { get; private set; } = false;
 
@@ -32,7 +32,7 @@ public class StoryAutoTriggerDatabase : MonoBehaviour
     public async Task LoadAllStoryAutoTriggerDataAsync()
     {
         var handle = Addressables.LoadAssetsAsync<StoryAutoTriggerData>(
-            "StoryAutoTriggers-Data",
+            "StoryAutoTrigger-Data",
             data => RegisterEntry(data)
         );
         await handle.Task;
@@ -42,9 +42,9 @@ public class StoryAutoTriggerDatabase : MonoBehaviour
 
     private void RegisterEntry(StoryAutoTriggerData data)
     {
-        if (storyAutoTriggerDataDict.ContainsKey(data.KitId)) return;
+        if (storyAutoTriggerDataDict.ContainsKey(data.StoryAutoTriggerId)) return;
 
-        storyAutoTriggerDataDict[data.StoryAutoTriggerId] = data
+        storyAutoTriggerDataDict[data.StoryAutoTriggerId] = data;
         var storyAutoTrigger = new StoryAutoTrigger(data);
         storyAutoTriggerDict[data.StoryAutoTriggerId] = storyAutoTrigger;
     }
@@ -67,7 +67,7 @@ public class StoryAutoTriggerDatabase : MonoBehaviour
         return storyAutoTriggerData;
     }
 
-    public StoryAutoTriggerData GetStoryAutoTrigger(string id)
+    public StoryAutoTrigger GetStoryAutoTrigger(string id)
     {
         if (string.IsNullOrEmpty(id))
         {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Simulation.Enums.StoryChapter;
+using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
 public class StoryChapterDatabase : MonoBehaviour
@@ -29,15 +29,15 @@ public class StoryChapterDatabase : MonoBehaviour
     public async Task LoadAllStoryChapterDataAsync()
     {
         var handle = Addressables.LoadAssetsAsync<StoryChapterData>(
-            "StoryChapters-Data",
+            "StoryChapter-Data",
             data => RegisterEntry(data)
         );
         await handle.Task;
         IsReady = true;
-        LogManager.Trace($"[StoryChapterDatabase] All storyChapter data loaded. Total count: {storyChapterDataDict.Count}", this);
+        LogManager.Trace($"[StoryChapterDatabase] All storyChapter data loaded. Total count: {storyChapterDict.Count}", this);
     }
 
-    private void RegisterEntry(KitData data)
+    private void RegisterEntry(StoryChapterData data)
     {
         if (storyChapterDict.ContainsKey(data.StoryChapterNumber)) return;
 
@@ -46,9 +46,9 @@ public class StoryChapterDatabase : MonoBehaviour
     }
 
 
-    public StoryChapterData GetStoryChapter(int id)
+    public StoryChapter GetStoryChapter(int id)
     {
-        if (id == null)
+        if (id < 0)
         {
             LogManager.Error("[StoryChapterDatabase] Tried to StoryChapterDatabase with null/empty id!");
             return null;

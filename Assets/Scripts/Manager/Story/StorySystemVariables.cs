@@ -35,4 +35,9 @@ public class StorySystemVariables
     {
         return variablesDict.TryGetValue(variableId, out int intValue) ? intValue : 0;
     }
+
+    public void Import(StorySystemSaveData saveData) 
+    {
+        variablesDict = saveData.VariablesDict;
+    }
 }

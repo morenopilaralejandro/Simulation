@@ -7,6 +7,6 @@ using Simulation.Enums.Story;
 public class QuestObjectiveSaveData
 {
     public string QuestObjectiveId;
-    public int CurrentAmount => progressComponent.RequiredAmount;
-    public bool IsCompleted => progressComponent.RequiredAmount;
+    public int CurrentAmount;
+    public bool IsCompleted;
 }

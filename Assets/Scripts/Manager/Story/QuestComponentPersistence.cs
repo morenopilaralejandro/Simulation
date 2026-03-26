@@ -16,7 +16,7 @@ public class QuestComponentPersistence
 
     #region Construcor
 
-    public QuestComponentPersistence(QuestData questData, Quest quest, QuestSaveData, questSaveData)
+    public QuestComponentPersistence(QuestData questData, Quest quest, QuestSaveData questSaveData)
     {
         this.quest = quest;
         this.questData = questData;

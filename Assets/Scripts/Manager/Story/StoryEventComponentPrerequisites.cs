@@ -6,11 +6,11 @@ using Simulation.Enums.Story;
 
 public class StoryEventComponentPrerequisites
 {
-    private List<StoryPrerequisite> prerequisites = new List<StoryPrerequisite>();
-    public IReadOnlyList<StoryPrerequisite> Prerequisites => prerequisites;
+    private List<StoryPrerequisite> storyPrerequisites = new List<StoryPrerequisite>();
+    public IReadOnlyList<StoryPrerequisite> StoryPrerequisites => storyPrerequisites;
 
     public StoryEventComponentPrerequisites(StoryEventData storyEventData, StoryEvent storyEvent)
     {
-        prerequisites = storyEventData.Prerequisites;
+        storyPrerequisites = storyEventData.StoryPrerequisites;
     }
 }

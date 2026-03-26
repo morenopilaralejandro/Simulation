@@ -9,8 +9,8 @@ public class StoryAutoTriggerComponentPrerequisites
     private List<StoryPrerequisite> prerequisites = new List<StoryPrerequisite>();
     public IReadOnlyList<StoryPrerequisite> Prerequisites => prerequisites;
 
-    public StoryAutoTriggerComponentAttributes(StoryAutoTriggerData storyAutoTriggerData, StoryAutoTrigger storyAutoTrigger)
+    public StoryAutoTriggerComponentPrerequisites(StoryAutoTriggerData storyAutoTriggerData, StoryAutoTrigger storyAutoTrigger)
     {
-        prerequisites = storyAutoTriggerData.Prerequisites;
+        prerequisites = storyAutoTriggerData.StoryPrerequisites;
     }
 }

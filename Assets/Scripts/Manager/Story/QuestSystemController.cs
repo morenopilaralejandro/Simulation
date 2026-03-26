@@ -15,13 +15,13 @@ public class QuestSystemController
     private string currentMainQuestId = "";
     private string currentActiveQuestId = "";
 
-    public IReadOnlyDictionary<string, Quest> QuestDict = questDict;
+    public IReadOnlyDictionary<string, Quest> QuestDict => questDict;
     public string CurrentMainQuestId => currentMainQuestId;
     public string CurrentActiveQuestId => currentActiveQuestId;
 
     private QuestSystemController()
     {
-        questSystemManager = QuestSystemManager.Instance
+        questSystemManager = QuestSystemManager.Instance;
         questDatabase = QuestDatabase.Instance;
         questObjectiveDatabase = QuestObjectiveDatabase.Instance;
         InitializeFromDatabase();
@@ -29,15 +29,15 @@ public class QuestSystemController
 
     private void InitializeFromDatabase()
     {
-        foreach (QuestData questData in questDatabase.QuestDataDict)
+        foreach (QuestData questData in questDatabase.QuestDataDict.Values)
         {
-            questDict[questData.QuestId] = new Quest(questData)
+            questDict[questData.QuestId] = new Quest(questData);
         }
     }
 
     public void StartQuest(string questId)
     {
-        if (!questDict.TryGetValue(questId, out auxQuest) return;
+        if (!questDict.TryGetValue(questId, out auxQuest)) return;
         if (auxQuest.State != QuestState.NotStarted) return;
 
         auxQuest.SetState(QuestState.Started);
@@ -46,7 +46,7 @@ public class QuestSystemController
 
     public void CompleteQuestObjective(string questId, string objectiveId)
     {
-        if (!questDict.TryGetValue(questId, out auxQuest) return;
+        if (!questDict.TryGetValue(questId, out auxQuest)) return;
         if (auxQuest.State != QuestState.Started) return;
 
         auxQuest.MarkObjectiveAsCompleted(objectiveId);
@@ -58,7 +58,7 @@ public class QuestSystemController
 
     public void UpdateQuestObjectiveProgress(string questId, string objectiveId, int amount = 1)
     {
-        if (!questDict.TryGetValue(questId, out auxQuest) return;
+        if (!questDict.TryGetValue(questId, out auxQuest)) return;
         if (auxQuest.State != QuestState.Started) return;
 
         auxQuest.UpdateObjectiveProgress(objectiveId, amount);
@@ -66,7 +66,7 @@ public class QuestSystemController
 
     public void CompleteQuest(string questId)
     {
-        if (!questDict.TryGetValue(questId, out auxQuest) return;
+        if (!questDict.TryGetValue(questId, out auxQuest)) return;
 
         auxQuest.SetState(QuestState.Completed);
         LogManager.Trace($"[QuestSystemController] Completed: {questId}");
@@ -81,7 +81,7 @@ public class QuestSystemController
 
     public void FailQuest(string questId)
     {
-        if (!questDict.TryGetValue(questId, out auxQuest) return;
+        if (!questDict.TryGetValue(questId, out auxQuest)) return;
         auxQuest.SetState(QuestState.Failed);
         LogManager.Trace($"[QuestSystemController] Failed: {questId}");
     }

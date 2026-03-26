@@ -14,7 +14,7 @@ public class QuestData : ScriptableObject
     public List<string> ObjectiveIds = new List<string>();
 
     [Header("Prerequisites")]
-    public List<StoryPrerequisite> Prerequisites = new List<StoryPrerequisite>();
+    public List<StoryPrerequisite> StoryPrerequisites = new List<StoryPrerequisite>();
 
     [Header("Rewards")]
     public int RewardExp;

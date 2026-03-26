@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Simulation.Enums.Localization;
 using Simulation.Enums.Quest;
 using Simulation.Enums.Story;
 
@@ -25,8 +26,8 @@ public class QuestObjective
     {
         attributesComponent = new QuestObjectiveComponentAttributes(questObjectiveData, this, questObjectiveSaveData);
         localizationStringComponent = new LocalizationComponentString(
-            LocalizationEntity.QuestObjective,
-            questObjectiveData.ObjectiveId,
+            LocalizationEntity.Quest_Objective,
+            questObjectiveData.QuestObjectiveId,
             new[] { LocalizationField.Description }
         );
         progressComponent = new QuestObjectiveComponentProgress(questObjectiveData, this, questObjectiveSaveData);
@@ -37,7 +38,7 @@ public class QuestObjective
 
     #region API
     // attributesComponent
-    public string ObjectiveId => attributesComponent.ObjectiveId;
+    public string QuestObjectiveId => attributesComponent.QuestObjectiveId;
     public ObjectiveType ObjectiveType => attributesComponent.ObjectiveType;
     public string TargetId => attributesComponent.TargetId;
     public bool IsOptional => attributesComponent.IsOptional;
@@ -50,7 +51,7 @@ public class QuestObjective
     // progressComponent
     public int RequiredAmount => progressComponent.RequiredAmount;
     public int CurrentAmount => progressComponent.RequiredAmount;
-    public bool IsCompleted => progressComponent.RequiredAmount;
+    public bool IsCompleted => progressComponent.IsCompleted;
     public void MarkAsCompleted() => progressComponent.MarkAsCompleted();
     public void UpdateProgress(int amount) => progressComponent.UpdateProgress(amount);
 

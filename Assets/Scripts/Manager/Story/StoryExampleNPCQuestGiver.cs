@@ -5,6 +5,7 @@ using Simulation.Enums.Story;
 
 public class StoryExampleNPCQuestGiver : MonoBehaviour
 {
+    /*
     [Header("NPC Info")]
     [SerializeField] private string npcId;
     [SerializeField] private string npcName;
@@ -83,4 +84,5 @@ public class StoryExampleNPCQuestGiver : MonoBehaviour
 
         Debug.Log($"[NPC {npcName}] No quests available.");
     }
+    */
 }

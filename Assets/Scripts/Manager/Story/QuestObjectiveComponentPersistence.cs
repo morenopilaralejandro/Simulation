@@ -48,7 +48,7 @@ public class QuestObjectiveComponentPersistence
         {
             QuestObjectiveId = questObjective.QuestObjectiveId,
             CurrentAmount = questObjective.CurrentAmount,
-            IsCompleted = questObjective.IsCompleted;
+            IsCompleted = questObjective.IsCompleted
         };
     }
 

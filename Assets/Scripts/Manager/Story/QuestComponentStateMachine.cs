@@ -27,7 +27,7 @@ public class QuestComponentStateMachine
     public void SetState(QuestState newState) 
     {
         State = newState;
-        QuestEvents.RaiseQuestStateChanged(quest.QuestId, newState);
+        QuestEvents.RaiseQuestStateChanged(quest);
 
         switch(newState) 
         {
@@ -45,7 +45,7 @@ public class QuestComponentStateMachine
                 break;
             case QuestState.Locked:
                 break;
-            default
+            default:
                 LogManager.Error("[QuestComponentStateMachine] default");
                 break;
         }

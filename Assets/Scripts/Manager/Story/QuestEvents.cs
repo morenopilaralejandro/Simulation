@@ -4,9 +4,9 @@ using Simulation.Enums.Quest;
 
 public static class QuestEvents
 {
-    public static event Action<string, QuestStatus> OnQuestStatusChanged;
-    public static void RaiseQuestStatusChanged(string questId, QuestStatus questStatus)
+    public static event Action<Quest> OnQuestStateChanged;
+    public static void RaiseQuestStateChanged(Quest quest)
     {
-        OnQuestStatusChanged?.Invoke(questId, questStatus);
+        OnQuestStateChanged?.Invoke(quest);
     }
 }

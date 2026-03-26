@@ -14,5 +14,5 @@ public class StoryAutoTriggerComponentPersistence
         storySystemManager = StorySystemManager.Instance;
     }
 
-    public bool HasTriggered => storySystemManager.HasAutoTriggerTriggered(storyEvent.StoryEventId);
+    public bool HasTriggered => storySystemManager.HasAutoTriggerTriggered(storyAutoTrigger.StoryAutoTriggerId);
 }

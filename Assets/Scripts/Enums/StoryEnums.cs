@@ -24,17 +24,4 @@ namespace Simulation.Enums.Story
         CompleteQuest,
         AdvanceChapter
     }
-
-    public enum ObjectiveType
-    {
-        Talk,
-        Kill,
-        Collect,
-        Explore,
-        Discover,
-        Escort,
-        Interact,
-        Survive,
-        Custom
-    }
 }
