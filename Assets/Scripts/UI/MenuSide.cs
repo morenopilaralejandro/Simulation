@@ -50,7 +50,7 @@ public class MenuSide : Menu
                 Close();
         } else 
         {
-            if (!WorldManager.Instance.PlayerCanOpenMenu) return;
+            if (!WorldManager.Instance.PlayerWorldEntity.CanOpenMenu) return;
             if (InputManager.Instance.GetDown(CustomAction.World_OpenSideMenu))
                 Open();
         }

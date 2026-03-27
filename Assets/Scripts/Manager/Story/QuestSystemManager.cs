@@ -17,6 +17,28 @@ public class QuestSystemManager : MonoBehaviour
 
     #endregion
 
+    #region Lifecycle
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        questSystemController = new QuestSystemController();
+        questSystemPrerequisites = new QuestSystemPrerequisites();
+        questSystemPersistence = new QuestSystemPersistence();
+    }
+
+    #endregion
+
     #region API
 
     // questSystemController

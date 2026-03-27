@@ -1,42 +1,44 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using System.Threading.Tasks;
 using Simulation.Enums.World;
 
-/// <summary>
-/// Central manager that orchestrates all overworld player systems.
-/// Attach to a persistent GameObject (survives scene loads).
-/// </summary>
-public class WorldManagerPlayer : MonoBehaviour
+public class WorldManagerPlayer
 {
-    public static WorldManagerPlayer Instance { get; private set; }
+    #region Fields
 
-    [SerializeField] private PlayerWorldEntity playerWorldEntity;
-    [SerializeField] private PlayerWorldConfig config;
-    public PlayerWorldConfig PlayerWorldConfig => config;
-    public PlayerWorldEntity PlayerWorldEntity => playerWorldEntity;
+    public PlayerWorldEntity PlayerWorldEntity { get; private set; }
+    public PlayerWorldConfig PlayerWorldConfig { get; private set; }
 
+    #endregion
 
-    // ================================================================
-    //  LIFECYCLE
-    // ================================================================
+    #region Constructor
 
-    private void Awake()
+    public WorldManagerPlayer(PlayerWorldConfig playerWorldConfig) 
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
+        PlayerWorldEntity = PlayerWorldEntity.Instance;
+        PlayerWorldConfig = playerWorldConfig;
 
-    private void Start()
-    {
         CharacterData characterData = CharacterManager.Instance.GetCharacterData("are");
         Kit kit = KitManager.Instance.GetKit("faith");
-        playerWorldEntity.Initialize(characterData, kit);
+        PlayerWorldEntity.Initialize(characterData, kit, PlayerWorldConfig);
     }
+
+    #endregion
+
+    #region Events
+
+    public void Subscribe()
+    {
+
+    }
+
+    public void Unsubscribe()
+    {
+
+    }
+
+    #endregion
 
 }

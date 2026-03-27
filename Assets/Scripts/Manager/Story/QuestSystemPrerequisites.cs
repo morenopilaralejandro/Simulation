@@ -10,7 +10,7 @@ public class QuestSystemPrerequisites
     private QuestSystemManager questSystemManager;
     private StorySystemManager storySystemManager;
 
-    private QuestSystemPrerequisites()
+    public QuestSystemPrerequisites()
     {
         questSystemManager = QuestSystemManager.Instance;
         storySystemManager = StorySystemManager.Instance;

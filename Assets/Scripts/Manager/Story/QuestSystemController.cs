@@ -19,7 +19,7 @@ public class QuestSystemController
     public string CurrentMainQuestId => currentMainQuestId;
     public string CurrentActiveQuestId => currentActiveQuestId;
 
-    private QuestSystemController()
+    public QuestSystemController()
     {
         questSystemManager = QuestSystemManager.Instance;
         questDatabase = QuestDatabase.Instance;

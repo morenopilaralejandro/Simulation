@@ -15,6 +15,7 @@ public class ChunkStreamingManager : MonoBehaviour
     [Tooltip("How often to check player position for chunk updates (seconds)")]
     [SerializeField] private float updateInterval = 1f;
 
+    private WorldManager worldManager;
     private OverworldDefinition _overworld;
     private Vector2Int _lastPlayerChunkCoord;
     private float _updateTimer;
@@ -52,6 +53,11 @@ public class ChunkStreamingManager : MonoBehaviour
 
         _lastPlayerChunkCoord = new Vector2Int(int.MinValue, int.MinValue);
         _invChunkSize = 1f / WorldConstants.CHUNK_SIZE;
+    }
+
+    private void Start() 
+    {
+        worldManager = WorldManager.Instance;
     }
 
     /// <summary>
@@ -99,9 +105,6 @@ public class ChunkStreamingManager : MonoBehaviour
                 _loadedChunkIds.Add(chunk.chunkId);
             }
         }
-
-        // Initialize zone tracking
-        ZoneTracker.Instance.Initialize(overworld);
 
     #if UNITY_EDITOR || DEVELOPMENT_BUILD
         LogManager.Trace(string.Concat(
@@ -192,7 +195,7 @@ public class ChunkStreamingManager : MonoBehaviour
             _lastPlayerChunkCoord.y = cy;
 
             // Notify zone tracker of player's new position
-            ZoneTracker.Instance.UpdatePlayerPosition(pos);
+            worldManager.UpdatePlayerPosition(pos);
 
             int radius = _chunkLoadRadius;
 
@@ -305,12 +308,4 @@ public class ChunkStreamingManager : MonoBehaviour
         return spawn;
     }
     */
-
-    /// <summary>
-    /// Get the zone the player is currently in (delegates to ZoneTracker).
-    /// </summary>
-    public ZoneDefinition GetCurrentPlayerZone()
-    {
-        return ZoneTracker.Instance != null ? ZoneTracker.Instance.CurrentZone : null;
-    }
 }

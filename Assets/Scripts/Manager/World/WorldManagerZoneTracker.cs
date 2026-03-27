@@ -6,46 +6,31 @@ using Simulation.Enums.Localization;
 /// Tracks which zone the player is currently in based on loaded chunks
 /// or zone bounds. Fires events on zone transitions.
 /// </summary>
-public class ZoneTracker : MonoBehaviour
+public class WorldManagerZoneTracker
 {
-    public static ZoneTracker Instance { get; private set; }
+    #region Fields
 
     public ZoneDefinition CurrentZone { get; private set; }
     public ZoneDefinition PreviousZone { get; private set; }
 
-    private OverworldDefinition _overworld;
-
     // O(1) chunk coord → zone lookup built at init
     private readonly Dictionary<Vector2Int, ZoneDefinition> _chunkCoordToZone
         = new Dictionary<Vector2Int, ZoneDefinition>();
-
     private float _invChunkSize;
+    private OverworldDefinition _overworld;
 
     private LocalizationComponentString localizationStringComponent;
     public string ZoneName => localizationStringComponent.GetString(LocalizationField.Name);
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+    #endregion
 
-        WorldEvents.OnZoneChanged += HandleZoneChanged;
-    }
-
-    private void Destroy() 
-    {
-        WorldEvents.OnZoneChanged -= HandleZoneChanged;
-    }
+    #region Constructor
 
     /// <summary>
     /// Build the coord-to-zone map from the overworld definition.
     /// Call once when streaming starts.
     /// </summary>
-    public void Initialize(OverworldDefinition overworld)
+    public WorldManagerZoneTracker(OverworldDefinition overworld)
     {
         _overworld = overworld;
         _invChunkSize = 1f / WorldConstants.CHUNK_SIZE;
@@ -67,6 +52,10 @@ public class ZoneTracker : MonoBehaviour
         }
 
     }
+
+    #endregion
+
+    #region Logic Positional
 
     /// <summary>
     /// Call every time the player moves to a new chunk coord (or periodically).
@@ -95,9 +84,13 @@ public class ZoneTracker : MonoBehaviour
         return zone;
     }
 
+    #endregion
+
+    #region SetZone
+
     public void SetZone(ZoneDefinition newZone) 
     {
-        if (newZone == CurrentZone) return;
+        if (newZone == CurrentZone || newZone == null) return;
         
         PreviousZone = CurrentZone;
         CurrentZone = newZone;
@@ -111,13 +104,25 @@ public class ZoneTracker : MonoBehaviour
 #endif
     }
 
+    #endregion
+
     #region Events
+    /*
+    public void Subscribe()
+    {
+        WorldEvents.OnZoneChanged += HandleZoneChanged;
+    }
+
+    public void Unsubscribe()
+    {
+        WorldEvents.OnZoneChanged -= HandleZoneChanged;
+    }
 
     private void HandleZoneChanged(ZoneDefinition previousZone, ZoneDefinition newZone, string newName) 
     {
         if (previousZone == newZone) return;
     }
-
+    */
     #endregion
 
     #region Localization

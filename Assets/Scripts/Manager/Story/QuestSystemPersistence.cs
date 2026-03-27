@@ -16,7 +16,7 @@ public class QuestSystemPersistence
 
     #region Construcor
 
-    private QuestSystemPersistence() 
+    public QuestSystemPersistence() 
     { 
         questSystemManager = QuestSystemManager.Instance;
     }
