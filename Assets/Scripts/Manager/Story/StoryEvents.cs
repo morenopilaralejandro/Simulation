@@ -27,4 +27,5 @@ public static class StoryEvents
     {
         OnStoryEventTriggered?.Invoke(storyEventId);
     }
+
 }

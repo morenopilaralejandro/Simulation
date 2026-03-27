@@ -9,57 +9,57 @@ using Simulation.Enums.Story;
 /// </summary>
 public class StoryConditionalObject : MonoBehaviour
 {
-    /*
     [Header("Conditions")]
     [SerializeField] private List<StoryPrerequisite> showConditions = new List<StoryPrerequisite>();
     [SerializeField] private bool hideWhenConditionsMet = false;
 
     [Header("Target")]
     [SerializeField] private GameObject targetObject;
-    [SerializeField] private float checkInterval = 1f;
 
-    private float checkTimer;
+    private QuestSystemManager questSystemManager;
 
     private void Start()
     {
-        if (targetObject == null)
-            targetObject = gameObject;
-
+        questSystemManager = QuestSystemManager.Instance;
         EvaluateConditions();
-
-        // Listen for changes
-        StoryProgressManager.Instance.OnStoryFlagChanged += _ => EvaluateConditions();
-        StoryProgressManager.Instance.OnQuestStatusChanged += (_, __) => EvaluateConditions();
-        StoryProgressManager.Instance.OnChapterChanged += _ => EvaluateConditions();
-    }
-
-    private void Update()
-    {
-        checkTimer -= Time.deltaTime;
-        if (checkTimer <= 0)
-        {
-            checkTimer = checkInterval;
-            EvaluateConditions();
-        }
+        SubscribeEvents();
     }
 
     private void EvaluateConditions()
     {
-        bool conditionsMet = StoryProgressManager.Instance.CheckPrerequisites(showConditions);
+        bool conditionsMet = questSystemManager.CheckPrerequisites(showConditions);
         bool shouldBeActive = hideWhenConditionsMet ? !conditionsMet : conditionsMet;
 
         if (targetObject.activeSelf != shouldBeActive)
             targetObject.SetActive(shouldBeActive);
     }
 
+    #region Events
+
+    private void SubscribeEvents() 
+    {
+        StoryEvents.OnStoryFlagChanged += HandleStoryFlagChanged;
+        StoryEvents.OnStoryVariableChanged += HandleStoryVariableChanged;
+        StoryEvents.OnChapterChanged += HandleChapterChanged;
+        StoryEvents.OnStoryEventTriggered += HandleStoryEventTriggered;
+        QuestEvents.OnQuestStateChanged += HandleQuestStateChanged;
+    }
+
     private void OnDestroy()
     {
-        if (StoryProgressManager.Instance != null)
-        {
-            StoryProgressManager.Instance.OnStoryFlagChanged -= _ => EvaluateConditions();
-            StoryProgressManager.Instance.OnQuestStatusChanged -= (_, __) => EvaluateConditions();
-            StoryProgressManager.Instance.OnChapterChanged -= _ => EvaluateConditions();
-        }
+        StoryEvents.OnStoryFlagChanged -= HandleStoryFlagChanged;
+        StoryEvents.OnStoryVariableChanged -= HandleStoryVariableChanged;
+        StoryEvents.OnChapterChanged -= HandleChapterChanged;
+        StoryEvents.OnStoryEventTriggered -= HandleStoryEventTriggered;
+        QuestEvents.OnQuestStateChanged -= HandleQuestStateChanged;
     }
-    */
+
+    private void HandleStoryFlagChanged(string flagId) => EvaluateConditions();
+    private void HandleStoryVariableChanged(string varibaleId, int intValue) => EvaluateConditions();
+    private void HandleChapterChanged(StoryChapter storyChapter) => EvaluateConditions();
+    private void HandleStoryEventTriggered(string storyEventId) => EvaluateConditions();
+    private void HandleQuestStateChanged(Quest quest) => EvaluateConditions();
+
+    #endregion
+
 }

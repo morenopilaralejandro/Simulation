@@ -7,7 +7,7 @@ public interface IDialogGameDataProvider
     // Player
     string GetPlayerName();
         
-    // Inventory
+    // Item
     bool HasItem(string itemId);
     int GetItemCount(string itemId);
     void GiveItem(string itemId, int count);
@@ -18,11 +18,17 @@ public interface IDialogGameDataProvider
     void GiveGold(int amount);
     void RemoveGold(int amount);
         
-    // Flags & Quests
-    bool GetFlag(string flagName);
-    void SetFlag(string flagName, bool value);
+    // Story
+    bool GetFlag(string flagId);
+    void SetFlag(string flagId, bool boolValue);
+    int GetVariable(string variableId);
+    void SetVariable(string variableId, int intValue);
+    void TriggerStoryEvent(string storyEventId);
         
-    // Stats
+    // Quest
+    void StartQuest(string questId);
+
+    // Reputation
     int GetReputation();
     void SetReputation(int value);
 }
