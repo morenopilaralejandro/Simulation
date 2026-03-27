@@ -16,6 +16,13 @@ namespace Simulation.Enums.World
         Interior
     }
 
+    public enum Realm
+    {
+        Earth,
+        Heaven,
+        Saturn
+    }
+
     public enum WorldState
     {
         None,

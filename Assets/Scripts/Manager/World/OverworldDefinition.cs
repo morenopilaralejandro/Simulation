@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Simulation.Enums.World;
 
 /// <summary>
 /// The overworld is a flat collection of ALL chunks across every zone.
@@ -8,6 +9,9 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "OverworldDefinition", menuName = "ScriptableObject/World/OverworldDefinition")]
 public class OverworldDefinition : ScriptableObject
 {
+    public string OverworldId;
+    public Realm Realm;
+
     [Header("All Overworld Chunks (across all zones)")]
     public List<ChunkDefinition> allChunks = new List<ChunkDefinition>();
 

@@ -51,4 +51,10 @@ public static class WorldEvents
     {
         OnPlayerTeleported?.Invoke(position);
     }
+
+    public static event Action<Realm> OnRealmChanged;
+    public static void RaiseRealmChanged(Realm realm)
+    {
+        OnRealmChanged?.Invoke(realm);
+    }
 }

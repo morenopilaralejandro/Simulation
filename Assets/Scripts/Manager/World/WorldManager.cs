@@ -16,12 +16,10 @@ public class WorldManager : MonoBehaviour
     [Header("Player System")]
     [SerializeField] private PlayerWorldConfig playerWorldConfig;
 
-    [Header("Zone System")]
-    [SerializeField] private OverworldDefinition overworldDefinition;
-
     [Header("Encounter System")]
     [SerializeField] private SceneGroup sceneBattle;
 
+    private WorldManagerRealm realmSystem;
     private WorldManagerPlayer playerSystem;
     private WorldManagerZone zoneSystem;
     private WorldManagerZoneTracker zoneTrackerSystem;
@@ -50,16 +48,20 @@ public class WorldManager : MonoBehaviour
 
     private void Start()
     {
+        realmSystem = new WorldManagerRealm();
+
+        OverworldDefinition overworldDefinition = GetOverworldDefinition();
+
         playerSystem = new WorldManagerPlayer(playerWorldConfig);
         zoneTrackerSystem = new WorldManagerZoneTracker(overworldDefinition);
         zoneSystem = new WorldManagerZone(overworldDefinition);
         encounterSystem = new WorldManagerEncounter(sceneBattle);
         encounterSystem.Subscribe();
 
-        InitializeAsync();
+        InitializeAsync(overworldDefinition);
     }
 
-    private async void InitializeAsync()
+    private async void InitializeAsync(OverworldDefinition overworldDefinition)
     {
         if (WorldArgs.WorldState == WorldState.InEncounter)
         {
@@ -82,6 +84,11 @@ public class WorldManager : MonoBehaviour
 
 
     #region API
+
+    // realmSystem
+    public Realm CurrentRealm => realmSystem.CurrentRealm;
+    public void SetRealm(Realm realm) => realmSystem.SetRealm(realm);
+    public OverworldDefinition GetOverworldDefinition() => realmSystem.GetOverworldDefinition();
 
     // playerSystem
     public PlayerWorldConfig PlayerWorldConfig => playerSystem.PlayerWorldConfig;

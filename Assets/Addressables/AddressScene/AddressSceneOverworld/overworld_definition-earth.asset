@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a6b23617d6cf38c796a1bb9cabc1e24, type: 3}
-  m_Name: OverworldDefinition
+  m_Name: overworld_definition-earth
   m_EditorClassIdentifier: 
+  OverworldId: overworld_definition-earth
+  realm: 0
   allChunks:
   - chunkId: zone_overworld_street_brown_chunk_0_0
     parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}

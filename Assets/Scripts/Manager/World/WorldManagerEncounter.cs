@@ -92,6 +92,7 @@ public class WorldManagerEncounter
         {
             WorldArgs.Set(
                 zoneId : worldManager.CurrentZone != null ? worldManager.CurrentZone.zoneId : null,
+                realm : worldManager.CurrentRealm,
                 playerPosition : player.CurrentTilePosition3d(),
                 facingDirection : player.FacingToVector(player.FacingDirection),
                 worldState : WorldState.InEncounter

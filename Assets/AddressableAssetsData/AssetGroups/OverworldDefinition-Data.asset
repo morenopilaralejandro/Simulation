@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: OverworldDefinition-Data
+  m_EditorClassIdentifier: 
+  m_GroupName: OverworldDefinition-Data
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c40a45c93bc1df3b8b929c5ddbe96db3
+  m_SerializeEntries:
+  - m_GUID: 3fca1ff5222f289868254aecdad511c7
+    m_Address: Assets/Addressables/AddressScene/AddressSceneOverworld/overworld_definition-earth.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - OverworldDefinition-Data
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbbf8746dd11b76adb135e1a74fab914
+    m_Address: Assets/Addressables/AddressScene/AddressSceneOverworld/overworld_definition-heaven.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - OverworldDefinition-Data
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 238c8803a8a1b023082cd8ccb30f5946, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 499a7ae05d717e3f88d26945562dc7d5, type: 2}
+    - {fileID: 11400000, guid: 8ecbb287ffdcf1274bf3cb0f2e91a021, type: 2}

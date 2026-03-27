@@ -37,6 +37,7 @@ public class DataLoadManager : MonoBehaviour
         Task loadScenes = SceneGroupRegistry.Instance.LoadAllSceneGroupAsync();
         Task loadNpcs = NpcManager.Instance.LoadAllNpcDataAsync();
         Task loadItems = ItemManager.Instance.LoadAllItemDataAsync();
+        Task loadOverworldDefinition = OverworldDefinitionDatabase.Instance.LoadAllOverworldDefinitionDataAsync();
 
         // SpriteAtlas
         await loadSpriteAtlas;
@@ -59,7 +60,8 @@ public class DataLoadManager : MonoBehaviour
             loadTeams, 
             loadScenes,
             loadNpcs,
-            loadItems);
+            loadItems,
+            loadOverworldDefinition);
 
 
 
