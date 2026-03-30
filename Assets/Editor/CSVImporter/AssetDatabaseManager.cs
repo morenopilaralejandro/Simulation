@@ -27,9 +27,4 @@ public static class AssetDatabaseManager
             currentPath = nextPath;
         }
     }
-
-    public static bool ParseBool(string stringValue)
-    {
-        return stringValue == "TRUE" || stringValue == "true" || stringValue == "1" || stringValue == "yes" || stringValue == "YES";
-    }
 }

@@ -95,11 +95,11 @@ public class CSVImporterItem
             itemData.SpriteType     = EnumManager.StringToEnum<ItemSpriteType>(values[spriteTypeIndex].Trim());
             itemData.SpriteColor    = EnumManager.StringToEnum<ItemSpriteColor>(values[spriteColorIndex].Trim());
             itemData.UsageContext   = EnumManager.StringToEnum<ItemUsageContext>(values[usageContextIndex].Trim());
-            itemData.IsSellable     = AssetDatabaseManager.ParseBool(values[isSellableIndex].Trim());
+            itemData.IsSellable     = CSVImporterParser.ParseBool(values[isSellableIndex].Trim());
             itemData.PriceBuy       = int.Parse(values[priceBuyIndex].Trim());
             itemData.PriceSell      = int.Parse(values[priceSellIndex].Trim());
-            itemData.IsDiscardable  = AssetDatabaseManager.ParseBool(values[isDiscardableIndex].Trim());
-            itemData.IsStackable    = AssetDatabaseManager.ParseBool(values[isStackableIndex].Trim());
+            itemData.IsDiscardable  = CSVImporterParser.ParseBool(values[isDiscardableIndex].Trim());
+            itemData.IsStackable    = CSVImporterParser.ParseBool(values[isStackableIndex].Trim());
             itemData.MaxStack       = int.Parse(values[maxStackIndex].Trim());
 
             switch (itemData)
@@ -124,7 +124,7 @@ public class CSVImporterItem
                     break;
 
                 case ItemDataImportant itemDataImportant:
-                    itemDataImportant.PlaceHolder = AssetDatabaseManager.ParseBool(values[importantPlaceHolderIndex].Trim());
+                    itemDataImportant.PlaceHolder = CSVImporterParser.ParseBool(values[importantPlaceHolderIndex].Trim());
                     break;
 
                 case ItemDataKit itemDataKit:
@@ -132,11 +132,11 @@ public class CSVImporterItem
                     break;
 
                 case ItemDataMaterial itemDataMaterial:
-                    itemDataMaterial.PlaceHolder = AssetDatabaseManager.ParseBool(values[materialPlaceHolderIndex].Trim());
+                    itemDataMaterial.PlaceHolder = CSVImporterParser.ParseBool(values[materialPlaceHolderIndex].Trim());
                     break;
 
                 case ItemDataMisc itemDataMisc:
-                    itemDataMisc.PlaceHolder = AssetDatabaseManager.ParseBool(values[miscPlaceHolderIndex].Trim());
+                    itemDataMisc.PlaceHolder = CSVImporterParser.ParseBool(values[miscPlaceHolderIndex].Trim());
                     break;
 
                 case ItemDataMove itemDataMove:

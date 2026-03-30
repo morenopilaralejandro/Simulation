@@ -1,0 +1,2 @@
+QuestId,QuestType,RecommendedLevel,ObjectiveIds,Prerequisites,RewardExp,RewardGold,ItemRewards,StoryEffects,FollowUpQuestIds
+test,MainQuest,10,test1|test2,VariableEquals#variableId#10|FlagIsTrue#flagId#1,1000,1000,item#1|item#2,SetFlag#flagId#true#0|SetVariable#variableId#false#10,test1|test2

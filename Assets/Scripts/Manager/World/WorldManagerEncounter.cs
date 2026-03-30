@@ -1,53 +1,186 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Simulation.Enums.Battle;
 using Simulation.Enums.World;
 
-public class WorldManagerEncounter : MonoBehaviour
+public class WorldManagerEncounter
 {
-    //TODO have csv from excel to know the encounter info for each zone
-    public static WorldManagerEncounter Instance { get; private set; }
+    #region Fields
 
-    [SerializeField] private SceneGroup sceneBattle;
-
-    private PlayerWorldEntity playerWorldEntity;
+    private SceneGroup sceneBattle;
+    private WorldManager worldManager;
+    private PlayerWorldEntity player;
     private PlayerWorldConfig config;
-    private ZoneTracker zoneTracker;
-    
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+    private SceneLoader sceneLoader;
+    private ChunkStreamingManager chunkStreamingManager;
 
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
-    }
+    #endregion
 
-    private void Start() 
+    #region Constructor
+
+    public WorldManagerEncounter(SceneGroup sceneBattle)
     {
-        config = WorldManagerPlayer.Instance.PlayerWorldConfig;
-        playerWorldEntity = WorldManagerPlayer.Instance.PlayerWorldEntity;
-        zoneTracker = ZoneTracker.Instance;
+        this.sceneBattle = sceneBattle;
+        worldManager = WorldManager.Instance;
+        player = worldManager.PlayerWorldEntity;
+        config = worldManager.PlayerWorldConfig;
+        sceneLoader = SceneLoader.Instance;
+        chunkStreamingManager = ChunkStreamingManager.Instance;
 
         ResetStepCounter();
     }
 
-    private void OnDestroy() 
+    #endregion
+
+    #region Events
+
+    public void Subscribe()
     {
+        WorldEvents.OnEncounterTriggered += HandleEncounterTriggered;
+        WorldEvents.OnZoneChanged += HandleZoneChanged;
+        BattleEvents.OnBattleEnd += HandleBattleEnd;
+    }
+
+    public void Unsubscribe()
+    {
+        WorldEvents.OnEncounterTriggered -= HandleEncounterTriggered;
+        WorldEvents.OnZoneChanged -= HandleZoneChanged;
         BattleEvents.OnBattleEnd -= HandleBattleEnd;
     }
 
-    #region Events
     private void HandleBattleEnd() 
     {
         //Resume overworld
         //playerWorldEntity.SetState(PlayerWorldState.FreeRoam);
         //WorldManager.ReturnFromEncounter()
     }
+
+    private void HandleZoneChanged(ZoneDefinition previousZone, ZoneDefinition newZone, string newName) 
+    {
+        if (previousZone == newZone) return;
+        ResetStepCounter();
+    }
+
+    /// <summary>
+    /// Called when an encounter is triggered. Disables player control,
+    /// unloads all zones, stops chunk streaming, and transitions
+    /// the world state to InEncounter.
+    /// </summary>
+    private async void HandleEncounterTriggered(EncounterData encounterData)
+    {
+        if (worldManager.IsTransitioning)
+        {
+            LogManager.Warning("[WorldManager] Encounter triggered during transition, ignoring.");
+            return;
+        }
+
+        if (worldManager.CurrentState == WorldState.InEncounter)
+        {
+            LogManager.Warning("[WorldManager] Already in encounter, ignoring.");
+            return;
+        }
+
+        worldManager.SetIsTransitioning(true);
+
+        LogManager.Trace($"[WorldManager] Encounter triggered: {encounterData}. Tearing down world zones.");
+
+        // Immediately freeze the player
+        player.SetControlEnabled(false);
+
+        try
+        {
+            WorldArgs.Set(
+                zoneId : worldManager.CurrentZone != null ? worldManager.CurrentZone.zoneId : null,
+                realm : worldManager.CurrentRealm,
+                playerPosition : player.CurrentTilePosition3d(),
+                facingDirection : player.FacingToVector(player.FacingDirection),
+                worldState : WorldState.InEncounter
+            );
+
+            // Fade out so the player doesn't see scenes disappearing
+
+                await worldManager.FadeOut();
+
+            // Stop chunk streaming first (prevents new chunks from loading
+            // while we're tearing things down)
+            if (worldManager.CurrentZone != null && worldManager.CurrentZone.zoneType == ZoneType.Overworld)
+            {
+                await chunkStreamingManager.StopStreaming();
+            }
+
+            // Unload whatever zone is currently loaded
+            bool unloadSuccess = await worldManager.UnloadCurrentZone();
+            if (!unloadSuccess)
+            {
+                LogManager.Warning("[WorldManager] Zone unload reported failure during encounter transition.");
+            }
+
+            worldManager.SetState(WorldState.InEncounter);
+
+            LogManager.Trace("[WorldManager] World zones unloaded. Ready for encounter scene.");
+
+            StartEncounterBattle(encounterData);
+
+            // NOTE: At this point the encounter system (e.g. EncounterManager)
+            // should take over — load its own scene, run combat, etc.
+            // When the encounter ends(results), it should call WorldManager.ReturnFromEncounter()
+            // to reload the zone the player was in.
+        }
+        catch (System.Exception e)
+        {
+            LogManager.Error($"[WorldManager] Exception during encounter teardown: {e.Message}\n{e.StackTrace}");
+
+            // Attempt recovery so the game isn't permanently stuck
+            worldManager.SetState(WorldState.None);
+
+                await worldManager.FadeIn();
+    
+            player.SetControlEnabled(true);
+        }
+        finally
+        {
+            worldManager.SetIsTransitioning(false);
+        }
+    }
+
+    public async void ReturnFromEncounter()
+    {
+        worldManager.SetIsTransitioning(true);
+
+        try
+        {
+            var targetZone = worldManager.FindZone(WorldArgs.ZoneId);
+            if (targetZone == null)
+            {
+                LogManager.Error($"[WorldManager] Cannot return to zone '{WorldArgs.ZoneId}'");
+                return;
+            }
+
+            // Load the zone but place the player at the SAVED position
+            await worldManager.LoadZoneAtPosition(targetZone, WorldArgs.PlayerPosition, WorldArgs.FacingDirection);
+
+                await worldManager.FadeIn();
+
+            player.SetControlEnabled(true);
+            player.SetState(PlayerWorldState.FreeRoam);
+            ResetStepCounter();
+        }
+        catch (System.Exception e)
+        {
+            LogManager.Error($"[WorldManager] Exception returning from encounter: {e.Message}\n{e.StackTrace}");
+            player.SetControlEnabled(true);
+            await worldManager.FadeIn();
+        }
+        finally
+        {
+            worldManager.SetIsTransitioning(false);
+        }
+    }
+
     #endregion
+
+    #region Logic
 
     private int _stepsUntilEncounter;
     private float _distanceAccumulator;
@@ -56,7 +189,7 @@ public class WorldManagerEncounter : MonoBehaviour
     /// <summary>Called from PlayerWorldComponentController.</summary>
     public void Tick(bool isMoving, float speed, float deltaTime)
     {
-        if (!isMoving || zoneTracker.CurrentZone == null) return;
+        if (!isMoving || worldManager.CurrentZone == null) return;
 
         _distanceAccumulator += speed * deltaTime;
 
@@ -79,7 +212,7 @@ public class WorldManagerEncounter : MonoBehaviour
     /// </summary>
     public void OnTileArrived(bool isRunning)
     {
-        if (zoneTracker.CurrentZone == null) return;
+        if (worldManager.CurrentZone == null) return;
 
         int stepValue = isRunning ? config.runStepMultiplier : 1;
         _stepsUntilEncounter -= stepValue;
@@ -106,10 +239,10 @@ public class WorldManagerEncounter : MonoBehaviour
         TriggerEncounter(encounter);
     }
 
-    public EncounterData GetRandomEncounter()
+    private EncounterData GetRandomEncounter()
     {
-        if (zoneTracker.CurrentZone == null) return null;
-        List<EncounterData> encounters = zoneTracker.CurrentZone.encounters;
+        if (worldManager.CurrentZone == null) return null;
+        List<EncounterData> encounters = worldManager.CurrentZone.encounters;
         if (encounters == null || encounters.Count == 0) return null;
 
         // Weighted random selection by encounterRate
@@ -130,24 +263,25 @@ public class WorldManagerEncounter : MonoBehaviour
         return encounters[^1];
     }
 
-    //event handled in WorldManager
-    public void TriggerEncounter(EncounterData encounter)
+    private void TriggerEncounter(EncounterData encounter)
     {
-        if (playerWorldEntity.PlayerWorldState != PlayerWorldState.FreeRoam) return;
+        if (player.PlayerWorldState != PlayerWorldState.FreeRoam) return;
 
-        playerWorldEntity.StopMovement();
-        playerWorldEntity.SetState(PlayerWorldState.InBattle);
+        player.StopMovement();
+        player.SetState(PlayerWorldState.InBattle);
         WorldEvents.RaiseEncounterTriggered(encounter);
         LogManager.Trace($"[WorldManagerEncounter] Encounter triggered");
     }
 
-    public void StartEncounterBattle(EncounterData encounter) 
+    private void StartEncounterBattle(EncounterData encounter) 
     {
         BattleArgs.SetMini(
             homeTeamGuid : TeamLoadoutManager.Instance.ActiveLoadoutGuid, 
             awayTeamId : encounter.teamId,
             battleResultsType : BattleResultsType.Drop);
-        SceneLoader.Instance.LoadGroup(sceneBattle);
+        sceneLoader.LoadGroup(sceneBattle);
     }
+
+    #endregion
 
 }

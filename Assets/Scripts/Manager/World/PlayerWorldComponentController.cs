@@ -176,7 +176,7 @@ public class PlayerWorldComponentController : MonoBehaviour
                 CurrentTilePosition = _gridMoveTarget;
 
                 // Tick encounter system once per tile arrival
-                WorldManagerEncounter.Instance.OnTileArrived(IsRunning);
+                WorldManager.Instance.OnTileArrived(IsRunning);
 
                 // If an encounter was triggered, stop here
                 if (!playerWorldEntity.IsControlEnabled) return;
