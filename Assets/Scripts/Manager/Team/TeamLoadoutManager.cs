@@ -18,7 +18,7 @@ public class TeamLoadoutManager : MonoBehaviour
 
     private Dictionary<string, Team> loadouts = new();
     private string activeLoadoutGuid;
-    private CharacterStorageManager characterStorageManager;
+    private CharacterManager characterManager;
 
     public IReadOnlyDictionary<string, Team> Loadouts => loadouts;
     public Team ActiveLoadout => GetLoadout(activeLoadoutGuid);
@@ -57,7 +57,7 @@ public class TeamLoadoutManager : MonoBehaviour
 
     private void Start() 
     {
-        characterStorageManager = CharacterStorageManager.Instance;
+        characterManager = CharacterManager.Instance;
     }
 
     #endregion
@@ -214,7 +214,7 @@ public class TeamLoadoutManager : MonoBehaviour
         {
             if (string.IsNullOrEmpty(guid)) continue;
 
-            Character character = characterStorageManager.GetCharacter(guid);
+            Character character = characterManager.GetCharacter(guid);
             if (character != null)
             {
                 resolved.Add(character);
@@ -252,7 +252,7 @@ public class TeamLoadoutManager : MonoBehaviour
             return null;
         }
 
-        List<Character> allCharacters = characterStorageManager.Storage.GetAllCharacters();
+        List<Character> allCharacters = characterManager.GetAllCharacters();
         if (allCharacters == null || allCharacters.Count == 0)
         {
             LogManager.Warning("[TeamLoadoutManager] No characters in storage. Loadout created but left empty.");

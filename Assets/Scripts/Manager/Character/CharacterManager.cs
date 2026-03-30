@@ -1,16 +1,26 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+using System.Collections.Generic;
+using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
+using Simulation.Enums.Move;
+using Simulation.Enums.Localization;
 
+/// <summary>
+/// MonoBehaviour singleton that owns the CharacterStorage instance
+/// and provides a global access point.
+/// </summary>
 public class CharacterManager : MonoBehaviour
 {
     public static CharacterManager Instance { get; private set; }
 
-    private readonly Dictionary<string, CharacterData> characterDataDict = new();
+    #region Fields
 
-    public bool IsReady { get; private set; } = false;
+    private CharacterManagerStorage storageSystem;
+    private CharacterManagerPersistance persistanceSystem;
+
+    #endregion
+
+    #region Lifecycle
 
     private void Awake()
     {
@@ -23,31 +33,65 @@ public class CharacterManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public async Task LoadAllCharacterDataAsync()
+    private void OnDestroy() 
     {
-        var handle = Addressables.LoadAssetsAsync<CharacterData>(
-            "Characters-Data",
-            data => characterDataDict[data.CharacterId] = data
-        );
-        await handle.Task;
-        IsReady = true;
-        LogManager.Trace($"[CharacterManager] All characters loaded. Total count: {characterDataDict.Count}", this);
+        //encounterSystem.Unsubscribe();
     }
 
-    public CharacterData GetCharacterData(string id)
+
+    private void Start()
     {
-        if (string.IsNullOrEmpty(id))
-        {
-            LogManager.Error("[CharacterManager] Tried to GetCharacterData with null/empty id!");
-            return null;
-        }
-
-        if (!characterDataDict.TryGetValue(id, out var characterData))
-        {
-            LogManager.Error($"[CharacterManager] No characterData found for id '{id}'.");
-            return null;
-        }
-
-        return characterData;
+        storageSystem = new CharacterManagerStorage();
+        persistanceSystem = new CharacterManagerPersistance();
+        
+        //encounterSystem.Subscribe();
+        //InitializeAsync();
     }
+
+    //private async void InitializeAsync() { }
+
+    #endregion
+
+    #region API
+
+    // storageSystem
+    public Character AddCharacter(Character character) => storageSystem.AddCharacter(character);
+    public Character AddCharacterFromScout(CharacterData characterData, int level) => storageSystem.AddCharacterFromScout(characterData, level);
+    public Character GetCharacter(string characterGuid) => storageSystem.GetCharacter(characterGuid);
+    public List<Character> GetAllCharacters() => storageSystem.GetAllCharacters();
+    public bool HasCharacter(string characterGuid) => storageSystem.HasCharacter(characterGuid);
+    public bool RemoveCharacter(string characterGuid) => storageSystem.RemoveCharacter(characterGuid);
+    public void FirstTimeInitialize() => storageSystem.FirstTimeInitialize();
+    public CharacterStorageSaveData ExportStorageSystem() => storageSystem.Export();
+    public void ImportStorageSystem(CharacterStorageSaveData saveData) => storageSystem.Import(saveData);
+
+    // persistanceSystem
+    public CharacterSystemSaveData Export() => persistanceSystem.Export();
+    public void Import(CharacterSystemSaveData saveData) => persistanceSystem.Import(saveData);
+
+    #endregion
+
+    #region Event
+
+    //TODO placeholder
+
+    private void OnEnable() 
+    {
+        MoveEvents.OnMoveUsed += HandleMoveUsed;
+    }
+
+    private void OnDisable() 
+    {
+        MoveEvents.OnMoveUsed -= HandleMoveUsed;
+    }
+
+    private void HandleMoveUsed(Move move, CharacterEntityBattle character)
+    {
+        if(!HasCharacter(character.Character.CharacterGuid)) return;
+
+        move.ProgressEvolution();
+        LogManager.Trace($"[CharacterStorage] {character.Character.CharacterName} used {move.MoveName}");
+    }
+
+    #endregion
 }

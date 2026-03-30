@@ -8,7 +8,7 @@ using Simulation.Enums.Item;
 using Simulation.Enums.Move;
 using Simulation.Enums.Localization;
 
-public class ItemStorage
+public class ItemManagerStorage
 {
     #region Fields
 
@@ -28,7 +28,7 @@ public class ItemStorage
 
     #region Constructor
 
-    public ItemStorage() 
+    public ItemManagerStorage() 
     {
         categoryMap = new Dictionary<ItemCategory, List<ItemStorageSlot>>
         {

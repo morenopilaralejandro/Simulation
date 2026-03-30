@@ -18,7 +18,7 @@ public class NpcComponentCharacter : MonoBehaviour
         this.npcEntity = npcEntity;
         this.character = null;
         if (string.IsNullOrEmpty(characterId)) return;
-        CharacterData characterData = CharacterManager.Instance.GetCharacterData(characterId);
+        CharacterData characterData = CharacterDatabase.Instance.GetCharacterData(characterId);
         this.character = new Character(characterData);
     }
 

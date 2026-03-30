@@ -46,7 +46,7 @@ public class DebugMainMenu : MonoBehaviour
     }
 
     private void HandleButton3() {
-        CharacterStorageManager.Instance.FirstTimeInitialize();
+        CharacterManager.Instance.FirstTimeInitialize();
         sceneLoader.LoadGroup(sceneWorld);
     }
 }

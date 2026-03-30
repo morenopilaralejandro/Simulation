@@ -1,15 +1,24 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+using System.Collections.Generic;
+using Simulation.Enums.Character;
+using Simulation.Enums.Kit;
+using Simulation.Enums.Move;
+using Simulation.Enums.Item;
+using Simulation.Enums.Localization;
 
 public class ItemManager : MonoBehaviour
 {
     public static ItemManager Instance { get; private set; }
 
-    private readonly Dictionary<string, ItemData> itemDataDict = new();
+    #region Fields
 
-    public bool IsReady { get; private set; } = false;
+    private ItemManagerStorage storageSystem;
+    private ItemManagerCurrency currencySystem;
+    private ItemManagerPersistance persistanceSystem;
+
+    #endregion
+
+    #region Lifecycle
 
     private void Awake()
     {
@@ -22,51 +31,57 @@ public class ItemManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // ---- Loading ----
-
-    public async Task LoadAllItemDataAsync()
+    private void OnDestroy() 
     {
-        var handle = Addressables.LoadAssetsAsync<ItemData>(
-            "Items-Data",
-            data => itemDataDict[data.ItemId] = data
-        );
-        await handle.Task;
-        IsReady = true;
-        LogManager.Trace($"[ItemManager] All items loaded. Total count: {itemDataDict.Count}", this);
+        //encounterSystem.Unsubscribe();
     }
 
-    // ---- Get ScriptableObject Data ----
 
-    public ItemData GetItemData(string id)
+    private void Start()
     {
-        if (string.IsNullOrEmpty(id))
-        {
-            LogManager.Error("[ItemManager] Tried to GetItemData with null/empty id!");
-            return null;
-        }
-
-        if (!itemDataDict.TryGetValue(id, out var itemData))
-        {
-            LogManager.Error($"[ItemManager] No ItemData found for id '{id}'.");
-            return null;
-        }
-
-        return itemData;
+        storageSystem = new ItemManagerStorage();
+        currencySystem = new ItemManagerCurrency();
+        persistanceSystem = new ItemManagerPersistance();
+        
+        //encounterSystem.Subscribe();
+        //InitializeAsync();
     }
 
-    /// <summary>
-    /// Get ItemData cast to a specific subclass
-    /// </summary>
-    public T GetItemData<T>(string id) where T : ItemData
-    {
-        var data = GetItemData(id);
-        if (data == null) return null;
+    //private async void InitializeAsync() { }
 
-        if (data is T typed)
-            return typed;
+    #endregion
 
-        LogManager.Error($"[ItemManager] Item '{id}' is {data.GetType().Name}, not {typeof(T).Name}.");
-        return null;
-    }
+    #region API
 
+    // storageSystem
+    public void FirstTimeInitialize() => storageSystem.FirstTimeInitialize();
+    public void AddItem(Item item, int count = 1) => storageSystem.AddItem(item, count);
+    public bool RemoveItem(Item item, int count = 1) => storageSystem.RemoveItem(item, count);
+    public bool HasItem(Item item) => storageSystem.HasItem(item);
+    public int GetItemCount(Item item) => storageSystem.GetItemCount(item);
+    public ItemStorageSaveData ExportStorageSystem() => storageSystem.Export();
+    public void ImportStorageSystem(ItemStorageSaveData saveData) => storageSystem.Import(saveData);
+
+    // currencySystem
+    public IReadOnlyDictionary<CurrencyType, int> CurrencyDict => currencySystem.CurrencyDict;
+    public int GetGold() => currencySystem.GetGold();
+    public int GetAmount(CurrencyType type) => currencySystem.GetAmount(type);
+    public void Add(CurrencyType type, int amount) => currencySystem.Add(type, amount);
+    public bool Spend(CurrencyType type, int amount) => currencySystem.Spend(type, amount);
+    public bool CanAfford(CurrencyType type, int amount) => currencySystem.CanAfford(type, amount);
+    public SaveDataCurrencySystem ExportCurrencySystem() => currencySystem.Export();
+    public void ImportCurrencySystem(SaveDataCurrencySystem saveData) => currencySystem.Import(saveData);
+
+    // persistanceSystem
+    public ItemSystemSaveData Export() => persistanceSystem.Export();
+    public void Import(ItemSystemSaveData saveData) => persistanceSystem.Import(saveData);
+
+    #endregion
+
+    #region Event
+
+    //private void OnEnable() { }
+    //private void OnDisable() { }
+
+    #endregion
 }

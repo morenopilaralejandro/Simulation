@@ -524,7 +524,7 @@ public class BattleManager : MonoBehaviour
             {
                 if (character != null && characterIndex < team.GetCharacterGuids(currentType).Count)
                 {
-                    Character characterObject = CharacterStorageManager.Instance.GetCharacter(team.GetCharacterGuids(CurrentType)[characterIndex]);
+                    Character characterObject = CharacterManager.Instance.GetCharacter(team.GetCharacterGuids(CurrentType)[characterIndex]);
                     character.Initialize(null, characterObject); //Initialize the CharacterEntityBattle with a characterObject
 
                     character.CalculateSpeed();

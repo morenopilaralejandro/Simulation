@@ -11,43 +11,43 @@ using Simulation.Enums.Localization;
 /// Persistent storage for all characters the player owns.
 /// Characters are keyed by their unique CharacterGuid.
 /// </summary>
-public class CharacterStorage
+public class CharacterManagerStorage
 {
     private Dictionary<string, Character> characters = new();
 
     public IReadOnlyDictionary<string, Character> Characters => characters;
     public int Count => characters.Count;
 
-    public CharacterStorage() { }
+    public CharacterManagerStorage() { }
 
     #region First Time Initialize
 
     public void FirstTimeInitialize()
     {
-        CharacterManager characterManager = CharacterManager.Instance;
+        CharacterDatabase characterDatabase = CharacterDatabase.Instance;
 
-        AddCharacterFromScout(characterManager.GetCharacterData("almu"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("sofireca"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("satu"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("are"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("fran"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("rocinante"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("ainara"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("teruel"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("alexander"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("wang"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("navarro"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("mohamed"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("meiga"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("ruperta"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("malaki"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("ayud"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("isa"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("nina"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("gambino"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("inquina"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("apa"), 50);
-        AddCharacterFromScout(characterManager.GetCharacterData("ali"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("almu"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("sofireca"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("satu"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("are"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("fran"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("rocinante"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("ainara"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("teruel"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("alexander"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("wang"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("navarro"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("mohamed"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("meiga"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("ruperta"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("malaki"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("ayud"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("isa"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("nina"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("gambino"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("inquina"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("apa"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("ali"), 50);
 
         TeamLoadoutManager.Instance.InitializeFirstLoadout();
     }

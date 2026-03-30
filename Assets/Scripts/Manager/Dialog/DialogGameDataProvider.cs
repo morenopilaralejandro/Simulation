@@ -11,7 +11,7 @@ public class DialogGameDataProvider : IDialogGameDataProvider
     private string _playerName = "Hero";
     private int _gold = 1000;
 
-    private ItemStorageManager itemStorageManager;
+    private ItemManager itemManager;
     private Item cachedItem;
 
     private QuestSystemManager questSystemManager;
@@ -23,7 +23,7 @@ public class DialogGameDataProvider : IDialogGameDataProvider
 
     public DialogGameDataProvider() 
     {
-        itemStorageManager = ItemStorageManager.Instance;
+        itemManager = ItemManager.Instance;
         questSystemManager = QuestSystemManager.Instance;
         storySystemManager = StorySystemManager.Instance;
     }
@@ -41,25 +41,25 @@ public class DialogGameDataProvider : IDialogGameDataProvider
     public bool HasItem(string itemId) 
     {
         cachedItem = ItemFactory.CreateById(itemId);
-        return itemStorageManager.HasItem(cachedItem);
+        return itemManager.HasItem(cachedItem);
     }
 
     public int GetItemCount(string itemId) 
     {
         cachedItem = ItemFactory.CreateById(itemId);
-        return itemStorageManager.GetItemCount(cachedItem);
+        return itemManager.GetItemCount(cachedItem);
     }
     
     public void GiveItem(string itemId, int count = 1)
     {
         cachedItem = ItemFactory.CreateById(itemId);
-        itemStorageManager.AddItem(cachedItem, count);
+        itemManager.AddItem(cachedItem, count);
     }
     
     public void RemoveItem(string itemId, int count = 1)
     {
         cachedItem = ItemFactory.CreateById(itemId);
-        itemStorageManager.RemoveItem(cachedItem, count);
+        itemManager.RemoveItem(cachedItem, count);
     }
 
     #endregion    
