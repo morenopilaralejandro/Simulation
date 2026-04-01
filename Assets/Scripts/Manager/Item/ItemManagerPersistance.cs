@@ -24,18 +24,18 @@ public class ItemManagerPersistance
 
     #region Logic
 
-    public ItemSystemSaveData Export()
+    public SaveDataItemSystem Export()
     {
-        ItemSystemSaveData saveData = new ItemSystemSaveData();
+        SaveDataItemSystem saveData = new SaveDataItemSystem();
 
-        saveData.ItemStorageSaveData = itemManager.ExportStorageSystem();
+        saveData.SaveDataItemStorage = itemManager.ExportStorageSystem();
 
         return saveData;
     }
 
-    public void Import(ItemSystemSaveData saveData)
+    public void Import(SaveDataItemSystem saveData)
     {
-        itemManager.ImportStorageSystem(saveData.ItemStorageSaveData);
+        itemManager.ImportStorageSystem(saveData.SaveDataItemStorage);
     }
 
     #endregion

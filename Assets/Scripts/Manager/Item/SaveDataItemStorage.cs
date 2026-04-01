@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Simulation.Enums.Item;
 
 [System.Serializable]
-public class ItemSystemSaveData
+public class SaveDataItemStorage
 {
-    public ItemStorageSaveData ItemStorageSaveData;
+    public List<SaveDataItemStorageSlot> SaveDataItemStorageSlotList;
 }

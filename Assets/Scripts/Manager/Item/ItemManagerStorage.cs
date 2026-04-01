@@ -132,17 +132,17 @@ public class ItemManagerStorage
 
     #region Persistence
     
-    public ItemStorageSaveData Export()
+    public SaveDataItemStorage Export()
     {
-        ItemStorageSaveData saveData = new ItemStorageSaveData();
-        saveData.ItemStorageSlotSaveDataList = new List<ItemStorageSlotSaveData>();
+        SaveDataItemStorage saveData = new SaveDataItemStorage();
+        saveData.SaveDataItemStorageSlotList = new List<SaveDataItemStorageSlot>();
 
         foreach (ItemCategory category in Enum.GetValues(typeof(ItemCategory)))
         {
             foreach (ItemStorageSlot slot in categoryMap[category])
             {
-                saveData.ItemStorageSlotSaveDataList.Add(
-                    new ItemStorageSlotSaveData {
+                saveData.SaveDataItemStorageSlotList.Add(
+                    new SaveDataItemStorageSlot {
                         ItemId = slot.Item.ItemId,
                         Category = slot.Item.Category,
                         Count = slot.Count
@@ -153,17 +153,17 @@ public class ItemManagerStorage
         return saveData;
     }
 
-    public void Import(ItemStorageSaveData saveData)
+    public void Import(SaveDataItemStorage saveData)
     {
         //clear
 
-        if (saveData?.ItemStorageSlotSaveDataList == null) return;
+        if (saveData?.SaveDataItemStorageSlotList == null) return;
 
-        foreach (ItemStorageSlotSaveData itemStorageSlotSaveData in saveData.ItemStorageSlotSaveDataList)
+        foreach (SaveDataItemStorageSlot saveDataItemStorageSlot in saveData.SaveDataItemStorageSlotList)
         {
             AddItem(
-                ItemFactory.CreateByIdAndCategory(itemStorageSlotSaveData.ItemId, itemStorageSlotSaveData.Category), 
-                itemStorageSlotSaveData.Count
+                ItemFactory.CreateByIdAndCategory(saveDataItemStorageSlot.ItemId, saveDataItemStorageSlot.Category), 
+                saveDataItemStorageSlot.Count
             );
         }
     }

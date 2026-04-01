@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using Simulation.Enums.Item;
 
 [System.Serializable]
-public class ItemStorageSlotSaveData
+public class SaveDataItemSystem
 {
-    public string ItemId;
-    public ItemCategory Category;
-    public int Count;
+    public SaveDataItemStorage SaveDataItemStorage;
 }

@@ -1,8 +1,9 @@
 [System.Serializable]
 public class SaveData
 {
-    public int SaveVersion;
-    public long SaveTimestamp; //DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    public int VersionNumber;
+    public long TimestampSave;
+    public long TimestampCreation; //DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     /*
     public PlayerData PlayerSaveData; //TODO position in overworld, current area, money, etc
     public StorySaveData StorySaveData; //TODO story event progresion, etc,

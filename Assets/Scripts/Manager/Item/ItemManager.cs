@@ -59,8 +59,8 @@ public class ItemManager : MonoBehaviour
     public bool RemoveItem(Item item, int count = 1) => storageSystem.RemoveItem(item, count);
     public bool HasItem(Item item) => storageSystem.HasItem(item);
     public int GetItemCount(Item item) => storageSystem.GetItemCount(item);
-    public ItemStorageSaveData ExportStorageSystem() => storageSystem.Export();
-    public void ImportStorageSystem(ItemStorageSaveData saveData) => storageSystem.Import(saveData);
+    public SaveDataItemStorage ExportStorageSystem() => storageSystem.Export();
+    public void ImportStorageSystem(SaveDataItemStorage saveData) => storageSystem.Import(saveData);
 
     // currencySystem
     public IReadOnlyDictionary<CurrencyType, int> CurrencyDict => currencySystem.CurrencyDict;
@@ -73,8 +73,8 @@ public class ItemManager : MonoBehaviour
     public void ImportCurrencySystem(SaveDataCurrencySystem saveData) => currencySystem.Import(saveData);
 
     // persistanceSystem
-    public ItemSystemSaveData Export() => persistanceSystem.Export();
-    public void Import(ItemSystemSaveData saveData) => persistanceSystem.Import(saveData);
+    public SaveDataItemSystem Export() => persistanceSystem.Export();
+    public void Import(SaveDataItemSystem saveData) => persistanceSystem.Import(saveData);
 
     #endregion
 

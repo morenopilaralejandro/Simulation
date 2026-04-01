@@ -6,11 +6,15 @@ public class PersistenceManager : MonoBehaviour
 {
     public static PersistenceManager Instance { get; private set; }
 
-    public const int CURRENT_SAVE_VERSION = 21;
+    #region Fields
 
-    private static string SavePath => Path.Combine(Application.persistentDataPath, "save.json");
-    private static string BackupPath => Path.Combine(Application.persistentDataPath, "save_backup.json");
-    private static string TempPath => Path.Combine(Application.persistentDataPath, "save_temp.json");
+    private PersistenceManagerBackup backupSystem;
+    private PersistenceManagerSave saveSystem;
+    private PersistenceManagerLoad loadSystem;
+
+    #endregion
+
+    #region Lifecycle
 
     private void Awake()
     {
@@ -24,119 +28,34 @@ public class PersistenceManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // =========================
-    // SAVE
-    // =========================
-    public void SaveGame()
+    private void Start()
     {
-        // Create save data (PLACEHOLDER)
-        SaveData data = CreateSaveData();
-        Save(data);
+        backupSystem = new PersistenceManagerBackup();
+        saveSystem = new PersistenceManagerSave();
+        loadSystem = new PersistenceManagerLoad();
+
+        //encounterSystem.Subscribe();
     }
 
-    public void Save(SaveData saveData) 
+    private void OnDestroy() 
     {
-        string json = JsonUtility.ToJson(saveData, true);
-        try
-        {
-            // Write temp file
-            File.WriteAllText(TempPath, json);
-
-            // Validate temp save
-            if (!TryValidateSave(TempPath))
-            {
-                LogManager.Error("[PersistenceManager] Save validation failed.");
-                return;
-            }
-
-            // Create backup
-            if (File.Exists(SavePath))
-                File.Copy(SavePath, BackupPath, overwrite: true);
-
-            // Replace save with temp
-            File.Copy(TempPath, SavePath, overwrite: true);
-            File.Delete(TempPath);
-
-            LogManager.Trace("[PersistenceManager] Game saved successfully.");
-        }
-        catch (System.Exception e)
-        {
-            LogManager.Error($"[PersistenceManager] Save failed: {e}");
-        }
+        //encounterSystem.Unsubscribe();
     }
 
-    // =========================
-    // LOAD
-    // =========================
-    public SaveData GetLastSaveData()
-    {
-        // Try main save
-        if (TryLoad(SavePath, out SaveData data))
-        {
-            LogManager.Trace("[PersistenceManager] Loaded main save.");
-            return data;
-        }
+    #endregion
 
-        // Fallback to backup
-        if (TryLoad(BackupPath, out data))
-        {
-            LogManager.Warning("[PersistenceManager] Main save failed. Loaded backup.");
-            return data;
-        }
+    #region API
 
-        LogManager.Warning("[PersistenceManager] No valid save found.");
-        return null;
-    }
+    // backupSystem
+    public int CurrentSaveVersion => PersistenceManagerBackup.CURRENT_SAVE_VERSION;
+    public void Save(SaveData saveData) => backupSystem.Save(saveData);
+    public SaveData GetLastSaveData() => backupSystem.GetLastSaveData();
 
-    public void LoadGame() 
-    {
-        /*
-            GetLastSaveData();
-            initialize the characters etc.
-        */
-    }
+    // saveSystem
+    public void SaveGame() => saveSystem.SaveGame();
 
-    // =========================
-    // INTERNAL HELPERS
-    // =========================
-    private bool TryLoad(string path, out SaveData data)
-    {
-        data = null;
+    // loadSystem
+    public void LoadGame() => loadSystem.LoadGame();
 
-        if (!File.Exists(path)) return false;
-
-        try
-        {
-            string json = File.ReadAllText(path);
-            data = JsonUtility.FromJson<SaveData>(json);
-            return data != null;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    private bool TryValidateSave(string path)
-    {
-        try
-        {
-            string json = File.ReadAllText(path);
-            SaveData data = JsonUtility.FromJson<SaveData>(json);
-            return data != null && data.SaveVersion > 0;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    private SaveData CreateSaveData()
-    {
-        return new SaveData
-        {
-            SaveVersion = CURRENT_SAVE_VERSION,
-            SaveTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
-        };
-    }
+    #endregion
 }

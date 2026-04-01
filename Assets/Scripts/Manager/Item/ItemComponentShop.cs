@@ -7,9 +7,10 @@ public class ItemComponentShop
 {
     private Item item;
 
-    public bool IsSellable  { get; private set; }
-    public int PriceBuy     { get; private set; }
-    public int PriceSell    { get; private set; }
+    private Dictionary<CurrencyType, int> priceBuyDict = new();
+    private int priceSellGold;
+
+    public bool IsSellable { get; private set; }
 
     public ItemComponentShop(ItemData itemData, Item item, ItemSaveData itemSaveData = null)
     {
@@ -20,7 +21,18 @@ public class ItemComponentShop
     {
         this.item = item;
         IsSellable = itemData.IsSellable;
-        PriceBuy = itemData.PriceBuy;
-        PriceSell = itemData.PriceSell;
+        priceSellGold = itemData.PriceSellGold;
+
+        priceBuyDict[CurrencyType.Gold] = itemData.PriceBuyGold;
+    }
+
+    public int GetPriceBuy(CurrencyType currencyType = CurrencyType.Gold) 
+    {
+        return priceBuyDict[currencyType];
+    }
+
+    public int GetPriceSell() 
+    {
+        return IsSellable ? priceSellGold : 0;
     }
 }

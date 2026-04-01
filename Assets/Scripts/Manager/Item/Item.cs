@@ -63,8 +63,9 @@ public class Item
 
     // shopComponent
     public bool IsSellable => shopComponent.IsSellable;
-    public int PriceBuy => shopComponent.PriceBuy;
-    public int PriceSell => shopComponent.PriceSell;
+    public int GetPriceBuy(CurrencyType currencyType = CurrencyType.Gold) => shopComponent.GetPriceBuy(currencyType);
+    public int GetPriceSell() => shopComponent.GetPriceSell();
 
     #endregion
+
 }

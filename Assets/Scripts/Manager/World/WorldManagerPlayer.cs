@@ -15,7 +15,7 @@ public class WorldManagerPlayer
 
     #region Constructor
 
-    public WorldManagerPlayer(PlayerWorldConfig playerWorldConfig) 
+    public WorldManagerPlayer(PlayerWorldConfig playerWorldConfig)
     {
         PlayerWorldEntity = PlayerWorldEntity.Instance;
         PlayerWorldConfig = playerWorldConfig;

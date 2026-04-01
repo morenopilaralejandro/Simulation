@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Simulation.Enums.Character;
+using Simulation.Enums.World;
+
+public class WorldManagerPersistance
+{
+    #region Fields
+
+    private WorldManager worldManager;
+    private PlayerWorldEntity playerWorldEntity;
+
+    #endregion
+
+    #region Constructor
+
+    public WorldManagerPersistance()
+    {
+        worldManager = WorldManager.Instance;
+        playerWorldEntity = worldManager.PlayerWorldEntity;
+    }
+
+    #endregion
+
+    #region Logic
+
+    public SaveDataWorldSystem Export()
+    {
+        return new SaveDataWorldSystem
+        {
+            CurrentRealm = worldManager.CurrentRealm,
+            PlayerPosition = playerWorldEntity.CurrentTilePosition3d(),
+            FacingDirection = playerWorldEntity.FacingToVector(playerWorldEntity.FacingDirection),
+            CurrentZone = worldManager.CurrentZone
+        };
+    }
+
+    public void Import(SaveDataWorldSystem saveData)
+    {
+        //itemManager.ImportStorageSystem(saveData.SaveDataItemStorage);
+    }
+
+    #endregion
+
+    #region Events
+
+    //public void Subscribe() { }
+    //public void Unsubscribe() { }
+
+    #endregion
+
+}

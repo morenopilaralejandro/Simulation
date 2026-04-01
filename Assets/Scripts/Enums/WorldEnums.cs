@@ -27,6 +27,7 @@ namespace Simulation.Enums.World
     {
         None,
         Loading,
+        Unloaded,
         InOverworld,
         InInterior,
         Transitioning,

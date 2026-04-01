@@ -37,8 +37,8 @@ public class CSVImporterItem
         int spriteColorIndex    = System.Array.IndexOf(headers, "SpriteColor");
         int usageContextIndex   = System.Array.IndexOf(headers, "UsageContext");
         int isSellableIndex     = System.Array.IndexOf(headers, "IsSellable");
-        int priceBuyIndex       = System.Array.IndexOf(headers, "PriceBuy");
-        int priceSellIndex      = System.Array.IndexOf(headers, "PriceSell");
+        int priceBuyGoldIndex   = System.Array.IndexOf(headers, "PriceBuyGold");
+        int priceSellGoldIndex  = System.Array.IndexOf(headers, "PriceSellGold");
         int isDiscardableIndex  = System.Array.IndexOf(headers, "IsDiscardable");
         int isStackableIndex    = System.Array.IndexOf(headers, "IsStackable");
         int maxStackIndex       = System.Array.IndexOf(headers, "MaxStack");
@@ -96,8 +96,8 @@ public class CSVImporterItem
             itemData.SpriteColor    = EnumManager.StringToEnum<ItemSpriteColor>(values[spriteColorIndex].Trim());
             itemData.UsageContext   = EnumManager.StringToEnum<ItemUsageContext>(values[usageContextIndex].Trim());
             itemData.IsSellable     = CSVImporterParser.ParseBool(values[isSellableIndex].Trim());
-            itemData.PriceBuy       = int.Parse(values[priceBuyIndex].Trim());
-            itemData.PriceSell      = int.Parse(values[priceSellIndex].Trim());
+            itemData.PriceBuyGold   = int.Parse(values[priceBuyGoldIndex].Trim());
+            itemData.PriceSellGold  = int.Parse(values[priceSellGoldIndex].Trim());
             itemData.IsDiscardable  = CSVImporterParser.ParseBool(values[isDiscardableIndex].Trim());
             itemData.IsStackable    = CSVImporterParser.ParseBool(values[isStackableIndex].Trim());
             itemData.MaxStack       = int.Parse(values[maxStackIndex].Trim());
