@@ -52,6 +52,10 @@ public class PersistenceManager : MonoBehaviour
     public SaveData GetLastSaveData() => backupSystem.GetLastSaveData();
 
     // saveSystem
+    public bool IsNewGame() => saveSystem.IsNewGame();
+    public void SetNewGame(bool boolValue) => saveSystem.SetNewGame(boolValue);
+    public long TimestampCreation => saveSystem.TimestampCreation;
+    public void SetTimestampCreation(long longValue) => saveSystem.SetTimestampCreation(longValue);
     public void SaveGame() => saveSystem.SaveGame();
 
     // loadSystem

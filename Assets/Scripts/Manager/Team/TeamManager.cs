@@ -1,20 +1,24 @@
-using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.Localization;
+using Simulation.Enums.Battle;
 
 public class TeamManager : MonoBehaviour
 {
+    #region Fields
+
     public static TeamManager Instance { get; private set; }
 
-    private readonly Dictionary<string, Team> teams = new();
+    [SerializeField] private LocalizedString defaultName;
 
-    public bool IsReady { get; private set; } = false;
+    private TeamManagerLoadout loadoutSystem;
+    private TeamManagerPersistance persistanceSystem;
 
-    public int SizeMax = 16;
-    public int SizeFull = 11;
-    public int SizeMini = 4;
+    #endregion
+
+    #region Lifecycle
 
     private void Awake()
     {
@@ -23,45 +27,59 @@ public class TeamManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
-        DontDestroyOnLoad(gameObject);        
+        DontDestroyOnLoad(gameObject);
     }
 
-    public async Task LoadAllTeamsAsync()
+    private void OnDestroy() 
     {
-        var handle = Addressables.LoadAssetsAsync<TeamData>(
-            "Teams-Data",
-            data => RegisterTeam(data)
-        );
-        await handle.Task;
-        IsReady = true;
-        LogManager.Trace($"[TeamManager] All teams loaded. Total count: {teams.Count}", this);
+        //encounterSystem.Unsubscribe();
     }
 
-    private void RegisterTeam(TeamData data)
+
+    private void Start()
     {
-        if (!teams.ContainsKey(data.TeamId))
-        {
-            var team = new Team(data);
-            teams.Add(team.TeamId, team);
-        }
+        loadoutSystem = new TeamManagerLoadout(defaultName);
+        persistanceSystem = new TeamManagerPersistance();
+        //encounterSystem.Subscribe();
     }
 
-    public Team GetTeam(string id)
-    {
-        if (string.IsNullOrEmpty(id))
-        {
-            LogManager.Error("[TeamManager] Tried to GetTeam with null/empty id!");
-            return null;
-        }
+    #endregion
 
-        if (!teams.TryGetValue(id, out var team))
-        {
-            LogManager.Error($"[TeamManager] No team found for id '{id}'.");
-            return null;
-        }
+    #region API
 
-        return team;
-    }
+    // loadoutSystem
+    public IReadOnlyDictionary<string, Team> Loadouts => loadoutSystem.Loadouts;
+    public Team ActiveLoadout => loadoutSystem.ActiveLoadout;
+    public string ActiveLoadoutGuid => loadoutSystem.ActiveLoadoutGuid;
+    public string DEFAULT_NAME => loadoutSystem.DEFAULT_NAME;
+    public const int MAX_LOADOUTS = TeamManagerLoadout.MAX_LOADOUTS;
+    public const string DEFAULT_CREST_ID = TeamManagerLoadout.DEFAULT_CREST_ID;
+    public const string TEAM_CREST_ID_COMMON = TeamManagerLoadout.TEAM_CREST_ID_COMMON;
+    public const string TEAM_CREST_ID_RARE = TeamManagerLoadout.TEAM_CREST_ID_RARE;
+    public const string DEFAULT_KIT_ID = TeamManagerLoadout.DEFAULT_KIT_ID;
+    public const string DEFAULT_FULL_BATTLE_FORMATION_ID = TeamManagerLoadout.DEFAULT_FULL_BATTLE_FORMATION_ID;
+    public const string DEFAULT_MINI_BATTLE_FORMATION_ID = TeamManagerLoadout.DEFAULT_MINI_BATTLE_FORMATION_ID;
+    public const int SIZE_MAX = TeamManagerLoadout.SIZE_MAX;
+    public const int SIZE_FULL = TeamManagerLoadout.SIZE_FULL;
+    public const int SIZE_MINI = TeamManagerLoadout.SIZE_MINI;
+    public Team CreateLoadout() => loadoutSystem.CreateLoadout();
+    public bool DeleteLoadout(string teamGuid) => loadoutSystem.DeleteLoadout(teamGuid);
+    public Team GetLoadout(string teamGuid) => loadoutSystem.GetLoadout(teamGuid);
+    public List<Team> GetAllLoadouts() => loadoutSystem.GetAllLoadouts();
+    public void SetActiveLoadout(string teamGuid) => loadoutSystem.SetActiveLoadout(teamGuid);
+    public bool HasActiveLoadout() => loadoutSystem.HasActiveLoadout();
+    public void SetCharacterInLoadout(string teamGuid, BattleType battleType, int slotIndex, string characterGuid) => loadoutSystem.SetCharacterInLoadout(teamGuid, battleType, slotIndex, characterGuid);
+    public void RemoveCharacterFromLoadout(string teamGuid, BattleType battleType, string characterGuid) => loadoutSystem.RemoveCharacterFromLoadout(teamGuid, battleType, characterGuid);
+    public List<Character> ResolveCharacters(Team loadout, BattleType battleType) => loadoutSystem.ResolveCharacters(loadout, battleType);
+    public Team InitializeFirstLoadout() => loadoutSystem.InitializeFirstLoadout();
+    public SaveDataLoadoutSystem ExportLoadoutSystem() => loadoutSystem.Export();
+    public void ImportLoadoutSystem(SaveDataLoadoutSystem saveData) => loadoutSystem.Import(saveData);
+
+    // persistanceSystem
+    public SaveDataTeamSystem Export() => persistanceSystem.Export();
+    public void Import(SaveDataTeamSystem saveData) => persistanceSystem.Import(saveData);
+
+    #endregion
+
 }

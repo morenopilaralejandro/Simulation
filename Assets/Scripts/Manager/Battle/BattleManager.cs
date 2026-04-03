@@ -132,7 +132,7 @@ public class BattleManager : MonoBehaviour
 
     private void SetTeamSize()
     {
-        currentTeamSize = currentType == BattleType.Full ? TeamManager.Instance.SizeFull : TeamManager.Instance.SizeMini;
+        currentTeamSize = currentType == BattleType.Full ? TeamManager.SIZE_FULL : TeamManager.SIZE_MINI;
         charactersReadyMax = currentTeamSize * 2;
     }
     #endregion

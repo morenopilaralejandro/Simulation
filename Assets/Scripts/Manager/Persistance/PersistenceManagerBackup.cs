@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.IO;
 
-public class PersistenceManagerBackup : MonoBehaviour
+public class PersistenceManagerBackup
 {
     #region Fields
 

@@ -49,7 +49,7 @@ public class DataLoadManager : MonoBehaviour
             loadKits, 
             loadCharacters,
             loadFormations);
-        Task loadTeams = TeamManager.Instance.LoadAllTeamsAsync();
+        Task loadTeams = TeamDatabase.Instance.LoadAllTeamsAsync();
         // Misc
         await Task.WhenAll(
             loadBalls, 

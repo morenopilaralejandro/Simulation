@@ -29,10 +29,10 @@ public class WorldManagerPersistance
     {
         return new SaveDataWorldSystem
         {
-            CurrentRealm = worldManager.CurrentRealm,
+            Realm = worldManager.CurrentRealm,
             PlayerPosition = playerWorldEntity.CurrentTilePosition3d(),
             FacingDirection = playerWorldEntity.FacingToVector(playerWorldEntity.FacingDirection),
-            CurrentZone = worldManager.CurrentZone
+            ZoneId = worldManager.CurrentZone.zoneId
         };
     }
 

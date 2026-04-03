@@ -242,7 +242,7 @@ public class WorldManagerEncounter
     private void StartEncounterBattle(EncounterData encounter) 
     {
         BattleArgs.SetMini(
-            homeTeamGuid : TeamLoadoutManager.Instance.ActiveLoadoutGuid, 
+            homeTeamGuid : TeamManager.Instance.ActiveLoadoutGuid, 
             awayTeamId : encounter.teamId,
             battleResultsType : BattleResultsType.Drop);
         sceneLoader.LoadGroup(sceneBattle);

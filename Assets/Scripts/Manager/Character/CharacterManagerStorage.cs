@@ -49,7 +49,7 @@ public class CharacterManagerStorage
         AddCharacterFromScout(characterDatabase.GetCharacterData("apa"), 50);
         AddCharacterFromScout(characterDatabase.GetCharacterData("ali"), 50);
 
-        TeamLoadoutManager.Instance.InitializeFirstLoadout();
+        TeamManager.Instance.InitializeFirstLoadout();
     }
 
     #endregion

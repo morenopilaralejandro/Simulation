@@ -9,6 +9,7 @@ public class DebugMainMenu : MonoBehaviour
     [SerializeField] private SceneGroup sceneBattle;
     [SerializeField] private SceneGroup sceneDebugMainMenu;
     [SerializeField] private SceneGroup sceneWorld;
+    [SerializeField] private SceneGroup sceneMainMenu;
     private SceneLoader sceneLoader;
     private AudioManager audioManager;
 
@@ -31,6 +32,10 @@ public class DebugMainMenu : MonoBehaviour
         HandleButton3();
     }
 
+    public void OnButton4Tapped() {
+        HandleButton4();
+    }
+
     private void HandleButton1() {
         BattleArgs.SetFull(
             "faith_selection", 
@@ -48,5 +53,9 @@ public class DebugMainMenu : MonoBehaviour
     private void HandleButton3() {
         CharacterManager.Instance.FirstTimeInitialize();
         sceneLoader.LoadGroup(sceneWorld);
+    }
+
+    private void HandleButton4() {
+        sceneLoader.LoadGroup(sceneMainMenu);
     }
 }

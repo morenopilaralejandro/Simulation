@@ -17,6 +17,7 @@ public class StorySystemTriggers
     {
         storySystemManager = StorySystemManager.Instance;
         questSystemManager = QuestSystemManager.Instance;
+        storyAutoTriggerDatabase = StoryAutoTriggerDatabase.Instance;
     }
 
     public void TriggerAutoTrigger(string storyAutoTriggerId)

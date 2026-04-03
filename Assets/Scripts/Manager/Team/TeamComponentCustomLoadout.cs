@@ -24,7 +24,7 @@ public class TeamComponentCustomLoadout
         } else 
         {
             IsCustomLoadout = false;
-            CustomName = TeamLoadoutManager.Instance.DEFAULT_NAME;
+            CustomName = TeamManager.Instance.DEFAULT_NAME;
         }
     }
 

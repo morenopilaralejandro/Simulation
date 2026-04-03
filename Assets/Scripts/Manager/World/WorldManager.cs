@@ -65,7 +65,7 @@ public class WorldManager : MonoBehaviour
 
     private async void InitializeAsync(OverworldDefinition overworldDefinition)
     {
-        if (StorySystemManager.Instance.GetFlag("newGame"))
+        if (PersistenceManager.Instance.IsNewGame())
         {
             await LoadZone(overworldDefinition.startingZone, overworldDefinition.startingSpawnId);
             PlayerWorldEntity.SetControlEnabled(true);

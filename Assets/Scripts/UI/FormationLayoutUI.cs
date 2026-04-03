@@ -32,7 +32,7 @@ public class FormationLayoutUI : MonoBehaviour
     private List<FormationCharacterSlotUI> benchSlots = new List<FormationCharacterSlotUI>();
 
     // Team data (assigned externally)
-    private TeamLoadoutManager loadoutManager;
+    private TeamManager teamManager;
     private List<Character> teamRoster;
 
     private void Start()
@@ -45,8 +45,8 @@ public class FormationLayoutUI : MonoBehaviour
     /// </summary>
     public void Initialize(Team team, BattleType battleType)
     {
-        loadoutManager = TeamLoadoutManager.Instance;
-        teamRoster = loadoutManager.ResolveCharacters(team, battleType);
+        teamManager = TeamManager.Instance;
+        teamRoster = teamManager.ResolveCharacters(team, battleType);
         SetFormation(team.GetFormation(battleType));
     }
 

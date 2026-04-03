@@ -89,13 +89,13 @@ public class BattleTeamManager : MonoBehaviour
     private Team CreateTeamFromLoadout(string teamGuid, TeamSide side)
     {
         // Different for each user depending on the side
-        Team team = TeamLoadoutManager.Instance.GetLoadout(teamGuid);
+        Team team = TeamManager.Instance.GetLoadout(teamGuid);
         return team;
     }
 
     private Team CreateTeamFromData(string teamId)
     {
-        Team team = TeamManager.Instance.GetTeam(teamId);
+        Team team = TeamDatabase.Instance.GetTeam(teamId);
         return team;
     }
 

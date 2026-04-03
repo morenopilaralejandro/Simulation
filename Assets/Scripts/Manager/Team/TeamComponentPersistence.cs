@@ -26,9 +26,9 @@ public class TeamComponentPersistence
 
     #region Import
 
-    public void Import(TeamSaveData teamSaveData)
+    public void Import(TeamSaveData saveData)
     {
-        team.Initialize(null, teamSaveData);
+        team.Initialize(null, saveData);
     }
 
     #endregion

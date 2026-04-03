@@ -7,12 +7,12 @@ using Simulation.Enums.World;
 public class SaveDataWorldSystem
 {
     // realmSystem;
-    public Realm CurrentRealm;
+    public Realm Realm;
     // zoneSystem;
     // playerSystem;
     public Vector3 PlayerPosition;
     public Vector2 FacingDirection;
     // zoneTrackerSystem;
-    public ZoneDefinition CurrentZone;
+    public string ZoneId;
     // encounterSystem;
 }

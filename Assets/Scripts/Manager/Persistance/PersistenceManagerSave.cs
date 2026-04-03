@@ -2,11 +2,15 @@ using UnityEngine;
 using System;
 using System.IO;
 
-public class PersistenceManagerSave : MonoBehaviour
+public class PersistenceManagerSave
 {
     #region Fields
 
+    private const string FLAG_NEW_GAME = "NEW_GAME";
+    private long timestampCreation;
+
     private PersistenceManager persistenceManager;
+    private StorySystemManager storyManager;
 
     #endregion
 
@@ -15,11 +19,18 @@ public class PersistenceManagerSave : MonoBehaviour
     public PersistenceManagerSave() 
     {
         persistenceManager = PersistenceManager.Instance;
+        storyManager = StorySystemManager.Instance;
     }
 
     #endregion
 
     #region Logic
+
+    public bool IsNewGame() => storyManager.GetFlag(FLAG_NEW_GAME);
+    public void SetNewGame(bool boolValue) => storyManager.SetFlag(FLAG_NEW_GAME, boolValue);
+
+    public long TimestampCreation => timestampCreation;
+    public void SetTimestampCreation(long longValue) => timestampCreation = longValue;
 
     public void SaveGame()
     {
@@ -30,14 +41,19 @@ public class PersistenceManagerSave : MonoBehaviour
 
     private SaveData CreateSaveData()
     {
-        return null;
-        /*
         return new SaveData
         {
-            SaveVersion = CURRENT_SAVE_VERSION,
-            SaveTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            VersionNumber = persistenceManager.CurrentSaveVersion,
+            TimestampSave = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+            TimestampCreation = persistenceManager.TimestampCreation,
+            CharacterSystemSaveData = CharacterManager.Instance.Export(),
+            SaveDataItemSystem = ItemManager.Instance.Export(),
+            QuestSystemSaveData = QuestSystemManager.Instance.Export(),
+            StorySystemSaveData = StorySystemManager.Instance.Export(),
+            ChestStateSaveData = ChestStateManager.Instance.Export(),
+            SaveDataWorldSystem = WorldManager.Instance.Export(),
+            SaveDataTeamSystem = TeamManager.Instance.Export()
         };
-        */
     }
 
     #endregion
