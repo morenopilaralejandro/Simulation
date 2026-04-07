@@ -34,7 +34,8 @@ public class PersistenceManagerSave
 
     public void SaveGame()
     {
-        // Create save data (PLACEHOLDER)
+        if (IsNewGame())
+            SetNewGame(false);
         SaveData data = CreateSaveData();
         persistenceManager.Save(data);
     }
@@ -45,7 +46,7 @@ public class PersistenceManagerSave
         {
             VersionNumber = persistenceManager.CurrentSaveVersion,
             TimestampSave = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-            TimestampCreation = persistenceManager.TimestampCreation,
+            TimestampCreation = timestampCreation,
             CharacterSystemSaveData = CharacterManager.Instance.Export(),
             SaveDataItemSystem = ItemManager.Instance.Export(),
             QuestSystemSaveData = QuestSystemManager.Instance.Export(),
@@ -54,6 +55,14 @@ public class PersistenceManagerSave
             SaveDataWorldSystem = WorldManager.Instance.Export(),
             SaveDataTeamSystem = TeamManager.Instance.Export()
         };
+    }
+
+    public void StartNewGame() 
+    {
+        SetNewGame(true);
+        SetTimestampCreation(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+        CharacterManager.Instance.FirstTimeInitialize();
+        StorySystemManager.Instance.SetChapter(0);
     }
 
     #endregion

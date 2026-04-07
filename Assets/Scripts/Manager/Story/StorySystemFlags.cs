@@ -36,6 +36,7 @@ public class StorySystemFlags
 
     public void Import(StorySystemSaveData saveData) 
     {
-        flagsDict = saveData.FlagsDict;
+        foreach (var serializableKeyValue in saveData.FlagsList) 
+            flagsDict[serializableKeyValue.Key] = serializableKeyValue.Value;
     }
 }

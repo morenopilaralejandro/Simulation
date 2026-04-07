@@ -9,6 +9,7 @@ public class StorySystemPersistance
     #region Fields
 
     private StorySystemManager storySystemManager;
+    private PersistenceManager persistenceManager;
 
     #endregion
 
@@ -17,6 +18,7 @@ public class StorySystemPersistance
     public StorySystemPersistance() 
     {
         storySystemManager = StorySystemManager.Instance;
+        persistenceManager = PersistenceManager.Instance;
     }
 
     #endregion
@@ -41,8 +43,8 @@ public class StorySystemPersistance
     {
         return new StorySystemSaveData
         {
-            FlagsDict = new Dictionary<string, bool>(storySystemManager.FlagsDict),
-            VariablesDict = new Dictionary<string, int>(storySystemManager.VariablesDict),
+            FlagsList = persistenceManager.ParseIReadOnlyDict<string, bool>(storySystemManager.FlagsDict),
+            VariablesList = persistenceManager.ParseIReadOnlyDict<string, int>(storySystemManager.VariablesDict),
             CompletedEventsList = new List<string>(storySystemManager.CompletedEventsCollection),
             TriggeredList = new List<string>(storySystemManager.TriggeredCollection),
             ChapterNumber = storySystemManager.CurrentChapter.StoryChapterNumber

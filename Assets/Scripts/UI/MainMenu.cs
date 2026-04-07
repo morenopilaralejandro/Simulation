@@ -32,7 +32,7 @@ public class MainMenu : MonoBehaviour
     private SceneLoader sceneLoader;
     private AudioManager audioManager;
     private PersistenceManager persistenceManager;
-    private SaveData saveData;
+    private bool hasSaveData;
 
     #endregion
 
@@ -41,16 +41,9 @@ public class MainMenu : MonoBehaviour
         sceneLoader = SceneLoader.Instance;
         audioManager = AudioManager.Instance;
         persistenceManager = PersistenceManager.Instance;
-        saveData = persistenceManager.GetLastSaveData();
+        hasSaveData = persistenceManager.HasSaveData();
 
-        if (saveData == null)
-        {
-            saveFileCard.gameObject.SetActive(false);
-            buttonContinueGame.interactable = false;
-        } else
-        {
-            saveFileCard.SetData(saveData);
-        }
+        buttonContinueGame.interactable = hasSaveData;
 
         audioManager.PlayBgm("bgm-simulation");    
         panelMain.SetActive(true);
@@ -152,14 +145,14 @@ public class MainMenu : MonoBehaviour
     {
         audioManager.PlaySfx("sfx-menu_tap");
 
-        if (saveData == null) 
+        if (!hasSaveData) 
         {
             StartNewGame();
             return;
         }
 
         // show confirm
-        panelMain.SetActive(false);
+        panelStory.SetActive(false);
         panelStoryConfirm.SetActive(true);
         EventSystem.current.SetSelectedGameObject(firstSelectedStoryConfirm);
     }
@@ -167,7 +160,6 @@ public class MainMenu : MonoBehaviour
     public void OnButtonStoryNewGameConfirmTapped() 
     {
         audioManager.PlaySfx("sfx-menu_tap");
-
         StartNewGame();
     }
 
@@ -181,8 +173,7 @@ public class MainMenu : MonoBehaviour
 
     private void StartNewGame() 
     {
-        persistenceManager.SetNewGame(true);
-        CharacterManager.Instance.FirstTimeInitialize();
+        persistenceManager.StartNewGame();
         sceneLoader.LoadGroup(sceneWorld);
     }
 

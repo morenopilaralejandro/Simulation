@@ -8,6 +8,6 @@ public class QuestSystemSaveData
 {
     public string CurrentMainQuestId;
     public string CurrentActiveQuestId;
-    public Dictionary<string, QuestSaveData> QuestSaveDataDict;
+    public List<SerializableKeyValue<string, QuestSaveData>> QuestSaveDataList;
 }
 

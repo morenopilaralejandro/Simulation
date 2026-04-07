@@ -1153,6 +1153,7 @@ GameObject:
   - component: {fileID: 8806413653560069859}
   - component: {fileID: 4043988821232567838}
   - component: {fileID: 3082480969223312510}
+  - component: {fileID: 6890774204520157265}
   m_Layer: 5
   m_Name: SaveFileCard
   m_TagString: Untagged
@@ -1230,5 +1231,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c6e220570b59ccb83cc1b6903ed257, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initializeFromSaveData: 0
+  canvasGroup: {fileID: 6890774204520157265}
   textZoneName: {fileID: 6579189794681730849}
   textTime: {fileID: 2976736559106010772}
+--- !u!225 &6890774204520157265
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8841031383263681980}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

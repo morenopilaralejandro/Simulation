@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 public class PersistenceManager : MonoBehaviour
@@ -11,6 +13,7 @@ public class PersistenceManager : MonoBehaviour
     private PersistenceManagerBackup backupSystem;
     private PersistenceManagerSave saveSystem;
     private PersistenceManagerLoad loadSystem;
+    private PersistenceManagerParse parseSystem;
 
     #endregion
 
@@ -33,6 +36,7 @@ public class PersistenceManager : MonoBehaviour
         backupSystem = new PersistenceManagerBackup();
         saveSystem = new PersistenceManagerSave();
         loadSystem = new PersistenceManagerLoad();
+        parseSystem = new PersistenceManagerParse();
 
         //encounterSystem.Subscribe();
     }
@@ -50,6 +54,7 @@ public class PersistenceManager : MonoBehaviour
     public int CurrentSaveVersion => PersistenceManagerBackup.CURRENT_SAVE_VERSION;
     public void Save(SaveData saveData) => backupSystem.Save(saveData);
     public SaveData GetLastSaveData() => backupSystem.GetLastSaveData();
+    public bool HasSaveData() => backupSystem.HasSaveData();
 
     // saveSystem
     public bool IsNewGame() => saveSystem.IsNewGame();
@@ -57,9 +62,17 @@ public class PersistenceManager : MonoBehaviour
     public long TimestampCreation => saveSystem.TimestampCreation;
     public void SetTimestampCreation(long longValue) => saveSystem.SetTimestampCreation(longValue);
     public void SaveGame() => saveSystem.SaveGame();
+    public void StartNewGame() => saveSystem.StartNewGame();
 
     // loadSystem
     public void LoadGame() => loadSystem.LoadGame();
+
+    // parseSystem
+    public List<SerializableKeyValue<TKey, TValue>> ParseDict<TKey, TValue>(
+        Dictionary<TKey, TValue> dict) => parseSystem.ParseDict<TKey, TValue>(dict);
+    public List<SerializableKeyValue<TKey, TValue>> ParseIReadOnlyDict<TKey, TValue>(
+        IReadOnlyDictionary<TKey, TValue> dict) => parseSystem.ParseIReadOnlyDict<TKey, TValue>(dict);
+    public List<T> ParseHashSet<T>(HashSet<T> hashSet) => parseSystem.ParseHashSet<T>(hashSet);
 
     #endregion
 }

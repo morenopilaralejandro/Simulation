@@ -42,6 +42,8 @@ public class PersistenceManagerLoad
             facingDirection : saveData.SaveDataWorldSystem.FacingDirection,
             worldState : WorldState.Loading
         );
+
+        PersistenceEvents.RaiseGameLoaded(saveData);
     }
 
     #endregion

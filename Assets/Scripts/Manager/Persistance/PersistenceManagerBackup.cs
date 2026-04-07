@@ -45,6 +45,7 @@ public class PersistenceManagerBackup
             File.Copy(TempPath, SavePath, overwrite: true);
             File.Delete(TempPath);
 
+            PersistenceEvents.RaiseGameSaved(saveData);
             LogManager.Trace("[PersistenceManager] Game saved successfully.");
         }
         catch (System.Exception e)
@@ -111,6 +112,11 @@ public class PersistenceManagerBackup
         {
             return false;
         }
+    }
+
+    public bool HasSaveData()
+    {
+        return TryLoad(SavePath, out _) || TryLoad(BackupPath, out _);
     }
 
     #endregion

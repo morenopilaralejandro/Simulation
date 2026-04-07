@@ -7,6 +7,7 @@ public class ChestStateManager : MonoBehaviour
     public static ChestStateManager Instance;
 
     private HashSet<string> openedChests = new HashSet<string>();
+    private PersistenceManager persistenceManager;
 
     void Awake()
     {
@@ -16,6 +17,11 @@ public class ChestStateManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
+    }
+
+    void Start()
+    {
+        persistenceManager = PersistenceManager.Instance;
     }
 
     public bool IsOpened(string chestId)
@@ -32,18 +38,19 @@ public class ChestStateManager : MonoBehaviour
     
     public ChestStateSaveData Export()
     {
-        ChestStateSaveData saveData = new ChestStateSaveData();
-        saveData.OpenedChestIds = new List<string>(openedChests);
-        return saveData;
+        return new ChestStateSaveData 
+        {
+            OpenedChestIdList = persistenceManager.ParseHashSet<string>(openedChests)
+        };
     }
 
     public void Import(ChestStateSaveData saveData)
     {
         openedChests.Clear();
 
-        if (saveData?.OpenedChestIds == null) return;
+        if (saveData?.OpenedChestIdList == null) return;
 
-        foreach (string chestId in saveData.OpenedChestIds)
+        foreach (string chestId in saveData.OpenedChestIdList)
         {
             openedChests.Add(chestId);
         }

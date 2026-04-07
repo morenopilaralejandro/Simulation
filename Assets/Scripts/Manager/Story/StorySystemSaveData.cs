@@ -6,9 +6,9 @@ using Simulation.Enums.Story;
 [Serializable]
 public class StorySystemSaveData
 {
-    public Dictionary<string, bool> FlagsDict;
+    public List<SerializableKeyValue<string, bool>> FlagsList;
 
-    public Dictionary<string, int> VariablesDict;
+    public List<SerializableKeyValue<string, int>> VariablesList;
 
     public List<string> CompletedEventsList;
 
