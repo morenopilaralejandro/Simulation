@@ -13,6 +13,7 @@ using Simulation.Enums.World;
 public class MenuSide : Menu
 {
     [SerializeField] private MenuTeam menuTeam;
+    [SerializeField] private MenuSave menuSave;
 
     private MenuManager menuManager;
     private WorldManager worldManager;
@@ -90,13 +91,17 @@ public class MenuSide : Menu
 
     public void OnButtonTapped()
     {
-        //AutoBattleManager.Instance.ToggleAutoBattle();
         Close();
     }
 
     public void OnButtonTeamTapped()
     {
         menuManager.OpenMenu(menuTeam);
+    }
+
+    public void OnButtonSaveTapped()
+    {
+        menuManager.OpenMenu(menuSave);
     }
 
 }

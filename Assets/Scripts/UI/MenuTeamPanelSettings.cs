@@ -17,11 +17,11 @@ public class MenuTeamPanelSettings : MonoBehaviour
     [SerializeField] private TMP_Text activeStatusText;
 
     private Team currentTeam;
-    private TeamLoadoutManager loadoutManager;
+    private TeamManager teamManager;
 
     private void Awake()
     {
-        loadoutManager = TeamLoadoutManager.Instance;
+        teamManager = TeamManager.Instance;
 
         if (closeButton != null)
             closeButton.onClick.AddListener(HandleClose);
@@ -85,7 +85,7 @@ public class MenuTeamPanelSettings : MonoBehaviour
         if (nameInputField != null)
             nameInputField.text = currentTeam.TeamName ?? "";
 
-        bool isActive = loadoutManager.ActiveLoadoutGuid == currentTeam.TeamGuid;
+        bool isActive = teamManager.ActiveLoadoutGuid == currentTeam.TeamGuid;
 
         if (activeStatusText != null)
             activeStatusText.text = isActive ? "✦ Active Loadout" : "";
@@ -95,7 +95,7 @@ public class MenuTeamPanelSettings : MonoBehaviour
 
         // Prevent deleting the last loadout
         if (deleteButton != null)
-            deleteButton.interactable = loadoutManager.Loadouts.Count > 1;
+            deleteButton.interactable = teamManager.Loadouts.Count > 1;
     }
 
     #endregion
@@ -118,7 +118,7 @@ public class MenuTeamPanelSettings : MonoBehaviour
     {
         if (currentTeam == null) return;
 
-        loadoutManager.SetActiveLoadout(currentTeam.TeamGuid);
+        teamManager.SetActiveLoadout(currentTeam.TeamGuid);
         AudioManager.Instance.PlaySfx("sfx-menu_tap");
         PopulateUI(); // Refresh button states
     }
@@ -129,7 +129,7 @@ public class MenuTeamPanelSettings : MonoBehaviour
 
         // Optional: show confirmation dialog before deleting
         Team teamToDelete = currentTeam;
-        bool deleted = loadoutManager.DeleteLoadout(teamToDelete.TeamGuid);
+        bool deleted = teamManager.DeleteLoadout(teamToDelete.TeamGuid);
 
         if (deleted)
         {

@@ -58,7 +58,6 @@ public class StorySystemManager : MonoBehaviour
     public bool HasFlag(string flagId) => flagSystem.HasFlag(flagId);
     public void ImportFlagSystem(StorySystemSaveData saveData) => flagSystem.Import(saveData);
 
-
     // variableSystem
     public IReadOnlyDictionary<string, int> VariablesDict => variableSystem.VariablesDict;
     public void SetVariable(string variableId, int intValue) => variableSystem.SetVariable(variableId, intValue);

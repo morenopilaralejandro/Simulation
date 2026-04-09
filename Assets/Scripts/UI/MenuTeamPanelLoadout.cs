@@ -17,11 +17,11 @@ public class MenuTeamPanelLoadout : MonoBehaviour
     [SerializeField] private Button createButton;
 
     private List<LoadoutListItem> spawnedItems = new();
-    private TeamLoadoutManager loadoutManager;
+    private TeamManager teamManager;
 
     private void Awake()
     {
-        loadoutManager = TeamLoadoutManager.Instance;
+        teamManager = TeamManager.Instance;
     }
 
     private void OnDestroy()
@@ -58,8 +58,8 @@ public class MenuTeamPanelLoadout : MonoBehaviour
     {
         ClearList();
 
-        List<Team> allLoadouts = loadoutManager.GetAllLoadouts();
-        string activeGuid = loadoutManager.ActiveLoadoutGuid;
+        List<Team> allLoadouts = teamManager.GetAllLoadouts();
+        string activeGuid = teamManager.ActiveLoadoutGuid;
 
         foreach (Team loadout in allLoadouts)
         {
@@ -86,13 +86,13 @@ public class MenuTeamPanelLoadout : MonoBehaviour
     private void UpdateCountText(int count)
     {
         if (loadoutCountText != null)
-            loadoutCountText.text = $"{count} / {TeamLoadoutManager.MAX_LOADOUTS}";
+            loadoutCountText.text = $"{count} / {TeamManager.MAX_LOADOUTS}";
     }
 
     private void UpdateCreateButtonState(int count)
     {
         if (createButton != null)
-            createButton.interactable = count < TeamLoadoutManager.MAX_LOADOUTS;
+            createButton.interactable = count < TeamManager.MAX_LOADOUTS;
     }
 
     #endregion

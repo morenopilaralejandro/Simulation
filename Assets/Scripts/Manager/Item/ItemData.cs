@@ -11,8 +11,8 @@ public class ItemData : ScriptableObject
     public ItemUsageContext UsageContext;
 
     public bool IsSellable;
-    public int PriceBuy;
-    public int PriceSell;
+    public int PriceBuyGold;
+    public int PriceSellGold;
 
     public bool IsDiscardable;
     public bool IsStackable;

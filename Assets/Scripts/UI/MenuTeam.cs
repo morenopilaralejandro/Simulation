@@ -16,7 +16,7 @@ public class MenuTeam : Menu
     [SerializeField] private MenuTeamPanelSettings panelSettings;
 
     private MenuManager menuManager;
-    private TeamLoadoutManager loadoutManager;
+    private TeamManager teamManager;
 
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     public bool IsTeamMenuOpen => isOpen;
@@ -33,7 +33,7 @@ public class MenuTeam : Menu
     private void Awake()
     {
         menuManager = MenuManager.Instance;
-        loadoutManager = TeamLoadoutManager.Instance;
+        teamManager = TeamManager.Instance;
     }
 
     private void Start()
@@ -184,7 +184,7 @@ public class MenuTeam : Menu
 
     private void HandleCreateRequested()
     {
-        Team newLoadout = loadoutManager.CreateLoadout();
+        Team newLoadout = teamManager.CreateLoadout();
         if (newLoadout != null)
         {
             AudioManager.Instance.PlaySfx("sfx-menu_tap");

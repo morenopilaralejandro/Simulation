@@ -49,7 +49,7 @@ public class TeamComponentPlayers
         List<string> customCharacterGuidList)
     {
         if (customCharacterGuidList == null) return;
-        characterGuidList = new List<string>(customCharacterGuidList);
+        characterGuidList.AddRange(customCharacterGuidList);
     }
 
     private void PopulateFromData(
@@ -60,7 +60,7 @@ public class TeamComponentPlayers
         {
             if (string.IsNullOrEmpty(characterId)) continue;
 
-            CharacterData characterData = CharacterManager.Instance.GetCharacterData(characterId);
+            CharacterData characterData = CharacterDatabase.Instance.GetCharacterData(characterId);
             if (characterData != null)
             {
                 characterDataList.Add(characterData);

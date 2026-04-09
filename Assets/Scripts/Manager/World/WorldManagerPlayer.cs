@@ -15,12 +15,12 @@ public class WorldManagerPlayer
 
     #region Constructor
 
-    public WorldManagerPlayer(PlayerWorldConfig playerWorldConfig) 
+    public WorldManagerPlayer(PlayerWorldConfig playerWorldConfig)
     {
         PlayerWorldEntity = PlayerWorldEntity.Instance;
         PlayerWorldConfig = playerWorldConfig;
 
-        CharacterData characterData = CharacterManager.Instance.GetCharacterData("are");
+        CharacterData characterData = CharacterDatabase.Instance.GetCharacterData("are");
         Kit kit = KitManager.Instance.GetKit("faith");
         PlayerWorldEntity.Initialize(characterData, kit, PlayerWorldConfig);
     }

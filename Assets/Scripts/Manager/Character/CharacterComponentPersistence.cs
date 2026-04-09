@@ -30,7 +30,7 @@ public class CharacterComponentPersistence
 
     public void Import(CharacterSaveData characterSaveData)
     {
-        CharacterData characterData = CharacterManager.Instance.GetCharacterData(
+        CharacterData characterData = CharacterDatabase.Instance.GetCharacterData(
             characterSaveData.IsCustomAvatar ? 
                 characterSaveData.CustomAvatarId : 
                 characterSaveData.CharacterId);

@@ -3,8 +3,8 @@ using UnityEngine;
 public static class FormationMapperUI
 {
     // Your world coordinate bounds
-    private const float WORLD_X_MIN = -4.5f;  // A column
-    private const float WORLD_X_MAX =  4.5f;  // K column
+    private const float WORLD_X_MIN = -6f;  // A column
+    private const float WORLD_X_MAX =  6f;  // K column
     private const float WORLD_Z_MIN = -7.5f;  // Row 9 (GK)
     private const float WORLD_Z_MAX = -1.5f;  // Row 1 (FW)
 

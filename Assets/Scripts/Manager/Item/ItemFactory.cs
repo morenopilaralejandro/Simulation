@@ -40,7 +40,7 @@ public static class ItemFactory
 
     public static Item CreateById(string itemId) 
     {
-        auxItemData = ItemManager.Instance.GetItemData(itemId);
+        auxItemData = ItemDatabase.Instance.GetItemData(itemId);
         return Create(auxItemData);
     }
 
@@ -48,14 +48,14 @@ public static class ItemFactory
     {
         auxItemData = category switch
         {
-            ItemCategory.Equipment  => ItemManager.Instance.GetItemData<ItemDataEquipment>(itemId),
-            ItemCategory.Formation  => ItemManager.Instance.GetItemData<ItemDataFormation>(itemId),
-            ItemCategory.Important  => ItemManager.Instance.GetItemData<ItemDataImportant>(itemId),
-            ItemCategory.Kit        => ItemManager.Instance.GetItemData<ItemDataKit>(itemId),
-            ItemCategory.Material   => ItemManager.Instance.GetItemData<ItemDataMaterial>(itemId),
-            ItemCategory.Misc       => ItemManager.Instance.GetItemData<ItemDataMisc>(itemId),
-            ItemCategory.Move       => ItemManager.Instance.GetItemData<ItemDataMove>(itemId),
-            ItemCategory.Recovery   => ItemManager.Instance.GetItemData<ItemDataRecovery>(itemId),
+            ItemCategory.Equipment  => ItemDatabase.Instance.GetItemData<ItemDataEquipment>(itemId),
+            ItemCategory.Formation  => ItemDatabase.Instance.GetItemData<ItemDataFormation>(itemId),
+            ItemCategory.Important  => ItemDatabase.Instance.GetItemData<ItemDataImportant>(itemId),
+            ItemCategory.Kit        => ItemDatabase.Instance.GetItemData<ItemDataKit>(itemId),
+            ItemCategory.Material   => ItemDatabase.Instance.GetItemData<ItemDataMaterial>(itemId),
+            ItemCategory.Misc       => ItemDatabase.Instance.GetItemData<ItemDataMisc>(itemId),
+            ItemCategory.Move       => ItemDatabase.Instance.GetItemData<ItemDataMove>(itemId),
+            ItemCategory.Recovery   => ItemDatabase.Instance.GetItemData<ItemDataRecovery>(itemId),
             _ => null
         };
 

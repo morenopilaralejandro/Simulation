@@ -14,4 +14,10 @@ public static class ItemEvents
     {
         OnItemUsed?.Invoke(item);
     }
+
+    public static event Action<CurrencyType, int> OnCurrencyUpdated;
+    public static void RaiseCurrencyUpdated(CurrencyType currencyType, int intValue)
+    {
+        OnCurrencyUpdated?.Invoke(currencyType, intValue);
+    }
 }

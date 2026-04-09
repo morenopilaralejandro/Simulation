@@ -432,6 +432,38 @@ public class WorldManagerZone
         _currentState = WorldState.InInterior;
     }
 
+    public async void LoadZoneFromUnloaded()
+    {
+        worldManager.SetIsTransitioning(true);
+
+        try
+        {
+            var targetZone = worldManager.FindZone(WorldArgs.ZoneId);
+            if (targetZone == null)
+            {
+                LogManager.Error($"[WorldManager] Cannot return to zone '{WorldArgs.ZoneId}'");
+                return;
+            }
+
+            // Load the zone but place the player at the SAVED position
+            await worldManager.LoadZoneAtPosition(targetZone, WorldArgs.PlayerPosition, WorldArgs.FacingDirection);
+
+                await worldManager.FadeIn();
+
+            player.SetControlEnabled(true);
+            player.SetState(PlayerWorldState.FreeRoam);
+        }
+        catch (System.Exception e)
+        {
+            LogManager.Error($"[WorldManager] Exception returning from encounter: {e.Message}\n{e.StackTrace}");
+            player.SetControlEnabled(true);
+            await worldManager.FadeIn();
+        }
+        finally
+        {
+            worldManager.SetIsTransitioning(false);
+        }
+    }
 
     #region Helpers
 

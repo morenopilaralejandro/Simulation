@@ -24,6 +24,7 @@ public class WorldManager : MonoBehaviour
     private WorldManagerZone zoneSystem;
     private WorldManagerZoneTracker zoneTrackerSystem;
     private WorldManagerEncounter encounterSystem;
+    private WorldManagerPersistance persistanceSystem;
 
     #endregion
 
@@ -57,26 +58,21 @@ public class WorldManager : MonoBehaviour
         zoneSystem = new WorldManagerZone(overworldDefinition);
         encounterSystem = new WorldManagerEncounter(sceneBattle);
         encounterSystem.Subscribe();
+        persistanceSystem = new WorldManagerPersistance();
 
         InitializeAsync(overworldDefinition);
     }
 
     private async void InitializeAsync(OverworldDefinition overworldDefinition)
     {
-        if (WorldArgs.WorldState == WorldState.InEncounter)
-        {
-            ReturnFromEncounter();
-            return;
-        }
-
-        if (overworldDefinition.startingZone != null)
+        if (PersistenceManager.Instance.IsNewGame())
         {
             await LoadZone(overworldDefinition.startingZone, overworldDefinition.startingSpawnId);
             PlayerWorldEntity.SetControlEnabled(true);
         }
         else
         {
-            LogManager.Error("[WorldManager] No starting zone assigned!");
+            LoadZoneFromUnloaded();
         }
     }
 
@@ -107,6 +103,7 @@ public class WorldManager : MonoBehaviour
     public void SetIsTransitioning(bool boolValue) => zoneSystem.SetIsTransitioning(boolValue);
     public Task FadeIn() => zoneSystem.FadeInAsync();
     public Task FadeOut() => zoneSystem.FadeOutAsync();
+    public void LoadZoneFromUnloaded() => zoneSystem.LoadZoneFromUnloaded();
 
     // zoneTrackerSystem
     public ZoneDefinition CurrentZone => zoneTrackerSystem.CurrentZone;
@@ -117,10 +114,13 @@ public class WorldManager : MonoBehaviour
     public void SetZone(ZoneDefinition newZone) => zoneTrackerSystem.SetZone(newZone);
 
     // encounterSystem
-    public void ReturnFromEncounter() => encounterSystem.ReturnFromEncounter();
     public void TickEncounter(bool isMoving, float speed, float deltaTime) => encounterSystem.Tick(isMoving, speed, deltaTime);
     public void OnTileArrived(bool isRunning) => encounterSystem.OnTileArrived(isRunning);
     public void ResetStepCounter() => encounterSystem.ResetStepCounter();
+
+    // persistanceSystem
+    public SaveDataWorldSystem Export() => persistanceSystem.Export();
+    public void Import(SaveDataWorldSystem saveData) => persistanceSystem.Import(saveData);
 
     #endregion
 

@@ -13,10 +13,17 @@ public class DialogSpeakerCache : MonoBehaviour
 
     // Reusable objects to avoid per-resolve allocations
     private Character reusableCharacter;
+    private CharacterData reusableCharacterData;
     private Npc reusableNpc;
 
     private Speaker speaker;
     public Speaker Speaker => speaker;
+    private CharacterDatabase characterDatabase;
+
+    private void Start() 
+    {
+        characterDatabase = CharacterDatabase.Instance;
+    }
 
     public Speaker GetSpeaker(DialogLine dialogLine)
     {
@@ -35,10 +42,10 @@ public class DialogSpeakerCache : MonoBehaviour
 
     private Speaker ResolveSpeaker(DialogLine dialogLine)
     {
-        CharacterData characterData = CharacterManager.Instance.GetCharacterData(dialogLine.SpeakerId);
-        if (characterData != null)
+        reusableCharacterData = characterDatabase.GetCharacterData(dialogLine.SpeakerId);
+        if (reusableCharacterData != null)
         {
-            reusableCharacter = new Character(characterData);
+            reusableCharacter = new Character(reusableCharacterData);
 
             return AddToCache(
                 reusableCharacter.CharacterId,

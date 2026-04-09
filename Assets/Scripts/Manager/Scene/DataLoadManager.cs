@@ -32,11 +32,11 @@ public class DataLoadManager : MonoBehaviour
         Task loadMoves = MoveManager.Instance.LoadAllMoveDataAsync();
         Task loadMoveEvolutionGrowthProfile = MoveEvolutionGrowthProfileManager.Instance.LoadAllMoveEvolutionGrowthProfileAsync();
         Task loadMoveEvolutionPath =  MoveEvolutionPathManager.Instance.LoadAllMoveEvolutionPathAsync();
-        Task loadCharacters = CharacterManager.Instance.LoadAllCharacterDataAsync();
+        Task loadCharacters = CharacterDatabase.Instance.LoadAllCharacterDataAsync();
         Task loadKits = KitManager.Instance.LoadAllKitsAsync();   
         Task loadScenes = SceneGroupRegistry.Instance.LoadAllSceneGroupAsync();
         Task loadNpcs = NpcManager.Instance.LoadAllNpcDataAsync();
-        Task loadItems = ItemManager.Instance.LoadAllItemDataAsync();
+        Task loadItems = ItemDatabase.Instance.LoadAllItemDataAsync();
         Task loadOverworldDefinition = OverworldDefinitionDatabase.Instance.LoadAllOverworldDefinitionDataAsync();
 
         // SpriteAtlas
@@ -49,7 +49,7 @@ public class DataLoadManager : MonoBehaviour
             loadKits, 
             loadCharacters,
             loadFormations);
-        Task loadTeams = TeamManager.Instance.LoadAllTeamsAsync();
+        Task loadTeams = TeamDatabase.Instance.LoadAllTeamsAsync();
         // Misc
         await Task.WhenAll(
             loadBalls, 

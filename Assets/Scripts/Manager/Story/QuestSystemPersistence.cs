@@ -25,11 +25,12 @@ public class QuestSystemPersistence
 
     #region Import
 
-    public void Import(QuestSystemSaveData data)
+    public void Import(QuestSystemSaveData questSystemSaveData)
     {
-        foreach(Quest quest in questSystemManager.QuestDict.Values) 
+        foreach(var serializableKeyValue in questSystemSaveData.QuestSaveDataList) 
         {
-            quest.Import(data.QuestSaveDataDict[quest.QuestId]);
+            QuestSaveData questSaveData = serializableKeyValue.Value;
+            questSystemManager.QuestDict[questSaveData.QuestId].Import(questSaveData);
         }
     }
 
@@ -43,7 +44,7 @@ public class QuestSystemPersistence
         {
             CurrentMainQuestId = questSystemManager.CurrentMainQuestId,
             CurrentActiveQuestId = questSystemManager.CurrentActiveQuestId,
-            QuestSaveDataDict = GetQuestSaveDataDict()
+            QuestSaveDataList = GetQuestSaveDataList()
         };
     }
 
@@ -51,16 +52,20 @@ public class QuestSystemPersistence
 
     #region Helpers
 
-    private Dictionary<string, QuestSaveData> GetQuestSaveDataDict() 
+    private List<SerializableKeyValue<string, QuestSaveData>> GetQuestSaveDataList() 
     {
-        Dictionary<string, QuestSaveData> dict = new Dictionary<string, QuestSaveData>();
+        var list = new List<SerializableKeyValue<string, QuestSaveData>>(questSystemManager.QuestDict.Count);
 
         foreach(Quest quest in questSystemManager.QuestDict.Values) 
         {
-            dict[quest.QuestId] = quest.Export();
+            list.Add(new SerializableKeyValue<string, QuestSaveData>
+            {
+                Key = quest.QuestId,
+                Value = quest.Export()
+            });
         }
 
-        return dict;
+        return list;
     }
 
     #endregion

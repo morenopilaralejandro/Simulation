@@ -38,6 +38,7 @@ public class StorySystemVariables
 
     public void Import(StorySystemSaveData saveData) 
     {
-        variablesDict = saveData.VariablesDict;
+        foreach (var serializableKeyValue in saveData.VariablesList) 
+            variablesDict[serializableKeyValue.Key] = serializableKeyValue.Value;
     }
 }

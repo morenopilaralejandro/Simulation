@@ -40,4 +40,10 @@ namespace Simulation.Enums.Item
         Gloves,
         Misc
     }
+
+    public enum CurrencyType
+    {
+        Gold,
+        Token
+    }
 }

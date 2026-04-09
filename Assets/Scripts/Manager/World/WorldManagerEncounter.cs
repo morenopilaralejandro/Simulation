@@ -144,40 +144,6 @@ public class WorldManagerEncounter
         }
     }
 
-    public async void ReturnFromEncounter()
-    {
-        worldManager.SetIsTransitioning(true);
-
-        try
-        {
-            var targetZone = worldManager.FindZone(WorldArgs.ZoneId);
-            if (targetZone == null)
-            {
-                LogManager.Error($"[WorldManager] Cannot return to zone '{WorldArgs.ZoneId}'");
-                return;
-            }
-
-            // Load the zone but place the player at the SAVED position
-            await worldManager.LoadZoneAtPosition(targetZone, WorldArgs.PlayerPosition, WorldArgs.FacingDirection);
-
-                await worldManager.FadeIn();
-
-            player.SetControlEnabled(true);
-            player.SetState(PlayerWorldState.FreeRoam);
-            ResetStepCounter();
-        }
-        catch (System.Exception e)
-        {
-            LogManager.Error($"[WorldManager] Exception returning from encounter: {e.Message}\n{e.StackTrace}");
-            player.SetControlEnabled(true);
-            await worldManager.FadeIn();
-        }
-        finally
-        {
-            worldManager.SetIsTransitioning(false);
-        }
-    }
-
     #endregion
 
     #region Logic
@@ -276,7 +242,7 @@ public class WorldManagerEncounter
     private void StartEncounterBattle(EncounterData encounter) 
     {
         BattleArgs.SetMini(
-            homeTeamGuid : TeamLoadoutManager.Instance.ActiveLoadoutGuid, 
+            homeTeamGuid : TeamManager.Instance.ActiveLoadoutGuid, 
             awayTeamId : encounter.teamId,
             battleResultsType : BattleResultsType.Drop);
         sceneLoader.LoadGroup(sceneBattle);

@@ -14,7 +14,7 @@ public class StorySystemChapters
 
     public StorySystemChapters() 
     {
-
+        storyChapterDatabase = StoryChapterDatabase.Instance;
     }
 
     public void AdvanceChapter()
