@@ -92,14 +92,12 @@ public class MenuSave : Menu
 
     public void Close()
     {
-        Debug.LogError("Close");
         if (!isOpen) return;
         menuManager.CloseMenu();
     }
 
     private IEnumerator CoroutineCloseMenu()
     {
-        Debug.LogError("CoroutineCloseMenu");
         yield return new WaitForSeconds(coroutineCloseDuration);
         Close();
     }
@@ -160,7 +158,6 @@ public class MenuSave : Menu
 
     private void HandleGameSaved(SaveData saveData) 
     {
-        Debug.LogError("event");
         saveFileCard.SetFromSaveData(saveData);
         textMessage.text = stringSaveFinished.GetLocalizedString();
         StartCoroutine(CoroutineCloseMenu());

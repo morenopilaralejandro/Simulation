@@ -49,7 +49,7 @@ public class TeamComponentPlayers
         List<string> customCharacterGuidList)
     {
         if (customCharacterGuidList == null) return;
-        characterGuidList = new List<string>(customCharacterGuidList);
+        characterGuidList.AddRange(customCharacterGuidList);
     }
 
     private void PopulateFromData(

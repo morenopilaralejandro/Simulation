@@ -304,16 +304,29 @@ public class TeamManagerLoadout
         foreach (TeamSaveData teamSaveData in saveData.TeamSaveDataList)
         {
             Team loadout = TeamFactory.Create(teamSaveData);
+
+            LogManager.Trace($"[TeamLoadoutManager] Imported loadout '{loadout.TeamName}' " +
+            $"({loadout.TeamGuid}) with " +
+            $"{loadout.GetCharacterGuids(BattleType.Full).Count(g => !string.IsNullOrEmpty(g))} full / " +
+            $"{loadout.GetCharacterGuids(BattleType.Mini).Count(g => !string.IsNullOrEmpty(g))} mini characters.");
+
             loadouts[loadout.TeamGuid] = loadout;
         }
 
+        string targetGuid = null;
+
         if (!string.IsNullOrEmpty(saveData.ActiveLoadoutGuid) && loadouts.ContainsKey(saveData.ActiveLoadoutGuid))
         {
-            activeLoadoutGuid = saveData.ActiveLoadoutGuid;
+            targetGuid = saveData.ActiveLoadoutGuid;
         }
         else if (loadouts.Count > 0)
         {
-            activeLoadoutGuid = loadouts.Keys.First();
+            targetGuid = loadouts.Keys.First();
+        }
+
+        if (targetGuid != null)
+        {
+            SetActiveLoadout(targetGuid);
         }
     }
 
