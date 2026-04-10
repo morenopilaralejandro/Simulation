@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using Simulation.Enums.Character;
 using Simulation.Enums.Battle;
 
@@ -13,8 +14,10 @@ public class FormationLayoutUI : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private RectTransform fieldArea;
     [SerializeField] private RectTransform benchArea;
-    [SerializeField] private Text formationNameLabel;
     [SerializeField] private GameObject playerSlotPrefab;
+    [SerializeField] private TMP_Text textTeamName;
+    //[SerializeField] private TMP_Text formationNameLabel;
+    [SerializeField] private Image imageTeamCrest;
 
     [Header("Pitch Padding")]
     [SerializeField] private float paddingX = 50f;
@@ -47,6 +50,8 @@ public class FormationLayoutUI : MonoBehaviour
     {
         teamManager = TeamManager.Instance;
         teamRoster = teamManager.ResolveCharacters(team, battleType);
+        textTeamName.text = team.TeamName;
+        //imageTeamCrest.sprite = team.TeamCrestSprite;
         SetFormation(team.GetFormation(battleType));
     }
 

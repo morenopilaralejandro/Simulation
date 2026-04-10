@@ -7,52 +7,83 @@ using TMPro;
 /// <summary>
 /// Displays all existing team loadouts and a "Create New" button.
 /// </summary>
-public class MenuTeamPanelLoadout : MonoBehaviour
+public class MenuTeamPanelLoadout : Menu
 {
-    [Header("UI References")]
-    [SerializeField] private CanvasGroup canvasGroup;
+    #region Fields
+    [Header("References")]
     [SerializeField] private Transform listRoot;
     [SerializeField] private LoadoutListItem itemPrefab;
     [SerializeField] private TMP_Text loadoutCountText;
     [SerializeField] private Button createButton;
 
+    private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     private List<LoadoutListItem> spawnedItems = new();
+    private MenuManager menuManager;
     private TeamManager teamManager;
+
+    #endregion
+
+    #region Lifecycle
 
     private void Awake()
     {
+
+    }
+
+    private void Start()
+    {
+        base.Hide();
+        base.SetInteractable(false);
+
+        menuManager = MenuManager.Instance;
         teamManager = TeamManager.Instance;
     }
 
-    private void OnDestroy()
-    {
+    /*    
 
+    private void Update()
+    {
+        HandleInput();
     }
 
-    #region Show / Hide
+    */
 
-    public void Show()
-    {
-        SetVisible(true);
-        Refresh();
-    }
+    #endregion
 
-    public void Hide()
-    {
-        SetVisible(false);
-    }
+    #region Input
 
-    private void SetVisible(bool visible)
+    private void HandleInput() 
     {
-        if (canvasGroup == null) return;
-        canvasGroup.alpha = visible ? 1f : 0f;
-        canvasGroup.interactable = visible;
-        canvasGroup.blocksRaycasts = visible;
+
     }
 
     #endregion
 
-    #region Refresh List
+    #region Menu Overrides
+
+    public override void Show()
+    {
+        base.Show();
+        base.SetInteractable(true);
+
+        Refresh();
+    }
+
+    public override void Hide()
+    {
+        base.SetInteractable(false);
+        base.Hide();
+    }
+
+    public void Close()
+    {
+        if (!isOpen) return;
+        menuManager.CloseMenu();
+    }
+
+    #endregion
+
+    #region Logic
 
     public void Refresh()
     {
@@ -86,27 +117,85 @@ public class MenuTeamPanelLoadout : MonoBehaviour
     private void UpdateCountText(int count)
     {
         if (loadoutCountText != null)
-            loadoutCountText.text = $"{count} / {TeamManager.MAX_LOADOUTS}";
+            loadoutCountText.text = $"({count} / {TeamManager.MAX_LOADOUTS})";
     }
 
     private void UpdateCreateButtonState(int count)
     {
-        if (createButton != null)
-            createButton.interactable = count < TeamManager.MAX_LOADOUTS;
+        createButton.interactable = count < TeamManager.MAX_LOADOUTS;
     }
 
     #endregion
 
-    #region Handlers
+    #region Button Handlers
 
     private void HandleItemClicked(Team team)
     {
         UIEvents.RaiseTeamLoadoutSelected(team);
     }
 
-    private void HandleCreateClicked()
+    public void OnButtonCreateClicked()
     {
         UIEvents.RaiseTeamLoadoutCreateRequested();
+    }
+
+    public void OnButtonCloseClicked()
+    {
+        Close();
+        UIEvents.RaiseTeamMenuClosed();
+    }
+
+    #endregion
+
+    #region Events
+
+    private void OnEnable()
+    {
+        UIEvents.OnTeamLoadoutRequested += HandleRequested;
+        UIEvents.OnTeamLoadoutCreateRequested += HandleCreateRequested;
+        TeamEvents.OnLoadoutDeleted += HandleLoadoutDeleted;
+        TeamEvents.OnLoadoutUpdated += HandleLoadoutUpdated;
+        UIEvents.OnBackFromTeamRequested += HandleBackToLoadoutList;
+    }
+
+    private void OnDisable()
+    {
+        UIEvents.OnTeamLoadoutRequested -= HandleRequested;
+        UIEvents.OnTeamLoadoutCreateRequested -= HandleCreateRequested;
+        TeamEvents.OnLoadoutDeleted -= HandleLoadoutDeleted;
+        TeamEvents.OnLoadoutUpdated -= HandleLoadoutUpdated;
+        UIEvents.OnBackFromTeamRequested -= HandleBackToLoadoutList;
+    }
+
+    private void HandleRequested() 
+    {
+        menuManager.OpenMenu(this);
+    }
+
+    private void HandleCreateRequested() 
+    {
+        Team newLoadout = teamManager.CreateLoadout();
+        if (newLoadout == null) return;
+   
+        // Refresh the list, then navigate into the new loadout
+        Refresh();
+        UIEvents.RaiseTeamLoadoutSelected(newLoadout);
+    }
+
+    private void HandleLoadoutDeleted(Team team)
+    {
+        teamManager.DeleteLoadout(team.TeamGuid);
+        Refresh();
+    }
+
+    private void HandleLoadoutUpdated(Team team)
+    {
+        Refresh();
+    }
+
+    private void HandleBackToLoadoutList() 
+    {
+        Refresh();
     }
 
     #endregion

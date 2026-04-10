@@ -24,10 +24,22 @@ public static class UIEvents
     }
 
     // Menu Team
+    public static event Action OnTeamMenuClosed;
+    public static void RaiseTeamMenuClosed()
+    {
+        OnTeamMenuClosed?.Invoke();
+    }
+
     public static event Action<BattleType, BattleType> OnBattleTypeChanged;
     public static void RaiseBattleTypeChanged(BattleType newType, BattleType oldType)
     {
         OnBattleTypeChanged?.Invoke(newType, oldType);
+    }
+
+    public static event Action OnTeamLoadoutRequested;
+    public static void RaiseTeamLoadoutRequested()
+    {
+        OnTeamLoadoutRequested?.Invoke();
     }
 
     public static event Action<Team> OnTeamLoadoutSelected;
@@ -60,4 +72,15 @@ public static class UIEvents
         OnBackFromTeamRequested?.Invoke();
     }
 
+    public static event Action<Character> OnFormationCharacterSlotUIClicked;
+    public static void RaiseFormationCharacterSlotUIClicked(Character character)
+    {
+        OnFormationCharacterSlotUIClicked?.Invoke(character);
+    }
+
+    public static event Action<Character> OnFormationCharacterSlotUIHighlited;
+    public static void RaiseFormationCharacterSlotUIHighlited(Character character)
+    {
+        OnFormationCharacterSlotUIHighlited?.Invoke(character);
+    }
 }

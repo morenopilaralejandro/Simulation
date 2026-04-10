@@ -3,78 +3,95 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Simulation.Enums.Battle;
+using Simulation.Enums.UI;
 
 /// <summary>
 /// Displays the selected team's formation and characters for a given BattleType.
 /// </summary>
-public class MenuTeamPanelTeam : MonoBehaviour
+public class MenuTeamPanelTeam : Menu
 {
+    #region Fields
+
     [Header("UI References")]
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private Text teamNameText;
-    [SerializeField] private Button backButton;
-    [SerializeField] private Button settingsButton;
-    [SerializeField] private Button toggleBattleTypeButton;
-    [SerializeField] private TMP_Text battleTypeLabel;
+    [SerializeField] private MenuTeamMode mode;
+    [SerializeField] private Image activeImage;
+
     [SerializeField] private FormationLayoutUI formationLayoutUI;
 
+    /*
+    [SerializeField] private MenuTeamPanelTeamActions panelTeamActions;
+    [SerializeField] private MenuTeamPanelSettings panelSettings;    
+    [SerializeField] private MenuTeamPanelCharacterActions panelCharacterActions;
+    [SerializeField] private MenuCharacterDetail menuCharacterDetail;
+    [SerializeField] private MenuCharacterSelector menuCharacterSelector;
+    [SerializeField] private MenuItemSelectorSide menuItemSelectorSide;
+    */
+
+    private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
+    private MenuManager menuManager;
+    private TeamManager teamManager;
+
     private Team currentTeam;
+    private GameObject selectedSlot;
     private BattleType currentBattleType;
+
+    
+
+    #endregion
+
+    #region Lifecycle
 
     private void Awake()
     {
-        if (backButton != null)
-            backButton.onClick.AddListener(() => UIEvents.RaiseBackFromTeamRequested());
 
-        if (settingsButton != null)
-            settingsButton.onClick.AddListener(() => UIEvents.RaiseTeamSettingsRequested());
+    }
 
-        if (toggleBattleTypeButton != null)
-            toggleBattleTypeButton.onClick.AddListener(HandleToggleBattleType);
+    private void Start() 
+    {
+        base.Hide();
+        base.SetInteractable(false);
+
+        currentBattleType = BattleType.Full;
+        menuManager = MenuManager.Instance;
+        teamManager = TeamManager.Instance;
     }
 
     private void OnDestroy()
     {
-        if (backButton != null)
-            backButton.onClick.RemoveAllListeners();
 
-        if (settingsButton != null)
-            settingsButton.onClick.RemoveAllListeners();
-
-        if (toggleBattleTypeButton != null)
-            toggleBattleTypeButton.onClick.RemoveAllListeners();
     }
 
-    #region Show / Hide
+    #endregion
 
-    public void Show(Team team, BattleType battleType)
+   #region Menu Overrides
+
+    public override void Show()
     {
-        currentTeam = team;
-        currentBattleType = battleType;
+        base.Show();
+        base.SetInteractable(true);
 
-        SetVisible(true);
         PopulateUI();
     }
 
-    public void Refresh(Team team, BattleType battleType)
+    public override void Hide()
     {
-        currentTeam = team;
-        currentBattleType = battleType;
-        PopulateUI();
-    }
+        base.SetInteractable(false);
+        base.Hide();
 
-    public void Hide()
-    {
-        SetVisible(false);
         currentTeam = null;
     }
 
-    private void SetVisible(bool visible)
+    public void Close()
     {
-        if (canvasGroup == null) return;
-        canvasGroup.alpha = visible ? 1f : 0f;
-        canvasGroup.interactable = visible;
-        canvasGroup.blocksRaycasts = visible;
+        if (!isOpen) return;
+        if(!isEditMode) return;
+        UIEvents.RaiseBackFromTeamRequested();
+        menuManager.CloseMenu();
+    }
+
+    public void Refresh()
+    {
+        PopulateUI();
     }
 
     #endregion
@@ -84,29 +101,78 @@ public class MenuTeamPanelTeam : MonoBehaviour
     private void PopulateUI()
     {
         if (currentTeam == null) return;
-
-        if (teamNameText != null)
-            teamNameText.text = currentTeam.TeamName ?? "Unnamed Team";
-
-        if (battleTypeLabel != null)
-            battleTypeLabel.text = currentBattleType == BattleType.Full ? "Full Battle" : "Mini Battle";
-
-        // Initialize the formation layout with current team and battle type
-        if (formationLayoutUI != null)
-            formationLayoutUI.Initialize(currentTeam, currentBattleType);
+        UpdateSetActiveButtonState();
+        formationLayoutUI.Initialize(currentTeam, currentBattleType);
     }
 
     #endregion
 
-    #region Battle Type Toggle
+    #region Helper
 
-    private void HandleToggleBattleType()
+    private bool isEditMode => mode == MenuTeamMode.Edit;
+    private bool isBattleMode => mode == MenuTeamMode.Battle;
+
+    private void UpdateSetActiveButtonState() 
     {
+        activeImage.enabled = teamManager.ActiveLoadoutGuid == currentTeam.TeamGuid;
+    }
+
+    #endregion
+
+    #region Button Handle
+
+    public void OnButtonToggleBattleTypeClicked()
+    {
+        if(!isEditMode) return;
+
         BattleType newType = currentBattleType == BattleType.Full
             ? BattleType.Mini
             : BattleType.Full;
 
         UIEvents.RaiseBattleTypeChanged(newType, currentBattleType);
+    }
+
+    public void OnButtonSetActiveClicked()
+    {
+        if(!isEditMode) return;
+   
+        if(teamManager.ActiveLoadoutGuid == currentTeam.TeamGuid) return;
+        teamManager.SetActiveLoadout(currentTeam.TeamGuid);
+        
+        UpdateSetActiveButtonState();
+    }
+
+    public void OnButtonCloseClicked()
+    {
+        Close();     
+    }
+
+    #endregion
+
+    #region Events
+
+    private void OnEnable()
+    {
+        UIEvents.OnTeamLoadoutSelected += HandleLoadoutSelected;
+        UIEvents.OnFormationCharacterSlotUIClicked += HandleFormationCharacterSlotUIClicked;
+    }
+
+    private void OnDisable()
+    {
+        UIEvents.OnTeamLoadoutSelected -= HandleLoadoutSelected;
+        UIEvents.OnFormationCharacterSlotUIClicked -= HandleFormationCharacterSlotUIClicked;
+    }
+
+    private void HandleLoadoutSelected(Team team) 
+    {
+        currentTeam = team;
+        menuManager.OpenMenu(this);
+    }
+
+    private void HandleFormationCharacterSlotUIClicked(Character character) 
+    {
+        if (!isEditMode) return;
+        //TODO open the character actions
     }
 
     #endregion

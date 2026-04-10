@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using Simulation.Enums.Character;
 
 public class FormationCharacterSlotUI : MonoBehaviour, 
-    IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+    IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler
 {
     // TODO toggle between edit mode and view only mode
     // TODO on slot selected, show character info in the side panel
@@ -68,6 +68,19 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     public Character GetCharacter() => character;
     public int SlotIndex => slotIndex;
     public bool IsBench => isBench;
+
+    public void OnButtonFormationCharacterSlotUIClicked()
+    {
+        //call event character
+        UIEvents.RaiseFormationCharacterSlotUIClicked(character);
+        Debug.LogError("Clicked Button highlighted (hover) show popup");
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        UIEvents.RaiseFormationCharacterSlotUIHighlited(character);
+        Debug.LogError("Button highlighted (hover) show detail on the side");
+    }
 
     // ============================================================
     //  DRAG & DROP (swap players between slots)
