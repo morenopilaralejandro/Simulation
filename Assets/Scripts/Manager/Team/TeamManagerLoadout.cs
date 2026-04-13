@@ -27,7 +27,7 @@ public class TeamManagerLoadout
     #region Constants
 
     public string DEFAULT_NAME = "custom team";
-    public const int MAX_LOADOUTS = 10;
+    public const int MAX_LOADOUTS = 8;
 
     public const string DEFAULT_CREST_ID = "faith_selection";
     public const string TEAM_CREST_ID_COMMON = "generic_common";

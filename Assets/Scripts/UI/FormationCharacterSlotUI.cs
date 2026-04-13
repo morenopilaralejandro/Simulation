@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using Simulation.Enums.Character;
 
 public class FormationCharacterSlotUI : MonoBehaviour, 
-    IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler
+    IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, ISelectHandler
 {
     // TODO toggle between edit mode and view only mode
     // TODO on slot selected, show character info in the side panel
@@ -72,14 +72,17 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     public void OnButtonFormationCharacterSlotUIClicked()
     {
         //call event character
-        UIEvents.RaiseFormationCharacterSlotUIClicked(character);
-        Debug.LogError("Clicked Button highlighted (hover) show popup");
+        UIEvents.RaiseFormationCharacterSlotUIClicked(this);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UIEvents.RaiseFormationCharacterSlotUIHighlited(character);
-        Debug.LogError("Button highlighted (hover) show detail on the side");
+        UIEvents.RaiseFormationCharacterSlotUIHighlited(this);
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        UIEvents.RaiseTeamButtonSelected(this.gameObject);
     }
 
     // ============================================================
@@ -121,8 +124,26 @@ public class FormationCharacterSlotUI : MonoBehaviour,
         this.SetCharacter(other.character);
         other.SetCharacter(temp);
 
-        // Notify manager of the swap if needed
-        // FormationLayoutUI manager = GetComponentInParent<FormationLayoutUI>();
-        // manager?.OnSlotSwapped(this, other);
+        UIEvents.RaiseFormationCharacterSlotUISwaped(this, other);
     }
+
+    #region Events
+
+    private void OnEnable()
+    {
+        UIEvents.OnFormationCharacterSlotUIReplaced += HandleFormationCharacterSlotUIReplaced;
+    }
+
+    private void OnDisable()
+    {
+        UIEvents.OnFormationCharacterSlotUIReplaced -= HandleFormationCharacterSlotUIReplaced;
+    }
+
+    private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character) 
+    {
+        if(this != slot) return;
+        SetCharacter(character);
+    }
+
+    #endregion
 }

@@ -17,6 +17,7 @@ public class MenuTeamPanelLoadout : Menu
     [SerializeField] private Button createButton;
 
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
+    private bool isOnTop => menuManager.IsMenuOnTop(this);
     private List<LoadoutListItem> spawnedItems = new();
     private MenuManager menuManager;
     private TeamManager teamManager;
@@ -99,6 +100,9 @@ public class MenuTeamPanelLoadout : Menu
             item.Initialize(loadout, isActive, HandleItemClicked);
             spawnedItems.Add(item);
         }
+
+        if (isOnTop) 
+            base.SetDefaultSelectable(spawnedItems[0].GetComponent<Button>());
 
         UpdateCountText(allLoadouts.Count);
         UpdateCreateButtonState(allLoadouts.Count);

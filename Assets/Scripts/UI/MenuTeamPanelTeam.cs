@@ -32,10 +32,10 @@ public class MenuTeamPanelTeam : Menu
     private TeamManager teamManager;
 
     private Team currentTeam;
-    private GameObject selectedSlot;
+    private FormationCharacterSlotUI currentSlot;
     private BattleType currentBattleType;
-
-    
+    private Character selectedCharacter;
+    private Item selectedItem;
 
     #endregion
 
@@ -70,6 +70,8 @@ public class MenuTeamPanelTeam : Menu
         base.Show();
         base.SetInteractable(true);
 
+        selectedCharacter = null;
+        selectedItem = null;
         PopulateUI();
     }
 
@@ -121,17 +123,6 @@ public class MenuTeamPanelTeam : Menu
 
     #region Button Handle
 
-    public void OnButtonToggleBattleTypeClicked()
-    {
-        if(!isEditMode) return;
-
-        BattleType newType = currentBattleType == BattleType.Full
-            ? BattleType.Mini
-            : BattleType.Full;
-
-        UIEvents.RaiseBattleTypeChanged(newType, currentBattleType);
-    }
-
     public void OnButtonSetActiveClicked()
     {
         if(!isEditMode) return;
@@ -147,6 +138,13 @@ public class MenuTeamPanelTeam : Menu
         Close();     
     }
 
+    public void OnButtonSelected(GameObject gameObject) 
+    {
+        UIEvents.RaiseTeamButtonSelected(gameObject);
+    }
+
+    public void OnButtonTeamActionsClicked() => UIEvents.RaiseTeamActionsOpened();
+
     #endregion
 
     #region Events
@@ -155,12 +153,24 @@ public class MenuTeamPanelTeam : Menu
     {
         UIEvents.OnTeamLoadoutSelected += HandleLoadoutSelected;
         UIEvents.OnFormationCharacterSlotUIClicked += HandleFormationCharacterSlotUIClicked;
+        UIEvents.OnFormationCharacterSlotUISwaped += HandeFormationCharacterSlotUISwaped;
+        UIEvents.OnFormationCharacterSlotUIReplaced += HandleFormationCharacterSlotUIReplaced;
+        UIEvents.OnFormationCharacterSlotUIReplaceRequested += HandleFormationCharacterSlotUIReplaceRequested;
+        UIEvents.OnTeamButtonSelected += HandleTeamButtonSelected;
+        UIEvents.OnCharacterSelected += HandleCharacterSelected;
+        UIEvents.OnBattleTypeChangeRequested += HandleBattleTypeChangeRequested;
     }
 
     private void OnDisable()
     {
         UIEvents.OnTeamLoadoutSelected -= HandleLoadoutSelected;
         UIEvents.OnFormationCharacterSlotUIClicked -= HandleFormationCharacterSlotUIClicked;
+        UIEvents.OnFormationCharacterSlotUISwaped -= HandeFormationCharacterSlotUISwaped;
+        UIEvents.OnFormationCharacterSlotUIReplaced -= HandleFormationCharacterSlotUIReplaced;
+        UIEvents.OnFormationCharacterSlotUIReplaceRequested -= HandleFormationCharacterSlotUIReplaceRequested;
+        UIEvents.OnTeamButtonSelected -= HandleTeamButtonSelected;
+        UIEvents.OnCharacterSelected -= HandleCharacterSelected;
+        UIEvents.OnBattleTypeChangeRequested -= HandleBattleTypeChangeRequested;
     }
 
     private void HandleLoadoutSelected(Team team) 
@@ -169,10 +179,68 @@ public class MenuTeamPanelTeam : Menu
         menuManager.OpenMenu(this);
     }
 
-    private void HandleFormationCharacterSlotUIClicked(Character character) 
+    private void HandleFormationCharacterSlotUIClicked(FormationCharacterSlotUI slot) 
     {
         if (!isEditMode) return;
-        //TODO open the character actions
+        currentSlot = slot;
+        UIEvents.RaiseCharacterActionsOpened();
+    }
+
+    private void HandeFormationCharacterSlotUISwaped(FormationCharacterSlotUI a, FormationCharacterSlotUI b) 
+    {
+        // character where already swaped on the slot script
+
+        teamManager.SetCharacterInLoadout(
+            currentTeam.TeamGuid,
+            currentBattleType,
+            a.SlotIndex,
+            a.GetCharacter().CharacterGuid
+        );
+
+        teamManager.SetCharacterInLoadout(
+            currentTeam.TeamGuid,
+            currentBattleType,
+            b.SlotIndex,
+            b.GetCharacter().CharacterGuid
+        );
+    }
+
+    private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
+    {
+        teamManager.SetCharacterInLoadout(
+            currentTeam.TeamGuid,
+            currentBattleType,
+            currentSlot.SlotIndex,
+            character.CharacterGuid
+        );
+    }
+
+    private void HandleFormationCharacterSlotUIReplaceRequested() 
+    {
+        if (selectedCharacter == null) return;
+        UIEvents.RaiseFormationCharacterSlotUIReplaced(currentSlot, selectedCharacter);
+    }
+
+    private void HandleTeamButtonSelected(GameObject gameObject) 
+    {
+        base.SetLastSelected(gameObject);
+    }
+
+    private void HandleCharacterSelected(Character character) 
+    {
+        selectedCharacter = character;
+    }
+
+    public void HandleBattleTypeChangeRequested()
+    {
+        if(!isEditMode) return;
+
+        BattleType newType = currentBattleType == BattleType.Full
+            ? BattleType.Mini
+            : BattleType.Full;
+
+        formationLayoutUI.Initialize(currentTeam, currentBattleType);
+        UIEvents.RaiseBattleTypeChanged(newType, currentBattleType);
     }
 
     #endregion
