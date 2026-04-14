@@ -4,20 +4,19 @@ using UnityEngine.UI;
 using TMPro;
 using Simulation.Enums.Battle;
 using Simulation.Enums.UI;
-using Simulation.Enums.Item;
 
-public class MenuTeamPanelTeamActions : Menu
+public class MenuTeamPanelEmblem : Menu
 {
     #region Fields
 
-    //[Header("UI References")]
-    //[SerializeField] private MenuTeamMode mode;
+    [Header("UI References")]
+    [SerializeField] private Image imageEmblem;
 
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
 
-    private Team team;
+    private string selectedId;
 
     #endregion
 
@@ -49,6 +48,8 @@ public class MenuTeamPanelTeamActions : Menu
     {
         base.Show();
         base.SetInteractable(true);
+
+        selectedId = null;
     }
 
     public override void Hide()
@@ -76,32 +77,19 @@ public class MenuTeamPanelTeamActions : Menu
 
     #region Button Handle
 
-    public void OnButtonChangeFormationClicked() 
+    public void OnButtonChangeClicked() 
     {
-        UIEvents.RaiseItemSelectorSideOpened(ItemCategory.Formation);
+        UIEvents.RaiseEmblemSelectorOpened();
     }
 
-    public void OnButtonChangeKitClicked() 
+    public void OnButtonConfirmClicked() 
     {
-        UIEvents.RaiseItemSelectorSideOpened(ItemCategory.Kit);
+        if (selectedId != null)
+            UIEvents.RaiseTeamEmblemChanged(selectedId);
+        Close();
     }
 
-    public void OnButtonChangeNameClicked() 
-    {
-        UIEvents.RaiseTeamPanelNameOpened();
-    }
-
-    public void OnButtonChangeEmblemClicked() 
-    {
-        UIEvents.RaiseTeamPanelEmblemOpened(team.TeamCrestSprite);
-    }
-
-    public void OnButtonChangeBattleTypeClicked() 
-    {
-        UIEvents.RaiseBattleTypeChangeRequested();
-    }
-
-    public void OnButtonBackClicked() 
+    public void OnButtonCancelClicked() 
     {
         Close();
     }
@@ -112,18 +100,26 @@ public class MenuTeamPanelTeamActions : Menu
 
     private void OnEnable()
     {
-        UIEvents.OnTeamActionsOpened += HandleTeamActionsOpened;
+        UIEvents.OnTeamPanelEmblemOpened += HandleTeamPanelEmblemOpened;
+        UIEvents.OnTeamEmblemSelected += HandleTeamEmblemSelected;
     }
 
     private void OnDisable()
     {
-        UIEvents.OnTeamActionsOpened -= HandleTeamActionsOpened;
+        UIEvents.OnTeamPanelEmblemOpened -= HandleTeamPanelEmblemOpened;
+        UIEvents.OnTeamEmblemSelected -= HandleTeamEmblemSelected;
     }
 
-    private void HandleTeamActionsOpened(Team team) 
+    private void HandleTeamPanelEmblemOpened(Sprite emblemSprite) 
     {
-        this.team = team;
+        imageEmblem.sprite = emblemSprite;
         menuManager.OpenMenu(this);
+    }
+
+    private void HandleTeamEmblemSelected(string emblemId, Sprite emblemSprite) 
+    {
+        selectedId = emblemId;
+        imageEmblem.sprite = emblemSprite;
     }
 
     #endregion

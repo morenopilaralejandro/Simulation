@@ -4,13 +4,10 @@ using UnityEngine.UI;
 using TMPro;
 using Simulation.Enums.Character;
 using Simulation.Enums.Battle;
+using Simulation.Enums.Kit;
 
 public class FormationLayoutUI : MonoBehaviour
 {
-    // TODO This must support full and mini battle
-    // TODO toggle between edit mode and view only mode
-    // Pass the formation
-
     [Header("UI References")]
     [SerializeField] private RectTransform fieldArea;
     [SerializeField] private RectTransform benchArea;
@@ -29,6 +26,7 @@ public class FormationLayoutUI : MonoBehaviour
 
     // Runtime data
     private Formation currentFormation;
+    private Kit currentKit;
 
     // Slot tracking
     private List<FormationCharacterSlotUI> fieldSlots = new List<FormationCharacterSlotUI>();
@@ -51,7 +49,8 @@ public class FormationLayoutUI : MonoBehaviour
         teamManager = TeamManager.Instance;
         teamRoster = teamManager.ResolveCharacters(team, battleType);
         textTeamName.text = team.TeamName;
-        //imageTeamCrest.sprite = team.TeamCrestSprite;
+        imageTeamCrest.sprite = team.TeamCrestSprite;
+        currentKit = team.Kit;
         SetFormation(team.GetFormation(battleType));
     }
 
@@ -68,6 +67,12 @@ public class FormationLayoutUI : MonoBehaviour
         {
             RebuildLayout();
         }
+    }
+
+    public void SetKit(Kit kit)
+    {
+        currentKit = kit;
+        RebuildLayout();
     }
 
     // ============================================================
@@ -99,8 +104,11 @@ public class FormationLayoutUI : MonoBehaviour
 
             // Data
             slot.Initialize(i, coord);
-            if (i < teamRoster.Count)
+            if (i < teamRoster.Count) 
+            {
+                teamRoster[i].ApplyKit(currentKit, Variant.Home, coord.Position);
                 slot.SetCharacter(teamRoster[i]);
+            }
 
             fieldSlots.Add(slot);
         }
@@ -119,6 +127,8 @@ public class FormationLayoutUI : MonoBehaviour
             slot.SetAsBench(i);
             benchSlots.Add(slot);
         }
+
+        UIEvents.RaiseFormationCharacterSlotUISelectedDefault(fieldSlots[0]);
     }
 
     private void AnimateToFormation()
@@ -176,4 +186,19 @@ public class FormationLayoutUI : MonoBehaviour
         fieldSlots.Clear();
         benchSlots.Clear();
     }
+
+    #region Events
+    
+    /*
+
+    team crest changed
+        //imageTeamCrest.sprite = team.TeamCrestSprite;
+
+    name changed 
+        textTeamName.text = team.TeamName;
+
+    */
+
+    #endregion
+    
 }

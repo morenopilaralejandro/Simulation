@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using Simulation.Enums.Battle;
 using Simulation.Enums.UI;
+using Simulation.Enums.Item;
 
 /// <summary>
 /// Displays the selected team's formation and characters for a given BattleType.
@@ -15,6 +16,10 @@ public class MenuTeamPanelTeam : Menu
     [Header("UI References")]
     [SerializeField] private MenuTeamMode mode;
     [SerializeField] private Image activeImage;
+
+    [SerializeField] private GameObject panelActive;
+    [SerializeField] private GameObject panelChanges;
+    [SerializeField] private GameObject panelTeamActions;
 
     [SerializeField] private FormationLayoutUI formationLayoutUI;
 
@@ -35,7 +40,10 @@ public class MenuTeamPanelTeam : Menu
     private FormationCharacterSlotUI currentSlot;
     private BattleType currentBattleType;
     private Character selectedCharacter;
-    private Item selectedItem;
+    private ItemFormation itemFormation;
+    private ItemKit itemKit;
+    private int changesRemaning;
+    private int changesMax = 3;
 
     #endregion
 
@@ -71,7 +79,7 @@ public class MenuTeamPanelTeam : Menu
         base.SetInteractable(true);
 
         selectedCharacter = null;
-        selectedItem = null;
+        InitializeUI();
         PopulateUI();
     }
 
@@ -100,12 +108,27 @@ public class MenuTeamPanelTeam : Menu
 
     #region Populate
 
+    private void InitializeUI() 
+    {
+        panelActive.SetActive(isEditMode);
+        panelTeamActions.SetActive(isEditMode);
+        panelChanges.SetActive(isBattleMode);
+
+        changesRemaning = changesMax;
+    }
+
     private void PopulateUI()
     {
         if (currentTeam == null) return;
         UpdateSetActiveButtonState();
         formationLayoutUI.Initialize(currentTeam, currentBattleType);
     }
+
+    #endregion
+
+    #region Input
+
+    // TODO E sumary, q replace, m change battle type
 
     #endregion
 
@@ -143,7 +166,10 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.RaiseTeamButtonSelected(gameObject);
     }
 
-    public void OnButtonTeamActionsClicked() => UIEvents.RaiseTeamActionsOpened();
+    public void OnButtonTeamActionsClicked() 
+    { 
+        UIEvents.RaiseTeamActionsOpened(currentTeam); 
+    }
 
     #endregion
 
@@ -152,13 +178,17 @@ public class MenuTeamPanelTeam : Menu
     private void OnEnable()
     {
         UIEvents.OnTeamLoadoutSelected += HandleLoadoutSelected;
+        UIEvents.OnFormationCharacterSlotUISelectedDefault += HandleFormationCharacterSlotUISelectedDefault;
         UIEvents.OnFormationCharacterSlotUIClicked += HandleFormationCharacterSlotUIClicked;
         UIEvents.OnFormationCharacterSlotUISwaped += HandeFormationCharacterSlotUISwaped;
         UIEvents.OnFormationCharacterSlotUIReplaced += HandleFormationCharacterSlotUIReplaced;
         UIEvents.OnFormationCharacterSlotUIReplaceRequested += HandleFormationCharacterSlotUIReplaceRequested;
         UIEvents.OnTeamButtonSelected += HandleTeamButtonSelected;
         UIEvents.OnCharacterSelected += HandleCharacterSelected;
+        UIEvents.OnItemSelected += HandleItemSelected;
         UIEvents.OnBattleTypeChangeRequested += HandleBattleTypeChangeRequested;
+        UIEvents.OnTeamEmblemChanged += HandleTeamEmblemChanged;
+        UIEvents.OnTeamNameChanged += HandleTeamNameChanged;
     }
 
     private void OnDisable()
@@ -170,13 +200,21 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnFormationCharacterSlotUIReplaceRequested -= HandleFormationCharacterSlotUIReplaceRequested;
         UIEvents.OnTeamButtonSelected -= HandleTeamButtonSelected;
         UIEvents.OnCharacterSelected -= HandleCharacterSelected;
+        UIEvents.OnItemSelected -= HandleItemSelected;
         UIEvents.OnBattleTypeChangeRequested -= HandleBattleTypeChangeRequested;
+        UIEvents.OnTeamEmblemChanged -= HandleTeamEmblemChanged;
+        UIEvents.OnTeamNameChanged -= HandleTeamNameChanged;
     }
 
     private void HandleLoadoutSelected(Team team) 
     {
         currentTeam = team;
         menuManager.OpenMenu(this);
+    }
+
+    private void HandleFormationCharacterSlotUISelectedDefault(FormationCharacterSlotUI slot) 
+    {
+        base.SetDefaultSelectable(slot.GetComponent<Button>());
     }
 
     private void HandleFormationCharacterSlotUIClicked(FormationCharacterSlotUI slot) 
@@ -188,7 +226,14 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandeFormationCharacterSlotUISwaped(FormationCharacterSlotUI a, FormationCharacterSlotUI b) 
     {
-        // character where already swaped on the slot script
+        if(isBattleMode && changesRemaning <= 0) 
+        {
+            return;
+        } 
+
+        Character temp = a.GetCharacter();
+        a.SetCharacter(b.GetCharacter());
+        b.SetCharacter(temp);
 
         teamManager.SetCharacterInLoadout(
             currentTeam.TeamGuid,
@@ -203,6 +248,8 @@ public class MenuTeamPanelTeam : Menu
             b.SlotIndex,
             b.GetCharacter().CharacterGuid
         );
+
+        if(isBattleMode) changesRemaning--;
     }
 
     private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
@@ -229,6 +276,26 @@ public class MenuTeamPanelTeam : Menu
     private void HandleCharacterSelected(Character character) 
     {
         selectedCharacter = character;
+        if(isOpen && isEditMode)
+            UIEvents.RaiseFormationCharacterSlotUIReplaceRequested();
+    }
+
+    private void HandleItemSelected(Item item) 
+    {
+        if (item.Category == ItemCategory.Formation) 
+        {
+            itemFormation = item as ItemFormation;
+            currentTeam.SetFormation(FormationManager.Instance.GetFormation(itemFormation.FormationId), currentBattleType);
+            formationLayoutUI.SetFormation(currentTeam.GetFormation(currentBattleType));
+        }
+
+        if (item.Category == ItemCategory.Kit) 
+        {
+            itemKit = item as ItemKit;
+            currentTeam.SetKit(KitManager.Instance.GetKit(itemKit.KitId));
+            formationLayoutUI.SetKit(currentTeam.Kit);
+            // TeamEvents.RaiseKitChanged(currentTeam, KitManager.Instance.GetKit(itemKit.KitId));
+        }
     }
 
     public void HandleBattleTypeChangeRequested()
@@ -241,6 +308,20 @@ public class MenuTeamPanelTeam : Menu
 
         formationLayoutUI.Initialize(currentTeam, currentBattleType);
         UIEvents.RaiseBattleTypeChanged(newType, currentBattleType);
+    }
+
+    public void HandleTeamEmblemChanged(string emblemId)
+    {
+        if(!isEditMode) return;
+        currentTeam.UpdateAppeariance(emblemId);
+        formationLayoutUI.Initialize(currentTeam, currentBattleType);
+    }
+
+    public void HandleTeamNameChanged(string newName)
+    {
+        if(!isEditMode) return;
+        currentTeam.SetCustomName(newName);
+        formationLayoutUI.Initialize(currentTeam, currentBattleType);
     }
 
     #endregion

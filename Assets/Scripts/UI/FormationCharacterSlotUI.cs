@@ -120,10 +120,6 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     private void SwapCharacters(FormationCharacterSlotUI other)
     {
-        Character temp = this.character;
-        this.SetCharacter(other.character);
-        other.SetCharacter(temp);
-
         UIEvents.RaiseFormationCharacterSlotUISwaped(this, other);
     }
 

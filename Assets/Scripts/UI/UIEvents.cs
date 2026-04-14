@@ -67,6 +67,12 @@ public static class UIEvents
         OnBackFromTeamRequested?.Invoke();
     }
 
+    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUISelectedDefault;
+    public static void RaiseFormationCharacterSlotUISelectedDefault(FormationCharacterSlotUI slot)
+    {
+        OnFormationCharacterSlotUISelectedDefault?.Invoke(slot);
+    }
+
     public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIClicked;
     public static void RaiseFormationCharacterSlotUIClicked(FormationCharacterSlotUI slot)
     {
@@ -97,10 +103,10 @@ public static class UIEvents
         OnTeamButtonSelected?.Invoke(gameObject);
     }
 
-    public static event Action OnTeamActionsOpened;
-    public static void RaiseTeamActionsOpened()
+    public static event Action<Team> OnTeamActionsOpened;
+    public static void RaiseTeamActionsOpened(Team team)
     {
-        OnTeamActionsOpened?.Invoke();
+        OnTeamActionsOpened?.Invoke(team);
     }
 
     public static event Action OnCharacterActionsOpened;
@@ -121,10 +127,34 @@ public static class UIEvents
         OnTeamPanelNameOpened?.Invoke();
     }
 
-    public static event Action OnTeamPanelEmblemOpened;
-    public static void RaiseTeamPanelEmblemOpened()
+    public static event Action<string> OnTeamNameChanged;
+    public static void RaiseOnTeamNameChanged(string teamName)
     {
-        OnTeamPanelEmblemOpened?.Invoke();
+        OnTeamNameChanged?.Invoke(teamName);
+    }
+
+    public static event Action<Sprite> OnTeamPanelEmblemOpened;
+    public static void RaiseTeamPanelEmblemOpened(Sprite emblemSprite)
+    {
+        OnTeamPanelEmblemOpened?.Invoke(emblemSprite);
+    }
+
+    public static event Action OnEmblemSelectorOpened;
+    public static void RaiseEmblemSelectorOpened()
+    {
+        OnEmblemSelectorOpened?.Invoke();
+    }
+
+    public static event Action<string, Sprite> OnTeamEmblemSelected;
+    public static void RaiseTeamEmblemSelected(string emblemId, Sprite emblemSprite)
+    {
+        OnTeamEmblemSelected?.Invoke(emblemId, emblemSprite);
+    }
+
+    public static event Action<string> OnTeamEmblemChanged;
+    public static void RaiseTeamEmblemChanged(string emblemId)
+    {
+        OnTeamEmblemChanged?.Invoke(emblemId);
     }
 
     public static event Action OnCharacterDetailOpened;
@@ -140,7 +170,19 @@ public static class UIEvents
         OnCharacterSelected?.Invoke(character);
     }
 
+    public static event Action OnCharacterSelectorOpened;
+    public static void RaiseCharacterSelectorOpened()
+    {
+        OnCharacterSelectorOpened?.Invoke();
+    }
+
     // Menu Item
+    public static event Action<Item> OnItemSelected;
+    public static void RaiseItemSelected(Item item)
+    {
+        OnItemSelected?.Invoke(item);
+    }
+
     public static event Action<ItemCategory> OnItemSelectorSideOpened;
     public static void RaiseItemSelectorSideOpened(ItemCategory category)
     {

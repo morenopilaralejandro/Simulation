@@ -82,7 +82,7 @@ public class MenuTeamPanelCharacterActions : Menu
 
     public void OnButtonReplaceClicked() 
     {
-        UIEvents.RaiseFormationCharacterSlotUIReplaceRequested();
+        UIEvents.RaiseCharacterSelectorOpened();
     }
 
     public void OnButtonBackClicked() 
