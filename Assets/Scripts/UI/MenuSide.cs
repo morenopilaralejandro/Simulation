@@ -18,6 +18,7 @@ public class MenuSide : Menu
     private MenuManager menuManager;
     private WorldManager worldManager;
     private bool isOpen => menuManager.IsMenuOpen(this);
+    private bool isTop => menuManager.IsMenuOnTop(this);
     public bool IsSideMenuOpen => isOpen;
 
     private void Awake()
@@ -45,7 +46,7 @@ public class MenuSide : Menu
 
     private void HandleInput()
     {
-        if (isOpen)
+        if (isTop)
         {
             if (InputManager.Instance.GetDown(CustomAction.World_CloseSideMenu))
                 Close();

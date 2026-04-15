@@ -1,7 +1,7 @@
 [System.Serializable]
 public class SaveData
 {
-    public int VersionNumber;
+    public SaveDataHeader Header;
     public long TimestampSave;
     public long TimestampCreation; //DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     public CharacterSystemSaveData CharacterSystemSaveData;

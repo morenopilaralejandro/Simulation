@@ -18,6 +18,7 @@ public class MenuTeamPanelTeamActions : Menu
     private MenuManager menuManager;
 
     private Team team;
+    private bool isClosing = false;
 
     #endregion
 
@@ -47,20 +48,36 @@ public class MenuTeamPanelTeamActions : Menu
 
     public override void Show()
     {
+        isClosing = false;
+
         base.Show();
         base.SetInteractable(true);
     }
 
     public override void Hide()
     {
+        isClosing = false;
+
         base.SetInteractable(false);
         base.Hide();
     }
 
+    public override void SetInteractable(bool interactable)
+    {
+        base.SetInteractable(interactable);
+
+        if (interactable && isClosing)
+        {
+            isClosing = false;
+            Close();
+        }
+    }
+
     public void Close()
     {
-        if (!isOpen) return;
+        if (!isTop) return;
         menuManager.CloseMenu();
+        UIEvents.RaiseTeamActionsClosed();
     }
 
     #endregion
@@ -88,7 +105,7 @@ public class MenuTeamPanelTeamActions : Menu
 
     public void OnButtonChangeNameClicked() 
     {
-        UIEvents.RaiseTeamPanelNameOpened();
+        UIEvents.RaiseTeamPanelNameOpened(team.TeamName);
     }
 
     public void OnButtonChangeEmblemClicked() 
@@ -113,17 +130,27 @@ public class MenuTeamPanelTeamActions : Menu
     private void OnEnable()
     {
         UIEvents.OnTeamActionsOpened += HandleTeamActionsOpened;
+        UIEvents.OnBackFromTeamActionsRequested += HandleBackFromTeamActionsRequested;
     }
 
     private void OnDisable()
     {
         UIEvents.OnTeamActionsOpened -= HandleTeamActionsOpened;
+        UIEvents.OnBackFromTeamActionsRequested -= HandleBackFromTeamActionsRequested;
     }
 
     private void HandleTeamActionsOpened(Team team) 
     {
         this.team = team;
         menuManager.OpenMenu(this);
+    }
+
+    private void HandleBackFromTeamActionsRequested() 
+    {
+        if (isTop)
+            Close();
+        else
+            isClosing = true;
     }
 
     #endregion

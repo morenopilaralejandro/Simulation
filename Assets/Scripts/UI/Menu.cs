@@ -36,7 +36,8 @@ public abstract class Menu : MonoBehaviour
     public virtual void SetInteractable(bool isInteractable) 
     { 
         canvasGroup.interactable = canvasGroup.blocksRaycasts = isInteractable;
-        SetDefaultFocus();
+        if (isInteractable)
+            SetDefaultFocus();
     }
     public virtual bool IsInteractable() => canvasGroup.interactable;
     public void SetLastSelected(GameObject obj) => lastSelected = obj;

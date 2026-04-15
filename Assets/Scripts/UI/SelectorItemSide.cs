@@ -5,13 +5,17 @@ using UnityEngine.UI;
 using TMPro;
 using Simulation.Enums.Battle;
 using Simulation.Enums.UI;
+using Simulation.Enums.Item;
 
-public class SelectorTeamEmblem : Menu
+public class SelectorItemSide : Menu
 {
     #region Fields
 
     //[Header("UI References")]
     //[SerializeField] private MenuTeamMode mode;
+    [SerializeField] private ItemCategory category;
+    [SerializeField] private bool showItemCount = false;
+
     [SerializeField] private ScrollViewAutoScroll autoScroll;
     [SerializeField] private GameObject listItemPrefab;
     [SerializeField] private RectTransform listItemContainer;
@@ -20,8 +24,10 @@ public class SelectorTeamEmblem : Menu
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
 
-    private Dictionary<string, Sprite> dict;
+    private List<ItemStorageSlot> items;
     private List<SelectorTeamEmblemListItem> listItems = new List<SelectorTeamEmblemListItem>();
+
+    private BattleType battleType;
 
     #endregion
 
@@ -90,14 +96,24 @@ public class SelectorTeamEmblem : Menu
 
     private void Populate()
     {
+        
         ClearList(); // Always clean up first
 
-        dict = SpriteAtlasManager.Instance.GetAllSpritesFromAtlasTeamCrest();
-        foreach (var kvp in dict)
+        items = ItemManager.Instance.GetItemsByCategory(category);
+        foreach (var kvp in items)
         {
             GameObject go = Instantiate(listItemPrefab, listItemContainer);
             SelectorTeamEmblemListItem listItem = go.GetComponent<SelectorTeamEmblemListItem>();            
             listItem.Initialize(kvp.Key, kvp.Value);
+
+            if (category = ItemCategory.Formation) 
+            {
+                check battleType
+            }
+
+            // TODO I can always cast as Subclass
+            // itemFormation = item as ItemFormation;
+
             listItems.Add(listItem);
         }
         base.SetDefaultSelectable(listItems[0].GetComponent<Button>());
@@ -144,31 +160,26 @@ public class SelectorTeamEmblem : Menu
 
     private void OnEnable()
     {
-        UIEvents.OnEmblemSelectorOpened += HandleEmblemSelectorOpened;
-        UIEvents.OnTeamEmblemSelected += HandleTeamEmblemSelected;
-        UIEvents.OnTeamEmblemChanged += HandleTeamEmblemChanged;
+        UIEvents.OnItemSelectorSideOpened += HandleItemSelectorSideOpened;
+        UIEvents.OnItemSelected += HandleItemSelected;
     }
 
     private void OnDisable()
     {
-        UIEvents.OnEmblemSelectorOpened -= HandleEmblemSelectorOpened;
-        UIEvents.OnTeamEmblemSelected -= HandleTeamEmblemSelected;
-        UIEvents.OnTeamEmblemChanged -= HandleTeamEmblemChanged;
+        UIEvents.OnItemSelectorSideOpened -= HandleItemSelectorSideOpened;
+        UIEvents.OnItemSelected -= HandleItemSelected;
     }
 
-    private void HandleEmblemSelectorOpened() 
+    private void HandleItemSelectorSideOpened(ItemCategory category, BattleType battleType) 
     {
+        this.category = category;
+        this.battleType = battleType;
         menuManager.OpenMenu(this);
     }
 
-    private void HandleTeamEmblemSelected(string emblemId, Sprite emblemSprite) 
+    private void HandleItemSelected(Item item) 
     {
         Close();
-    }
-
-    public void HandleTeamEmblemChanged(string emblemId)
-    {
-        ClearList();
     }
 
     #endregion

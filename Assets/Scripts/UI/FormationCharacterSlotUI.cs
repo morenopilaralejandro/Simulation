@@ -71,7 +71,6 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     public void OnButtonFormationCharacterSlotUIClicked()
     {
-        //call event character
         UIEvents.RaiseFormationCharacterSlotUIClicked(this);
     }
 

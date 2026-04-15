@@ -19,7 +19,9 @@ public class MenuTeamPanelTeam : Menu
 
     [SerializeField] private GameObject panelActive;
     [SerializeField] private GameObject panelChanges;
-    [SerializeField] private GameObject panelTeamActions;
+    [SerializeField] private GameObject panelTeamButtons;
+
+    [SerializeField] private TMP_Text textChanges;
 
     [SerializeField] private FormationLayoutUI formationLayoutUI;
 
@@ -45,6 +47,8 @@ public class MenuTeamPanelTeam : Menu
     private int changesRemaning;
     private int changesMax = 3;
 
+    private GameObject selectedGo;
+
     #endregion
 
     #region Lifecycle
@@ -59,7 +63,7 @@ public class MenuTeamPanelTeam : Menu
         base.Hide();
         base.SetInteractable(false);
 
-        currentBattleType = BattleType.Full;
+        currentBattleType = BattleType.Mini;
         menuManager = MenuManager.Instance;
         teamManager = TeamManager.Instance;
     }
@@ -79,6 +83,7 @@ public class MenuTeamPanelTeam : Menu
         base.SetInteractable(true);
 
         selectedCharacter = null;
+        selectedGo = null;
         InitializeUI();
         PopulateUI();
     }
@@ -89,6 +94,7 @@ public class MenuTeamPanelTeam : Menu
         base.Hide();
 
         currentTeam = null;
+        selectedGo = null;
     }
 
     public void Close()
@@ -111,7 +117,7 @@ public class MenuTeamPanelTeam : Menu
     private void InitializeUI() 
     {
         panelActive.SetActive(isEditMode);
-        panelTeamActions.SetActive(isEditMode);
+        panelTeamButtons.SetActive(isEditMode);
         panelChanges.SetActive(isBattleMode);
 
         changesRemaning = changesMax;
@@ -189,11 +195,13 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnBattleTypeChangeRequested += HandleBattleTypeChangeRequested;
         UIEvents.OnTeamEmblemChanged += HandleTeamEmblemChanged;
         UIEvents.OnTeamNameChanged += HandleTeamNameChanged;
+        UIEvents.OnTeamActionsClosed += HandleTeamActionsClosed;
     }
 
     private void OnDisable()
     {
         UIEvents.OnTeamLoadoutSelected -= HandleLoadoutSelected;
+        UIEvents.OnFormationCharacterSlotUISelectedDefault -= HandleFormationCharacterSlotUISelectedDefault;
         UIEvents.OnFormationCharacterSlotUIClicked -= HandleFormationCharacterSlotUIClicked;
         UIEvents.OnFormationCharacterSlotUISwaped -= HandeFormationCharacterSlotUISwaped;
         UIEvents.OnFormationCharacterSlotUIReplaced -= HandleFormationCharacterSlotUIReplaced;
@@ -204,6 +212,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnBattleTypeChangeRequested -= HandleBattleTypeChangeRequested;
         UIEvents.OnTeamEmblemChanged -= HandleTeamEmblemChanged;
         UIEvents.OnTeamNameChanged -= HandleTeamNameChanged;
+        UIEvents.OnTeamActionsClosed -= HandleTeamActionsClosed;
     }
 
     private void HandleLoadoutSelected(Team team) 
@@ -214,11 +223,19 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandleFormationCharacterSlotUISelectedDefault(FormationCharacterSlotUI slot) 
     {
+        if (slot == null || slot.gameObject == null) return;
+
+        selectedGo = slot.gameObject;
         base.SetDefaultSelectable(slot.GetComponent<Button>());
     }
 
     private void HandleFormationCharacterSlotUIClicked(FormationCharacterSlotUI slot) 
     {
+        if (slot == null || slot.gameObject == null) return;
+
+        selectedGo = slot.gameObject;
+        base.SetLastSelected(selectedGo);
+
         if (!isEditMode) return;
         currentSlot = slot;
         UIEvents.RaiseCharacterActionsOpened();
@@ -270,7 +287,8 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandleTeamButtonSelected(GameObject gameObject) 
     {
-        base.SetLastSelected(gameObject);
+        selectedGo = gameObject;
+        base.SetLastSelected(selectedGo);
     }
 
     private void HandleCharacterSelected(Character character) 
@@ -296,18 +314,22 @@ public class MenuTeamPanelTeam : Menu
             formationLayoutUI.SetKit(currentTeam.Kit);
             // TeamEvents.RaiseKitChanged(currentTeam, KitManager.Instance.GetKit(itemKit.KitId));
         }
+        UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
     public void HandleBattleTypeChangeRequested()
     {
         if(!isEditMode) return;
 
-        BattleType newType = currentBattleType == BattleType.Full
+        BattleType oldType = currentBattleType;
+
+        currentBattleType = currentBattleType == BattleType.Full
             ? BattleType.Mini
             : BattleType.Full;
 
         formationLayoutUI.Initialize(currentTeam, currentBattleType);
-        UIEvents.RaiseBattleTypeChanged(newType, currentBattleType);
+        UIEvents.RaiseBattleTypeChanged(currentBattleType, oldType);
+        UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
     public void HandleTeamEmblemChanged(string emblemId)
@@ -315,6 +337,7 @@ public class MenuTeamPanelTeam : Menu
         if(!isEditMode) return;
         currentTeam.UpdateAppeariance(emblemId);
         formationLayoutUI.Initialize(currentTeam, currentBattleType);
+        UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
     public void HandleTeamNameChanged(string newName)
@@ -322,7 +345,28 @@ public class MenuTeamPanelTeam : Menu
         if(!isEditMode) return;
         currentTeam.SetCustomName(newName);
         formationLayoutUI.Initialize(currentTeam, currentBattleType);
+        UIEvents.RaiseBackFromTeamActionsRequested();
     }
+
+    public void HandleTeamActionsClosed()
+    {
+        if (selectedGo == null)
+        {
+            if (formationLayoutUI != null)
+            {
+                SetDefaultFocus();
+            }
+            return;
+        }
+
+        Button btn = selectedGo.GetComponent<Button>();
+        if (btn != null)
+            base.SetDefaultSelectable(btn);
+        else
+            SetDefaultFocus();
+    }
+
+
 
     #endregion
 }

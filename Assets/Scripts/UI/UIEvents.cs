@@ -109,6 +109,18 @@ public static class UIEvents
         OnTeamActionsOpened?.Invoke(team);
     }
 
+    public static event Action OnBackFromTeamActionsRequested;
+    public static void RaiseBackFromTeamActionsRequested()
+    {
+        OnBackFromTeamActionsRequested?.Invoke();
+    }
+
+    public static event Action OnTeamActionsClosed;
+    public static void RaiseTeamActionsClosed()
+    {
+        OnTeamActionsClosed?.Invoke();
+    }
+
     public static event Action OnCharacterActionsOpened;
     public static void RaiseCharacterActionsOpened()
     {
@@ -121,14 +133,14 @@ public static class UIEvents
         OnFormationCharacterSlotUIReplaceRequested?.Invoke();
     }
 
-    public static event Action OnTeamPanelNameOpened;
-    public static void RaiseTeamPanelNameOpened()
+    public static event Action<string> OnTeamPanelNameOpened;
+    public static void RaiseTeamPanelNameOpened(string teamName)
     {
-        OnTeamPanelNameOpened?.Invoke();
+        OnTeamPanelNameOpened?.Invoke(teamName);
     }
 
     public static event Action<string> OnTeamNameChanged;
-    public static void RaiseOnTeamNameChanged(string teamName)
+    public static void RaiseTeamNameChanged(string teamName)
     {
         OnTeamNameChanged?.Invoke(teamName);
     }

@@ -51,7 +51,10 @@ public class PersistenceManager : MonoBehaviour
     #region API
 
     // backupSystem
-    public int CurrentSaveVersion => PersistenceManagerBackup.CURRENT_SAVE_VERSION;
+    public uint FileSignature => PersistenceManagerBackup.FILE_SIGNATURE;
+    public string GameIdentifier => PersistenceManagerBackup.GAME_IDENTIFIER;
+    public int SaveFormatVersion => PersistenceManagerBackup.SAVE_FORMAT_VERSION;
+    public string GameVersion => Application.version;
     public void Save(SaveData saveData) => backupSystem.Save(saveData);
     public SaveData GetLastSaveData() => backupSystem.GetLastSaveData();
     public bool HasSaveData() => backupSystem.HasSaveData();

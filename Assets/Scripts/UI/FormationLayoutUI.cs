@@ -128,7 +128,7 @@ public class FormationLayoutUI : MonoBehaviour
             benchSlots.Add(slot);
         }
 
-        UIEvents.RaiseFormationCharacterSlotUISelectedDefault(fieldSlots[0]);
+        UIEvents.RaiseFormationCharacterSlotUISelectedDefault(fieldSlots[fieldSlots.Count - 2]);
     }
 
     private void AnimateToFormation()
