@@ -20,6 +20,7 @@ public class MenuTeamPanelTeam : Menu
     [SerializeField] private GameObject panelActive;
     [SerializeField] private GameObject panelChanges;
     [SerializeField] private GameObject panelTeamButtons;
+    [SerializeField] private GameObject buttonDelete;
 
     [SerializeField] private TMP_Text textChanges;
 
@@ -55,6 +56,8 @@ public class MenuTeamPanelTeam : Menu
     private Formation cachedFormation;
     private Kit cachedKit;
 
+    private bool isClosing = false;
+
     #endregion
 
     #region Lifecycle
@@ -87,6 +90,8 @@ public class MenuTeamPanelTeam : Menu
 
     public override void Show()
     {
+        isClosing = false;
+
         base.Show();
         base.SetInteractable(true);
 
@@ -98,6 +103,8 @@ public class MenuTeamPanelTeam : Menu
 
     public override void Hide()
     {
+        isClosing = false;
+
         base.SetInteractable(false);
         base.Hide();
 
@@ -107,10 +114,21 @@ public class MenuTeamPanelTeam : Menu
 
     public void Close()
     {
-        if (!isOpen) return;
+        if (!isTop) return;
         if(!isEditMode) return;
         UIEvents.RaiseBackFromTeamRequested();
         menuManager.CloseMenu();
+    }
+
+    public override void SetInteractable(bool interactable)
+    {
+        base.SetInteractable(interactable);
+
+        if (interactable && isClosing)
+        {
+            isClosing = false;
+            Close();
+        }
     }
 
     public void Refresh()
@@ -127,6 +145,8 @@ public class MenuTeamPanelTeam : Menu
         panelActive.SetActive(isEditMode);
         panelTeamButtons.SetActive(isEditMode);
         panelChanges.SetActive(isBattleMode);
+
+        buttonDelete.SetActive(isEditMode && teamManager.ActiveLoadoutGuid != currentTeam.TeamGuid);
 
         changesRemaning = changesMax;
     }
@@ -156,6 +176,7 @@ public class MenuTeamPanelTeam : Menu
     private void UpdateSetActiveButtonState() 
     {
         activeImage.enabled = teamManager.ActiveLoadoutGuid == currentTeam.TeamGuid;
+        buttonDelete.SetActive(isEditMode && teamManager.ActiveLoadoutGuid != currentTeam.TeamGuid);
     }
 
     #endregion
@@ -187,6 +208,11 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.RaiseTeamActionsOpened(currentTeam, currentBattleType); 
     }
 
+    public void OnButtonDeleteClicked() 
+    {
+        UIEvents.RaiseTeamPanelDeleteOpened(currentTeam);
+    }
+
     #endregion
 
     #region Events
@@ -209,6 +235,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnTeamEmblemChanged += HandleTeamEmblemChanged;
         UIEvents.OnTeamNameChanged += HandleTeamNameChanged;
         UIEvents.OnTeamActionsClosed += HandleTeamActionsClosed;
+        TeamEvents.OnLoadoutDeleted += HandleLoadoutDeleted;
     }
 
     private void OnDisable()
@@ -229,6 +256,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnTeamEmblemChanged -= HandleTeamEmblemChanged;
         UIEvents.OnTeamNameChanged -= HandleTeamNameChanged;
         UIEvents.OnTeamActionsClosed -= HandleTeamActionsClosed;
+        TeamEvents.OnLoadoutDeleted -= HandleLoadoutDeleted;
     }
 
     private void HandleLoadoutSelected(Team team) 
@@ -378,7 +406,7 @@ public class MenuTeamPanelTeam : Menu
         PreviewHandleSelectorItemSideListItem(listItem);
     }
 
-    public void HandleBattleTypeChangeRequested()
+    private void HandleBattleTypeChangeRequested()
     {
         if(!isEditMode) return;
 
@@ -393,7 +421,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
-    public void HandleTeamEmblemChanged(string emblemId)
+    private void HandleTeamEmblemChanged(string emblemId)
     {
         if(!isEditMode) return;
         currentTeam.UpdateAppeariance(emblemId);
@@ -401,7 +429,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
-    public void HandleTeamNameChanged(string newName)
+    private void HandleTeamNameChanged(string newName)
     {
         if(!isEditMode) return;
         currentTeam.SetCustomName(newName);
@@ -409,7 +437,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
-    public void HandleTeamActionsClosed()
+    private void HandleTeamActionsClosed()
     {
         if (selectedGo == null)
         {
@@ -427,7 +455,10 @@ public class MenuTeamPanelTeam : Menu
             SetDefaultFocus();
     }
 
-
+    private void HandleLoadoutDeleted(Team team)
+    { 
+        isClosing = true;
+    }
 
     #endregion
 }

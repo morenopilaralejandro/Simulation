@@ -65,10 +65,12 @@ public class FormationLayoutUI : MonoBehaviour
 
         if (animateTransitions && fieldSlots.Count == currentFormation.FormationCoords.Count)
         {
+            // TODO Same team with different formation
             AnimateToFormation();
         }
         else
         {
+            // TODO Different team or same team with different battleType
             RebuildLayout();
         }
     }
@@ -125,14 +127,16 @@ public class FormationLayoutUI : MonoBehaviour
         int benchCount = GetBenchCount();
         for (int i = 0; i < benchCount; i++)
         {
+            int rosterIndex = fieldCount + i;
+            if (rosterIndex >= teamRoster.Count) break;
+
             GameObject slotGO = Instantiate(playerSlotPrefab, benchArea);
             FormationCharacterSlotUI slot = slotGO.GetComponent<FormationCharacterSlotUI>();
 
-            int rosterIndex = fieldCount + i;
-            if (rosterIndex < teamRoster.Count)
-                slot.SetCharacter(teamRoster[rosterIndex]);
+            slot.SetAsBench(rosterIndex);
+            teamRoster[rosterIndex].ApplyKit(currentKit, Variant.Home, teamRoster[rosterIndex].Position);
+            slot.SetCharacter(teamRoster[rosterIndex]);
 
-            slot.SetAsBench(i);
             benchSlots.Add(slot);
         }
 
@@ -204,16 +208,8 @@ public class FormationLayoutUI : MonoBehaviour
     }
 
     #region Events
-    
-    /*
 
-    team crest changed
-        //imageTeamCrest.sprite = team.TeamCrestSprite;
-
-    name changed 
-        textTeamName.text = team.TeamName;
-
-    */
+    // placeholder
 
     #endregion
     

@@ -6,9 +6,6 @@ using Simulation.Enums.Character;
 public class FormationCharacterSlotUI : MonoBehaviour, 
     IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, ISelectHandler
 {
-    // TODO toggle between edit mode and view only mode
-    // TODO on slot selected, show character info in the side panel
-
     [Header("UI Elements")]
     [SerializeField] private CharacterCard characterCard;
     [SerializeField] private CanvasGroup canvasGroup;
@@ -63,7 +60,10 @@ public class FormationCharacterSlotUI : MonoBehaviour,
         }
             //show card
 
-        characterCard.SetCharacter(character, coord.Position);
+        if (isBench) 
+            characterCard.SetCharacter(character, character.Position);
+        else
+            characterCard.SetCharacter(character, coord.Position);
     }
 
     public Character GetCharacter() => character;

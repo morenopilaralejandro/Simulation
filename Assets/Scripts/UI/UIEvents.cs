@@ -61,6 +61,18 @@ public static class UIEvents
         OnTeamLoadoutCreateRequested?.Invoke();
     }
 
+    public static event Action<Team> OnTeamLoadoutDeleteRequested;
+    public static void RaiseTeamLoadoutDeleteRequested(Team team)
+    {
+        OnTeamLoadoutDeleteRequested?.Invoke(team);
+    }
+
+    public static event Action<Team> OnTeamPanelDeleteOpened;
+    public static void RaiseTeamPanelDeleteOpened(Team team)
+    {
+        OnTeamPanelDeleteOpened?.Invoke(team);
+    }
+
     public static event Action OnBackFromTeamRequested;
     public static void RaiseBackFromTeamRequested()
     {

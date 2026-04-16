@@ -11,6 +11,7 @@ public class MenuTeamPanelLoadout : Menu
 {
     #region Fields
     [Header("References")]
+    [SerializeField] private ScrollViewAutoScroll autoScroll;
     [SerializeField] private Transform listRoot;
     [SerializeField] private LoadoutListItem itemPrefab;
     [SerializeField] private TMP_Text loadoutCountText;
@@ -67,13 +68,28 @@ public class MenuTeamPanelLoadout : Menu
         base.Show();
         base.SetInteractable(true);
 
+        autoScroll.Activate();
+        autoScroll.ResetToTop();
+
         Refresh();
     }
 
     public override void Hide()
     {
+        autoScroll.Deactivate();
+
         base.SetInteractable(false);
         base.Hide();
+    }
+
+    public override void SetInteractable(bool interactable)
+    {
+        base.SetInteractable(interactable);
+
+        if (interactable)
+            autoScroll.Activate();
+        else
+            autoScroll.Deactivate();
     }
 
     public void Close()
@@ -101,8 +117,7 @@ public class MenuTeamPanelLoadout : Menu
             spawnedItems.Add(item);
         }
 
-        if (isOnTop) 
-            base.SetDefaultSelectable(spawnedItems[0].GetComponent<Button>());
+        base.SetDefaultSelectable(spawnedItems[0].GetComponent<Button>());
 
         UpdateCountText(allLoadouts.Count);
         UpdateCreateButtonState(allLoadouts.Count);
@@ -157,6 +172,7 @@ public class MenuTeamPanelLoadout : Menu
     {
         UIEvents.OnTeamLoadoutRequested += HandleRequested;
         UIEvents.OnTeamLoadoutCreateRequested += HandleCreateRequested;
+        UIEvents.OnTeamLoadoutDeleteRequested += HandleDeleteRequested;
         TeamEvents.OnLoadoutDeleted += HandleLoadoutDeleted;
         TeamEvents.OnLoadoutUpdated += HandleLoadoutUpdated;
         UIEvents.OnBackFromTeamRequested += HandleBackToLoadoutList;
@@ -166,6 +182,7 @@ public class MenuTeamPanelLoadout : Menu
     {
         UIEvents.OnTeamLoadoutRequested -= HandleRequested;
         UIEvents.OnTeamLoadoutCreateRequested -= HandleCreateRequested;
+        UIEvents.OnTeamLoadoutDeleteRequested -= HandleDeleteRequested;
         TeamEvents.OnLoadoutDeleted -= HandleLoadoutDeleted;
         TeamEvents.OnLoadoutUpdated -= HandleLoadoutUpdated;
         UIEvents.OnBackFromTeamRequested -= HandleBackToLoadoutList;
@@ -186,10 +203,15 @@ public class MenuTeamPanelLoadout : Menu
         UIEvents.RaiseTeamLoadoutSelected(newLoadout);
     }
 
-    private void HandleLoadoutDeleted(Team team)
+    private void HandleDeleteRequested(Team team)
     {
         teamManager.DeleteLoadout(team.TeamGuid);
         Refresh();
+    }
+
+    private void HandleLoadoutDeleted(Team team)
+    {
+
     }
 
     private void HandleLoadoutUpdated(Team team)
