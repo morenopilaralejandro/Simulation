@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
 using Simulation.Enums.Kit;
 using Simulation.Enums.Item;
@@ -24,12 +25,18 @@ public class ItemManagerStorage
     private Dictionary<ItemCategory, List<ItemStorageSlot>> categoryMap;
     private ItemStorageSlot cachedSlot;
 
+    private ItemFormation cachedItemFormation;
+    private Formation cachedFormation;
+    private FormationManager formationDatabase;
+
     #endregion
 
     #region Constructor
 
     public ItemManagerStorage() 
     {
+        formationDatabase = FormationManager.Instance;
+
         categoryMap = new Dictionary<ItemCategory, List<ItemStorageSlot>>
         {
             { ItemCategory.Equipment, listEquipment },
@@ -128,6 +135,18 @@ public class ItemManagerStorage
     {
         SetSlot(item);
         return cachedSlot?.Count ?? 0;
+    }
+
+    public List<ItemStorageSlot> GetItemsByCategory(ItemCategory category) => categoryMap[category];
+
+    public bool IsFormationOfBattleType(Item item, BattleType battleType) 
+    {
+        if (item.Category != ItemCategory.Formation) return false;
+
+        cachedItemFormation = item as ItemFormation;
+        cachedFormation = formationDatabase.GetFormation(cachedItemFormation.FormationId);
+
+        return cachedFormation.BattleType == battleType;
     }
 
     #endregion

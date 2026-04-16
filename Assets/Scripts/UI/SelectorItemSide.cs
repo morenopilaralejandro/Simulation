@@ -14,20 +14,22 @@ public class SelectorItemSide : Menu
     //[Header("UI References")]
     //[SerializeField] private MenuTeamMode mode;
     [SerializeField] private ItemCategory category;
-    [SerializeField] private bool showItemCount = false;
+    //[SerializeField] private bool showItemCount = false;
 
     [SerializeField] private ScrollViewAutoScroll autoScroll;
     [SerializeField] private GameObject listItemPrefab;
     [SerializeField] private RectTransform listItemContainer;
+    [SerializeField] private Button buttonBack;
 
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
 
     private List<ItemStorageSlot> items;
-    private List<SelectorTeamEmblemListItem> listItems = new List<SelectorTeamEmblemListItem>();
-
+    private List<SelectorItemSideListItem> listItems = new List<SelectorItemSideListItem>();
+    
     private BattleType battleType;
+    private ItemManager itemManager;
 
     #endregion
 
@@ -44,6 +46,7 @@ public class SelectorItemSide : Menu
         base.SetInteractable(false);
 
         menuManager = MenuManager.Instance;
+        itemManager = ItemManager.Instance;
     }
 
     private void OnDestroy()
@@ -99,24 +102,22 @@ public class SelectorItemSide : Menu
         
         ClearList(); // Always clean up first
 
-        items = ItemManager.Instance.GetItemsByCategory(category);
-        foreach (var kvp in items)
+        items = itemManager.GetItemsByCategory(category);
+        foreach (var slot in items)
         {
+            if (slot.Item.Category == ItemCategory.Formation && 
+                !itemManager.IsFormationOfBattleType(slot.Item, battleType)) continue;
+
             GameObject go = Instantiate(listItemPrefab, listItemContainer);
-            SelectorTeamEmblemListItem listItem = go.GetComponent<SelectorTeamEmblemListItem>();            
-            listItem.Initialize(kvp.Key, kvp.Value);
-
-            if (category = ItemCategory.Formation) 
-            {
-                check battleType
-            }
-
-            // TODO I can always cast as Subclass
-            // itemFormation = item as ItemFormation;
-
+            SelectorItemSideListItem listItem = go.GetComponent<SelectorItemSideListItem>();            
+            listItem.Initialize(slot);
             listItems.Add(listItem);
         }
-        base.SetDefaultSelectable(listItems[0].GetComponent<Button>());
+        
+        if(listItems.Count <= 0) 
+            base.SetDefaultSelectable(buttonBack);
+        else
+            base.SetDefaultSelectable(listItems[0].GetComponent<Button>());
     }
 
     #endregion
@@ -125,17 +126,7 @@ public class SelectorItemSide : Menu
 
     private void ClearList()
     {
-        if (dict != null)
-        {
-            foreach (var kvp in dict)
-            {
-                if (kvp.Value != null)
-                    Destroy(kvp.Value);
-            }
-            dict.Clear();
-            dict = null;
-        }
-
+        items = null;
         foreach (var listItem in listItems)
         {
             if (listItem != null)
@@ -150,6 +141,7 @@ public class SelectorItemSide : Menu
 
     public void OnButtonBackClicked() 
     {
+        UIEvents.RaiseBackFromSelectorItemSideRequested(category);
         Close();
         ClearList();
     }
@@ -180,6 +172,7 @@ public class SelectorItemSide : Menu
     private void HandleItemSelected(Item item) 
     {
         Close();
+        ClearList();
     }
 
     #endregion

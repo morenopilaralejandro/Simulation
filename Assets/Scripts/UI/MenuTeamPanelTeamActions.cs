@@ -18,6 +18,7 @@ public class MenuTeamPanelTeamActions : Menu
     private MenuManager menuManager;
 
     private Team team;
+    private BattleType battleType;
     private bool isClosing = false;
 
     #endregion
@@ -95,12 +96,12 @@ public class MenuTeamPanelTeamActions : Menu
 
     public void OnButtonChangeFormationClicked() 
     {
-        UIEvents.RaiseItemSelectorSideOpened(ItemCategory.Formation);
+        UIEvents.RaiseItemSelectorSideOpened(ItemCategory.Formation, battleType);
     }
 
     public void OnButtonChangeKitClicked() 
     {
-        UIEvents.RaiseItemSelectorSideOpened(ItemCategory.Kit);
+        UIEvents.RaiseItemSelectorSideOpened(ItemCategory.Kit, battleType);
     }
 
     public void OnButtonChangeNameClicked() 
@@ -131,17 +132,20 @@ public class MenuTeamPanelTeamActions : Menu
     {
         UIEvents.OnTeamActionsOpened += HandleTeamActionsOpened;
         UIEvents.OnBackFromTeamActionsRequested += HandleBackFromTeamActionsRequested;
+        UIEvents.OnBattleTypeChanged += HandleBattleTypeChanged;
     }
 
     private void OnDisable()
     {
         UIEvents.OnTeamActionsOpened -= HandleTeamActionsOpened;
         UIEvents.OnBackFromTeamActionsRequested -= HandleBackFromTeamActionsRequested;
+        UIEvents.OnBattleTypeChanged -= HandleBattleTypeChanged;
     }
 
-    private void HandleTeamActionsOpened(Team team) 
+    private void HandleTeamActionsOpened(Team team, BattleType battleType) 
     {
         this.team = team;
+        this.battleType = battleType;
         menuManager.OpenMenu(this);
     }
 
@@ -151,6 +155,12 @@ public class MenuTeamPanelTeamActions : Menu
             Close();
         else
             isClosing = true;
+    }
+
+    private void HandleBattleTypeChanged(BattleType currentBattleType, BattleType oldType) 
+    {
+        if (!isTop) return;
+        this.battleType = currentBattleType;
     }
 
     #endregion

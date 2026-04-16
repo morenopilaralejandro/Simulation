@@ -27,6 +27,7 @@ public class FormationLayoutUI : MonoBehaviour
     // Runtime data
     private Formation currentFormation;
     private Kit currentKit;
+    private bool showDefaultSelected = true;
 
     // Slot tracking
     private List<FormationCharacterSlotUI> fieldSlots = new List<FormationCharacterSlotUI>();
@@ -54,10 +55,13 @@ public class FormationLayoutUI : MonoBehaviour
         SetFormation(team.GetFormation(battleType));
     }
 
-    public void SetFormation(Formation formation)
+    public void SetFormation(Formation formation, bool showDefaultSelected = true)
     {
         currentFormation = formation;
+        this.showDefaultSelected = showDefaultSelected;
         //formationNameLabel.text = currentFormation.FormationName;
+
+        StopAllCoroutines();
 
         if (animateTransitions && fieldSlots.Count == currentFormation.FormationCoords.Count)
         {
@@ -69,9 +73,13 @@ public class FormationLayoutUI : MonoBehaviour
         }
     }
 
-    public void SetKit(Kit kit)
+    public void SetKit(Kit kit, bool showDefaultSelected = true)
     {
         currentKit = kit;
+        this.showDefaultSelected = showDefaultSelected;
+
+        StopAllCoroutines();
+
         RebuildLayout();
     }
 
@@ -128,7 +136,8 @@ public class FormationLayoutUI : MonoBehaviour
             benchSlots.Add(slot);
         }
 
-        UIEvents.RaiseFormationCharacterSlotUISelectedDefault(fieldSlots[fieldSlots.Count - 2]);
+        if (showDefaultSelected)
+            UIEvents.RaiseFormationCharacterSlotUISelectedDefault(fieldSlots[fieldSlots.Count - 2]);
     }
 
     private void AnimateToFormation()
@@ -156,11 +165,15 @@ public class FormationLayoutUI : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
+        if (rt == null) yield break;
+
         Vector2 start = rt.anchoredPosition;
         float elapsed = 0f;
 
         while (elapsed < transitionDuration)
         {
+            if (rt == null) yield break;
+
             elapsed += Time.deltaTime;
             float t = elapsed / transitionDuration;
             // Ease out cubic
@@ -169,7 +182,8 @@ public class FormationLayoutUI : MonoBehaviour
             yield return null;
         }
 
-        rt.anchoredPosition = target;
+        if (rt != null)
+            rt.anchoredPosition = target;
     }
 
     private int GetBenchCount()
@@ -181,6 +195,8 @@ public class FormationLayoutUI : MonoBehaviour
 
     private void ClearAllSlots()
     {
+        StopAllCoroutines();
+
         foreach (var s in fieldSlots) if (s != null) Destroy(s.gameObject);
         foreach (var s in benchSlots) if (s != null) Destroy(s.gameObject);
         fieldSlots.Clear();

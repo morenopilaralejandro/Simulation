@@ -73,6 +73,12 @@ public static class UIEvents
         OnFormationCharacterSlotUISelectedDefault?.Invoke(slot);
     }
 
+    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUISelected;
+    public static void RaiseFormationCharacterSlotUISelected(FormationCharacterSlotUI slot)
+    {
+        OnFormationCharacterSlotUISelected?.Invoke(slot);
+    }
+
     public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIClicked;
     public static void RaiseFormationCharacterSlotUIClicked(FormationCharacterSlotUI slot)
     {
@@ -103,10 +109,10 @@ public static class UIEvents
         OnTeamButtonSelected?.Invoke(gameObject);
     }
 
-    public static event Action<Team> OnTeamActionsOpened;
-    public static void RaiseTeamActionsOpened(Team team)
+    public static event Action<Team, BattleType> OnTeamActionsOpened;
+    public static void RaiseTeamActionsOpened(Team team, BattleType battleType)
     {
-        OnTeamActionsOpened?.Invoke(team);
+        OnTeamActionsOpened?.Invoke(team, battleType);
     }
 
     public static event Action OnBackFromTeamActionsRequested;
@@ -195,9 +201,27 @@ public static class UIEvents
         OnItemSelected?.Invoke(item);
     }
 
-    public static event Action<ItemCategory> OnItemSelectorSideOpened;
-    public static void RaiseItemSelectorSideOpened(ItemCategory category)
+    public static event Action<ItemCategory, BattleType> OnItemSelectorSideOpened;
+    public static void RaiseItemSelectorSideOpened(ItemCategory category, BattleType battleType)
     {
-        OnItemSelectorSideOpened?.Invoke(category);
+        OnItemSelectorSideOpened?.Invoke(category, battleType);
+    }
+
+    public static event Action<ItemCategory> OnBackFromSelectorItemSideRequested;
+    public static void RaiseBackFromSelectorItemSideRequested(ItemCategory category)
+    {
+        OnBackFromSelectorItemSideRequested?.Invoke(category);
+    }
+
+    public static event Action<SelectorItemSideListItem> OnSelectorItemSideListItemHighlighted;
+    public static void RaiseSelectorItemSideListItemHighlighted(SelectorItemSideListItem listItem)
+    {
+        OnSelectorItemSideListItemHighlighted?.Invoke(listItem);
+    }
+
+    public static event Action<SelectorItemSideListItem> OnSelectorItemSideListItemSelected;
+    public static void RaiseSelectorItemSideListItemSelected(SelectorItemSideListItem listItem)
+    {
+        OnSelectorItemSideListItemSelected?.Invoke(listItem);
     }
 }

@@ -69,6 +69,7 @@ public class PersistenceManagerSave
         SetNewGame(true);
         SetTimestampCreation(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         CharacterManager.Instance.FirstTimeInitialize();
+        ItemManager.Instance.FirstTimeInitialize();
         StorySystemManager.Instance.SetChapter(0);
     }
 

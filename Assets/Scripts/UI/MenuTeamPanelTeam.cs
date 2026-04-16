@@ -35,19 +35,25 @@ public class MenuTeamPanelTeam : Menu
     */
 
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
+    private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
     private TeamManager teamManager;
+    private FormationManager formationDatabase;
+    private KitManager kitDatabase;
 
     private Team currentTeam;
     private FormationCharacterSlotUI currentSlot;
     private BattleType currentBattleType;
     private Character selectedCharacter;
-    private ItemFormation itemFormation;
-    private ItemKit itemKit;
+    private GameObject selectedGo;
+
     private int changesRemaning;
     private int changesMax = 3;
 
-    private GameObject selectedGo;
+    private ItemFormation cachedItemFormation;
+    private ItemKit cachedItemKit;
+    private Formation cachedFormation;
+    private Kit cachedKit;
 
     #endregion
 
@@ -66,6 +72,8 @@ public class MenuTeamPanelTeam : Menu
         currentBattleType = BattleType.Mini;
         menuManager = MenuManager.Instance;
         teamManager = TeamManager.Instance;
+        formationDatabase = FormationManager.Instance;
+        kitDatabase = KitManager.Instance;
     }
 
     private void OnDestroy()
@@ -134,7 +142,9 @@ public class MenuTeamPanelTeam : Menu
 
     #region Input
 
-    // TODO E sumary, q replace, m change battle type
+    // click on character -> character actions
+    // TODO E sumary, r replace, q swap
+    // TODO T team actions, shift change battle type, f set active
 
     #endregion
 
@@ -174,7 +184,7 @@ public class MenuTeamPanelTeam : Menu
 
     public void OnButtonTeamActionsClicked() 
     { 
-        UIEvents.RaiseTeamActionsOpened(currentTeam); 
+        UIEvents.RaiseTeamActionsOpened(currentTeam, currentBattleType); 
     }
 
     #endregion
@@ -192,6 +202,9 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnTeamButtonSelected += HandleTeamButtonSelected;
         UIEvents.OnCharacterSelected += HandleCharacterSelected;
         UIEvents.OnItemSelected += HandleItemSelected;
+        UIEvents.OnSelectorItemSideListItemSelected += HandleSelectorItemSideListItemSelected;
+        UIEvents.OnSelectorItemSideListItemHighlighted += HandleSelectorItemSideListItemHighlighted;
+        UIEvents.OnBackFromSelectorItemSideRequested += HandleBackFromSelectorItemSideRequested;
         UIEvents.OnBattleTypeChangeRequested += HandleBattleTypeChangeRequested;
         UIEvents.OnTeamEmblemChanged += HandleTeamEmblemChanged;
         UIEvents.OnTeamNameChanged += HandleTeamNameChanged;
@@ -209,6 +222,9 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnTeamButtonSelected -= HandleTeamButtonSelected;
         UIEvents.OnCharacterSelected -= HandleCharacterSelected;
         UIEvents.OnItemSelected -= HandleItemSelected;
+        UIEvents.OnSelectorItemSideListItemSelected -= HandleSelectorItemSideListItemSelected;
+        UIEvents.OnSelectorItemSideListItemHighlighted -= HandleSelectorItemSideListItemHighlighted;
+        UIEvents.OnBackFromSelectorItemSideRequested -= HandleBackFromSelectorItemSideRequested;
         UIEvents.OnBattleTypeChangeRequested -= HandleBattleTypeChangeRequested;
         UIEvents.OnTeamEmblemChanged -= HandleTeamEmblemChanged;
         UIEvents.OnTeamNameChanged -= HandleTeamNameChanged;
@@ -223,6 +239,7 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandleFormationCharacterSlotUISelectedDefault(FormationCharacterSlotUI slot) 
     {
+        if (!isTop) return;
         if (slot == null || slot.gameObject == null) return;
 
         selectedGo = slot.gameObject;
@@ -300,21 +317,65 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandleItemSelected(Item item) 
     {
+        if(!isOpen || !isEditMode) return;
+
         if (item.Category == ItemCategory.Formation) 
         {
-            itemFormation = item as ItemFormation;
-            currentTeam.SetFormation(FormationManager.Instance.GetFormation(itemFormation.FormationId), currentBattleType);
-            formationLayoutUI.SetFormation(currentTeam.GetFormation(currentBattleType));
+            cachedItemFormation = item as ItemFormation;
+            cachedFormation = formationDatabase.GetFormation(cachedItemFormation.FormationId);  
+            currentTeam.SetFormation(cachedFormation, currentBattleType);
+            formationLayoutUI.SetFormation(cachedFormation);
         }
 
         if (item.Category == ItemCategory.Kit) 
         {
-            itemKit = item as ItemKit;
-            currentTeam.SetKit(KitManager.Instance.GetKit(itemKit.KitId));
-            formationLayoutUI.SetKit(currentTeam.Kit);
+            cachedItemKit = item as ItemKit;
+            cachedKit = kitDatabase.GetKit(cachedItemKit.KitId);
+            currentTeam.SetKit(cachedKit);
+            formationLayoutUI.SetKit(cachedKit);
             // TeamEvents.RaiseKitChanged(currentTeam, KitManager.Instance.GetKit(itemKit.KitId));
         }
         UIEvents.RaiseBackFromTeamActionsRequested();
+    }
+
+    private void PreviewHandleSelectorItemSideListItem(SelectorItemSideListItem listItem) 
+    {
+        if(!isOpen || !isEditMode) return;
+
+        if (listItem.ItemStorageSlot.Item.Category == ItemCategory.Formation) 
+        {
+            cachedItemFormation = listItem.ItemStorageSlot.Item as ItemFormation;
+            cachedFormation = formationDatabase.GetFormation(cachedItemFormation.FormationId);
+            formationLayoutUI.SetFormation(cachedFormation, false);
+        }
+
+        if (listItem.ItemStorageSlot.Item.Category == ItemCategory.Kit) 
+        {
+            cachedItemKit = listItem.ItemStorageSlot.Item as ItemKit;
+            cachedKit = kitDatabase.GetKit(cachedItemKit.KitId);
+            formationLayoutUI.SetKit(cachedKit, false);
+        }
+    }
+
+    private void HandleBackFromSelectorItemSideRequested(ItemCategory category) 
+    {
+        if(!isOpen || !isEditMode) return;
+
+        if (category == ItemCategory.Formation) 
+            formationLayoutUI.SetFormation(currentTeam.GetFormation(currentBattleType));
+
+        if (category == ItemCategory.Kit) 
+            formationLayoutUI.SetKit(currentTeam.Kit);
+    }
+
+    private void HandleSelectorItemSideListItemHighlighted(SelectorItemSideListItem listItem) 
+    {
+        PreviewHandleSelectorItemSideListItem(listItem);
+    }
+
+    private void HandleSelectorItemSideListItemSelected(SelectorItemSideListItem listItem) 
+    {
+        PreviewHandleSelectorItemSideListItem(listItem);
     }
 
     public void HandleBattleTypeChangeRequested()

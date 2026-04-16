@@ -49,6 +49,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     public void UpdateCoord(FormationCoord newCoord)
     {
         coord = newCoord;
+        characterCard.SetCharacter(character, newCoord.Position);
     }
 
     public void SetCharacter(Character character)
