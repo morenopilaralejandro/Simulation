@@ -66,6 +66,7 @@ public class TeamManagerLoadout
 
         Team loadout = TeamFactory.Create();
         loadouts[loadout.TeamGuid] = loadout;
+        InitializeLoadoutCharacters(loadout);
 
         // Auto-set as active if it's the first loadout
         if (loadouts.Count == 1)
@@ -81,6 +82,12 @@ public class TeamManagerLoadout
         if (!loadouts.TryGetValue(teamGuid, out Team loadout))
         {
             LogManager.Warning($"[TeamLoadoutManager] Loadout {loadout.TeamName} not found for deletion.");
+            return false;
+        }
+
+        if (loadouts.Count == 1)
+        {
+            LogManager.Warning($"[TeamLoadoutManager] Can't delete when there is only one loadout");
             return false;
         }
 
@@ -238,20 +245,27 @@ public class TeamManagerLoadout
         }
 
         Team loadout = CreateLoadout();
+        SetActiveLoadout(loadout.TeamGuid);
+
+        return loadout;
+    }
+
+    public void InitializeLoadoutCharacters(Team loadout)
+    {
         if (loadout == null)
         {
-            LogManager.Warning("[TeamLoadoutManager] Failed to create initial loadout.");
-            return null;
+            LogManager.Warning("[TeamLoadoutManager] Failed to create loadout.");
+            return;
         }
 
         List<Character> allCharacters = characterManager.GetAllCharacters();
         if (allCharacters == null || allCharacters.Count == 0)
         {
             LogManager.Warning("[TeamLoadoutManager] No characters in storage. Loadout created but left empty.");
-            return loadout;
+            return;
         }
 
-        int sizeFull = TeamManager.SIZE_FULL;
+        int sizeFull = TeamManager.SIZE_MAX;
         int sizeMini = TeamManager.SIZE_MINI;
 
         // Populate Full Battle slots
@@ -268,11 +282,9 @@ public class TeamManagerLoadout
             SetCharacterInLoadout(loadout.TeamGuid, BattleType.Mini, i, allCharacters[i].CharacterGuid);
         }
 
-        LogManager.Info($"[TeamLoadoutManager] First-time loadout initialized: " +
+        LogManager.Info($"[TeamLoadoutManager] Loadout initialized: " +
                         $"{battleCount} full-battle and {miniCount} mini-battle characters assigned.");
-    
-        SetActiveLoadout(loadout.TeamGuid);
-        return loadout;
+
     }
 
     #endregion

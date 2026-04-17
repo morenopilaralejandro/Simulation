@@ -18,6 +18,10 @@ public class SceneLoader : MonoBehaviour
     private SceneGroup currentGroup;
     private InputManager inputManager;
 
+    // ★ NEW: Global loading guard
+    private bool isLoading = false;
+    public bool IsLoading => isLoading;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -45,6 +49,12 @@ public class SceneLoader : MonoBehaviour
         if (sceneData == null)
         {
             LogManager.Error("[SceneLoader] Attempted to load a null SceneData.");
+            return;
+        }
+
+        if (isLoading)
+        {
+            LogManager.Warning("[SceneLoader] Already loading. Ignoring LoadScene request.");
             return;
         }
 
@@ -80,6 +90,12 @@ public class SceneLoader : MonoBehaviour
             return;
         }
 
+        if (isLoading)
+        {
+            LogManager.Warning("[SceneLoader] Already loading. Ignoring UnloadScene request.");
+            return;
+        }
+
         if (!IsSceneLoaded(sceneData.sceneName))
         {
             LogManager.Warning($"[SceneLoader] Scene '{sceneData.sceneName}' is not loaded.");
@@ -95,6 +111,12 @@ public class SceneLoader : MonoBehaviour
         if (group == null)
         {
             LogManager.Error("[SceneLoader] Attempted to load a null SceneGroup.");
+            return;
+        }
+
+        if (isLoading)
+        {
+            LogManager.Warning($"[SceneLoader] Already loading. Ignoring LoadGroup '{group.groupName}'.");
             return;
         }
 
@@ -134,6 +156,12 @@ public class SceneLoader : MonoBehaviour
             return;
         }
 
+        if (isLoading)
+        {
+            LogManager.Warning("[SceneLoader] Already loading. Ignoring UnloadGroup request.");
+            return;
+        }
+
         List<SceneData> validScenes = group.GetValidScenes();
         StartCoroutine(UnloadScenesSequentially(validScenes, onComplete));
     }
@@ -164,6 +192,12 @@ public class SceneLoader : MonoBehaviour
             return;
         }
 
+        if (isLoading)
+        {
+            LogManager.Warning("[SceneLoader] Already loading. Ignoring TransitionGroups request.");
+            return;
+        }
+
         List<SceneData> scenesToUnload = fromGroup.GetValidScenes();
         List<SceneData> scenesToLoad = toGroup.GetValidScenes();
 
@@ -183,17 +217,14 @@ public class SceneLoader : MonoBehaviour
     // Guarded Coroutine Wrapper
     // ──────────────────────────────────────────────
 
-    /// <summary>
-    /// Wraps any transition coroutine with input locking.
-    /// Guarantees UnlockInput is called even if the inner coroutine fails.
-    /// </summary>
     private IEnumerator WithInputLock(IEnumerator innerCoroutine, Action onComplete = null)
     {
+        // ★ SET FLAG IMMEDIATELY (same frame as call)
+        isLoading = true;
         inputManager?.LockInput();
 
         Exception caughtException = null;
 
-        // Run the inner coroutine, catching any exception
         while (true)
         {
             bool hasNext;
@@ -212,6 +243,8 @@ public class SceneLoader : MonoBehaviour
         }
 
         inputManager?.UnlockInput();
+        // ★ CLEAR FLAG when done
+        isLoading = false;
 
         if (caughtException != null)
         {
@@ -222,7 +255,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // ──────────────────────────────────────────────
-    // Core Coroutines (no input lock — wrapped above)
+    // Core Coroutines
     // ──────────────────────────────────────────────
 
     private IEnumerator LoadSceneAsync(string sceneName, Action onComplete = null)
@@ -292,7 +325,7 @@ public class SceneLoader : MonoBehaviour
     }
 
     // ──────────────────────────────────────────────
-    // Transition Coroutines (WITH input locking)
+    // Transition Coroutines
     // ──────────────────────────────────────────────
 
     private IEnumerator LoadWithLoadingScreen(
@@ -300,7 +333,6 @@ public class SceneLoader : MonoBehaviour
         List<SceneData> scenesToUnload,
         Action onComplete = null)
     {
-        // ★ Lock input for the entire loading screen transition
         yield return WithInputLock(
             LoadWithLoadingScreenInner(scenesToLoad, scenesToUnload),
             onComplete
@@ -311,27 +343,23 @@ public class SceneLoader : MonoBehaviour
         List<SceneData> scenesToLoad,
         List<SceneData> scenesToUnload)
     {
-        // Show loading screen
         if (loadingScreenScene != null && !IsSceneLoaded(loadingScreenScene.sceneName))
         {
             yield return LoadSceneAsync(loadingScreenScene.sceneName);
         }
 
-        yield return null; // Let loading screen render
+        yield return null;
 
-        // Unload old scenes
         if (scenesToUnload != null)
         {
             yield return UnloadScenesSequentially(scenesToUnload);
         }
 
-        // Load new scenes
         if (scenesToLoad != null)
         {
             yield return LoadScenesSequentially(scenesToLoad);
         }
 
-        // Hide loading screen
         if (loadingScreenScene != null && IsSceneLoaded(loadingScreenScene.sceneName))
         {
             yield return UnloadSceneAsync(loadingScreenScene.sceneName);
@@ -343,7 +371,6 @@ public class SceneLoader : MonoBehaviour
         List<SceneData> scenesToLoad,
         Action onComplete = null)
     {
-        // ★ Lock input for the entire sequential transition
         yield return WithInputLock(
             TransitionSequentiallyInner(scenesToUnload, scenesToLoad),
             onComplete

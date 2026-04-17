@@ -9,6 +9,7 @@ public abstract class Menu : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private bool deactivateOnHide = true;
     [SerializeField] private bool closeAllPreviousOnBack = false;
+    [SerializeField] private bool hasMemory = false;
 
     private GameObject lastSelected;
 
@@ -32,19 +33,35 @@ public abstract class Menu : MonoBehaviour
             canvasGroup.alpha = 0f;
     }
 
-    public virtual void SetInteractable(bool isInteractable) => canvasGroup.interactable = canvasGroup.blocksRaycasts = isInteractable;
+    public virtual void SetInteractable(bool isInteractable) 
+    { 
+        canvasGroup.interactable = canvasGroup.blocksRaycasts = isInteractable;
+        if (isInteractable)
+            SetDefaultFocus();
+    }
     public virtual bool IsInteractable() => canvasGroup.interactable;
+    public void SetLastSelected(GameObject obj) => lastSelected = obj;
+
+    public void SetDefaultSelectable(Selectable selectable, bool focusImmediately = true)
+    {
+        defaultSelectable = selectable;
+
+        if (focusImmediately && selectable != null)
+        {
+            EventSystem.current.SetSelectedGameObject(selectable.gameObject);
+            lastSelected = selectable.gameObject;
+        }
+    }
 
     protected void SetDefaultFocus()
     {
-        if (defaultSelectable != null)
+        if (hasMemory && lastSelected != null) 
         {
+            EventSystem.current.SetSelectedGameObject(lastSelected);
+        } else 
+        {
+            if (defaultSelectable == null) return;
             EventSystem.current.SetSelectedGameObject(defaultSelectable.gameObject);
-            lastSelected = defaultSelectable.gameObject;
-        }
-        else if (EventSystem.current.currentSelectedGameObject)
-        {
-            lastSelected = EventSystem.current.currentSelectedGameObject;
         }
     }
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Simulation.Enums.Battle;
 using Simulation.Enums.Character;
 using Simulation.Enums.Kit;
 using Simulation.Enums.Move;
@@ -59,6 +60,8 @@ public class ItemManager : MonoBehaviour
     public bool RemoveItem(Item item, int count = 1) => storageSystem.RemoveItem(item, count);
     public bool HasItem(Item item) => storageSystem.HasItem(item);
     public int GetItemCount(Item item) => storageSystem.GetItemCount(item);
+    public List<ItemStorageSlot> GetItemsByCategory(ItemCategory category) => storageSystem.GetItemsByCategory(category);
+    public bool IsFormationOfBattleType(Item item, BattleType battleType) => storageSystem.IsFormationOfBattleType(item, battleType);
     public SaveDataItemStorage ExportStorageSystem() => storageSystem.Export();
     public void ImportStorageSystem(SaveDataItemStorage saveData) => storageSystem.Import(saveData);
 

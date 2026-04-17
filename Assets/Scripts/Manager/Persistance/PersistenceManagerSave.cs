@@ -44,7 +44,14 @@ public class PersistenceManagerSave
     {
         return new SaveData
         {
-            VersionNumber = persistenceManager.CurrentSaveVersion,
+            Header = new SaveDataHeader 
+            {
+                FileSignature = persistenceManager.FileSignature,
+                GameIdentifier = persistenceManager.GameIdentifier,
+                SaveFormatVersion = persistenceManager.SaveFormatVersion,
+                GameVersion = persistenceManager.GameVersion
+            },
+
             TimestampSave = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             TimestampCreation = timestampCreation,
             CharacterSystemSaveData = CharacterManager.Instance.Export(),
@@ -62,6 +69,7 @@ public class PersistenceManagerSave
         SetNewGame(true);
         SetTimestampCreation(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         CharacterManager.Instance.FirstTimeInitialize();
+        ItemManager.Instance.FirstTimeInitialize();
         StorySystemManager.Instance.SetChapter(0);
     }
 

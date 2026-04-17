@@ -6,7 +6,9 @@ public class PersistenceManagerBackup
 {
     #region Fields
 
-    public const int CURRENT_SAVE_VERSION = 2;
+    public const int SAVE_FORMAT_VERSION = 3;
+    public const uint FILE_SIGNATURE = 0x4D594752;
+    public const string GAME_IDENTIFIER = "com.Aremoreno.SoccerSecretSimulation";
 
     private string SavePath   => Path.Combine(Application.persistentDataPath, "save.json");
     private string BackupPath => Path.Combine(Application.persistentDataPath, "save_backup.json");
@@ -106,7 +108,7 @@ public class PersistenceManagerBackup
         {
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
-            return data != null && data.VersionNumber > 0;
+            return data != null /*&& data.VersionNumber > 0*/;
         }
         catch
         {

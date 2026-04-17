@@ -9,24 +9,14 @@ using Simulation.Enums.Battle;
 /// </summary>
 public class MenuTeam : Menu
 {
-    //TODO support edit or view mode
-    [Header("References")]
-    [SerializeField] private MenuTeamPanelLoadout panelLoadout;
-    [SerializeField] private MenuTeamPanelTeam panelTeam;
-    [SerializeField] private MenuTeamPanelSettings panelSettings;
-
+    #region Fields
     private MenuManager menuManager;
     private TeamManager teamManager;
 
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     public bool IsTeamMenuOpen => isOpen;
 
-    // Currently inspected loadout + battle type
-    private Team selectedLoadout;
-    private BattleType currentBattleType = BattleType.Full;
-
-    public Team SelectedLoadout => selectedLoadout;
-    public BattleType CurrentBattleType => currentBattleType;
+    #endregion
 
     #region Lifecycle
 
@@ -40,44 +30,14 @@ public class MenuTeam : Menu
     {
         base.Hide();
         base.SetInteractable(false);
-
-        HideAllPanels();
     }
 
-    private void OnEnable()
-    {
-        UIEvents.OnTeamLoadoutSelected += HandleLoadoutSelected;
-        UIEvents.OnTeamLoadoutCreateRequested += HandleCreateRequested;
-
-        UIEvents.OnBackFromTeamRequested += HandleBackToLoadoutList;
-        UIEvents.OnTeamSettingsRequested += HandleOpenSettings;
-        UIEvents.OnBattleTypeChanged += HandleBattleTypeChanged;
-
-        UIEvents.OnTeamSettingsClosed += HandleSettingsClosed;
-
-        TeamEvents.OnLoadoutDeleted += HandleLoadoutDeleted;
-        TeamEvents.OnLoadoutUpdated += HandleLoadoutUpdatedExternally;
-    }
-
-    private void OnDisable()
-    {
-        UIEvents.OnTeamLoadoutSelected -= HandleLoadoutSelected;
-        UIEvents.OnTeamLoadoutCreateRequested -= HandleCreateRequested;
-
-        UIEvents.OnBackFromTeamRequested -= HandleBackToLoadoutList;
-        UIEvents.OnTeamSettingsRequested -= HandleOpenSettings;
-        UIEvents.OnBattleTypeChanged -= HandleBattleTypeChanged;
-
-        UIEvents.OnTeamSettingsClosed -= HandleSettingsClosed;
-
-        TeamEvents.OnLoadoutDeleted -= HandleLoadoutDeleted;
-        TeamEvents.OnLoadoutUpdated -= HandleLoadoutUpdatedExternally;
-    }
-
+    /*
     private void Update()
     {
         HandleInput();
     }
+    */
 
     #endregion
 
@@ -91,20 +51,11 @@ public class MenuTeam : Menu
         base.Show();
         base.SetInteractable(true);
 
-        selectedLoadout = null;
-        currentBattleType = BattleType.Full;
-
-        ShowLoadoutPanel();
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        UIEvents.RaiseTeamLoadoutRequested();
     }
 
     public override void Hide()
     {
-        HideAllPanels();
-        selectedLoadout = null;
-
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
-
         base.SetInteractable(false);
         base.Hide();
     }
@@ -117,32 +68,6 @@ public class MenuTeam : Menu
     {
         if (!isOpen) return;
         menuManager.CloseMenu();
-    }
-
-    private void ShowLoadoutPanel()
-    {
-        HideAllPanels();
-        panelLoadout.Show();
-    }
-
-    private void ShowTeamPanel(Team team)
-    {
-        HideAllPanels();
-        selectedLoadout = team;
-        panelTeam.Show(team, currentBattleType);
-    }
-
-    private void ShowSettingsPanel(Team team)
-    {
-        // Settings overlays on top of team panel — don't hide team panel
-        panelSettings.Show(team);
-    }
-
-    private void HideAllPanels()
-    {
-        panelLoadout.Hide();
-        panelTeam.Hide();
-        panelSettings.Hide();
     }
 
     #endregion
@@ -167,79 +92,34 @@ public class MenuTeam : Menu
         */
     }
 
+    #endregion
+
+    #region Button Handle
+
+    /*
     public void OnButtonCloseTapped() 
     {
         Close();
     }
+    */
 
     #endregion
 
-    #region Event Handlers
+    #region Event
 
-    private void HandleLoadoutSelected(Team team)
+    private void OnEnable()
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
-        ShowTeamPanel(team);
+        UIEvents.OnTeamMenuClosed += HandleTeamMenuClosed;
     }
 
-    private void HandleCreateRequested()
+    private void OnDisable()
     {
-        Team newLoadout = teamManager.CreateLoadout();
-        if (newLoadout != null)
-        {
-            AudioManager.Instance.PlaySfx("sfx-menu_tap");
-            // Refresh the list, then navigate into the new loadout
-            panelLoadout.Refresh();
-            ShowTeamPanel(newLoadout);
-        }
+        UIEvents.OnTeamMenuClosed -= HandleTeamMenuClosed;
     }
 
-    private void HandleBackToLoadoutList()
+    private void HandleTeamMenuClosed() 
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
-        selectedLoadout = null;
-        ShowLoadoutPanel();
+        Close();
     }
-
-    private void HandleOpenSettings()
-    {
-        if (selectedLoadout == null) return;
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
-        ShowSettingsPanel(selectedLoadout);
-    }
-
-    private void HandleBattleTypeChanged(BattleType newType, BattleType oldType)
-    {
-        currentBattleType = newType;
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
-
-        if (selectedLoadout != null)
-            panelTeam.Show(selectedLoadout, currentBattleType);
-    }
-
-    private void HandleSettingsClosed()
-    {
-        panelSettings.Hide();
-        // Refresh the team panel in case name changed
-        if (selectedLoadout != null)
-            panelTeam.Refresh(selectedLoadout, currentBattleType);
-    }
-
-    private void HandleLoadoutDeleted(Team deletedTeam)
-    {
-        panelSettings.Hide();
-        selectedLoadout = null;
-        ShowLoadoutPanel();
-    }
-
-    private void HandleLoadoutUpdatedExternally(Team team)
-    {
-        // If the currently viewed team was updated, refresh
-        if (selectedLoadout != null && selectedLoadout.TeamGuid == team.TeamGuid)
-        {
-            panelTeam.Refresh(team, currentBattleType);
-        }
-    }
-
     #endregion
 }

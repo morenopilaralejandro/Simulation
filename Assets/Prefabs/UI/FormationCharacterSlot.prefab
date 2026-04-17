@@ -100,11 +100,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
+    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 0}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 0}
+    m_SelectedColor: {r: 0.627451, g: 0.3529412, b: 0.9411765, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -122,7 +122,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 108241828713626650}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1241742737430211362}
+        m_TargetAssemblyTypeName: FormationCharacterSlotUI, Assembly-CSharp
+        m_MethodName: OnButtonFormationCharacterSlotUIClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!225 &1593169111096143137
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -150,6 +162,7 @@ MonoBehaviour:
   characterCard: {fileID: 5903267555732895046}
   canvasGroup: {fileID: 1593169111096143137}
   rectTransform: {fileID: 5970664150944610605}
+  dragLayer: {fileID: 0}
 --- !u!1001 &478751471084128767
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -188,7 +201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 481415799169888399, guid: 62a63eeb9045e22478333ae68f0d2d2b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 67
+      value: 66
       objectReference: {fileID: 0}
     - target: {fileID: 481415799169888399, guid: 62a63eeb9045e22478333ae68f0d2d2b, type: 3}
       propertyPath: m_LocalPosition.x

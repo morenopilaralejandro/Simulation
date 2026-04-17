@@ -10,6 +10,7 @@ public class LoadoutListItem : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private Button selectButton;
+    [SerializeField] private Image imageEmblem;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private GameObject activeIndicator;
     //[SerializeField] private Text characterCountText;      // e.g., "5 / 8"
@@ -22,6 +23,8 @@ public class LoadoutListItem : MonoBehaviour
         this.onClickCallback = onClick;
 
         // Populate UI
+        imageEmblem.sprite = team.TeamCrestSprite;
+
         if (nameText != null)
             nameText.text = team.TeamName;
 
