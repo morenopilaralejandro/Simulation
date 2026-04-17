@@ -3,13 +3,18 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Simulation.Enums.Character;
 
-public class FormationCharacterSlotUI : MonoBehaviour, 
+public class FormationCharacterSlotUI : MonoBehaviour,
     IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, ISelectHandler
 {
+    #region Field
+
     [Header("UI Elements")]
     [SerializeField] private CharacterCard characterCard;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform rectTransform;
+
+    [Header("Drag Layer")]
+    [SerializeField] private RectTransform dragLayer;
 
     // Runtime
     private int slotIndex;
@@ -19,16 +24,29 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     private Canvas rootCanvas;
     private Vector2 originalPosition;
+    private Transform originalParent;
+    private int originalSiblingIndex;
+    private Vector2 originalAnchorMin;
+    private Vector2 originalAnchorMax;
+    private Vector2 originalPivot;
+
+    public int SlotIndex => slotIndex;
+    public bool IsBench => isBench;
+
+    #endregion
+
+    #region Lifecycle
 
     private void Awake()
     {
         rootCanvas = GetComponentInParent<Canvas>();
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
+        if (rectTransform == null) rectTransform = GetComponent<RectTransform>();
     }
 
-    // ============================================================
-    //  INITIALIZATION
-    // ============================================================
+    #endregion
+
+    #region Initialize
 
     public void Initialize(int index, FormationCoord formationCoord)
     {
@@ -43,11 +61,25 @@ public class FormationCharacterSlotUI : MonoBehaviour,
         isBench = true;
     }
 
+    /// <summary>
+    /// Call once after pooling or instantiation to assign the shared drag layer.
+    /// </summary>
+    public void SetDragLayer(RectTransform layer)
+    {
+        dragLayer = layer;
+    }
+
+    #endregion
+
+    #region Helpers
+
     public void UpdateCoord(FormationCoord newCoord)
     {
         coord = newCoord;
         characterCard.SetCharacter(character, newCoord.Position);
     }
+
+    public Character GetCharacter() => character;
 
     public void SetCharacter(Character character)
     {
@@ -55,20 +87,35 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
         if (character == null)
         {
-            //hide card
+            // hide card
             return;
         }
-            //show card
+        // show card
 
-        if (isBench) 
+        if (isBench)
             characterCard.SetCharacter(character, character.Position);
         else
             characterCard.SetCharacter(character, coord.Position);
     }
 
-    public Character GetCharacter() => character;
-    public int SlotIndex => slotIndex;
-    public bool IsBench => isBench;
+    public void SetVisible(bool boolValue)
+    {
+        canvasGroup.alpha = boolValue ? 1f : 0f;
+        canvasGroup.interactable = boolValue;
+        canvasGroup.blocksRaycasts = boolValue;
+    }
+
+    public void Reset()
+    {
+        slotIndex = -1;
+        coord = default;
+        character = null;
+        isBench = false;
+    }
+
+    #endregion
+
+    #region Button Handle
 
     public void OnButtonFormationCharacterSlotUIClicked()
     {
@@ -85,16 +132,37 @@ public class FormationCharacterSlotUI : MonoBehaviour,
         UIEvents.RaiseTeamButtonSelected(this.gameObject);
     }
 
-    // ============================================================
-    //  DRAG & DROP (swap players between slots)
-    // ============================================================
+    #endregion
+
+    #region DRAG & DROP
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        // Store everything we need to restore later
         originalPosition = rectTransform.anchoredPosition;
+        originalParent = transform.parent;
+        originalSiblingIndex = transform.GetSiblingIndex();
+        originalAnchorMin = rectTransform.anchorMin;
+        originalAnchorMax = rectTransform.anchorMax;
+        originalPivot = rectTransform.pivot;
+
+        // Capture world position before reparenting
+        Vector3 worldPos = rectTransform.position;
+
+        // Reparent into the drag layer (renders on top of everything)
+        transform.SetParent(dragLayer, false);
+
+        // Normalize anchors/pivot so anchoredPosition math is clean
+        rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        rectTransform.pivot = new Vector2(0.5f, 0.5f);
+
+        // Restore the exact world position after reparent
+        rectTransform.position = worldPos;
+
+        // Visual feedback
         canvasGroup.alpha = 0.7f;
         canvasGroup.blocksRaycasts = false;
-        transform.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -104,14 +172,26 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        // Visual feedback restore
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+
+        // Reparent back to original parent
+        transform.SetParent(originalParent, false);
+        transform.SetSiblingIndex(originalSiblingIndex);
+
+        // Restore original anchors, pivot, and position
+        rectTransform.anchorMin = originalAnchorMin;
+        rectTransform.anchorMax = originalAnchorMax;
+        rectTransform.pivot = originalPivot;
         rectTransform.anchoredPosition = originalPosition;
     }
 
     public void OnDrop(PointerEventData eventData)
     {
-        FormationCharacterSlotUI draggedSlot = eventData.pointerDrag?.GetComponent<FormationCharacterSlotUI>();
+        FormationCharacterSlotUI draggedSlot =
+            eventData.pointerDrag?.GetComponent<FormationCharacterSlotUI>();
+
         if (draggedSlot != null && draggedSlot != this)
         {
             SwapCharacters(draggedSlot);
@@ -122,6 +202,8 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     {
         UIEvents.RaiseFormationCharacterSlotUISwaped(this, other);
     }
+
+    #endregion
 
     #region Events
 
@@ -135,9 +217,9 @@ public class FormationCharacterSlotUI : MonoBehaviour,
         UIEvents.OnFormationCharacterSlotUIReplaced -= HandleFormationCharacterSlotUIReplaced;
     }
 
-    private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character) 
+    private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
     {
-        if(this != slot) return;
+        if (this != slot) return;
         SetCharacter(character);
     }
 

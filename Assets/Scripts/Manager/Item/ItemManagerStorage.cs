@@ -58,7 +58,9 @@ public class ItemManagerStorage
     {
         AddItem(ItemFactory.CreateById("spike_cool"), 10);
         AddItem(ItemFactory.CreateById("formation_faith"), 1);
+        AddItem(ItemFactory.CreateById("formation_crimson"), 1);
         AddItem(ItemFactory.CreateById("kit_faith"), 1);
+        AddItem(ItemFactory.CreateById("kit_crimson"), 1);
     }
 
     #endregion
