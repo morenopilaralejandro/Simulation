@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Log
+namespace Aremoreno.Enums.Log
 {
     public enum LogLevel
     {

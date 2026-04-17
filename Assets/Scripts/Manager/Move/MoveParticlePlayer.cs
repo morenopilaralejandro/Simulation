@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Threading.Tasks;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
 
 public class MoveParticlePlayer : MonoBehaviour
 {

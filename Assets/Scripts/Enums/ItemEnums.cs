@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Item
+namespace Aremoreno.Enums.Item
 {
     public enum ItemCategory
     {

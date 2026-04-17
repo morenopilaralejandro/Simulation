@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Simulation.Enums.Input;
+using Aremoreno.Enums.Input;
 
 public static class InputEvents
 {

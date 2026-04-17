@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Story
+namespace Aremoreno.Enums.Story
 {
     public enum PrerequisiteType
     {

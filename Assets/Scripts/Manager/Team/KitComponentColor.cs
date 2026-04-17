@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Kit;
+using Aremoreno.Enums.Kit;
 
 public class KitComponentColor
 {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Simulation.Enums.Log;
+using Aremoreno.Enums.Log;
 
 public class DuelLogPopupStack : MonoBehaviour
 {

@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Move;
 
 [Serializable]
 public class MoveEvolutionPathEntry

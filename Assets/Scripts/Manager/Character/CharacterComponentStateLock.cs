@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class CharacterComponentStateLock : MonoBehaviour
 {

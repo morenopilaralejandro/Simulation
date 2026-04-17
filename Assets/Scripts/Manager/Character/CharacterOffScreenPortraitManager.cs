@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class OffScreenPortraitManager : MonoBehaviour
 {

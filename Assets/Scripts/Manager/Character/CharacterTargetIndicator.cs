@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 [RequireComponent(typeof(LineRenderer))]
 public class CharacterTargetIndicator : MonoBehaviour

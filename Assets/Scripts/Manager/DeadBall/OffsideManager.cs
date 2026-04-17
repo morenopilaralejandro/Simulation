@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.DeadBall;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.DeadBall;
 
 public class OffsideManager : MonoBehaviour
 {

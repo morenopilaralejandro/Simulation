@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Battle
+namespace Aremoreno.Enums.Battle
 {
     public enum BattlePhase
     {

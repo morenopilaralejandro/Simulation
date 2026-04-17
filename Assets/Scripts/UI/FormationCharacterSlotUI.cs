@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class FormationCharacterSlotUI : MonoBehaviour,
     IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, ISelectHandler

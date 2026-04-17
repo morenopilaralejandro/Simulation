@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using Simulation.Enums.Input;
-using Simulation.Enums.World;
+using Aremoreno.Enums.Input;
+using Aremoreno.Enums.World;
 
 /*
     menu things

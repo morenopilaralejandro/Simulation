@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.Localization;
 
 public class Team
 {

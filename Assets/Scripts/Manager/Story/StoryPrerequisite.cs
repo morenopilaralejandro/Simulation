@@ -1,6 +1,6 @@
-using Simulation.Enums.Quest;
-using Simulation.Enums.Story;
-using Simulation.Enums.Item;
+using Aremoreno.Enums.Quest;
+using Aremoreno.Enums.Story;
+using Aremoreno.Enums.Item;
 
 [System.Serializable]
 public class StoryPrerequisite

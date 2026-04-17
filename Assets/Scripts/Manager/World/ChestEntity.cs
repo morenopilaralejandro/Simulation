@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.World;
+using Aremoreno.Enums.World;
 
 public class ChestEntity : MonoBehaviour
 {

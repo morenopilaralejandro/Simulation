@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Move;
 
 public class DuelLogPopup : MonoBehaviour
 {

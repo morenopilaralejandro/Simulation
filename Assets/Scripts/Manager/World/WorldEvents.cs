@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using Simulation.Enums.World;
+using Aremoreno.Enums.World;
 
 public static class WorldEvents
 {

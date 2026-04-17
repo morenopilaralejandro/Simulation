@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using System.Collections.Generic;
-using Simulation.Enums.Input;
-using Simulation.Enums.Duel;
+using Aremoreno.Enums.Input;
+using Aremoreno.Enums.Duel;
 
 ///<summary>
 /// Handles input with Unity New Input System. 

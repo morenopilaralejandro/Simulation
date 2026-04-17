@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class CharacterComponentStats
 {

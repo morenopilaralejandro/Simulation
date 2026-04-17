@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
 
 public class BattleTeamManager : MonoBehaviour
 {

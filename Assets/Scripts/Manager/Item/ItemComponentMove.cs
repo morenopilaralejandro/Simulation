@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Item;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Item;
+using Aremoreno.Enums.Move;
 
 public class ItemComponentMove
 {

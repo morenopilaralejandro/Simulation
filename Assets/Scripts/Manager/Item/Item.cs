@@ -1,9 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
-using Simulation.Enums.Item;
-using Simulation.Enums.Move;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Item;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Localization;
 
 public class Item
 {

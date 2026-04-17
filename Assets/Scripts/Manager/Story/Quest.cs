@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.Localization;
-using Simulation.Enums.Quest;
-using Simulation.Enums.Story;
+using Aremoreno.Enums.Localization;
+using Aremoreno.Enums.Quest;
+using Aremoreno.Enums.Story;
 
 public class Quest
 {

@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Battle;
 
 public class DuelManager : MonoBehaviour
 {

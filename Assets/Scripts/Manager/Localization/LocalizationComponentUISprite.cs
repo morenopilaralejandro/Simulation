@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 public class LocalizationComponentUISprite : MonoBehaviour
 {

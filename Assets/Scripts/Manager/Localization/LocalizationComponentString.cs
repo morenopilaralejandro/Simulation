@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Localization;
 using System.Collections.Generic;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 public class LocalizationComponentString
 {

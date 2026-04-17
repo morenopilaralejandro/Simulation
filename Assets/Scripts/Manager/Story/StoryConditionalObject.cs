@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Quest;
-using Simulation.Enums.Story;
+using Aremoreno.Enums.Quest;
+using Aremoreno.Enums.Story;
 
 /// <summary>
 /// Activates/deactivates GameObjects based on story conditions.

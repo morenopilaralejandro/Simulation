@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
 
 [CreateAssetMenu(menuName = "ScriptableObject/MoveEvolutionPath")]
 public class MoveEvolutionPath : ScriptableObject

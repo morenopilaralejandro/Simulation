@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Dialog
+namespace Aremoreno.Enums.Dialog
 {
     public enum DialogState
     {

@@ -1,5 +1,5 @@
-using Simulation.Enums.Input;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Input;
+using Aremoreno.Enums.Localization;
 
 [System.Serializable]
 public class GameSettings

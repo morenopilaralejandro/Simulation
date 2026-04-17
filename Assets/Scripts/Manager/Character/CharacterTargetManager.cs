@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
-using Simulation.Enums.Input;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Input;
 
 public class CharacterTargetManager : MonoBehaviour
 {

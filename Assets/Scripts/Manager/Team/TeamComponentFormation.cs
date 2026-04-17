@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 public class TeamComponentFormation
 {

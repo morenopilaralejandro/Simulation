@@ -1,4 +1,4 @@
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public interface IDeadBallHandler
 {

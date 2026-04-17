@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using Simulation.Enums.Input;
+using Aremoreno.Enums.Input;
 
 public class ForfeitMenu : Menu
 {

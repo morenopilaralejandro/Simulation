@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Input 
+namespace Aremoreno.Enums.Input 
 {
     public enum ControlScheme
     {

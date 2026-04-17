@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Simulation.Enums.Dialog;
+using Aremoreno.Enums.Dialog;
 
 public static class DialogEvents
 {

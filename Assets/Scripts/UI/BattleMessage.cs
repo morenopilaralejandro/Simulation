@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 using TMPro;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Battle;
 
 public class BattleMessage : MonoBehaviour
 {

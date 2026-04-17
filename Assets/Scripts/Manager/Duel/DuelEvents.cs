@@ -1,6 +1,6 @@
 using System;
-using Simulation.Enums.Character;
-using Simulation.Enums.Duel;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Duel;
 
 public static class DuelEvents
 {

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Localization;
 using TMPro;
 using System.Collections;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 /// <summary>
 /// Menu for saving the game.

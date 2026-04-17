@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Character;
 
 public class PossessionManager : MonoBehaviour
 {

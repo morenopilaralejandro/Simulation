@@ -1,5 +1,5 @@
 using System;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public static class CharacterEvents
 {

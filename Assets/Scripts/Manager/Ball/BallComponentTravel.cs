@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Duel;
+using Aremoreno.Enums.Duel;
 
 public class BallComponentTravel : MonoBehaviour
 {

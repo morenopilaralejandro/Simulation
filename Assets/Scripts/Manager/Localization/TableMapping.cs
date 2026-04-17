@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 [System.Serializable]
 public struct TableMapping

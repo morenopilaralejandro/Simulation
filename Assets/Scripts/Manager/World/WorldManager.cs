@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Simulation.Enums.World;
+using Aremoreno.Enums.World;
 
 /// <summary>
 /// Top-level manager that lives in the World scene.

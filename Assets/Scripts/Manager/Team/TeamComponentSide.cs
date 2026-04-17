@@ -1,6 +1,6 @@
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
 
 public class TeamComponentSide
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class CharacterCard : MonoBehaviour
 {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Character;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Move;
-using Simulation.Enums.Duel;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Duel;
 
 public class BattleUIManager : MonoBehaviour
 {

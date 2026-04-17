@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Quest
+namespace Aremoreno.Enums.Quest
 {
     public enum QuestState
     {

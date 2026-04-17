@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Item;
+using Aremoreno.Enums.Item;
 
 [CreateAssetMenu(fileName = "ItemDataRecovery", menuName = "ScriptableObject/Item/ItemDataRecovery")]
 public class ItemDataRecovery : ItemData

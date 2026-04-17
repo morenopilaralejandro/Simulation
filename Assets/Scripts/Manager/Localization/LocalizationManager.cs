@@ -3,7 +3,7 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 using UnityEngine.Localization.Tables;
 using System;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 public class LocalizationManager : MonoBehaviour
 {

@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.SpriteLayer;
+using Aremoreno.Enums.SpriteLayer;
 
 public class SpriteLayerRendererCharacter : MonoBehaviour
 {

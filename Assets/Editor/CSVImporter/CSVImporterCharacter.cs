@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.IO;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class CSVImporterCharacter
 {

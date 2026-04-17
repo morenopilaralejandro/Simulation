@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Localization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 public class LocalizationComponentAsset<T> where T : Object
 {

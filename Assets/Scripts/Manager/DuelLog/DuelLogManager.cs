@@ -3,10 +3,10 @@ using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Localization;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Log;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Log;
 
 public class DuelLogManager : MonoBehaviour
 {

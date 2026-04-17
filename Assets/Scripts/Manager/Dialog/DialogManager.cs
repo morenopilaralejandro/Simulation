@@ -1,9 +1,9 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Simulation.Enums.Dialog;
-using Simulation.Enums.Input;
-using Simulation.Enums.World;
+using Aremoreno.Enums.Dialog;
+using Aremoreno.Enums.Input;
+using Aremoreno.Enums.World;
 
 /// <summary>
 /// Main entry point for the dialog system.

@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class CharacterComponentFatigue : MonoBehaviour
 {

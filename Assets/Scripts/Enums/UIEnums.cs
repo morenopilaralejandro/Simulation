@@ -1,4 +1,4 @@
-namespace Simulation.Enums.UI
+namespace Aremoreno.Enums.UI
 {
     public enum MenuTeamMode
     {

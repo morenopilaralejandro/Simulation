@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Simulation.Enums.Character;
-using Simulation.Enums.SpriteLayer;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.SpriteLayer;
 
 public class CharacterPortraitSpeaker : MonoBehaviour
 {

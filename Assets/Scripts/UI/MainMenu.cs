@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 public class MainMenu : MonoBehaviour
 {

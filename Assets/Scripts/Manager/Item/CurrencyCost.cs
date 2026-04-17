@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Item;
+using Aremoreno.Enums.Item;
 
 [System.Serializable]
 public struct CurrencyCost

@@ -6,7 +6,7 @@ using UnityEditor.Localization;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 public static class TableConfigGenerator
 {

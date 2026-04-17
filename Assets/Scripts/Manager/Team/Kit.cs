@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using Simulation.Enums.Localization;
-using Simulation.Enums.Kit;
+using Aremoreno.Enums.Localization;
+using Aremoreno.Enums.Kit;
 
 public class Kit
 {

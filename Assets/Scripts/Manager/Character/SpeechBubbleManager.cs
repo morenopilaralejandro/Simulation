@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Localization;
 using System.Threading.Tasks;
 
 public class SpeechBubbleManager : MonoBehaviour

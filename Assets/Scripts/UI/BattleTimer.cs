@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 public class BattleTimer : MonoBehaviour
 {

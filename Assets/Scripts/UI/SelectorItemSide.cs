@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Battle;
-using Simulation.Enums.UI;
-using Simulation.Enums.Item;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.UI;
+using Aremoreno.Enums.Item;
 
 public class SelectorItemSide : Menu
 {

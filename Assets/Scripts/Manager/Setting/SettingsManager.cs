@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using UnityEngine;
-using Simulation.Enums.Input;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Input;
+using Aremoreno.Enums.Localization;
 
 public class SettingsManager : MonoBehaviour
 {

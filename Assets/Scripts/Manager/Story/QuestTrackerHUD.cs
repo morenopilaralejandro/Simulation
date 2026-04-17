@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Simulation.Enums.Quest;
-using Simulation.Enums.Story;
+using Aremoreno.Enums.Quest;
+using Aremoreno.Enums.Story;
 
 public class QuestTrackerHUD : MonoBehaviour
 {

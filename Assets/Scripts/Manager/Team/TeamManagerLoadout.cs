@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Localization;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 /// <summary>
 /// Manages all user-created team loadouts and tracks which one is active.

@@ -1,7 +1,7 @@
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.Quest;
-using Simulation.Enums.Story;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Quest;
+using Aremoreno.Enums.Story;
 
 public class StoryAutoTriggerComponentPersistence
 {

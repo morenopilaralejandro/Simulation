@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Localization;
-using Simulation.Enums.Log;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Log;
+using Aremoreno.Enums.Localization;
 
 public class DuelLogEntry
 {

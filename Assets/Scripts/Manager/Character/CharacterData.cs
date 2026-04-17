@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 [CreateAssetMenu(fileName = "CharacterData", menuName = "ScriptableObject/CharacterData")]
 public class CharacterData : ScriptableObject

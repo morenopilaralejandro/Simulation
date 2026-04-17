@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
-using Simulation.Enums.Log;
+using Aremoreno.Enums.Log;
 
 public class ScrollViewAutoScroll : MonoBehaviour
 {

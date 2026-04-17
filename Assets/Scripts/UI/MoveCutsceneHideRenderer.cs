@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Move;
 
 public class MoveCutsceneHideRenderer : MonoBehaviour
 {

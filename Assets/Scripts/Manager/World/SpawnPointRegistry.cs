@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.World;
+using Aremoreno.Enums.World;
 
 /// <summary>
 /// Central registry that tracks all currently loaded spawn points.

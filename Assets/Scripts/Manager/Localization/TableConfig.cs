@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Tables;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 [CreateAssetMenu(fileName = "TableConfig", menuName = "Localization/TableConfig")]
 public class TableConfig : ScriptableObject

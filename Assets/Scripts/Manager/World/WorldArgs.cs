@@ -1,6 +1,6 @@
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.World;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.World;
 
 public static class WorldArgs
 {

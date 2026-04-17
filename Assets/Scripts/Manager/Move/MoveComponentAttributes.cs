@@ -1,6 +1,6 @@
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
 
 public class MoveComponentAttributes
 {

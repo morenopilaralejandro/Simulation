@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Duel
+namespace Aremoreno.Enums.Duel
 {
     public enum DuelMode
     {

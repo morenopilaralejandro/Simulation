@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 /// <summary>
 /// Bridges Ink localization keys to your LocalizationComponentString system.

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Item;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Item;
 
 public static class UIEvents
 {
