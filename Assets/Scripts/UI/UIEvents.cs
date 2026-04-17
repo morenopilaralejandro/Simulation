@@ -115,6 +115,30 @@ public static class UIEvents
         OnFormationCharacterSlotUIReplaced?.Invoke(slot, character);
     }
 
+    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIMoveRequested;
+    public static void RaiseFormationCharacterSlotUIMoveRequested(FormationCharacterSlotUI slot)
+    {
+        OnFormationCharacterSlotUIMoveRequested?.Invoke(slot);
+    }
+
+    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIMoveStarted;
+    public static void RaiseFormationCharacterSlotUIMoveStarted(FormationCharacterSlotUI slot)
+    {
+        OnFormationCharacterSlotUIMoveStarted?.Invoke(slot);
+    }
+
+    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIMoveEnded;
+    public static void RaiseFormationCharacterSlotUIMoveEnded(FormationCharacterSlotUI slot)
+    {
+        OnFormationCharacterSlotUIMoveEnded?.Invoke(slot);
+    }
+
+    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIMoveCanceled;
+    public static void RaiseFormationCharacterSlotUIMoveCanceled(FormationCharacterSlotUI slot)
+    {
+        OnFormationCharacterSlotUIMoveCanceled?.Invoke(slot);
+    }
+
     public static event Action<GameObject> OnTeamButtonSelected;
     public static void RaiseTeamButtonSelected(GameObject gameObject)
     {

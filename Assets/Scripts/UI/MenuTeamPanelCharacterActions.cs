@@ -80,6 +80,12 @@ public class MenuTeamPanelCharacterActions : Menu
         UIEvents.RaiseCharacterDetailOpened();
     }
 
+    public void OnButtonMoveClicked() 
+    {
+        Close();
+        UIEvents.RaiseFormationCharacterSlotUIMoveRequested(null);
+    }
+
     public void OnButtonReplaceClicked() 
     {
         UIEvents.RaiseCharacterSelectorOpened();

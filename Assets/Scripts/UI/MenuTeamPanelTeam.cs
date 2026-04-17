@@ -19,8 +19,11 @@ public class MenuTeamPanelTeam : Menu
 
     [SerializeField] private GameObject panelActive;
     [SerializeField] private GameObject panelChanges;
-    [SerializeField] private GameObject panelTeamButtons;
     [SerializeField] private GameObject buttonDelete;
+    [SerializeField] private Button buttonOptions;
+    [SerializeField] private Button buttonCharacterReplace;
+    [SerializeField] private Button buttonCharacterSummary;
+    // [SerializeField] private GameObject buttonCharacterSummarySide;
 
     [SerializeField] private TMP_Text textChanges;
 
@@ -48,15 +51,15 @@ public class MenuTeamPanelTeam : Menu
     private Character selectedCharacter;
     private GameObject selectedGo;
 
-    private int changesRemaning;
-    private int changesMax = 3;
-
     private ItemFormation cachedItemFormation;
     private ItemKit cachedItemKit;
     private Formation cachedFormation;
     private Kit cachedKit;
 
     private bool isClosing = false;
+
+    private FormationCharacterSlotUI pickedSlot;
+    private bool isSwapping => pickedSlot != null;
 
     #endregion
 
@@ -110,6 +113,7 @@ public class MenuTeamPanelTeam : Menu
 
         currentTeam = null;
         selectedGo = null;
+        pickedSlot = null;
     }
 
     public void Close()
@@ -143,12 +147,14 @@ public class MenuTeamPanelTeam : Menu
     private void InitializeUI() 
     {
         panelActive.SetActive(isEditMode);
-        panelTeamButtons.SetActive(isEditMode);
         panelChanges.SetActive(isBattleMode);
 
-        buttonDelete.SetActive(isEditMode && teamManager.ActiveLoadoutGuid != currentTeam.TeamGuid);
+        buttonOptions.interactable = isEditMode;
+        buttonCharacterReplace.interactable = isEditMode;
+        buttonCharacterSummary.interactable = isEditMode;
+        // buttonCharacterSummarySide.interactable = isEditMode;
 
-        changesRemaning = changesMax;
+        buttonDelete.SetActive(isEditMode && teamManager.ActiveLoadoutGuid != currentTeam.TeamGuid);
     }
 
     private void PopulateUI()
@@ -236,6 +242,8 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnTeamNameChanged += HandleTeamNameChanged;
         UIEvents.OnTeamActionsClosed += HandleTeamActionsClosed;
         TeamEvents.OnLoadoutDeleted += HandleLoadoutDeleted;
+        UIEvents.OnFormationCharacterSlotUIMoveRequested += HandleFormationCharacterSlotUIMoveRequested;
+        UIEvents.OnFormationCharacterSlotUIMoveCanceled += HandleFormationCharacterSlotUIMoveCanceled;
     }
 
     private void OnDisable()
@@ -257,6 +265,8 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnTeamNameChanged -= HandleTeamNameChanged;
         UIEvents.OnTeamActionsClosed -= HandleTeamActionsClosed;
         TeamEvents.OnLoadoutDeleted -= HandleLoadoutDeleted;
+        UIEvents.OnFormationCharacterSlotUIMoveRequested -= HandleFormationCharacterSlotUIMoveRequested;
+        UIEvents.OnFormationCharacterSlotUIMoveCanceled -= HandleFormationCharacterSlotUIMoveCanceled;
     }
 
     private void HandleLoadoutSelected(Team team) 
@@ -281,18 +291,47 @@ public class MenuTeamPanelTeam : Menu
         selectedGo = slot.gameObject;
         base.SetLastSelected(selectedGo);
 
+        if (isSwapping) 
+        {
+            if (pickedSlot != slot) 
+                UIEvents.RaiseFormationCharacterSlotUISwaped(pickedSlot, slot);
+            base.SetDefaultSelectable(slot.GetComponent<Button>());
+            UIEvents.RaiseFormationCharacterSlotUIMoveEnded(pickedSlot);
+            pickedSlot = null;
+            return;
+        }
+
         if (!isEditMode) return;
         currentSlot = slot;
         UIEvents.RaiseCharacterActionsOpened();
     }
 
+
+    private void HandleFormationCharacterSlotUIMoveCanceled(FormationCharacterSlotUI slot) 
+    {
+        pickedSlot = null;
+        UIEvents.RaiseFormationCharacterSlotUIMoveEnded(slot);
+    }
+
+
+    private void HandleFormationCharacterSlotUIMoveRequested(FormationCharacterSlotUI slot)
+    {
+        base.SetDefaultSelectable(currentSlot.GetComponent<Button>());
+        pickedSlot = currentSlot;
+        UIEvents.RaiseFormationCharacterSlotUIMoveStarted(currentSlot);
+    }
+
+
+
+
+
+
+
+
+
+
     private void HandeFormationCharacterSlotUISwaped(FormationCharacterSlotUI a, FormationCharacterSlotUI b) 
     {
-        if(isBattleMode && changesRemaning <= 0) 
-        {
-            return;
-        } 
-
         Character temp = a.GetCharacter();
         a.SetCharacter(b.GetCharacter());
         b.SetCharacter(temp);
@@ -310,8 +349,6 @@ public class MenuTeamPanelTeam : Menu
             b.SlotIndex,
             b.GetCharacter().CharacterGuid
         );
-
-        if(isBattleMode) changesRemaning--;
     }
 
     private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
@@ -327,6 +364,12 @@ public class MenuTeamPanelTeam : Menu
     private void HandleFormationCharacterSlotUIReplaceRequested() 
     {
         if (selectedCharacter == null) return;
+        teamManager.SetCharacterInLoadout(
+            currentTeam.TeamGuid,
+            currentBattleType,
+            currentSlot.SlotIndex,
+            selectedCharacter.CharacterGuid
+        );
         UIEvents.RaiseFormationCharacterSlotUIReplaced(currentSlot, selectedCharacter);
     }
 

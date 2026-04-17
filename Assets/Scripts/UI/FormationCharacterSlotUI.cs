@@ -138,6 +138,8 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        UIEvents.RaiseFormationCharacterSlotUIMoveCanceled(this);
+
         // Store everything we need to restore later
         originalPosition = rectTransform.anchoredPosition;
         originalParent = transform.parent;
@@ -205,22 +207,42 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     #endregion
 
+    #region Move
+
+    #endregion
+
     #region Events
 
     private void OnEnable()
     {
         UIEvents.OnFormationCharacterSlotUIReplaced += HandleFormationCharacterSlotUIReplaced;
+        UIEvents.OnFormationCharacterSlotUIMoveStarted += HandleMoveStarted;
+        UIEvents.OnFormationCharacterSlotUIMoveEnded += HandleMoveEnded;
     }
 
     private void OnDisable()
     {
         UIEvents.OnFormationCharacterSlotUIReplaced -= HandleFormationCharacterSlotUIReplaced;
+        UIEvents.OnFormationCharacterSlotUIMoveStarted -= HandleMoveStarted;
+        UIEvents.OnFormationCharacterSlotUIMoveEnded -= HandleMoveEnded;
     }
 
     private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
     {
         if (this != slot) return;
         SetCharacter(character);
+    }
+
+    private void HandleMoveStarted(FormationCharacterSlotUI slot)
+    {
+        if (this != slot) return;
+        canvasGroup.alpha = 0.6f;
+    }
+
+    private void HandleMoveEnded(FormationCharacterSlotUI slot)
+    {
+        if (canvasGroup.alpha == 0.6f)
+            canvasGroup.alpha = 1f;
     }
 
     #endregion

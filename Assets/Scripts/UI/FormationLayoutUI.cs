@@ -143,8 +143,13 @@ public class FormationLayoutUI : MonoBehaviour
         // Default selection
         if (showDefaultSelected && fieldSlots.Count >= 2)
         {
+            /*
             UIEvents.RaiseFormationCharacterSlotUISelectedDefault(
                 fieldSlots[fieldSlots.Count - 2]);
+            */
+
+            UIEvents.RaiseFormationCharacterSlotUISelectedDefault(
+                fieldSlots[0]);
         }
     }
 
