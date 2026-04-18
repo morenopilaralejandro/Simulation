@@ -61,11 +61,13 @@ public class MenuSide : Menu
     public override void Show()
     {
         base.Show();
+        InputEvents.RaiseScreenControlsHideRequested();
         AudioManager.Instance.PlaySfx("sfx-menu_tap");
     }
 
     public override void Hide()
     {
+        InputEvents.RaiseScreenControlsShowRequested();
         AudioManager.Instance.PlaySfx("sfx-menu_tap");
         base.Hide();
     }

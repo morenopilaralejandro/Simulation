@@ -27,6 +27,7 @@ public static class BattleEvents
     public static void RaiseBattleStart()
     {
         OnBattleStart?.Invoke();
+        InputEvents.RaiseScreenControlsShowRequested();
         InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
     }
 
@@ -34,6 +35,7 @@ public static class BattleEvents
     public static void RaiseBattleEnd()
     {
         OnBattleEnd?.Invoke();
+        InputEvents.RaiseScreenControlsHideRequested();
         InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Dpad);
     }
 

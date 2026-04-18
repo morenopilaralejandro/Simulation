@@ -9,4 +9,25 @@ public static class InputEvents
     {
         OnDirectionalInputModeChanged?.Invoke(directionalInputMode);
     }
+
+    public static event Action OnScreenControlsShowRequested;
+    public static void RaiseScreenControlsShowRequested()
+    {
+        OnScreenControlsShowRequested?.Invoke();
+    }
+
+    public static event Action OnScreenControlsHideRequested;
+    public static void RaiseScreenControlsHideRequested()
+    {
+        OnScreenControlsHideRequested?.Invoke();
+    }
+
+    public static event Action<InputDeviceType> OnDeviceTypeChanged;
+    public static void RaiseDeviceTypeChanged(InputDeviceType inputDeviceType)
+    {
+        OnDeviceTypeChanged?.Invoke(inputDeviceType);
+    }
+
+
+
 }

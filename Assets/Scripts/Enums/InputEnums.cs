@@ -6,6 +6,13 @@ namespace Aremoreno.Enums.Input
         Touch
     }
 
+    public enum InputDeviceType
+    {
+        KeyboardMouse,
+        Gamepad,
+        Touch
+    }
+
     public enum DirectionalInputMode
     {
         Joystick,
@@ -47,6 +54,14 @@ namespace Aremoreno.Enums.Input
         World_ClosePauseMenu,
         //DialogActions
         Dialog_Submit,
-        Dialog_Cancel
+        Dialog_Cancel,
+        //NavigationActions
+        Navigation_Back,
+        Navigation_ShortcutTeamBattleType,
+        Navigation_ShortcutTeamActive,
+        Navigation_ShortcutTeamActions,
+        Navigation_ShortcutTeamCharacterSummary,
+        Navigation_ShortcutTeamCharacterMove,
+        Navigation_ShortcutTeamCharacterReplace
     }
 }

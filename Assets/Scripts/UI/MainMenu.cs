@@ -38,6 +38,8 @@ public class MainMenu : MonoBehaviour
 
     private void Start() 
     {
+        InputEvents.RaiseScreenControlsHideRequested();
+
         sceneLoader = SceneLoader.Instance;
         audioManager = AudioManager.Instance;
         persistenceManager = PersistenceManager.Instance;

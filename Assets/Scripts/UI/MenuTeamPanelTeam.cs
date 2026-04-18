@@ -169,7 +169,7 @@ public class MenuTeamPanelTeam : Menu
     #region Input
 
     // click on character -> character actions
-    // TODO E sumary, r replace, q swap
+    // TODO E sumary, r replace, q move
     // TODO T team actions, shift change battle type, f set active
 
     #endregion
@@ -320,15 +320,6 @@ public class MenuTeamPanelTeam : Menu
         pickedSlot = currentSlot;
         UIEvents.RaiseFormationCharacterSlotUIMoveStarted(currentSlot);
     }
-
-
-
-
-
-
-
-
-
 
     private void HandeFormationCharacterSlotUISwaped(FormationCharacterSlotUI a, FormationCharacterSlotUI b) 
     {

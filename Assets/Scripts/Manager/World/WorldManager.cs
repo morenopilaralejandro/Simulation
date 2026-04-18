@@ -65,6 +65,8 @@ public class WorldManager : MonoBehaviour
 
     private async void InitializeAsync(OverworldDefinition overworldDefinition)
     {
+        InputEvents.RaiseScreenControlsShowRequested();
+
         if (PersistenceManager.Instance.IsNewGame())
         {
             await LoadZone(overworldDefinition.startingZone, overworldDefinition.startingSpawnId);

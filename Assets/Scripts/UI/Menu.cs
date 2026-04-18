@@ -46,7 +46,7 @@ public abstract class Menu : MonoBehaviour
     {
         defaultSelectable = selectable;
 
-        if (focusImmediately && selectable != null)
+        if (focusImmediately && selectable != null && InputManager.Instance.IsUsingController)
         {
             EventSystem.current.SetSelectedGameObject(selectable.gameObject);
             lastSelected = selectable.gameObject;
@@ -55,6 +55,8 @@ public abstract class Menu : MonoBehaviour
 
     protected void SetDefaultFocus()
     {
+        if (!InputManager.Instance.IsUsingController) return;
+
         if (hasMemory && lastSelected != null) 
         {
             EventSystem.current.SetSelectedGameObject(lastSelected);

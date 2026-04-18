@@ -121,16 +121,7 @@ public class OnScreenControlsManager : MonoBehaviour
 
     #region Visibility
 
-    public void HideOnScreenControls()
-    {
-        onScreenControlsRoot.SetActive(false);
-    }
-
-    public void ShowOnScreenControls()
-    {
-        if (InputManager.Instance)
-            InputManager.Instance.UpdateOnScreenVisibility();
-    }
+    // input manager
 
     #endregion
 
