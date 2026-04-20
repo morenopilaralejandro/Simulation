@@ -458,6 +458,24 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_OpenTeamMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""06811560-0a21-4532-9eb7-7d1716a79dec"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_CloseTeamMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""8201b860-72e2-4ce7-b8c1-61b667cdd2a6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -678,6 +696,61 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""BattleUI_CloseDimensionMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""095008ab-c93a-4809-8394-9e351129aea6"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_OpenTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf12c6a3-5084-44aa-b579-6fe30e28ee3b"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_OpenTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8534c3a-f3b6-4f7e-8a73-c43f4479735e"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9a1687a-8ea5-4e02-9f14-32b2ccd507cc"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d936179-931c-4a28-bcd4-7aea6cca0567"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseTeamMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1312,6 +1385,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_BattleUIActions_BattleUI_OpenDimensionMenu = m_BattleUIActions.FindAction("BattleUI_OpenDimensionMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_CloseDimensionMenu = m_BattleUIActions.FindAction("BattleUI_CloseDimensionMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_DimensionShortcutPause = m_BattleUIActions.FindAction("BattleUI_DimensionShortcutPause", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_OpenTeamMenu = m_BattleUIActions.FindAction("BattleUI_OpenTeamMenu", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_CloseTeamMenu = m_BattleUIActions.FindAction("BattleUI_CloseTeamMenu", throwIfNotFound: true);
         // WorldActions
         m_WorldActions = asset.FindActionMap("WorldActions", throwIfNotFound: true);
         m_WorldActions_World_Move = m_WorldActions.FindAction("World_Move", throwIfNotFound: true);
@@ -1593,6 +1668,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_BattleUIActions_BattleUI_OpenDimensionMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_CloseDimensionMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_DimensionShortcutPause;
+    private readonly InputAction m_BattleUIActions_BattleUI_OpenTeamMenu;
+    private readonly InputAction m_BattleUIActions_BattleUI_CloseTeamMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "BattleUIActions".
     /// </summary>
@@ -1648,6 +1725,14 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "BattleUIActions/BattleUI_DimensionShortcutPause".
         /// </summary>
         public InputAction @BattleUI_DimensionShortcutPause => m_Wrapper.m_BattleUIActions_BattleUI_DimensionShortcutPause;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_OpenTeamMenu".
+        /// </summary>
+        public InputAction @BattleUI_OpenTeamMenu => m_Wrapper.m_BattleUIActions_BattleUI_OpenTeamMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_CloseTeamMenu".
+        /// </summary>
+        public InputAction @BattleUI_CloseTeamMenu => m_Wrapper.m_BattleUIActions_BattleUI_CloseTeamMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1707,6 +1792,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_DimensionShortcutPause.started += instance.OnBattleUI_DimensionShortcutPause;
             @BattleUI_DimensionShortcutPause.performed += instance.OnBattleUI_DimensionShortcutPause;
             @BattleUI_DimensionShortcutPause.canceled += instance.OnBattleUI_DimensionShortcutPause;
+            @BattleUI_OpenTeamMenu.started += instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_OpenTeamMenu.performed += instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_OpenTeamMenu.canceled += instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_CloseTeamMenu.started += instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_CloseTeamMenu.performed += instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_CloseTeamMenu.canceled += instance.OnBattleUI_CloseTeamMenu;
         }
 
         /// <summary>
@@ -1751,6 +1842,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_DimensionShortcutPause.started -= instance.OnBattleUI_DimensionShortcutPause;
             @BattleUI_DimensionShortcutPause.performed -= instance.OnBattleUI_DimensionShortcutPause;
             @BattleUI_DimensionShortcutPause.canceled -= instance.OnBattleUI_DimensionShortcutPause;
+            @BattleUI_OpenTeamMenu.started -= instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_OpenTeamMenu.performed -= instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_OpenTeamMenu.canceled -= instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_CloseTeamMenu.started -= instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_CloseTeamMenu.performed -= instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_CloseTeamMenu.canceled -= instance.OnBattleUI_CloseTeamMenu;
         }
 
         /// <summary>
@@ -2378,6 +2475,20 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBattleUI_DimensionShortcutPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_OpenTeamMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_OpenTeamMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_CloseTeamMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_CloseTeamMenu(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "WorldActions" which allows adding and removing callbacks.

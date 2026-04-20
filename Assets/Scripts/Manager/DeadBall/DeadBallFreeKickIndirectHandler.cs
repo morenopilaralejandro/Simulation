@@ -39,6 +39,17 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
         isBallReady = false;
 
         team = BattleManager.Instance.Teams[teamSide];
+
+        ResetPositions();
+
+        DuelLogManager.Instance.AddDeadBallFreeKickIndirect(characterKicker);
+
+        BallEvents.OnGained += OnBallGained;
+        deadBallManager.SetState(DeadBallState.WaitingForReady);
+    }
+
+    public void ResetPositions() 
+    {
         characterKicker = deadBallManager.CharacterSelector.GetKickerIndirectFreeKick(team);
         /*
         characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
@@ -50,11 +61,6 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
         */
 
         SetKickerPosition();
-
-        DuelLogManager.Instance.AddDeadBallFreeKickIndirect(characterKicker);
-
-        BallEvents.OnGained += OnBallGained;
-        deadBallManager.SetState(DeadBallState.WaitingForReady);
     }
 
     public void HandleInput()

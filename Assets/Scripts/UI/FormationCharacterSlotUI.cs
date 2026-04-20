@@ -31,6 +31,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     private Vector2 originalPivot;
 
     public int SlotIndex => slotIndex;
+    public FormationCoord FormationCoord => coord;
     public bool IsBench => isBench;
 
     #endregion

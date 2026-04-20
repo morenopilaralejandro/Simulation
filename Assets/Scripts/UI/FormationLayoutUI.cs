@@ -5,6 +5,7 @@ using TMPro;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.UI;
 
 public class FormationLayoutUI : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class FormationLayoutUI : MonoBehaviour
     private Formation currentFormation;
     private Kit currentKit;
     private bool showDefaultSelected = true;
+    private MenuTeamMode menuTeamMode = MenuTeamMode.Edit;
 
     private List<FormationCharacterSlotUI> fieldSlots = new List<FormationCharacterSlotUI>();
     private List<FormationCharacterSlotUI> benchSlots = new List<FormationCharacterSlotUI>();
@@ -50,9 +52,15 @@ public class FormationLayoutUI : MonoBehaviour
 
     #region Initialize
 
-    public void Initialize(Team team, BattleType battleType, bool showDefaultSelected = true)
+    public void Initialize(Team team, BattleType battleType, MenuTeamMode menuTeamMode, bool showDefaultSelected = true)
     {
-        teamRoster = teamManager.ResolveCharacters(team, battleType);
+        this.menuTeamMode = menuTeamMode;
+
+        if (menuTeamMode == MenuTeamMode.Edit) 
+            teamRoster = teamManager.ResolveCharactersFromStorage(team, battleType);
+        else 
+            teamRoster = teamManager.ResolveCharactersFromBattle(team, battleType);
+
         textTeamName.text = team.TeamName;
         imageTeamCrest.sprite = team.TeamCrestSprite;
         currentKit = team.Kit;
@@ -115,7 +123,8 @@ public class FormationLayoutUI : MonoBehaviour
             // Re-initialize data
             slot.SetDragLayer(dragLayer);
             slot.Initialize(i, coord);
-            teamRoster[i].ApplyKit(currentKit, Variant.Home, coord.Position);
+            if (menuTeamMode != MenuTeamMode.Battle)
+                teamRoster[i].ApplyKit(currentKit, Variant.Home, coord.Position);
             slot.SetCharacter(teamRoster[i]);
         }
 
@@ -135,8 +144,9 @@ public class FormationLayoutUI : MonoBehaviour
             FormationCharacterSlotUI slot = benchSlots[i];
             slot.SetDragLayer(dragLayer);
             slot.SetAsBench(rosterIndex);
-            teamRoster[rosterIndex].ApplyKit(
-                currentKit, Variant.Home, teamRoster[rosterIndex].Position);
+            if (menuTeamMode != MenuTeamMode.Battle)
+                teamRoster[rosterIndex].ApplyKit(
+                    currentKit, Variant.Home, teamRoster[rosterIndex].Position);
             slot.SetCharacter(teamRoster[rosterIndex]);
         }
 

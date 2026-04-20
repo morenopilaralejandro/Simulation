@@ -55,6 +55,12 @@ public static class UIEvents
         OnTeamLoadoutSelected?.Invoke(team);
     }
 
+    public static event Action<Team> OnMenuTeamBattleRequested;
+    public static void RaiseMenuTeamBattleRequested(Team team)
+    {
+        OnMenuTeamBattleRequested?.Invoke(team);
+    }
+
     public static event Action OnTeamLoadoutCreateRequested;
     public static void RaiseTeamLoadoutCreateRequested()
     {
@@ -73,10 +79,10 @@ public static class UIEvents
         OnTeamPanelDeleteOpened?.Invoke(team);
     }
 
-    public static event Action OnBackFromTeamRequested;
-    public static void RaiseBackFromTeamRequested()
+    public static event Action<Team> OnBackFromTeamRequested;
+    public static void RaiseBackFromTeamRequested(Team team)
     {
-        OnBackFromTeamRequested?.Invoke();
+        OnBackFromTeamRequested?.Invoke(team);
     }
 
     public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUISelectedDefault;
@@ -215,6 +221,12 @@ public static class UIEvents
     public static void RaiseCharacterDetailOpened()
     {
         OnCharacterDetailOpened?.Invoke();
+    }
+
+    public static event Action<int, int> OnSubstitutionChangesUpdated;
+    public static void RaiseSubstitutionChangesUpdated(int currentValue, int maxValue)
+    {
+        OnSubstitutionChangesUpdated?.Invoke(currentValue, maxValue);
     }
 
     // Menu Character

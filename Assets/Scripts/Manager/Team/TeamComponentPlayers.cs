@@ -112,6 +112,16 @@ public class TeamComponentPlayers
         guids[slotIndex] = characterGuid;
     }
 
+    public void SetCharacterEntity(BattleType battleType, int slotIndex, CharacterEntityBattle characterEntityBattle)
+    {
+        List<CharacterEntityBattle> entities = GetCharacterEntities(battleType);
+        
+        while (entities.Count <= slotIndex)
+            entities.Add(null);
+
+        entities[slotIndex] = characterEntityBattle;
+    }
+
     public void RemoveCharacterGuid(BattleType battleType, string characterGuid)
     {
         List<string> guids = GetCharacterGuids(battleType);
@@ -174,5 +184,19 @@ public class TeamComponentPlayers
     public bool HasCharacterEntities(BattleType battleType)
     {
         return GetCharacterEntityCount(battleType) > 0;
+    }
+
+    public CharacterEntityBattle GetEntityByGuid(string characterGuid, BattleType battleType)
+    {
+        List<CharacterEntityBattle> entities = GetCharacterEntities(battleType);
+        int count = entities.Count;
+        
+        for (int i = 0; i < count; i++)
+        {
+            if (entities[i].CharacterGuid == characterGuid)
+                return entities[i];
+        }
+        
+        return null;
     }
 }

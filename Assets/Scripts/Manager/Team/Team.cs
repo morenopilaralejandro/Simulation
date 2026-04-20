@@ -88,6 +88,7 @@ public class Team
     public List<string> MiniBattleCharacterGuids => playersComponent.MiniBattleCharacterGuids;
     public List<CharacterData> GetCharacterDataList(BattleType battleType) => playersComponent.GetCharacterDataList(battleType);
     public List<CharacterEntityBattle> GetCharacterEntities(BattleType battleType) => playersComponent.GetCharacterEntities(battleType);
+    public void SetCharacterEntity(BattleType battleType, int slotIndex, CharacterEntityBattle characterEntityBattle) => playersComponent.SetCharacterEntity(battleType, slotIndex, characterEntityBattle);
     public List<string> GetCharacterGuids(BattleType battleType) => playersComponent.GetCharacterGuids(battleType);
     public void SetCharacterGuid(BattleType battleType, int slotIndex, string characterGuid) => playersComponent.SetCharacterGuid(battleType, slotIndex, characterGuid);
     public void RemoveCharacterGuid(BattleType battleType, string characterGuid) => playersComponent.RemoveCharacterGuid(battleType, characterGuid);
@@ -97,6 +98,7 @@ public class Team
     public int GetCharacterEntityCount(BattleType battleType) => playersComponent.GetCharacterEntityCount(battleType);
     public bool HasCharacterData(BattleType battleType) => playersComponent.HasCharacterData(battleType);
     public bool HasCharacterEntities(BattleType battleType) => playersComponent.HasCharacterEntities(battleType);
+    public CharacterEntityBattle GetEntityByGuid(string characterGuid, BattleType battleType) => playersComponent.GetEntityByGuid(characterGuid, battleType);
     //sideComponent
     public TeamSide TeamSide => sideComponent.TeamSide;
     public Variant Variant => sideComponent.Variant;

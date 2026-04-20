@@ -34,17 +34,23 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         isBallReady = false;
 
         team = BattleManager.Instance.Teams[teamSide];
-        characterKicker = team.GetCharacterEntities(BattleManager.Instance.CurrentType)[team.GetFormation(BattleManager.Instance.CurrentType).Kickoff0];
-        characterReceiver = team.GetCharacterEntities(BattleManager.Instance.CurrentType)[team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1];
-        receiverIndex = deadBallManager.CharacterSelector.GetKickoffReceiverIndex(team.GetFormation(BattleManager.Instance.CurrentType).Kickoff0, team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1);
 
-        SetPositions();
+        ResetPositions();
 
         AudioManager.Instance.PlaySfx("sfx-whistle_single");
         DuelLogManager.Instance.AddDeadBallKickoff(characterKicker);
 
         BallEvents.OnGained += OnBallGained;
         deadBallManager.SetState(DeadBallState.WaitingForReady);
+    }
+
+    public void ResetPositions() 
+    {
+        characterKicker = team.GetCharacterEntities(BattleManager.Instance.CurrentType)[team.GetFormation(BattleManager.Instance.CurrentType).Kickoff0];
+        characterReceiver = team.GetCharacterEntities(BattleManager.Instance.CurrentType)[team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1];
+        receiverIndex = deadBallManager.CharacterSelector.GetKickoffReceiverIndex(team.GetFormation(BattleManager.Instance.CurrentType).Kickoff0, team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1);
+
+        SetPositions();
     }
 
     public void HandleInput()

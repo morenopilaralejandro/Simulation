@@ -73,4 +73,28 @@ public static class TeamEvents
         OnTeamCrestSpriteUpdated?.Invoke(team);
     }
 
+
+    public static event Action<TeamSide, int> OnSubstitutionMade;
+    public static void RaiseSubstitutionMade(TeamSide teamSide, int intValue)
+    {
+        OnSubstitutionMade?.Invoke(teamSide, intValue);
+    }
+
+    public static event Action<TeamSide> OnSubstitutionDenied;
+    public static void RaiseSubstitutionDenied(TeamSide teamSide)
+    {
+        OnSubstitutionDenied?.Invoke(teamSide);
+    }
+
+    public static event Action<TeamSide> OnSubstitutionResetPositions;
+    public static void RaiseSubstitutionResetPositions(TeamSide teamSide)
+    {
+        OnSubstitutionResetPositions?.Invoke(teamSide);
+    }
+
+    public static event Action<CharacterEntityBattle, CharacterEntityBattle> OnCharacterSubstituted;
+    public static void RaiseCharacterSubstituted(CharacterEntityBattle characterIn, CharacterEntityBattle characterOut)
+    {
+        OnCharacterSubstituted?.Invoke(characterIn, characterOut);
+    }
 }

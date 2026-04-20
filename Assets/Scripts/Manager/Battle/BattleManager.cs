@@ -547,7 +547,7 @@ public class BattleManager : MonoBehaviour
         BattleBallManager.Instance.ResetBallPosition();
     }
 
-    private void ResetPlayerPositions()
+    public void ResetPlayerPositions()
     {
         foreach (Team team in Teams.Values) 
         {

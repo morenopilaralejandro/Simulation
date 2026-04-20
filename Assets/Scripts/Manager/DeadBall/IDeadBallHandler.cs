@@ -4,6 +4,7 @@ public interface IDeadBallHandler
 {
     bool IsReady { get; }
     void Setup(TeamSide teamSide);
+    void ResetPositions();
     void HandleInput();
     void Execute();
 }

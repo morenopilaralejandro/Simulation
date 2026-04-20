@@ -39,10 +39,12 @@ public class CharacterComponentColliderDuelKeeper : MonoBehaviour
         Team team, 
         FormationCoord formationCoord)
     {
+        /*
         if (this.characterEntityBattle == characterEntityBattle)
         {
             this.gameObject.SetActive(formationCoord.Position == Position.GK);
         }
+        */
     }
 
     #endregion

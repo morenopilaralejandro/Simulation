@@ -24,6 +24,7 @@ public class DeadBallManager : MonoBehaviour
     private Vector3 cachedBallPosition;
     private Vector3 defaultPositionKickoffKicker;
     private Dictionary<TeamSide, Vector3> defaultPositionKickoffReceiver;
+    private Dictionary<TeamSide, bool> teamMenuOpen = new();
 
     public DeadBallPositionConfig PositionConfig => positionConfig;
     public DeadBallCharacterSelector CharacterSelector => characterSelector;
@@ -76,6 +77,7 @@ public class DeadBallManager : MonoBehaviour
         BattleManager.Instance.SetBattlePhase(BattlePhase.DeadBall);
 
         teamReadiness.Reset();
+        ResetMenuState();
 
         DeadBallType = type;
         currentHandler = DeadBallFactory.Create(type);
@@ -91,10 +93,30 @@ public class DeadBallManager : MonoBehaviour
 
         //handleSharedInput Menu formation and change characters
 
-        currentHandler.HandleInput();
+        HandleMenuInput();
+
+        if (!IsUserMenuOpen())
+            currentHandler.HandleInput();
 
         if (DeadBallState == DeadBallState.WaitingForReady && currentHandler.IsReady)
             Execute();
+    }
+
+    private void HandleMenuInput()
+    {
+        if (DeadBallState != DeadBallState.WaitingForReady) return;
+        if (!InputManager.Instance.GetDown(CustomAction.BattleUI_OpenTeamMenu)) return;
+
+        TeamSide userSide = BattleManager.Instance.GetUserSide();
+        ToggleTeamMenu(userSide);
+    }
+
+    private void ToggleTeamMenu(TeamSide side)
+    {
+        teamMenuOpen[side] = !teamMenuOpen[side];
+
+        if (teamMenuOpen[side])
+            UIEvents.RaiseMenuTeamBattleRequested(BattleManager.Instance.Teams[side]);
     }
 
     private void Execute()
@@ -148,6 +170,16 @@ public class DeadBallManager : MonoBehaviour
         DeadBallType == DeadBallType.Penalty &&
         offenseSide == BattleManager.Instance.GetUserSide();
 
+    public bool IsTeamMenuOpen(TeamSide side) => teamMenuOpen[side];
+    public bool IsUserMenuOpen() => IsTeamMenuOpen(BattleManager.Instance.GetUserSide());
+    public bool IsAnyMenuOpen() => teamMenuOpen[TeamSide.Home] || teamMenuOpen[TeamSide.Away];
+    private void ResetMenuState()
+    {
+        teamMenuOpen[TeamSide.Home] = false;
+        teamMenuOpen[TeamSide.Away] = false;
+    }
+
+
     public TeamSide GetRestartTeamSide() 
     {
         if (PossessionManager.Instance.CurrentCharacter == null)
@@ -168,6 +200,40 @@ public class DeadBallManager : MonoBehaviour
             return true;
 
         return false;
+    }
+
+    #endregion
+
+    #region Event
+    
+    private void OnEnable() 
+    {
+        UIEvents.OnBackFromTeamRequested += HandleBackFromTeamRequested;
+        TeamEvents.OnSubstitutionResetPositions += HandleSubstitutionResetPositions;
+    }
+
+    private void OnDisable() 
+    {
+        UIEvents.OnBackFromTeamRequested -= HandleBackFromTeamRequested;
+        TeamEvents.OnSubstitutionResetPositions -= HandleSubstitutionResetPositions;
+    }
+
+    private void HandleBackFromTeamRequested(Team team) 
+    {
+        if (!IsDeadBallInProgress) return;
+        if (!teamMenuOpen[team.TeamSide]) return;
+
+        TeamEvents.RaiseSubstitutionResetPositions(team.TeamSide);
+        ToggleTeamMenu(team.TeamSide);
+    }
+
+    private void HandleSubstitutionResetPositions(TeamSide teamSide) 
+    {
+        if (currentHandler == null) return;
+        if (DeadBallState != DeadBallState.WaitingForReady && DeadBallState != DeadBallState.Setup) return;
+
+        BattleManager.Instance.ResetPlayerPositions();
+        currentHandler.ResetPositions();
     }
 
     #endregion

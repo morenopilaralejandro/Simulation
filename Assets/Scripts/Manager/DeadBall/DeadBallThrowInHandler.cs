@@ -41,6 +41,17 @@ public class DeadBallThrowInHandler : IDeadBallHandler
         isBallReady = false;
 
         team = BattleManager.Instance.Teams[teamSide];
+
+        ResetPositions();
+
+        DuelLogManager.Instance.AddDeadBallThrowIn(characterKicker);
+
+        BallEvents.OnGained += OnBallGained;
+        deadBallManager.SetState(DeadBallState.WaitingForReady);
+    }
+
+    public void ResetPositions() 
+    {
         characterKicker = deadBallManager.CharacterSelector.GetKicker(team);
         characterKicker.HasBallInHandThrowIn = true;
         characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
@@ -58,11 +69,6 @@ public class DeadBallThrowInHandler : IDeadBallHandler
             SetPositionsDefault();
 
         SetKickerPosition();
-
-        DuelLogManager.Instance.AddDeadBallThrowIn(characterKicker);
-
-        BallEvents.OnGained += OnBallGained;
-        deadBallManager.SetState(DeadBallState.WaitingForReady);
     }
 
     public void HandleInput()

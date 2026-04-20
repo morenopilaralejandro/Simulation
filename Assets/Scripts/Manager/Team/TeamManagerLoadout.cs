@@ -144,12 +144,11 @@ public class TeamManagerLoadout
 
     #region Loadout Character Management
 
-    public void SetCharacterInLoadout(string teamGuid, BattleType battleType, int slotIndex, string characterGuid)
+    public void SetCharacterInLoadout(Team loadout, BattleType battleType, int slotIndex, string characterGuid)
     {
-        Team loadout = GetLoadout(teamGuid);
         if (loadout == null)
         {
-            LogManager.Warning($"[TeamLoadoutManager] Loadout {teamGuid} not found.");
+            LogManager.Warning($"[TeamLoadoutManager] Loadout {loadout.TeamGuid} not found.");
             return;
         }
 
@@ -170,9 +169,59 @@ public class TeamManagerLoadout
         TeamEvents.RaiseLoadoutUpdated(loadout);
     }
 
-    public void RemoveCharacterFromLoadout(string teamGuid, BattleType battleType, string characterGuid)
+    public void SwapCharactersInBattle(
+        Team loadout, BattleType battleType,
+        int slotIndexA, FormationCoord coordA, string guidA,
+        int slotIndexB, FormationCoord coordB, string guidB)
     {
-        Team loadout = GetLoadout(teamGuid);
+        List<CharacterEntityBattle> entities = loadout.GetCharacterEntities(battleType);
+
+        if (entities == null)
+        {
+            Debug.LogError($"SwapCharactersInBattle: entities null for {battleType}");
+            return;
+        }
+
+        // Resolve BOTH references BEFORE modifying anything
+        CharacterEntityBattle entityA = null;
+        CharacterEntityBattle entityB = null;
+
+        int count = entities.Count;
+        for (int i = 0; i < count; i++)
+        {
+            if (entities[i] == null)
+                continue;
+
+            string guid = entities[i].CharacterGuid;
+
+            if (entityA == null && guid == guidA)
+                entityA = entities[i];
+
+            if (entityB == null && guid == guidB)
+                entityB = entities[i];
+
+            if (entityA != null && entityB != null)
+                break;
+        }
+
+        LogManager.Trace($"[TeamManagerLoadout] guidA: {guidA}, entityA found: {entityA != null}, ref: {entityA?.GetHashCode()}");
+        LogManager.Trace($"[TeamManagerLoadout] guidB: {guidB}, entityB found: {entityB != null}, ref: {entityB?.GetHashCode()}");
+        LogManager.Trace($"[TeamManagerLoadout] coordA: {coordA.Position}, coordB: {coordB.Position}");
+
+        // Now swap — same references, no new lookups
+        loadout.SetCharacterEntity(battleType, slotIndexA, entityB);
+        loadout.SetCharacterEntity(battleType, slotIndexB, entityA);
+
+        // Raise events with the EXACT same references
+        if (entityB != null)
+            TeamEvents.RaiseAssignCharacterToTeamBattle(entityB, loadout, coordA);
+
+        if (entityA != null)
+            TeamEvents.RaiseAssignCharacterToTeamBattle(entityA, loadout, coordB);
+    }
+
+    public void RemoveCharacterFromLoadout(Team loadout, BattleType battleType, string characterGuid)
+    {
         if (loadout == null) return;
 
         loadout.RemoveCharacterGuid(battleType, characterGuid);
@@ -204,7 +253,7 @@ public class TeamManagerLoadout
     /// Resolves a loadout's character GUIDs into actual Character instances from storage.
     /// Returns the list in slot order (nulls filtered out).
     /// </summary>
-    public List<Character> ResolveCharacters(Team loadout, BattleType battleType)
+    public List<Character> ResolveCharactersFromStorage(Team loadout, BattleType battleType)
     {
         List<Character> resolved = new();
         List<string> guids = loadout.GetCharacterGuids(battleType);
@@ -223,6 +272,17 @@ public class TeamManagerLoadout
                 LogManager.Warning($"[TeamLoadoutManager] Character GUID {guid} not found in storage. Skipping.");
             }
         }
+
+        return resolved;
+    }
+
+    public List<Character> ResolveCharactersFromBattle(Team loadout, BattleType battleType)
+    {
+        List<Character> resolved = new();
+        List<CharacterEntityBattle> entities = loadout.GetCharacterEntities(battleType);
+
+        foreach (var entity in entities)
+            resolved.Add(entity.Character);
 
         return resolved;
     }
@@ -272,14 +332,14 @@ public class TeamManagerLoadout
         int battleCount = Mathf.Min(sizeFull, allCharacters.Count);
         for (int i = 0; i < battleCount; i++)
         {
-            SetCharacterInLoadout(loadout.TeamGuid, BattleType.Full, i, allCharacters[i].CharacterGuid);
+            SetCharacterInLoadout(loadout, BattleType.Full, i, allCharacters[i].CharacterGuid);
         }
 
         // Populate Mini Battle slots
         int miniCount = Mathf.Min(sizeMini, allCharacters.Count);
         for (int i = 0; i < miniCount; i++)
         {
-            SetCharacterInLoadout(loadout.TeamGuid, BattleType.Mini, i, allCharacters[i].CharacterGuid);
+            SetCharacterInLoadout(loadout, BattleType.Mini, i, allCharacters[i].CharacterGuid);
         }
 
         LogManager.Info($"[TeamLoadoutManager] Loadout initialized: " +

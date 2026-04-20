@@ -42,12 +42,14 @@ public class MenuTeamPanelTeam : Menu
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
     private TeamManager teamManager;
+    private SubstitutionManager substitutionManager;
     private FormationManager formationDatabase;
     private KitManager kitDatabase;
 
     private Team currentTeam;
     private FormationCharacterSlotUI currentSlot;
     private BattleType currentBattleType;
+    private BattleType defaultBattleType = BattleType.Mini;
     private Character selectedCharacter;
     private GameObject selectedGo;
 
@@ -75,9 +77,10 @@ public class MenuTeamPanelTeam : Menu
         base.Hide();
         base.SetInteractable(false);
 
-        currentBattleType = BattleType.Mini;
+        currentBattleType = defaultBattleType;
         menuManager = MenuManager.Instance;
         teamManager = TeamManager.Instance;
+        substitutionManager = SubstitutionManager.Instance;
         formationDatabase = FormationManager.Instance;
         kitDatabase = KitManager.Instance;
     }
@@ -119,8 +122,7 @@ public class MenuTeamPanelTeam : Menu
     public void Close()
     {
         if (!isTop) return;
-        if(!isEditMode) return;
-        UIEvents.RaiseBackFromTeamRequested();
+        UIEvents.RaiseBackFromTeamRequested(currentTeam);
         menuManager.CloseMenu();
     }
 
@@ -161,7 +163,7 @@ public class MenuTeamPanelTeam : Menu
     {
         if (currentTeam == null) return;
         UpdateSetActiveButtonState();
-        formationLayoutUI.Initialize(currentTeam, currentBattleType);
+        formationLayoutUI.Initialize(currentTeam, currentBattleType, mode);
     }
 
     #endregion
@@ -183,6 +185,11 @@ public class MenuTeamPanelTeam : Menu
     {
         activeImage.enabled = teamManager.ActiveLoadoutGuid == currentTeam.TeamGuid;
         buttonDelete.SetActive(isEditMode && teamManager.ActiveLoadoutGuid != currentTeam.TeamGuid);
+    }
+
+    private void UpdateChangesText(int currentValue, int maxValue)
+    {
+        textChanges.text = $"{currentValue}/{maxValue}";
     }
 
     #endregion
@@ -244,6 +251,9 @@ public class MenuTeamPanelTeam : Menu
         TeamEvents.OnLoadoutDeleted += HandleLoadoutDeleted;
         UIEvents.OnFormationCharacterSlotUIMoveRequested += HandleFormationCharacterSlotUIMoveRequested;
         UIEvents.OnFormationCharacterSlotUIMoveCanceled += HandleFormationCharacterSlotUIMoveCanceled;
+        UIEvents.OnMenuTeamBattleRequested += HandleMenuTeamBattleRequested;
+        UIEvents.OnSubstitutionChangesUpdated += HandleSubstitutionChangesUpdated;
+        BattleEvents.OnBattleStart += HandleBattleStart;
     }
 
     private void OnDisable()
@@ -267,10 +277,20 @@ public class MenuTeamPanelTeam : Menu
         TeamEvents.OnLoadoutDeleted -= HandleLoadoutDeleted;
         UIEvents.OnFormationCharacterSlotUIMoveRequested -= HandleFormationCharacterSlotUIMoveRequested;
         UIEvents.OnFormationCharacterSlotUIMoveCanceled -= HandleFormationCharacterSlotUIMoveCanceled;
+        UIEvents.OnMenuTeamBattleRequested -= HandleMenuTeamBattleRequested;
+        UIEvents.OnSubstitutionChangesUpdated -= HandleSubstitutionChangesUpdated;
+        BattleEvents.OnBattleStart -= HandleBattleStart;
     }
 
     private void HandleLoadoutSelected(Team team) 
     {
+        currentTeam = team;
+        menuManager.OpenMenu(this);
+    }
+
+    private void HandleMenuTeamBattleRequested(Team team) 
+    {
+        if (isOpen) return;
         currentTeam = team;
         menuManager.OpenMenu(this);
     }
@@ -323,29 +343,51 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandeFormationCharacterSlotUISwaped(FormationCharacterSlotUI a, FormationCharacterSlotUI b) 
     {
+        // check substitution
+        bool isValidSwap = isEditMode || substitutionManager.ValidateSwap(currentTeam.TeamSide, a , b);
+        if (!isValidSwap) return;
+
+        string guidA = a.GetCharacter().CharacterGuid;
+        string guidB = b.GetCharacter().CharacterGuid;
+
+        // swap entities in battle
+        if (isBattleMode) 
+        {
+            teamManager.SwapCharactersInBattle(
+                currentTeam,
+                currentBattleType,
+                a.SlotIndex, a.FormationCoord, guidA,
+                b.SlotIndex, b.FormationCoord, guidB
+            );
+        }
+
+        // Update visual slot
         Character temp = a.GetCharacter();
         a.SetCharacter(b.GetCharacter());
         b.SetCharacter(temp);
 
+        // persist only in edit
+        if (!isEditMode) return;
+        
         teamManager.SetCharacterInLoadout(
-            currentTeam.TeamGuid,
+            currentTeam,
             currentBattleType,
             a.SlotIndex,
-            a.GetCharacter().CharacterGuid
+            guidB
         );
 
         teamManager.SetCharacterInLoadout(
-            currentTeam.TeamGuid,
+            currentTeam,
             currentBattleType,
             b.SlotIndex,
-            b.GetCharacter().CharacterGuid
+            guidA
         );
     }
 
     private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
     {
         teamManager.SetCharacterInLoadout(
-            currentTeam.TeamGuid,
+            currentTeam,
             currentBattleType,
             currentSlot.SlotIndex,
             character.CharacterGuid
@@ -356,7 +398,7 @@ public class MenuTeamPanelTeam : Menu
     {
         if (selectedCharacter == null) return;
         teamManager.SetCharacterInLoadout(
-            currentTeam.TeamGuid,
+            currentTeam,
             currentBattleType,
             currentSlot.SlotIndex,
             selectedCharacter.CharacterGuid
@@ -450,7 +492,7 @@ public class MenuTeamPanelTeam : Menu
             ? BattleType.Mini
             : BattleType.Full;
 
-        formationLayoutUI.Initialize(currentTeam, currentBattleType);
+        formationLayoutUI.Initialize(currentTeam, currentBattleType, mode);
         UIEvents.RaiseBattleTypeChanged(currentBattleType, oldType);
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
@@ -459,7 +501,7 @@ public class MenuTeamPanelTeam : Menu
     {
         if(!isEditMode) return;
         currentTeam.UpdateAppeariance(emblemId);
-        formationLayoutUI.Initialize(currentTeam, currentBattleType);
+        formationLayoutUI.Initialize(currentTeam, currentBattleType, mode);
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
@@ -467,7 +509,7 @@ public class MenuTeamPanelTeam : Menu
     {
         if(!isEditMode) return;
         currentTeam.SetCustomName(newName);
-        formationLayoutUI.Initialize(currentTeam, currentBattleType);
+        formationLayoutUI.Initialize(currentTeam, currentBattleType, mode);
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
@@ -492,6 +534,16 @@ public class MenuTeamPanelTeam : Menu
     private void HandleLoadoutDeleted(Team team)
     { 
         isClosing = true;
+    }
+
+    private void HandleSubstitutionChangesUpdated(int currentValue, int maxValue) 
+    {
+        UpdateChangesText(currentValue, maxValue);
+    }
+
+    private void HandleBattleStart() 
+    {
+        currentBattleType = BattleManager.Instance.CurrentType;
     }
 
     #endregion

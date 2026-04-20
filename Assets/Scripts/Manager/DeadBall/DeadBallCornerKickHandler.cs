@@ -37,9 +37,22 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
 
         isAutoBattleEnabled = AutoBattleManager.Instance.IsAutoBattleEnabled;
         isMultiplayer = false;
-        isBallReady = false;
 
         team = BattleManager.Instance.Teams[teamSide];
+
+        ResetPositions();
+
+        DuelLogManager.Instance.AddDeadBallCornerKick(characterKicker);
+
+        deadBallManager.SetState(DeadBallState.WaitingForReady);
+    }
+
+    public void ResetPositions() 
+    {
+        isBallReady = false;
+        BallEvents.OnGained -= OnBallGained;
+        BallEvents.OnGained += OnBallGained;
+
         characterKicker = deadBallManager.CharacterSelector.GetKicker(team);
         characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
             deadBallManager.OffenseTeam,
@@ -49,14 +62,8 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
             characterKicker);
 
         defaultRecieverIndex = deadBallManager.CharacterSelector.GetDefaultReceiverIndex(characterSupportOffense, characterKicker);
-
         SetPositions();
         SetKickerPosition();
-
-        DuelLogManager.Instance.AddDeadBallCornerKick(characterKicker);
-
-        BallEvents.OnGained += OnBallGained;
-        deadBallManager.SetState(DeadBallState.WaitingForReady);
     }
 
     public void HandleInput()
