@@ -17,6 +17,7 @@ public class TeamComponentSide
     public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
+        ResetSideAndVariant(); 
     }
 
     public void Deinitialize()

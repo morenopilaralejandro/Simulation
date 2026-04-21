@@ -361,27 +361,39 @@ public class MenuTeamPanelTeam : Menu
             );
         }
 
+        if (isEditMode) 
+        {
+            a.GetCharacter().ApplyKit(
+                currentTeam.Kit,
+                currentTeam.Variant,
+                b.FormationCoord.Position
+            );
+
+            b.GetCharacter().ApplyKit(
+                currentTeam.Kit,
+                currentTeam.Variant,
+                a.FormationCoord.Position
+            );
+
+            teamManager.SetCharacterInLoadout(
+                currentTeam,
+                currentBattleType,
+                a.SlotIndex,
+                guidB
+            );
+
+            teamManager.SetCharacterInLoadout(
+                currentTeam,
+                currentBattleType,
+                b.SlotIndex,
+                guidA
+            );
+        }
+
         // Update visual slot
         Character temp = a.GetCharacter();
         a.SetCharacter(b.GetCharacter());
         b.SetCharacter(temp);
-
-        // persist only in edit
-        if (!isEditMode) return;
-        
-        teamManager.SetCharacterInLoadout(
-            currentTeam,
-            currentBattleType,
-            a.SlotIndex,
-            guidB
-        );
-
-        teamManager.SetCharacterInLoadout(
-            currentTeam,
-            currentBattleType,
-            b.SlotIndex,
-            guidA
-        );
     }
 
     private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)

@@ -25,6 +25,7 @@ public class FormationLayoutUI : MonoBehaviour
 
     private Formation currentFormation;
     private Kit currentKit;
+    private Variant currentVariant;
     private bool showDefaultSelected = true;
     private MenuTeamMode menuTeamMode = MenuTeamMode.Edit;
 
@@ -64,6 +65,7 @@ public class FormationLayoutUI : MonoBehaviour
         textTeamName.text = team.TeamName;
         imageTeamCrest.sprite = team.TeamCrestSprite;
         currentKit = team.Kit;
+        currentVariant = team.Variant;
         this.showDefaultSelected = showDefaultSelected;
         currentFormation = team.GetFormation(battleType);
 
@@ -123,8 +125,7 @@ public class FormationLayoutUI : MonoBehaviour
             // Re-initialize data
             slot.SetDragLayer(dragLayer);
             slot.Initialize(i, coord);
-            if (menuTeamMode != MenuTeamMode.Battle)
-                teamRoster[i].ApplyKit(currentKit, Variant.Home, coord.Position);
+            teamRoster[i].ApplyKit(currentKit, currentVariant, coord.Position);
             slot.SetCharacter(teamRoster[i]);
         }
 
@@ -144,9 +145,8 @@ public class FormationLayoutUI : MonoBehaviour
             FormationCharacterSlotUI slot = benchSlots[i];
             slot.SetDragLayer(dragLayer);
             slot.SetAsBench(rosterIndex);
-            if (menuTeamMode != MenuTeamMode.Battle)
-                teamRoster[rosterIndex].ApplyKit(
-                    currentKit, Variant.Home, teamRoster[rosterIndex].Position);
+            teamRoster[rosterIndex].ApplyKit(
+                currentKit, currentVariant, teamRoster[rosterIndex].Position);
             slot.SetCharacter(teamRoster[rosterIndex]);
         }
 

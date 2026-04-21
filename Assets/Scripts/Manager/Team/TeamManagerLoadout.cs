@@ -278,13 +278,7 @@ public class TeamManagerLoadout
 
     public List<Character> ResolveCharactersFromBattle(Team loadout, BattleType battleType)
     {
-        List<Character> resolved = new();
-        List<CharacterEntityBattle> entities = loadout.GetCharacterEntities(battleType);
-
-        foreach (var entity in entities)
-            resolved.Add(entity.Character);
-
-        return resolved;
+        return loadout.GetCharacters(battleType);
     }
 
     #endregion

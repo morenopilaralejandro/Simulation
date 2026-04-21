@@ -43,13 +43,13 @@ public class ScrollViewAutoScroll : MonoBehaviour
         if (content == null)
             LogManager.Error("[AutoScroll] Content is NULL. Check ScrollRect setup.", this);
 
-        LogManager.Debug($"[AutoScroll] Awake OK — viewport={viewport?.name} content={content?.name}", this);
+        LogManager.Trace($"[AutoScroll] Awake OK — viewport={viewport?.name} content={content?.name}", this);
     }
 
     // ─────────────────────────────────────────────
     public void Activate()
     {
-        LogManager.Debug("[AutoScroll] Activate() called", this);
+        LogManager.Trace("[AutoScroll] Activate() called", this);
         isActive = true;
         StartCoroutine(DelayedReset());
     }
@@ -58,12 +58,12 @@ public class ScrollViewAutoScroll : MonoBehaviour
     {
         yield return null;
         lastSelected = null;
-        LogManager.Debug("[AutoScroll] DelayedReset done — ready to evaluate selection", this);
+        LogManager.Trace("[AutoScroll] DelayedReset done — ready to evaluate selection", this);
     }
 
     public void Deactivate()
     {
-        LogManager.Debug("[AutoScroll] Deactivate() called", this);
+        LogManager.Trace("[AutoScroll] Deactivate() called", this);
         isActive     = false;
         isScrolling  = false;
         lastSelected = null;
@@ -78,7 +78,7 @@ public class ScrollViewAutoScroll : MonoBehaviour
 
         if (selected != lastSelected)
         {
-            LogManager.Debug($"[AutoScroll] Selection changed: " +
+            LogManager.Trace($"[AutoScroll] Selection changed: " +
                              $"{(lastSelected != null ? lastSelected.name : "NULL")} " +
                              $"→ {(selected != null ? selected.name : "NULL")}", this);
             lastSelected = selected;
@@ -97,7 +97,7 @@ public class ScrollViewAutoScroll : MonoBehaviour
             {
                 content.anchoredPosition = targetAnchoredPos;
                 isScrolling = false;
-                LogManager.Debug($"[AutoScroll] Scroll complete. Final pos={content.anchoredPosition}", this);
+                LogManager.Trace($"[AutoScroll] Scroll complete. Final pos={content.anchoredPosition}", this);
             }
             else
             {
@@ -111,13 +111,13 @@ public class ScrollViewAutoScroll : MonoBehaviour
     {
         if (selected == null)
         {
-            LogManager.Debug("[AutoScroll] Selected is NULL — skipping", this);
+            LogManager.Trace("[AutoScroll] Selected is NULL — skipping", this);
             return;
         }
 
         if (!IsChildOfContent(selected.transform))
         {
-            LogManager.Warning($"[AutoScroll] '{selected.name}' is NOT a child of content '{content?.name}' — skipping", this);
+            LogManager.Trace($"[AutoScroll] '{selected.name}' is NOT a child of content '{content?.name}' — skipping", this);
             return;
         }
 
@@ -128,7 +128,7 @@ public class ScrollViewAutoScroll : MonoBehaviour
             return;
         }
 
-        LogManager.Debug($"[AutoScroll] HandleSelectionChanged → scrolling to '{item.name}'", this);
+        LogManager.Trace($"[AutoScroll] HandleSelectionChanged → scrolling to '{item.name}'", this);
         Canvas.ForceUpdateCanvases();
         ComputeAndApplyScroll(item);
     }
@@ -136,10 +136,10 @@ public class ScrollViewAutoScroll : MonoBehaviour
     // ─────────────────────────────────────────────
     private void ComputeAndApplyScroll(RectTransform item)
     {
-        LogManager.Debug($"[AutoScroll] ── ComputeAndApplyScroll: {item.name}", this);
-        LogManager.Debug($"[AutoScroll] content.anchoredPosition = {content.anchoredPosition}", this);
-        LogManager.Debug($"[AutoScroll] content.rect  = {content.rect}", this);
-        LogManager.Debug($"[AutoScroll] viewport.rect = {viewport.rect}", this);
+        LogManager.Trace($"[AutoScroll] ── ComputeAndApplyScroll: {item.name}", this);
+        LogManager.Trace($"[AutoScroll] content.anchoredPosition = {content.anchoredPosition}", this);
+        LogManager.Trace($"[AutoScroll] content.rect  = {content.rect}", this);
+        LogManager.Trace($"[AutoScroll] viewport.rect = {viewport.rect}", this);
 
         Vector2 itemCenterInViewport = viewport.InverseTransformPoint(
             item.TransformPoint(item.rect.center)
@@ -150,9 +150,9 @@ public class ScrollViewAutoScroll : MonoBehaviour
         float viewHalfH = viewport.rect.height * 0.5f;
         float viewHalfW = viewport.rect.width  * 0.5f;
 
-        LogManager.Debug($"[AutoScroll] itemCenterInViewport = {itemCenterInViewport}", this);
-        LogManager.Debug($"[AutoScroll] item  half W={itemHalfW} H={itemHalfH}", this);
-        LogManager.Debug($"[AutoScroll] view  half W={viewHalfW} H={viewHalfH}", this);
+        LogManager.Trace($"[AutoScroll] itemCenterInViewport = {itemCenterInViewport}", this);
+        LogManager.Trace($"[AutoScroll] item  half W={itemHalfW} H={itemHalfH}", this);
+        LogManager.Trace($"[AutoScroll] view  half W={viewHalfW} H={viewHalfH}", this);
 
         Vector2 newPos = content.anchoredPosition;
         bool changed   = false;
@@ -165,27 +165,27 @@ public class ScrollViewAutoScroll : MonoBehaviour
             float viewTop    = viewport.rect.yMax - padding;
             float viewBottom = viewport.rect.yMin + padding;
 
-            LogManager.Debug($"[AutoScroll] VERTICAL " +
+            LogManager.Trace($"[AutoScroll] VERTICAL " +
                              $"itemTop={itemTop:F1} itemBottom={itemBottom:F1} " +
                              $"viewTop={viewTop:F1} viewBottom={viewBottom:F1}", this);
 
             if (itemBottom < viewBottom)
             {
                 float delta = viewBottom - itemBottom;
-                LogManager.Debug($"[AutoScroll] Item BELOW viewport → newPos.y += {delta:F1}", this);
+                LogManager.Trace($"[AutoScroll] Item BELOW viewport → newPos.y += {delta:F1}", this);
                 newPos.y += delta;
                 changed = true;
             }
             else if (itemTop > viewTop)
             {
                 float delta = itemTop - viewTop;
-                LogManager.Debug($"[AutoScroll] Item ABOVE viewport → newPos.y -= {delta:F1}", this);
+                LogManager.Trace($"[AutoScroll] Item ABOVE viewport → newPos.y -= {delta:F1}", this);
                 newPos.y -= delta;
                 changed = true;
             }
             else
             {
-                LogManager.Debug("[AutoScroll] Item already visible vertically", this);
+                LogManager.Trace("[AutoScroll] Item already visible vertically", this);
             }
         }
 
@@ -197,38 +197,38 @@ public class ScrollViewAutoScroll : MonoBehaviour
             float viewRight = viewport.rect.xMax - padding;
             float viewLeft  = viewport.rect.xMin + padding;
 
-            LogManager.Debug($"[AutoScroll] HORIZONTAL " +
+            LogManager.Trace($"[AutoScroll] HORIZONTAL " +
                              $"itemLeft={itemLeft:F1} itemRight={itemRight:F1} " +
                              $"viewLeft={viewLeft:F1} viewRight={viewRight:F1}", this);
 
             if (itemLeft < viewLeft)
             {
                 float delta = viewLeft - itemLeft;
-                LogManager.Debug($"[AutoScroll] Item LEFT of viewport → newPos.x -= {delta:F1}", this);
+                LogManager.Trace($"[AutoScroll] Item LEFT of viewport → newPos.x -= {delta:F1}", this);
                 newPos.x -= delta;
                 changed = true;
             }
             else if (itemRight > viewRight)
             {
                 float delta = itemRight - viewRight;
-                LogManager.Debug($"[AutoScroll] Item RIGHT of viewport → newPos.x += {delta:F1}", this);
+                LogManager.Trace($"[AutoScroll] Item RIGHT of viewport → newPos.x += {delta:F1}", this);
                 newPos.x += delta;
                 changed = true;
             }
             else
             {
-                LogManager.Debug("[AutoScroll] Item already visible horizontally", this);
+                LogManager.Trace("[AutoScroll] Item already visible horizontally", this);
             }
         }
 
         if (!changed)
         {
-            LogManager.Debug("[AutoScroll] No scroll needed — item fully visible", this);
+            LogManager.Trace("[AutoScroll] No scroll needed — item fully visible", this);
             return;
         }
 
         Vector2 clamped = ClampToContent(newPos);
-        LogManager.Debug($"[AutoScroll] Pre-clamp={newPos} Post-clamp={clamped}", this);
+        LogManager.Trace($"[AutoScroll] Pre-clamp={newPos} Post-clamp={clamped}", this);
 
         ApplyScroll(clamped);
     }
@@ -261,13 +261,13 @@ public class ScrollViewAutoScroll : MonoBehaviour
     {
         if (instant)
         {
-            LogManager.Debug($"[AutoScroll] ApplyScroll INSTANT → {pos}", this);
+            LogManager.Trace($"[AutoScroll] ApplyScroll INSTANT → {pos}", this);
             content.anchoredPosition = pos;
             isScrolling = false;
         }
         else
         {
-            LogManager.Debug($"[AutoScroll] ApplyScroll SMOOTH → target={pos}", this);
+            LogManager.Trace($"[AutoScroll] ApplyScroll SMOOTH → target={pos}", this);
             targetAnchoredPos = pos;
             isScrolling       = true;
         }
@@ -297,7 +297,7 @@ public class ScrollViewAutoScroll : MonoBehaviour
             return;
         }
 
-        LogManager.Debug($"[AutoScroll] ScrollTo called → {target.name} forceInstant={forceInstant}", this);
+        LogManager.Trace($"[AutoScroll] ScrollTo called → {target.name} forceInstant={forceInstant}", this);
 
         bool wasInstant = instant;
         if (forceInstant) instant = true;
@@ -310,7 +310,7 @@ public class ScrollViewAutoScroll : MonoBehaviour
 
     public void ResetToTop()
     {
-        LogManager.Debug("[AutoScroll] ResetToTop called", this);
+        LogManager.Trace("[AutoScroll] ResetToTop called", this);
         content.anchoredPosition = Vector2.zero;
         isScrolling  = false;
         lastSelected = null;

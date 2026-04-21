@@ -3,16 +3,25 @@ using UnityEngine;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 
+/*
+    data used for enemy teams from csv
+    entity used during battle
+    character used for team menu
+    guids used for user team persistence
+*/
+
 public class TeamComponentPlayers
 {
     // Full Battle Team
     public List<CharacterData> FullBattleCharacterDataList { get; private set; }
     public List<CharacterEntityBattle> FullBattleCharacterEntities { get; private set; }
+    public List<Character> FullBattleCharacters { get; private set; }
     public List<string> FullBattleCharacterGuids { get; private set; }
 
     // Mini Battle Team
     public List<CharacterData> MiniBattleCharacterDataList { get; private set; }
     public List<CharacterEntityBattle> MiniBattleCharacterEntities { get; private set; }
+    public List<Character> MiniBattleCharacters { get; private set; }
     public List<string> MiniBattleCharacterGuids { get; private set; }
 
     public TeamComponentPlayers(TeamData teamData, Team team, TeamSaveData teamSaveData = null)
@@ -25,11 +34,13 @@ public class TeamComponentPlayers
         // Initialize Full Battle lists
         FullBattleCharacterDataList = new();
         FullBattleCharacterEntities = new();
+        FullBattleCharacters = new();
         FullBattleCharacterGuids = new();
         
         // Initialize Mini Battle lists
         MiniBattleCharacterDataList = new();
         MiniBattleCharacterEntities = new();
+        MiniBattleCharacters = new();
         MiniBattleCharacterGuids = new();
         
         if (teamSaveData == null) 
@@ -92,6 +103,16 @@ public class TeamComponentPlayers
         };
     }
 
+    public List<Character> GetCharacters(BattleType battleType)
+    {
+        return battleType switch
+        {
+            BattleType.Full => FullBattleCharacters,
+            BattleType.Mini => MiniBattleCharacters,
+            _ => FullBattleCharacters
+        };
+    }
+
     public List<string> GetCharacterGuids(BattleType battleType)
     {
         return battleType switch
@@ -110,6 +131,16 @@ public class TeamComponentPlayers
             guids.Add(null);
 
         guids[slotIndex] = characterGuid;
+    }
+
+    public void SetCharacter(BattleType battleType, int slotIndex, Character character)
+    {
+        List<Character> characters = GetCharacters(battleType);
+        
+        while (characters.Count <= slotIndex)
+            characters.Add(null);
+
+        characters[slotIndex] = character;
     }
 
     public void SetCharacterEntity(BattleType battleType, int slotIndex, CharacterEntityBattle characterEntityBattle)
@@ -146,6 +177,22 @@ public class TeamComponentPlayers
         }
     }
 
+    public void ClearCharacters(BattleType battleType)
+    {
+        switch (battleType)
+        {
+            case BattleType.Full:
+                FullBattleCharacters.Clear();
+                break;
+            case BattleType.Mini:
+                MiniBattleCharacters.Clear();
+                break;
+            default:
+                LogManager.Warning($"[TeamComponentPlayers] Unknown battle type: {battleType}");
+                break;
+        }
+    }
+
     public void ClearAll(BattleType battleType)
     {
         switch (battleType)
@@ -153,11 +200,13 @@ public class TeamComponentPlayers
             case BattleType.Full:
                 FullBattleCharacterDataList.Clear();
                 FullBattleCharacterEntities.Clear();
+                FullBattleCharacters.Clear();
                 FullBattleCharacterGuids.Clear();
                 break;
             case BattleType.Mini:
                 MiniBattleCharacterDataList.Clear();
                 MiniBattleCharacterEntities.Clear();
+                MiniBattleCharacters.Clear();
                 MiniBattleCharacterGuids.Clear();
                 break;
             default:
@@ -195,6 +244,20 @@ public class TeamComponentPlayers
         {
             if (entities[i].CharacterGuid == characterGuid)
                 return entities[i];
+        }
+        
+        return null;
+    }
+
+    public Character GetCharacterByGuid(string characterGuid, BattleType battleType)
+    {
+        List<Character> characters = GetCharacters(battleType);
+        int count = characters.Count;
+        
+        for (int i = 0; i < count; i++)
+        {
+            if (characters[i].CharacterGuid == characterGuid)
+                return characters[i];
         }
         
         return null;

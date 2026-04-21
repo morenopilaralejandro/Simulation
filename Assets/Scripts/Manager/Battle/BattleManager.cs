@@ -480,6 +480,7 @@ public class BattleManager : MonoBehaviour
     private void PopulateTeamWithCharacters(Team team, int teamSize)
     {
         team.ClearCharacterEntities(currentType);
+        team.ClearCharacters(currentType);
 
         TeamSide side = team.TeamSide;
 
@@ -489,6 +490,7 @@ public class BattleManager : MonoBehaviour
             PopulateTeamWithCharactersFromData(team, teamSize);
     }
 
+    // TODO refactor this to create 11 entity and 15 data
     private void PopulateTeamWithCharactersFromData(Team team, int teamSize)
     {
         for (int i = 0; i < teamSize; i++)
@@ -506,6 +508,7 @@ public class BattleManager : MonoBehaviour
                     BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
                     character.gameObject.name = character.CharacterId;
                     team.GetCharacterEntities(currentType).Add(character);
+                    team.GetCharacters(currentType).Add(character.Character);
                 
                     charactersReady++;
                     if (charactersReady >= charactersReadyMax)
@@ -515,6 +518,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    // TODO refactor this to create 11 entity and 15 data
     private void PopulateTeamWithCharactersFromLoadout(Team team, int teamSize, TeamSide side)
     {
         for (int i = 0; i < teamSize; i++)
@@ -531,6 +535,7 @@ public class BattleManager : MonoBehaviour
                     BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
                     character.gameObject.name = character.CharacterId;
                     team.GetCharacterEntities(currentType).Add(character);
+                    team.GetCharacters(currentType).Add(character.Character);
                 
                     charactersReady++;
                     if (charactersReady >= charactersReadyMax)
