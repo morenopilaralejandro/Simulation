@@ -102,6 +102,9 @@ public class Team
     //sideComponent
     public TeamSide TeamSide => sideComponent.TeamSide;
     public Variant Variant => sideComponent.Variant;
+    public void SetSide(TeamSide teamSide) => sideComponent.SetSide(teamSide);
+    public void SetVariant(Variant variant) => sideComponent.SetVariant(variant);
+    public void ResetSideAndVariant() => sideComponent.ResetSideAndVariant();
     //customLoadoutComponent
     public bool IsCustomLoadout => customLoadoutComponent.IsCustomLoadout;
     public string CustomName => customLoadoutComponent.CustomName;

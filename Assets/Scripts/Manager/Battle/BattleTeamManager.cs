@@ -39,11 +39,11 @@ public class BattleTeamManager : MonoBehaviour
 
     public void AssignTeamToSide(Team team, TeamSide teamSide) {
         teams[teamSide] = team;
-        TeamEvents.RaiseAssignTeamToSide(team, teamSide);
+        team.SetSide(teamSide);
     }
 
     public void AssignVariantToTeam(Team team, Variant variant) {
-        TeamEvents.RaiseAssignVariantToTeam(team, variant);
+        team.SetVariant(variant);
     }
 
     public void AssignVariants() 
@@ -99,4 +99,23 @@ public class BattleTeamManager : MonoBehaviour
         return team;
     }
 
+    #region event 
+    
+    private void OnEnable()
+    {
+        BattleEvents.OnBattleEnd += HandleBattleEnd;
+    }
+
+    private void OnDisable()
+    {
+        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+    }
+
+    private void HandleBattleEnd()
+    {
+        teams[TeamSide.Home].ResetSideAndVariant();
+        teams[TeamSide.Away].ResetSideAndVariant();
+    }
+
+    #endregion
 }
