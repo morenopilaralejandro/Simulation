@@ -33,4 +33,12 @@ public class TeamReadiness
         isHomeReady = false;
         isAwayReady = false;
     }
+
+    public void CancelReady(TeamSide side)
+    {
+        if (side == TeamSide.Home)
+            isHomeReady = false;
+        else
+            isAwayReady = false;
+    }
 }

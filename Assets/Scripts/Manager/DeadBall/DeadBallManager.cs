@@ -115,8 +115,9 @@ public class DeadBallManager : MonoBehaviour
     {
         teamMenuOpen[side] = !teamMenuOpen[side];
 
-        if (teamMenuOpen[side])
-            UIEvents.RaiseMenuTeamBattleRequested(BattleManager.Instance.Teams[side]);
+        if (!teamMenuOpen[side]) return;
+        teamReadiness.CancelReady(side);
+        UIEvents.RaiseMenuTeamBattleRequested(BattleManager.Instance.Teams[side]);
     }
 
     private void Execute()
@@ -144,6 +145,8 @@ public class DeadBallManager : MonoBehaviour
     public Vector3 GetDefaultPositionKickoffReceive(TeamSide teamSide) => defaultPositionKickoffReceiver[teamSide];
     public void SetBallPosition(Vector3 ballPosition) => cachedBallPosition = ballPosition;
     public void SetState(DeadBallState state) => DeadBallState = state;
+    public Coroutine StartRoutine(IEnumerator routine) => StartCoroutine(routine);
+    public void StopRoutine(Coroutine routine) { if (routine != null) StopCoroutine(routine); }
 
     private void ResolveOffenseDefense(TeamSide offenseSide)
     {
@@ -231,6 +234,8 @@ public class DeadBallManager : MonoBehaviour
     {
         if (currentHandler == null) return;
         if (DeadBallState != DeadBallState.WaitingForReady && DeadBallState != DeadBallState.Setup) return;
+
+        DeadBallState = DeadBallState.Setup;
 
         BattleManager.Instance.ResetPlayerPositions();
         currentHandler.ResetPositions();

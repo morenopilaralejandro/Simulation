@@ -138,7 +138,6 @@ public class DeadBallCharacterSelector
 
     public int GetKickoffReceiverIndex(int kickerIndex, int receiverIndex)
     {
-        
         int baseValue = Mathf.Max(kickerIndex, receiverIndex);
         int result;
         int randomOffset;

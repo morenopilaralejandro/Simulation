@@ -131,6 +131,13 @@ public class PossessionManager : MonoBehaviour
     #region Feedback Logic
 
     public bool IsOnCooldownDuel(float now) => (now - lastDuelTime) <= cooldownSfxOnDuel;
+
+    public void SetCooldown(CharacterEntityBattle character)
+    {
+        lastCharacter = character;
+        lastKickTime = Time.time;
+    }
+
     private bool IsPassCut() => 
         lastCharacter != null &&
         currentCharacter != null &&

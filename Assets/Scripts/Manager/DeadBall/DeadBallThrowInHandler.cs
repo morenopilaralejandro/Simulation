@@ -23,6 +23,7 @@ public class DeadBallThrowInHandler : IDeadBallHandler
     private bool isAutoBattleEnabled;
     private bool isMultiplayer;
     private float throwInCornerDistance = 3f;
+    private Coroutine ballReadyRoutine;
 
     public bool IsReady => deadBallManager.TeamReadiness.AreBothReady && isBallReady;
 
@@ -45,13 +46,14 @@ public class DeadBallThrowInHandler : IDeadBallHandler
         ResetPositions();
 
         DuelLogManager.Instance.AddDeadBallThrowIn(characterKicker);
-
-        BallEvents.OnGained += OnBallGained;
-        deadBallManager.SetState(DeadBallState.WaitingForReady);
     }
 
     public void ResetPositions() 
     {
+        isBallReady = false;
+        BallEvents.OnGained -= OnBallGained;
+        deadBallManager.StopRoutine(ballReadyRoutine);
+
         characterKicker = deadBallManager.CharacterSelector.GetKicker(team);
         characterKicker.HasBallInHandThrowIn = true;
         characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
@@ -69,6 +71,8 @@ public class DeadBallThrowInHandler : IDeadBallHandler
             SetPositionsDefault();
 
         SetKickerPosition();
+
+        BallEvents.OnGained += OnBallGained;
     }
 
     public void HandleInput()
@@ -85,9 +89,16 @@ public class DeadBallThrowInHandler : IDeadBallHandler
     {
         if (c == characterKicker) 
         {
-            isBallReady = true;
             BallEvents.OnGained -= OnBallGained;
+            ballReadyRoutine = deadBallManager.StartRoutine(DelayedBallReady());
         }
+    }
+
+    private IEnumerator DelayedBallReady()
+    {
+        yield return null;
+        isBallReady = true;
+        deadBallManager.SetState(DeadBallState.WaitingForReady);
 
         if (isAutoBattleEnabled) 
             deadBallManager.TeamReadiness.SetBothReady();
@@ -111,8 +122,6 @@ public class DeadBallThrowInHandler : IDeadBallHandler
             characterKicker.KickBallTo(target.transform.position);
             CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);
         }
-
-
 
         characterKicker.HasBallInHandThrowIn = false;
     }
@@ -179,6 +188,7 @@ public class DeadBallThrowInHandler : IDeadBallHandler
 
         PossessionManager.Instance.Release();
         PossessionManager.Instance.GiveBallToCharacter(characterKicker);
+        PossessionManager.Instance.SetCooldown(characterKicker);
     }
 
     private Vector3 GetAdjustedDefaultPosition(Vector3 basePosition)

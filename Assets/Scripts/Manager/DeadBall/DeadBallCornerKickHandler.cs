@@ -22,8 +22,11 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
     private bool isBallReady;
     private bool isAutoBattleEnabled;
     private bool isMultiplayer;
+    private Coroutine ballReadyRoutine;
 
     public bool IsReady => deadBallManager.TeamReadiness.AreBothReady && isBallReady;
+    
+
 
     #endregion
 
@@ -43,15 +46,14 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
         ResetPositions();
 
         DuelLogManager.Instance.AddDeadBallCornerKick(characterKicker);
-
-        deadBallManager.SetState(DeadBallState.WaitingForReady);
     }
+
 
     public void ResetPositions() 
     {
         isBallReady = false;
         BallEvents.OnGained -= OnBallGained;
-        BallEvents.OnGained += OnBallGained;
+        deadBallManager.StopRoutine(ballReadyRoutine);
 
         characterKicker = deadBallManager.CharacterSelector.GetKicker(team);
         characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
@@ -64,11 +66,14 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
         defaultRecieverIndex = deadBallManager.CharacterSelector.GetDefaultReceiverIndex(characterSupportOffense, characterKicker);
         SetPositions();
         SetKickerPosition();
+
+        BallEvents.OnGained += OnBallGained;
     }
 
     public void HandleInput()
     {
         if (!InputManager.Instance.GetDown(CustomAction.Battle_Pass)) return;
+        if (!isBallReady) return;
 
         if (isMultiplayer) 
             deadBallManager.TeamReadiness.SetUserReady();
@@ -80,9 +85,16 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
     {
         if (c == characterKicker) 
         {
-            isBallReady = true;
             BallEvents.OnGained -= OnBallGained;
+            ballReadyRoutine = deadBallManager.StartRoutine(DelayedBallReady());
         }
+    }
+
+    private IEnumerator DelayedBallReady()
+    {
+        yield return null;
+        isBallReady = true;
+        deadBallManager.SetState(DeadBallState.WaitingForReady);
 
         if (isAutoBattleEnabled) 
             deadBallManager.TeamReadiness.SetBothReady();
@@ -141,6 +153,7 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
 
         PossessionManager.Instance.Release();
         PossessionManager.Instance.GiveBallToCharacter(characterKicker);
+        PossessionManager.Instance.SetCooldown(characterKicker);
     }
 
     private Quaternion GetKickerCornerRotation(Vector3 ballPosition)

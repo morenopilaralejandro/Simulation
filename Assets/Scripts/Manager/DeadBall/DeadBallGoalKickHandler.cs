@@ -21,6 +21,7 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
     private bool isBallReady;
     private bool isAutoBattleEnabled;
     private bool isMultiplayer;
+    private Coroutine ballReadyRoutine;
 
     public bool IsReady => deadBallManager.TeamReadiness.AreBothReady && isBallReady;
 
@@ -43,13 +44,14 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
         ResetPositions();
 
         DuelLogManager.Instance.AddDeadBallGoalKick(characterKicker);
-
-        BallEvents.OnGained += OnBallGained;
-        deadBallManager.SetState(DeadBallState.WaitingForReady);
     }
 
     public void ResetPositions() 
     {
+        isBallReady = false;
+        BallEvents.OnGained -= OnBallGained;
+        deadBallManager.StopRoutine(ballReadyRoutine);
+
         characterKicker = GoalManager.Instance.Keepers[team.TeamSide];
         /*
         characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
@@ -61,6 +63,8 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
         */
 
         SetKickerPosition();
+
+        BallEvents.OnGained += OnBallGained;
     }
 
     public void HandleInput()
@@ -77,9 +81,16 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
     {
         if (c == characterKicker) 
         {
-            isBallReady = true;
             BallEvents.OnGained -= OnBallGained;
+            ballReadyRoutine = deadBallManager.StartRoutine(DelayedBallReady());
         }
+    }
+
+    private IEnumerator DelayedBallReady()
+    {
+        yield return null;
+        isBallReady = true;
+        deadBallManager.SetState(DeadBallState.WaitingForReady);
 
         if (isAutoBattleEnabled) 
             deadBallManager.TeamReadiness.SetBothReady();
@@ -138,6 +149,7 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
     {
         PossessionManager.Instance.Release();
         PossessionManager.Instance.GiveBallToCharacter(characterKicker);
+        PossessionManager.Instance.SetCooldown(characterKicker);
     }
 
     #endregion
