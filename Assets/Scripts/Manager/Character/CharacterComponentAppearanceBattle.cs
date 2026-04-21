@@ -12,6 +12,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     [SerializeField] private SpriteLayerRendererCharacter spriteLayerRenderer;
 
     private CharacterEntityBattle characterEntityBattle;
+    private bool spritesLoaded;
 
     #endregion
 
@@ -27,15 +28,11 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     #region Async Loading
 
     public async Task LoadAsync()
-    {       
+    {
         await LoadSprites();
 
-        if (characterEntityBattle.FormationCoord.Position != Position.GK)
-        {
-            characterEntityBattle.SpriteLayerState.VisibleLayers.Remove(CharacterSpriteLayer.Gloves);
-            spriteLayerRenderer.SetActive(CharacterSpriteLayer.Gloves, false);
-        }
         characterEntityBattle.InitializeVisibility();
+        ToggleGloves(characterEntityBattle.FormationCoord.Position);
         ApplyStateToRenderer();
     }
 
@@ -44,14 +41,17 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         characterEntityBattle.SpriteLayerState.Sprites[CharacterSpriteLayer.Hair] =
             await SpriteAtlasManager.Instance.GetCharacterHair(characterEntityBattle.HairStyle.ToString().ToLower());
 
+        spritesLoaded = true;
     }
 
     #endregion
 
     #region Appearance Application
 
-    private void ApplyStateToRenderer()
+    public void ApplyStateToRenderer()
     {
+        if (!spritesLoaded) return;
+
         foreach (var (layer, sprite) in characterEntityBattle.SpriteLayerState.Sprites)
             spriteLayerRenderer.SetSprite(layer, sprite);
 
@@ -66,6 +66,21 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     #region Visibility
 
+    public void ToggleGloves(Position position)
+    {
+        bool isGoalkeeper = position == Position.GK;
+        bool hasGloves = characterEntityBattle.SpriteLayerState.VisibleLayers.Contains(CharacterSpriteLayer.Gloves);
+
+        if (isGoalkeeper == hasGloves) return;
+
+        if (isGoalkeeper)
+            characterEntityBattle.SpriteLayerState.VisibleLayers.Add(CharacterSpriteLayer.Gloves);
+        else
+            characterEntityBattle.SpriteLayerState.VisibleLayers.Remove(CharacterSpriteLayer.Gloves);
+
+        spriteLayerRenderer.SetActive(CharacterSpriteLayer.Gloves, isGoalkeeper);
+    }
+
     public void SetCharacterVisible(bool isVisible)
     {
         foreach (CharacterSpriteLayer layer in characterEntityBattle.SpriteLayerState.VisibleLayers)
@@ -75,7 +90,6 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     #endregion
 
     #region Helpers
-
 
     #endregion
 }

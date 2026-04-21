@@ -84,7 +84,7 @@ public class BattleManager : MonoBehaviour
         timeCurrent += Time.deltaTime * timeScale;
         BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
         
-        if(!Ball.IsTraveling)
+        if(Ball != null && !Ball.IsTraveling)
             CheckEndGame();
     }
 

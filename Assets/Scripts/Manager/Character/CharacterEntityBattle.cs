@@ -178,6 +178,9 @@ public class CharacterEntityBattle : MonoBehaviour
     public List<CharacterEntityBattle> GetOpponents() => teamMemberComponent.GetOpponents();
     //appearanceBattleComponent
     public void SetCharacterVisible(bool isVisible) => appearanceBattleComponent.SetCharacterVisible(isVisible);
+    public void ApplyStateToRenderer() => appearanceBattleComponent.ApplyStateToRenderer();
+    public void ToggleGloves(Position position) => appearanceBattleComponent.ToggleGloves(position);
+
     //modelComponent
     public Transform Model => modelComponent.Model;
     //keeperComponent

@@ -52,6 +52,9 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         characterReceiver = team.GetCharacterEntities(BattleManager.Instance.CurrentType)[team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1];
         receiverIndex = deadBallManager.CharacterSelector.GetKickoffReceiverIndex(team.GetFormation(BattleManager.Instance.CurrentType).Kickoff0, team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1);
 
+        if (team.TeamSide == BattleManager.Instance.GetUserSide())
+            CharacterChangeControlManager.Instance.SetControlledCharacter(characterKicker, team.TeamSide);
+
         LogManager.Trace($"[DeadBallKickoffHandler] Kickoff - Kicker: {characterKicker.name}, Receiver: {characterReceiver.name}, Same: {characterKicker == characterReceiver}");
 
         SetPositions();
