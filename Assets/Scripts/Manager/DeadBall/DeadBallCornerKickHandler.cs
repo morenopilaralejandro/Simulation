@@ -24,9 +24,7 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
     private bool isMultiplayer;
     private Coroutine ballReadyRoutine;
 
-    public bool IsReady => deadBallManager.TeamReadiness.AreBothReady && isBallReady;
-    
-
+    public bool IsReady => deadBallManager.TeamReadiness.AreBothReady && isBallReady;    
 
     #endregion
 
@@ -45,7 +43,7 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
 
         ResetPositions();
 
-        DuelLogManager.Instance.AddDeadBallCornerKick(characterKicker);
+        DuelLogManager.Instance.AddDeadBallCornerKick(characterKicker.Character, characterKicker.TeamSide);
     }
 
 

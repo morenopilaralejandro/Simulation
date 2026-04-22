@@ -153,8 +153,8 @@ public class FieldDuelHandler : IDuelHandler
     #region Helpers
     private void LogParticipantAction(DuelParticipant participant)
     {
-        DuelLogManager.Instance.AddActionCommand(participant.CharacterEntityBattle, participant.Command, participant.Move);
-        DuelLogManager.Instance.AddActionDamage(participant.CharacterEntityBattle, participant.Action, participant.Damage);
+        DuelLogManager.Instance.AddActionCommand(participant.CharacterEntityBattle.Character, participant.CharacterEntityBattle.TeamSide ,participant.Command, participant.Move);
+        DuelLogManager.Instance.AddActionDamage(participant.CharacterEntityBattle.Character, participant.CharacterEntityBattle.TeamSide, participant.Action, participant.Damage);
     }
     #endregion
 

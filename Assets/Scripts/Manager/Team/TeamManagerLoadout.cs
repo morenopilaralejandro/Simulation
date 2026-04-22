@@ -409,6 +409,8 @@ public class TeamManagerLoadout
         // Entity A is on field, Entity B is on bench (null)
         if (entityA != null && entityB == null)
         {
+            TeamEvents.RaiseCharacterSubstituted(characterB, characterA, loadout.TeamSide);
+
             // Return the field entity to pool
             BattleCharacterManager.Instance.ReturnCharacterToPool(entityA);
             characterA.ApplyKit(loadout.Kit, loadout.Variant, Position.FW);
@@ -421,6 +423,8 @@ public class TeamManagerLoadout
         // Entity B is on field, Entity A is on bench (null)
         if (entityB != null && entityA == null)
         {
+            TeamEvents.RaiseCharacterSubstituted(characterA, characterB, loadout.TeamSide);
+
             // Return the field entity to pool
             BattleCharacterManager.Instance.ReturnCharacterToPool(entityB);
             characterB.ApplyKit(loadout.Kit, loadout.Variant, Position.FW);

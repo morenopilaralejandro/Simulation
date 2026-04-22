@@ -32,7 +32,6 @@ public class DuelLogManager : MonoBehaviour
         }
 
         Instance = this;
-        //DontDestroyOnLoad(gameObject);
     }
 
     private void Start() 
@@ -88,25 +87,25 @@ public class DuelLogManager : MonoBehaviour
     private void HandleBattlePause(TeamSide teamSide) => AddMatchPause(GoalManager.Instance.Keepers[teamSide]);
     private void HandleBattleResume() => AddMatchResume();
 
-    private void HandlePassPerformed(CharacterEntityBattle character) => AddActionPass(character);
+    private void HandlePassPerformed(CharacterEntityBattle character) => AddActionPass(character.Character, character.TeamSide);
     private void HandleShootPerformed(CharacterEntityBattle character, bool isDirect) 
     {
-        AddActionShoot(character);
-        if (isDirect) AddActionDirect(character);
+        AddActionShoot(character.Character, character.TeamSide);
+        if (isDirect) AddActionDirect(character.Character, character.TeamSide);
     }
-    private void HandleGoalScored(CharacterEntityBattle scorringCharacter) => AddActionScore(scorringCharacter);
-    private void HandleShootStopped(CharacterEntityBattle character) => AddActionStop(character);
+    private void HandleGoalScored(CharacterEntityBattle scorringCharacter) => AddActionScore(scorringCharacter.Character, scorringCharacter.TeamSide);
+    private void HandleShootStopped(CharacterEntityBattle character) => AddActionStop(character.Character, character.TeamSide);
 
     private void HandleDuelStart(DuelMode duelMode) => AddDuelStart();
     private void HandleDuelEnd(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser)
     {
         if (isWinnerUser)
-            AddDuelWin(winner.CharacterEntityBattle);
+            AddDuelWin(winner.CharacterEntityBattle.Character, winner.CharacterEntityBattle.TeamSide);
         else
-            AddDuelLose(winner.CharacterEntityBattle);
+            AddDuelLose(winner.CharacterEntityBattle.Character, winner.CharacterEntityBattle.TeamSide);
     }
     private void HandleDuelCancel(DuelMode duelMode) => AddDuelCancel();
-    private void HandleGained(CharacterEntityBattle character) => AddPossessionGained(character);
+    private void HandleGained(CharacterEntityBattle character) => AddPossessionGained(character.Character, character.TeamSide);
         
 
 
@@ -115,9 +114,9 @@ public class DuelLogManager : MonoBehaviour
 
     #region Add Methods
 
-    private void AddEntry(string entryId, LogLevel logLevel, CharacterEntityBattle character, Move move, object args) 
+    private void AddEntry(string entryId, LogLevel logLevel, Character character, TeamSide teamSide, Move move, object args) 
     {
-        DuelLogEntry entry = new DuelLogEntry(entryId, logLevel, character, move, args);
+        DuelLogEntry entry = new DuelLogEntry(entryId, logLevel, character, teamSide, move, args);
         DuelLogEntries.Add(entry);
         LogManager.Trace($"[DuelLogManager] Shown: {logLevel == LogLevel.Info} String: {entry.EntryString}");
         DuelLogEvents.RaiseNewEntry(entry);
@@ -129,6 +128,7 @@ public class DuelLogManager : MonoBehaviour
             "match_start", 
             LogLevel.Trace,
             null,
+            default,
             null,
             null
         );
@@ -140,6 +140,7 @@ public class DuelLogManager : MonoBehaviour
             "match_half", 
             LogLevel.Trace,
             null,
+            default,
             null,
             null
         );
@@ -151,6 +152,7 @@ public class DuelLogManager : MonoBehaviour
             "match_end", 
             LogLevel.Trace,
             null,
+            default,
             null,
             null
         );
@@ -164,7 +166,8 @@ public class DuelLogManager : MonoBehaviour
         AddEntry(
             "match_pause", 
             LogLevel.Trace,
-            character,
+            character.Character,
+            character.TeamSide,
             null,
             args
         );
@@ -176,79 +179,86 @@ public class DuelLogManager : MonoBehaviour
             "match_resume", 
             LogLevel.Trace,
             null,
+            default,
             null,
             null
         );
     }
 
-    public void AddDeadBallKickoff(CharacterEntityBattle character)
+    public void AddDeadBallKickoff(Character character, TeamSide teamSide)
     {
         if(character.PortraitSprite == null) return;
         AddEntry(
             "deadball_kickoff", 
             LogLevel.Info,
             character,
+            teamSide,
             null,
             null
         );
     }
 
-    public void AddDeadBallThrowIn(CharacterEntityBattle character)
+    public void AddDeadBallThrowIn(Character character, TeamSide teamSide)
     {
         AddEntry(
             "deadball_throw_in", 
             LogLevel.Info,
             character,
+            teamSide,
             null,
             null
         );
     }
 
-    public void AddDeadBallCornerKick(CharacterEntityBattle character)
+    public void AddDeadBallCornerKick(Character character, TeamSide teamSide)
     {
         AddEntry(
             "deadball_corner_kick", 
             LogLevel.Info,
             character,
+            teamSide,
             null,
             null
         );
     }
 
-    public void AddDeadBallGoalKick(CharacterEntityBattle character)
+    public void AddDeadBallGoalKick(Character character, TeamSide teamSide)
     {
         AddEntry(
             "deadball_goal_kick", 
             LogLevel.Info,
             character,
+            teamSide,
             null,
             null
         );
     }
 
-    public void AddDeadBallFreeKickDirect(CharacterEntityBattle character)
+    public void AddDeadBallFreeKickDirect(Character character, TeamSide teamSide)
     {
         AddEntry(
             "deadball_free_kick_direct", 
             LogLevel.Info,
             character,
+            teamSide,
             null,
             null
         );
     }
 
-    public void AddDeadBallFreeKickIndirect(CharacterEntityBattle character)
+    public void AddDeadBallFreeKickIndirect(Character character, TeamSide teamSide)
     {
         AddEntry(
             "deadball_free_kick_indirect", 
             LogLevel.Info,
             character,
+            teamSide,
             null,
             null
         );
     }
 
-    public void AddActionPass(CharacterEntityBattle character)
+    public void AddActionPass(Character character, TeamSide teamSide)
     {
         if (DeadBallManager.Instance.IsFirstKickoff) return;
 
@@ -259,12 +269,13 @@ public class DuelLogManager : MonoBehaviour
             "action_pass", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             args
         );
     }
 
-    public void AddActionShoot(CharacterEntityBattle character)
+    public void AddActionShoot(Character character, TeamSide teamSide)
     {
         var args = new { 
             characterName = character.CharacterNick
@@ -273,23 +284,25 @@ public class DuelLogManager : MonoBehaviour
             "action_shoot", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             args
         );
     }
 
-    public void AddActionDirect(CharacterEntityBattle character)
+    public void AddActionDirect(Character character, TeamSide teamSide)
     {
         AddEntry(
             "action_direct", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             null
         );
     }
 
-    public void AddActionCommand(CharacterEntityBattle character, DuelCommand command, Move move)
+    public void AddActionCommand(Character character, TeamSide teamSide, DuelCommand command, Move move)
     {
         string characterName = character.CharacterNick;
         string commandName;
@@ -317,22 +330,13 @@ public class DuelLogManager : MonoBehaviour
             "action_command", 
             LogLevel.Trace,
             character,
+            teamSide,
             move,
             argsLong
         );
-
-        /*
-        AddEntry(
-            "action_command_short", 
-            LogLevel.Info,
-            character,
-            move,
-            argsShort
-        );
-        */
     }
 
-    public void AddActionDamage(CharacterEntityBattle character, DuelAction action, float damage)
+    public void AddActionDamage(Character character, TeamSide teamSide, DuelAction action, float damage)
     {
         string actionSymbol = (action == DuelAction.Offense)
             ? "+"
@@ -348,12 +352,13 @@ public class DuelLogManager : MonoBehaviour
             "action_damage", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             args
         );
     }
 
-    public void AddActionScore(CharacterEntityBattle character)
+    public void AddActionScore(Character character, TeamSide teamSide)
     {
         var args = new { 
             characterName = character.CharacterNick
@@ -362,12 +367,13 @@ public class DuelLogManager : MonoBehaviour
             "action_score", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             args
         );
     }
 
-    public void AddActionStop(CharacterEntityBattle character)
+    public void AddActionStop(Character character, TeamSide teamSide)
     {
         var args = new { 
             characterName = character.CharacterNick
@@ -376,28 +382,56 @@ public class DuelLogManager : MonoBehaviour
             "action_stop", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             args
         );
     }
 
-    public void AddElementOffense(CharacterEntityBattle character)
+    public void AddActionSubstitution(Character character, TeamSide teamSide)
+    {
+        var args = new { 
+            characterName = character.CharacterNick
+        };
+
+        AddEntry(
+            "action_substitution", 
+            LogLevel.Trace,
+            character,
+            teamSide,
+            null,
+            args
+        );
+
+        AddEntry(
+            "action_substitution", 
+            LogLevel.Info,
+            character,
+            teamSide,
+            null,
+            args
+        );
+    }
+
+    public void AddElementOffense(Character character, TeamSide teamSide)
     {
         AddEntry(
             "element_offense", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             null
         );
     }
 
-    public void AddElementDefense(CharacterEntityBattle character)
+    public void AddElementDefense(Character character, TeamSide teamSide)
     {
         AddEntry(
             "element_defense", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             null
         );
@@ -409,28 +443,31 @@ public class DuelLogManager : MonoBehaviour
             "duel_start", 
             LogLevel.Trace,
             null,
+            default,
             null,
             null
         );
     }
 
-    public void AddDuelWin(CharacterEntityBattle character)
+    public void AddDuelWin(Character character, TeamSide teamSide)
     {
         AddEntry(
             "duel_win", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             null
         );
     }
 
-    public void AddDuelLose(CharacterEntityBattle character)
+    public void AddDuelLose(Character character, TeamSide teamSide)
     {
         AddEntry(
             "duel_lose", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             null
         );
@@ -442,6 +479,7 @@ public class DuelLogManager : MonoBehaviour
             "duel_cancel", 
             LogLevel.Trace,
             null,
+            default,
             null,
             null
         );
@@ -453,12 +491,13 @@ public class DuelLogManager : MonoBehaviour
             "goal", 
             LogLevel.Trace,
             null,
+            default,
             null,
             null
         );
     }
 
-    public void AddPossessionGained(CharacterEntityBattle character)
+    public void AddPossessionGained(Character character, TeamSide teamSide)
     {
         if (BattleManager.Instance.CurrentPhase == BattlePhase.DeadBall) return;
 
@@ -469,6 +508,7 @@ public class DuelLogManager : MonoBehaviour
             "possession_gained", 
             LogLevel.Trace,
             character,
+            teamSide,
             null,
             args
         );
@@ -483,15 +523,16 @@ public class DuelLogManager : MonoBehaviour
             "condition", 
             LogLevel.Trace,
             null,
+            default,
             null,
             args
         );
     }
 
-    public void AddNotifyMoveLevelUp(CharacterEntityBattle character, Move move)
+    public void AddNotifyMoveLevelUp(Character character, TeamSide teamSide, Move move)
     {
         string characterName = character.CharacterNick;
-        string moveName = move.MoveName;;
+        string moveName = move.MoveName;
 
         var args = new {
             characterName = characterName,
@@ -502,6 +543,7 @@ public class DuelLogManager : MonoBehaviour
             "notify_move_evolved", 
             LogLevel.Info,
             character,
+            teamSide,
             null,
             null
         );

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Input;
@@ -14,6 +15,9 @@ public class SubstitutionManager : MonoBehaviour
     private BattleType battleType = BattleType.Full;
     private int maxSubstitutions = 3;
     private Dictionary<TeamSide, int> substitutionsMade = new();
+    private List<SubstitutionData> cachedSubstitutions = new();
+
+    private DuelLogManager duelLogManager;
 
     //[SerializeField] private Dictionary<TeamSide, int> remainingChanges = new ();
 
@@ -35,12 +39,19 @@ public class SubstitutionManager : MonoBehaviour
         substitutionsMade[TeamSide.Away] = 0;
     }
 
+    private void Start() 
+    {
+        duelLogManager = DuelLogManager.Instance;
+    }
+
     public void InitializeForBattle()
     {
         battleType = BattleManager.Instance.CurrentType;
 
         substitutionsMade[TeamSide.Home] = 0;
         substitutionsMade[TeamSide.Away] = 0;
+
+        cachedSubstitutions.Clear();
     }
 
     #endregion
@@ -97,21 +108,40 @@ public class SubstitutionManager : MonoBehaviour
 
     #endregion
 
+    #region Display
+
+    public void ShowSubstitutions() 
+    {
+        if (cachedSubstitutions.Count == 0) return;
+        var orderedList = cachedSubstitutions.OrderBy(s => s.TeamSide).ToList();
+        foreach (SubstitutionData substitution in orderedList)
+            duelLogManager.AddActionSubstitution(substitution.CharacterIn, substitution.TeamSide);
+    }
+
+    #endregion
+
     #region Events
 
     private void OnEnable()
     {
         BattleEvents.OnBattleStart += HandleBattleStart;
+        TeamEvents.OnCharacterSubstituted += HandleCharacterSubstituted;
     }
 
     private void OnDisable()
     {
         BattleEvents.OnBattleStart -= HandleBattleStart;
+        TeamEvents.OnCharacterSubstituted -= HandleCharacterSubstituted;
     }
 
     private void HandleBattleStart() 
     {
         InitializeForBattle();
+    }
+
+    private void HandleCharacterSubstituted(Character characterIn, Character characterOut, TeamSide teamSide)
+    {
+        cachedSubstitutions.Add(new SubstitutionData(characterIn, characterOut, teamSide));
     }
 
     #endregion

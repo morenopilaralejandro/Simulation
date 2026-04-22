@@ -43,7 +43,7 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
 
         ResetPositions();
 
-        DuelLogManager.Instance.AddDeadBallFreeKickIndirect(characterKicker);
+        DuelLogManager.Instance.AddDeadBallFreeKickIndirect(characterKicker.Character, characterKicker.TeamSide);
     }
 
     public void ResetPositions() 

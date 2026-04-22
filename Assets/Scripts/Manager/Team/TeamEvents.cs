@@ -92,9 +92,9 @@ public static class TeamEvents
         OnSubstitutionResetPositions?.Invoke(teamSide);
     }
 
-    public static event Action<CharacterEntityBattle, CharacterEntityBattle> OnCharacterSubstituted;
-    public static void RaiseCharacterSubstituted(CharacterEntityBattle characterIn, CharacterEntityBattle characterOut)
+    public static event Action<Character, Character, TeamSide> OnCharacterSubstituted;
+    public static void RaiseCharacterSubstituted(Character characterIn, Character characterOut, TeamSide teamSide)
     {
-        OnCharacterSubstituted?.Invoke(characterIn, characterOut);
+        OnCharacterSubstituted?.Invoke(characterIn, characterOut, teamSide);
     }
 }

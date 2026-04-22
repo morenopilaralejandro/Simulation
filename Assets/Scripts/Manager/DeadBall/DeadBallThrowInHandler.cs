@@ -45,7 +45,7 @@ public class DeadBallThrowInHandler : IDeadBallHandler
 
         ResetPositions();
 
-        DuelLogManager.Instance.AddDeadBallThrowIn(characterKicker);
+        DuelLogManager.Instance.AddDeadBallThrowIn(characterKicker.Character, characterKicker.TeamSide);
     }
 
     public void ResetPositions() 

@@ -131,6 +131,8 @@ public class DeadBallManager : MonoBehaviour
 
     private void Finish()
     {
+        SubstitutionManager.Instance.ShowSubstitutions();
+
         DeadBallState = DeadBallState.Finished;
         BattleManager.Instance.Unfreeze();
         BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
