@@ -59,6 +59,7 @@ public class MenuTeamPanelTeam : Menu
     private Kit cachedKit;
 
     private bool isClosing = false;
+    private bool hasSwapped = false;
 
     private FormationCharacterSlotUI pickedSlot;
     private bool isSwapping => pickedSlot != null;
@@ -97,6 +98,7 @@ public class MenuTeamPanelTeam : Menu
     public override void Show()
     {
         isClosing = false;
+        hasSwapped = false;
 
         base.Show();
         base.SetInteractable(true);
@@ -122,7 +124,7 @@ public class MenuTeamPanelTeam : Menu
     public void Close()
     {
         if (!isTop) return;
-        UIEvents.RaiseBackFromTeamRequested(currentTeam);
+        UIEvents.RaiseBackFromTeamRequested(currentTeam, hasSwapped);
         menuManager.CloseMenu();
     }
 
@@ -321,7 +323,6 @@ public class MenuTeamPanelTeam : Menu
             return;
         }
 
-        if (!isEditMode) return;
         currentSlot = slot;
         UIEvents.RaiseCharacterActionsOpened();
     }
@@ -346,6 +347,7 @@ public class MenuTeamPanelTeam : Menu
         // check substitution
         bool isValidSwap = isEditMode || substitutionManager.ValidateSwap(currentTeam.TeamSide, a , b);
         if (!isValidSwap) return;
+        hasSwapped = true;
 
         string guidA = a.GetCharacter().CharacterGuid;
         string guidB = b.GetCharacter().CharacterGuid;

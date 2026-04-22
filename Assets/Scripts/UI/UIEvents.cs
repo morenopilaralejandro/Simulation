@@ -79,10 +79,10 @@ public static class UIEvents
         OnTeamPanelDeleteOpened?.Invoke(team);
     }
 
-    public static event Action<Team> OnBackFromTeamRequested;
-    public static void RaiseBackFromTeamRequested(Team team)
+    public static event Action<Team, bool> OnBackFromTeamRequested;
+    public static void RaiseBackFromTeamRequested(Team team, bool hasSwapped)
     {
-        OnBackFromTeamRequested?.Invoke(team);
+        OnBackFromTeamRequested?.Invoke(team, hasSwapped);
     }
 
     public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUISelectedDefault;

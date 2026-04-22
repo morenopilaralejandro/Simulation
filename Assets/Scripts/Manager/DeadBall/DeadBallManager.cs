@@ -25,6 +25,8 @@ public class DeadBallManager : MonoBehaviour
     private Vector3 defaultPositionKickoffKicker;
     private Dictionary<TeamSide, Vector3> defaultPositionKickoffReceiver;
     private Dictionary<TeamSide, bool> teamMenuOpen = new();
+    private Dictionary<TeamSide, bool> teamMenuOpened = new();
+    private bool isOneTimeMenu = false;
 
     public DeadBallPositionConfig PositionConfig => positionConfig;
     public DeadBallCharacterSelector CharacterSelector => characterSelector;
@@ -91,8 +93,6 @@ public class DeadBallManager : MonoBehaviour
     {
         if (currentHandler == null) return;
 
-        //handleSharedInput Menu formation and change characters
-
         HandleMenuInput();
 
         if (!IsUserMenuOpen())
@@ -106,6 +106,7 @@ public class DeadBallManager : MonoBehaviour
     {
         if (DeadBallState != DeadBallState.WaitingForReady) return;
         if (!InputManager.Instance.GetDown(CustomAction.BattleUI_OpenTeamMenu)) return;
+        if (HasUserOpenedMenu() && isOneTimeMenu) return;
 
         TeamSide userSide = BattleManager.Instance.GetUserSide();
         ToggleTeamMenu(userSide);
@@ -116,6 +117,7 @@ public class DeadBallManager : MonoBehaviour
         teamMenuOpen[side] = !teamMenuOpen[side];
 
         if (!teamMenuOpen[side]) return;
+        teamMenuOpened[side] = true;
         teamReadiness.CancelReady(side);
         UIEvents.RaiseMenuTeamBattleRequested(BattleManager.Instance.Teams[side]);
     }
@@ -176,10 +178,15 @@ public class DeadBallManager : MonoBehaviour
     public bool IsTeamMenuOpen(TeamSide side) => teamMenuOpen[side];
     public bool IsUserMenuOpen() => IsTeamMenuOpen(BattleManager.Instance.GetUserSide());
     public bool IsAnyMenuOpen() => teamMenuOpen[TeamSide.Home] || teamMenuOpen[TeamSide.Away];
+    public bool HasOpenedMenu(TeamSide side) => teamMenuOpened[side];
+    public bool HasUserOpenedMenu() => HasOpenedMenu(BattleManager.Instance.GetUserSide());
     private void ResetMenuState()
     {
         teamMenuOpen[TeamSide.Home] = false;
         teamMenuOpen[TeamSide.Away] = false;
+
+        teamMenuOpened[TeamSide.Home] = false;
+        teamMenuOpened[TeamSide.Away] = false;
     }
 
 
@@ -221,12 +228,14 @@ public class DeadBallManager : MonoBehaviour
         TeamEvents.OnSubstitutionResetPositions -= HandleSubstitutionResetPositions;
     }
 
-    private void HandleBackFromTeamRequested(Team team) 
+    private void HandleBackFromTeamRequested(Team team, bool hasSwapped) 
     {
         if (!IsDeadBallInProgress) return;
         if (!teamMenuOpen[team.TeamSide]) return;
 
-        TeamEvents.RaiseSubstitutionResetPositions(team.TeamSide);
+        if (hasSwapped)
+            TeamEvents.RaiseSubstitutionResetPositions(team.TeamSide);
+
         ToggleTeamMenu(team.TeamSide);
     }
 

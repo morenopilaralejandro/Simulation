@@ -219,7 +219,7 @@ public class MenuTeamPanelLoadout : Menu
         Refresh();
     }
 
-    private void HandleBackToLoadoutList(Team team) 
+    private void HandleBackToLoadoutList(Team team, bool hasSwapped) 
     {
         Refresh();
     }

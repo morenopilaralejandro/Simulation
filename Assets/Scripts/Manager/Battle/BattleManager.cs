@@ -482,67 +482,85 @@ public class BattleManager : MonoBehaviour
         team.ClearCharacterEntities(currentType);
         team.ClearCharacters(currentType);
 
-        TeamSide side = team.TeamSide;
+        int rosterSize = currentType == BattleType.Full ? TeamManager.SIZE_MAX : teamSize;
 
+        for (int i = 0; i < rosterSize; i++)
+        {
+            int characterIndex = i;
+            bool needsEntity = i < teamSize;
+
+            if (!needsEntity)
+            {
+                // Add to roster without spawning an entity
+                AddCharacterToRoster(team, characterIndex);
+                continue;
+            }
+
+            BattleCharacterManager.Instance.GetPooledCharacter((character) =>
+            {
+                if (character == null) return;
+
+                bool initialized = team.IsCustomLoadout
+                    ? TryInitializeFromLoadout(character, team, characterIndex)
+                    : TryInitializeFromData(character, team, characterIndex);
+
+                if (!initialized) return;
+
+                BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
+                character.gameObject.name = character.CharacterId;
+                team.GetCharacterEntities(currentType).Add(character);
+                team.GetCharacters(currentType).Add(character.Character);
+
+                charactersReady++;
+                if (charactersReady >= charactersReadyMax)
+                    BattleEvents.RaiseAllCharactersReady();
+            });
+        }
+    }
+
+    private void AddCharacterToRoster(Team team, int index)
+    {
         if (team.IsCustomLoadout)
-            PopulateTeamWithCharactersFromLoadout(team, teamSize, side);
+        {
+            var guids = team.GetCharacterGuids(currentType);
+            if (index >= guids.Count) return;
+
+            Character characterObject = CharacterManager.Instance.GetCharacter(guids[index]);
+            team.GetCharacters(currentType).Add(characterObject);
+        }
         else
-            PopulateTeamWithCharactersFromData(team, teamSize);
-    }
-
-    // TODO refactor this to create 11 entity and 15 data
-    private void PopulateTeamWithCharactersFromData(Team team, int teamSize)
-    {
-        for (int i = 0; i < teamSize; i++)
         {
-            int characterIndex = i;
-            BattleCharacterManager.Instance.GetPooledCharacter((character) =>
-            {
-                if (character != null && characterIndex < team.GetCharacterDataList(currentType).Count)
-                {
-                    CharacterData characterData = team.GetCharacterDataList(currentType)[characterIndex]; 
-                    character.Initialize(characterData);
+            var dataList = team.GetCharacterDataList(currentType);
+            if (index >= dataList.Count) return;
 
-                    character.SetLevel(character.MaxLevel);
-                    character.ForceMaxEvolutionOnEquippedMoves();
-                    BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
-                    character.gameObject.name = character.CharacterId;
-                    team.GetCharacterEntities(currentType).Add(character);
-                    team.GetCharacters(currentType).Add(character.Character);
-                
-                    charactersReady++;
-                    if (charactersReady >= charactersReadyMax)
-                        BattleEvents.RaiseAllCharactersReady();
-                }
-            });
+            // Create a Character from data without an entity
+            Character characterObject = new Character(dataList[index]);
+            characterObject.SetLevel(characterObject.MaxLevel);
+            characterObject.ForceMaxEvolutionOnEquippedMoves();
+            team.GetCharacters(currentType).Add(characterObject);
         }
     }
 
-    // TODO refactor this to create 11 entity and 15 data
-    private void PopulateTeamWithCharactersFromLoadout(Team team, int teamSize, TeamSide side)
+    private bool TryInitializeFromData(CharacterEntityBattle character, Team team, int index)
     {
-        for (int i = 0; i < teamSize; i++)
-        {
-            int characterIndex = i;
-            BattleCharacterManager.Instance.GetPooledCharacter((character) =>
-            {
-                if (character != null && characterIndex < team.GetCharacterGuids(currentType).Count)
-                {
-                    Character characterObject = CharacterManager.Instance.GetCharacter(team.GetCharacterGuids(CurrentType)[characterIndex]);
-                    character.Initialize(null, characterObject); //Initialize the CharacterEntityBattle with a characterObject
+        var dataList = team.GetCharacterDataList(currentType);
+        if (index >= dataList.Count) return false;
 
-                    character.CalculateSpeed();
-                    BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
-                    character.gameObject.name = character.CharacterId;
-                    team.GetCharacterEntities(currentType).Add(character);
-                    team.GetCharacters(currentType).Add(character.Character);
-                
-                    charactersReady++;
-                    if (charactersReady >= charactersReadyMax)
-                        BattleEvents.RaiseAllCharactersReady();
-                }
-            });
-        }
+        character.Initialize(dataList[index]);
+        character.SetLevel(character.MaxLevel);
+        character.ForceMaxEvolutionOnEquippedMoves();
+        return true;
+    }
+
+    private bool TryInitializeFromLoadout(CharacterEntityBattle character, Team team, int index)
+    {
+        var guids = team.GetCharacterGuids(currentType);
+        if (index >= guids.Count) return false;
+
+        Character characterObject = CharacterManager.Instance.GetCharacter(guids[index]);
+        character.Initialize(null, characterObject);
+        character.CalculateSpeed();
+        return true;
     }
 
     public void ResetDefaultPositions()

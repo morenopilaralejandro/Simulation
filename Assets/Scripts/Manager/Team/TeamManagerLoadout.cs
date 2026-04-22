@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Localization;
 using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
 
 /// <summary>
 /// Manages all user-created team loadouts and tracks which one is active.
@@ -167,57 +168,6 @@ public class TeamManagerLoadout
 
         loadout.SetCharacterGuid(battleType, slotIndex, characterGuid);
         TeamEvents.RaiseLoadoutUpdated(loadout);
-    }
-
-    public void SwapCharactersInBattle(
-        Team loadout, BattleType battleType,
-        int slotIndexA, FormationCoord coordA, string guidA,
-        int slotIndexB, FormationCoord coordB, string guidB)
-    {
-        List<CharacterEntityBattle> entities = loadout.GetCharacterEntities(battleType);
-
-        if (entities == null)
-        {
-            Debug.LogError($"SwapCharactersInBattle: entities null for {battleType}");
-            return;
-        }
-
-        // Resolve BOTH references BEFORE modifying anything
-        CharacterEntityBattle entityA = null;
-        CharacterEntityBattle entityB = null;
-
-        int count = entities.Count;
-        for (int i = 0; i < count; i++)
-        {
-            if (entities[i] == null)
-                continue;
-
-            string guid = entities[i].CharacterGuid;
-
-            if (entityA == null && guid == guidA)
-                entityA = entities[i];
-
-            if (entityB == null && guid == guidB)
-                entityB = entities[i];
-
-            if (entityA != null && entityB != null)
-                break;
-        }
-
-        LogManager.Trace($"[TeamManagerLoadout] guidA: {guidA}, entityA found: {entityA != null}, ref: {entityA?.GetHashCode()}");
-        LogManager.Trace($"[TeamManagerLoadout] guidB: {guidB}, entityB found: {entityB != null}, ref: {entityB?.GetHashCode()}");
-        LogManager.Trace($"[TeamManagerLoadout] coordA: {coordA.Position}, coordB: {coordB.Position}");
-
-        // Now swap — same references, no new lookups
-        loadout.SetCharacterEntity(battleType, slotIndexA, entityB);
-        loadout.SetCharacterEntity(battleType, slotIndexB, entityA);
-
-        // Raise events with the EXACT same references
-        if (entityB != null)
-            TeamEvents.RaiseAssignCharacterToTeamBattle(entityB, loadout, coordA);
-
-        if (entityA != null)
-            TeamEvents.RaiseAssignCharacterToTeamBattle(entityA, loadout, coordB);
     }
 
     public void RemoveCharacterFromLoadout(Team loadout, BattleType battleType, string characterGuid)
@@ -396,6 +346,133 @@ public class TeamManagerLoadout
         }
     }
 
+    #endregion
+
+    #region Swap
+
+    public void SwapCharactersInBattle(
+        Team loadout, BattleType battleType,
+        int slotIndexA, FormationCoord coordA, string guidA,
+        int slotIndexB, FormationCoord coordB, string guidB)
+    {
+        List<CharacterEntityBattle> entities = loadout.GetCharacterEntities(battleType);
+
+        if (entities == null)
+        {
+            Debug.LogError($"SwapCharactersInBattle: entities null for {battleType}");
+            return;
+        }
+
+        CharacterEntityBattle entityA = null;
+        CharacterEntityBattle entityB = null;
+
+        int count = entities.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var e = entities[i];
+            if (e == null) continue;
+
+            string guid = e.CharacterGuid;
+
+            if (entityA == null && guid == guidA)
+                entityA = e;
+            else if (entityB == null && guid == guidB)
+                entityB = e;
+
+            if (entityA != null && entityB != null)
+                break;
+        }
+
+        // Swap characters in roster
+        Character characterA = loadout.GetCharacterByGuid(guidA, battleType);
+        Character characterB = loadout.GetCharacterByGuid(guidB, battleType);
+        loadout.SetCharacter(battleType, slotIndexA, characterB);
+        loadout.SetCharacter(battleType, slotIndexB, characterA);
+
+        int activeTeamSize = battleType == BattleType.Full
+            ? TeamManager.SIZE_FULL
+            : TeamManager.SIZE_MINI;
+
+        bool slotAIsActive = slotIndexA < activeTeamSize;
+        bool slotBIsActive = slotIndexB < activeTeamSize;
+
+        // Both on field — just swap entities directly
+        if (entityA != null && entityB != null)
+        {
+            loadout.SetCharacterEntity(battleType, slotIndexA, entityB);
+            loadout.SetCharacterEntity(battleType, slotIndexB, entityA);
+            TeamEvents.RaiseAssignCharacterToTeamBattle(entityB, loadout, coordA);
+            TeamEvents.RaiseAssignCharacterToTeamBattle(entityA, loadout, coordB);
+            return;
+        }
+
+        // Entity A is on field, Entity B is on bench (null)
+        if (entityA != null && entityB == null)
+        {
+            // Return the field entity to pool
+            BattleCharacterManager.Instance.ReturnCharacterToPool(entityA);
+            characterA.ApplyKit(loadout.Kit, loadout.Variant, Position.FW);
+
+            // Spawn fresh entity for slotA (where characterB is going)
+            SpawnEntityForSlot(loadout, battleType, slotIndexA, coordA, characterB);
+            return;
+        }
+
+        // Entity B is on field, Entity A is on bench (null)
+        if (entityB != null && entityA == null)
+        {
+            // Return the field entity to pool
+            BattleCharacterManager.Instance.ReturnCharacterToPool(entityB);
+            characterB.ApplyKit(loadout.Kit, loadout.Variant, Position.FW);
+
+            // Spawn fresh entity for slotB (where characterA is going)
+            SpawnEntityForSlot(loadout, battleType, slotIndexB, coordB, characterA);
+            return;
+        }
+    }
+
+    private void SpawnEntityForSlot(
+        Team loadout, BattleType battleType,
+        int slotIndex, FormationCoord coord, Character character)
+    {
+        if (character == null) return;
+
+        BattleCharacterManager.Instance.GetPooledCharacter((entity) =>
+        {
+            if (entity == null) return;
+
+            entity.Initialize(null, character);
+            LoadEntityAppearanceAsync(entity);
+
+            entity.CalculateSpeed();
+            entity.gameObject.name = entity.CharacterId;
+            loadout.SetCharacterEntity(battleType, slotIndex, entity);
+            TeamEvents.RaiseAssignCharacterToTeamBattle(entity, loadout, coord);
+
+            LogManager.Trace($"[TeamManagerLoadout] {entity.CharacterId} " +
+                $"baseStat: {entity.GetBattleStat(Stat.Speed)}, " +
+                $"fatigue: {entity.FatigueSpeedMultiplier}, " +
+                $"status: {entity.StatusSpeedMultiplier}, " +
+                $"final: {entity.MovementSpeed}");
+        });
+    }
+
+    private async void LoadEntityAppearanceAsync(CharacterEntityBattle entity)
+    {
+        try
+        {
+            await entity.AppearanceBattleLoadAsync();
+            
+            // Guard: entity may have been pooled during async load
+            if (!entity.gameObject.activeInHierarchy) return;
+            
+            entity.ApplyStateToRenderer();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TeamManagerLoadout] Failed to load appearance for {entity.CharacterId}: {e}");
+        }
+    }
     #endregion
 }
 

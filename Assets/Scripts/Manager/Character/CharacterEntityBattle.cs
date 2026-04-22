@@ -180,6 +180,7 @@ public class CharacterEntityBattle : MonoBehaviour
     public void SetCharacterVisible(bool isVisible) => appearanceBattleComponent.SetCharacterVisible(isVisible);
     public void ApplyStateToRenderer() => appearanceBattleComponent.ApplyStateToRenderer();
     public void ToggleGloves(Position position) => appearanceBattleComponent.ToggleGloves(position);
+    public Task AppearanceBattleLoadAsync() => appearanceBattleComponent.LoadAsync();
 
     //modelComponent
     public Transform Model => modelComponent.Model;

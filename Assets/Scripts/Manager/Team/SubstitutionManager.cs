@@ -12,7 +12,7 @@ public class SubstitutionManager : MonoBehaviour
     public static SubstitutionManager Instance { get; private set; }
 
     private BattleType battleType = BattleType.Full;
-    private int maxSubstitutions = 5;
+    private int maxSubstitutions = 3;
     private Dictionary<TeamSide, int> substitutionsMade = new();
 
     //[SerializeField] private Dictionary<TeamSide, int> remainingChanges = new ();
