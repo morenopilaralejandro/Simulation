@@ -151,7 +151,7 @@ public class MenuTeamPanelTeam : Menu
     private void InitializeUI() 
     {
         panelActive.SetActive(isEditMode);
-        panelChanges.SetActive(isBattleMode);
+        panelChanges.SetActive(isBattleMode && currentBattleType == BattleType.Full);
 
         buttonOptions.interactable = isEditMode;
         buttonCharacterReplace.interactable = isEditMode;

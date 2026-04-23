@@ -44,6 +44,7 @@ namespace Aremoreno.Enums.Input
         BattleUI_DimensionShortcutPause,
         BattleUI_OpenTeamMenu,
         BattleUI_CloseTeamMenu,
+        BattleUI_DeadBallConfirm,
         //WorldActions
         World_Move,
         World_Run,

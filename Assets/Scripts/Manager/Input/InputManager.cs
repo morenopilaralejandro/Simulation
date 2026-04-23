@@ -76,6 +76,7 @@ public class InputManager : MonoBehaviour
         BindButton(input.BattleUIActions.BattleUI_DimensionShortcutPause, CustomAction.BattleUI_DimensionShortcutPause);
         BindButton(input.BattleUIActions.BattleUI_OpenTeamMenu, CustomAction.BattleUI_OpenTeamMenu);
         BindButton(input.BattleUIActions.BattleUI_CloseTeamMenu, CustomAction.BattleUI_CloseTeamMenu);
+        BindButton(input.BattleUIActions.BattleUI_DeadBallConfirm, CustomAction.BattleUI_DeadBallConfirm);
 
         //WorldActions
         input.WorldActions.World_Move.performed += OnMoveWorldPerformed;
@@ -156,6 +157,7 @@ public class InputManager : MonoBehaviour
             UnbindButton(input.BattleUIActions.BattleUI_DimensionShortcutPause);
             UnbindButton(input.BattleUIActions.BattleUI_OpenTeamMenu);
             UnbindButton(input.BattleUIActions.BattleUI_CloseTeamMenu);
+            UnbindButton(input.BattleUIActions.BattleUI_DeadBallConfirm);
 
             //WorldActions
             UnbindButton(input.WorldActions.World_Run);

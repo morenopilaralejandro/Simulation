@@ -116,6 +116,7 @@ public class SubstitutionManager : MonoBehaviour
         var orderedList = cachedSubstitutions.OrderBy(s => s.TeamSide).ToList();
         foreach (SubstitutionData substitution in orderedList)
             duelLogManager.AddActionSubstitution(substitution.CharacterIn, substitution.TeamSide);
+        cachedSubstitutions.Clear();
     }
 
     #endregion

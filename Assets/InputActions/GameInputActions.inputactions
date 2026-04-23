@@ -390,6 +390,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "BattleUI_DeadBallConfirm",
+                    "type": "Button",
+                    "id": "778131dc-c061-409d-ada1-4587220d0341",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -665,6 +674,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "BattleUI_CloseTeamMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c35053f7-8a28-4038-bab4-d146e2922447",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_DeadBallConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "afb4cd6b-d4b0-4883-9ef1-ca8f317109d7",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_DeadBallConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a399e5da-91bf-47df-b082-dca4018b8854",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_DeadBallConfirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

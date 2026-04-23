@@ -18,12 +18,13 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
     private CharacterEntityBattle[] characterSupportDefense;
     private Vector3 ballPosition;
 
+    private bool isKickExecuted;
     private bool isBallReady;
     private bool isAutoBattleEnabled;
     private bool isMultiplayer;
     private Coroutine ballReadyRoutine;
 
-    public bool IsReady => deadBallManager.TeamReadiness.AreBothReady && isBallReady;
+    public bool IsReady => isBallReady && isKickExecuted;
 
     #endregion
 
@@ -48,6 +49,7 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
 
     public void ResetPositions() 
     {
+        isKickExecuted = false;
         isBallReady = false;
         BallEvents.OnGained -= OnBallGained;
         deadBallManager.StopRoutine(ballReadyRoutine);
@@ -69,12 +71,23 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
 
     public void HandleInput()
     {
-        if (!InputManager.Instance.GetDown(CustomAction.Battle_Pass)) return;
+        if (deadBallManager.DeadBallState == DeadBallState.WaitingForReady)
+        {
+            if (!InputManager.Instance.GetDown(CustomAction.BattleUI_DeadBallConfirm)) return;
 
-        if (isMultiplayer) 
-            deadBallManager.TeamReadiness.SetUserReady();
-        else 
-            deadBallManager.TeamReadiness.SetBothReady();
+            if (isMultiplayer) 
+                deadBallManager.TeamReadiness.SetUserReady();
+            else 
+                deadBallManager.TeamReadiness.SetBothReady();
+        }
+
+        if (deadBallManager.DeadBallState == DeadBallState.Executing)
+        {
+            if (!isBallReady) return;
+            if (!deadBallManager.IsUserOffense) return;
+            if (!InputManager.Instance.GetDown(CustomAction.Battle_Pass)) return;
+            isKickExecuted = true;
+        }
     }
 
     private void OnBallGained(CharacterEntityBattle c)
@@ -93,7 +106,15 @@ public class DeadBallFreeKickIndirectHandler : IDeadBallHandler
         deadBallManager.SetState(DeadBallState.WaitingForReady);
 
         if (isAutoBattleEnabled) 
+        {
             deadBallManager.TeamReadiness.SetBothReady();
+            if (deadBallManager.IsUserOffense) isKickExecuted = true;
+        }
+
+        if (characterKicker.IsEnemyAI && characterKicker.TeamSide == deadBallManager.OffenseSide) 
+        {
+            isKickExecuted = true;
+        }
     }
 
     public void Execute()

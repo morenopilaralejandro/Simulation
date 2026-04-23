@@ -476,6 +476,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_DeadBallConfirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""778131dc-c061-409d-ada1-4587220d0341"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -751,6 +760,39 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""BattleUI_CloseTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c35053f7-8a28-4038-bab4-d146e2922447"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_DeadBallConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""afb4cd6b-d4b0-4883-9ef1-ca8f317109d7"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_DeadBallConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a399e5da-91bf-47df-b082-dca4018b8854"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_DeadBallConfirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1387,6 +1429,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_BattleUIActions_BattleUI_DimensionShortcutPause = m_BattleUIActions.FindAction("BattleUI_DimensionShortcutPause", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_OpenTeamMenu = m_BattleUIActions.FindAction("BattleUI_OpenTeamMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_CloseTeamMenu = m_BattleUIActions.FindAction("BattleUI_CloseTeamMenu", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_DeadBallConfirm = m_BattleUIActions.FindAction("BattleUI_DeadBallConfirm", throwIfNotFound: true);
         // WorldActions
         m_WorldActions = asset.FindActionMap("WorldActions", throwIfNotFound: true);
         m_WorldActions_World_Move = m_WorldActions.FindAction("World_Move", throwIfNotFound: true);
@@ -1670,6 +1713,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_BattleUIActions_BattleUI_DimensionShortcutPause;
     private readonly InputAction m_BattleUIActions_BattleUI_OpenTeamMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_CloseTeamMenu;
+    private readonly InputAction m_BattleUIActions_BattleUI_DeadBallConfirm;
     /// <summary>
     /// Provides access to input actions defined in input action map "BattleUIActions".
     /// </summary>
@@ -1733,6 +1777,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "BattleUIActions/BattleUI_CloseTeamMenu".
         /// </summary>
         public InputAction @BattleUI_CloseTeamMenu => m_Wrapper.m_BattleUIActions_BattleUI_CloseTeamMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_DeadBallConfirm".
+        /// </summary>
+        public InputAction @BattleUI_DeadBallConfirm => m_Wrapper.m_BattleUIActions_BattleUI_DeadBallConfirm;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1798,6 +1846,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_CloseTeamMenu.started += instance.OnBattleUI_CloseTeamMenu;
             @BattleUI_CloseTeamMenu.performed += instance.OnBattleUI_CloseTeamMenu;
             @BattleUI_CloseTeamMenu.canceled += instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_DeadBallConfirm.started += instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_DeadBallConfirm.performed += instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_DeadBallConfirm.canceled += instance.OnBattleUI_DeadBallConfirm;
         }
 
         /// <summary>
@@ -1848,6 +1899,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_CloseTeamMenu.started -= instance.OnBattleUI_CloseTeamMenu;
             @BattleUI_CloseTeamMenu.performed -= instance.OnBattleUI_CloseTeamMenu;
             @BattleUI_CloseTeamMenu.canceled -= instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_DeadBallConfirm.started -= instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_DeadBallConfirm.performed -= instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_DeadBallConfirm.canceled -= instance.OnBattleUI_DeadBallConfirm;
         }
 
         /// <summary>
@@ -2489,6 +2543,13 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBattleUI_CloseTeamMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_DeadBallConfirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_DeadBallConfirm(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "WorldActions" which allows adding and removing callbacks.

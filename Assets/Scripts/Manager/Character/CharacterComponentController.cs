@@ -115,7 +115,7 @@ public class CharacterComponentController : MonoBehaviour
     #region Targeting
     private void UpdateTargeting()
     {
-        if (isAimingPass || BattleEffectManager.Instance.IsPlayingMove || DeadBallManager.Instance.IsUserDefense)
+        if (isAimingPass || BattleEffectManager.Instance.IsPlayingMove || DeadBallManager.Instance.PreventTarget())
             return;
 
         CharacterEntityBattle target = moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE
