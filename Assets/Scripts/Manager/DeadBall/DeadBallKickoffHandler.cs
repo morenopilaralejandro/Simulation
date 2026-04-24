@@ -39,11 +39,10 @@ public class DeadBallKickoffHandler : IDeadBallHandler
 
         ResetPositions();
 
-        AudioManager.Instance.PlaySfx("sfx-whistle_single");
         DuelLogManager.Instance.AddDeadBallKickoff(characterKicker.Character, characterKicker.TeamSide);
     }
 
-    public void ResetPositions() 
+    public void ResetPositions()
     {
         isKickExecuted = false;
         isBallReady = false;

@@ -60,7 +60,7 @@ public class FormationCharacterSlotPool : MonoBehaviour
     {
         if (o == null) return;
 
-        o.Reset();
+        o.Release();
         o.SetVisible(false);
 
         if (isBench)

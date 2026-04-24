@@ -242,6 +242,12 @@ public static class UIEvents
         OnCharacterSelectorOpened?.Invoke();
     }
 
+    public static event Action<Character> OnCharaterDetailSideUpdateRequested;
+    public static void RaiseCharaterDetailSideUpdateRequested(Character character)
+    {
+        OnCharaterDetailSideUpdateRequested?.Invoke(character);
+    }
+
     // Menu Item
     public static event Action<Item> OnItemSelected;
     public static void RaiseItemSelected(Item item)

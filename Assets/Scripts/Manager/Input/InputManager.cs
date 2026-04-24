@@ -31,7 +31,7 @@ public class InputManager : MonoBehaviour
     public bool IsAndroid => isAndroid;
     public bool IsLocked => isLocked;    
     //public bool IsUsingController => currentDeviceType == InputDeviceType.Gamepad;
-    public bool IsUsingController => true;
+    public bool IsUsingController => false;
     public InputDeviceType CurrentDeviceType => currentDeviceType;
     #endregion
 
@@ -77,6 +77,7 @@ public class InputManager : MonoBehaviour
         BindButton(input.BattleUIActions.BattleUI_OpenTeamMenu, CustomAction.BattleUI_OpenTeamMenu);
         BindButton(input.BattleUIActions.BattleUI_CloseTeamMenu, CustomAction.BattleUI_CloseTeamMenu);
         BindButton(input.BattleUIActions.BattleUI_DeadBallConfirm, CustomAction.BattleUI_DeadBallConfirm);
+        BindButton(input.BattleUIActions.BattleUI_TeamPreviewConfirm, CustomAction.BattleUI_TeamPreviewConfirm);
 
         //WorldActions
         input.WorldActions.World_Move.performed += OnMoveWorldPerformed;
@@ -124,6 +125,7 @@ public class InputManager : MonoBehaviour
     private void Start() 
     {
         mainCamera = Camera.main;
+        isAndroid = Application.platform == RuntimePlatform.Android;
     }
 
     private void OnDestroy()
@@ -158,6 +160,7 @@ public class InputManager : MonoBehaviour
             UnbindButton(input.BattleUIActions.BattleUI_OpenTeamMenu);
             UnbindButton(input.BattleUIActions.BattleUI_CloseTeamMenu);
             UnbindButton(input.BattleUIActions.BattleUI_DeadBallConfirm);
+            UnbindButton(input.BattleUIActions.BattleUI_TeamPreviewConfirm);
 
             //WorldActions
             UnbindButton(input.WorldActions.World_Run);
@@ -474,7 +477,8 @@ public class InputManager : MonoBehaviour
 
     private void HandleScreenControlsShowRequested() 
     {
-        if (onScreenControlsRoot.activeSelf != true && isAndroid && !IsUsingController)
+        //if (onScreenControlsRoot.activeSelf != true && isAndroid && !IsUsingController)
+        if (onScreenControlsRoot.activeSelf != true && isAndroid)
             onScreenControlsRoot.SetActive(true);
     }
 

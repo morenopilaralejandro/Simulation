@@ -399,6 +399,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "BattleUI_TeamPreviewConfirm",
+                    "type": "Button",
+                    "id": "d088e0ec-40d2-4739-ad65-993e111e888a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -707,6 +716,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "BattleUI_DeadBallConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c32fc651-49a2-43e9-a9fb-913a26fae76b",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_TeamPreviewConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9848ab0b-e8b4-4a8d-95bc-77d69c5be42b",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_TeamPreviewConfirm",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

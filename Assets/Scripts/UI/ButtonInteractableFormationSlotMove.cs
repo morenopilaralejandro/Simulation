@@ -6,6 +6,8 @@ public class ButtonInteractableFormationSlotMove : MonoBehaviour
     [Header("References")]
     [SerializeField] private Button _targetButton;
 
+    private bool _wasInteractableBeforeMove;
+
     private void OnEnable()
     {
         UIEvents.OnFormationCharacterSlotUIMoveStarted += HandleMoveStarted;
@@ -20,11 +22,13 @@ public class ButtonInteractableFormationSlotMove : MonoBehaviour
 
     private void HandleMoveStarted(FormationCharacterSlotUI slot)
     {
+        _wasInteractableBeforeMove = _targetButton.interactable;
         _targetButton.interactable = false;
     }
 
     private void HandleMoveEnded(FormationCharacterSlotUI slot)
     {
-        _targetButton.interactable = true;
+        if (_wasInteractableBeforeMove)
+            _targetButton.interactable = true;
     }
 }

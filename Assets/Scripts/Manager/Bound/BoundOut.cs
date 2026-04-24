@@ -10,6 +10,7 @@ public class BoundOut : MonoBehaviour
     [SerializeField] private BoundType boundType;
     private BattleManager battleManager;
     private DeadBallManager deadBallManager;
+    private AudioManager audioManager;
 
     #region Unity Lifecycle
 
@@ -17,6 +18,7 @@ public class BoundOut : MonoBehaviour
     {
         battleManager = BattleManager.Instance;
         deadBallManager = DeadBallManager.Instance;
+        audioManager = AudioManager.Instance;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,6 +41,8 @@ public class BoundOut : MonoBehaviour
 
         GameObject hitObj = other.GetComponent<Collider>().gameObject;
         if (!hitObj.CompareTag("Ball")) return;
+
+        audioManager.PlaySfx("sfx-whistle_single");
 
         battleManager.Freeze();
         var ball = battleManager.Ball;

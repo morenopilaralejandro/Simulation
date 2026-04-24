@@ -22,4 +22,14 @@ public class CharacterCard : MonoBehaviour
         textName.text = character.CharacterNick;
     }
 
+    public void Clear()
+    {
+        characterPortrait?.Clear();
+
+        if (imageElement != null) imageElement.sprite = null;
+        if (imageGender != null) imageGender.sprite = null;
+        if (imagePosition != null) imagePosition.color = Color.white;
+        if (textName != null) textName.text = string.Empty;
+    }
+
 }

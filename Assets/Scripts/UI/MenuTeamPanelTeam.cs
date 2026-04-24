@@ -308,6 +308,7 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandleFormationCharacterSlotUIClicked(FormationCharacterSlotUI slot) 
     {
+        if (!isTop) return;
         if (slot == null || slot.gameObject == null) return;
 
         selectedGo = slot.gameObject;

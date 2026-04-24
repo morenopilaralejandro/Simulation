@@ -15,6 +15,7 @@ public class DeadBallManager : MonoBehaviour
     private DeadBallPositionConfig positionConfig;
     private DeadBallCharacterSelector characterSelector;
     private DeadBallPositionUtils positionUtils;
+    private AudioManager audioManager;
     private TeamReadiness teamReadiness;
     private bool isFirstKickoff = true;
     private Team offenseTeam;
@@ -67,6 +68,11 @@ public class DeadBallManager : MonoBehaviour
             { TeamSide.Away, new Vector3(1f, 0.34f, 0.1f) }
         };
 
+    }
+
+    private void Start() 
+    {
+        audioManager = AudioManager.Instance;
     }
 
     #endregion
@@ -129,6 +135,12 @@ public class DeadBallManager : MonoBehaviour
     private void Execute()
     {
         SubstitutionManager.Instance.ShowSubstitutions();
+
+        audioManager.PlaySfx("sfx-whistle_single");
+        // foul double
+        // offside double
+        // out single
+
         DeadBallState = DeadBallState.Executing;
         DeadBallEvents.RaiseDeadBallReady(DeadBallType, offenseSide, defenseSide);
     }

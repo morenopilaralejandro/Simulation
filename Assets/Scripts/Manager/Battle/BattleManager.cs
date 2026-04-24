@@ -419,7 +419,6 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator ThrowInSequence(TeamSide side)
     {
-        AudioManager.Instance.PlaySfx("sfx-whistle_single");
         yield return new WaitForSeconds(0.5f);
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.ThrowIn, side);
@@ -432,7 +431,6 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator CornerKickSequence(TeamSide side)
     {
-        AudioManager.Instance.PlaySfx("sfx-whistle_single");
         yield return new WaitForSeconds(0.5f);
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.CornerKick, side);
@@ -445,8 +443,6 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator OffsideSequence(TeamSide side)
     {
-        AudioManager.Instance.PlaySfx("sfx-whistle_single");
-
         BattleUIManager.Instance.SetMessageActive(MessageType.Offside, true);
         yield return new WaitForSeconds(0.5f);
         BattleUIManager.Instance.SetMessageActive(MessageType.Offside, false);
@@ -462,7 +458,6 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator GoalKickSequence(TeamSide side)
     {
-        AudioManager.Instance.PlaySfx("sfx-whistle_single");
         yield return new WaitForSeconds(0.5f);
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.GoalKick, side);
@@ -472,8 +467,21 @@ public class BattleManager : MonoBehaviour
     #region Team and Ball
     private void HandleAllCharactersReady()
     {
-        BattleEvents.RaiseBattleStart();
         ResetDefaultPositions();
+        BattleEvents.RaiseBattleStart();
+
+        if (currentType == BattleType.Mini)
+        {
+
+            DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Home);
+        } else 
+        {
+            TeamEvents.RaiseTeamPreviewRequested();
+        }
+    }
+
+    private void HandleTeamPreviewEnded()
+    {
         DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Home);
     }
 
@@ -580,5 +588,19 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Events
+
+    private void OnEnable()
+    {
+        TeamEvents.OnTeamPreviewEnded += HandleTeamPreviewEnded;
+    }
+
+    private void OnDisable()
+    {
+        TeamEvents.OnTeamPreviewEnded -= HandleTeamPreviewEnded;
+    }
+
     #endregion
 }

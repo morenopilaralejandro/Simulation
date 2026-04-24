@@ -48,4 +48,15 @@ public class CharacterPortraitBattle : MonoBehaviour
         imageKitPortraitNeck.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.Body];
     }
 
+    public void Clear()
+    {
+        if (imageCharacterPortrait != null) imageCharacterPortrait.sprite = null;
+        if (imageKitPortraitBase != null) imageKitPortraitBase.sprite = null;
+        if (imageKitPortraitDetail != null) imageKitPortraitDetail.sprite = null;
+        if (imageKitPortraitNeck != null) imageKitPortraitNeck.sprite = null;
+
+        _cachedId = null;
+        _cachedSize = default;
+    }
+
 }

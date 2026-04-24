@@ -485,6 +485,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_TeamPreviewConfirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""d088e0ec-40d2-4739-ad65-993e111e888a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -793,6 +802,28 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""BattleUI_DeadBallConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c32fc651-49a2-43e9-a9fb-913a26fae76b"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_TeamPreviewConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9848ab0b-e8b4-4a8d-95bc-77d69c5be42b"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_TeamPreviewConfirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1430,6 +1461,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_BattleUIActions_BattleUI_OpenTeamMenu = m_BattleUIActions.FindAction("BattleUI_OpenTeamMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_CloseTeamMenu = m_BattleUIActions.FindAction("BattleUI_CloseTeamMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_DeadBallConfirm = m_BattleUIActions.FindAction("BattleUI_DeadBallConfirm", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_TeamPreviewConfirm = m_BattleUIActions.FindAction("BattleUI_TeamPreviewConfirm", throwIfNotFound: true);
         // WorldActions
         m_WorldActions = asset.FindActionMap("WorldActions", throwIfNotFound: true);
         m_WorldActions_World_Move = m_WorldActions.FindAction("World_Move", throwIfNotFound: true);
@@ -1714,6 +1746,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_BattleUIActions_BattleUI_OpenTeamMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_CloseTeamMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_DeadBallConfirm;
+    private readonly InputAction m_BattleUIActions_BattleUI_TeamPreviewConfirm;
     /// <summary>
     /// Provides access to input actions defined in input action map "BattleUIActions".
     /// </summary>
@@ -1782,6 +1815,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @BattleUI_DeadBallConfirm => m_Wrapper.m_BattleUIActions_BattleUI_DeadBallConfirm;
         /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_TeamPreviewConfirm".
+        /// </summary>
+        public InputAction @BattleUI_TeamPreviewConfirm => m_Wrapper.m_BattleUIActions_BattleUI_TeamPreviewConfirm;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_BattleUIActions; }
@@ -1849,6 +1886,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_DeadBallConfirm.started += instance.OnBattleUI_DeadBallConfirm;
             @BattleUI_DeadBallConfirm.performed += instance.OnBattleUI_DeadBallConfirm;
             @BattleUI_DeadBallConfirm.canceled += instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_TeamPreviewConfirm.started += instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_TeamPreviewConfirm.performed += instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_TeamPreviewConfirm.canceled += instance.OnBattleUI_TeamPreviewConfirm;
         }
 
         /// <summary>
@@ -1902,6 +1942,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_DeadBallConfirm.started -= instance.OnBattleUI_DeadBallConfirm;
             @BattleUI_DeadBallConfirm.performed -= instance.OnBattleUI_DeadBallConfirm;
             @BattleUI_DeadBallConfirm.canceled -= instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_TeamPreviewConfirm.started -= instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_TeamPreviewConfirm.performed -= instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_TeamPreviewConfirm.canceled -= instance.OnBattleUI_TeamPreviewConfirm;
         }
 
         /// <summary>
@@ -2550,6 +2593,13 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBattleUI_DeadBallConfirm(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_TeamPreviewConfirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_TeamPreviewConfirm(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "WorldActions" which allows adding and removing callbacks.

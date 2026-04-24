@@ -6,6 +6,7 @@ namespace Aremoreno.Enums.Battle
         Selection,
         Cutscene,
         DeadBall,
+        TeamPreview,
         End
     }
 
