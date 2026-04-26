@@ -458,6 +458,42 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_OpenTeamMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""06811560-0a21-4532-9eb7-7d1716a79dec"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_CloseTeamMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""8201b860-72e2-4ce7-b8c1-61b667cdd2a6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_DeadBallConfirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""778131dc-c061-409d-ada1-4587220d0341"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_TeamPreviewConfirm"",
+                    ""type"": ""Button"",
+                    ""id"": ""d088e0ec-40d2-4739-ad65-993e111e888a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -678,6 +714,127 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""BattleUI_CloseDimensionMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""095008ab-c93a-4809-8394-9e351129aea6"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_OpenTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf12c6a3-5084-44aa-b579-6fe30e28ee3b"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_OpenTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8534c3a-f3b6-4f7e-8a73-c43f4479735e"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e9a1687a-8ea5-4e02-9f14-32b2ccd507cc"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d936179-931c-4a28-bcd4-7aea6cca0567"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseTeamMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c35053f7-8a28-4038-bab4-d146e2922447"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_DeadBallConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""afb4cd6b-d4b0-4883-9ef1-ca8f317109d7"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_DeadBallConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a399e5da-91bf-47df-b082-dca4018b8854"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_DeadBallConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c32fc651-49a2-43e9-a9fb-913a26fae76b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_TeamPreviewConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7cb2250b-271b-475b-9f55-9c07abe182c8"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_TeamPreviewConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9848ab0b-e8b4-4a8d-95bc-77d69c5be42b"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_TeamPreviewConfirm"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1084,6 +1241,28 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""20e866a6-5e6e-45ef-a3af-1598670414f3"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dialog_Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dbcd2275-05f7-47c8-b09a-aa63f0dd6629"",
+                    ""path"": ""<Pointer>/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dialog_Submit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""40dae726-f467-469e-9aac-ee7bcab6329d"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
@@ -1101,6 +1280,165 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dialog_Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""NavigationActions"",
+            ""id"": ""cf478ca0-8bb5-4917-b995-879e750e81ab"",
+            ""actions"": [
+                {
+                    ""name"": ""Navigation_Back"",
+                    ""type"": ""Button"",
+                    ""id"": ""c922c6c1-e393-4a38-9d77-6c2f0167ee29"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutTeamBattleType"",
+                    ""type"": ""Button"",
+                    ""id"": ""29820f94-557e-461a-ad51-014aef21b2a4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutTeamActive"",
+                    ""type"": ""Button"",
+                    ""id"": ""2e93b219-a6e0-413d-8c48-df2ba150aa39"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutTeamActions"",
+                    ""type"": ""Button"",
+                    ""id"": ""4695552d-1a13-4898-bd39-fbc41eb34c17"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutTeamCharacterSummary"",
+                    ""type"": ""Button"",
+                    ""id"": ""7162f13e-a29a-4ca6-8039-32a010a492f3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutTeamCharacterMove"",
+                    ""type"": ""Button"",
+                    ""id"": ""1d68b325-7fdd-40ff-8f8a-378d6615b70e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutTeamCharacterReplace"",
+                    ""type"": ""Button"",
+                    ""id"": ""a3cd895a-dacc-4b00-87e1-bf0405f147b6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""30f3261b-c862-4dcb-b9e5-eb0fff11f4d6"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bf1d443f-2226-402e-b520-c2a423864346"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_Back"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""71567722-cabd-4b5d-9091-8dfe255772e8"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamBattleType"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8ba97c61-075f-4edc-a95a-6c232ec62d66"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamActive"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""abe83593-196d-4506-8169-f89498d7910c"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamActions"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5e068b6a-35fc-4b0b-9ff2-6d1d5866c176"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamCharacterSummary"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f9427b0-a21e-4070-8313-c46015f7a808"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamCharacterMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c0887a9d-e463-4d82-8627-d1e4c7866a1f"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamCharacterReplace"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1131,6 +1469,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_BattleUIActions_BattleUI_OpenDimensionMenu = m_BattleUIActions.FindAction("BattleUI_OpenDimensionMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_CloseDimensionMenu = m_BattleUIActions.FindAction("BattleUI_CloseDimensionMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_DimensionShortcutPause = m_BattleUIActions.FindAction("BattleUI_DimensionShortcutPause", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_OpenTeamMenu = m_BattleUIActions.FindAction("BattleUI_OpenTeamMenu", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_CloseTeamMenu = m_BattleUIActions.FindAction("BattleUI_CloseTeamMenu", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_DeadBallConfirm = m_BattleUIActions.FindAction("BattleUI_DeadBallConfirm", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_TeamPreviewConfirm = m_BattleUIActions.FindAction("BattleUI_TeamPreviewConfirm", throwIfNotFound: true);
         // WorldActions
         m_WorldActions = asset.FindActionMap("WorldActions", throwIfNotFound: true);
         m_WorldActions_World_Move = m_WorldActions.FindAction("World_Move", throwIfNotFound: true);
@@ -1146,6 +1488,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_DialogActions = asset.FindActionMap("DialogActions", throwIfNotFound: true);
         m_DialogActions_Dialog_Submit = m_DialogActions.FindAction("Dialog_Submit", throwIfNotFound: true);
         m_DialogActions_Dialog_Cancel = m_DialogActions.FindAction("Dialog_Cancel", throwIfNotFound: true);
+        // NavigationActions
+        m_NavigationActions = asset.FindActionMap("NavigationActions", throwIfNotFound: true);
+        m_NavigationActions_Navigation_Back = m_NavigationActions.FindAction("Navigation_Back", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutTeamBattleType = m_NavigationActions.FindAction("Navigation_ShortcutTeamBattleType", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutTeamActive = m_NavigationActions.FindAction("Navigation_ShortcutTeamActive", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutTeamActions = m_NavigationActions.FindAction("Navigation_ShortcutTeamActions", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutTeamCharacterSummary = m_NavigationActions.FindAction("Navigation_ShortcutTeamCharacterSummary", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutTeamCharacterMove = m_NavigationActions.FindAction("Navigation_ShortcutTeamCharacterMove", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutTeamCharacterReplace = m_NavigationActions.FindAction("Navigation_ShortcutTeamCharacterReplace", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -1154,6 +1505,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_BattleUIActions.enabled, "This will cause a leak and performance issues, GameInputActions.BattleUIActions.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_WorldActions.enabled, "This will cause a leak and performance issues, GameInputActions.WorldActions.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_DialogActions.enabled, "This will cause a leak and performance issues, GameInputActions.DialogActions.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_NavigationActions.enabled, "This will cause a leak and performance issues, GameInputActions.NavigationActions.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1402,6 +1754,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_BattleUIActions_BattleUI_OpenDimensionMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_CloseDimensionMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_DimensionShortcutPause;
+    private readonly InputAction m_BattleUIActions_BattleUI_OpenTeamMenu;
+    private readonly InputAction m_BattleUIActions_BattleUI_CloseTeamMenu;
+    private readonly InputAction m_BattleUIActions_BattleUI_DeadBallConfirm;
+    private readonly InputAction m_BattleUIActions_BattleUI_TeamPreviewConfirm;
     /// <summary>
     /// Provides access to input actions defined in input action map "BattleUIActions".
     /// </summary>
@@ -1457,6 +1813,22 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "BattleUIActions/BattleUI_DimensionShortcutPause".
         /// </summary>
         public InputAction @BattleUI_DimensionShortcutPause => m_Wrapper.m_BattleUIActions_BattleUI_DimensionShortcutPause;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_OpenTeamMenu".
+        /// </summary>
+        public InputAction @BattleUI_OpenTeamMenu => m_Wrapper.m_BattleUIActions_BattleUI_OpenTeamMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_CloseTeamMenu".
+        /// </summary>
+        public InputAction @BattleUI_CloseTeamMenu => m_Wrapper.m_BattleUIActions_BattleUI_CloseTeamMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_DeadBallConfirm".
+        /// </summary>
+        public InputAction @BattleUI_DeadBallConfirm => m_Wrapper.m_BattleUIActions_BattleUI_DeadBallConfirm;
+        /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_TeamPreviewConfirm".
+        /// </summary>
+        public InputAction @BattleUI_TeamPreviewConfirm => m_Wrapper.m_BattleUIActions_BattleUI_TeamPreviewConfirm;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1516,6 +1888,18 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_DimensionShortcutPause.started += instance.OnBattleUI_DimensionShortcutPause;
             @BattleUI_DimensionShortcutPause.performed += instance.OnBattleUI_DimensionShortcutPause;
             @BattleUI_DimensionShortcutPause.canceled += instance.OnBattleUI_DimensionShortcutPause;
+            @BattleUI_OpenTeamMenu.started += instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_OpenTeamMenu.performed += instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_OpenTeamMenu.canceled += instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_CloseTeamMenu.started += instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_CloseTeamMenu.performed += instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_CloseTeamMenu.canceled += instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_DeadBallConfirm.started += instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_DeadBallConfirm.performed += instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_DeadBallConfirm.canceled += instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_TeamPreviewConfirm.started += instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_TeamPreviewConfirm.performed += instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_TeamPreviewConfirm.canceled += instance.OnBattleUI_TeamPreviewConfirm;
         }
 
         /// <summary>
@@ -1560,6 +1944,18 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_DimensionShortcutPause.started -= instance.OnBattleUI_DimensionShortcutPause;
             @BattleUI_DimensionShortcutPause.performed -= instance.OnBattleUI_DimensionShortcutPause;
             @BattleUI_DimensionShortcutPause.canceled -= instance.OnBattleUI_DimensionShortcutPause;
+            @BattleUI_OpenTeamMenu.started -= instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_OpenTeamMenu.performed -= instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_OpenTeamMenu.canceled -= instance.OnBattleUI_OpenTeamMenu;
+            @BattleUI_CloseTeamMenu.started -= instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_CloseTeamMenu.performed -= instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_CloseTeamMenu.canceled -= instance.OnBattleUI_CloseTeamMenu;
+            @BattleUI_DeadBallConfirm.started -= instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_DeadBallConfirm.performed -= instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_DeadBallConfirm.canceled -= instance.OnBattleUI_DeadBallConfirm;
+            @BattleUI_TeamPreviewConfirm.started -= instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_TeamPreviewConfirm.performed -= instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_TeamPreviewConfirm.canceled -= instance.OnBattleUI_TeamPreviewConfirm;
         }
 
         /// <summary>
@@ -1884,6 +2280,168 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="DialogActionsActions" /> instance referencing this action map.
     /// </summary>
     public DialogActionsActions @DialogActions => new DialogActionsActions(this);
+
+    // NavigationActions
+    private readonly InputActionMap m_NavigationActions;
+    private List<INavigationActionsActions> m_NavigationActionsActionsCallbackInterfaces = new List<INavigationActionsActions>();
+    private readonly InputAction m_NavigationActions_Navigation_Back;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamBattleType;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamActive;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamActions;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamCharacterSummary;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamCharacterMove;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamCharacterReplace;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "NavigationActions".
+    /// </summary>
+    public struct NavigationActionsActions
+    {
+        private @GameInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public NavigationActionsActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_Back".
+        /// </summary>
+        public InputAction @Navigation_Back => m_Wrapper.m_NavigationActions_Navigation_Back;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutTeamBattleType".
+        /// </summary>
+        public InputAction @Navigation_ShortcutTeamBattleType => m_Wrapper.m_NavigationActions_Navigation_ShortcutTeamBattleType;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutTeamActive".
+        /// </summary>
+        public InputAction @Navigation_ShortcutTeamActive => m_Wrapper.m_NavigationActions_Navigation_ShortcutTeamActive;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutTeamActions".
+        /// </summary>
+        public InputAction @Navigation_ShortcutTeamActions => m_Wrapper.m_NavigationActions_Navigation_ShortcutTeamActions;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutTeamCharacterSummary".
+        /// </summary>
+        public InputAction @Navigation_ShortcutTeamCharacterSummary => m_Wrapper.m_NavigationActions_Navigation_ShortcutTeamCharacterSummary;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutTeamCharacterMove".
+        /// </summary>
+        public InputAction @Navigation_ShortcutTeamCharacterMove => m_Wrapper.m_NavigationActions_Navigation_ShortcutTeamCharacterMove;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutTeamCharacterReplace".
+        /// </summary>
+        public InputAction @Navigation_ShortcutTeamCharacterReplace => m_Wrapper.m_NavigationActions_Navigation_ShortcutTeamCharacterReplace;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_NavigationActions; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="NavigationActionsActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(NavigationActionsActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="NavigationActionsActions" />
+        public void AddCallbacks(INavigationActionsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_NavigationActionsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_NavigationActionsActionsCallbackInterfaces.Add(instance);
+            @Navigation_Back.started += instance.OnNavigation_Back;
+            @Navigation_Back.performed += instance.OnNavigation_Back;
+            @Navigation_Back.canceled += instance.OnNavigation_Back;
+            @Navigation_ShortcutTeamBattleType.started += instance.OnNavigation_ShortcutTeamBattleType;
+            @Navigation_ShortcutTeamBattleType.performed += instance.OnNavigation_ShortcutTeamBattleType;
+            @Navigation_ShortcutTeamBattleType.canceled += instance.OnNavigation_ShortcutTeamBattleType;
+            @Navigation_ShortcutTeamActive.started += instance.OnNavigation_ShortcutTeamActive;
+            @Navigation_ShortcutTeamActive.performed += instance.OnNavigation_ShortcutTeamActive;
+            @Navigation_ShortcutTeamActive.canceled += instance.OnNavigation_ShortcutTeamActive;
+            @Navigation_ShortcutTeamActions.started += instance.OnNavigation_ShortcutTeamActions;
+            @Navigation_ShortcutTeamActions.performed += instance.OnNavigation_ShortcutTeamActions;
+            @Navigation_ShortcutTeamActions.canceled += instance.OnNavigation_ShortcutTeamActions;
+            @Navigation_ShortcutTeamCharacterSummary.started += instance.OnNavigation_ShortcutTeamCharacterSummary;
+            @Navigation_ShortcutTeamCharacterSummary.performed += instance.OnNavigation_ShortcutTeamCharacterSummary;
+            @Navigation_ShortcutTeamCharacterSummary.canceled += instance.OnNavigation_ShortcutTeamCharacterSummary;
+            @Navigation_ShortcutTeamCharacterMove.started += instance.OnNavigation_ShortcutTeamCharacterMove;
+            @Navigation_ShortcutTeamCharacterMove.performed += instance.OnNavigation_ShortcutTeamCharacterMove;
+            @Navigation_ShortcutTeamCharacterMove.canceled += instance.OnNavigation_ShortcutTeamCharacterMove;
+            @Navigation_ShortcutTeamCharacterReplace.started += instance.OnNavigation_ShortcutTeamCharacterReplace;
+            @Navigation_ShortcutTeamCharacterReplace.performed += instance.OnNavigation_ShortcutTeamCharacterReplace;
+            @Navigation_ShortcutTeamCharacterReplace.canceled += instance.OnNavigation_ShortcutTeamCharacterReplace;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="NavigationActionsActions" />
+        private void UnregisterCallbacks(INavigationActionsActions instance)
+        {
+            @Navigation_Back.started -= instance.OnNavigation_Back;
+            @Navigation_Back.performed -= instance.OnNavigation_Back;
+            @Navigation_Back.canceled -= instance.OnNavigation_Back;
+            @Navigation_ShortcutTeamBattleType.started -= instance.OnNavigation_ShortcutTeamBattleType;
+            @Navigation_ShortcutTeamBattleType.performed -= instance.OnNavigation_ShortcutTeamBattleType;
+            @Navigation_ShortcutTeamBattleType.canceled -= instance.OnNavigation_ShortcutTeamBattleType;
+            @Navigation_ShortcutTeamActive.started -= instance.OnNavigation_ShortcutTeamActive;
+            @Navigation_ShortcutTeamActive.performed -= instance.OnNavigation_ShortcutTeamActive;
+            @Navigation_ShortcutTeamActive.canceled -= instance.OnNavigation_ShortcutTeamActive;
+            @Navigation_ShortcutTeamActions.started -= instance.OnNavigation_ShortcutTeamActions;
+            @Navigation_ShortcutTeamActions.performed -= instance.OnNavigation_ShortcutTeamActions;
+            @Navigation_ShortcutTeamActions.canceled -= instance.OnNavigation_ShortcutTeamActions;
+            @Navigation_ShortcutTeamCharacterSummary.started -= instance.OnNavigation_ShortcutTeamCharacterSummary;
+            @Navigation_ShortcutTeamCharacterSummary.performed -= instance.OnNavigation_ShortcutTeamCharacterSummary;
+            @Navigation_ShortcutTeamCharacterSummary.canceled -= instance.OnNavigation_ShortcutTeamCharacterSummary;
+            @Navigation_ShortcutTeamCharacterMove.started -= instance.OnNavigation_ShortcutTeamCharacterMove;
+            @Navigation_ShortcutTeamCharacterMove.performed -= instance.OnNavigation_ShortcutTeamCharacterMove;
+            @Navigation_ShortcutTeamCharacterMove.canceled -= instance.OnNavigation_ShortcutTeamCharacterMove;
+            @Navigation_ShortcutTeamCharacterReplace.started -= instance.OnNavigation_ShortcutTeamCharacterReplace;
+            @Navigation_ShortcutTeamCharacterReplace.performed -= instance.OnNavigation_ShortcutTeamCharacterReplace;
+            @Navigation_ShortcutTeamCharacterReplace.canceled -= instance.OnNavigation_ShortcutTeamCharacterReplace;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="NavigationActionsActions.UnregisterCallbacks(INavigationActionsActions)" />.
+        /// </summary>
+        /// <seealso cref="NavigationActionsActions.UnregisterCallbacks(INavigationActionsActions)" />
+        public void RemoveCallbacks(INavigationActionsActions instance)
+        {
+            if (m_Wrapper.m_NavigationActionsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="NavigationActionsActions.AddCallbacks(INavigationActionsActions)" />
+        /// <seealso cref="NavigationActionsActions.RemoveCallbacks(INavigationActionsActions)" />
+        /// <seealso cref="NavigationActionsActions.UnregisterCallbacks(INavigationActionsActions)" />
+        public void SetCallbacks(INavigationActionsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_NavigationActionsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_NavigationActionsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="NavigationActionsActions" /> instance referencing this action map.
+    /// </summary>
+    public NavigationActionsActions @NavigationActions => new NavigationActionsActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "BattleActions" which allows adding and removing callbacks.
     /// </summary>
@@ -2025,6 +2583,34 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBattleUI_DimensionShortcutPause(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_OpenTeamMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_OpenTeamMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_CloseTeamMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_CloseTeamMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_DeadBallConfirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_DeadBallConfirm(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_TeamPreviewConfirm" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_TeamPreviewConfirm(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "WorldActions" which allows adding and removing callbacks.
@@ -2118,5 +2704,62 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDialog_Cancel(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "NavigationActions" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="NavigationActionsActions.AddCallbacks(INavigationActionsActions)" />
+    /// <seealso cref="NavigationActionsActions.RemoveCallbacks(INavigationActionsActions)" />
+    public interface INavigationActionsActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_Back" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_Back(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutTeamBattleType" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutTeamBattleType(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutTeamActive" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutTeamActive(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutTeamActions" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutTeamActions(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutTeamCharacterSummary" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutTeamCharacterSummary(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutTeamCharacterMove" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutTeamCharacterMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutTeamCharacterReplace" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutTeamCharacterReplace(InputAction.CallbackContext context);
     }
 }

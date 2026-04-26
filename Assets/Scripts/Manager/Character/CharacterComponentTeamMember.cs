@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class CharacterComponentTeamMember : MonoBehaviour
 {
@@ -47,6 +47,9 @@ public class CharacterComponentTeamMember : MonoBehaviour
             team.Variant,
             formationCoord.Position
         );
+
+        this.characterEntityBattle.ToggleGloves(formationCoord.Position);
+        this.characterEntityBattle.ApplyStateToRenderer();
 
         LogManager.Trace($"[CharacterComponentTeamMember] {this.characterEntityBattle.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
     }

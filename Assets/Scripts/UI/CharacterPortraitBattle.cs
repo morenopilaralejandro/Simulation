@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Simulation.Enums.Character;
-using Simulation.Enums.SpriteLayer;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.SpriteLayer;
 
 public class CharacterPortraitBattle : MonoBehaviour
 {
@@ -46,6 +46,17 @@ public class CharacterPortraitBattle : MonoBehaviour
         imageKitPortraitBase.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.KitBase];
         imageKitPortraitDetail.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.KitDetail];
         imageKitPortraitNeck.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.Body];
+    }
+
+    public void Clear()
+    {
+        if (imageCharacterPortrait != null) imageCharacterPortrait.sprite = null;
+        if (imageKitPortraitBase != null) imageKitPortraitBase.sprite = null;
+        if (imageKitPortraitDetail != null) imageKitPortraitDetail.sprite = null;
+        if (imageKitPortraitNeck != null) imageKitPortraitNeck.sprite = null;
+
+        _cachedId = null;
+        _cachedSize = default;
     }
 
 }

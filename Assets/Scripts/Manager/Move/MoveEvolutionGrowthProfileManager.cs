@@ -3,7 +3,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Move;
 
 public class MoveEvolutionGrowthProfileManager : MonoBehaviour
 {

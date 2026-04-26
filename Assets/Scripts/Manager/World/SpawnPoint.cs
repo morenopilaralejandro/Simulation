@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.World;
+using Aremoreno.Enums.World;
 
 /// <summary>
 /// Place this on GameObjects in your chunk/interior scenes.

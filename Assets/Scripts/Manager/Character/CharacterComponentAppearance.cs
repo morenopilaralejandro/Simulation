@@ -1,9 +1,9 @@
 using UnityEngine;
 using System;
 using System.Threading.Tasks;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
-using Simulation.Enums.SpriteLayer;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.SpriteLayer;
 
 public class CharacterComponentAppearance
 {

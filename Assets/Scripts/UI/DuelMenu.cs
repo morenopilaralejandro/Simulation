@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Input;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Input;
 
 public class DuelMenu : MonoBehaviour
 {

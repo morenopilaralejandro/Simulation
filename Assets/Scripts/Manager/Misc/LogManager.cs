@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Log;
+using Aremoreno.Enums.Log;
 
 public static class LogManager
 {

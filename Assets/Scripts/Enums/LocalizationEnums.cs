@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Localization
+namespace Aremoreno.Enums.Localization
 {
     public enum LocalizationEntity
     {

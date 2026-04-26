@@ -1,4 +1,4 @@
-namespace Simulation.Enums.SpriteLayer
+namespace Aremoreno.Enums.SpriteLayer
 {
     public enum CharacterSpriteLayer
     {

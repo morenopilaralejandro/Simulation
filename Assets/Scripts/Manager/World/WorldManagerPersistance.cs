@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.World;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.World;
 
 public class WorldManagerPersistance
 {

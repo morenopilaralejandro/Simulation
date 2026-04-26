@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-using Simulation.Enums.SpriteLayer;
+using Aremoreno.Enums.SpriteLayer;
 
 [Serializable]
 public struct LayerRenderer<TEnum> where TEnum : Enum

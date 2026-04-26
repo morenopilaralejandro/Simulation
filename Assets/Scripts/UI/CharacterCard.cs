@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class CharacterCard : MonoBehaviour
 {
@@ -20,6 +20,16 @@ public class CharacterCard : MonoBehaviour
         imageGender.sprite = IconManager.Instance.Gender.GetIcon(character.Gender);
         imagePosition.color = ColorManager.GetPositionColor(position);
         textName.text = character.CharacterNick;
+    }
+
+    public void Clear()
+    {
+        characterPortrait?.Clear();
+
+        if (imageElement != null) imageElement.sprite = null;
+        if (imageGender != null) imageGender.sprite = null;
+        if (imagePosition != null) imagePosition.color = Color.white;
+        if (textName != null) textName.text = string.Empty;
     }
 
 }

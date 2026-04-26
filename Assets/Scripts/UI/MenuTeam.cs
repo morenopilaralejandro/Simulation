@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 /// <summary>
 /// Root menu for team loadout management.

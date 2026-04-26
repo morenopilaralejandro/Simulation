@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Simulation.Enums.Battle;
-using Simulation.Enums.World;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.World;
 
 public class WorldManagerEncounter
 {

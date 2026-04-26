@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Battle;
 
 /// <summary>
 /// Handles calculations related to the top and bottom goals based on the team
@@ -50,18 +50,12 @@ public class GoalManager : MonoBehaviour
         BattleEvents.OnBattleStart -= HandleBattleStart;
     }
 
-    private void HandleBattleStart()
+    private void HandleBattleStart(BattleType battleType)
     {
-        BattleType currentMode = BattleManager.Instance.CurrentType;
-
-        if (currentMode == BattleType.Mini)
-        {
+        if (battleType == BattleType.Mini)
             shootDistance = shootDistanceMini;
-        }
         else
-        {
             shootDistance = shootDistanceFull;
-        }
     }
 
     public void Reset()

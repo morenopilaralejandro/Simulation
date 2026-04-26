@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Kit
+namespace Aremoreno.Enums.Kit
 {
     public enum Role 
     { 

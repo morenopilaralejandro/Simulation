@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Item;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Item;
 
 public static class UIEvents
 {
@@ -55,6 +56,12 @@ public static class UIEvents
         OnTeamLoadoutSelected?.Invoke(team);
     }
 
+    public static event Action<Team> OnMenuTeamBattleRequested;
+    public static void RaiseMenuTeamBattleRequested(Team team)
+    {
+        OnMenuTeamBattleRequested?.Invoke(team);
+    }
+
     public static event Action OnTeamLoadoutCreateRequested;
     public static void RaiseTeamLoadoutCreateRequested()
     {
@@ -73,10 +80,10 @@ public static class UIEvents
         OnTeamPanelDeleteOpened?.Invoke(team);
     }
 
-    public static event Action OnBackFromTeamRequested;
-    public static void RaiseBackFromTeamRequested()
+    public static event Action<Team, bool> OnBackFromTeamRequested;
+    public static void RaiseBackFromTeamRequested(Team team, bool hasSwapped)
     {
-        OnBackFromTeamRequested?.Invoke();
+        OnBackFromTeamRequested?.Invoke(team, hasSwapped);
     }
 
     public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUISelectedDefault;
@@ -217,6 +224,18 @@ public static class UIEvents
         OnCharacterDetailOpened?.Invoke();
     }
 
+    public static event Action<int, int> OnSubstitutionChangesUpdated;
+    public static void RaiseSubstitutionChangesUpdated(int currentValue, int maxValue)
+    {
+        OnSubstitutionChangesUpdated?.Invoke(currentValue, maxValue);
+    }
+
+    public static event Action<TeamSide> OnTeamPreviewButtonContinueClicked;
+    public static void RaiseTeamPreviewButtonContinueClicked(TeamSide teamSide)
+    {
+        OnTeamPreviewButtonContinueClicked?.Invoke(teamSide);
+    }
+
     // Menu Character
     public static event Action<Character> OnCharacterSelected;
     public static void RaiseCharacterSelected(Character character)
@@ -228,6 +247,12 @@ public static class UIEvents
     public static void RaiseCharacterSelectorOpened()
     {
         OnCharacterSelectorOpened?.Invoke();
+    }
+
+    public static event Action<Character> OnCharaterDetailSideUpdateRequested;
+    public static void RaiseCharaterDetailSideUpdateRequested(Character character)
+    {
+        OnCharaterDetailSideUpdateRequested?.Invoke(character);
     }
 
     // Menu Item

@@ -4,7 +4,7 @@ using UnityEngine.Localization.Components;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 public class LocalizationComponentUIText : MonoBehaviour
 {

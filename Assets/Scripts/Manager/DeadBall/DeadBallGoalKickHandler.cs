@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.DeadBall;
-using Simulation.Enums.Input;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.DeadBall;
+using Aremoreno.Enums.Input;
 
 public class DeadBallGoalKickHandler : IDeadBallHandler
 {
@@ -18,11 +18,13 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
     private CharacterEntityBattle[] characterSupportDefense;
     private Vector3 ballPosition;
 
+    private bool isKickExecuted;
     private bool isBallReady;
     private bool isAutoBattleEnabled;
     private bool isMultiplayer;
+    private Coroutine ballReadyRoutine;
 
-    public bool IsReady => deadBallManager.TeamReadiness.AreBothReady && isBallReady;
+    public bool IsReady => isBallReady && isKickExecuted;
 
     #endregion
 
@@ -39,7 +41,20 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
         isBallReady = false;
 
         team = BattleManager.Instance.Teams[teamSide];
-        characterKicker = GoalManager.Instance.Keepers[teamSide];
+
+        ResetPositions();
+
+        DuelLogManager.Instance.AddDeadBallGoalKick(characterKicker.Character, characterKicker.TeamSide);
+    }
+
+    public void ResetPositions() 
+    {
+        isKickExecuted = false;
+        isBallReady = false;
+        BallEvents.OnGained -= OnBallGained;
+        deadBallManager.StopRoutine(ballReadyRoutine);
+
+        characterKicker = GoalManager.Instance.Keepers[team.TeamSide];
         /*
         characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
             deadBallManager.OffenseTeam,
@@ -51,32 +66,55 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
 
         SetKickerPosition();
 
-        DuelLogManager.Instance.AddDeadBallGoalKick(characterKicker);
-
         BallEvents.OnGained += OnBallGained;
-        deadBallManager.SetState(DeadBallState.WaitingForReady);
     }
 
     public void HandleInput()
     {
-        if (!InputManager.Instance.GetDown(CustomAction.Battle_Pass)) return;
+        if (deadBallManager.DeadBallState == DeadBallState.WaitingForReady)
+        {
+            if (!InputManager.Instance.GetDown(CustomAction.BattleUI_DeadBallConfirm)) return;
 
-        if (isMultiplayer) 
-            deadBallManager.TeamReadiness.SetUserReady();
-        else 
-            deadBallManager.TeamReadiness.SetBothReady();
+            if (isMultiplayer) 
+                deadBallManager.TeamReadiness.SetUserReady();
+            else 
+                deadBallManager.TeamReadiness.SetBothReady();
+        }
+
+        if (deadBallManager.DeadBallState == DeadBallState.Executing)
+        {
+            if (!isBallReady) return;
+            if (!deadBallManager.IsUserOffense) return;
+            if (!InputManager.Instance.GetDown(CustomAction.Battle_Pass)) return;
+            isKickExecuted = true;
+        }
     }
 
     private void OnBallGained(CharacterEntityBattle c)
     {
         if (c == characterKicker) 
         {
-            isBallReady = true;
             BallEvents.OnGained -= OnBallGained;
+            ballReadyRoutine = deadBallManager.StartRoutine(DelayedBallReady());
         }
+    }
+
+    private IEnumerator DelayedBallReady()
+    {
+        yield return null;
+        isBallReady = true;
+        deadBallManager.SetState(DeadBallState.WaitingForReady);
 
         if (isAutoBattleEnabled) 
+        {
             deadBallManager.TeamReadiness.SetBothReady();
+            if (deadBallManager.IsUserOffense) isKickExecuted = true;
+        }
+
+        if (characterKicker.IsEnemyAI && characterKicker.TeamSide == deadBallManager.OffenseSide) 
+        {
+            isKickExecuted = true;
+        }
     }
 
     public void Execute()
@@ -132,6 +170,7 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
     {
         PossessionManager.Instance.Release();
         PossessionManager.Instance.GiveBallToCharacter(characterKicker);
+        PossessionManager.Instance.SetCooldown(characterKicker);
     }
 
     #endregion

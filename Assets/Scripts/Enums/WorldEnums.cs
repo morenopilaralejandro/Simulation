@@ -1,4 +1,4 @@
-namespace Simulation.Enums.World
+namespace Aremoreno.Enums.World
 {
     public enum SpawnPointType
     {

@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Item;
+using Aremoreno.Enums.Item;
 
 [CreateAssetMenu(fileName = "ItemDataImportant", menuName = "ScriptableObject/Item/ItemDataImportant")]
 public class ItemDataImportant : ItemData

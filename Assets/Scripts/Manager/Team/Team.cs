@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.Localization;
 
 public class Team
 {
@@ -82,24 +82,35 @@ public class Team
     //playersComponent
     public List<CharacterData> FullBattleCharacterDataList => playersComponent.FullBattleCharacterDataList;
     public List<CharacterEntityBattle> FullBattleCharacterEntities => playersComponent.FullBattleCharacterEntities;
+    public List<Character> FullBattleCharacters => playersComponent.FullBattleCharacters;
     public List<string> FullBattleCharacterGuids => playersComponent.FullBattleCharacterGuids;
     public List<CharacterData> MiniBattleCharacterDataList => playersComponent.MiniBattleCharacterDataList;
     public List<CharacterEntityBattle> MiniBattleCharacterEntities => playersComponent.MiniBattleCharacterEntities;
+    public List<Character> MiniBattleCharacters => playersComponent.MiniBattleCharacters;
     public List<string> MiniBattleCharacterGuids => playersComponent.MiniBattleCharacterGuids;
     public List<CharacterData> GetCharacterDataList(BattleType battleType) => playersComponent.GetCharacterDataList(battleType);
     public List<CharacterEntityBattle> GetCharacterEntities(BattleType battleType) => playersComponent.GetCharacterEntities(battleType);
+    public List<Character> GetCharacters(BattleType battleType) => playersComponent.GetCharacters(battleType);
     public List<string> GetCharacterGuids(BattleType battleType) => playersComponent.GetCharacterGuids(battleType);
     public void SetCharacterGuid(BattleType battleType, int slotIndex, string characterGuid) => playersComponent.SetCharacterGuid(battleType, slotIndex, characterGuid);
+    public void SetCharacter(BattleType battleType, int slotIndex, Character character) => playersComponent.SetCharacter(battleType, slotIndex, character);
+    public void SetCharacterEntity(BattleType battleType, int slotIndex, CharacterEntityBattle characterEntityBattle) => playersComponent.SetCharacterEntity(battleType, slotIndex, characterEntityBattle);
     public void RemoveCharacterGuid(BattleType battleType, string characterGuid) => playersComponent.RemoveCharacterGuid(battleType, characterGuid);
     public void ClearCharacterEntities(BattleType battleType) => playersComponent.ClearCharacterEntities(battleType);
+    public void ClearCharacters(BattleType battleType) => playersComponent.ClearCharacters(battleType);
     public void ClearAll(BattleType battleType) => playersComponent.ClearAll(battleType);
     public int GetCharacterDataCount(BattleType battleType) => playersComponent.GetCharacterDataCount(battleType);
     public int GetCharacterEntityCount(BattleType battleType) => playersComponent.GetCharacterEntityCount(battleType);
     public bool HasCharacterData(BattleType battleType) => playersComponent.HasCharacterData(battleType);
     public bool HasCharacterEntities(BattleType battleType) => playersComponent.HasCharacterEntities(battleType);
+    public CharacterEntityBattle GetEntityByGuid(string characterGuid, BattleType battleType) => playersComponent.GetEntityByGuid(characterGuid, battleType);
+    public Character GetCharacterByGuid(string characterGuid, BattleType battleType) => playersComponent.GetCharacterByGuid(characterGuid, battleType);
     //sideComponent
     public TeamSide TeamSide => sideComponent.TeamSide;
     public Variant Variant => sideComponent.Variant;
+    public void SetSide(TeamSide teamSide) => sideComponent.SetSide(teamSide);
+    public void SetVariant(Variant variant) => sideComponent.SetVariant(variant);
+    public void ResetSideAndVariant() => sideComponent.ResetSideAndVariant();
     //customLoadoutComponent
     public bool IsCustomLoadout => customLoadoutComponent.IsCustomLoadout;
     public string CustomName => customLoadoutComponent.CustomName;

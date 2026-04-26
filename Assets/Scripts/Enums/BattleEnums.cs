@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Battle
+namespace Aremoreno.Enums.Battle
 {
     public enum BattlePhase
     {
@@ -6,6 +6,7 @@ namespace Simulation.Enums.Battle
         Selection,
         Cutscene,
         DeadBall,
+        TeamPreview,
         End
     }
 

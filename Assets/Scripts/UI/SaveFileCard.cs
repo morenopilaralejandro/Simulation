@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Localization;
-using Simulation.Enums.World;
+using Aremoreno.Enums.Localization;
+using Aremoreno.Enums.World;
 
 public class SaveFileCard : MonoBehaviour
 {

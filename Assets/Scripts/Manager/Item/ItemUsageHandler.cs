@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
-using Simulation.Enums.Item;
-using Simulation.Enums.Move;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.Item;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Localization;
 
 public class ItemUsageHandler
 {

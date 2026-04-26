@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
-using Simulation.Enums.Duel;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Duel;
 
 public static class DamageCalculator
 {

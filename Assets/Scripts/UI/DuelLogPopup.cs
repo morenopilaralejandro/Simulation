@@ -3,7 +3,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
 
 public class DuelLogPopup : MonoBehaviour
 {
@@ -20,8 +21,8 @@ public class DuelLogPopup : MonoBehaviour
     private void Configure(DuelLogEntry entry)
     {
         messageText.text = entry.EntryString;
-        if (entry.CharacterEntityBattle != null)
-            characterPortrait.SetCharacter(entry.CharacterEntityBattle.Character);
+        if (entry.Character != null)
+            characterPortrait.SetCharacter(entry.Character);
         if (entry.Move != null && entry.Move.CurrentEvolution != MoveEvolution.None) 
         {
             imageEvolution.sprite = entry.Move.EvolutionSprite;
@@ -30,17 +31,17 @@ public class DuelLogPopup : MonoBehaviour
 
     private void UpdateActivePanels(DuelLogEntry entry)
     {
-        bool hasCharacter = entry.CharacterEntityBattle != null;
+        bool hasCharacter = entry.Character != null;
         bool hasMove = entry.Move != null && entry.Move.CurrentEvolution != MoveEvolution.None;
 
         panelPortraitCharacter.SetActive(hasCharacter);
         panelPortraitDefault.SetActive(!hasCharacter);
         panelEvolution.SetActive(hasMove);
 
-        UpdateBackgroundColor(hasCharacter, entry.CharacterEntityBattle);
+        UpdateBackgroundColor(hasCharacter, entry.Character, entry.TeamSide);
     }
 
-    private void UpdateBackgroundColor(bool hasCharacter, CharacterEntityBattle character) 
+    private void UpdateBackgroundColor(bool hasCharacter, Character character, TeamSide teamSide) 
     {
         if (!hasCharacter) 
         {
@@ -48,7 +49,7 @@ public class DuelLogPopup : MonoBehaviour
             return;
         }
 
-        if(character.TeamSide == BattleManager.Instance.GetUserSide())
+        if(teamSide == BattleManager.Instance.GetUserSide())
             imageBackground.color = DuelLogManager.Instance.ColorHome;
         else
             imageBackground.color = DuelLogManager.Instance.ColorAway;

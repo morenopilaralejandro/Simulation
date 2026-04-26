@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class FormationCharacterSlotUI : MonoBehaviour,
     IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, ISelectHandler
@@ -21,6 +21,8 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     private FormationCoord coord;
     private Character character;
     private bool isBench;
+    private bool canDrag;
+    private bool isDragging;
 
     private Canvas rootCanvas;
     private Vector2 originalPosition;
@@ -31,6 +33,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     private Vector2 originalPivot;
 
     public int SlotIndex => slotIndex;
+    public FormationCoord FormationCoord => coord;
     public bool IsBench => isBench;
 
     #endregion
@@ -69,6 +72,11 @@ public class FormationCharacterSlotUI : MonoBehaviour,
         dragLayer = layer;
     }
 
+    public void SetCanDrag(bool boolValue)
+    {
+        canDrag = boolValue;
+    }
+
     #endregion
 
     #region Helpers
@@ -105,12 +113,31 @@ public class FormationCharacterSlotUI : MonoBehaviour,
         canvasGroup.blocksRaycasts = boolValue;
     }
 
-    public void Reset()
+    public void Release()
     {
-        slotIndex = -1;
-        coord = default;
+        // Clear runtime references
         character = null;
+        coord = default;
+        slotIndex = -1;
         isBench = false;
+        canDrag = false;
+        isDragging = false;
+
+        // Clear the character card visual (prevents holding sprite/material refs)
+        characterCard?.Clear();
+
+        // Reset drag state in case release happens mid-drag
+        dragLayer = null;
+        originalParent = null;
+        /*        
+        // Reset visual state
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+        }
+        */
     }
 
     #endregion
@@ -139,6 +166,14 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     public void OnBeginDrag(PointerEventData eventData)
     {
         UIEvents.RaiseFormationCharacterSlotUIMoveCanceled(this);
+
+        if (!canDrag)
+        {
+            isDragging = false;
+            return;
+        }
+
+        isDragging = true;
 
         // Store everything we need to restore later
         originalPosition = rectTransform.anchoredPosition;
@@ -169,11 +204,15 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!isDragging) return;
         rectTransform.anchoredPosition += eventData.delta / rootCanvas.scaleFactor;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!isDragging) return; // ← Guard
+        isDragging = false;
+
         // Visual feedback restore
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
@@ -194,10 +233,8 @@ public class FormationCharacterSlotUI : MonoBehaviour,
         FormationCharacterSlotUI draggedSlot =
             eventData.pointerDrag?.GetComponent<FormationCharacterSlotUI>();
 
-        if (draggedSlot != null && draggedSlot != this)
-        {
+        if (draggedSlot != null && draggedSlot != this && draggedSlot.isDragging)
             SwapCharacters(draggedSlot);
-        }
     }
 
     private void SwapCharacters(FormationCharacterSlotUI other)

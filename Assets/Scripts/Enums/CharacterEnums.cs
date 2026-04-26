@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Character
+namespace Aremoreno.Enums.Character
 {
     public enum Element 
     {

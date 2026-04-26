@@ -1,15 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
 
 [RequireComponent(typeof(BoxCollider))]
 public class BoundOut : MonoBehaviour
 {
     [SerializeField] private BoundType boundType;
+    private BattleManager battleManager;
+    private DeadBallManager deadBallManager;
+    private AudioManager audioManager;
 
     #region Unity Lifecycle
+
+    private void Start() 
+    {
+        battleManager = BattleManager.Instance;
+        deadBallManager = DeadBallManager.Instance;
+        audioManager = AudioManager.Instance;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -27,15 +37,17 @@ public class BoundOut : MonoBehaviour
 
     private void HandleTrigger(Collider other) 
     {
-        if (BattleManager.Instance.IsTimeFrozen) return;
+        if (battleManager.IsTimeFrozen) return;
 
         GameObject hitObj = other.GetComponent<Collider>().gameObject;
         if (!hitObj.CompareTag("Ball")) return;
 
-        BattleManager.Instance.Freeze();
-        var ball = BattleManager.Instance.Ball;
-        DeadBallManager.Instance.SetBallPosition(ball.transform.position);
-        TeamSide teamSide = DeadBallManager.Instance.GetRestartTeamSide();
+        audioManager.PlaySfx("sfx-whistle_single");
+
+        battleManager.Freeze();
+        var ball = battleManager.Ball;
+        deadBallManager.SetBallPosition(ball.transform.position);
+        TeamSide teamSide = deadBallManager.GetRestartTeamSide();
         //freeze
         //whistle sfx
 
@@ -44,15 +56,15 @@ public class BoundOut : MonoBehaviour
             case BoundType.Endline:
                 LogManager.Trace("[BoundOut] [HandleTrigger] Ball crossed the endline.");
                 //determine if it is corner or goal kick
-                if(DeadBallManager.Instance.IsCornerKick(teamSide))
-                    BattleManager.Instance.StartCornerKick(teamSide);
+                if(deadBallManager.IsCornerKick(teamSide))
+                    battleManager.StartCornerKick(teamSide);
                 else
-                    BattleManager.Instance.StartGoalKick(teamSide);
+                    battleManager.StartGoalKick(teamSide);
                 break;
 
             case BoundType.Sideline:
                 LogManager.Trace("[BoundOut] [HandleTrigger] Ball crossed the sideline.");
-                BattleManager.Instance.StartThrowIn(teamSide);
+                battleManager.StartThrowIn(teamSide);
                 break;
 
         }

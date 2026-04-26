@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Simulation.Enums.Quest;
+using Aremoreno.Enums.Quest;
 
 public static class QuestEvents
 {

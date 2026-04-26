@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.World;
+using Aremoreno.Enums.World;
 
 [CreateAssetMenu(fileName = "ZoneDefinition", menuName = "ScriptableObject/World/ZoneDefinition")]
 public class ZoneDefinition : ScriptableObject

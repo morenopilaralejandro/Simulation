@@ -1,15 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.DeadBall;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.DeadBall;
 
 public class OffsideManager : MonoBehaviour
 {
     public static OffsideManager Instance;
 
     private OffsideSnapshot snapshot;
+    private AudioManager audioManager;
 
     private void Awake()
     {
@@ -22,6 +23,11 @@ public class OffsideManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         snapshot = new OffsideSnapshot();
+    }
+
+    private void Start() 
+    {
+        audioManager = AudioManager.Instance;
     }
 
     public void TakeSnapshot(CharacterEntityBattle passer)
@@ -186,6 +192,7 @@ public class OffsideManager : MonoBehaviour
         snapshot.isActive = false;
         snapshot.offsideCandidates.Clear();
         DeadBallManager.Instance.SetBallPosition(offender.transform.position);
+        audioManager.PlaySfx("sfx-whistle_double");
         BattleManager.Instance.StartOffside(offender.GetOpponentSide());
     }
 

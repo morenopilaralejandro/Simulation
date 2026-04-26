@@ -1,7 +1,7 @@
 using System;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.Input;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Input;
 
 public static class BattleEvents
 {
@@ -23,10 +23,11 @@ public static class BattleEvents
         OnBattleTypeChanged?.Invoke(newType, oldType);
     }
 
-    public static event Action OnBattleStart;
-    public static void RaiseBattleStart()
+    public static event Action<BattleType> OnBattleStart;
+    public static void RaiseBattleStart(BattleType battleType)
     {
-        OnBattleStart?.Invoke();
+        OnBattleStart?.Invoke(battleType);
+        InputEvents.RaiseScreenControlsShowRequested();
         InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
     }
 
@@ -34,6 +35,7 @@ public static class BattleEvents
     public static void RaiseBattleEnd()
     {
         OnBattleEnd?.Invoke();
+        InputEvents.RaiseScreenControlsHideRequested();
         InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Dpad);
     }
 

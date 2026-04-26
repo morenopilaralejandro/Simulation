@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.DeadBall;
-using Simulation.Enums.Input;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.DeadBall;
+using Aremoreno.Enums.Input;
 
 public class DeadBallManager : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class DeadBallManager : MonoBehaviour
     private DeadBallPositionConfig positionConfig;
     private DeadBallCharacterSelector characterSelector;
     private DeadBallPositionUtils positionUtils;
+    private AudioManager audioManager;
     private TeamReadiness teamReadiness;
     private bool isFirstKickoff = true;
     private Team offenseTeam;
@@ -24,6 +25,9 @@ public class DeadBallManager : MonoBehaviour
     private Vector3 cachedBallPosition;
     private Vector3 defaultPositionKickoffKicker;
     private Dictionary<TeamSide, Vector3> defaultPositionKickoffReceiver;
+    private Dictionary<TeamSide, bool> teamMenuOpen = new();
+    private Dictionary<TeamSide, bool> teamMenuOpened = new();
+    private bool isOneTimeMenu = false;
 
     public DeadBallPositionConfig PositionConfig => positionConfig;
     public DeadBallCharacterSelector CharacterSelector => characterSelector;
@@ -66,6 +70,11 @@ public class DeadBallManager : MonoBehaviour
 
     }
 
+    private void Start() 
+    {
+        audioManager = AudioManager.Instance;
+    }
+
     #endregion
 
     #region Interface
@@ -76,12 +85,14 @@ public class DeadBallManager : MonoBehaviour
         BattleManager.Instance.SetBattlePhase(BattlePhase.DeadBall);
 
         teamReadiness.Reset();
+        ResetMenuState();
 
         DeadBallType = type;
         currentHandler = DeadBallFactory.Create(type);
         DeadBallState = DeadBallState.Setup;
         ResolveOffenseDefense(teamSide);
 
+        DeadBallEvents.RaiseDeadBallStarted(type, offenseSide, defenseSide);
         currentHandler.Setup(teamSide);
     }
 
@@ -89,23 +100,57 @@ public class DeadBallManager : MonoBehaviour
     {
         if (currentHandler == null) return;
 
-        //handleSharedInput Menu formation and change characters
+        HandleMenuInput();
 
-        currentHandler.HandleInput();
+        if (!IsUserMenuOpen())
+            currentHandler.HandleInput();
 
-        if (DeadBallState == DeadBallState.WaitingForReady && currentHandler.IsReady)
+        if (DeadBallState == DeadBallState.WaitingForReady && TeamReadiness.AreBothReady)
             Execute();
+
+        if (DeadBallState == DeadBallState.Executing && currentHandler.IsReady)
+            Finish();
+    }
+
+    private void HandleMenuInput()
+    {
+        if (DeadBallState != DeadBallState.WaitingForReady) return;
+        if (HasUserOpenedMenu() && isOneTimeMenu) return;
+        if (!InputManager.Instance.GetDown(CustomAction.BattleUI_OpenTeamMenu)) return;
+
+        TeamSide userSide = BattleManager.Instance.GetUserSide();
+        ToggleTeamMenu(userSide);
+    }
+
+    private void ToggleTeamMenu(TeamSide side)
+    {
+        teamMenuOpen[side] = !teamMenuOpen[side];
+
+        if (!teamMenuOpen[side]) return;
+        teamMenuOpened[side] = true;
+        teamReadiness.CancelReady(side);
+        UIEvents.RaiseMenuTeamBattleRequested(BattleManager.Instance.Teams[side]);
     }
 
     private void Execute()
     {
+        SubstitutionManager.Instance.ShowSubstitutions();
+
+        audioManager.PlaySfx("sfx-whistle_single");
+        // foul double
+        // offside double
+        // out single
+
         DeadBallState = DeadBallState.Executing;
-        currentHandler.Execute();
-        Finish();
+        DeadBallEvents.RaiseDeadBallReady(DeadBallType, offenseSide, defenseSide);
     }
 
     private void Finish()
     {
+        currentHandler.Execute();
+
+        DeadBallEvents.RaiseDeadBallEnded(DeadBallType, offenseSide, defenseSide);
+
         DeadBallState = DeadBallState.Finished;
         BattleManager.Instance.Unfreeze();
         BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
@@ -122,6 +167,8 @@ public class DeadBallManager : MonoBehaviour
     public Vector3 GetDefaultPositionKickoffReceive(TeamSide teamSide) => defaultPositionKickoffReceiver[teamSide];
     public void SetBallPosition(Vector3 ballPosition) => cachedBallPosition = ballPosition;
     public void SetState(DeadBallState state) => DeadBallState = state;
+    public Coroutine StartRoutine(IEnumerator routine) => StartCoroutine(routine);
+    public void StopRoutine(Coroutine routine) { if (routine != null) StopCoroutine(routine); }
 
     private void ResolveOffenseDefense(TeamSide offenseSide)
     {
@@ -136,17 +183,28 @@ public class DeadBallManager : MonoBehaviour
     public bool IsDefense(TeamSide side) => side == defenseSide;
     public bool IsUserOffense => 
         currentHandler != null &&
-        DeadBallState == DeadBallState.WaitingForReady &&
         offenseSide == BattleManager.Instance.GetUserSide();
     public bool IsUserDefense => 
         currentHandler != null &&
-        DeadBallState == DeadBallState.WaitingForReady &&
         defenseSide == BattleManager.Instance.GetUserSide();
     public bool IsUserTakingPenalty => 
         currentHandler != null &&
-        DeadBallState == DeadBallState.WaitingForReady &&
         DeadBallType == DeadBallType.Penalty &&
         offenseSide == BattleManager.Instance.GetUserSide();
+
+    public bool IsTeamMenuOpen(TeamSide side) => teamMenuOpen[side];
+    public bool IsUserMenuOpen() => IsTeamMenuOpen(BattleManager.Instance.GetUserSide());
+    public bool IsAnyMenuOpen() => teamMenuOpen[TeamSide.Home] || teamMenuOpen[TeamSide.Away];
+    public bool HasOpenedMenu(TeamSide side) => teamMenuOpened[side];
+    public bool HasUserOpenedMenu() => HasOpenedMenu(BattleManager.Instance.GetUserSide());
+    private void ResetMenuState()
+    {
+        teamMenuOpen[TeamSide.Home] = false;
+        teamMenuOpen[TeamSide.Away] = false;
+
+        teamMenuOpened[TeamSide.Home] = false;
+        teamMenuOpened[TeamSide.Away] = false;
+    }
 
     public TeamSide GetRestartTeamSide() 
     {
@@ -168,6 +226,53 @@ public class DeadBallManager : MonoBehaviour
             return true;
 
         return false;
+    }
+
+    public bool PreventTarget() => IsDeadBallInProgress && (IsUserDefense || (IsUserOffense && DeadBallState != DeadBallState.Executing));
+
+    #endregion
+
+    #region Event
+    
+    private void OnEnable() 
+    {
+        DeadBallEvents.OnDeadBallStartRequested += HandleDeadBallStartRequested;
+        UIEvents.OnBackFromTeamRequested += HandleBackFromTeamRequested;
+        TeamEvents.OnSubstitutionResetPositions += HandleSubstitutionResetPositions;
+    }
+
+    private void OnDisable() 
+    {
+        DeadBallEvents.OnDeadBallStartRequested -= HandleDeadBallStartRequested;
+        UIEvents.OnBackFromTeamRequested -= HandleBackFromTeamRequested;
+        TeamEvents.OnSubstitutionResetPositions -= HandleSubstitutionResetPositions;
+    }
+
+    private void HandleDeadBallStartRequested(DeadBallType type, TeamSide teamSide) 
+    {
+        StartDeadBall(type, teamSide);
+    }
+
+    private void HandleBackFromTeamRequested(Team team, bool hasSwapped) 
+    {
+        if (!IsDeadBallInProgress) return;
+        if (!teamMenuOpen[team.TeamSide]) return;
+
+        if (hasSwapped)
+            TeamEvents.RaiseSubstitutionResetPositions(team.TeamSide);
+
+        ToggleTeamMenu(team.TeamSide);
+    }
+
+    private void HandleSubstitutionResetPositions(TeamSide teamSide) 
+    {
+        if (currentHandler == null) return;
+        if (DeadBallState != DeadBallState.WaitingForReady && DeadBallState != DeadBallState.Setup) return;
+
+        DeadBallState = DeadBallState.Setup;
+
+        BattleManager.Instance.ResetPlayerPositions();
+        currentHandler.ResetPositions();
     }
 
     #endregion

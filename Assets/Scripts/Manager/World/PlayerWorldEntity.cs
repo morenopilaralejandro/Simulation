@@ -2,14 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Simulation.Enums.Character;
-using Simulation.Enums.SpriteLayer;
-using Simulation.Enums.Kit;
-using Simulation.Enums.Move;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Localization;
-using Simulation.Enums.World;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.SpriteLayer;
+using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Localization;
+using Aremoreno.Enums.World;
 
 public class PlayerWorldEntity : MonoBehaviour
 {
@@ -136,7 +136,7 @@ public class PlayerWorldEntity : MonoBehaviour
         interactionComponent.enabled = enable;
     }
 
-    private void HandleBattleStart() => SetEnable(false);
+    private void HandleBattleStart(BattleType battleType) => SetEnable(false);
     private void HandleBattleEnd() => SetEnable(true);
 
     private void HandleDialogStarted() => SetDialogEnabled(true);

@@ -1,4 +1,4 @@
-namespace Simulation.Enums.DeadBall
+namespace Aremoreno.Enums.DeadBall
 {
     public enum DeadBallState
     {

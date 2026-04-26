@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Simulation.Enums.World;
+using Aremoreno.Enums.World;
 
 public class ChestComponentDialog : MonoBehaviour
 {

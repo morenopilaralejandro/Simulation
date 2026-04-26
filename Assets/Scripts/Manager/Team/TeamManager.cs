@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Localization;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 public class TeamManager : MonoBehaviour
 {
@@ -69,9 +69,18 @@ public class TeamManager : MonoBehaviour
     public List<Team> GetAllLoadouts() => loadoutSystem.GetAllLoadouts();
     public void SetActiveLoadout(string teamGuid) => loadoutSystem.SetActiveLoadout(teamGuid);
     public bool HasActiveLoadout() => loadoutSystem.HasActiveLoadout();
-    public void SetCharacterInLoadout(string teamGuid, BattleType battleType, int slotIndex, string characterGuid) => loadoutSystem.SetCharacterInLoadout(teamGuid, battleType, slotIndex, characterGuid);
-    public void RemoveCharacterFromLoadout(string teamGuid, BattleType battleType, string characterGuid) => loadoutSystem.RemoveCharacterFromLoadout(teamGuid, battleType, characterGuid);
-    public List<Character> ResolveCharacters(Team loadout, BattleType battleType) => loadoutSystem.ResolveCharacters(loadout, battleType);
+    public void SetCharacterInLoadout(Team loadout, BattleType battleType, int slotIndex, string characterGuid) => loadoutSystem.SetCharacterInLoadout(loadout, battleType, slotIndex, characterGuid);
+    public void SwapCharactersInBattle(
+        Team loadout, BattleType battleType,
+        int slotIndexA, FormationCoord coordA, string guidA,
+        int slotIndexB, FormationCoord coordB, string guidB) 
+    => loadoutSystem.SwapCharactersInBattle(
+        loadout, battleType,
+        slotIndexA, coordA, guidA,
+        slotIndexB, coordB, guidB);
+    public void RemoveCharacterFromLoadout(Team loadout, BattleType battleType, string characterGuid) => loadoutSystem.RemoveCharacterFromLoadout(loadout, battleType, characterGuid);
+    public List<Character> ResolveCharactersFromStorage(Team loadout, BattleType battleType) => loadoutSystem.ResolveCharactersFromStorage(loadout, battleType);
+    public List<Character> ResolveCharactersFromBattle(Team loadout, BattleType battleType) => loadoutSystem.ResolveCharactersFromBattle(loadout, battleType);
     public Team InitializeFirstLoadout() => loadoutSystem.InitializeFirstLoadout();
     public SaveDataLoadoutSystem ExportLoadoutSystem() => loadoutSystem.Export();
     public void ImportLoadoutSystem(SaveDataLoadoutSystem saveData) => loadoutSystem.Import(saveData);

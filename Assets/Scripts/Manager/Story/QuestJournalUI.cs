@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Quest;
-using Simulation.Enums.Story;
+using Aremoreno.Enums.Quest;
+using Aremoreno.Enums.Story;
 
 public class QuestJournalUI : MonoBehaviour
 {

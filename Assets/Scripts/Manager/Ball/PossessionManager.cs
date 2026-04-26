@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Character;
 
 public class PossessionManager : MonoBehaviour
 {
@@ -131,6 +131,13 @@ public class PossessionManager : MonoBehaviour
     #region Feedback Logic
 
     public bool IsOnCooldownDuel(float now) => (now - lastDuelTime) <= cooldownSfxOnDuel;
+
+    public void SetCooldown(CharacterEntityBattle character)
+    {
+        lastCharacter = character;
+        lastKickTime = Time.time;
+    }
+
     private bool IsPassCut() => 
         lastCharacter != null &&
         currentCharacter != null &&

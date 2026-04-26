@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using Simulation.Enums.Quest;
-using Simulation.Enums.Story;
+using Aremoreno.Enums.Quest;
+using Aremoreno.Enums.Story;
 
 public class StoryEventDatabase : MonoBehaviour
 {

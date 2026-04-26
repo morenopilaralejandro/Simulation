@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class FormationCharacterSlotPool : MonoBehaviour
 {
@@ -60,7 +60,7 @@ public class FormationCharacterSlotPool : MonoBehaviour
     {
         if (o == null) return;
 
-        o.Reset();
+        o.Release();
         o.SetVisible(false);
 
         if (isBench)

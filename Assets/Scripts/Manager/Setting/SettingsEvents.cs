@@ -1,6 +1,6 @@
 using System;
-using Simulation.Enums.Input;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Input;
+using Aremoreno.Enums.Localization;
 
 public static class SettingsEvents
 {

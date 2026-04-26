@@ -1,8 +1,15 @@
-namespace Simulation.Enums.Input 
+namespace Aremoreno.Enums.Input 
 {
     public enum ControlScheme
     {
         Traditional,
+        Touch
+    }
+
+    public enum InputDeviceType
+    {
+        KeyboardMouse,
+        Gamepad,
         Touch
     }
 
@@ -35,6 +42,10 @@ namespace Simulation.Enums.Input
         BattleUI_OpenDimensionMenu,
         BattleUI_CloseDimensionMenu,
         BattleUI_DimensionShortcutPause,
+        BattleUI_OpenTeamMenu,
+        BattleUI_CloseTeamMenu,
+        BattleUI_DeadBallConfirm,
+        BattleUI_TeamPreviewConfirm,
         //WorldActions
         World_Move,
         World_Run,
@@ -47,6 +58,14 @@ namespace Simulation.Enums.Input
         World_ClosePauseMenu,
         //DialogActions
         Dialog_Submit,
-        Dialog_Cancel
+        Dialog_Cancel,
+        //NavigationActions
+        Navigation_Back,
+        Navigation_ShortcutTeamBattleType,
+        Navigation_ShortcutTeamActive,
+        Navigation_ShortcutTeamActions,
+        Navigation_ShortcutTeamCharacterSummary,
+        Navigation_ShortcutTeamCharacterMove,
+        Navigation_ShortcutTeamCharacterReplace
     }
 }

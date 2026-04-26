@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 public class CharacterShootIndicator : MonoBehaviour
 {

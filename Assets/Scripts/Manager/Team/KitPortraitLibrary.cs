@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 [CreateAssetMenu(fileName = "KitPortraitSprites", menuName = "Library/Portrait/KitPortraitLibrary")]
 public class KitPortraitLibrary : ScriptableObject 

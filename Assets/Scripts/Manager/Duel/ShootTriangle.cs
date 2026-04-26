@@ -1,6 +1,6 @@
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Battle;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class ShootTriangle : MonoBehaviour

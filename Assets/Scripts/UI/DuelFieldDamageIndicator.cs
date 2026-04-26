@@ -4,10 +4,10 @@ using TMPro;
 using System.Collections;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Move;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Move;
 
 public class DuelFieldDamageIndicator : MonoBehaviour
 {

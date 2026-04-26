@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
 
 /// <summary>
 /// Win by a goal margin over the opponent before the timer runs out.

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Quest;
-using Simulation.Enums.Story;
+using Aremoreno.Enums.Quest;
+using Aremoreno.Enums.Story;
 
 public class QuestObjectiveComponentProgress
 {

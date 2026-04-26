@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Simulation.Enums.Localization;
+using Aremoreno.Enums.Localization;
 
 /// <summary>
 /// Tracks which zone the player is currently in based on loaded chunks

@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Battle;
 
 [RequireComponent(typeof(Collider))]
 public class CharacterComponentColliderDuelKeeper : MonoBehaviour
@@ -39,10 +39,12 @@ public class CharacterComponentColliderDuelKeeper : MonoBehaviour
         Team team, 
         FormationCoord formationCoord)
     {
+        /*
         if (this.characterEntityBattle == characterEntityBattle)
         {
             this.gameObject.SetActive(formationCoord.Position == Position.GK);
         }
+        */
     }
 
     #endregion

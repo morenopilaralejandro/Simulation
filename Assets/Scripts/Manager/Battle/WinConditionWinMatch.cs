@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
 
 /// <summary>
 /// Play two halves. At the end of the second half, the highest score wins.

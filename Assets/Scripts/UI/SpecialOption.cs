@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Aremoreno.Enums.Battle;
 
 [System.Serializable]
 public class SpecialOption : MonoBehaviour
@@ -22,7 +23,7 @@ public class SpecialOption : MonoBehaviour
         BattleEvents.OnBattleStart -= HandleBattleStart;
     }
 
-    private void HandleBattleStart()
+    private void HandleBattleStart(BattleType battleType)
     {
         cooldownRemaining = 0f;
         button.interactable = true;

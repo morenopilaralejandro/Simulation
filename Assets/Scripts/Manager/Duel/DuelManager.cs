@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Battle;
 
 public class DuelManager : MonoBehaviour
 {
@@ -352,7 +352,7 @@ public class DuelManager : MonoBehaviour
         if (DamageCalculator.IsEffective(defense.CurrentElement, offense.CurrentElement))
         {
             defense.Damage *= DamageCalculator.ELEMENT_EFFECTIVE_MULTIPLIER;
-            DuelLogManager.Instance.AddElementDefense(defense.CharacterEntityBattle);
+            DuelLogManager.Instance.AddElementDefense(defense.CharacterEntityBattle.Character, defense.CharacterEntityBattle.TeamSide);
             LogManager.Info("[DuelManager] Defense element is effective", this);
         }
         else if (DamageCalculator.IsEffective(offense.CurrentElement, defense.CurrentElement))
@@ -362,7 +362,7 @@ public class DuelManager : MonoBehaviour
             offense.Damage *= DamageCalculator.ELEMENT_EFFECTIVE_MULTIPLIER;
             if (duel.DuelMode == DuelMode.Shoot)
                 duel.OffensePressure += offense.Damage;
-            DuelLogManager.Instance.AddElementOffense(offense.CharacterEntityBattle);
+            DuelLogManager.Instance.AddElementOffense(offense.CharacterEntityBattle.Character, offense.CharacterEntityBattle.TeamSide);
             LogManager.Info("[DuelManager] Offense element is effective", this);
         }
     }

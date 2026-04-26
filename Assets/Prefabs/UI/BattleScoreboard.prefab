@@ -642,6 +642,7 @@ GameObject:
   - component: {fileID: 669433217550469470}
   - component: {fileID: 5919165751159176524}
   - component: {fileID: 505884464115261136}
+  - component: {fileID: 6850495255516912185}
   m_Layer: 5
   m_Name: BattleScoreboard
   m_TagString: Untagged
@@ -721,12 +722,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32c0e40598c81963a84c6f0f4a280afe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 6850495255516912185}
   scoreTextHome: {fileID: 3444361835610581769}
   scoreTextAway: {fileID: 7743112566473911214}
   teamCrestHome: {fileID: 7949345378180798100}
   teamCrestAway: {fileID: 3042636152009602855}
   teamNameHome: {fileID: 7300354387046526788}
   teamNameAway: {fileID: 5168762000276727122}
+--- !u!225 &6850495255516912185
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3939218464629949272}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4451464773645335821
 GameObject:
   m_ObjectHideFlags: 0

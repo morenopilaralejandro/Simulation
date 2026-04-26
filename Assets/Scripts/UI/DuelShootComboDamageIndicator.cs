@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using UnityEngine.Localization;
-using Simulation.Enums.Duel;
+using Aremoreno.Enums.Duel;
 
 public class DuelShootComboDamageIndicator : MonoBehaviour
 {

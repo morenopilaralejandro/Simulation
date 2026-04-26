@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Character;
-using Simulation.Enums.DeadBall;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.DeadBall;
 
 public class BattleManager : MonoBehaviour
 {
@@ -84,7 +84,7 @@ public class BattleManager : MonoBehaviour
         timeCurrent += Time.deltaTime * timeScale;
         BattleUIManager.Instance.UpdateTimerDisplay(timeCurrent);
         
-        if(!Ball.IsTraveling)
+        if(Ball != null && !Ball.IsTraveling)
             CheckEndGame();
     }
 
@@ -419,7 +419,6 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator ThrowInSequence(TeamSide side)
     {
-        AudioManager.Instance.PlaySfx("sfx-whistle_single");
         yield return new WaitForSeconds(0.5f);
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.ThrowIn, side);
@@ -432,7 +431,6 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator CornerKickSequence(TeamSide side)
     {
-        AudioManager.Instance.PlaySfx("sfx-whistle_single");
         yield return new WaitForSeconds(0.5f);
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.CornerKick, side);
@@ -445,8 +443,6 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator OffsideSequence(TeamSide side)
     {
-        AudioManager.Instance.PlaySfx("sfx-whistle_single");
-
         BattleUIManager.Instance.SetMessageActive(MessageType.Offside, true);
         yield return new WaitForSeconds(0.5f);
         BattleUIManager.Instance.SetMessageActive(MessageType.Offside, false);
@@ -462,7 +458,6 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator GoalKickSequence(TeamSide side)
     {
-        AudioManager.Instance.PlaySfx("sfx-whistle_single");
         yield return new WaitForSeconds(0.5f);
         ResetDefaultPositions();
         DeadBallManager.Instance.StartDeadBall(DeadBallType.GoalKick, side);
@@ -472,72 +467,108 @@ public class BattleManager : MonoBehaviour
     #region Team and Ball
     private void HandleAllCharactersReady()
     {
-        BattleEvents.RaiseBattleStart();
         ResetDefaultPositions();
+        BattleEvents.RaiseBattleStart(currentType);
+
+        if (currentType == BattleType.Mini)
+        {
+
+            DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Home);
+        } else 
+        {
+            TeamEvents.RaiseTeamPreviewRequested();
+        }
+    }
+
+    private void HandleTeamPreviewEnded()
+    {
         DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Home);
     }
 
     private void PopulateTeamWithCharacters(Team team, int teamSize)
     {
         team.ClearCharacterEntities(currentType);
+        team.ClearCharacters(currentType);
 
-        TeamSide side = team.TeamSide;
+        int rosterSize = currentType == BattleType.Full ? TeamManager.SIZE_MAX : teamSize;
 
+        for (int i = 0; i < rosterSize; i++)
+        {
+            int characterIndex = i;
+            bool needsEntity = i < teamSize;
+
+            if (!needsEntity)
+            {
+                // Add to roster without spawning an entity
+                AddCharacterToRoster(team, characterIndex);
+                continue;
+            }
+
+            BattleCharacterManager.Instance.GetPooledCharacter((character) =>
+            {
+                if (character == null) return;
+
+                bool initialized = team.IsCustomLoadout
+                    ? TryInitializeFromLoadout(character, team, characterIndex)
+                    : TryInitializeFromData(character, team, characterIndex);
+
+                if (!initialized) return;
+
+                BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
+                character.gameObject.name = character.CharacterId;
+                team.GetCharacterEntities(currentType).Add(character);
+                team.GetCharacters(currentType).Add(character.Character);
+
+                charactersReady++;
+                if (charactersReady >= charactersReadyMax)
+                    BattleEvents.RaiseAllCharactersReady();
+            });
+        }
+    }
+
+    private void AddCharacterToRoster(Team team, int index)
+    {
         if (team.IsCustomLoadout)
-            PopulateTeamWithCharactersFromLoadout(team, teamSize, side);
+        {
+            var guids = team.GetCharacterGuids(currentType);
+            if (index >= guids.Count) return;
+
+            Character characterObject = CharacterManager.Instance.GetCharacter(guids[index]);
+            team.GetCharacters(currentType).Add(characterObject);
+        }
         else
-            PopulateTeamWithCharactersFromData(team, teamSize);
-    }
-
-    private void PopulateTeamWithCharactersFromData(Team team, int teamSize)
-    {
-        for (int i = 0; i < teamSize; i++)
         {
-            int characterIndex = i;
-            BattleCharacterManager.Instance.GetPooledCharacter((character) =>
-            {
-                if (character != null && characterIndex < team.GetCharacterDataList(currentType).Count)
-                {
-                    CharacterData characterData = team.GetCharacterDataList(currentType)[characterIndex]; 
-                    character.Initialize(characterData);
+            var dataList = team.GetCharacterDataList(currentType);
+            if (index >= dataList.Count) return;
 
-                    character.SetLevel(character.MaxLevel);
-                    character.ForceMaxEvolutionOnEquippedMoves();
-                    BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
-                    character.gameObject.name = character.CharacterId;
-                    team.GetCharacterEntities(currentType).Add(character);
-                
-                    charactersReady++;
-                    if (charactersReady >= charactersReadyMax)
-                        BattleEvents.RaiseAllCharactersReady();
-                }
-            });
+            // Create a Character from data without an entity
+            Character characterObject = new Character(dataList[index]);
+            characterObject.SetLevel(characterObject.MaxLevel);
+            characterObject.ForceMaxEvolutionOnEquippedMoves();
+            team.GetCharacters(currentType).Add(characterObject);
         }
     }
 
-    private void PopulateTeamWithCharactersFromLoadout(Team team, int teamSize, TeamSide side)
+    private bool TryInitializeFromData(CharacterEntityBattle character, Team team, int index)
     {
-        for (int i = 0; i < teamSize; i++)
-        {
-            int characterIndex = i;
-            BattleCharacterManager.Instance.GetPooledCharacter((character) =>
-            {
-                if (character != null && characterIndex < team.GetCharacterGuids(currentType).Count)
-                {
-                    Character characterObject = CharacterManager.Instance.GetCharacter(team.GetCharacterGuids(CurrentType)[characterIndex]);
-                    character.Initialize(null, characterObject); //Initialize the CharacterEntityBattle with a characterObject
+        var dataList = team.GetCharacterDataList(currentType);
+        if (index >= dataList.Count) return false;
 
-                    character.CalculateSpeed();
-                    BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
-                    character.gameObject.name = character.CharacterId;
-                    team.GetCharacterEntities(currentType).Add(character);
-                
-                    charactersReady++;
-                    if (charactersReady >= charactersReadyMax)
-                        BattleEvents.RaiseAllCharactersReady();
-                }
-            });
-        }
+        character.Initialize(dataList[index]);
+        character.SetLevel(character.MaxLevel);
+        character.ForceMaxEvolutionOnEquippedMoves();
+        return true;
+    }
+
+    private bool TryInitializeFromLoadout(CharacterEntityBattle character, Team team, int index)
+    {
+        var guids = team.GetCharacterGuids(currentType);
+        if (index >= guids.Count) return false;
+
+        Character characterObject = CharacterManager.Instance.GetCharacter(guids[index]);
+        character.Initialize(null, characterObject);
+        character.CalculateSpeed();
+        return true;
     }
 
     public void ResetDefaultPositions()
@@ -547,7 +578,7 @@ public class BattleManager : MonoBehaviour
         BattleBallManager.Instance.ResetBallPosition();
     }
 
-    private void ResetPlayerPositions()
+    public void ResetPlayerPositions()
     {
         foreach (Team team in Teams.Values) 
         {
@@ -557,5 +588,19 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Events
+
+    private void OnEnable()
+    {
+        TeamEvents.OnTeamPreviewEnded += HandleTeamPreviewEnded;
+    }
+
+    private void OnDisable()
+    {
+        TeamEvents.OnTeamPreviewEnded -= HandleTeamPreviewEnded;
+    }
+
     #endregion
 }

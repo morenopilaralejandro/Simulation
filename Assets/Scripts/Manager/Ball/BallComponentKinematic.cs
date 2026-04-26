@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BallComponentKinematic : MonoBehaviour

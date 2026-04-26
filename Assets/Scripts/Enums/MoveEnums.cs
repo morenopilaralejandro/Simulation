@@ -1,4 +1,4 @@
-namespace Simulation.Enums.Move
+namespace Aremoreno.Enums.Move
 {
     public enum Category
     {

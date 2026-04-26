@@ -1,6 +1,9 @@
 using System;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Input;
+using Aremoreno.Enums.Team;
 
 public static class TeamEvents
 {
@@ -72,5 +75,71 @@ public static class TeamEvents
     {
         OnTeamCrestSpriteUpdated?.Invoke(team);
     }
+    
+    // Substitution
+    public static event Action<TeamSide, int> OnSubstitutionMade;
+    public static void RaiseSubstitutionMade(TeamSide teamSide, int intValue)
+    {
+        OnSubstitutionMade?.Invoke(teamSide, intValue);
+    }
+
+    public static event Action<TeamSide> OnSubstitutionDenied;
+    public static void RaiseSubstitutionDenied(TeamSide teamSide)
+    {
+        OnSubstitutionDenied?.Invoke(teamSide);
+    }
+
+    public static event Action<TeamSide> OnSubstitutionResetPositions;
+    public static void RaiseSubstitutionResetPositions(TeamSide teamSide)
+    {
+        OnSubstitutionResetPositions?.Invoke(teamSide);
+    }
+
+    public static event Action<Character, Character, TeamSide> OnCharacterSubstituted;
+    public static void RaiseCharacterSubstituted(Character characterIn, Character characterOut, TeamSide teamSide)
+    {
+        OnCharacterSubstituted?.Invoke(characterIn, characterOut, teamSide);
+    }
+
+    // Preview
+    public static event Action OnTeamPreviewRequested;
+    public static void RaiseTeamPreviewRequested()
+    {
+        OnTeamPreviewRequested?.Invoke();
+    }
+
+    public static event Action OnTeamPreviewStarted;
+    public static void RaiseTeamPreviewStarted()
+    {
+        OnTeamPreviewStarted?.Invoke();
+    }
+
+    public static event Action OnTeamPreviewReady;
+    public static void RaiseTeamPreviewReady()
+    {
+        OnTeamPreviewReady?.Invoke();
+    }
+
+    public static event Action OnTeamPreviewEnded;
+    public static void RaiseTeamPreviewEnded()
+    {
+        OnTeamPreviewEnded?.Invoke();
+    }
+
+    public static event Action<TeamPreviewState> OnTeamPreviewStateChanged;
+    public static void RaiseTeamPreviewStateChanged(TeamPreviewState state) =>
+        OnTeamPreviewStateChanged?.Invoke(state);
+
+    public static event Action<TeamSide, TeamPreviewSideState> OnTeamPreviewSideStateChanged;
+    public static void RaiseTeamPreviewSideStateChanged(TeamSide side, TeamPreviewSideState sideState) =>
+        OnTeamPreviewSideStateChanged?.Invoke(side, sideState);
+
+    public static event Action<TeamSide, Team, BattleType, int, int> OnTeamPreviewPageChanged;
+    public static void RaiseTeamPreviewPageChanged(TeamSide side, Team team, BattleType battleType, int page, int totalPages) =>
+        OnTeamPreviewPageChanged?.Invoke(side, team, battleType, page, totalPages);
+
+    public static event Action<TeamSide> OnTeamPreviewSideReady;
+    public static void RaiseTeamPreviewSideReady(TeamSide side) =>
+        OnTeamPreviewSideReady?.Invoke(side);
 
 }

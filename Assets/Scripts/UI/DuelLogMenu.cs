@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
-using Simulation.Enums.Log;
-using Simulation.Enums.Input;
+using Aremoreno.Enums.Log;
+using Aremoreno.Enums.Input;
 
 public class DuelLogMenu : Menu
 {

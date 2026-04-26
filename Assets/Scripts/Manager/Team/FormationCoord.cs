@@ -1,5 +1,5 @@
 using UnityEngine;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 [System.Serializable]
 public struct FormationCoord

@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Duel;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Character;
 
 public class Ball : MonoBehaviour
 {

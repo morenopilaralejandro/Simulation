@@ -4,7 +4,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
-using Simulation.Enums.World;
+using Aremoreno.Enums.World;
 
 public class ChunkCreatorTool : EditorWindow
 {

@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Character;
-using Simulation.Enums.Battle;
-using Simulation.Enums.Kit;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.UI;
 
 public class FormationLayoutUI : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class FormationLayoutUI : MonoBehaviour
     [SerializeField] private RectTransform dragLayer;
     [SerializeField] private TMP_Text textTeamName;
     [SerializeField] private Image imageTeamCrest;
+    [SerializeField] private bool canDrag = true;
 
     [Header("Pitch Padding")]
     [SerializeField] private float paddingX = 50f;
@@ -24,7 +26,9 @@ public class FormationLayoutUI : MonoBehaviour
 
     private Formation currentFormation;
     private Kit currentKit;
+    private Variant currentVariant;
     private bool showDefaultSelected = true;
+    private MenuTeamMode menuTeamMode = MenuTeamMode.Edit;
 
     private List<FormationCharacterSlotUI> fieldSlots = new List<FormationCharacterSlotUI>();
     private List<FormationCharacterSlotUI> benchSlots = new List<FormationCharacterSlotUI>();
@@ -50,12 +54,19 @@ public class FormationLayoutUI : MonoBehaviour
 
     #region Initialize
 
-    public void Initialize(Team team, BattleType battleType, bool showDefaultSelected = true)
+    public void Initialize(Team team, BattleType battleType, MenuTeamMode menuTeamMode, bool showDefaultSelected = true)
     {
-        teamRoster = teamManager.ResolveCharacters(team, battleType);
+        this.menuTeamMode = menuTeamMode;
+
+        if (menuTeamMode == MenuTeamMode.Edit) 
+            teamRoster = teamManager.ResolveCharactersFromStorage(team, battleType);
+        else 
+            teamRoster = teamManager.ResolveCharactersFromBattle(team, battleType);
+
         textTeamName.text = team.TeamName;
         imageTeamCrest.sprite = team.TeamCrestSprite;
         currentKit = team.Kit;
+        currentVariant = team.Variant;
         this.showDefaultSelected = showDefaultSelected;
         currentFormation = team.GetFormation(battleType);
 
@@ -115,7 +126,8 @@ public class FormationLayoutUI : MonoBehaviour
             // Re-initialize data
             slot.SetDragLayer(dragLayer);
             slot.Initialize(i, coord);
-            teamRoster[i].ApplyKit(currentKit, Variant.Home, coord.Position);
+            slot.SetCanDrag(canDrag);
+            teamRoster[i].ApplyKit(currentKit, currentVariant, coord.Position);
             slot.SetCharacter(teamRoster[i]);
         }
 
@@ -135,8 +147,9 @@ public class FormationLayoutUI : MonoBehaviour
             FormationCharacterSlotUI slot = benchSlots[i];
             slot.SetDragLayer(dragLayer);
             slot.SetAsBench(rosterIndex);
+            slot.SetCanDrag(canDrag);
             teamRoster[rosterIndex].ApplyKit(
-                currentKit, Variant.Home, teamRoster[rosterIndex].Position);
+                currentKit, currentVariant, teamRoster[rosterIndex].Position);
             slot.SetCharacter(teamRoster[rosterIndex]);
         }
 
@@ -176,6 +189,33 @@ public class FormationLayoutUI : MonoBehaviour
             FormationCharacterSlotUI slot = pool.Get(isBench);
             slots.Add(slot);
         }
+    }
+
+    public void ReleaseAll()
+    {
+        // Return all field slots to the pool
+        for (int i = fieldSlots.Count - 1; i >= 0; i--)
+        {
+            pool.Return(fieldSlots[i], isBench: false);
+        }
+        fieldSlots.Clear();
+
+        // Return all bench slots to the pool
+        for (int i = benchSlots.Count - 1; i >= 0; i--)
+        {
+            pool.Return(benchSlots[i], isBench: true);
+        }
+        benchSlots.Clear();
+
+        // Null out references to allow GC collection
+        teamRoster = null;
+        currentFormation = null;
+        currentKit = null;
+        teamManager = null;
+
+        // Clear UI references that hold asset data
+        if (textTeamName != null) textTeamName.text = string.Empty;
+        if (imageTeamCrest != null) imageTeamCrest.sprite = null;
     }
 
     #endregion

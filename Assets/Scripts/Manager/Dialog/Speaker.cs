@@ -1,8 +1,8 @@
 using UnityEngine;
-using Simulation.Enums.Localization;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
-using Simulation.Enums.SpriteLayer;
+using Aremoreno.Enums.Localization;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.SpriteLayer;
 
 public class Speaker
 {

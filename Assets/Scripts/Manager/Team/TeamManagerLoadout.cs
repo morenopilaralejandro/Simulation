@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Localization;
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
 
 /// <summary>
 /// Manages all user-created team loadouts and tracks which one is active.
@@ -144,12 +145,11 @@ public class TeamManagerLoadout
 
     #region Loadout Character Management
 
-    public void SetCharacterInLoadout(string teamGuid, BattleType battleType, int slotIndex, string characterGuid)
+    public void SetCharacterInLoadout(Team loadout, BattleType battleType, int slotIndex, string characterGuid)
     {
-        Team loadout = GetLoadout(teamGuid);
         if (loadout == null)
         {
-            LogManager.Warning($"[TeamLoadoutManager] Loadout {teamGuid} not found.");
+            LogManager.Warning($"[TeamLoadoutManager] Loadout {loadout.TeamGuid} not found.");
             return;
         }
 
@@ -170,9 +170,8 @@ public class TeamManagerLoadout
         TeamEvents.RaiseLoadoutUpdated(loadout);
     }
 
-    public void RemoveCharacterFromLoadout(string teamGuid, BattleType battleType, string characterGuid)
+    public void RemoveCharacterFromLoadout(Team loadout, BattleType battleType, string characterGuid)
     {
-        Team loadout = GetLoadout(teamGuid);
         if (loadout == null) return;
 
         loadout.RemoveCharacterGuid(battleType, characterGuid);
@@ -204,7 +203,7 @@ public class TeamManagerLoadout
     /// Resolves a loadout's character GUIDs into actual Character instances from storage.
     /// Returns the list in slot order (nulls filtered out).
     /// </summary>
-    public List<Character> ResolveCharacters(Team loadout, BattleType battleType)
+    public List<Character> ResolveCharactersFromStorage(Team loadout, BattleType battleType)
     {
         List<Character> resolved = new();
         List<string> guids = loadout.GetCharacterGuids(battleType);
@@ -225,6 +224,11 @@ public class TeamManagerLoadout
         }
 
         return resolved;
+    }
+
+    public List<Character> ResolveCharactersFromBattle(Team loadout, BattleType battleType)
+    {
+        return loadout.GetCharacters(battleType);
     }
 
     #endregion
@@ -272,14 +276,14 @@ public class TeamManagerLoadout
         int battleCount = Mathf.Min(sizeFull, allCharacters.Count);
         for (int i = 0; i < battleCount; i++)
         {
-            SetCharacterInLoadout(loadout.TeamGuid, BattleType.Full, i, allCharacters[i].CharacterGuid);
+            SetCharacterInLoadout(loadout, BattleType.Full, i, allCharacters[i].CharacterGuid);
         }
 
         // Populate Mini Battle slots
         int miniCount = Mathf.Min(sizeMini, allCharacters.Count);
         for (int i = 0; i < miniCount; i++)
         {
-            SetCharacterInLoadout(loadout.TeamGuid, BattleType.Mini, i, allCharacters[i].CharacterGuid);
+            SetCharacterInLoadout(loadout, BattleType.Mini, i, allCharacters[i].CharacterGuid);
         }
 
         LogManager.Info($"[TeamLoadoutManager] Loadout initialized: " +
@@ -342,6 +346,137 @@ public class TeamManagerLoadout
         }
     }
 
+    #endregion
+
+    #region Swap
+
+    public void SwapCharactersInBattle(
+        Team loadout, BattleType battleType,
+        int slotIndexA, FormationCoord coordA, string guidA,
+        int slotIndexB, FormationCoord coordB, string guidB)
+    {
+        List<CharacterEntityBattle> entities = loadout.GetCharacterEntities(battleType);
+
+        if (entities == null)
+        {
+            Debug.LogError($"SwapCharactersInBattle: entities null for {battleType}");
+            return;
+        }
+
+        CharacterEntityBattle entityA = null;
+        CharacterEntityBattle entityB = null;
+
+        int count = entities.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var e = entities[i];
+            if (e == null) continue;
+
+            string guid = e.CharacterGuid;
+
+            if (entityA == null && guid == guidA)
+                entityA = e;
+            else if (entityB == null && guid == guidB)
+                entityB = e;
+
+            if (entityA != null && entityB != null)
+                break;
+        }
+
+        // Swap characters in roster
+        Character characterA = loadout.GetCharacterByGuid(guidA, battleType);
+        Character characterB = loadout.GetCharacterByGuid(guidB, battleType);
+        loadout.SetCharacter(battleType, slotIndexA, characterB);
+        loadout.SetCharacter(battleType, slotIndexB, characterA);
+
+        int activeTeamSize = battleType == BattleType.Full
+            ? TeamManager.SIZE_FULL
+            : TeamManager.SIZE_MINI;
+
+        bool slotAIsActive = slotIndexA < activeTeamSize;
+        bool slotBIsActive = slotIndexB < activeTeamSize;
+
+        // Both on field — just swap entities directly
+        if (entityA != null && entityB != null)
+        {
+            loadout.SetCharacterEntity(battleType, slotIndexA, entityB);
+            loadout.SetCharacterEntity(battleType, slotIndexB, entityA);
+            TeamEvents.RaiseAssignCharacterToTeamBattle(entityB, loadout, coordA);
+            TeamEvents.RaiseAssignCharacterToTeamBattle(entityA, loadout, coordB);
+            return;
+        }
+
+        // Entity A is on field, Entity B is on bench (null)
+        if (entityA != null && entityB == null)
+        {
+            TeamEvents.RaiseCharacterSubstituted(characterB, characterA, loadout.TeamSide);
+
+            // Return the field entity to pool
+            BattleCharacterManager.Instance.ReturnCharacterToPool(entityA);
+            characterA.ApplyKit(loadout.Kit, loadout.Variant, Position.FW);
+
+            // Spawn fresh entity for slotA (where characterB is going)
+            SpawnEntityForSlot(loadout, battleType, slotIndexA, coordA, characterB);
+            return;
+        }
+
+        // Entity B is on field, Entity A is on bench (null)
+        if (entityB != null && entityA == null)
+        {
+            TeamEvents.RaiseCharacterSubstituted(characterA, characterB, loadout.TeamSide);
+
+            // Return the field entity to pool
+            BattleCharacterManager.Instance.ReturnCharacterToPool(entityB);
+            characterB.ApplyKit(loadout.Kit, loadout.Variant, Position.FW);
+
+            // Spawn fresh entity for slotB (where characterA is going)
+            SpawnEntityForSlot(loadout, battleType, slotIndexB, coordB, characterA);
+            return;
+        }
+    }
+
+    private void SpawnEntityForSlot(
+        Team loadout, BattleType battleType,
+        int slotIndex, FormationCoord coord, Character character)
+    {
+        if (character == null) return;
+
+        BattleCharacterManager.Instance.GetPooledCharacter((entity) =>
+        {
+            if (entity == null) return;
+
+            entity.Initialize(null, character);
+            LoadEntityAppearanceAsync(entity);
+
+            entity.CalculateSpeed();
+            entity.gameObject.name = entity.CharacterId;
+            loadout.SetCharacterEntity(battleType, slotIndex, entity);
+            TeamEvents.RaiseAssignCharacterToTeamBattle(entity, loadout, coord);
+
+            LogManager.Trace($"[TeamManagerLoadout] {entity.CharacterId} " +
+                $"baseStat: {entity.GetBattleStat(Stat.Speed)}, " +
+                $"fatigue: {entity.FatigueSpeedMultiplier}, " +
+                $"status: {entity.StatusSpeedMultiplier}, " +
+                $"final: {entity.MovementSpeed}");
+        });
+    }
+
+    private async void LoadEntityAppearanceAsync(CharacterEntityBattle entity)
+    {
+        try
+        {
+            await entity.AppearanceBattleLoadAsync();
+            
+            // Guard: entity may have been pooled during async load
+            if (!entity.gameObject.activeInHierarchy) return;
+            
+            entity.ApplyStateToRenderer();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TeamManagerLoadout] Failed to load appearance for {entity.CharacterId}: {e}");
+        }
+    }
     #endregion
 }
 

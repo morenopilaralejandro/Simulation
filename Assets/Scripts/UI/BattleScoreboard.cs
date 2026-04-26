@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Simulation.Enums.Character;
+using Aremoreno.Enums.Character;
 
 public class BattleScoreboard : MonoBehaviour
 {
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private TMP_Text scoreTextHome;
     [SerializeField] private TMP_Text scoreTextAway;
     [SerializeField] private Image teamCrestHome;
@@ -62,6 +63,37 @@ public class BattleScoreboard : MonoBehaviour
     {
         scoreTextDict[TeamSide.Home].text = "0";
         scoreTextDict[TeamSide.Away].text = "0";
+    }
+
+    private void OnEnable()
+    {
+        TeamEvents.OnTeamPreviewStarted += HandlePreviewStarted;
+        TeamEvents.OnTeamPreviewEnded += HandlePreviewEnded;
+    }
+
+    private void OnDisable()
+    {
+        TeamEvents.OnTeamPreviewStarted -= HandlePreviewStarted;
+        TeamEvents.OnTeamPreviewEnded -= HandlePreviewEnded;
+    }
+
+    private void HandlePreviewStarted()
+    {
+        SetCanvasGroupVisible(false);
+    }
+
+    private void HandlePreviewEnded()
+    {
+        SetCanvasGroupVisible(true);
+    }
+
+    private void SetCanvasGroupVisible(bool visible)
+    {
+        if (canvasGroup == null) return;
+
+        canvasGroup.alpha = visible ? 1f : 0f;
+        canvasGroup.interactable = visible;
+        canvasGroup.blocksRaycasts = visible;
     }
 
 }

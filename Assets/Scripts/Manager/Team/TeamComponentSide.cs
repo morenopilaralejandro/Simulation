@@ -1,6 +1,6 @@
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
 
 public class TeamComponentSide
 {
@@ -17,45 +17,18 @@ public class TeamComponentSide
     public void Initialize(TeamData teamData, Team team)
     {
         this.team = team;
-        SubscribeEvents();
+        ResetSideAndVariant(); 
     }
 
     public void Deinitialize()
     {
-        UnsubscribeEvents();
     }
 
-    private void SubscribeEvents()
+    public void SetSide(TeamSide teamSide) => TeamSide = teamSide;
+    public void SetVariant(Variant variant) => Variant = variant;
+    public void ResetSideAndVariant() 
     {
-        TeamEvents.OnAssignTeamToSide += HandleAssignTeamToSide;
-        TeamEvents.OnAssignVariantToTeam += HandleAssignVariantToTeam;
-    }
-
-    private void UnsubscribeEvents()
-    {
-        TeamEvents.OnAssignTeamToSide -= HandleAssignTeamToSide;
-        TeamEvents.OnAssignVariantToTeam -= HandleAssignVariantToTeam;
-    }
-
-    private void HandleAssignTeamToSide(
-        Team team, 
-        TeamSide teamSide)
-    {
-        if (this.team == team)
-        {
-            this.TeamSide = teamSide;
-            LogManager.Trace($"[TeamComponentSide] {this.team.TeamId} assigned to side {teamSide}", null);
-        }
-    }
-
-    private void HandleAssignVariantToTeam(
-        Team team, 
-        Variant variant)
-    {
-        if (this.team == team)
-        {
-            this.Variant = variant;
-            LogManager.Trace($"[TeamComponentSide] {this.team.TeamId} assigned to variant {variant}", null);
-        }
+        TeamSide = TeamSide.Home;
+        Variant = Variant.Home;
     }
 }

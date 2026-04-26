@@ -2,8 +2,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using System.Collections.Generic;
-using Simulation.Enums.Input;
-using Simulation.Enums.Duel;
+using Aremoreno.Enums.Input;
+using Aremoreno.Enums.Duel;
 
 ///<summary>
 /// Handles input with Unity New Input System. 
@@ -26,9 +26,13 @@ public class InputManager : MonoBehaviour
     private bool isAndroid;
     private bool isLocked;
     [SerializeField] private PlayerInput playerInput;
+    private InputDeviceType currentDeviceType = InputDeviceType.KeyboardMouse;
 
     public bool IsAndroid => isAndroid;
-    public bool IsLocked => isLocked;
+    public bool IsLocked => isLocked;    
+    //public bool IsUsingController => currentDeviceType == InputDeviceType.Gamepad;
+    public bool IsUsingController => false;
+    public InputDeviceType CurrentDeviceType => currentDeviceType;
     #endregion
 
     #region Lifecycle
@@ -70,6 +74,10 @@ public class InputManager : MonoBehaviour
         BindButton(input.BattleUIActions.BattleUI_OpenDimensionMenu, CustomAction.BattleUI_OpenDimensionMenu);
         BindButton(input.BattleUIActions.BattleUI_CloseDimensionMenu, CustomAction.BattleUI_CloseDimensionMenu);
         BindButton(input.BattleUIActions.BattleUI_DimensionShortcutPause, CustomAction.BattleUI_DimensionShortcutPause);
+        BindButton(input.BattleUIActions.BattleUI_OpenTeamMenu, CustomAction.BattleUI_OpenTeamMenu);
+        BindButton(input.BattleUIActions.BattleUI_CloseTeamMenu, CustomAction.BattleUI_CloseTeamMenu);
+        BindButton(input.BattleUIActions.BattleUI_DeadBallConfirm, CustomAction.BattleUI_DeadBallConfirm);
+        BindButton(input.BattleUIActions.BattleUI_TeamPreviewConfirm, CustomAction.BattleUI_TeamPreviewConfirm);
 
         //WorldActions
         input.WorldActions.World_Move.performed += OnMoveWorldPerformed;
@@ -88,11 +96,21 @@ public class InputManager : MonoBehaviour
         BindButton(input.DialogActions.Dialog_Submit, CustomAction.Dialog_Submit);
         BindButton(input.DialogActions.Dialog_Cancel, CustomAction.Dialog_Cancel);
 
+        //NavigationActions
+        BindButton(input.NavigationActions.Navigation_Back, CustomAction.Navigation_Back);
+        BindButton(input.NavigationActions.Navigation_ShortcutTeamBattleType, CustomAction.Navigation_ShortcutTeamBattleType);
+        BindButton(input.NavigationActions.Navigation_ShortcutTeamActive, CustomAction.Navigation_ShortcutTeamActive);
+        BindButton(input.NavigationActions.Navigation_ShortcutTeamActions, CustomAction.Navigation_ShortcutTeamActions);
+        BindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterSummary, CustomAction.Navigation_ShortcutTeamCharacterSummary);
+        BindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterMove, CustomAction.Navigation_ShortcutTeamCharacterMove);
+        BindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterReplace, CustomAction.Navigation_ShortcutTeamCharacterReplace);
+
         // Enable once here
         input.BattleActions.Enable();
         input.BattleUIActions.Enable();
         input.WorldActions.Enable();
         input.DialogActions.Disable();
+        input.NavigationActions.Disable();
 
         // Respond to control scheme changes (requires a PlayerInput component on the same GO)
         playerInput = GetComponent<PlayerInput>();
@@ -107,11 +125,12 @@ public class InputManager : MonoBehaviour
     private void Start() 
     {
         mainCamera = Camera.main;
+        isAndroid = Application.platform == RuntimePlatform.Android;
     }
 
     private void OnDestroy()
     {
-        DuelEvents.OnDuelStart += HandleDuelStart;
+        DuelEvents.OnDuelStart -= HandleDuelStart;
 
         if (input != null)
         {
@@ -138,6 +157,10 @@ public class InputManager : MonoBehaviour
             UnbindButton(input.BattleUIActions.BattleUI_OpenDimensionMenu);
             UnbindButton(input.BattleUIActions.BattleUI_CloseDimensionMenu);
             UnbindButton(input.BattleUIActions.BattleUI_DimensionShortcutPause);
+            UnbindButton(input.BattleUIActions.BattleUI_OpenTeamMenu);
+            UnbindButton(input.BattleUIActions.BattleUI_CloseTeamMenu);
+            UnbindButton(input.BattleUIActions.BattleUI_DeadBallConfirm);
+            UnbindButton(input.BattleUIActions.BattleUI_TeamPreviewConfirm);
 
             //WorldActions
             UnbindButton(input.WorldActions.World_Run);
@@ -151,12 +174,22 @@ public class InputManager : MonoBehaviour
 
             //DialogActions
             UnbindButton(input.DialogActions.Dialog_Submit);
-            UnbindButton(input.DialogActions.Dialog_Cancel);      
+            UnbindButton(input.DialogActions.Dialog_Cancel);
+
+            //NavigationActions
+            UnbindButton(input.NavigationActions.Navigation_Back);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutTeamBattleType);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutTeamActive);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutTeamActions);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterSummary);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterMove);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterReplace);
 
             input.BattleActions.Disable();
             input.BattleUIActions.Disable();
             input.WorldActions.Disable();
             input.DialogActions.Disable();
+            input.NavigationActions.Disable();
             input.Dispose();
         }
 
@@ -171,7 +204,8 @@ public class InputManager : MonoBehaviour
     public void RegisterScreenControls(GameObject screenControls) 
     {
         onScreenControlsRoot = screenControls;
-        UpdateOnScreenVisibility();
+        HandleScreenControlsHideRequested();
+        // UpdateOnScreenVisibility();
     }
 
     public void UnregisterScreenControls()
@@ -314,15 +348,37 @@ public class InputManager : MonoBehaviour
     #region Scheme helpers
     private void OnControlsChanged(PlayerInput playerInput)
     {
-        LogManager.Trace($"[InputManager] OnControlsChanged: {playerInput.currentControlScheme}");
-        UpdateOnScreenVisibility();
+        string scheme = playerInput.currentControlScheme;
+        LogManager.Trace($"[InputManager] OnControlsChanged: {scheme}");
+
+        InputDeviceType previousDeviceType = currentDeviceType;
+
+        // Match these strings to your Input Actions asset control scheme names
+        currentDeviceType = scheme switch
+        {
+            "Gamepad"        => InputDeviceType.Gamepad,
+            "Touch"          => InputDeviceType.Touch,
+            "KeyboardMouse"  => InputDeviceType.KeyboardMouse,
+            _                => InputDeviceType.KeyboardMouse
+        };
+
+        if (previousDeviceType != currentDeviceType)
+        {
+            LogManager.Trace($"[InputManager] Device changed: {previousDeviceType} -> {currentDeviceType}");
+            InputEvents.RaiseDeviceTypeChanged(currentDeviceType);
+        }
     }
 
     public void UpdateOnScreenVisibility()
     {
+        /*
         isAndroid = Application.platform == RuntimePlatform.Android;
         if (onScreenControlsRoot && onScreenControlsRoot.activeSelf != isAndroid)
             onScreenControlsRoot.SetActive(isAndroid);
+        */
+
+        //if (onScreenControlsRoot)
+            //onScreenControlsRoot.SetActive(true);
     }
     #endregion
 
@@ -397,5 +453,34 @@ public class InputManager : MonoBehaviour
         buttons[(int)CustomAction.Dialog_Cancel].SetUp();
         LogManager.Trace("[InputManager] DialogActions disabled");
     }
+    #endregion
+
+    #region Event
+
+    private void OnEnable()
+    {
+        InputEvents.OnScreenControlsShowRequested += HandleScreenControlsShowRequested;
+        InputEvents.OnScreenControlsHideRequested += HandleScreenControlsHideRequested;
+    }
+
+    private void OnDisable()
+    {
+        InputEvents.OnScreenControlsShowRequested -= HandleScreenControlsShowRequested;
+        InputEvents.OnScreenControlsHideRequested -= HandleScreenControlsHideRequested;
+    }
+
+    private void HandleScreenControlsHideRequested() 
+    {
+        if (onScreenControlsRoot.activeSelf != false)
+            onScreenControlsRoot.SetActive(false);
+    }
+
+    private void HandleScreenControlsShowRequested() 
+    {
+        //if (onScreenControlsRoot.activeSelf != true && isAndroid && !IsUsingController)
+        if (onScreenControlsRoot.activeSelf != true && isAndroid)
+            onScreenControlsRoot.SetActive(true);
+    }
+
     #endregion
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
-using Simulation.Enums.Input;
-using Simulation.Enums.World;
+using Aremoreno.Enums.Input;
+using Aremoreno.Enums.World;
 
 public class NpcComponentInteractable : Interactable
 {

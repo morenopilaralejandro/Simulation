@@ -2,9 +2,9 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
-using Simulation.Enums.Move;
-using Simulation.Enums.Duel;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Duel;
 
 public class ShootDuelHandler : IDuelHandler 
 {
@@ -192,8 +192,8 @@ public class ShootDuelHandler : IDuelHandler
     {
         bool isActionOffense = participant.Action == DuelAction.Offense;
 
-        DuelLogManager.Instance.AddActionCommand(participant.CharacterEntityBattle, participant.Command, participant.Move);
-        DuelLogManager.Instance.AddActionDamage(participant.CharacterEntityBattle, participant.Action, Mathf.Abs(participant.Damage));
+        DuelLogManager.Instance.AddActionCommand(participant.CharacterEntityBattle.Character, participant.CharacterEntityBattle.TeamSide, participant.Command, participant.Move);
+        DuelLogManager.Instance.AddActionDamage(participant.CharacterEntityBattle.Character, participant.CharacterEntityBattle.TeamSide, participant.Action, Mathf.Abs(participant.Damage));
         BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
 
         if(isActionOffense)

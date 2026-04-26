@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Simulation.Enums.Character;
-using Simulation.Enums.Kit;
-using Simulation.Enums.Item;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.Item;
 
 public class ItemManagerPersistance
 {

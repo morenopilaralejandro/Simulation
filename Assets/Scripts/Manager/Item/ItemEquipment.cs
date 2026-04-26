@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Simulation.Enums.Character;
-using Simulation.Enums.Item;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Item;
 
 public class ItemEquipment : Item
 {

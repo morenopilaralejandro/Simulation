@@ -1,4 +1,4 @@
-using Simulation.Enums.Battle;
+using Aremoreno.Enums.Battle;
 
 public static class BattleArgs
 {
