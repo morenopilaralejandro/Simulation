@@ -23,10 +23,10 @@ public static class BattleEvents
         OnBattleTypeChanged?.Invoke(newType, oldType);
     }
 
-    public static event Action OnBattleStart;
-    public static void RaiseBattleStart()
+    public static event Action<BattleType> OnBattleStart;
+    public static void RaiseBattleStart(BattleType battleType)
     {
-        OnBattleStart?.Invoke();
+        OnBattleStart?.Invoke(battleType);
         InputEvents.RaiseScreenControlsShowRequested();
         InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
     }

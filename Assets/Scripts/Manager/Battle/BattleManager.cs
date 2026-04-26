@@ -468,7 +468,7 @@ public class BattleManager : MonoBehaviour
     private void HandleAllCharactersReady()
     {
         ResetDefaultPositions();
-        BattleEvents.RaiseBattleStart();
+        BattleEvents.RaiseBattleStart(currentType);
 
         if (currentType == BattleType.Mini)
         {

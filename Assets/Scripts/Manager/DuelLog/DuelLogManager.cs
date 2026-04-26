@@ -78,7 +78,7 @@ public class DuelLogManager : MonoBehaviour
         BallEvents.OnGained -= HandleGained;
     }
 
-    private void HandleBattleStart() 
+    private void HandleBattleStart(BattleType battleType) 
     { 
         Clear();
         DuelLogManager.Instance.AddMatchStart();

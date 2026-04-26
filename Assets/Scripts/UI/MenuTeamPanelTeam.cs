@@ -43,6 +43,7 @@ public class MenuTeamPanelTeam : Menu
     private MenuManager menuManager;
     private TeamManager teamManager;
     private SubstitutionManager substitutionManager;
+    private InputManager inputManager;
     private FormationManager formationDatabase;
     private KitManager kitDatabase;
 
@@ -82,6 +83,7 @@ public class MenuTeamPanelTeam : Menu
         menuManager = MenuManager.Instance;
         teamManager = TeamManager.Instance;
         substitutionManager = SubstitutionManager.Instance;
+        inputManager = InputManager.Instance;
         formationDatabase = FormationManager.Instance;
         kitDatabase = KitManager.Instance;
     }
@@ -100,6 +102,8 @@ public class MenuTeamPanelTeam : Menu
         isClosing = false;
         hasSwapped = false;
 
+        if(isBattleMode && inputManager.IsAndroid) InputEvents.RaiseScreenControlsHideRequested();
+
         base.Show();
         base.SetInteractable(true);
 
@@ -115,6 +119,8 @@ public class MenuTeamPanelTeam : Menu
 
         base.SetInteractable(false);
         base.Hide();
+
+        if(isBattleMode && inputManager.IsAndroid) InputEvents.RaiseScreenControlsShowRequested();
 
         currentTeam = null;
         selectedGo = null;
@@ -556,9 +562,9 @@ public class MenuTeamPanelTeam : Menu
         UpdateChangesText(currentValue, maxValue);
     }
 
-    private void HandleBattleStart() 
+    private void HandleBattleStart(BattleType battleType) 
     {
-        currentBattleType = BattleManager.Instance.CurrentType;
+        currentBattleType = battleType;
     }
 
     #endregion

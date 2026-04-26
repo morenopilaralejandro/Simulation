@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Log;
 
 public class DuelLogPopupStack : MonoBehaviour
@@ -53,7 +54,7 @@ public class DuelLogPopupStack : MonoBehaviour
             ClearAllPopups();
     }
 
-    private void HandleBattleStart() => SetActive(!SettingsManager.Instance.IsAutoBattleEnabled);
+    private void HandleBattleStart(BattleType battleType) => SetActive(!SettingsManager.Instance.IsAutoBattleEnabled);
     private void HandleAutoBattleToggled(bool enable) => SetActive(!enable);
 
     void EnqueuePopup(DuelLogEntry entry)

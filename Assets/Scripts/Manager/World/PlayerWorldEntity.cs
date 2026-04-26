@@ -136,7 +136,7 @@ public class PlayerWorldEntity : MonoBehaviour
         interactionComponent.enabled = enable;
     }
 
-    private void HandleBattleStart() => SetEnable(false);
+    private void HandleBattleStart(BattleType battleType) => SetEnable(false);
     private void HandleBattleEnd() => SetEnable(true);
 
     private void HandleDialogStarted() => SetDialogEnabled(true);

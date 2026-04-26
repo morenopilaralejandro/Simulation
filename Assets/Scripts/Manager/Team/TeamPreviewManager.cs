@@ -62,6 +62,7 @@ public class TeamPreviewManager : MonoBehaviour
 
     public void StartTeamPreview(Team homeTeam, Team awayTeam)
     {
+        if(inputManager.IsAndroid) InputEvents.RaiseScreenControlsHideRequested();
         TeamEvents.RaiseTeamPreviewStarted();
 
         isMultiplayer = false;
@@ -157,6 +158,7 @@ public class TeamPreviewManager : MonoBehaviour
         sides.Clear(); //  Release preview data for GC
 
         TeamEvents.RaiseTeamPreviewEnded();
+        if(inputManager.IsAndroid) InputEvents.RaiseScreenControlsShowRequested();
     }
 
     #endregion
@@ -187,11 +189,13 @@ public class TeamPreviewManager : MonoBehaviour
     private void OnEnable()
     {
         TeamEvents.OnTeamPreviewRequested += HandleTeamPreviewRequested;
+        UIEvents.OnTeamPreviewButtonContinueClicked += HandleTeamPreviewButtonContinueClicked;
     }
 
     private void OnDisable()
     {
         TeamEvents.OnTeamPreviewRequested -= HandleTeamPreviewRequested;
+        UIEvents.OnTeamPreviewButtonContinueClicked -= HandleTeamPreviewButtonContinueClicked;
     }
 
     private void HandleTeamPreviewRequested()
@@ -200,6 +204,11 @@ public class TeamPreviewManager : MonoBehaviour
             battleManager.Teams[TeamSide.Home],
             battleManager.Teams[TeamSide.Away]
         );
+    }
+
+    private void HandleTeamPreviewButtonContinueClicked(TeamSide teamSide)
+    {
+        ConfirmSide(teamSide);
     }
 
     #endregion

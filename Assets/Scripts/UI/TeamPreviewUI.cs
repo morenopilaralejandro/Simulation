@@ -14,7 +14,7 @@ public class TeamPreviewUI : MonoBehaviour
 
     private TeamSide localSide;
 
-    //  Cache to avoid redundant GetUserSide() calls
+    // Cache to avoid redundant GetUserSide() calls
     private bool localSideCached;
 
     private void Start()
@@ -102,6 +102,15 @@ public class TeamPreviewUI : MonoBehaviour
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
+    }
+
+    #endregion
+
+    #region Buttons
+
+    public void OnTeamPreviewButtonContinueClicked() 
+    {
+        UIEvents.RaiseTeamPreviewButtonContinueClicked(localSide);
     }
 
     #endregion

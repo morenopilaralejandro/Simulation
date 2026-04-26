@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Item;
 
 public static class UIEvents
@@ -227,6 +228,12 @@ public static class UIEvents
     public static void RaiseSubstitutionChangesUpdated(int currentValue, int maxValue)
     {
         OnSubstitutionChangesUpdated?.Invoke(currentValue, maxValue);
+    }
+
+    public static event Action<TeamSide> OnTeamPreviewButtonContinueClicked;
+    public static void RaiseTeamPreviewButtonContinueClicked(TeamSide teamSide)
+    {
+        OnTeamPreviewButtonContinueClicked?.Invoke(teamSide);
     }
 
     // Menu Character

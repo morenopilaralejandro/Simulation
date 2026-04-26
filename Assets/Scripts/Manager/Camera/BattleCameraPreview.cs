@@ -1,5 +1,6 @@
 using UnityEngine;
 using Cinemachine;
+using Aremoreno.Enums.Battle;
 
 public class BattleCameraPreview : MonoBehaviour
 {
@@ -13,14 +14,21 @@ public class BattleCameraPreview : MonoBehaviour
     private float travelTimer;
     private bool isTravelling;
 
+    private void Awake() 
+    {
+        virtualCamera.enabled = false;
+    }
+
     private void OnEnable()
     {
+        BattleEvents.OnBattleStart += HandleBattleStart;
         TeamEvents.OnTeamPreviewStarted += HandlePreviewStarted;
         TeamEvents.OnTeamPreviewEnded += HandlePreviewEnded;
     }
 
     private void OnDisable()
     {
+        BattleEvents.OnBattleStart += HandleBattleStart;
         TeamEvents.OnTeamPreviewStarted -= HandlePreviewStarted;
         TeamEvents.OnTeamPreviewEnded -= HandlePreviewEnded;
     }
@@ -44,6 +52,12 @@ public class BattleCameraPreview : MonoBehaviour
         }
     }
 
+    private void HandleBattleStart(BattleType battleType) 
+    {
+        if (battleType == BattleType.Mini)
+            this.gameObject.SetActive(false);
+    }
+
     private void HandlePreviewStarted()
     {
         virtualCamera.enabled = true;
@@ -54,6 +68,7 @@ public class BattleCameraPreview : MonoBehaviour
     {
         isTravelling = false;
         virtualCamera.enabled = false;
+        this.gameObject.SetActive(false);
     }
 
     private void StartTravel()

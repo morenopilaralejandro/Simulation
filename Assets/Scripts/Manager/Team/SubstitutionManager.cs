@@ -44,9 +44,9 @@ public class SubstitutionManager : MonoBehaviour
         duelLogManager = DuelLogManager.Instance;
     }
 
-    public void InitializeForBattle()
+    public void InitializeForBattle(BattleType battleType)
     {
-        battleType = BattleManager.Instance.CurrentType;
+        this.battleType = battleType;
 
         substitutionsMade[TeamSide.Home] = 0;
         substitutionsMade[TeamSide.Away] = 0;
@@ -135,9 +135,9 @@ public class SubstitutionManager : MonoBehaviour
         TeamEvents.OnCharacterSubstituted -= HandleCharacterSubstituted;
     }
 
-    private void HandleBattleStart() 
+    private void HandleBattleStart(BattleType battleType) 
     {
-        InitializeForBattle();
+        InitializeForBattle(battleType);
     }
 
     private void HandleCharacterSubstituted(Character characterIn, Character characterOut, TeamSide teamSide)

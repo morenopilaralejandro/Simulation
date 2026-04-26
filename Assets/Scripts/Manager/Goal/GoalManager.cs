@@ -50,18 +50,12 @@ public class GoalManager : MonoBehaviour
         BattleEvents.OnBattleStart -= HandleBattleStart;
     }
 
-    private void HandleBattleStart()
+    private void HandleBattleStart(BattleType battleType)
     {
-        BattleType currentMode = BattleManager.Instance.CurrentType;
-
-        if (currentMode == BattleType.Mini)
-        {
+        if (battleType == BattleType.Mini)
             shootDistance = shootDistanceMini;
-        }
         else
-        {
             shootDistance = shootDistanceFull;
-        }
     }
 
     public void Reset()
