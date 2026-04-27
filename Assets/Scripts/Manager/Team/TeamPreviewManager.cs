@@ -206,9 +206,18 @@ public class TeamPreviewManager : MonoBehaviour
         );
     }
 
-    private void HandleTeamPreviewButtonContinueClicked(TeamSide teamSide)
+    private void HandleTeamPreviewButtonContinueClicked()
     {
-        ConfirmSide(teamSide);
+        if (isMultiplayer)
+        {
+            TeamSide userSide = battleManager.GetUserSide();
+            ConfirmSide(userSide);
+        }
+        else
+        {
+            ConfirmSide(TeamSide.Home);
+            ConfirmSide(TeamSide.Away);
+        }
     }
 
     #endregion

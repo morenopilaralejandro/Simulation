@@ -55,6 +55,7 @@ public class CharacterManager : MonoBehaviour
     #region API
 
     // storageSystem
+    public IReadOnlyDictionary<string, Character> Characters => storageSystem.Characters;
     public Character AddCharacter(Character character) => storageSystem.AddCharacter(character);
     public Character AddCharacterFromScout(CharacterData characterData, int level) => storageSystem.AddCharacterFromScout(characterData, level);
     public Character GetCharacter(string characterGuid) => storageSystem.GetCharacter(characterGuid);

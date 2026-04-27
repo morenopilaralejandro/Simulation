@@ -5,20 +5,16 @@ using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Character;
 
-public class BarHPSP : MonoBehaviour
+public class BarXP : MonoBehaviour
 {
     [SerializeField] private TMP_Text textNumber;
 
-    public void SetCharacter(Character character, Stat stat)
+    public void SetCharacter(Character character)
     {
         if (character != null)
-        {
-            textNumber.text = $"{character.GetBattleStat(stat)}/{character.GetTrueStat(stat)}";
-        }
+            textNumber.text = $"{character.CurrentExp}/{character.ExpToNextLevel}";
         else
-        {
             textNumber.text = "";
-        }
     }
 
     public void Clear() 

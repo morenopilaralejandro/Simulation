@@ -110,7 +110,7 @@ public class TeamPreviewUI : MonoBehaviour
 
     public void OnTeamPreviewButtonContinueClicked() 
     {
-        UIEvents.RaiseTeamPreviewButtonContinueClicked(localSide);
+        UIEvents.RaiseTeamPreviewButtonContinueClicked();
     }
 
     #endregion

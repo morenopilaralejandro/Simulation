@@ -14,6 +14,7 @@ public class MenuSide : Menu
 {
     [SerializeField] private MenuTeam menuTeam;
     [SerializeField] private MenuSave menuSave;
+    [SerializeField] private MenuCharacter menuCharacter;
 
     private MenuManager menuManager;
     private WorldManager worldManager;
@@ -105,6 +106,11 @@ public class MenuSide : Menu
     public void OnButtonSaveTapped()
     {
         menuManager.OpenMenu(menuSave);
+    }
+
+    public void OnButtonCharacterTapped()
+    {
+        menuManager.OpenMenu(menuCharacter);
     }
 
 }

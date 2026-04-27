@@ -230,10 +230,10 @@ public static class UIEvents
         OnSubstitutionChangesUpdated?.Invoke(currentValue, maxValue);
     }
 
-    public static event Action<TeamSide> OnTeamPreviewButtonContinueClicked;
-    public static void RaiseTeamPreviewButtonContinueClicked(TeamSide teamSide)
+    public static event Action OnTeamPreviewButtonContinueClicked;
+    public static void RaiseTeamPreviewButtonContinueClicked()
     {
-        OnTeamPreviewButtonContinueClicked?.Invoke(teamSide);
+        OnTeamPreviewButtonContinueClicked?.Invoke();
     }
 
     // Menu Character
@@ -243,16 +243,40 @@ public static class UIEvents
         OnCharacterSelected?.Invoke(character);
     }
 
-    public static event Action OnCharacterSelectorOpened;
-    public static void RaiseCharacterSelectorOpened()
+    public static event Action<Team, BattleType> OnCharacterSelectorOpened;
+    public static void RaiseCharacterSelectorOpened(Team team , BattleType battleType)
     {
-        OnCharacterSelectorOpened?.Invoke();
+        OnCharacterSelectorOpened?.Invoke(team, battleType);
     }
 
-    public static event Action<Character> OnCharaterDetailSideUpdateRequested;
-    public static void RaiseCharaterDetailSideUpdateRequested(Character character)
+    public static event Action OnBackFromCharacterSelectorRequested;
+    public static void RaiseBackFromCharacterSelectorRequested()
     {
-        OnCharaterDetailSideUpdateRequested?.Invoke(character);
+        OnBackFromCharacterSelectorRequested?.Invoke();
+    }
+
+    public static event Action<Character> OnCharacterDetailSideUpdateRequested;
+    public static void RaiseCharacterDetailSideUpdateRequested(Character character)
+    {
+        OnCharacterDetailSideUpdateRequested?.Invoke(character);
+    }
+
+    public static event Action OnCharacterDetailSideNextPageRequested;
+    public static void RaiseCharacterDetailSideNextPageRequested()
+    {
+        OnCharacterDetailSideNextPageRequested?.Invoke();
+    }
+
+    public static event Action OnCharacterFilterRequested;
+    public static void RaiseCharacterFilterRequested()
+    {
+        OnCharacterFilterRequested?.Invoke();
+    }
+
+    public static event Action<CharacterFilterData> OnCharacterFilterUpdated;
+    public static void RaiseCharacterFilterUpdated(CharacterFilterData characterFilterData)
+    {
+        OnCharacterFilterUpdated?.Invoke(characterFilterData);
     }
 
     // Menu Item

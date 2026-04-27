@@ -50,7 +50,7 @@ public class MenuTeamPanelTeam : Menu
     private Team currentTeam;
     private FormationCharacterSlotUI currentSlot;
     private BattleType currentBattleType;
-    private BattleType defaultBattleType = BattleType.Mini;
+    private BattleType defaultBattleType = BattleType.Full;
     private Character selectedCharacter;
     private GameObject selectedGo;
 

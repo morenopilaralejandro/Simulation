@@ -88,7 +88,7 @@ public class MenuTeamPanelCharacterActions : Menu
 
     public void OnButtonReplaceClicked() 
     {
-        UIEvents.RaiseCharacterSelectorOpened();
+        UIEvents.RaiseCharacterSelectorOpened(null, default);
     }
 
     public void OnButtonBackClicked() 
