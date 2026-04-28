@@ -5,4 +5,16 @@ namespace Aremoreno.Enums.UI
         Edit,
         Battle
     }
+
+    public enum CharacterSelectorMode
+    {
+        GetFromStorage,
+        GetFromTeam,
+        ExcludeFromTeam
+    }
+
+    public enum MoveSelectorMode
+    {
+        GetFromLearnset
+    }
 }

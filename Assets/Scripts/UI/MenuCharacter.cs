@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.UI;
 
 /// <summary>
 
@@ -48,7 +49,7 @@ public class MenuCharacter : Menu
         base.Show();
         base.SetInteractable(true);
 
-        UIEvents.RaiseCharacterSelectorOpened(null, default);
+        UIEvents.RaiseCharacterSelectorOpenRequested(CharacterSelectorMode.GetFromStorage, null, default, false);
     }
 
     public override void Hide()

@@ -3,6 +3,7 @@ using UnityEngine;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Item;
+using Aremoreno.Enums.UI;
 
 public static class UIEvents
 {
@@ -170,10 +171,16 @@ public static class UIEvents
         OnTeamActionsClosed?.Invoke();
     }
 
-    public static event Action OnCharacterActionsOpened;
-    public static void RaiseCharacterActionsOpened()
+    public static event Action<Character> OnTeamCharacterActionsOpenRequested;
+    public static void RaiseTeamCharacterActionsOpenRequested(Character character)
     {
-        OnCharacterActionsOpened?.Invoke();
+        OnTeamCharacterActionsOpenRequested?.Invoke(character);
+    }
+
+    public static event Action OnTeamCharacterActionsClosed;
+    public static void RaiseTeamCharacterActionsClosed()
+    {
+        OnTeamCharacterActionsClosed?.Invoke();
     }
 
     public static event Action OnFormationCharacterSlotUIReplaceRequested;
@@ -218,10 +225,10 @@ public static class UIEvents
         OnTeamEmblemChanged?.Invoke(emblemId);
     }
 
-    public static event Action OnCharacterDetailOpened;
-    public static void RaiseCharacterDetailOpened()
+    public static event Action<Character> OnCharacterDetailOpenRequested;
+    public static void RaiseCharacterDetailOpenRequested(Character character)
     {
-        OnCharacterDetailOpened?.Invoke();
+        OnCharacterDetailOpenRequested?.Invoke(character);
     }
 
     public static event Action<int, int> OnSubstitutionChangesUpdated;
@@ -243,10 +250,14 @@ public static class UIEvents
         OnCharacterSelected?.Invoke(character);
     }
 
-    public static event Action<Team, BattleType> OnCharacterSelectorOpened;
-    public static void RaiseCharacterSelectorOpened(Team team , BattleType battleType)
+    public static event Action<CharacterSelectorMode, Team, BattleType, bool> OnCharacterSelectorOpenRequested;
+    public static void RaiseCharacterSelectorOpenRequested(
+        CharacterSelectorMode mode,
+        Team team, 
+        BattleType battleType, 
+        bool isCloseOnSelect)
     {
-        OnCharacterSelectorOpened?.Invoke(team, battleType);
+        OnCharacterSelectorOpenRequested?.Invoke(mode, team, battleType, isCloseOnSelect);
     }
 
     public static event Action OnBackFromCharacterSelectorRequested;
@@ -277,6 +288,44 @@ public static class UIEvents
     public static void RaiseCharacterFilterUpdated(CharacterFilterData characterFilterData)
     {
         OnCharacterFilterUpdated?.Invoke(characterFilterData);
+    }
+
+    public static event Action OnCharacterFilterResetRequested;
+    public static void RaiseCharacterFilterResetRequested()
+    {
+        OnCharacterFilterResetRequested?.Invoke();
+    }
+
+    // Menu Move
+
+    public static event Action<Move, Character> OnMoveActionsOpenRequested;
+    public static void RaiseMoveActionsOpenRequested(Move move, Character character)
+    {
+        OnMoveActionsOpenRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Move, Character> OnMoveReplaceRequested;
+    public static void RaiseMoveReplaceRequested(Move move, Character character)
+    {
+        OnMoveReplaceRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Move, Move> OnMoveReplaced;
+    public static void RaiseMoveReplaced(Move moveOld, Move moveNew)
+    {
+        OnMoveReplaced?.Invoke(moveOld, moveNew);
+    }
+
+    public static event Action<Move, Character> OnMoveSelectorOpenRequested;
+    public static void RaiseMoveSelectorOpenRequested(Move move, Character character)
+    {
+        OnMoveSelectorOpenRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Move> OnMoveSelected;
+    public static void RaiseMoveSelected(Move move)
+    {
+        OnMoveSelected?.Invoke(move);
     }
 
     // Menu Item

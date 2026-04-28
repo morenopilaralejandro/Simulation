@@ -119,17 +119,19 @@ public class DeadBallManager : MonoBehaviour
         if (!InputManager.Instance.GetDown(CustomAction.BattleUI_OpenTeamMenu)) return;
 
         TeamSide userSide = BattleManager.Instance.GetUserSide();
-        ToggleTeamMenu(userSide);
+        UpdateTeamMenuVisibility(userSide, true);
     }
 
-    private void ToggleTeamMenu(TeamSide side)
+    private void UpdateTeamMenuVisibility(TeamSide side, bool boolValue)
     {
-        teamMenuOpen[side] = !teamMenuOpen[side];
+        teamMenuOpen[side] = boolValue;
 
-        if (!teamMenuOpen[side]) return;
-        teamMenuOpened[side] = true;
-        teamReadiness.CancelReady(side);
-        UIEvents.RaiseMenuTeamBattleRequested(BattleManager.Instance.Teams[side]);
+        if (boolValue == true) 
+        {
+            teamMenuOpened[side] = true;
+            teamReadiness.CancelReady(side);
+            UIEvents.RaiseMenuTeamBattleRequested(BattleManager.Instance.Teams[side]);
+        }
     }
 
     private void Execute()
@@ -261,7 +263,7 @@ public class DeadBallManager : MonoBehaviour
         if (hasSwapped)
             TeamEvents.RaiseSubstitutionResetPositions(team.TeamSide);
 
-        ToggleTeamMenu(team.TeamSide);
+        UpdateTeamMenuVisibility(team.TeamSide, false);
     }
 
     private void HandleSubstitutionResetPositions(TeamSide teamSide) 

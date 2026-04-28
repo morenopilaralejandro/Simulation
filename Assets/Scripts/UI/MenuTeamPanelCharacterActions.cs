@@ -17,6 +17,8 @@ public class MenuTeamPanelCharacterActions : Menu
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
+    private bool isReplacing = false;
+    private bool isClosing = false;
 
     #endregion
 
@@ -46,20 +48,36 @@ public class MenuTeamPanelCharacterActions : Menu
 
     public override void Show()
     {
+        isClosing = false;
+
         base.Show();
         base.SetInteractable(true);
     }
 
     public override void Hide()
     {
+        isClosing = false;
+
         base.SetInteractable(false);
         base.Hide();
     }
 
+    public override void SetInteractable(bool interactable)
+    {
+        base.SetInteractable(interactable);
+
+        if (interactable && isClosing)
+        {
+            isClosing = false;
+            Close();
+        }
+    }
+
     public void Close()
     {
-        if (!isOpen) return;
+        if (!isTop) return;
         menuManager.CloseMenu();
+        UIEvents.RaiseTeamCharacterActionsClosed();
     }
 
     #endregion
@@ -77,7 +95,8 @@ public class MenuTeamPanelCharacterActions : Menu
 
     public void OnButtonSummaryClicked() 
     {
-        UIEvents.RaiseCharacterDetailOpened();
+        Close();
+        UIEvents.RaiseCharacterDetailOpenRequested(character);
     }
 
     public void OnButtonMoveClicked() 
@@ -88,7 +107,9 @@ public class MenuTeamPanelCharacterActions : Menu
 
     public void OnButtonReplaceClicked() 
     {
-        UIEvents.RaiseCharacterSelectorOpened(null, default);
+        isReplacing = true;
+        UIEvents.RaiseFormationCharacterSlotUIReplaceRequested();
+        UIEvents.RaiseCharacterSelectorOpenRequested(CharacterSelectorMode.GetFromStorage, null, default, true);
     }
 
     public void OnButtonBackClicked() 
@@ -102,22 +123,33 @@ public class MenuTeamPanelCharacterActions : Menu
 
     private void OnEnable()
     {
-        UIEvents.OnCharacterActionsOpened += HandleCharacterActionsOpened;
+        UIEvents.OnTeamCharacterActionsOpenRequested += HandleTeamCharacterActionsOpenRequested;
+        UIEvents.OnCharacterSelected += HandleCharacterSelected;
     }
 
     private void OnDisable()
     {
-        UIEvents.OnCharacterActionsOpened -= HandleCharacterActionsOpened;
+        UIEvents.OnTeamCharacterActionsOpenRequested -= HandleTeamCharacterActionsOpenRequested;
+        UIEvents.OnCharacterSelected -= HandleCharacterSelected;
     }
 
-    private void HandleFormationCharacterSlotUIClicked(Character character) 
+    private void HandleTeamCharacterActionsOpenRequested(Character character) 
     {
+        if (isOpen) return;
         this.character = character;
+        menuManager.OpenMenu(this);
     }
 
-    private void HandleCharacterActionsOpened() 
+    private void HandleCharacterSelected(Character character) 
     {
-        menuManager.OpenMenu(this);
+        if (isReplacing) 
+        {
+            isReplacing = false;
+            if (isTop)
+                Close();
+            else
+                isClosing = true;
+        }
     }
 
     #endregion

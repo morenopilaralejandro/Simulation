@@ -115,6 +115,51 @@ public class CharacterComponentMoves
         equippedMoves.Remove(move);
     }
 
+    /// <summary>
+    /// Replaces an currently equipped move with a new move at the same slot index.
+    /// The new move must be learned and not already equipped.
+    /// The old move must be currently equipped.
+    /// </summary>
+    /// <param name="oldMove">The move to unequip.</param>
+    /// <param name="newMove">The learned move to equip in its place.</param>
+    /// <returns>True if the replacement was successful, false otherwise.</returns>
+    public bool ReplaceEquippedMove(Move oldMove, Move newMove)
+    {
+        // Validate: old move must be equipped
+        if (!IsMoveEquipped(oldMove))
+        {
+            LogManager.Trace($"[CharacterComponentMoves] Cannot replace: {oldMove.MoveId} is not equipped.");
+            return false;
+        }
+
+        // Validate: new move must be learned
+        if (!IsMoveLearned(newMove))
+        {
+            LogManager.Trace($"[CharacterComponentMoves] Cannot replace: {newMove.MoveId} has not been learned.");
+            return false;
+        }
+
+        // Validate: new move must not already be equipped
+        if (IsMoveEquipped(newMove))
+        {
+            LogManager.Trace($"[CharacterComponentMoves] Cannot replace: {newMove.MoveId} is already equipped.");
+            return false;
+        }
+
+        // Find the index of the old move to preserve slot position
+        int index = equippedMoves.IndexOf(oldMove);
+        if (index < 0)
+        {
+            LogManager.Trace($"[CharacterComponentMoves] Cannot replace: {oldMove.MoveId} index not found.");
+            return false;
+        }
+
+        // Swap in place
+        equippedMoves[index] = newMove;
+        LogManager.Trace($"[CharacterComponentMoves] {character.CharacterId} replaced {oldMove.MoveId} with {newMove.MoveId} at slot {index}.");
+        return true;
+    }
+
     #endregion
 
     #region Get Move data

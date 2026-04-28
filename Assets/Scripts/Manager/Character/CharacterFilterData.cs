@@ -8,16 +8,25 @@ public class CharacterFilterData
     public HashSet<Position> Positions = new HashSet<Position>();
     public HashSet<Element> Elements = new HashSet<Element>();
     public HashSet<Gender> Genders = new HashSet<Gender>();
+    public HashSet<string> ExcludedGuids = new HashSet<string>(); // NEW
 
     public bool IsEmpty =>
         string.IsNullOrEmpty(Name) &&
         Positions.Count == 0 &&
         Elements.Count == 0 &&
-        Genders.Count == 0;
+        Genders.Count == 0 &&
+        ExcludedGuids.Count == 0; // NEW
 
     public bool Matches(Character character)
     {
-        // Name filter: skip if empty
+        // GUID exclusion filter
+        if (ExcludedGuids.Count > 0)
+        {
+            if (ExcludedGuids.Contains(character.CharacterGuid))
+                return false;
+        }
+
+        // Name filter
         if (!string.IsNullOrEmpty(Name))
         {
             if (character.CharacterName == null ||
@@ -25,21 +34,21 @@ public class CharacterFilterData
                 return false;
         }
 
-        // Position filter: skip if no toggle is on
+        // Position filter
         if (Positions.Count > 0)
         {
             if (!Positions.Contains(character.Position))
                 return false;
         }
 
-        // Element filter: skip if no toggle is on
+        // Element filter
         if (Elements.Count > 0)
         {
             if (!Elements.Contains(character.Element))
                 return false;
         }
 
-        // Gender filter: skip if no toggle is on
+        // Gender filter
         if (Genders.Count > 0)
         {
             if (!Genders.Contains(character.Gender))
@@ -50,6 +59,15 @@ public class CharacterFilterData
     }
 
     public void Reset()
+    {
+        Name = null;
+        Positions.Clear();
+        Elements.Clear();
+        Genders.Clear();
+        ExcludedGuids.Clear(); // NEW
+    }
+
+    public void ResetUI()
     {
         Name = null;
         Positions.Clear();

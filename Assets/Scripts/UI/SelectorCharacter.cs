@@ -35,6 +35,7 @@ public class SelectorCharacter : Menu
     private Role role;
 
     private CharacterFilterData activeFilter;
+    private bool isCloseOnSelect = false;
 
     #endregion
 
@@ -42,7 +43,7 @@ public class SelectorCharacter : Menu
 
     private void Awake()
     {
-
+        auxDict = new();
     }
 
     private void Start() 
@@ -61,6 +62,8 @@ public class SelectorCharacter : Menu
     {
         // ReturnAllToPool();
     }
+
+    // TODO input f (select button) to open filter
 
     #endregion
 
@@ -82,6 +85,7 @@ public class SelectorCharacter : Menu
     {
         ReturnAllToPool();
         autoScroll.Deactivate();
+        UIEvents.RaiseCharacterFilterResetRequested();
 
         base.SetInteractable(false);
         base.Hide();
@@ -160,6 +164,20 @@ public class SelectorCharacter : Menu
         role = Role.Field;
     }
 
+    private void InitializeFromTeamExclude(Team team, BattleType battleType)
+    {
+        dict = characterManager.Characters;
+
+        // Set up a filter that excludes team members
+        activeFilter = activeFilter ?? new CharacterFilterData();
+        activeFilter.ExcludedGuids = new HashSet<string>(team.GetCharacterGuids(battleType));
+        UIEvents.RaiseCharacterFilterUpdated(activeFilter);
+
+        kit = team.Kit;
+        variant = team.Variant;
+        role = Role.Field;
+    }
+
     #endregion
 
     #region Button Handle
@@ -180,26 +198,34 @@ public class SelectorCharacter : Menu
 
     private void OnEnable()
     {
-        UIEvents.OnCharacterSelectorOpened += HandleCharacterSelectorOpened;
+        UIEvents.OnCharacterSelectorOpenRequested += HandleCharacterSelectorOpenRequested;
         UIEvents.OnCharacterFilterUpdated += HandleCharacterFilterUpdated;
+        UIEvents.OnCharacterSelected += HandleCharacterSelected;
     }
 
     private void OnDisable()
     {
-        UIEvents.OnCharacterSelectorOpened -= HandleCharacterSelectorOpened;
+        UIEvents.OnCharacterSelectorOpenRequested -= HandleCharacterSelectorOpenRequested;
         UIEvents.OnCharacterFilterUpdated -= HandleCharacterFilterUpdated;
+        UIEvents.OnCharacterSelected -= HandleCharacterSelected;
     }
 
-    private void HandleCharacterSelectorOpened(Team team, BattleType battleType) 
+    private void HandleCharacterSelectorOpenRequested(CharacterSelectorMode mode, Team team, BattleType battleType, bool isCloseOnSelect) 
     {
         activeFilter = null; // reset filter when opening fresh
+        this.isCloseOnSelect = isCloseOnSelect;
 
-        if (team == null) 
+        switch (mode)
         {
-            InitializeFromStorage();
-        } else 
-        {
-            InitializeFromTeam(team, battleType);
+            case CharacterSelectorMode.GetFromTeam:
+                InitializeFromTeam(team, battleType);
+                break;
+            case CharacterSelectorMode.ExcludeFromTeam:
+                InitializeFromTeamExclude(team, battleType);
+                break;
+            default:
+                InitializeFromStorage();
+                break;
         }
 
         menuManager.OpenMenu(this);
@@ -212,6 +238,12 @@ public class SelectorCharacter : Menu
         // Re-populate with the new filter applied
         ReturnAllToPool();
         Populate();
+    }
+
+    private void HandleCharacterSelected(Character character) 
+    {
+        if(isCloseOnSelect)
+            Close();
     }
 
     #endregion

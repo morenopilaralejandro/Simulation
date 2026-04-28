@@ -13,6 +13,7 @@ public class MenuCharacterPanelFilter : Menu
 
     [Header("UI References")]
     [SerializeField] private TMP_InputField inputFieldName;
+    [SerializeField] private Button buttonApply;
 
     [Header("Position Toggles")]
     [SerializeField] private Toggle toggleFW;
@@ -202,7 +203,7 @@ public class MenuCharacterPanelFilter : Menu
 
     public void OnButtonResetClicked() 
     {
-        filterData.Reset();
+        filterData.ResetUI();
         ResetUI();
     }
 
@@ -213,7 +214,7 @@ public class MenuCharacterPanelFilter : Menu
 
     public void OnInputEndEdit()
     {
-        // OnButtonConfirmClicked();
+        base.SetDefaultSelectable(buttonApply);
     }
 
     #endregion
@@ -223,17 +224,30 @@ public class MenuCharacterPanelFilter : Menu
     private void OnEnable()
     {
         UIEvents.OnCharacterFilterRequested += HandleCharacterFilterRequested;
-
+        UIEvents.OnCharacterFilterResetRequested += HandleCharacterFilterResetRequested;
+        UIEvents.OnCharacterFilterUpdated += HandleCharacterFilterUpdated;
     }
 
     private void OnDisable()
     {
         UIEvents.OnCharacterFilterRequested -= HandleCharacterFilterRequested;
+        UIEvents.OnCharacterFilterResetRequested -= HandleCharacterFilterResetRequested;
+        UIEvents.OnCharacterFilterUpdated -= HandleCharacterFilterUpdated;
     }
 
     private void HandleCharacterFilterRequested() 
     {
         menuManager.OpenMenu(this);
+    }
+
+    private void HandleCharacterFilterResetRequested() 
+    {
+        filterData.Reset();
+    }
+
+    private void HandleCharacterFilterUpdated(CharacterFilterData characterFilterData) 
+    {
+        filterData = characterFilterData;
     }
 
     #endregion

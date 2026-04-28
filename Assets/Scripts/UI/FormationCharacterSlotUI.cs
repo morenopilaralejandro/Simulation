@@ -12,6 +12,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     [SerializeField] private CharacterCard characterCard;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private Button button;
 
     [Header("Drag Layer")]
     [SerializeField] private RectTransform dragLayer;
@@ -35,6 +36,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     public int SlotIndex => slotIndex;
     public FormationCoord FormationCoord => coord;
     public bool IsBench => isBench;
+    public Button Button => button;
 
     #endregion
 

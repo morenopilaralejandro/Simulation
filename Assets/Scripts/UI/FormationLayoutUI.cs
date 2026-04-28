@@ -229,4 +229,33 @@ public class FormationLayoutUI : MonoBehaviour
     }
 
     #endregion
+
+    #region Public Queries
+
+    /// <summary>
+    /// Searches both field and bench slots for a slot whose current character
+    /// matches the given GUID. Returns null if no match is found.
+    /// </summary>
+    public FormationCharacterSlotUI FindSlotByCharacterGuid(string characterGuid)
+    {
+        if (string.IsNullOrEmpty(characterGuid)) return null;
+
+        for (int i = 0; i < fieldSlots.Count; i++)
+        {
+            Character character = fieldSlots[i].GetCharacter();
+            if (character != null && character.CharacterGuid == characterGuid)
+                return fieldSlots[i];
+        }
+
+        for (int i = 0; i < benchSlots.Count; i++)
+        {
+            Character character = benchSlots[i].GetCharacter();
+            if (character != null && character.CharacterGuid == characterGuid)
+                return benchSlots[i];
+        }
+
+        return null;
+    }
+
+    #endregion
 }
