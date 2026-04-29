@@ -34,8 +34,13 @@ public class SelectorCharacter : Menu
     private Variant variant;
     private Role role;
 
+    private CharacterSelectorModePopulate modePopulate;
+    private CharacterSelectorModeClick modeClick;
+
     private CharacterFilterData activeFilter;
     private bool isCloseOnSelect = false;
+
+    private Button selectedButton;
 
     #endregion
 
@@ -99,13 +104,19 @@ public class SelectorCharacter : Menu
             autoScroll.Activate();
         else
             autoScroll.Deactivate();
+
+        if(!isCloseOnSelect) 
+            base.SetVisible(interactable);
+
+        if (selectedButton != null)
+            base.SetDefaultSelectable(selectedButton);
     }
 
     public void Close()
     {
         if (!isOpen) return;
+        selectedButton = null;
         menuManager.CloseMenu();
-        UIEvents.RaiseBackFromCharacterSelectorRequested();
     }
 
     #endregion
@@ -129,13 +140,13 @@ public class SelectorCharacter : Menu
 
             var listItem = GetFromPool();
             character.ApplyKit(kit, variant, role);
-            listItem.Initialize(character);
+            listItem.Initialize(character, modeClick);
         }
 
         layoutGroup.enabled = true;
         LayoutRebuilder.ForceRebuildLayoutImmediate(listItemContainer);
 
-        if (activeItems.Count > 0)
+        if (activeItems.Count > 0 && selectedButton == null)
             base.SetDefaultSelectable(activeItems[0].Button);
     }
 
@@ -185,6 +196,7 @@ public class SelectorCharacter : Menu
     public void OnButtonBackClicked() 
     {
         Close();
+        UIEvents.RaiseBackFromCharacterSelectorRequested();
     }
 
     public void OnButtonFilterClicked() 
@@ -201,6 +213,7 @@ public class SelectorCharacter : Menu
         UIEvents.OnCharacterSelectorOpenRequested += HandleCharacterSelectorOpenRequested;
         UIEvents.OnCharacterFilterUpdated += HandleCharacterFilterUpdated;
         UIEvents.OnCharacterSelected += HandleCharacterSelected;
+        UIEvents.OnCharacterCharacterSelectedListItemSelected += HandleCharacterCharacterSelectedListItemSelected;
     }
 
     private void OnDisable()
@@ -208,19 +221,28 @@ public class SelectorCharacter : Menu
         UIEvents.OnCharacterSelectorOpenRequested -= HandleCharacterSelectorOpenRequested;
         UIEvents.OnCharacterFilterUpdated -= HandleCharacterFilterUpdated;
         UIEvents.OnCharacterSelected -= HandleCharacterSelected;
+        UIEvents.OnCharacterCharacterSelectedListItemSelected -= HandleCharacterCharacterSelectedListItemSelected;
     }
 
-    private void HandleCharacterSelectorOpenRequested(CharacterSelectorMode mode, Team team, BattleType battleType, bool isCloseOnSelect) 
+    private void HandleCharacterSelectorOpenRequested(
+        CharacterSelectorModePopulate modePopulate,
+        CharacterSelectorModeClick modeClick,
+        Team team, 
+        BattleType battleType, 
+        bool isCloseOnSelect) 
     {
         activeFilter = null; // reset filter when opening fresh
         this.isCloseOnSelect = isCloseOnSelect;
 
-        switch (mode)
+        this.modePopulate = modePopulate;
+        this.modeClick = modeClick;
+
+        switch (modePopulate)
         {
-            case CharacterSelectorMode.GetFromTeam:
+            case CharacterSelectorModePopulate.GetFromTeam:
                 InitializeFromTeam(team, battleType);
                 break;
-            case CharacterSelectorMode.ExcludeFromTeam:
+            case CharacterSelectorModePopulate.ExcludeFromTeam:
                 InitializeFromTeamExclude(team, battleType);
                 break;
             default:
@@ -244,6 +266,11 @@ public class SelectorCharacter : Menu
     {
         if(isCloseOnSelect)
             Close();
+    }
+
+    private void HandleCharacterCharacterSelectedListItemSelected(SelectorCharacterListItem selectorCharacterListItem) 
+    {
+        selectedButton = selectorCharacterListItem.Button;
     }
 
     #endregion

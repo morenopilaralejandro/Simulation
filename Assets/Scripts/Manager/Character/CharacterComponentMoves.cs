@@ -160,6 +160,46 @@ public class CharacterComponentMoves
         return true;
     }
 
+    /// <summary>
+    /// Swaps the positions of two equipped moves by their slot indices.
+    /// </summary>
+    /// <param name="indexA">The index of the first move to swap.</param>
+    /// <param name="indexB">The index of the second move to swap.</param>
+    /// <returns>True if the swap was successful, false otherwise.</returns>
+    public bool SwapEquippedMoves(int indexA, int indexB)
+    {
+        // Same index, nothing to do
+        if (indexA == indexB)
+        {
+            LogManager.Trace($"[CharacterComponentMoves] Swap skipped: both indices are the same ({indexA}).");
+            return false;
+        }
+
+        // Validate bounds
+        if (indexA < 0 || indexA >= equippedMoves.Count)
+        {
+            LogManager.Trace($"[CharacterComponentMoves] Cannot swap: indexA ({indexA}) is out of range.");
+            return false;
+        }
+
+        if (indexB < 0 || indexB >= equippedMoves.Count)
+        {
+            LogManager.Trace($"[CharacterComponentMoves] Cannot swap: indexB ({indexB}) is out of range.");
+            return false;
+        }
+
+        // Swap
+        Move temp = equippedMoves[indexA];
+        equippedMoves[indexA] = equippedMoves[indexB];
+        equippedMoves[indexB] = temp;
+
+        LogManager.Trace($"[CharacterComponentMoves] {character.CharacterId} swapped " +
+            $"{equippedMoves[indexA].MoveId} (slot {indexA}) with " +
+            $"{equippedMoves[indexB].MoveId} (slot {indexB}).");
+
+        return true;
+    }
+
     #endregion
 
     #region Get Move data

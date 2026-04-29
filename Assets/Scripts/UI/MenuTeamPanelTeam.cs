@@ -50,7 +50,6 @@ public class MenuTeamPanelTeam : Menu
     private Team currentTeam;
     private FormationCharacterSlotUI currentSlot;
     private BattleType currentBattleType;
-    private BattleType defaultBattleType = BattleType.Full;
     private Character selectedCharacter;
     private GameObject selectedGo;
 
@@ -80,13 +79,14 @@ public class MenuTeamPanelTeam : Menu
         base.Hide();
         base.SetInteractable(false);
 
-        currentBattleType = defaultBattleType;
         menuManager = MenuManager.Instance;
         teamManager = TeamManager.Instance;
         substitutionManager = SubstitutionManager.Instance;
         inputManager = InputManager.Instance;
         formationDatabase = FormationManager.Instance;
         kitDatabase = KitManager.Instance;
+
+        currentBattleType = teamManager.DefaultBattleType;
     }
 
     private void OnDestroy()
@@ -275,6 +275,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnSubstitutionChangesUpdated += HandleSubstitutionChangesUpdated;
         BattleEvents.OnBattleStart += HandleBattleStart;
         UIEvents.OnTeamCharacterActionsClosed += HandleTeamCharacterActionsClosed;
+        UIEvents.OnBackFromCharacterSelectorRequested += HandleBackFromCharacterSelectorRequested;
     }
 
     private void OnDisable()
@@ -302,6 +303,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnSubstitutionChangesUpdated -= HandleSubstitutionChangesUpdated;
         BattleEvents.OnBattleStart -= HandleBattleStart;
         UIEvents.OnTeamCharacterActionsClosed -= HandleTeamCharacterActionsClosed;
+        UIEvents.OnBackFromCharacterSelectorRequested -= HandleBackFromCharacterSelectorRequested;
     }
 
     private void HandleLoadoutSelected(Team team) 
@@ -436,7 +438,7 @@ public class MenuTeamPanelTeam : Menu
         }
         else
         {
-            hasSwapped = true;
+            //hasSwapped = true;
 
             // Store the old character reference before replacing
             Character oldCharacter = slot.GetCharacter();
@@ -557,6 +559,7 @@ public class MenuTeamPanelTeam : Menu
             : BattleType.Full;
 
         formationLayoutUI.Initialize(currentTeam, currentBattleType, mode);
+        teamManager.SetDefaultBattleType(currentBattleType);
         UIEvents.RaiseBattleTypeChanged(currentBattleType, oldType);
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
@@ -613,6 +616,12 @@ public class MenuTeamPanelTeam : Menu
     private void HandleBattleStart(BattleType battleType) 
     {
         currentBattleType = battleType;
+    }
+
+
+    private void HandleBackFromCharacterSelectorRequested() 
+    {
+        isReplacing = false;
     }
 
     #endregion

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using Aremoreno.Enums.Character;
+using Aremoreno.Enums.UI;
 
 public class SelectorCharacterListItem : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class SelectorCharacterListItem : MonoBehaviour
     [SerializeField] private TMP_Text textLv;
 
     private Character character;
+    private CharacterSelectorModeClick modeClick;
 
     public Button Button => button;
 
@@ -32,9 +34,10 @@ public class SelectorCharacterListItem : MonoBehaviour
 
     #region Initialize
 
-    public void Initialize(Character character)
+    public void Initialize(Character character, CharacterSelectorModeClick modeClick)
     {
         this.character = character;
+        this.modeClick = modeClick;
         characterCard.SetCharacter(character, character.Position);
         barHp.SetCharacter(character, Stat.Hp);
         barSp.SetCharacter(character, Stat.Sp);
@@ -53,7 +56,15 @@ public class SelectorCharacterListItem : MonoBehaviour
 
     public void OnListItemClicked() 
     {
-        UIEvents.RaiseCharacterSelected(character);
+        if (modeClick == CharacterSelectorModeClick.SelectCharacter)
+            UIEvents.RaiseCharacterSelected(character);
+        else 
+            UIEvents.RaiseCharacterDetailOpenRequested(character);
+    }
+
+    public void OnListItemSelected() 
+    {
+        UIEvents.RaiseCharacterSelectedListItemSelected(this);
     }
 
     #endregion

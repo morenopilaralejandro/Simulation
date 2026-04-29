@@ -33,7 +33,8 @@ public class MenuCharacterDetail : Menu
 
     private GameObject selectedGo;
 
-    private bool isReplacingMove;
+    private MoveSlotUI cachedMoveSlot;
+    private bool isSwappingMove;
 
     #endregion
 
@@ -64,11 +65,10 @@ public class MenuCharacterDetail : Menu
     public override void Show()
     {
         base.Show();
+        InitializeUI();
         base.SetInteractable(true);
 
         selectedGo = null;
-        InitializeUI();
-        PopulateUI();
     }
 
     public override void Hide()
@@ -77,6 +77,15 @@ public class MenuCharacterDetail : Menu
         base.Hide();
 
         selectedGo = null;
+        isSwappingMove = false;
+    }
+
+    public override void SetInteractable(bool interactable)
+    {
+        base.SetInteractable(interactable);
+
+        if (interactable)
+            Refresh();
     }
 
     public void Close()
@@ -88,6 +97,7 @@ public class MenuCharacterDetail : Menu
 
     public void Refresh()
     {
+        InitializeUI();
         PopulateUI();
     }
 
@@ -165,11 +175,19 @@ public class MenuCharacterDetail : Menu
     private void OnEnable()
     {
         UIEvents.OnCharacterDetailOpenRequested += HandleCharacterDetailOpenRequested;
+        UIEvents.OnMoveSlotUIClicked += HandleMoveSlotUIClicked;
+        UIEvents.OnCharacterDetailRefreshRequested += HandleCharacterDetailRefreshRequested;
+        UIEvents.OnMoveSlotUIMoveRequested += HandleMoveSlotUIMoveRequested;
+        UIEvents.OnMoveSlotUIMoveCanceled += HandleMoveSlotUIMoveCanceled;
     }
 
     private void OnDisable()
     {
         UIEvents.OnCharacterDetailOpenRequested -= HandleCharacterDetailOpenRequested;
+        UIEvents.OnMoveSlotUIClicked -= HandleMoveSlotUIClicked;
+        UIEvents.OnCharacterDetailRefreshRequested -= HandleCharacterDetailRefreshRequested;
+        UIEvents.OnMoveSlotUIMoveRequested -= HandleMoveSlotUIMoveRequested;
+        UIEvents.OnMoveSlotUIMoveCanceled -= HandleMoveSlotUIMoveCanceled;
     }
 
     private void HandleCharacterDetailOpenRequested(Character character) 
@@ -177,6 +195,42 @@ public class MenuCharacterDetail : Menu
         if (isOpen) return;
         this.character = character;
         menuManager.OpenMenu(this);
+    }
+
+    private void HandleMoveSlotUIMoveRequested(MoveSlotUI slot) 
+    {
+        isSwappingMove = true;
+        UIEvents.RaiseMoveSlotUIMoveStarted(slot);
+    }
+
+    private void HandleMoveSlotUIClicked(MoveSlotUI slot) 
+    {
+        if (!isTop) return;
+        if (slot == null) return;
+
+        if (isSwappingMove) 
+        {
+            isSwappingMove = false;
+            UIEvents.RaiseMoveSlotUIMoveEnded(slot);
+            if (slot == null || slot.Character == null) return;
+            UIEvents.RaiseMoveSwapRequested(slot.Character, slot.Index, cachedMoveSlot.Index);
+            return;
+        }
+
+        base.SetDefaultSelectable(slot.Button);
+        cachedMoveSlot = slot;
+        UIEvents.RaiseMoveActionsOpenRequested(slot);
+    }
+
+    private void HandleCharacterDetailRefreshRequested() 
+    {
+        Refresh();
+    }
+
+    private void HandleMoveSlotUIMoveCanceled(MoveSlotUI moveSlotUI) 
+    {
+        isSwappingMove = false;
+        UIEvents.RaiseMoveSlotUIMoveEnded(moveSlotUI);
     }
 
     #endregion

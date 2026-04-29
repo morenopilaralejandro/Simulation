@@ -20,6 +20,8 @@ public class MoveLayoutUI : MonoBehaviour
     [SerializeField] private MoveSlotUI moveSlot4;
     [SerializeField] private MoveSlotUI moveSlot5;
 
+    [SerializeField] private RectTransform dragLayer;
+
     private MoveSlotUI[] moveSlots;
     private Character character;
 
@@ -88,12 +90,13 @@ public class MoveLayoutUI : MonoBehaviour
         {
             if (i < equippedMoves.Count)
             {
-                moveSlots[i].Initialize(equippedMoves[i], character);
+                moveSlots[i].Initialize(equippedMoves[i], character, i, dragLayer, true);
                 moveSlots[i].SetMove(equippedMoves[i]);
             }
             else
             {
                 moveSlots[i].Clear();
+                moveSlots[i].Initialize(null, character, i, dragLayer, true);
             }
         }
     }

@@ -231,6 +231,12 @@ public static class UIEvents
         OnCharacterDetailOpenRequested?.Invoke(character);
     }
 
+    public static event Action OnCharacterDetailRefreshRequested;
+    public static void RaiseCharacterDetailRefreshRequested()
+    {
+        OnCharacterDetailRefreshRequested?.Invoke();
+    }
+
     public static event Action<int, int> OnSubstitutionChangesUpdated;
     public static void RaiseSubstitutionChangesUpdated(int currentValue, int maxValue)
     {
@@ -250,14 +256,21 @@ public static class UIEvents
         OnCharacterSelected?.Invoke(character);
     }
 
-    public static event Action<CharacterSelectorMode, Team, BattleType, bool> OnCharacterSelectorOpenRequested;
+    public static event Action<CharacterSelectorModePopulate, CharacterSelectorModeClick, Team, BattleType, bool> OnCharacterSelectorOpenRequested;
     public static void RaiseCharacterSelectorOpenRequested(
-        CharacterSelectorMode mode,
+        CharacterSelectorModePopulate modePopulate,
+        CharacterSelectorModeClick modeClick,
         Team team, 
         BattleType battleType, 
         bool isCloseOnSelect)
     {
-        OnCharacterSelectorOpenRequested?.Invoke(mode, team, battleType, isCloseOnSelect);
+        OnCharacterSelectorOpenRequested?.Invoke(modePopulate, modeClick, team, battleType, isCloseOnSelect);
+    }
+
+    public static event Action<SelectorCharacterListItem> OnCharacterCharacterSelectedListItemSelected;
+    public static void RaiseCharacterSelectedListItemSelected(SelectorCharacterListItem selectorCharacterListItem)
+    {
+        OnCharacterCharacterSelectedListItemSelected?.Invoke(selectorCharacterListItem);
     }
 
     public static event Action OnBackFromCharacterSelectorRequested;
@@ -298,16 +311,16 @@ public static class UIEvents
 
     // Menu Move
 
-    public static event Action<Move, Character> OnMoveActionsOpenRequested;
-    public static void RaiseMoveActionsOpenRequested(Move move, Character character)
+    public static event Action<MoveSlotUI> OnMoveActionsOpenRequested;
+    public static void RaiseMoveActionsOpenRequested(MoveSlotUI moveSlotUI)
     {
-        OnMoveActionsOpenRequested?.Invoke(move, character);
+        OnMoveActionsOpenRequested?.Invoke(moveSlotUI);
     }
 
-    public static event Action<Move, Character> OnMoveReplaceRequested;
-    public static void RaiseMoveReplaceRequested(Move move, Character character)
+    public static event Action<Move, Move> OnMoveReplaceRequested;
+    public static void RaiseMoveReplaceRequested(Move moveOld, Move moveNew)
     {
-        OnMoveReplaceRequested?.Invoke(move, character);
+        OnMoveReplaceRequested?.Invoke(moveOld, moveNew);
     }
 
     public static event Action<Move, Move> OnMoveReplaced;
@@ -316,16 +329,82 @@ public static class UIEvents
         OnMoveReplaced?.Invoke(moveOld, moveNew);
     }
 
-    public static event Action<Move, Character> OnMoveSelectorOpenRequested;
-    public static void RaiseMoveSelectorOpenRequested(Move move, Character character)
+    public static event Action<Character, int, int> OnMoveSwapRequested;
+    public static void RaiseMoveSwapRequested(Character character, int indexA, int indexB)
     {
-        OnMoveSelectorOpenRequested?.Invoke(move, character);
+        OnMoveSwapRequested?.Invoke(character, indexA, indexB);
+    }
+
+    public static event Action<MoveSelectorModePopulate, Character> OnMoveSelectorOpenRequested;
+    public static void RaiseMoveSelectorOpenRequested(MoveSelectorModePopulate modePopulate, Character character)
+    {
+        OnMoveSelectorOpenRequested?.Invoke(modePopulate, character);
     }
 
     public static event Action<Move> OnMoveSelected;
     public static void RaiseMoveSelected(Move move)
     {
         OnMoveSelected?.Invoke(move);
+    }
+
+    public static event Action OnBackFromMoveSelectorRequested;
+    public static void RaiseBackFromMoveSelectorRequested()
+    {
+        OnBackFromMoveSelectorRequested?.Invoke();
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIClicked;
+    public static void RaiseMoveSlotUIClicked(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIClicked?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIMoveRequested;
+    public static void RaiseMoveSlotUIMoveRequested(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIMoveRequested?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIMoveStarted;
+    public static void RaiseMoveSlotUIMoveStarted(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIMoveStarted?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIMoveEnded;
+    public static void RaiseMoveSlotUIMoveEnded(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIMoveEnded?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIMoveCanceled;
+    public static void RaiseMoveSlotUIMoveCanceled(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIMoveCanceled?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<Move, Character> OnMoveEquipRequested;
+    public static void RaiseMoveEquipRequested(Move move, Character character)
+    {
+        OnMoveEquipRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Move, Character> OnMoveUnequipRequested;
+    public static void RaiseMoveUnequipRequested(Move move, Character character)
+    {
+        OnMoveUnequipRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Move, Character> OnMoveLimitBreakPanelOpenRequested;
+    public static void RaiseMoveLimitBreakPanelOpenRequested(Move move, Character character)
+    {
+        OnMoveLimitBreakPanelOpenRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Move, Character> OnMoveLimitBreakRequested;
+    public static void RaiseMoveLimitBreakRequested(Move move, Character character)
+    {
+        OnMoveLimitBreakRequested?.Invoke(move, character);
     }
 
     // Menu Item

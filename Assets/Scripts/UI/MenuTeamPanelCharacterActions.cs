@@ -109,7 +109,7 @@ public class MenuTeamPanelCharacterActions : Menu
     {
         isReplacing = true;
         UIEvents.RaiseFormationCharacterSlotUIReplaceRequested();
-        UIEvents.RaiseCharacterSelectorOpenRequested(CharacterSelectorMode.GetFromStorage, null, default, true);
+        UIEvents.RaiseCharacterSelectorOpenRequested(CharacterSelectorModePopulate.GetFromStorage, CharacterSelectorModeClick.SelectCharacter, null, default, true);
     }
 
     public void OnButtonBackClicked() 

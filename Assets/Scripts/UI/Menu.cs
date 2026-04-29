@@ -68,6 +68,14 @@ public abstract class Menu : MonoBehaviour
         }
     }
 
+    public void SetVisible(bool isVisible)
+    {
+        if (isVisible)
+            canvasGroup.alpha = 1f;
+        else
+            canvasGroup.alpha = 0f;
+    }
+
     /*  
     private void Update()
     {

@@ -268,8 +268,10 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
     {
-        if (this != slot) return;
-        SetCharacter(character);
+        // unused
+        // handled in team menu
+        //if (this != slot) return;
+        //SetCharacter(character);
     }
 
     private void HandleMoveStarted(FormationCharacterSlotUI slot)
