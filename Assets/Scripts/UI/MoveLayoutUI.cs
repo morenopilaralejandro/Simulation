@@ -24,6 +24,7 @@ public class MoveLayoutUI : MonoBehaviour
 
     private MoveSlotUI[] moveSlots;
     private Character character;
+    private bool canDrag = true;
 
     #endregion
 
@@ -31,6 +32,9 @@ public class MoveLayoutUI : MonoBehaviour
 
     private void Awake()
     {
+        if (dragLayer == null) 
+            canDrag = false;
+
         moveSlots = new MoveSlotUI[]
         {
             moveSlot0,
@@ -90,13 +94,13 @@ public class MoveLayoutUI : MonoBehaviour
         {
             if (i < equippedMoves.Count)
             {
-                moveSlots[i].Initialize(equippedMoves[i], character, i, dragLayer, true);
+                moveSlots[i].Initialize(equippedMoves[i], character, i, dragLayer, canDrag);
                 moveSlots[i].SetMove(equippedMoves[i]);
             }
             else
             {
                 moveSlots[i].Clear();
-                moveSlots[i].Initialize(null, character, i, dragLayer, true);
+                moveSlots[i].Initialize(null, character, i, dragLayer, false);
             }
         }
     }

@@ -23,7 +23,7 @@ public class MenuTeamPanelTeam : Menu
     [SerializeField] private Button buttonOptions;
     [SerializeField] private Button buttonCharacterReplace;
     [SerializeField] private Button buttonCharacterSummary;
-    // [SerializeField] private GameObject buttonCharacterSummarySide;
+    [SerializeField] private Button buttonCharacterSummarySide;
 
     [SerializeField] private TMP_Text textChanges;
 
@@ -163,7 +163,7 @@ public class MenuTeamPanelTeam : Menu
         buttonOptions.interactable = isEditMode;
         buttonCharacterReplace.interactable = isEditMode;
         buttonCharacterSummary.interactable = isEditMode;
-        // buttonCharacterSummarySide.interactable = isEditMode;
+        buttonCharacterSummarySide.interactable = isEditMode;
 
         buttonDelete.SetActive(isEditMode && teamManager.ActiveLoadoutGuid != currentTeam.TeamGuid);
     }

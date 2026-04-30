@@ -159,6 +159,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     public void OnSelect(BaseEventData eventData)
     {
         UIEvents.RaiseTeamButtonSelected(this.gameObject);
+        UIEvents.RaiseFormationCharacterSlotUISelected(this);
     }
 
     #endregion

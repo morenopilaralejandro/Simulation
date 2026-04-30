@@ -279,10 +279,10 @@ public static class UIEvents
         OnBackFromCharacterSelectorRequested?.Invoke();
     }
 
-    public static event Action<Character> OnCharacterDetailSideUpdateRequested;
-    public static void RaiseCharacterDetailSideUpdateRequested(Character character)
+    public static event Action<Character, Position> OnCharacterDetailSideUpdateRequested;
+    public static void RaiseCharacterDetailSideUpdateRequested(Character character, Position position)
     {
-        OnCharacterDetailSideUpdateRequested?.Invoke(character);
+        OnCharacterDetailSideUpdateRequested?.Invoke(character, position);
     }
 
     public static event Action OnCharacterDetailSideNextPageRequested;
