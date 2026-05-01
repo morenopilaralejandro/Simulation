@@ -153,7 +153,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UIEvents.RaiseFormationCharacterSlotUIHighlited(this);
+        UIEvents.RaiseFormationCharacterSlotUIHighlighted(this);
     }
 
     public void OnSelect(BaseEventData eventData)
@@ -242,7 +242,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     private void SwapCharacters(FormationCharacterSlotUI other)
     {
-        UIEvents.RaiseFormationCharacterSlotUISwaped(this, other);
+        UIEvents.RaiseFormationCharacterSlotUISwapped(this, other);
     }
 
     #endregion

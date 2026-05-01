@@ -6,6 +6,7 @@ using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.UI;
+using Aremoreno.Enums.Input;
 
 public class SelectorCharacter : Menu
 {
@@ -40,7 +41,7 @@ public class SelectorCharacter : Menu
     private CharacterFilterData activeFilter;
     private bool isCloseOnSelect = false;
 
-    private Button selectedButton;
+    private SelectorCharacterListItem selectedListItem;
 
     #endregion
 
@@ -63,16 +64,16 @@ public class SelectorCharacter : Menu
         PreWarmPool();
     }
 
+    /*
     private void OnDestroy()
     {
         // ReturnAllToPool();
     }
-
-    // TODO input f (select button) to open filter
+    */
 
     #endregion
 
-   #region Menu Overrides
+    #region Menu Overrides
 
     public override void Show()
     {
@@ -108,14 +109,19 @@ public class SelectorCharacter : Menu
         if(!isCloseOnSelect) 
             base.SetVisible(interactable);
 
-        if (selectedButton != null)
-            base.SetDefaultSelectable(selectedButton);
+        if (selectedListItem != null)
+            base.SetDefaultSelectable(selectedListItem.Button);
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
     }
 
     public void Close()
     {
         if (!isOpen) return;
-        selectedButton = null;
+        selectedListItem = null;
         menuManager.CloseMenu();
     }
 
@@ -146,7 +152,7 @@ public class SelectorCharacter : Menu
         layoutGroup.enabled = true;
         LayoutRebuilder.ForceRebuildLayoutImmediate(listItemContainer);
 
-        if (activeItems.Count > 0 && selectedButton == null)
+        if (activeItems.Count > 0 && selectedListItem == null)
             base.SetDefaultSelectable(activeItems[0].Button);
     }
 
@@ -187,6 +193,30 @@ public class SelectorCharacter : Menu
         kit = team.Kit;
         variant = team.Variant;
         role = Role.Field;
+    }
+
+    #endregion
+
+    #region Input 
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_ShortcutCharacterFilter, OnButtonFilterClicked);
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterSummary, HandleShortcutTeamCharacterSummary);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_ShortcutCharacterFilter, OnButtonFilterClicked);
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterSummary, HandleShortcutTeamCharacterSummary);
+    }
+
+    private void HandleShortcutTeamCharacterSummary()
+    {
+        if(selectedListItem != null)
+            UIEvents.RaiseCharacterDetailOpenRequested(selectedListItem.Character);
     }
 
     #endregion
@@ -255,6 +285,7 @@ public class SelectorCharacter : Menu
 
     private void HandleCharacterFilterUpdated(CharacterFilterData characterFilterData) 
     {
+        selectedListItem = null;
         activeFilter = characterFilterData;
 
         // Re-populate with the new filter applied
@@ -270,7 +301,7 @@ public class SelectorCharacter : Menu
 
     private void HandleCharacterCharacterSelectedListItemSelected(SelectorCharacterListItem selectorCharacterListItem) 
     {
-        selectedButton = selectorCharacterListItem.Button;
+        selectedListItem = selectorCharacterListItem;
     }
 
     #endregion
@@ -325,10 +356,6 @@ public class SelectorCharacter : Menu
             pool.Enqueue(item);
         }
     }
-
-    #endregion
-
-    #region Filter
 
     #endregion
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Aremoreno.Enums.Input;
 
 /// <summary>
 /// Displays all existing team loadouts and a "Create New" button.
@@ -41,23 +42,6 @@ public class MenuTeamPanelLoadout : Menu
         teamManager = TeamManager.Instance;
     }
 
-    /*    
-
-    private void Update()
-    {
-        HandleInput();
-    }
-
-    */
-
-    #endregion
-
-    #region Input
-
-    private void HandleInput() 
-    {
-
-    }
 
     #endregion
 
@@ -90,12 +74,18 @@ public class MenuTeamPanelLoadout : Menu
             autoScroll.Activate();
         else
             autoScroll.Deactivate();
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
     }
 
     public void Close()
     {
         if (!isOpen) return;
         menuManager.CloseMenu();
+        UIEvents.RaiseTeamMenuClosed();
     }
 
     #endregion
@@ -146,6 +136,20 @@ public class MenuTeamPanelLoadout : Menu
 
     #endregion
 
+    #region Input
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCloseClicked);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonCloseClicked);
+    }
+
+    #endregion
+
     #region Button Handlers
 
     private void HandleItemClicked(Team team)
@@ -161,7 +165,6 @@ public class MenuTeamPanelLoadout : Menu
     public void OnButtonCloseClicked()
     {
         Close();
-        UIEvents.RaiseTeamMenuClosed();
     }
 
     #endregion

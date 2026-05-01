@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.UI;
+using Aremoreno.Enums.Input;
 
 public class MenuTeamPanelEmblem : Menu
 {
@@ -22,11 +23,6 @@ public class MenuTeamPanelEmblem : Menu
 
     #region Lifecycle
 
-    private void Awake()
-    {
-
-    }
-
     private void Start() 
     {
         base.Hide();
@@ -35,14 +31,9 @@ public class MenuTeamPanelEmblem : Menu
         menuManager = MenuManager.Instance;
     }
 
-    private void OnDestroy()
-    {
-
-    }
-
     #endregion
 
-   #region Menu Overrides
+    #region Menu Overrides
 
     public override void Show()
     {
@@ -56,6 +47,16 @@ public class MenuTeamPanelEmblem : Menu
     {
         base.SetInteractable(false);
         base.Hide();
+    }
+
+    public override void SetInteractable(bool interactable)
+    {
+        base.SetInteractable(interactable);
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
     }
 
     public void Close()
@@ -72,6 +73,19 @@ public class MenuTeamPanelEmblem : Menu
 
     #region Helper
 
+    #endregion
+
+    #region Input 
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCancelClicked);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonCancelClicked);
+    }
 
     #endregion
 

@@ -6,6 +6,7 @@ using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.UI;
+using Aremoreno.Enums.Input;
 
 public class MenuCharacterPanelFilter : Menu
 {
@@ -88,11 +89,6 @@ public class MenuCharacterPanelFilter : Menu
         menuManager = MenuManager.Instance;
     }
 
-    private void OnDestroy()
-    {
-
-    }
-
     #endregion
 
     #region Menu Overrides
@@ -108,6 +104,19 @@ public class MenuCharacterPanelFilter : Menu
     {
         base.SetInteractable(false);
         base.Hide();
+    }
+
+    public override void SetInteractable(bool interactable)
+    {
+        base.SetInteractable(interactable);
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
+
+        if (interactable)
+            base.SetDefaultSelectable(inputFieldName);
     }
 
     public void Close()
@@ -189,6 +198,20 @@ public class MenuCharacterPanelFilter : Menu
     #endregion
 
     #region Helper
+
+    #endregion
+
+    #region Input 
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonApplyClicked);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonApplyClicked);
+    }
 
     #endregion
 

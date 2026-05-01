@@ -32,13 +32,6 @@ public class MenuTeam : Menu
         base.SetInteractable(false);
     }
 
-    /*
-    private void Update()
-    {
-        HandleInput();
-    }
-    */
-
     #endregion
 
     #region Menu Overrides
@@ -68,28 +61,6 @@ public class MenuTeam : Menu
     {
         if (!isOpen) return;
         menuManager.CloseMenu();
-    }
-
-    #endregion
-
-    #region Input
-
-    private void HandleInput()
-    {
-        // Placeholder for input handling
-        /*
-        if (isOpen)
-        {
-            if (InputManager.Instance.GetDown(CustomAction.World_CloseSideMenu))
-                Close();
-        }
-        else
-        {
-            if (!WorldManager.Instance.PlayerCanOpenMenu) return;
-            if (InputManager.Instance.GetDown(CustomAction.World_OpenSideMenu))
-                Open();
-        }
-        */
     }
 
     #endregion

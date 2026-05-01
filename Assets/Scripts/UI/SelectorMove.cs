@@ -6,6 +6,7 @@ using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.UI;
+using Aremoreno.Enums.Input;
 
 public class SelectorMove : Menu
 {
@@ -78,6 +79,11 @@ public class SelectorMove : Menu
             autoScroll.Activate();
         else
             autoScroll.Deactivate();
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
     }
 
     public void Close()
@@ -134,6 +140,20 @@ public class SelectorMove : Menu
             if (!character.IsMoveEquipped(move))
                 moveList.Add(move);              
         }
+    }
+
+    #endregion
+
+    #region Input 
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
     }
 
     #endregion

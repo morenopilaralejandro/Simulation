@@ -5,6 +5,7 @@ using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.UI;
 using Aremoreno.Enums.Item;
+using Aremoreno.Enums.Input;
 
 /// <summary>
 /// Displays the selected team's formation and characters for a given BattleType.
@@ -29,15 +30,6 @@ public class MenuTeamPanelTeam : Menu
 
     [SerializeField] private FormationLayoutUI formationLayoutUI;
 
-    /*
-    [SerializeField] private MenuTeamPanelTeamActions panelTeamActions;
-    [SerializeField] private MenuTeamPanelSettings panelSettings;    
-    [SerializeField] private MenuTeamPanelCharacterActions panelCharacterActions;
-    [SerializeField] private MenuCharacterDetail menuCharacterDetail;
-    [SerializeField] private MenuCharacterSelector menuCharacterSelector;
-    [SerializeField] private MenuItemSelectorSide menuItemSelectorSide;
-    */
-
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
@@ -49,6 +41,7 @@ public class MenuTeamPanelTeam : Menu
 
     private Team currentTeam;
     private FormationCharacterSlotUI currentSlot;
+    private FormationCharacterSlotUI selectedSlot;
     private BattleType currentBattleType;
     private Character selectedCharacter;
     private GameObject selectedGo;
@@ -69,11 +62,6 @@ public class MenuTeamPanelTeam : Menu
 
     #region Lifecycle
 
-    private void Awake()
-    {
-
-    }
-
     private void Start() 
     {
         base.Hide();
@@ -89,14 +77,9 @@ public class MenuTeamPanelTeam : Menu
         currentBattleType = teamManager.DefaultBattleType;
     }
 
-    private void OnDestroy()
-    {
-
-    }
-
     #endregion
 
-   #region Menu Overrides
+    #region Menu Overrides
 
     public override void Show()
     {
@@ -126,11 +109,15 @@ public class MenuTeamPanelTeam : Menu
         currentTeam = null;
         selectedGo = null;
         pickedSlot = null;
+        selectedSlot = null;
     }
 
     public void Close()
     {
         if (!isTop) return;
+        pickedSlot = null;
+        selectedSlot = null;
+        isReplacing = false;
         UIEvents.RaiseBackFromTeamRequested(currentTeam, hasSwapped);
         menuManager.CloseMenu();
     }
@@ -144,6 +131,11 @@ public class MenuTeamPanelTeam : Menu
             isClosing = false;
             Close();
         }
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
     }
 
     public void Refresh()
@@ -179,20 +171,96 @@ public class MenuTeamPanelTeam : Menu
 
     #region Input
 
-    // click on character -> character actions
-    // TODO 
-    /*
-    click enter character options
+    private void SubscribeInput()
+    {
+        inputManager.SubscribeDown(CustomAction.Navigation_Back, HandleShortcutBack);
+        inputManager.SubscribeDown(CustomAction.Navigation_ShortcutTeamBattleType, HandleShortcutTeamBattleType);
+        inputManager.SubscribeDown(CustomAction.Navigation_ShortcutTeamActive, HandleShortcutTeamActive);
+        inputManager.SubscribeDown(CustomAction.Navigation_ShortcutTeamActions, HandleShortcutTeamActions);
+        inputManager.SubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterSummary, HandleShortcutTeamCharacterSummary);
+        inputManager.SubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterMove, HandleShortcutCharacterMove);
+        inputManager.SubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterReplace, HandleShortcutTeamCharacterReplace);
+        inputManager.SubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterNext, HandleShortcutTeamCharacterNext);
+    }
 
-    E sumary, (r button)
-    r replace, (l button)
-    q move (y button)
-    tab next page on side (x button)
+    private void UnsubscribeInput()
+    {
+        inputManager.UnsubscribeDown(CustomAction.Navigation_Back, HandleShortcutBack);
+        inputManager.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamBattleType, HandleShortcutTeamBattleType);
+        inputManager.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamActive, HandleShortcutTeamActive);
+        inputManager.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamActions, HandleShortcutTeamActions);
+        inputManager.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterSummary, HandleShortcutTeamCharacterSummary);
+        inputManager.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterMove, HandleShortcutCharacterMove);
+        inputManager.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterReplace, HandleShortcutTeamCharacterReplace);
+        inputManager.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterNext, HandleShortcutTeamCharacterNext);
+    }
 
-    T team actions, (start button)
-    shift change battle type, (select button) 
-    f set active
-    */
+    private void HandleShortcutBack()
+    {
+        if (isReplacing) return;
+
+        if (isSwapping)
+        {
+            UIEvents.RaiseFormationCharacterSlotUIMoveCanceled(pickedSlot);
+            return;
+        }
+
+        Close();
+    }
+
+    private void HandleShortcutTeamBattleType()
+    {
+        if (isSwapping || isReplacing) return;
+        if (isBattleMode) return;
+        UIEvents.RaiseBattleTypeChangeRequested();
+    }
+
+    private void HandleShortcutTeamActive()
+    {
+        if (isSwapping || isReplacing) return;
+        if (isBattleMode) return;
+        OnButtonSetActiveClicked();
+    }
+
+    private void HandleShortcutTeamActions()
+    {
+        if (isSwapping || isReplacing) return;
+        if (isBattleMode) return;
+        UIEvents.RaiseTeamActionsOpened(currentTeam, currentBattleType);
+    }
+
+    private void HandleShortcutTeamCharacterSummary()
+    {
+        if (isSwapping || isReplacing) return;
+        if (isBattleMode) return;
+        if (selectedSlot == null || selectedSlot.GetCharacter() == null) return;
+        UIEvents.RaiseCharacterDetailOpenRequested(selectedSlot.GetCharacter());
+    }
+
+    private void HandleShortcutCharacterMove()
+    {
+        if (isSwapping || isReplacing) return;
+        UIEvents.RaiseFormationCharacterSlotUIMoveRequested(null);
+    }
+
+    private void HandleShortcutTeamCharacterReplace()
+    {
+        if (isSwapping || isReplacing) return;
+        if (isBattleMode) return;
+        UIEvents.RaiseFormationCharacterSlotUIReplaceRequested();
+        UIEvents.RaiseCharacterSelectorOpenRequested(
+            CharacterSelectorModePopulate.GetFromStorage,
+            CharacterSelectorModeClick.SelectCharacter,
+            null,
+            default,
+            true);
+    }
+
+    private void HandleShortcutTeamCharacterNext()
+    {
+        if (isSwapping || isReplacing) return;
+        UIEvents.RaiseCharacterDetailSideNextPageRequested();
+    }
 
     #endregion
 
@@ -255,7 +323,9 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnTeamLoadoutSelected += HandleLoadoutSelected;
         UIEvents.OnFormationCharacterSlotUISelectedDefault += HandleFormationCharacterSlotUISelectedDefault;
         UIEvents.OnFormationCharacterSlotUIClicked += HandleFormationCharacterSlotUIClicked;
-        UIEvents.OnFormationCharacterSlotUISwaped += HandeFormationCharacterSlotUISwaped;
+        UIEvents.OnFormationCharacterSlotUISelected += HandleFormationCharacterSlotUISelected;
+        UIEvents.OnFormationCharacterSlotUIHighlighted += HandleFormationCharacterSlotUIHighlighted;
+        UIEvents.OnFormationCharacterSlotUISwapped += HandleFormationCharacterSlotUISwapped;
         UIEvents.OnFormationCharacterSlotUIReplaced += HandleFormationCharacterSlotUIReplaced;
         UIEvents.OnFormationCharacterSlotUIReplaceRequested += HandleFormationCharacterSlotUIReplaceRequested;
         UIEvents.OnTeamButtonSelected += HandleTeamButtonSelected;
@@ -283,7 +353,9 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnTeamLoadoutSelected -= HandleLoadoutSelected;
         UIEvents.OnFormationCharacterSlotUISelectedDefault -= HandleFormationCharacterSlotUISelectedDefault;
         UIEvents.OnFormationCharacterSlotUIClicked -= HandleFormationCharacterSlotUIClicked;
-        UIEvents.OnFormationCharacterSlotUISwaped -= HandeFormationCharacterSlotUISwaped;
+        UIEvents.OnFormationCharacterSlotUISelected -= HandleFormationCharacterSlotUISelected;
+        UIEvents.OnFormationCharacterSlotUIHighlighted -= HandleFormationCharacterSlotUIHighlighted;
+        UIEvents.OnFormationCharacterSlotUISwapped -= HandleFormationCharacterSlotUISwapped;
         UIEvents.OnFormationCharacterSlotUIReplaced -= HandleFormationCharacterSlotUIReplaced;
         UIEvents.OnFormationCharacterSlotUIReplaceRequested -= HandleFormationCharacterSlotUIReplaceRequested;
         UIEvents.OnTeamButtonSelected -= HandleTeamButtonSelected;
@@ -326,6 +398,7 @@ public class MenuTeamPanelTeam : Menu
 
         selectedGo = slot.gameObject;
         base.SetDefaultSelectable(slot.Button);
+        UIEvents.RaiseFormationCharacterSlotUISelected(slot);
     }
 
     private void HandleFormationCharacterSlotUIClicked(FormationCharacterSlotUI slot) 
@@ -339,7 +412,7 @@ public class MenuTeamPanelTeam : Menu
         if (isSwapping) 
         {
             if (pickedSlot != slot) 
-                UIEvents.RaiseFormationCharacterSlotUISwaped(pickedSlot, slot);
+                UIEvents.RaiseFormationCharacterSlotUISwapped(pickedSlot, slot);
             base.SetDefaultSelectable(slot.Button);
             UIEvents.RaiseFormationCharacterSlotUIMoveEnded(pickedSlot);
             pickedSlot = null;
@@ -347,6 +420,7 @@ public class MenuTeamPanelTeam : Menu
         }
 
         currentSlot = slot;
+        selectedSlot = slot;
         UIEvents.RaiseTeamCharacterActionsOpenRequested(slot.GetCharacter());
     }
 
@@ -360,12 +434,12 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandleFormationCharacterSlotUIMoveRequested(FormationCharacterSlotUI slot)
     {
-        base.SetDefaultSelectable(currentSlot.Button);
-        pickedSlot = currentSlot;
-        UIEvents.RaiseFormationCharacterSlotUIMoveStarted(currentSlot);
+        base.SetDefaultSelectable(selectedSlot.Button);
+        pickedSlot = selectedSlot;
+        UIEvents.RaiseFormationCharacterSlotUIMoveStarted(selectedSlot);
     }
 
-    private void HandeFormationCharacterSlotUISwaped(FormationCharacterSlotUI a, FormationCharacterSlotUI b) 
+    private void HandleFormationCharacterSlotUISwapped(FormationCharacterSlotUI a, FormationCharacterSlotUI b) 
     {
         // check substitution
         bool isValidSwap = isEditMode || substitutionManager.ValidateSwap(currentTeam.TeamSide, a , b);
@@ -433,7 +507,7 @@ public class MenuTeamPanelTeam : Menu
             FormationCharacterSlotUI otherSlot = formationLayoutUI.FindSlotByCharacterGuid(newGuid);
             if (otherSlot != null && otherSlot != slot)
             {
-                UIEvents.RaiseFormationCharacterSlotUISwaped(slot, otherSlot);
+                UIEvents.RaiseFormationCharacterSlotUISwapped(slot, otherSlot);
             }
         }
         else
@@ -464,6 +538,8 @@ public class MenuTeamPanelTeam : Menu
             // Update the visual slot
             slot.SetCharacter(character);
         }
+
+        base.SetDefaultSelectable(slot.Button);
     }
 
     private void HandleFormationCharacterSlotUIReplaceRequested() 
@@ -481,7 +557,7 @@ public class MenuTeamPanelTeam : Menu
     {
         selectedCharacter = character;
         if(isReplacing) 
-            UIEvents.RaiseFormationCharacterSlotUIReplaced(currentSlot, selectedCharacter);
+            UIEvents.RaiseFormationCharacterSlotUIReplaced(selectedSlot, selectedCharacter);
         isReplacing = false;
     }
 
@@ -567,7 +643,7 @@ public class MenuTeamPanelTeam : Menu
     private void HandleTeamEmblemChanged(string emblemId)
     {
         if(!isEditMode) return;
-        currentTeam.UpdateAppeariance(emblemId);
+        currentTeam.UpdateAppearance(emblemId);
         formationLayoutUI.Initialize(currentTeam, currentBattleType, mode);
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
@@ -600,7 +676,8 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandleTeamCharacterActionsClosed() 
     {
-        base.SetDefaultSelectable(currentSlot.Button);
+        if (currentSlot != null)
+            base.SetDefaultSelectable(currentSlot.Button);
     }
 
     private void HandleLoadoutDeleted(Team team)
@@ -618,10 +695,21 @@ public class MenuTeamPanelTeam : Menu
         currentBattleType = battleType;
     }
 
-
     private void HandleBackFromCharacterSelectorRequested() 
     {
         isReplacing = false;
+    }
+
+    private void HandleFormationCharacterSlotUISelected(FormationCharacterSlotUI slot) 
+    {
+        if (!isTop) return;
+        selectedSlot = slot;
+    }
+
+    private void HandleFormationCharacterSlotUIHighlighted(FormationCharacterSlotUI slot) 
+    {
+        if (!isTop) return;
+        base.SetDefaultSelectable(slot.Button);
     }
 
     #endregion

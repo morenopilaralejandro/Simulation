@@ -67,7 +67,7 @@ public class Team
     //appearanceComponent
     public Sprite TeamCrestSprite => appearanceComponent.TeamCrestSprite;
     public string TeamCrestId => appearanceComponent.TeamCrestId;
-    public void UpdateAppeariance(string teamCrestId) => appearanceComponent.UpdateAppeariance(teamCrestId); 
+    public void UpdateAppearance(string teamCrestId) => appearanceComponent.UpdateAppearance(teamCrestId); 
     //formationComponent
     public Formation FullBattleFormation => formationComponent.FullBattleFormation;
     public Formation MiniBattleFormation => formationComponent.MiniBattleFormation;

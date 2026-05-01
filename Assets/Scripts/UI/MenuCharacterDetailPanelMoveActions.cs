@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.UI;
+using Aremoreno.Enums.Input;
 
 public class MenuCharacterDetailPanelMoveActions : Menu
 {
@@ -28,22 +29,12 @@ public class MenuCharacterDetailPanelMoveActions : Menu
 
     #region Lifecycle
 
-    private void Awake()
-    {
-
-    }
-
     private void Start() 
     {
         base.Hide();
         base.SetInteractable(false);
 
         menuManager = MenuManager.Instance;
-    }
-
-    private void OnDestroy()
-    {
-
     }
 
     #endregion
@@ -77,6 +68,11 @@ public class MenuCharacterDetailPanelMoveActions : Menu
             isClosing = false;
             Close();
         }
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
     }
 
     public void Close()
@@ -108,6 +104,20 @@ public class MenuCharacterDetailPanelMoveActions : Menu
             base.SetDefaultSelectable(buttonEquip);
         else
             base.SetDefaultSelectable(buttonMove);
+    }
+
+    #endregion
+
+    #region Input 
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, Close);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, Close);
     }
 
     #endregion
@@ -183,7 +193,12 @@ public class MenuCharacterDetailPanelMoveActions : Menu
         if (!isOpen) return;
         if (!isEquiping) return;
         UIEvents.RaiseMoveEquipRequested(move, moveSlotUI.Character);
-        Close();
+
+        isEquiping = false;
+        if (isTop)
+            Close();
+        else
+            isClosing = true;
     }
 
     private void HandleMoveUnequipRequested(Move move, Character character) 

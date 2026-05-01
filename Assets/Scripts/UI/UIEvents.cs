@@ -105,16 +105,16 @@ public static class UIEvents
         OnFormationCharacterSlotUIClicked?.Invoke(slot);
     }
 
-    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIHighlited;
-    public static void RaiseFormationCharacterSlotUIHighlited(FormationCharacterSlotUI slot)
+    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIHighlighted;
+    public static void RaiseFormationCharacterSlotUIHighlighted(FormationCharacterSlotUI slot)
     {
-        OnFormationCharacterSlotUIHighlited?.Invoke(slot);
+        OnFormationCharacterSlotUIHighlighted?.Invoke(slot);
     }
 
-    public static event Action<FormationCharacterSlotUI, FormationCharacterSlotUI> OnFormationCharacterSlotUISwaped;
-    public static void RaiseFormationCharacterSlotUISwaped(FormationCharacterSlotUI a, FormationCharacterSlotUI b)
+    public static event Action<FormationCharacterSlotUI, FormationCharacterSlotUI> OnFormationCharacterSlotUISwapped;
+    public static void RaiseFormationCharacterSlotUISwapped(FormationCharacterSlotUI a, FormationCharacterSlotUI b)
     {
-        OnFormationCharacterSlotUISwaped?.Invoke(a, b);
+        OnFormationCharacterSlotUISwapped?.Invoke(a, b);
     }
 
     public static event Action<FormationCharacterSlotUI, Character> OnFormationCharacterSlotUIReplaced;

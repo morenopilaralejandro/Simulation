@@ -6,6 +6,7 @@ using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.UI;
 using Aremoreno.Enums.Item;
+using Aremoreno.Enums.Input;
 
 public class SelectorItemSide : Menu
 {
@@ -35,11 +36,6 @@ public class SelectorItemSide : Menu
 
     #region Lifecycle
 
-    private void Awake()
-    {
-
-    }
-
     private void Start() 
     {
         base.Hide();
@@ -56,7 +52,7 @@ public class SelectorItemSide : Menu
 
     #endregion
 
-   #region Menu Overrides
+    #region Menu Overrides
 
     public override void Show()
     {
@@ -85,6 +81,11 @@ public class SelectorItemSide : Menu
             autoScroll.Activate();
         else
             autoScroll.Deactivate();
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
     }
 
     public void Close()
@@ -133,6 +134,20 @@ public class SelectorItemSide : Menu
                 Destroy(listItem.gameObject);
         }
         listItems.Clear();
+    }
+
+    #endregion
+
+    #region Input 
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
     }
 
     #endregion

@@ -20,6 +20,7 @@ public class SelectorCharacterListItem : MonoBehaviour
     private CharacterSelectorModeClick modeClick;
 
     public Button Button => button;
+    public Character Character => character;
 
     #endregion
 

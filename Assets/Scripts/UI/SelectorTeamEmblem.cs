@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.UI;
+using Aremoreno.Enums.Input;
 
 public class SelectorTeamEmblem : Menu
 {
@@ -27,11 +28,6 @@ public class SelectorTeamEmblem : Menu
 
     #region Lifecycle
 
-    private void Awake()
-    {
-
-    }
-
     private void Start() 
     {
         base.Hide();
@@ -47,7 +43,7 @@ public class SelectorTeamEmblem : Menu
 
     #endregion
 
-   #region Menu Overrides
+    #region Menu Overrides
 
     public override void Show()
     {
@@ -76,6 +72,11 @@ public class SelectorTeamEmblem : Menu
             autoScroll.Activate();
         else
             autoScroll.Deactivate();
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
     }
 
     public void Close()
@@ -129,6 +130,17 @@ public class SelectorTeamEmblem : Menu
     }
 
     #endregion
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
+    }
+
 
     #region Button Handle
 

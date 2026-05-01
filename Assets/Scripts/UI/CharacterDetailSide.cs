@@ -129,7 +129,7 @@ public class CharacterDetailSide : MonoBehaviour
         UIEvents.OnCharacterDetailSideUpdateRequested += HandleCharacterDetailSideUpdateRequested;
         UIEvents.OnCharacterDetailSideNextPageRequested += HandleCharacterDetailSideNextPageRequested;
         UIEvents.OnFormationCharacterSlotUISelected += HandleFormationCharacterSlotUISelected;
-        UIEvents.OnFormationCharacterSlotUIHighlited += HandleFormationCharacterSlotUIHighlited;
+        UIEvents.OnFormationCharacterSlotUIHighlighted += HandleFormationCharacterSlotUIHighlighted;
         UIEvents.OnFormationCharacterSlotUIClicked += HandleFormationCharacterSlotUIClicked;
     }
 
@@ -138,7 +138,7 @@ public class CharacterDetailSide : MonoBehaviour
         UIEvents.OnCharacterDetailSideUpdateRequested -= HandleCharacterDetailSideUpdateRequested;
         UIEvents.OnCharacterDetailSideNextPageRequested -= HandleCharacterDetailSideNextPageRequested;
         UIEvents.OnFormationCharacterSlotUISelected -= HandleFormationCharacterSlotUISelected;
-        UIEvents.OnFormationCharacterSlotUIHighlited -= HandleFormationCharacterSlotUIHighlited;
+        UIEvents.OnFormationCharacterSlotUIHighlighted -= HandleFormationCharacterSlotUIHighlighted;
         UIEvents.OnFormationCharacterSlotUIClicked -= HandleFormationCharacterSlotUIClicked;
     }
 
@@ -157,7 +157,7 @@ public class CharacterDetailSide : MonoBehaviour
         UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
     }
 
-    private void HandleFormationCharacterSlotUIHighlited(FormationCharacterSlotUI slot) 
+    private void HandleFormationCharacterSlotUIHighlighted(FormationCharacterSlotUI slot) 
     {
         UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
     }

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.UI;
+using Aremoreno.Enums.Input;
 
 public class MenuTeamPanelDelete : Menu
 {
@@ -22,22 +23,12 @@ public class MenuTeamPanelDelete : Menu
 
     #region Lifecycle
 
-    private void Awake()
-    {
-
-    }
-
     private void Start() 
     {
         base.Hide();
         base.SetInteractable(false);
 
         menuManager = MenuManager.Instance;
-    }
-
-    private void OnDestroy()
-    {
-
     }
 
     #endregion
@@ -56,6 +47,16 @@ public class MenuTeamPanelDelete : Menu
         base.Hide();
     }
 
+    public override void SetInteractable(bool interactable)
+    {
+        base.SetInteractable(interactable);
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
+    }
+
     public void Close()
     {
         if (!isOpen) return;
@@ -69,6 +70,20 @@ public class MenuTeamPanelDelete : Menu
     #endregion
 
     #region Helper
+
+    #endregion
+
+    #region Input 
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCancelClicked);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonCancelClicked);
+    }
 
     #endregion
 

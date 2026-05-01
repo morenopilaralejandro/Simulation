@@ -94,32 +94,8 @@ public class DeadBallManager : MonoBehaviour
 
         DeadBallEvents.RaiseDeadBallStarted(type, offenseSide, defenseSide);
         currentHandler.Setup(teamSide);
-    }
 
-    private void Update()
-    {
-        if (currentHandler == null) return;
-
-        HandleMenuInput();
-
-        if (!IsUserMenuOpen())
-            currentHandler.HandleInput();
-
-        if (DeadBallState == DeadBallState.WaitingForReady && TeamReadiness.AreBothReady)
-            Execute();
-
-        if (DeadBallState == DeadBallState.Executing && currentHandler.IsReady)
-            Finish();
-    }
-
-    private void HandleMenuInput()
-    {
-        if (DeadBallState != DeadBallState.WaitingForReady) return;
-        if (HasUserOpenedMenu() && isOneTimeMenu) return;
-        if (!InputManager.Instance.GetDown(CustomAction.BattleUI_OpenTeamMenu)) return;
-
-        TeamSide userSide = BattleManager.Instance.GetUserSide();
-        UpdateTeamMenuVisibility(userSide, true);
+        SubscribeInputMenu();
     }
 
     private void UpdateTeamMenuVisibility(TeamSide side, bool boolValue)
@@ -145,6 +121,8 @@ public class DeadBallManager : MonoBehaviour
 
         DeadBallState = DeadBallState.Executing;
         DeadBallEvents.RaiseDeadBallReady(DeadBallType, offenseSide, defenseSide);
+
+        NotifyHandlerReady();
     }
 
     private void Finish()
@@ -157,6 +135,50 @@ public class DeadBallManager : MonoBehaviour
         BattleManager.Instance.Unfreeze();
         BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
         currentHandler = null;
+
+        UnsubscribeInputMenu();
+    }
+
+    #endregion
+
+    #region Comunication with handler
+
+    /// <summary>Called by the handler whenever readiness changes.</summary>
+    public void NotifyReadinessChanged()
+    {
+        if (DeadBallState == DeadBallState.WaitingForReady && teamReadiness.AreBothReady)
+            Execute();
+    }
+
+    /// <summary>Called by the handler when its IsReady flips true.</summary>
+    public void NotifyHandlerReady()
+    {
+        if (DeadBallState == DeadBallState.Executing && currentHandler != null && currentHandler.IsReady)
+            Finish();
+    }
+
+    #endregion
+
+    #region Input
+
+    private void SubscribeInputMenu()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.BattleUI_OpenTeamMenu, HandleOpenTeamMenuPressed);
+    }
+
+    private void UnsubscribeInputMenu()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.BattleUI_OpenTeamMenu, HandleOpenTeamMenuPressed);
+    }
+
+    private void HandleOpenTeamMenuPressed()
+    {
+        if (DeadBallState != DeadBallState.WaitingForReady) return;
+        if (IsUserMenuOpen()) return;
+        if (HasUserOpenedMenu() && isOneTimeMenu) return;
+
+        TeamSide userSide = BattleManager.Instance.GetUserSide();
+        UpdateTeamMenuVisibility(userSide, true);
     }
 
     #endregion
