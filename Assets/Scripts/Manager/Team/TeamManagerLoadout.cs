@@ -18,10 +18,12 @@ public class TeamManagerLoadout
     private Dictionary<string, Team> loadouts = new();
     private string activeLoadoutGuid;
     private CharacterManager characterManager;
+    public BattleType defaultBattleType = BattleType.Mini;
 
     public IReadOnlyDictionary<string, Team> Loadouts => loadouts;
     public Team ActiveLoadout => GetLoadout(activeLoadoutGuid);
     public string ActiveLoadoutGuid => activeLoadoutGuid;
+    public BattleType DefaultBattleType => defaultBattleType;
 
     #endregion
 
@@ -291,6 +293,11 @@ public class TeamManagerLoadout
 
     }
 
+    public void SetDefaultBattleType(BattleType battleType) 
+    {
+        defaultBattleType = battleType;
+    }
+
     #endregion
    
     #region Persistence
@@ -299,6 +306,7 @@ public class TeamManagerLoadout
     {
         SaveDataLoadoutSystem saveData = new SaveDataLoadoutSystem();
         saveData.ActiveLoadoutGuid = activeLoadoutGuid;
+        saveData.DefaultBattleType = defaultBattleType;
         saveData.TeamSaveDataList = new List<TeamSaveData>();
 
         foreach (Team loadout in loadouts.Values)
@@ -316,6 +324,8 @@ public class TeamManagerLoadout
         activeLoadoutGuid = null;
 
         if (saveData?.TeamSaveDataList == null) return;
+
+        defaultBattleType = saveData.DefaultBattleType;
 
         foreach (TeamSaveData teamSaveData in saveData.TeamSaveDataList)
         {

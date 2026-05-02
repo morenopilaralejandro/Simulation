@@ -5,6 +5,7 @@ using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.UI;
 using Aremoreno.Enums.Team;
+using Aremoreno.Enums.Input;
 
 public class TeamPreviewUI : MonoBehaviour
 {
@@ -29,7 +30,9 @@ public class TeamPreviewUI : MonoBehaviour
         UIEvents.OnFormationCharacterSlotUISelectedDefault += HandleFormationCharacterSlotUISelectedDefault;
         TeamEvents.OnTeamPreviewStateChanged += HandleStateChanged;
         TeamEvents.OnTeamPreviewPageChanged += HandlePageChanged;
-        TeamEvents.OnTeamPreviewEnded += HandleFinished;
+        TeamEvents.OnTeamPreviewStarted+= HandleTeamPreviewStarted;
+        TeamEvents.OnTeamPreviewEnded += HandleTeamPreviewEnded;
+        UIEvents.OnFormationCharacterSlotUIHighlighted += HandleFormationCharacterSlotUIHighlighted;
 
         //  REMOVED: Subscriptions to events with empty handlers
         // OnTeamPreviewSideStateChanged, OnTeamPreviewSideReady, OnTeamPreviewReady
@@ -41,7 +44,9 @@ public class TeamPreviewUI : MonoBehaviour
         UIEvents.OnFormationCharacterSlotUISelectedDefault -= HandleFormationCharacterSlotUISelectedDefault;
         TeamEvents.OnTeamPreviewStateChanged -= HandleStateChanged;
         TeamEvents.OnTeamPreviewPageChanged -= HandlePageChanged;
-        TeamEvents.OnTeamPreviewEnded -= HandleFinished;
+        TeamEvents.OnTeamPreviewStarted -= HandleTeamPreviewStarted;
+        TeamEvents.OnTeamPreviewEnded -= HandleTeamPreviewEnded;
+        UIEvents.OnFormationCharacterSlotUIHighlighted -= HandleFormationCharacterSlotUIHighlighted;
     }
 
     #endregion
@@ -72,14 +77,30 @@ public class TeamPreviewUI : MonoBehaviour
         formationLayoutUI.Initialize(team, battleType, MenuTeamMode.Battle);
     }
 
-    private void HandleFinished()
+    private void HandleTeamPreviewStarted()
     {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterNext, UIEvents.RaiseCharacterDetailSideNextPageRequested);
+
+    }
+
+    private void HandleTeamPreviewEnded()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterNext, UIEvents.RaiseCharacterDetailSideNextPageRequested);
+
         HideCanvasGroup();
         localSideCached = false;
         formationLayoutUI.ReleaseAll();
     }
 
     private void HandleFormationCharacterSlotUISelectedDefault(FormationCharacterSlotUI slot) 
+    {
+        if (!canvasGroup.interactable) return;
+        if (slot == null || slot.gameObject == null) return;
+        EventSystem.current.SetSelectedGameObject(slot.gameObject);
+        UIEvents.RaiseFormationCharacterSlotUISelected(slot);
+    }
+
+    private void HandleFormationCharacterSlotUIHighlighted(FormationCharacterSlotUI slot) 
     {
         if (!canvasGroup.interactable) return;
         if (slot == null || slot.gameObject == null) return;
@@ -110,7 +131,7 @@ public class TeamPreviewUI : MonoBehaviour
 
     public void OnTeamPreviewButtonContinueClicked() 
     {
-        UIEvents.RaiseTeamPreviewButtonContinueClicked(localSide);
+        UIEvents.RaiseTeamPreviewButtonContinueClicked();
     }
 
     #endregion

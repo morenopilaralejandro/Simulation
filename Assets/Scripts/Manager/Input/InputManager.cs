@@ -20,6 +20,8 @@ public class InputManager : MonoBehaviour
     private Vector2 moveWorld;
     private readonly ButtonState[] buttons = new ButtonState[System.Enum.GetValues(typeof(CustomAction)).Length];
     private readonly Dictionary<InputAction, CustomAction> actionLookup = new();
+    private readonly Dictionary<CustomAction, Action> _perActionDown = new();
+    private readonly Dictionary<CustomAction, Action> _perActionUp   = new();
     private GameObject onScreenControlsRoot;
     private Camera mainCamera;
     private float bufferDurationShoot = 1f;
@@ -104,13 +106,15 @@ public class InputManager : MonoBehaviour
         BindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterSummary, CustomAction.Navigation_ShortcutTeamCharacterSummary);
         BindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterMove, CustomAction.Navigation_ShortcutTeamCharacterMove);
         BindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterReplace, CustomAction.Navigation_ShortcutTeamCharacterReplace);
+        BindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterNext, CustomAction.Navigation_ShortcutTeamCharacterNext);
+        BindButton(input.NavigationActions.Navigation_ShortcutCharacterFilter, CustomAction.Navigation_ShortcutCharacterFilter);
 
         // Enable once here
         input.BattleActions.Enable();
         input.BattleUIActions.Enable();
         input.WorldActions.Enable();
         input.DialogActions.Disable();
-        input.NavigationActions.Disable();
+        input.NavigationActions.Enable();
 
         // Respond to control scheme changes (requires a PlayerInput component on the same GO)
         playerInput = GetComponent<PlayerInput>();
@@ -184,6 +188,8 @@ public class InputManager : MonoBehaviour
             UnbindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterSummary);
             UnbindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterMove);
             UnbindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterReplace);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterNext);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutCharacterFilter);
 
             input.BattleActions.Disable();
             input.BattleUIActions.Disable();
@@ -284,6 +290,11 @@ public class InputManager : MonoBehaviour
             button.SetDown(0f);
 
         buttons[(int)customAction] = button;
+
+        InputEvents.RaiseActionDown(customAction);
+
+        if (_perActionDown.TryGetValue(customAction, out var cb))
+            cb?.Invoke();
     }
 
     private void OnButtonUp(CustomAction customAction)
@@ -291,6 +302,11 @@ public class InputManager : MonoBehaviour
         var button = buttons[(int)customAction];
         button.SetUp();
         buttons[(int)customAction] = button;
+
+        InputEvents.RaiseActionUp(customAction);
+
+        if (_perActionUp.TryGetValue(customAction, out var cb))
+            cb?.Invoke();
     }
     #endregion
 
@@ -453,6 +469,58 @@ public class InputManager : MonoBehaviour
         buttons[(int)CustomAction.Dialog_Cancel].SetUp();
         LogManager.Trace("[InputManager] DialogActions disabled");
     }
+
+    #endregion
+
+    #region _perActionDown
+
+    /*
+    Why the if check?
+    C# delegates are tricky: if a key doesn't exist in the dictionary, indexing it throws KeyNotFoundException. And null + callback works fine in C#, but storing null as a value is wasteful.
+
+    So:
+
+    First subscriber → create entry with the delegate
+    Subsequent subscribers → append to the existing delegate using +=
+    Action is a multicast delegate: a += b; a += c; means calling a() invokes b() then c() in order.
+    */
+
+    public void SubscribeDown(CustomAction action, Action callback)
+    {
+        if (_perActionDown.ContainsKey(action))
+            _perActionDown[action] += callback;
+        else
+            _perActionDown[action] = callback;
+    }
+
+    public void UnsubscribeDown(CustomAction action, Action callback)
+    {
+        if (_perActionDown.TryGetValue(action, out var existing))
+        {
+            existing -= callback;
+            if (existing == null) _perActionDown.Remove(action);
+            else _perActionDown[action] = existing;
+        }
+    }
+
+    public void SubscribeUp(CustomAction action, Action callback)
+    {
+        if (_perActionUp.ContainsKey(action))
+            _perActionUp[action] += callback;
+        else
+            _perActionUp[action] = callback;
+    }
+
+    public void UnsubscribeUp(CustomAction action, Action callback)
+    {
+        if (_perActionUp.TryGetValue(action, out var existing))
+        {
+            existing -= callback;
+            if (existing == null) _perActionUp.Remove(action);
+            else _perActionUp[action] = existing;
+        }
+    }
+
     #endregion
 
     #region Event

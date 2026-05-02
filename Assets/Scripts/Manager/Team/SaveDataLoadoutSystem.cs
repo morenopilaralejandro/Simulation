@@ -6,5 +6,6 @@ using Aremoreno.Enums.Character;
 public class SaveDataLoadoutSystem
 {
     public string ActiveLoadoutGuid;
+    public BattleType DefaultBattleType;
     public List<TeamSaveData> TeamSaveDataList;
 }

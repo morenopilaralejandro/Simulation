@@ -1351,6 +1351,24 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutTeamCharacterNext"",
+                    ""type"": ""Button"",
+                    ""id"": ""e550460e-ccf4-4dea-816e-0c24a23c5517"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutCharacterFilter"",
+                    ""type"": ""Button"",
+                    ""id"": ""b599eb97-4c9c-4d30-affc-59b500da8359"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1389,6 +1407,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""dcf6e87f-2707-434f-8ebb-25d783d72ddc"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamBattleType"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8ba97c61-075f-4edc-a95a-6c232ec62d66"",
                     ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
@@ -1411,8 +1440,30 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""d53c3328-f1d5-4397-9766-3f692c4ed53b"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamActions"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""5e068b6a-35fc-4b0b-9ff2-6d1d5866c176"",
                     ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamCharacterSummary"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd32ee59-7073-423b-b677-9e250dd1e01e"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1433,12 +1484,78 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""a276453a-f9b0-4437-9dda-ab61d67a7a51"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamCharacterMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""c0887a9d-e463-4d82-8627-d1e4c7866a1f"",
                     ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Navigation_ShortcutTeamCharacterReplace"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e62a2372-9ddc-4acb-a81b-991ed185e324"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamCharacterReplace"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""13a86dcc-257b-4c35-b312-c46a45be1db4"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamCharacterNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1636fd01-f296-4e06-a7b8-f07480e097cd"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutTeamCharacterNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2472db9c-878a-4c32-b363-006e2a2dc73e"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutCharacterFilter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""54dbaaa9-f7ad-49e0-9286-aefe3349c966"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutCharacterFilter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1497,6 +1614,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_NavigationActions_Navigation_ShortcutTeamCharacterSummary = m_NavigationActions.FindAction("Navigation_ShortcutTeamCharacterSummary", throwIfNotFound: true);
         m_NavigationActions_Navigation_ShortcutTeamCharacterMove = m_NavigationActions.FindAction("Navigation_ShortcutTeamCharacterMove", throwIfNotFound: true);
         m_NavigationActions_Navigation_ShortcutTeamCharacterReplace = m_NavigationActions.FindAction("Navigation_ShortcutTeamCharacterReplace", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutTeamCharacterNext = m_NavigationActions.FindAction("Navigation_ShortcutTeamCharacterNext", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutCharacterFilter = m_NavigationActions.FindAction("Navigation_ShortcutCharacterFilter", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -2291,6 +2410,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamCharacterSummary;
     private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamCharacterMove;
     private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamCharacterReplace;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamCharacterNext;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutCharacterFilter;
     /// <summary>
     /// Provides access to input actions defined in input action map "NavigationActions".
     /// </summary>
@@ -2330,6 +2451,14 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutTeamCharacterReplace".
         /// </summary>
         public InputAction @Navigation_ShortcutTeamCharacterReplace => m_Wrapper.m_NavigationActions_Navigation_ShortcutTeamCharacterReplace;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutTeamCharacterNext".
+        /// </summary>
+        public InputAction @Navigation_ShortcutTeamCharacterNext => m_Wrapper.m_NavigationActions_Navigation_ShortcutTeamCharacterNext;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutCharacterFilter".
+        /// </summary>
+        public InputAction @Navigation_ShortcutCharacterFilter => m_Wrapper.m_NavigationActions_Navigation_ShortcutCharacterFilter;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2377,6 +2506,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Navigation_ShortcutTeamCharacterReplace.started += instance.OnNavigation_ShortcutTeamCharacterReplace;
             @Navigation_ShortcutTeamCharacterReplace.performed += instance.OnNavigation_ShortcutTeamCharacterReplace;
             @Navigation_ShortcutTeamCharacterReplace.canceled += instance.OnNavigation_ShortcutTeamCharacterReplace;
+            @Navigation_ShortcutTeamCharacterNext.started += instance.OnNavigation_ShortcutTeamCharacterNext;
+            @Navigation_ShortcutTeamCharacterNext.performed += instance.OnNavigation_ShortcutTeamCharacterNext;
+            @Navigation_ShortcutTeamCharacterNext.canceled += instance.OnNavigation_ShortcutTeamCharacterNext;
+            @Navigation_ShortcutCharacterFilter.started += instance.OnNavigation_ShortcutCharacterFilter;
+            @Navigation_ShortcutCharacterFilter.performed += instance.OnNavigation_ShortcutCharacterFilter;
+            @Navigation_ShortcutCharacterFilter.canceled += instance.OnNavigation_ShortcutCharacterFilter;
         }
 
         /// <summary>
@@ -2409,6 +2544,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Navigation_ShortcutTeamCharacterReplace.started -= instance.OnNavigation_ShortcutTeamCharacterReplace;
             @Navigation_ShortcutTeamCharacterReplace.performed -= instance.OnNavigation_ShortcutTeamCharacterReplace;
             @Navigation_ShortcutTeamCharacterReplace.canceled -= instance.OnNavigation_ShortcutTeamCharacterReplace;
+            @Navigation_ShortcutTeamCharacterNext.started -= instance.OnNavigation_ShortcutTeamCharacterNext;
+            @Navigation_ShortcutTeamCharacterNext.performed -= instance.OnNavigation_ShortcutTeamCharacterNext;
+            @Navigation_ShortcutTeamCharacterNext.canceled -= instance.OnNavigation_ShortcutTeamCharacterNext;
+            @Navigation_ShortcutCharacterFilter.started -= instance.OnNavigation_ShortcutCharacterFilter;
+            @Navigation_ShortcutCharacterFilter.performed -= instance.OnNavigation_ShortcutCharacterFilter;
+            @Navigation_ShortcutCharacterFilter.canceled -= instance.OnNavigation_ShortcutCharacterFilter;
         }
 
         /// <summary>
@@ -2761,5 +2902,19 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNavigation_ShortcutTeamCharacterReplace(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutTeamCharacterNext" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutTeamCharacterNext(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutCharacterFilter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutCharacterFilter(InputAction.CallbackContext context);
     }
 }

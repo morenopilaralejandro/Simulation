@@ -21,4 +21,8 @@ public class BarHPSP : MonoBehaviour
         }
     }
 
+    public void Clear() 
+    {
+        textNumber.text = "";
+    }
 }

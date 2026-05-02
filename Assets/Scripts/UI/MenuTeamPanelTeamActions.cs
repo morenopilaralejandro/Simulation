@@ -5,6 +5,7 @@ using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.UI;
 using Aremoreno.Enums.Item;
+using Aremoreno.Enums.Input;
 
 public class MenuTeamPanelTeamActions : Menu
 {
@@ -16,6 +17,7 @@ public class MenuTeamPanelTeamActions : Menu
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
+    private AudioManager audioManager;
 
     private Team team;
     private BattleType battleType;
@@ -25,27 +27,18 @@ public class MenuTeamPanelTeamActions : Menu
 
     #region Lifecycle
 
-    private void Awake()
-    {
-
-    }
-
     private void Start() 
     {
         base.Hide();
         base.SetInteractable(false);
 
         menuManager = MenuManager.Instance;
-    }
-
-    private void OnDestroy()
-    {
-
+        audioManager = AudioManager.Instance;
     }
 
     #endregion
 
-   #region Menu Overrides
+    #region Menu Overrides
 
     public override void Show()
     {
@@ -72,6 +65,11 @@ public class MenuTeamPanelTeamActions : Menu
             isClosing = false;
             Close();
         }
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
     }
 
     public void Close()
@@ -89,6 +87,19 @@ public class MenuTeamPanelTeamActions : Menu
 
     #region Helper
 
+    #endregion
+
+    #region Input 
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, Close);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, Close);
+    }
 
     #endregion
 

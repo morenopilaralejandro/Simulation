@@ -66,6 +66,8 @@ namespace Aremoreno.Enums.Input
         Navigation_ShortcutTeamActions,
         Navigation_ShortcutTeamCharacterSummary,
         Navigation_ShortcutTeamCharacterMove,
-        Navigation_ShortcutTeamCharacterReplace
+        Navigation_ShortcutTeamCharacterReplace,
+        Navigation_ShortcutTeamCharacterNext,
+        Navigation_ShortcutCharacterFilter
     }
 }

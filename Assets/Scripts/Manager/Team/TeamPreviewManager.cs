@@ -42,20 +42,6 @@ public class TeamPreviewManager : MonoBehaviour
         inputManager = InputManager.Instance;
     }
 
-    private void Update()
-    {
-        // Single bool check — nearly zero cost when inactive
-        if (!isPollingInput) return;
-
-        if (state == TeamPreviewState.WaitingForReady && AreBothReady())
-        {
-            StartBattle();
-            return;
-        }
-
-        HandleConfirmInput();
-    }
-
     #endregion
 
     #region Interface
@@ -94,7 +80,7 @@ public class TeamPreviewManager : MonoBehaviour
             }
         }
 
-        isPollingInput = true; //  Start polling
+        SubscribeInput();
     }
 
     public TeamPreviewSideData GetSideData(TeamSide side) => sides.GetValueOrDefault(side);
@@ -103,9 +89,20 @@ public class TeamPreviewManager : MonoBehaviour
 
     #region Input
 
-    private void HandleConfirmInput()
+    private void SubscribeInput()
     {
-        if (!inputManager.GetDown(CustomAction.BattleUI_TeamPreviewConfirm))
+        inputManager.SubscribeDown(CustomAction.BattleUI_TeamPreviewConfirm, HandleConfirmPressed);
+    }
+
+    private void UnsubscribeInput()
+    {
+        inputManager.UnsubscribeDown(CustomAction.BattleUI_TeamPreviewConfirm, HandleConfirmPressed);
+    }
+
+    private void HandleConfirmPressed()
+    {
+        // Guard: only act in valid states
+        if (state != TeamPreviewState.Previewing && state != TeamPreviewState.WaitingForReady)
             return;
 
         if (isMultiplayer)
@@ -146,17 +143,16 @@ public class TeamPreviewManager : MonoBehaviour
         }
 
         TeamEvents.RaiseTeamPreviewReady();
-        SetState(TeamPreviewState.WaitingForReady);
+        StartBattle();
     }
 
     private void StartBattle()
     {
-        isPollingInput = false; //  Stop polling — Update() becomes a single bool check
-
         SetState(TeamPreviewState.Finished);
 
         sides.Clear(); //  Release preview data for GC
 
+        UnsubscribeInput();
         TeamEvents.RaiseTeamPreviewEnded();
         if(inputManager.IsAndroid) InputEvents.RaiseScreenControlsShowRequested();
     }
@@ -206,9 +202,9 @@ public class TeamPreviewManager : MonoBehaviour
         );
     }
 
-    private void HandleTeamPreviewButtonContinueClicked(TeamSide teamSide)
+    private void HandleTeamPreviewButtonContinueClicked()
     {
-        ConfirmSide(teamSide);
+        HandleConfirmPressed();
     }
 
     #endregion

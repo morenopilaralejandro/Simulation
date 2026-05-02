@@ -12,6 +12,8 @@ public class DuelLogManager : MonoBehaviour
 {
     #region Fields
 
+    // TODO refactor to use DuelLogData instead of passing all the arguments
+
     public static DuelLogManager Instance { get; private set; }
 
     public List<DuelLogEntry> DuelLogEntries = new List<DuelLogEntry>();

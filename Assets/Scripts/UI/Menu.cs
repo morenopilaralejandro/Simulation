@@ -63,9 +63,17 @@ public abstract class Menu : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(lastSelected);
         } else 
         {
-            if (defaultSelectable == null) return;
+            if (defaultSelectable == null || EventSystem.current.currentSelectedGameObject == defaultSelectable.gameObject) return;
             EventSystem.current.SetSelectedGameObject(defaultSelectable.gameObject);
         }
+    }
+
+    public void SetVisible(bool isVisible)
+    {
+        if (isVisible)
+            canvasGroup.alpha = 1f;
+        else
+            canvasGroup.alpha = 0f;
     }
 
     /*  

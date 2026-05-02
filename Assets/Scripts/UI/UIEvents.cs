@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Item;
+using Aremoreno.Enums.UI;
 
 public static class UIEvents
 {
@@ -104,16 +106,16 @@ public static class UIEvents
         OnFormationCharacterSlotUIClicked?.Invoke(slot);
     }
 
-    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIHighlited;
-    public static void RaiseFormationCharacterSlotUIHighlited(FormationCharacterSlotUI slot)
+    public static event Action<FormationCharacterSlotUI> OnFormationCharacterSlotUIHighlighted;
+    public static void RaiseFormationCharacterSlotUIHighlighted(FormationCharacterSlotUI slot)
     {
-        OnFormationCharacterSlotUIHighlited?.Invoke(slot);
+        OnFormationCharacterSlotUIHighlighted?.Invoke(slot);
     }
 
-    public static event Action<FormationCharacterSlotUI, FormationCharacterSlotUI> OnFormationCharacterSlotUISwaped;
-    public static void RaiseFormationCharacterSlotUISwaped(FormationCharacterSlotUI a, FormationCharacterSlotUI b)
+    public static event Action<FormationCharacterSlotUI, FormationCharacterSlotUI> OnFormationCharacterSlotUISwapped;
+    public static void RaiseFormationCharacterSlotUISwapped(FormationCharacterSlotUI a, FormationCharacterSlotUI b)
     {
-        OnFormationCharacterSlotUISwaped?.Invoke(a, b);
+        OnFormationCharacterSlotUISwapped?.Invoke(a, b);
     }
 
     public static event Action<FormationCharacterSlotUI, Character> OnFormationCharacterSlotUIReplaced;
@@ -170,10 +172,16 @@ public static class UIEvents
         OnTeamActionsClosed?.Invoke();
     }
 
-    public static event Action OnCharacterActionsOpened;
-    public static void RaiseCharacterActionsOpened()
+    public static event Action<Character> OnTeamCharacterActionsOpenRequested;
+    public static void RaiseTeamCharacterActionsOpenRequested(Character character)
     {
-        OnCharacterActionsOpened?.Invoke();
+        OnTeamCharacterActionsOpenRequested?.Invoke(character);
+    }
+
+    public static event Action OnTeamCharacterActionsClosed;
+    public static void RaiseTeamCharacterActionsClosed()
+    {
+        OnTeamCharacterActionsClosed?.Invoke();
     }
 
     public static event Action OnFormationCharacterSlotUIReplaceRequested;
@@ -218,10 +226,16 @@ public static class UIEvents
         OnTeamEmblemChanged?.Invoke(emblemId);
     }
 
-    public static event Action OnCharacterDetailOpened;
-    public static void RaiseCharacterDetailOpened()
+    public static event Action<Character> OnCharacterDetailOpenRequested;
+    public static void RaiseCharacterDetailOpenRequested(Character character)
     {
-        OnCharacterDetailOpened?.Invoke();
+        OnCharacterDetailOpenRequested?.Invoke(character);
+    }
+
+    public static event Action OnCharacterDetailRefreshRequested;
+    public static void RaiseCharacterDetailRefreshRequested()
+    {
+        OnCharacterDetailRefreshRequested?.Invoke();
     }
 
     public static event Action<int, int> OnSubstitutionChangesUpdated;
@@ -230,10 +244,10 @@ public static class UIEvents
         OnSubstitutionChangesUpdated?.Invoke(currentValue, maxValue);
     }
 
-    public static event Action<TeamSide> OnTeamPreviewButtonContinueClicked;
-    public static void RaiseTeamPreviewButtonContinueClicked(TeamSide teamSide)
+    public static event Action OnTeamPreviewButtonContinueClicked;
+    public static void RaiseTeamPreviewButtonContinueClicked()
     {
-        OnTeamPreviewButtonContinueClicked?.Invoke(teamSide);
+        OnTeamPreviewButtonContinueClicked?.Invoke();
     }
 
     // Menu Character
@@ -243,16 +257,167 @@ public static class UIEvents
         OnCharacterSelected?.Invoke(character);
     }
 
-    public static event Action OnCharacterSelectorOpened;
-    public static void RaiseCharacterSelectorOpened()
+    public static event Action<CharacterSelectorModePopulate, CharacterSelectorModeClick, Team, BattleType, bool> OnCharacterSelectorOpenRequested;
+    public static void RaiseCharacterSelectorOpenRequested(
+        CharacterSelectorModePopulate modePopulate,
+        CharacterSelectorModeClick modeClick,
+        Team team, 
+        BattleType battleType, 
+        bool isCloseOnSelect)
     {
-        OnCharacterSelectorOpened?.Invoke();
+        OnCharacterSelectorOpenRequested?.Invoke(modePopulate, modeClick, team, battleType, isCloseOnSelect);
     }
 
-    public static event Action<Character> OnCharaterDetailSideUpdateRequested;
-    public static void RaiseCharaterDetailSideUpdateRequested(Character character)
+    public static event Action<SelectorCharacterListItem> OnCharacterCharacterSelectedListItemSelected;
+    public static void RaiseCharacterSelectedListItemSelected(SelectorCharacterListItem selectorCharacterListItem)
     {
-        OnCharaterDetailSideUpdateRequested?.Invoke(character);
+        OnCharacterCharacterSelectedListItemSelected?.Invoke(selectorCharacterListItem);
+    }
+
+    public static event Action<SelectorCharacterListItem> OnCharacterCharacterSelectedListItemPointerEnter;
+    public static void RaiseCharacterSelectedListItemPointerEnter(SelectorCharacterListItem selectorCharacterListItem)
+    {
+        OnCharacterCharacterSelectedListItemPointerEnter?.Invoke(selectorCharacterListItem);
+    }
+
+    public static event Action<BaseEventData> OnGenericScroll;
+    public static void RaiseGenericScroll(BaseEventData eventData)
+    {
+        OnGenericScroll?.Invoke(eventData);
+    }
+
+    public static event Action OnBackFromCharacterSelectorRequested;
+    public static void RaiseBackFromCharacterSelectorRequested()
+    {
+        OnBackFromCharacterSelectorRequested?.Invoke();
+    }
+
+    public static event Action<Character, Position> OnCharacterDetailSideUpdateRequested;
+    public static void RaiseCharacterDetailSideUpdateRequested(Character character, Position position)
+    {
+        OnCharacterDetailSideUpdateRequested?.Invoke(character, position);
+    }
+
+    public static event Action OnCharacterDetailSideNextPageRequested;
+    public static void RaiseCharacterDetailSideNextPageRequested()
+    {
+        OnCharacterDetailSideNextPageRequested?.Invoke();
+    }
+
+    public static event Action OnCharacterFilterRequested;
+    public static void RaiseCharacterFilterRequested()
+    {
+        OnCharacterFilterRequested?.Invoke();
+    }
+
+    public static event Action<CharacterFilterData> OnCharacterFilterUpdated;
+    public static void RaiseCharacterFilterUpdated(CharacterFilterData characterFilterData)
+    {
+        OnCharacterFilterUpdated?.Invoke(characterFilterData);
+    }
+
+    public static event Action OnCharacterFilterResetRequested;
+    public static void RaiseCharacterFilterResetRequested()
+    {
+        OnCharacterFilterResetRequested?.Invoke();
+    }
+
+    // Menu Move
+
+    public static event Action<MoveSlotUI> OnMoveActionsOpenRequested;
+    public static void RaiseMoveActionsOpenRequested(MoveSlotUI moveSlotUI)
+    {
+        OnMoveActionsOpenRequested?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<Move, Move> OnMoveReplaceRequested;
+    public static void RaiseMoveReplaceRequested(Move moveOld, Move moveNew)
+    {
+        OnMoveReplaceRequested?.Invoke(moveOld, moveNew);
+    }
+
+    public static event Action<Move, Move> OnMoveReplaced;
+    public static void RaiseMoveReplaced(Move moveOld, Move moveNew)
+    {
+        OnMoveReplaced?.Invoke(moveOld, moveNew);
+    }
+
+    public static event Action<Character, int, int> OnMoveSwapRequested;
+    public static void RaiseMoveSwapRequested(Character character, int indexA, int indexB)
+    {
+        OnMoveSwapRequested?.Invoke(character, indexA, indexB);
+    }
+
+    public static event Action<MoveSelectorModePopulate, Character> OnMoveSelectorOpenRequested;
+    public static void RaiseMoveSelectorOpenRequested(MoveSelectorModePopulate modePopulate, Character character)
+    {
+        OnMoveSelectorOpenRequested?.Invoke(modePopulate, character);
+    }
+
+    public static event Action<Move> OnMoveSelected;
+    public static void RaiseMoveSelected(Move move)
+    {
+        OnMoveSelected?.Invoke(move);
+    }
+
+    public static event Action OnBackFromMoveSelectorRequested;
+    public static void RaiseBackFromMoveSelectorRequested()
+    {
+        OnBackFromMoveSelectorRequested?.Invoke();
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIClicked;
+    public static void RaiseMoveSlotUIClicked(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIClicked?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIMoveRequested;
+    public static void RaiseMoveSlotUIMoveRequested(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIMoveRequested?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIMoveStarted;
+    public static void RaiseMoveSlotUIMoveStarted(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIMoveStarted?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIMoveEnded;
+    public static void RaiseMoveSlotUIMoveEnded(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIMoveEnded?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<MoveSlotUI> OnMoveSlotUIMoveCanceled;
+    public static void RaiseMoveSlotUIMoveCanceled(MoveSlotUI moveSlotUI)
+    {
+        OnMoveSlotUIMoveCanceled?.Invoke(moveSlotUI);
+    }
+
+    public static event Action<Move, Character> OnMoveEquipRequested;
+    public static void RaiseMoveEquipRequested(Move move, Character character)
+    {
+        OnMoveEquipRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Move, Character> OnMoveUnequipRequested;
+    public static void RaiseMoveUnequipRequested(Move move, Character character)
+    {
+        OnMoveUnequipRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Move, Character> OnMoveLimitBreakPanelOpenRequested;
+    public static void RaiseMoveLimitBreakPanelOpenRequested(Move move, Character character)
+    {
+        OnMoveLimitBreakPanelOpenRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Move, Character> OnMoveLimitBreakRequested;
+    public static void RaiseMoveLimitBreakRequested(Move move, Character character)
+    {
+        OnMoveLimitBreakRequested?.Invoke(move, character);
     }
 
     // Menu Item
@@ -285,4 +450,13 @@ public static class UIEvents
     {
         OnSelectorItemSideListItemSelected?.Invoke(listItem);
     }
+
+    public static event Action<LoadoutListItem> OnLoadoutListItemSelect;
+    public static void RaiseLoadoutListItemSelect(LoadoutListItem listItem)
+    {
+        OnLoadoutListItemSelect?.Invoke(listItem);
+    }
+
+
+
 }

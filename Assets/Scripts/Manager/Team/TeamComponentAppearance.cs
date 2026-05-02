@@ -64,7 +64,7 @@ public class TeamComponentAppearance
         TeamEvents.RaiseTeamCrestSpriteUpdated(team);
     }
 
-    public void UpdateAppeariance(string teamCrestId) 
+    public void UpdateAppearance(string teamCrestId) 
     {
         TeamCrestId = teamCrestId;
         _ = InitializeAsync(TeamCrestId);

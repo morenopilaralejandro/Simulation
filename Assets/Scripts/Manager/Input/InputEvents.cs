@@ -28,6 +28,16 @@ public static class InputEvents
         OnDeviceTypeChanged?.Invoke(inputDeviceType);
     }
 
+    public static event Action<CustomAction> OnActionDown;
+    public static void RaiseActionDown(CustomAction customAction)
+    {
+        OnActionDown?.Invoke(customAction);
+    }
 
+    public static event Action<CustomAction> OnActionUp;
+    public static void RaiseActionUp(CustomAction customAction)
+    {
+        OnActionUp?.Invoke(customAction);
+    }
 
 }

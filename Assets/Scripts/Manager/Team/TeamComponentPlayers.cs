@@ -262,4 +262,10 @@ public class TeamComponentPlayers
         
         return null;
     }
+
+    public bool ContainsCharacterGuid(string characterGuid, BattleType battleType)
+    {
+        if (string.IsNullOrEmpty(characterGuid)) return false;
+        return GetCharacterGuids(battleType).Contains(characterGuid);
+    }
 }

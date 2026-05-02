@@ -12,6 +12,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     [SerializeField] private CharacterCard characterCard;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private Button button;
 
     [Header("Drag Layer")]
     [SerializeField] private RectTransform dragLayer;
@@ -35,6 +36,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
     public int SlotIndex => slotIndex;
     public FormationCoord FormationCoord => coord;
     public bool IsBench => isBench;
+    public Button Button => button;
 
     #endregion
 
@@ -151,12 +153,13 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UIEvents.RaiseFormationCharacterSlotUIHighlited(this);
+        UIEvents.RaiseFormationCharacterSlotUIHighlighted(this);
     }
 
     public void OnSelect(BaseEventData eventData)
     {
         UIEvents.RaiseTeamButtonSelected(this.gameObject);
+        UIEvents.RaiseFormationCharacterSlotUISelected(this);
     }
 
     #endregion
@@ -239,7 +242,7 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     private void SwapCharacters(FormationCharacterSlotUI other)
     {
-        UIEvents.RaiseFormationCharacterSlotUISwaped(this, other);
+        UIEvents.RaiseFormationCharacterSlotUISwapped(this, other);
     }
 
     #endregion
@@ -266,8 +269,10 @@ public class FormationCharacterSlotUI : MonoBehaviour,
 
     private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
     {
-        if (this != slot) return;
-        SetCharacter(character);
+        // unused
+        // handled in team menu
+        //if (this != slot) return;
+        //SetCharacter(character);
     }
 
     private void HandleMoveStarted(FormationCharacterSlotUI slot)

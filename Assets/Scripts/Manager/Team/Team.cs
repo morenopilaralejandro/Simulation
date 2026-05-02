@@ -67,7 +67,7 @@ public class Team
     //appearanceComponent
     public Sprite TeamCrestSprite => appearanceComponent.TeamCrestSprite;
     public string TeamCrestId => appearanceComponent.TeamCrestId;
-    public void UpdateAppeariance(string teamCrestId) => appearanceComponent.UpdateAppeariance(teamCrestId); 
+    public void UpdateAppearance(string teamCrestId) => appearanceComponent.UpdateAppearance(teamCrestId); 
     //formationComponent
     public Formation FullBattleFormation => formationComponent.FullBattleFormation;
     public Formation MiniBattleFormation => formationComponent.MiniBattleFormation;
@@ -105,6 +105,7 @@ public class Team
     public bool HasCharacterEntities(BattleType battleType) => playersComponent.HasCharacterEntities(battleType);
     public CharacterEntityBattle GetEntityByGuid(string characterGuid, BattleType battleType) => playersComponent.GetEntityByGuid(characterGuid, battleType);
     public Character GetCharacterByGuid(string characterGuid, BattleType battleType) => playersComponent.GetCharacterByGuid(characterGuid, battleType);
+    public bool ContainsCharacterGuid(string characterGuid, BattleType battleType) => playersComponent.ContainsCharacterGuid(characterGuid, battleType);
     //sideComponent
     public TeamSide TeamSide => sideComponent.TeamSide;
     public Variant Variant => sideComponent.Variant;

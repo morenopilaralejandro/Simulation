@@ -115,6 +115,8 @@ public class Character
     public void LearnMove(string moveId) => movesComponent.LearnMove(moveId);
     public void EquipMove(Move move) => movesComponent.EquipMove(move);
     public void UnequipMove(Move move) => movesComponent.UnequipMove(move);
+    public bool ReplaceEquippedMove(Move oldMove, Move newMove) => movesComponent.ReplaceEquippedMove(oldMove, newMove);
+    public bool SwapEquippedMoves(int indexA, int indexB) => movesComponent.SwapEquippedMoves(indexA, indexB);
     public bool IsMoveEquipped(string moveId) => movesComponent.IsMoveEquipped(moveId);
     public bool IsMoveEquipped(Move move) => movesComponent.IsMoveEquipped(move);
     public bool IsMoveLearned(string moveId) => movesComponent.IsMoveLearned(moveId);

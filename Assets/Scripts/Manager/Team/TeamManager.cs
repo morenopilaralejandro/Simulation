@@ -52,6 +52,8 @@ public class TeamManager : MonoBehaviour
     public IReadOnlyDictionary<string, Team> Loadouts => loadoutSystem.Loadouts;
     public Team ActiveLoadout => loadoutSystem.ActiveLoadout;
     public string ActiveLoadoutGuid => loadoutSystem.ActiveLoadoutGuid;
+    public BattleType DefaultBattleType => loadoutSystem.DefaultBattleType;
+    public void SetDefaultBattleType(BattleType battleType) => loadoutSystem.SetDefaultBattleType(battleType);
     public string DEFAULT_NAME => loadoutSystem.DEFAULT_NAME;
     public const int MAX_LOADOUTS = TeamManagerLoadout.MAX_LOADOUTS;
     public const string DEFAULT_CREST_ID = TeamManagerLoadout.DEFAULT_CREST_ID;

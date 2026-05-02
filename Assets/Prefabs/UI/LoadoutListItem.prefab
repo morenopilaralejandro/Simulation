@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1071346474273860043}
   - component: {fileID: 965442284135473682}
   - component: {fileID: 3075890120058380228}
+  - component: {fileID: 1251535808489288419}
   m_Layer: 5
   m_Name: LoadoutListItem
   m_TagString: Untagged
@@ -152,6 +153,67 @@ MonoBehaviour:
   imageEmblem: {fileID: 3710939763216143992}
   nameText: {fileID: 8257505128772914342}
   activeIndicator: {fileID: 2930235771354444868}
+--- !u!114 &1251535808489288419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060894830714594237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3075890120058380228}
+          m_TargetAssemblyTypeName: LoadoutListItem, Assembly-CSharp
+          m_MethodName: OnListItemPointerEnter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 7
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3075890120058380228}
+          m_TargetAssemblyTypeName: LoadoutListItem, Assembly-CSharp
+          m_MethodName: OnListItemScroll
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 9
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3075890120058380228}
+          m_TargetAssemblyTypeName: LoadoutListItem, Assembly-CSharp
+          m_MethodName: OnListItemSelect
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &2458463090928509118
 GameObject:
   m_ObjectHideFlags: 0

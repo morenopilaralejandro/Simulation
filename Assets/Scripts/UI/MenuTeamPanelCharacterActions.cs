@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.UI;
+using Aremoreno.Enums.Input;
 
 public class MenuTeamPanelCharacterActions : Menu
 {
@@ -17,15 +18,12 @@ public class MenuTeamPanelCharacterActions : Menu
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
+    private bool isReplacing = false;
+    private bool isClosing = false;
 
     #endregion
 
     #region Lifecycle
-
-    private void Awake()
-    {
-
-    }
 
     private void Start() 
     {
@@ -35,31 +33,47 @@ public class MenuTeamPanelCharacterActions : Menu
         menuManager = MenuManager.Instance;
     }
 
-    private void OnDestroy()
-    {
-
-    }
-
     #endregion
 
-   #region Menu Overrides
+    #region Menu Overrides
 
     public override void Show()
     {
+        isClosing = false;
+
         base.Show();
         base.SetInteractable(true);
     }
 
     public override void Hide()
     {
+        isClosing = false;
+
         base.SetInteractable(false);
         base.Hide();
     }
 
+    public override void SetInteractable(bool interactable)
+    {
+        base.SetInteractable(interactable);
+
+        if (interactable && isClosing)
+        {
+            isClosing = false;
+            Close();
+        }
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
+    }
+
     public void Close()
     {
-        if (!isOpen) return;
+        if (!isTop) return;
         menuManager.CloseMenu();
+        UIEvents.RaiseTeamCharacterActionsClosed();
     }
 
     #endregion
@@ -70,6 +84,19 @@ public class MenuTeamPanelCharacterActions : Menu
 
     #region Helper
 
+    #endregion
+
+    #region Input 
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
+    }
 
     #endregion
 
@@ -77,7 +104,8 @@ public class MenuTeamPanelCharacterActions : Menu
 
     public void OnButtonSummaryClicked() 
     {
-        UIEvents.RaiseCharacterDetailOpened();
+        Close();
+        UIEvents.RaiseCharacterDetailOpenRequested(character);
     }
 
     public void OnButtonMoveClicked() 
@@ -88,7 +116,9 @@ public class MenuTeamPanelCharacterActions : Menu
 
     public void OnButtonReplaceClicked() 
     {
-        UIEvents.RaiseCharacterSelectorOpened();
+        isReplacing = true;
+        UIEvents.RaiseFormationCharacterSlotUIReplaceRequested();
+        UIEvents.RaiseCharacterSelectorOpenRequested(CharacterSelectorModePopulate.GetFromStorage, CharacterSelectorModeClick.SelectCharacter, null, default, true);
     }
 
     public void OnButtonBackClicked() 
@@ -102,22 +132,33 @@ public class MenuTeamPanelCharacterActions : Menu
 
     private void OnEnable()
     {
-        UIEvents.OnCharacterActionsOpened += HandleCharacterActionsOpened;
+        UIEvents.OnTeamCharacterActionsOpenRequested += HandleTeamCharacterActionsOpenRequested;
+        UIEvents.OnCharacterSelected += HandleCharacterSelected;
     }
 
     private void OnDisable()
     {
-        UIEvents.OnCharacterActionsOpened -= HandleCharacterActionsOpened;
+        UIEvents.OnTeamCharacterActionsOpenRequested -= HandleTeamCharacterActionsOpenRequested;
+        UIEvents.OnCharacterSelected -= HandleCharacterSelected;
     }
 
-    private void HandleFormationCharacterSlotUIClicked(Character character) 
+    private void HandleTeamCharacterActionsOpenRequested(Character character) 
     {
+        if (isOpen) return;
         this.character = character;
+        menuManager.OpenMenu(this);
     }
 
-    private void HandleCharacterActionsOpened() 
+    private void HandleCharacterSelected(Character character) 
     {
-        menuManager.OpenMenu(this);
+        if (isReplacing) 
+        {
+            isReplacing = false;
+            if (isTop)
+                Close();
+            else
+                isClosing = true;
+        }
     }
 
     #endregion

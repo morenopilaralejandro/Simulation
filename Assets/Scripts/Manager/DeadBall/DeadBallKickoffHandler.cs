@@ -44,6 +44,9 @@ public class DeadBallKickoffHandler : IDeadBallHandler
 
     public void ResetPositions()
     {
+
+        UnsubscribeInputPass();
+
         isKickExecuted = false;
         isBallReady = false;
         BallEvents.OnGained -= OnBallGained;
@@ -61,27 +64,6 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         SetPositions();
 
         BallEvents.OnGained += OnBallGained;
-    }
-
-    public void HandleInput()
-    {
-        if (deadBallManager.DeadBallState == DeadBallState.WaitingForReady)
-        {
-            if (!InputManager.Instance.GetDown(CustomAction.BattleUI_DeadBallConfirm)) return;
-
-            if (isMultiplayer) 
-                deadBallManager.TeamReadiness.SetUserReady();
-            else 
-                deadBallManager.TeamReadiness.SetBothReady();
-        }
-
-        if (deadBallManager.DeadBallState == DeadBallState.Executing)
-        {
-            if (!isBallReady) return;
-            if (!deadBallManager.IsUserOffense) return;
-            if (!InputManager.Instance.GetDown(CustomAction.Battle_Pass)) return;
-            isKickExecuted = true;
-        }
     }
 
     private void OnBallGained(CharacterEntityBattle c)
@@ -102,20 +84,29 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         isBallReady = true;
         deadBallManager.SetState(DeadBallState.WaitingForReady);
 
-        if (isAutoBattleEnabled) 
-        {
-            deadBallManager.TeamReadiness.SetBothReady();
-            if (deadBallManager.IsUserOffense) isKickExecuted = true;
-        }
+        SubscribeInputConfirm();
 
-        if (characterKicker.IsEnemyAI && characterKicker.TeamSide == deadBallManager.OffenseSide) 
-        {
+        bool aiKicker = characterKicker.IsEnemyAI 
+            && characterKicker.TeamSide == deadBallManager.OffenseSide;
+
+        if (aiKicker)
             isKickExecuted = true;
+
+        if (isAutoBattleEnabled)
+        {
+            if (deadBallManager.IsUserOffense)
+                isKickExecuted = true;
+
+            deadBallManager.TeamReadiness.SetBothReady();
+            deadBallManager.NotifyReadinessChanged();
         }
     }
 
     public void Execute()
     {
+        UnsubscribeInputConfirm();
+        UnsubscribeInputPass();
+
         CharacterEntityBattle target = BattleManager.Instance.TargetedCharacter[characterKicker.TeamSide];
 
         if (!target || target == characterKicker || characterKicker.IsEnemyAI || isAutoBattleEnabled) 
@@ -139,9 +130,79 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         }
     }
 
+    private void MarkKickExecuted()
+    {
+        if (isKickExecuted) return;
+        isKickExecuted = true;
+        UnsubscribeInputPass();
+        deadBallManager.NotifyHandlerReady();
+    }
+
+    #endregion
+
+    #region Input
+
+    private void SubscribeInputConfirm()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.BattleUI_DeadBallConfirm, HandleConfirmPressed);
+    }
+
+    private void UnsubscribeInputConfirm()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.BattleUI_DeadBallConfirm, HandleConfirmPressed);
+    }
+
+    private void SubscribeInputPass()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Battle_Pass, HandlePassPressed);
+    }
+
+    private void UnsubscribeInputPass()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Battle_Pass, HandlePassPressed);
+    }
+
+    private void HandleConfirmPressed()
+    {
+        if (deadBallManager.DeadBallState != DeadBallState.WaitingForReady) return;
+        if (deadBallManager.IsUserMenuOpen()) return; // mirror old guard
+
+        if (isMultiplayer)
+            deadBallManager.TeamReadiness.SetUserReady();
+        else
+            deadBallManager.TeamReadiness.SetBothReady();
+
+        deadBallManager.NotifyReadinessChanged();
+
+        if (deadBallManager.DeadBallState == DeadBallState.Executing)
+        {
+            UnsubscribeInputConfirm();
+
+            // Only the user-offense human-kicker path needs the pass input.
+            // AI-kicker / auto-battle already set isKickExecuted, and Execute()
+            // already cascaded into Finish() via NotifyHandlerReady().
+            bool needsOffenseInput = deadBallManager.IsUserOffense
+                                  && !characterKicker.IsEnemyAI
+                                  && !isKickExecuted;
+
+            if (needsOffenseInput)
+                SubscribeInputPass();
+        }
+    }
+
+    private void HandlePassPressed()
+    {
+        if (deadBallManager.DeadBallState != DeadBallState.Executing) return;
+        if (!isBallReady) return;
+        if (!deadBallManager.IsUserOffense) return;
+
+        MarkKickExecuted();
+    }
+
     #endregion
 
     #region Helpers
+
     private void SetPositions()
     {
         characterKicker.Teleport(deadBallManager.GetDefaultPositionKickoffKicker());
@@ -160,7 +221,6 @@ public class DeadBallKickoffHandler : IDeadBallHandler
             PossessionManager.Instance.SetCooldown(characterKicker);
         }
     }
-
 
     #endregion
 }

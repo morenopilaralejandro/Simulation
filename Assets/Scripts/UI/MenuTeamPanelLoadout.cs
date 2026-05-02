@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
+using Aremoreno.Enums.Input;
 
 /// <summary>
 /// Displays all existing team loadouts and a "Create New" button.
@@ -18,10 +20,13 @@ public class MenuTeamPanelLoadout : Menu
     [SerializeField] private Button createButton;
 
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
-    private bool isOnTop => menuManager.IsMenuOnTop(this);
+    private bool isTop => menuManager.IsMenuOnTop(this);
     private List<LoadoutListItem> spawnedItems = new();
     private MenuManager menuManager;
     private TeamManager teamManager;
+    private AudioManager audioManager;
+
+    private bool isPlaySfxSelectEnabled;
 
     #endregion
 
@@ -39,25 +44,9 @@ public class MenuTeamPanelLoadout : Menu
 
         menuManager = MenuManager.Instance;
         teamManager = TeamManager.Instance;
+        audioManager = AudioManager.Instance;
     }
 
-    /*    
-
-    private void Update()
-    {
-        HandleInput();
-    }
-
-    */
-
-    #endregion
-
-    #region Input
-
-    private void HandleInput() 
-    {
-
-    }
 
     #endregion
 
@@ -90,12 +79,20 @@ public class MenuTeamPanelLoadout : Menu
             autoScroll.Activate();
         else
             autoScroll.Deactivate();
+
+        if (interactable) 
+            SubscribeInput();
+        else
+            UnsubscribeInput();
+
+        isPlaySfxSelectEnabled = interactable;
     }
 
     public void Close()
     {
         if (!isOpen) return;
         menuManager.CloseMenu();
+        UIEvents.RaiseTeamMenuClosed();
     }
 
     #endregion
@@ -146,22 +143,56 @@ public class MenuTeamPanelLoadout : Menu
 
     #endregion
 
+    #region Input
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCloseClicked);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonCloseClicked);
+    }
+
+    #endregion
+
     #region Button Handlers
 
     private void HandleItemClicked(Team team)
     {
+        if (isPlaySfxSelectEnabled)
+            audioManager.PlaySfx("sfx-menu_tap");
         UIEvents.RaiseTeamLoadoutSelected(team);
     }
 
     public void OnButtonCreateClicked()
     {
+        isPlaySfxSelectEnabled = false;
+        audioManager.PlaySfx("sfx-menu_tap");
         UIEvents.RaiseTeamLoadoutCreateRequested();
     }
 
     public void OnButtonCloseClicked()
     {
+        audioManager.PlaySfx("sfx-menu_back");
         Close();
-        UIEvents.RaiseTeamMenuClosed();
+    }
+
+    public void OnButtonSelectedSfx() 
+    { 
+        if (isPlaySfxSelectEnabled)
+            audioManager.PlaySfx("sfx-menu_selected");
+    }
+
+    public void OnButtonPointerEnter(Selectable selectable) 
+    {
+        base.SetDefaultSelectable(selectable);
+    }
+
+    public void OnScrollSfx() 
+    { 
+        audioManager.PlaySfx("sfx-menu_scroll");
     }
 
     #endregion
@@ -176,6 +207,8 @@ public class MenuTeamPanelLoadout : Menu
         TeamEvents.OnLoadoutDeleted += HandleLoadoutDeleted;
         TeamEvents.OnLoadoutUpdated += HandleLoadoutUpdated;
         UIEvents.OnBackFromTeamRequested += HandleBackToLoadoutList;
+        UIEvents.OnGenericScroll += HandleGenericScroll;
+        UIEvents.OnLoadoutListItemSelect += HandleLoadoutListItemSelect;
     }
 
     private void OnDisable()
@@ -186,6 +219,8 @@ public class MenuTeamPanelLoadout : Menu
         TeamEvents.OnLoadoutDeleted -= HandleLoadoutDeleted;
         TeamEvents.OnLoadoutUpdated -= HandleLoadoutUpdated;
         UIEvents.OnBackFromTeamRequested -= HandleBackToLoadoutList;
+        UIEvents.OnGenericScroll -= HandleGenericScroll;
+        UIEvents.OnLoadoutListItemSelect -= HandleLoadoutListItemSelect;
     }
 
     private void HandleRequested() 
@@ -222,6 +257,20 @@ public class MenuTeamPanelLoadout : Menu
     private void HandleBackToLoadoutList(Team team, bool hasSwapped) 
     {
         Refresh();
+    }
+
+    private void HandleGenericScroll(BaseEventData eventData) 
+    {
+        if (!isTop) return;
+        autoScroll.OnScroll(eventData);
+    }
+
+    private void HandleLoadoutListItemSelect(LoadoutListItem listItem) 
+    {
+        if (!isTop) return;
+
+        if (isPlaySfxSelectEnabled) 
+            audioManager.PlaySfx("sfx-menu_selected");
     }
 
     #endregion
