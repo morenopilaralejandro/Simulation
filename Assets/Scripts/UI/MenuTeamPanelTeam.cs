@@ -38,6 +38,7 @@ public class MenuTeamPanelTeam : Menu
     private InputManager inputManager;
     private FormationManager formationDatabase;
     private KitManager kitDatabase;
+    private AudioManager audioManager;
 
     private Team currentTeam;
     private FormationCharacterSlotUI currentSlot;
@@ -57,6 +58,7 @@ public class MenuTeamPanelTeam : Menu
     private FormationCharacterSlotUI pickedSlot;
     private bool isSwapping => pickedSlot != null;
     private bool isReplacing = false;
+    private bool isPlaySfxSelectEnabled = false;
 
     #endregion
 
@@ -73,6 +75,7 @@ public class MenuTeamPanelTeam : Menu
         inputManager = InputManager.Instance;
         formationDatabase = FormationManager.Instance;
         kitDatabase = KitManager.Instance;
+        audioManager = AudioManager.Instance;
 
         currentBattleType = teamManager.DefaultBattleType;
     }
@@ -136,6 +139,8 @@ public class MenuTeamPanelTeam : Menu
             SubscribeInput();
         else
             UnsubscribeInput();
+
+        isPlaySfxSelectEnabled = interactable;
     }
 
     public void Refresh()
@@ -205,6 +210,7 @@ public class MenuTeamPanelTeam : Menu
             return;
         }
 
+        audioManager.PlaySfx("sfx-menu_back");
         Close();
     }
 
@@ -212,6 +218,7 @@ public class MenuTeamPanelTeam : Menu
     {
         if (isSwapping || isReplacing) return;
         if (isBattleMode) return;
+        audioManager.PlaySfx("sfx-menu_tap");
         UIEvents.RaiseBattleTypeChangeRequested();
     }
 
@@ -226,6 +233,7 @@ public class MenuTeamPanelTeam : Menu
     {
         if (isSwapping || isReplacing) return;
         if (isBattleMode) return;
+        audioManager.PlaySfx("sfx-menu_tap");
         UIEvents.RaiseTeamActionsOpened(currentTeam, currentBattleType);
     }
 
@@ -234,6 +242,7 @@ public class MenuTeamPanelTeam : Menu
         if (isSwapping || isReplacing) return;
         if (isBattleMode) return;
         if (selectedSlot == null || selectedSlot.GetCharacter() == null) return;
+        audioManager.PlaySfx("sfx-menu_tap");
         UIEvents.RaiseCharacterDetailOpenRequested(selectedSlot.GetCharacter());
     }
 
@@ -247,6 +256,7 @@ public class MenuTeamPanelTeam : Menu
     {
         if (isSwapping || isReplacing) return;
         if (isBattleMode) return;
+        audioManager.PlaySfx("sfx-menu_tap");
         UIEvents.RaiseFormationCharacterSlotUIReplaceRequested();
         UIEvents.RaiseCharacterSelectorOpenRequested(
             CharacterSelectorModePopulate.GetFromStorage,
@@ -292,11 +302,13 @@ public class MenuTeamPanelTeam : Menu
         teamManager.SetActiveLoadout(currentTeam.TeamGuid);
         
         UpdateSetActiveButtonState();
+        audioManager.PlaySfx("sfx-menu_tap");
     }
 
     public void OnButtonCloseClicked()
     {
-        Close();     
+        audioManager.PlaySfx("sfx-menu_back");
+        Close();
     }
 
     public void OnButtonSelected(GameObject gameObject) 
@@ -305,13 +317,25 @@ public class MenuTeamPanelTeam : Menu
     }
 
     public void OnButtonTeamActionsClicked() 
-    { 
+    {
+        audioManager.PlaySfx("sfx-menu_tap"); 
         UIEvents.RaiseTeamActionsOpened(currentTeam, currentBattleType); 
     }
 
     public void OnButtonDeleteClicked() 
     {
+        audioManager.PlaySfx("sfx-menu_tap");
         UIEvents.RaiseTeamPanelDeleteOpened(currentTeam);
+    }
+
+    public void OnButtonSelectedSfx() { 
+        if (isPlaySfxSelectEnabled)
+            audioManager.PlaySfx("sfx-menu_selected");
+    }
+
+    public void OnButtonPointerEnter(Selectable selectable) 
+    {
+        base.SetDefaultSelectable(selectable);
     }
 
     #endregion
@@ -413,29 +437,33 @@ public class MenuTeamPanelTeam : Menu
         {
             if (pickedSlot != slot) 
                 UIEvents.RaiseFormationCharacterSlotUISwapped(pickedSlot, slot);
+            isPlaySfxSelectEnabled = false;
             base.SetDefaultSelectable(slot.Button);
             UIEvents.RaiseFormationCharacterSlotUIMoveEnded(pickedSlot);
             pickedSlot = null;
+            //audioManager.PlaySfx("sfx-menu_tap");
+            isPlaySfxSelectEnabled = true;
             return;
         }
 
+        audioManager.PlaySfx("sfx-menu_tap");
         currentSlot = slot;
         selectedSlot = slot;
         UIEvents.RaiseTeamCharacterActionsOpenRequested(slot.GetCharacter());
     }
 
-
     private void HandleFormationCharacterSlotUIMoveCanceled(FormationCharacterSlotUI slot) 
     {
         pickedSlot = null;
+        audioManager.PlaySfx("sfx-menu_cancel");
         UIEvents.RaiseFormationCharacterSlotUIMoveEnded(slot);
     }
-
 
     private void HandleFormationCharacterSlotUIMoveRequested(FormationCharacterSlotUI slot)
     {
         base.SetDefaultSelectable(selectedSlot.Button);
         pickedSlot = selectedSlot;
+        audioManager.PlaySfx("sfx-menu_change");
         UIEvents.RaiseFormationCharacterSlotUIMoveStarted(selectedSlot);
     }
 
@@ -493,6 +521,11 @@ public class MenuTeamPanelTeam : Menu
         Character temp = a.GetCharacter();
         a.SetCharacter(b.GetCharacter());
         b.SetCharacter(temp);
+
+        audioManager.PlaySfx("sfx-menu_tap");
+        isPlaySfxSelectEnabled = false;
+        base.SetDefaultSelectable(a.Button);
+        isPlaySfxSelectEnabled = true;
     }
 
     private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
@@ -539,7 +572,9 @@ public class MenuTeamPanelTeam : Menu
             slot.SetCharacter(character);
         }
 
+        isPlaySfxSelectEnabled = false;
         base.SetDefaultSelectable(slot.Button);
+        isPlaySfxSelectEnabled = true;
     }
 
     private void HandleFormationCharacterSlotUIReplaceRequested() 
@@ -557,7 +592,11 @@ public class MenuTeamPanelTeam : Menu
     {
         selectedCharacter = character;
         if(isReplacing) 
+        {
+            audioManager.PlaySfx("sfx-menu_tap");
             UIEvents.RaiseFormationCharacterSlotUIReplaced(selectedSlot, selectedCharacter);
+        }
+
         isReplacing = false;
     }
 
@@ -634,10 +673,12 @@ public class MenuTeamPanelTeam : Menu
             ? BattleType.Mini
             : BattleType.Full;
 
+        isPlaySfxSelectEnabled = false;
         formationLayoutUI.Initialize(currentTeam, currentBattleType, mode);
         teamManager.SetDefaultBattleType(currentBattleType);
         UIEvents.RaiseBattleTypeChanged(currentBattleType, oldType);
         UIEvents.RaiseBackFromTeamActionsRequested();
+        isPlaySfxSelectEnabled = true;
     }
 
     private void HandleTeamEmblemChanged(string emblemId)
@@ -704,6 +745,9 @@ public class MenuTeamPanelTeam : Menu
     {
         if (!isTop) return;
         selectedSlot = slot;
+
+        if (isPlaySfxSelectEnabled) 
+            audioManager.PlaySfx("sfx-menu_selected");
     }
 
     private void HandleFormationCharacterSlotUIHighlighted(FormationCharacterSlotUI slot) 

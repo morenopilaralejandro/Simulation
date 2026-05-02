@@ -315,4 +315,22 @@ public class ScrollViewAutoScroll : MonoBehaviour
         isScrolling  = false;
         lastSelected = null;
     }
+
+    public void OnScroll(BaseEventData vaseEventData)
+    {
+        if (!isActive) return;
+        if (scrollRect == null) return;
+
+        isScrolling = false;
+
+        PointerEventData pointerData = vaseEventData as PointerEventData;
+        if (pointerData == null) return;
+
+        scrollRect.OnScroll(pointerData);
+
+        // Optional: clear selection so auto-scroll doesn't fight the user
+        EventSystem.current?.SetSelectedGameObject(null);
+        
+        //lastSelected = EventSystem.current?.currentSelectedGameObject;
+    }
 }

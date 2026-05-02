@@ -68,6 +68,16 @@ public class SelectorCharacterListItem : MonoBehaviour
         UIEvents.RaiseCharacterSelectedListItemSelected(this);
     }
 
+    public void OnListItemPointerEnter() 
+    {
+        UIEvents.RaiseCharacterSelectedListItemPointerEnter(this);
+    }
+
+    public void OnListItemScroll(BaseEventData eventData) 
+    {
+        UIEvents.RaiseGenericScroll(eventData);
+    }
+
     #endregion
 
     #region Events

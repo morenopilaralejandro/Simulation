@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Item;
@@ -273,6 +274,18 @@ public static class UIEvents
         OnCharacterCharacterSelectedListItemSelected?.Invoke(selectorCharacterListItem);
     }
 
+    public static event Action<SelectorCharacterListItem> OnCharacterCharacterSelectedListItemPointerEnter;
+    public static void RaiseCharacterSelectedListItemPointerEnter(SelectorCharacterListItem selectorCharacterListItem)
+    {
+        OnCharacterCharacterSelectedListItemPointerEnter?.Invoke(selectorCharacterListItem);
+    }
+
+    public static event Action<BaseEventData> OnGenericScroll;
+    public static void RaiseGenericScroll(BaseEventData eventData)
+    {
+        OnGenericScroll?.Invoke(eventData);
+    }
+
     public static event Action OnBackFromCharacterSelectorRequested;
     public static void RaiseBackFromCharacterSelectorRequested()
     {
@@ -437,4 +450,13 @@ public static class UIEvents
     {
         OnSelectorItemSideListItemSelected?.Invoke(listItem);
     }
+
+    public static event Action<LoadoutListItem> OnLoadoutListItemSelect;
+    public static void RaiseLoadoutListItemSelect(LoadoutListItem listItem)
+    {
+        OnLoadoutListItemSelect?.Invoke(listItem);
+    }
+
+
+
 }

@@ -17,6 +17,7 @@ public class MenuTeamPanelTeamActions : Menu
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
+    private AudioManager audioManager;
 
     private Team team;
     private BattleType battleType;
@@ -32,6 +33,7 @@ public class MenuTeamPanelTeamActions : Menu
         base.SetInteractable(false);
 
         menuManager = MenuManager.Instance;
+        audioManager = AudioManager.Instance;
     }
 
     #endregion

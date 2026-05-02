@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 /// <summary>
@@ -45,5 +46,20 @@ public class LoadoutListItem : MonoBehaviour
     {
         // Invokes the one pased in Initialize.
         onClickCallback?.Invoke(team);
+    }
+
+    public void OnListItemScroll(BaseEventData eventData) 
+    {
+        UIEvents.RaiseGenericScroll(eventData);
+    }
+
+    public void OnListItemSelect() 
+    {
+        UIEvents.RaiseLoadoutListItemSelect(this);
+    }
+
+    public void OnListItemPointerEnter() 
+    {
+        selectButton.Select();
     }
 }

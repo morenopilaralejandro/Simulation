@@ -40,12 +40,14 @@ public class MenuCharacterPanelFilter : Menu
     private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
     private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
     private MenuManager menuManager;
-
+    private AudioManager audioManager;
 
     private CharacterFilterData filterData = new CharacterFilterData();
     private Dictionary<Toggle, Position> positionToggles;
     private Dictionary<Toggle, Element> elementToggles;
     private Dictionary<Toggle, Gender> genderToggles;
+
+    private bool isPlaySfxSelectEnabled = false;
 
     #endregion
 
@@ -69,7 +71,7 @@ public class MenuCharacterPanelFilter : Menu
             { toggleEvil,       Element.Evil },
             { toggleAir,        Element.Air },
             { toggleForest,     Element.Forest },
-            { toggleEarth,      Element.Water },
+            { toggleEarth,      Element.Earth },
             { toggleElectric,   Element.Electric },
             { toggleWater,      Element.Water },
         };
@@ -87,6 +89,7 @@ public class MenuCharacterPanelFilter : Menu
         base.SetInteractable(false);
 
         menuManager = MenuManager.Instance;
+        audioManager = AudioManager.Instance;
     }
 
     #endregion
@@ -115,8 +118,14 @@ public class MenuCharacterPanelFilter : Menu
         else
             UnsubscribeInput();
 
-        if (interactable)
+        if (interactable) 
+        {
             base.SetDefaultSelectable(inputFieldName);
+            inputFieldName.DeactivateInputField();
+        }
+
+
+        isPlaySfxSelectEnabled = interactable;
     }
 
     public void Close()
@@ -170,6 +179,7 @@ public class MenuCharacterPanelFilter : Menu
     private void ApplyFilterDataToUI()
     {
         inputFieldName.SetTextWithoutNotify(filterData.Name ?? string.Empty);
+        inputFieldName.DeactivateInputField();
 
         foreach (var kvp in positionToggles)
             kvp.Key.SetIsOnWithoutNotify(filterData.Positions.Contains(kvp.Value));
@@ -184,6 +194,7 @@ public class MenuCharacterPanelFilter : Menu
     private void ResetUI()
     {
         inputFieldName.SetTextWithoutNotify(string.Empty);
+        inputFieldName.DeactivateInputField();
 
         foreach (var kvp in positionToggles)
             kvp.Key.SetIsOnWithoutNotify(false);
@@ -205,12 +216,18 @@ public class MenuCharacterPanelFilter : Menu
 
     private void SubscribeInput()
     {
-        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonApplyClicked);
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, HandleNavigationBack);
     }
 
     private void UnsubscribeInput()
     {
-        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonApplyClicked);
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, HandleNavigationBack);
+    }
+
+    private void HandleNavigationBack() 
+    {
+        Close();
+        audioManager.PlaySfx("sfx-menu_back");
     }
 
     #endregion
@@ -219,6 +236,7 @@ public class MenuCharacterPanelFilter : Menu
 
     public void OnButtonApplyClicked() 
     {
+        audioManager.PlaySfx("sfx-menu_tap");
         BuildFilterDataFromUI();
         UIEvents.RaiseCharacterFilterUpdated(filterData);
         Close();
@@ -226,6 +244,7 @@ public class MenuCharacterPanelFilter : Menu
 
     public void OnButtonResetClicked() 
     {
+        audioManager.PlaySfx("sfx-menu_change");
         filterData.ResetUI();
         ResetUI();
     }
@@ -237,7 +256,23 @@ public class MenuCharacterPanelFilter : Menu
 
     public void OnInputEndEdit()
     {
-        base.SetDefaultSelectable(buttonApply);
+        inputFieldName.DeactivateInputField();
+        audioManager.PlaySfx("sfx-menu_confirm");
+        //base.SetDefaultSelectable(buttonApply);
+    }
+
+    public void OnButtonSelectedSfx() { 
+        if (isPlaySfxSelectEnabled)
+            audioManager.PlaySfx("sfx-menu_selected");
+    }
+
+    public void OnButtonTapSfx() { 
+        audioManager.PlaySfx("sfx-menu_tap");
+    }
+
+    public void OnButtonPointerEnter(Selectable selectable) 
+    {
+        base.SetDefaultSelectable(selectable);
     }
 
     #endregion

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Kit;
@@ -23,6 +24,7 @@ public class SelectorCharacter : Menu
     private MenuManager menuManager;
     private CharacterManager characterManager;
     private TeamManager teamManager;
+    private AudioManager audioManager;
 
     private Dictionary<string, Character> auxDict;
     private IReadOnlyDictionary<string, Character> dict;
@@ -40,6 +42,7 @@ public class SelectorCharacter : Menu
 
     private CharacterFilterData activeFilter;
     private bool isCloseOnSelect = false;
+    private bool isPlaySfxSelectEnabled = false;
 
     private SelectorCharacterListItem selectedListItem;
 
@@ -60,6 +63,7 @@ public class SelectorCharacter : Menu
         menuManager = MenuManager.Instance;
         characterManager = CharacterManager.Instance;
         teamManager = TeamManager.Instance;
+        audioManager = AudioManager.Instance;
 
         PreWarmPool();
     }
@@ -116,6 +120,8 @@ public class SelectorCharacter : Menu
             SubscribeInput();
         else
             UnsubscribeInput();
+
+        isPlaySfxSelectEnabled = interactable;
     }
 
     public void Close()
@@ -223,14 +229,27 @@ public class SelectorCharacter : Menu
 
     #region Button Handle
 
+    public void OnButtonSelectedSfx() 
+    { 
+        if (isPlaySfxSelectEnabled)
+            audioManager.PlaySfx("sfx-menu_selected");
+    }
+
+    public void OnScrollSfx() 
+    { 
+        audioManager.PlaySfx("sfx-menu_scroll");
+    }
+
     public void OnButtonBackClicked() 
     {
+        audioManager.PlaySfx("sfx-menu_back");
         Close();
         UIEvents.RaiseBackFromCharacterSelectorRequested();
     }
 
     public void OnButtonFilterClicked() 
     {
+        audioManager.PlaySfx("sfx-menu_tap");
         UIEvents.RaiseCharacterFilterRequested();
     }
 
@@ -244,6 +263,8 @@ public class SelectorCharacter : Menu
         UIEvents.OnCharacterFilterUpdated += HandleCharacterFilterUpdated;
         UIEvents.OnCharacterSelected += HandleCharacterSelected;
         UIEvents.OnCharacterCharacterSelectedListItemSelected += HandleCharacterCharacterSelectedListItemSelected;
+        UIEvents.OnCharacterCharacterSelectedListItemPointerEnter += HandleCharacterCharacterSelectedListItemPointerEnter;
+        UIEvents.OnGenericScroll += HandleGenericScroll;
     }
 
     private void OnDisable()
@@ -252,6 +273,8 @@ public class SelectorCharacter : Menu
         UIEvents.OnCharacterFilterUpdated -= HandleCharacterFilterUpdated;
         UIEvents.OnCharacterSelected -= HandleCharacterSelected;
         UIEvents.OnCharacterCharacterSelectedListItemSelected -= HandleCharacterCharacterSelectedListItemSelected;
+        UIEvents.OnCharacterCharacterSelectedListItemPointerEnter -= HandleCharacterCharacterSelectedListItemPointerEnter;
+        UIEvents.OnGenericScroll -= HandleGenericScroll;
     }
 
     private void HandleCharacterSelectorOpenRequested(
@@ -302,6 +325,20 @@ public class SelectorCharacter : Menu
     private void HandleCharacterCharacterSelectedListItemSelected(SelectorCharacterListItem selectorCharacterListItem) 
     {
         selectedListItem = selectorCharacterListItem;
+        if (isPlaySfxSelectEnabled)
+            audioManager.PlaySfx("sfx-menu_selected");
+    }
+
+    private void HandleCharacterCharacterSelectedListItemPointerEnter(SelectorCharacterListItem selectorCharacterListItem) 
+    {
+        if (!isTop) return;
+        base.SetDefaultSelectable(selectorCharacterListItem.Button);
+    }
+
+    private void HandleGenericScroll(BaseEventData eventData) 
+    {
+        if (!isTop) return;
+        autoScroll.OnScroll(eventData);
     }
 
     #endregion
