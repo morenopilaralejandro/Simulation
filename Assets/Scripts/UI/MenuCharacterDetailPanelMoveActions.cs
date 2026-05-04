@@ -8,8 +8,6 @@ using Aremoreno.Enums.Input;
 
 public class MenuCharacterDetailPanelMoveActions : Menu
 {
-    #region Fields
-
     [Header("UI References")]
     [SerializeField] private Button buttonMove;
     [SerializeField] private Button buttonUnequip;
@@ -18,80 +16,11 @@ public class MenuCharacterDetailPanelMoveActions : Menu
     [SerializeField] private Button buttonBack;
 
     private MoveSlotUI moveSlotUI;
-
-    private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
-    private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
-    private MenuManager menuManager;
-    private bool isClosing = false;
     private bool isEquiping = false;
 
-    #endregion
-
-    #region Lifecycle
-
-    private void Start() 
+    private void InitializeUI()
     {
-        base.Hide();
-        base.SetInteractable(false);
-
-        menuManager = MenuManager.Instance;
-    }
-
-    #endregion
-
-   #region Menu Overrides
-
-    public override void Show()
-    {
-        isClosing = false;
-
-        InitializeUI();
-
-        base.Show();
-        base.SetInteractable(true);
-    }
-
-    public override void Hide()
-    {
-        isClosing = false;
-
-        base.SetInteractable(false);
-        base.Hide();
-    }
-
-    public override void SetInteractable(bool interactable)
-    {
-        base.SetInteractable(interactable);
-
-        if (interactable && isClosing)
-        {
-            isClosing = false;
-            Close();
-        }
-
-        if (interactable) 
-            SubscribeInput();
-        else
-            UnsubscribeInput();
-    }
-
-    public void Close()
-    {
-        if (!isTop) return;
-        menuManager.CloseMenu();
-    }
-
-    #endregion
-
-    #region Logic
-
-    #endregion
-
-    #region Helper
-
-    public void InitializeUI()
-    {
-        bool isNull = this.moveSlotUI == null || this.moveSlotUI.Move == null;
+        bool isNull = moveSlotUI == null || moveSlotUI.Move == null;
 
         buttonMove.gameObject.SetActive(!isNull);
         buttonUnequip.gameObject.SetActive(!isNull);
@@ -100,69 +29,50 @@ public class MenuCharacterDetailPanelMoveActions : Menu
         buttonEquip.gameObject.SetActive(isNull);
         buttonBack.gameObject.SetActive(true);
 
-        if (isNull) 
+        if (isNull)
             base.SetDefaultSelectable(buttonEquip);
         else
             base.SetDefaultSelectable(buttonMove);
     }
 
-    #endregion
+    protected override void OnGainedInput()
+        => InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
 
-    #region Input 
+    protected override void OnLostInput()
+        => InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
 
-    private void SubscribeInput()
+    public void OnButtonMoveClicked()
     {
-        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, Close);
-    }
-
-    private void UnsubscribeInput()
-    {
-        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, Close);
-    }
-
-    #endregion
-
-    #region Button Handle
-
-    public void OnButtonMoveClicked() 
-    {
-        Close();
+        RequestClose();
         UIEvents.RaiseMoveSlotUIMoveRequested(moveSlotUI);
     }
 
-    public void OnButtonUnequipClicked() 
+    public void OnButtonUnequipClicked()
     {
-        Close();
+        RequestClose();
         UIEvents.RaiseMoveUnequipRequested(moveSlotUI.Move, moveSlotUI.Character);
     }
 
-    public void OnButtonLimitBreakClicked() 
+    public void OnButtonLimitBreakClicked()
     {
-        // open limit break menu 
-        // show required item
-        // show if meet evolution requirement
-
-        Close();
+        RequestClose();
         UIEvents.RaiseMoveLimitBreakPanelOpenRequested(moveSlotUI.Move, moveSlotUI.Character);
     }
 
-    public void OnButtonEquipClicked() 
+    public void OnButtonEquipClicked()
     {
         isEquiping = true;
         UIEvents.RaiseMoveSelectorOpenRequested(MoveSelectorModePopulate.GetFromLearnedExcludeEquiped, moveSlotUI.Character);
     }
 
-    public void OnButtonBackClicked() 
+    public void OnButtonBackClicked()
     {
-        Close();
+        RequestClose();
     }
 
-    #endregion
-
-    #region Events
-
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         UIEvents.OnMoveActionsOpenRequested += HandleMoveActionsOpenRequested;
         UIEvents.OnMoveSelected += HandleMoveSelected;
         UIEvents.OnMoveUnequipRequested += HandleMoveUnequipRequested;
@@ -171,8 +81,9 @@ public class MenuCharacterDetailPanelMoveActions : Menu
         UIEvents.OnBackFromMoveSelectorRequested += HandleBackFromMoveSelectorRequested;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         UIEvents.OnMoveActionsOpenRequested -= HandleMoveActionsOpenRequested;
         UIEvents.OnMoveSelected -= HandleMoveSelected;
         UIEvents.OnMoveUnequipRequested -= HandleMoveUnequipRequested;
@@ -181,49 +92,43 @@ public class MenuCharacterDetailPanelMoveActions : Menu
         UIEvents.OnBackFromMoveSelectorRequested -= HandleBackFromMoveSelectorRequested;
     }
 
-    private void HandleMoveActionsOpenRequested(MoveSlotUI moveSlotUI) 
+    private void HandleMoveActionsOpenRequested(MoveSlotUI moveSlotUI)
     {
-        if (isOpen) return;
         this.moveSlotUI = moveSlotUI;
-        menuManager.OpenMenu(this);
+        InitializeUI();
+        MenuManager.Instance.OpenMenu(this);
     }
 
     private void HandleMoveSelected(Move move)
     {
-        if (!isOpen) return;
         if (!isEquiping) return;
         UIEvents.RaiseMoveEquipRequested(move, moveSlotUI.Character);
-
         isEquiping = false;
-        if (isTop)
-            Close();
-        else
-            isClosing = true;
+        RequestClose();
     }
 
-    private void HandleMoveUnequipRequested(Move move, Character character) 
+    private void HandleMoveUnequipRequested(Move move, Character character)
     {
         character.UnequipMove(move);
         UIEvents.RaiseCharacterDetailRefreshRequested();
     }
 
-    private void HandleMoveEquipRequested(Move move, Character character) 
+    private void HandleMoveEquipRequested(Move move, Character character)
     {
         character.EquipMove(move);
         isEquiping = false;
         UIEvents.RaiseCharacterDetailRefreshRequested();
     }
 
-    private void HandleBackFromMoveSelectorRequested() 
+    private void HandleBackFromMoveSelectorRequested()
     {
         isEquiping = false;
     }
 
-    private void HandleMoveSwapRequested(Character character, int indexA, int indexB) 
+    private void HandleMoveSwapRequested(Character character, int indexA, int indexB)
     {
         character.SwapEquippedMoves(indexA, indexB);
         UIEvents.RaiseCharacterDetailRefreshRequested();
     }
 
-    #endregion
 }

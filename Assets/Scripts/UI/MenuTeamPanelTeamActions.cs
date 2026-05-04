@@ -9,101 +9,14 @@ using Aremoreno.Enums.Input;
 
 public class MenuTeamPanelTeamActions : Menu
 {
-    #region Fields
-
-    //[Header("UI References")]
-    //[SerializeField] private MenuTeamMode mode;
-
-    private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
-    private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
-    private MenuManager menuManager;
-    private AudioManager audioManager;
-
     private Team team;
     private BattleType battleType;
-    private bool isClosing = false;
 
-    #endregion
+    protected override void OnGainedInput()
+        => InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
 
-    #region Lifecycle
-
-    private void Start() 
-    {
-        base.Hide();
-        base.SetInteractable(false);
-
-        menuManager = MenuManager.Instance;
-        audioManager = AudioManager.Instance;
-    }
-
-    #endregion
-
-    #region Menu Overrides
-
-    public override void Show()
-    {
-        isClosing = false;
-
-        base.Show();
-        base.SetInteractable(true);
-    }
-
-    public override void Hide()
-    {
-        isClosing = false;
-
-        base.SetInteractable(false);
-        base.Hide();
-    }
-
-    public override void SetInteractable(bool interactable)
-    {
-        base.SetInteractable(interactable);
-
-        if (interactable && isClosing)
-        {
-            isClosing = false;
-            Close();
-        }
-
-        if (interactable) 
-            SubscribeInput();
-        else
-            UnsubscribeInput();
-    }
-
-    public void Close()
-    {
-        if (!isTop) return;
-        menuManager.CloseMenu();
-        UIEvents.RaiseTeamActionsClosed();
-    }
-
-    #endregion
-
-    #region Logic
-
-    #endregion
-
-    #region Helper
-
-    #endregion
-
-    #region Input 
-
-    private void SubscribeInput()
-    {
-        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, Close);
-    }
-
-    private void UnsubscribeInput()
-    {
-        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, Close);
-    }
-
-    #endregion
-
-    #region Button Handle
+    protected override void OnLostInput()
+        => InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
 
     public void OnButtonChangeFormationClicked() 
     {
@@ -132,22 +45,20 @@ public class MenuTeamPanelTeamActions : Menu
 
     public void OnButtonBackClicked() 
     {
-        Close();
+        RequestClose();
     }
 
-    #endregion
-
-    #region Events
-
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         UIEvents.OnTeamActionsOpened += HandleTeamActionsOpened;
         UIEvents.OnBackFromTeamActionsRequested += HandleBackFromTeamActionsRequested;
         UIEvents.OnBattleTypeChanged += HandleBattleTypeChanged;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         UIEvents.OnTeamActionsOpened -= HandleTeamActionsOpened;
         UIEvents.OnBackFromTeamActionsRequested -= HandleBackFromTeamActionsRequested;
         UIEvents.OnBattleTypeChanged -= HandleBattleTypeChanged;
@@ -157,22 +68,17 @@ public class MenuTeamPanelTeamActions : Menu
     {
         this.team = team;
         this.battleType = battleType;
-        menuManager.OpenMenu(this);
+        MenuManager.Instance.OpenMenu(this);
     }
 
     private void HandleBackFromTeamActionsRequested() 
     {
-        if (isTop)
-            Close();
-        else
-            isClosing = true;
+        RequestClose();
     }
 
     private void HandleBattleTypeChanged(BattleType currentBattleType, BattleType oldType) 
     {
-        if (!isTop) return;
         this.battleType = currentBattleType;
     }
 
-    #endregion
 }

@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
@@ -10,43 +8,48 @@ using Aremoreno.Enums.Input;
 public class MenuCharacterDetail : Menu
 {
     #region Fields
+
     [Header("Basic")]
     [SerializeField] private CharacterCard characterCard;
-    [SerializeField] private BarHPSP barHp;
-    [SerializeField] private BarHPSP barSp;
-    [SerializeField] private BarXP barXp;
-    [SerializeField] private TMP_Text textLevel;
+    [SerializeField] private BarHPSP       barHp;
+    [SerializeField] private BarHPSP       barSp;
+    [SerializeField] private BarXP         barXp;
+    [SerializeField] private TMP_Text      textLevel;
+
     [Header("Moves")]
     [SerializeField] private MoveLayoutUI moveLayoutUI;
+
     [Header("Stats")]
     [SerializeField] private StatLayoutUI statLayoutUI;
+
     [Header("Other")]
     [SerializeField] private GameObject firstSelected;
 
-    //[Header("UI References")]
-    //[SerializeField] private MenuTeamMode mode;
+    private Character    character;
+    private MoveSlotUI   pickedMoveSlot;
 
-    private Character character;
-
-    private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
-    private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
-    private MenuManager menuManager;
-
-    private GameObject selectedGo;
-
-    private MoveSlotUI cachedMoveSlot;
-    private bool isSwappingMove;
+    private MenuStateMachine<CharacterDetailState> stateMachine;
 
     #endregion
 
     #region Lifecycle
 
-    private void Start() 
+    private void Start()
     {
-        base.Hide();
-        base.SetInteractable(false);
+        BuildStateMachine();
+    }
 
-        menuManager = MenuManager.Instance;
+    private void BuildStateMachine()
+    {
+        stateMachine = new MenuStateMachine<CharacterDetailState>(CharacterDetailState.Idle)
+            .OnEnter(CharacterDetailState.SwappingMove, () =>
+            {
+                UIEvents.RaiseMoveSlotUIMoveStarted(pickedMoveSlot);
+            })
+            .OnExit(CharacterDetailState.SwappingMove, () =>
+            {
+                UIEvents.RaiseMoveSlotUIMoveEnded(pickedMoveSlot);
+            });
     }
 
     #endregion
@@ -57,38 +60,28 @@ public class MenuCharacterDetail : Menu
     {
         base.Show();
         InitializeUI();
-        base.SetInteractable(true);
-
-        selectedGo = null;
+        PopulateUI();
     }
 
     public override void Hide()
     {
-        base.SetInteractable(false);
+        ClearUI();
+        pickedMoveSlot = null;
+
+        if (stateMachine != null && stateMachine.Is(CharacterDetailState.SwappingMove))
+            stateMachine.Set(CharacterDetailState.Idle);
+
         base.Hide();
-
-        selectedGo = null;
-        isSwappingMove = false;
     }
 
-    public override void SetInteractable(bool interactable)
+    protected override void OnGainedInput()
     {
-        base.SetInteractable(interactable);
-
-        if (interactable)
-            Refresh();
-
-        if (interactable) 
-            SubscribeInput();
-        else
-            UnsubscribeInput();
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
     }
 
-    public void Close()
+    protected override void OnLostInput()
     {
-        if (!isTop) return;
-        base.SetLastSelected(firstSelected);
-        menuManager.CloseMenu();
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
     }
 
     public void Refresh()
@@ -101,8 +94,9 @@ public class MenuCharacterDetail : Menu
 
     #region Populate
 
-    private void InitializeUI() 
+    private void InitializeUI()
     {
+        if (character == null) return;
         moveLayoutUI.Initialize(character);
         statLayoutUI.Initialize(character);
     }
@@ -111,19 +105,14 @@ public class MenuCharacterDetail : Menu
     {
         if (character == null) return;
 
-        // basic
         characterCard.SetCharacter(character, Position.FW);
         barHp.SetCharacter(character, Stat.Hp);
         barSp.SetCharacter(character, Stat.Sp);
         barXp.SetCharacter(character);
         textLevel.text = $"{character.Level}";
 
-        // move
         moveLayoutUI.Populate();
-
-        // training
         statLayoutUI.Populate();
-
     }
 
     private void ClearUI()
@@ -142,104 +131,89 @@ public class MenuCharacterDetail : Menu
 
     #endregion
 
-    #region Logic
+    #region Button Handlers
 
-    #endregion
-
-    #region Helper
-
-    #endregion
-
-    #region Input 
-
-    private void SubscribeInput()
+    public void OnButtonBackClicked()
     {
-        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
-    }
+        if (stateMachine.Is(CharacterDetailState.SwappingMove))
+        {
+            stateMachine.Set(CharacterDetailState.Idle);
+            return;
+        }
 
-    private void UnsubscribeInput()
-    {
-        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
-    }
-
-    #endregion
-
-    #region Button Handle
-
-    public void OnButtonBackClicked() 
-    {
-        Close();
-    }
-
-    public void OnButtonSelected(GameObject selectedGo)
-    {
-        this.selectedGo = selectedGo;
-        base.SetLastSelected(selectedGo);
+        SetLastSelected(firstSelected);
+        RequestClose();
     }
 
     #endregion
 
     #region Events
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        UIEvents.OnCharacterDetailOpenRequested += HandleCharacterDetailOpenRequested;
-        UIEvents.OnMoveSlotUIClicked += HandleMoveSlotUIClicked;
+        base.OnEnable();
+        UIEvents.OnCharacterDetailOpenRequested    += HandleCharacterDetailOpenRequested;
         UIEvents.OnCharacterDetailRefreshRequested += HandleCharacterDetailRefreshRequested;
-        UIEvents.OnMoveSlotUIMoveRequested += HandleMoveSlotUIMoveRequested;
-        UIEvents.OnMoveSlotUIMoveCanceled += HandleMoveSlotUIMoveCanceled;
+        UIEvents.OnMoveSlotUIClicked               += HandleMoveSlotUIClicked;
+        UIEvents.OnMoveSlotUIMoveRequested         += HandleMoveSlotUIMoveRequested;
+        UIEvents.OnMoveSlotUIMoveCanceled          += HandleMoveSlotUIMoveCanceled;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        UIEvents.OnCharacterDetailOpenRequested -= HandleCharacterDetailOpenRequested;
-        UIEvents.OnMoveSlotUIClicked -= HandleMoveSlotUIClicked;
+        base.OnDisable();
+        UIEvents.OnCharacterDetailOpenRequested    -= HandleCharacterDetailOpenRequested;
         UIEvents.OnCharacterDetailRefreshRequested -= HandleCharacterDetailRefreshRequested;
-        UIEvents.OnMoveSlotUIMoveRequested -= HandleMoveSlotUIMoveRequested;
-        UIEvents.OnMoveSlotUIMoveCanceled -= HandleMoveSlotUIMoveCanceled;
+        UIEvents.OnMoveSlotUIClicked               -= HandleMoveSlotUIClicked;
+        UIEvents.OnMoveSlotUIMoveRequested         -= HandleMoveSlotUIMoveRequested;
+        UIEvents.OnMoveSlotUIMoveCanceled          -= HandleMoveSlotUIMoveCanceled;
     }
 
-    private void HandleCharacterDetailOpenRequested(Character character) 
+    private void HandleCharacterDetailOpenRequested(Character character)
     {
-        if (isOpen) return;
+        if (MenuManager.Instance.IsMenuOpen(this)) return;
         this.character = character;
-        menuManager.OpenMenu(this);
+        MenuManager.Instance.OpenMenu(this);
     }
 
-    private void HandleMoveSlotUIMoveRequested(MoveSlotUI slot) 
+    private void HandleCharacterDetailRefreshRequested()
     {
-        isSwappingMove = true;
-        UIEvents.RaiseMoveSlotUIMoveStarted(slot);
-    }
-
-    private void HandleMoveSlotUIClicked(MoveSlotUI slot) 
-    {
-        if (!isTop) return;
-        if (slot == null) return;
-
-        if (isSwappingMove) 
-        {
-            isSwappingMove = false;
-            UIEvents.RaiseMoveSlotUIMoveEnded(slot);
-            if (slot == null || slot.Character == null) return;
-            UIEvents.RaiseMoveSwapRequested(slot.Character, slot.Index, cachedMoveSlot.Index);
-            return;
-        }
-
-        base.SetDefaultSelectable(slot.Button);
-        cachedMoveSlot = slot;
-        UIEvents.RaiseMoveActionsOpenRequested(slot);
-    }
-
-    private void HandleCharacterDetailRefreshRequested() 
-    {
+        if (!MenuManager.Instance.IsMenuOpen(this)) return;
         Refresh();
     }
 
-    private void HandleMoveSlotUIMoveCanceled(MoveSlotUI moveSlotUI) 
+    private void HandleMoveSlotUIMoveRequested(MoveSlotUI slot)
     {
-        isSwappingMove = false;
-        UIEvents.RaiseMoveSlotUIMoveEnded(moveSlotUI);
+        if (!IsInteractable() || slot == null) return;
+        if (!stateMachine.Is(CharacterDetailState.Idle)) return;
+
+        pickedMoveSlot = slot;
+        stateMachine.Set(CharacterDetailState.SwappingMove);
+    }
+
+    private void HandleMoveSlotUIMoveCanceled(MoveSlotUI _)
+    {
+        if (!stateMachine.Is(CharacterDetailState.SwappingMove)) return;
+        stateMachine.Set(CharacterDetailState.Idle);
+    }
+
+    private void HandleMoveSlotUIClicked(MoveSlotUI slot)
+    {
+        if (!IsInteractable() || slot == null) return;
+
+        if (stateMachine.Is(CharacterDetailState.SwappingMove))
+        {
+            if (pickedMoveSlot != null && pickedMoveSlot != slot && slot.Character != null)
+                UIEvents.RaiseMoveSwapRequested(slot.Character, slot.Index, pickedMoveSlot.Index);
+
+            stateMachine.Set(CharacterDetailState.Idle);
+            SetDefaultSelectable(slot.Button);
+            return;
+        }
+
+        SetDefaultSelectable(slot.Button);
+        pickedMoveSlot = slot;
+        UIEvents.RaiseMoveActionsOpenRequested(slot);
     }
 
     #endregion

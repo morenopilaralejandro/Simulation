@@ -25,4 +25,19 @@ namespace Aremoreno.Enums.UI
         GetFromLearned,
         GetFromLearnedExcludeEquiped
     }
+
+    public enum MenuTeamState 
+    { 
+        Idle, 
+        Swapping, 
+        Replacing, 
+        Closing 
+    }
+
+    public enum CharacterDetailState 
+    { 
+        Idle, 
+        SwappingMove 
+    }
+
 }

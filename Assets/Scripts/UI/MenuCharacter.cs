@@ -49,7 +49,11 @@ public class MenuCharacter : Menu
         base.Show();
         base.SetInteractable(true);
 
-        UIEvents.RaiseCharacterSelectorOpenRequested(CharacterSelectorModePopulate.GetFromStorage, CharacterSelectorModeClick.OpenDetail, null, default, false);
+        UIEvents.RaiseCharacterSelectorOpenRequested(
+            source: new SelectorCharacterSourceFromStorage(),
+            action: new SelectorCharacterActionOpenDetail(),
+            filter: null,
+            closeOnSelect: false);
     }
 
     public override void Hide()

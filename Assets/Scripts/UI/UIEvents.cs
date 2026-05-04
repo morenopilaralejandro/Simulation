@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Aremoreno.Enums.Battle;
@@ -257,34 +258,18 @@ public static class UIEvents
         OnCharacterSelected?.Invoke(character);
     }
 
-    public static event Action<CharacterSelectorModePopulate, CharacterSelectorModeClick, Team, BattleType, bool> OnCharacterSelectorOpenRequested;
+    public static event System.Action<
+        ISelectorSource<Character>,
+        ISelectorClickAction<Character>,
+        ISelectorFilter<Character>,
+        bool> OnCharacterSelectorOpenRequested;
+
     public static void RaiseCharacterSelectorOpenRequested(
-        CharacterSelectorModePopulate modePopulate,
-        CharacterSelectorModeClick modeClick,
-        Team team, 
-        BattleType battleType, 
-        bool isCloseOnSelect)
-    {
-        OnCharacterSelectorOpenRequested?.Invoke(modePopulate, modeClick, team, battleType, isCloseOnSelect);
-    }
-
-    public static event Action<SelectorCharacterListItem> OnCharacterCharacterSelectedListItemSelected;
-    public static void RaiseCharacterSelectedListItemSelected(SelectorCharacterListItem selectorCharacterListItem)
-    {
-        OnCharacterCharacterSelectedListItemSelected?.Invoke(selectorCharacterListItem);
-    }
-
-    public static event Action<SelectorCharacterListItem> OnCharacterCharacterSelectedListItemPointerEnter;
-    public static void RaiseCharacterSelectedListItemPointerEnter(SelectorCharacterListItem selectorCharacterListItem)
-    {
-        OnCharacterCharacterSelectedListItemPointerEnter?.Invoke(selectorCharacterListItem);
-    }
-
-    public static event Action<BaseEventData> OnGenericScroll;
-    public static void RaiseGenericScroll(BaseEventData eventData)
-    {
-        OnGenericScroll?.Invoke(eventData);
-    }
+        ISelectorSource<Character>      source,
+        ISelectorClickAction<Character> action,
+        ISelectorFilter<Character>      filter         = null,
+        bool                            closeOnSelect  = true)
+        => OnCharacterSelectorOpenRequested?.Invoke(source, action, filter, closeOnSelect);
 
     public static event Action OnBackFromCharacterSelectorRequested;
     public static void RaiseBackFromCharacterSelectorRequested()
@@ -457,6 +442,17 @@ public static class UIEvents
         OnLoadoutListItemSelect?.Invoke(listItem);
     }
 
+    public static event Action<GameObject> OnSelectableSelected;
+    public static void RaiseSelectableSelected(GameObject go)
+    {
+        OnSelectableSelected?.Invoke(go);
+    }
 
+    // Selector
+    public static event Action<Character> OnSelectorCharacterActionClicked;
+    public static void RaiseSelectorCharacterActionClicked(Character character)
+    {
+        OnSelectorCharacterActionClicked?.Invoke(character);
+    }
 
 }

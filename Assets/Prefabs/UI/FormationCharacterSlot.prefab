@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 4294251798489139204}
   - component: {fileID: 1593169111096143137}
   - component: {fileID: 1241742737430211362}
+  - component: {fileID: 4724151769279880667}
+  - component: {fileID: 7833306946885825611}
   m_Layer: 5
   m_Name: FormationCharacterSlot
   m_TagString: Untagged
@@ -164,6 +166,31 @@ MonoBehaviour:
   rectTransform: {fileID: 5970664150944610605}
   button: {fileID: 4294251798489139204}
   dragLayer: {fileID: 0}
+--- !u!114 &4724151769279880667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758806585940672447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2859e86bf4d983a5d841688c94fbbe7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectable: {fileID: 4294251798489139204}
+--- !u!114 &7833306946885825611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758806585940672447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef315e2e19f377e87bffa6012c62e78d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &478751471084128767
 PrefabInstance:
   m_ObjectHideFlags: 0

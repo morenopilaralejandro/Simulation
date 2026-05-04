@@ -32,8 +32,7 @@ public class InputManager : MonoBehaviour
 
     public bool IsAndroid => isAndroid;
     public bool IsLocked => isLocked;    
-    //public bool IsUsingController => currentDeviceType == InputDeviceType.Gamepad;
-    public bool IsUsingController => false;
+    public bool IsUsingController => currentDeviceType == InputDeviceType.Gamepad;
     public InputDeviceType CurrentDeviceType => currentDeviceType;
     #endregion
 
@@ -364,6 +363,9 @@ public class InputManager : MonoBehaviour
     #region Scheme helpers
     private void OnControlsChanged(PlayerInput playerInput)
     {
+        // TODO keep track of when the screenControls need to be visible and 
+        // show or hide when going from Gamepad to touch and viceversa
+
         string scheme = playerInput.currentControlScheme;
         LogManager.Trace($"[InputManager] OnControlsChanged: {scheme}");
 

@@ -154,14 +154,14 @@ public class SelectorTeamEmblem : Menu
 
     #region Events
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
         UIEvents.OnEmblemSelectorOpened += HandleEmblemSelectorOpened;
         UIEvents.OnTeamEmblemSelected += HandleTeamEmblemSelected;
         UIEvents.OnTeamEmblemChanged += HandleTeamEmblemChanged;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
         UIEvents.OnEmblemSelectorOpened -= HandleEmblemSelectorOpened;
         UIEvents.OnTeamEmblemSelected -= HandleTeamEmblemSelected;

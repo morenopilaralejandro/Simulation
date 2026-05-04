@@ -50,7 +50,7 @@ public class LoadoutListItem : MonoBehaviour
 
     public void OnListItemScroll(BaseEventData eventData) 
     {
-        UIEvents.RaiseGenericScroll(eventData);
+        //UIEvents.RaiseGenericScroll(eventData);
     }
 
     public void OnListItemSelect() 

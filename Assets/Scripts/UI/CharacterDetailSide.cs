@@ -159,12 +159,12 @@ public class CharacterDetailSide : MonoBehaviour
 
     private void HandleFormationCharacterSlotUIHighlighted(FormationCharacterSlotUI slot) 
     {
-        UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
+        // UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
     }
 
     private void HandleFormationCharacterSlotUIClicked(FormationCharacterSlotUI slot) 
     {
-        UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
+        // UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
     }
 
     #endregion

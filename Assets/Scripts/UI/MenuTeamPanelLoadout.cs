@@ -207,7 +207,6 @@ public class MenuTeamPanelLoadout : Menu
         TeamEvents.OnLoadoutDeleted += HandleLoadoutDeleted;
         TeamEvents.OnLoadoutUpdated += HandleLoadoutUpdated;
         UIEvents.OnBackFromTeamRequested += HandleBackToLoadoutList;
-        UIEvents.OnGenericScroll += HandleGenericScroll;
         UIEvents.OnLoadoutListItemSelect += HandleLoadoutListItemSelect;
     }
 
@@ -219,7 +218,6 @@ public class MenuTeamPanelLoadout : Menu
         TeamEvents.OnLoadoutDeleted -= HandleLoadoutDeleted;
         TeamEvents.OnLoadoutUpdated -= HandleLoadoutUpdated;
         UIEvents.OnBackFromTeamRequested -= HandleBackToLoadoutList;
-        UIEvents.OnGenericScroll -= HandleGenericScroll;
         UIEvents.OnLoadoutListItemSelect -= HandleLoadoutListItemSelect;
     }
 
@@ -257,12 +255,6 @@ public class MenuTeamPanelLoadout : Menu
     private void HandleBackToLoadoutList(Team team, bool hasSwapped) 
     {
         Refresh();
-    }
-
-    private void HandleGenericScroll(BaseEventData eventData) 
-    {
-        if (!isTop) return;
-        autoScroll.OnScroll(eventData);
     }
 
     private void HandleLoadoutListItemSelect(LoadoutListItem listItem) 

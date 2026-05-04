@@ -743,6 +743,13 @@ MonoBehaviour:
   deactivateOnHide: 0
   closeAllPreviousOnBack: 0
   hasMemory: 1
+  hideWhenNotInteractable: 0
+  startHidden: 1
+  hideWhenCovered: 0
+  dimWhenCovered: 0
+  dimmedAlpha: 0.5
+  sfxOpen: sfx-menu_tap
+  sfxClose: sfx-menu_back
   mode: 0
   activeImage: {fileID: 4351211870346160512}
   panelActive: {fileID: 7966253537350815947}
@@ -1233,7 +1240,14 @@ MonoBehaviour:
   canvasGroup: {fileID: 5207428239969545463}
   deactivateOnHide: 0
   closeAllPreviousOnBack: 0
-  hasMemory: 0
+  hasMemory: 1
+  hideWhenNotInteractable: 0
+  startHidden: 1
+  hideWhenCovered: 0
+  dimWhenCovered: 0
+  dimmedAlpha: 0.5
+  sfxOpen: sfx-menu_tap
+  sfxClose: sfx-menu_back
 --- !u!1 &5453844308908541045
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,6 +1344,13 @@ MonoBehaviour:
   deactivateOnHide: 0
   closeAllPreviousOnBack: 0
   hasMemory: 0
+  hideWhenNotInteractable: 0
+  startHidden: 1
+  hideWhenCovered: 0
+  dimWhenCovered: 0
+  dimmedAlpha: 0.5
+  sfxOpen: sfx-menu_tap
+  sfxClose: sfx-menu_back
 --- !u!225 &5516523233659096475
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1489,7 +1510,8 @@ GameObject:
   - component: {fileID: 6496710313079517062}
   - component: {fileID: 51712024353896777}
   - component: {fileID: 6477798740721386979}
-  - component: {fileID: 8368830787489247159}
+  - component: {fileID: 92513552545510338}
+  - component: {fileID: 6570543866765247359}
   m_Layer: 5
   m_Name: ButtonActive
   m_TagString: Untagged
@@ -1624,7 +1646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetButton: {fileID: 51712024353896777}
---- !u!114 &8368830787489247159
+--- !u!114 &92513552545510338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1633,42 +1655,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 5898210545670853569}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: ef315e2e19f377e87bffa6012c62e78d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3859568422017443285}
-          m_TargetAssemblyTypeName: MenuTeamPanelTeam, Assembly-CSharp
-          m_MethodName: OnButtonPointerEnter
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 51712024353896777}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 9
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3859568422017443285}
-          m_TargetAssemblyTypeName: MenuTeamPanelTeam, Assembly-CSharp
-          m_MethodName: OnButtonSelectedSfx
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+--- !u!114 &6570543866765247359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5898210545670853569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2859e86bf4d983a5d841688c94fbbe7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectable: {fileID: 51712024353896777}
 --- !u!1 &5972719939827308444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2687,6 +2689,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Replace
       objectReference: {fileID: 0}
+    - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
+      propertyPath: m_fontSize
+      value: 38
+      objectReference: {fileID: 0}
     - target: {fileID: 7091285805655136620, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -2848,6 +2854,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Options
       objectReference: {fileID: 0}
+    - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
+      propertyPath: m_fontSize
+      value: 38
+      objectReference: {fileID: 0}
     - target: {fileID: 7091285805655136620, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -3002,9 +3012,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 9184928148092625549, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5547882135699294876}
-    - targetCorrespondingSourceObject: {fileID: 9184928148092625549, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7768562487770526992}
   m_SourcePrefab: {fileID: 100100000, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
 --- !u!1 &7677241280368289504 stripped
@@ -3012,63 +3019,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 9184928148092625549, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
   m_PrefabInstance: {fileID: 1584248063849727085}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5547882135699294876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7677241280368289504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 9
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3859568422017443285}
-          m_TargetAssemblyTypeName: MenuTeamPanelTeam, Assembly-CSharp
-          m_MethodName: OnButtonSelected
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 7677241280368289504}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 3859568422017443285}
-          m_TargetAssemblyTypeName: MenuTeamPanelTeam, Assembly-CSharp
-          m_MethodName: OnButtonSelectedSfx
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3859568422017443285}
-          m_TargetAssemblyTypeName: MenuTeamPanelTeam, Assembly-CSharp
-          m_MethodName: OnButtonPointerEnter
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 8177262349968605030}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &7768562487770526992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3109,6 +3059,10 @@ PrefabInstance:
     - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_text
       value: Close
+      objectReference: {fileID: 0}
+    - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
+      propertyPath: m_fontSize
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 7091285805655136620, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_Pivot.x
@@ -3229,9 +3183,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9184928148092625549, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2213016912710489687}
-    - targetCorrespondingSourceObject: {fileID: 9184928148092625549, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6106408513289731013}
   m_SourcePrefab: {fileID: 100100000, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
 --- !u!1 &7540189058328983159 stripped
 GameObject:
@@ -3251,51 +3202,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _targetButton: {fileID: 8310358966708252657}
---- !u!114 &6106408513289731013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7540189058328983159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 9
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3859568422017443285}
-          m_TargetAssemblyTypeName: MenuTeamPanelTeam, Assembly-CSharp
-          m_MethodName: OnButtonSelectedSfx
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3859568422017443285}
-          m_TargetAssemblyTypeName: MenuTeamPanelTeam, Assembly-CSharp
-          m_MethodName: OnButtonPointerEnter
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 8310358966708252657}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &8310358966708252657 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7243787044983470859, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
@@ -3323,6 +3229,10 @@ PrefabInstance:
     - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_text
       value: Delete
+      objectReference: {fileID: 0}
+    - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
+      propertyPath: m_fontSize
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 7091285805655136620, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_Pivot.x
@@ -3474,9 +3384,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 9184928148092625549, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1552409213995038611}
-    - targetCorrespondingSourceObject: {fileID: 9184928148092625549, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8158996092170905516}
   m_SourcePrefab: {fileID: 100100000, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
 --- !u!224 &4837877798800397063 stripped
@@ -3500,35 +3407,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 9184928148092625549, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
   m_PrefabInstance: {fileID: 2398966041954159211}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1552409213995038611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6790792286636288230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 9
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 3859568422017443285}
-          m_TargetAssemblyTypeName: MenuTeamPanelTeam, Assembly-CSharp
-          m_MethodName: OnButtonSelected
-          m_Mode: 2
-          m_Arguments:
-            m_ObjectArgument: {fileID: 6790792286636288230}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &8158996092170905516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4914,6 +4792,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Summary
       objectReference: {fileID: 0}
+    - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
+      propertyPath: m_fontSize
+      value: 38
+      objectReference: {fileID: 0}
     - target: {fileID: 7091285805655136620, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -5074,6 +4956,10 @@ PrefabInstance:
     - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_text
       value: Move
+      objectReference: {fileID: 0}
+    - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
+      propertyPath: m_fontSize
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 7091285805655136620, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_Pivot.x
