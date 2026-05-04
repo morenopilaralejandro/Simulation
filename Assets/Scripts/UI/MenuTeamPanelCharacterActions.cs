@@ -41,15 +41,15 @@ public class MenuTeamPanelCharacterActions : Menu
     protected override void OnEnable()
     {
         base.OnEnable();
-        UIEvents.OnTeamCharacterActionsOpenRequested += HandleOpen;
-        UIEvents.OnCharacterSelected               += HandleCharacterSelected;
+        UIEvents.OnTeamCharacterActionsOpenRequested    += HandleOpen;
+        UIEvents.OnSelectorCharacterActionClicked       += HandleSelectorCharacterActionClicked;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        UIEvents.OnTeamCharacterActionsOpenRequested -= HandleOpen;
-        UIEvents.OnCharacterSelected               -= HandleCharacterSelected;
+        UIEvents.OnTeamCharacterActionsOpenRequested    -= HandleOpen;
+        UIEvents.OnSelectorCharacterActionClicked       -= HandleSelectorCharacterActionClicked;
     }
 
     private void HandleOpen(Character c)
@@ -58,7 +58,7 @@ public class MenuTeamPanelCharacterActions : Menu
         MenuManager.Instance.OpenMenu(this);
     }
 
-    private void HandleCharacterSelected(Character _)
+    private void HandleSelectorCharacterActionClicked(Character _)
     {
         RequestClose();
     }

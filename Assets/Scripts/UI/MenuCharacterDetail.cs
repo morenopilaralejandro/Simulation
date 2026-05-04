@@ -45,6 +45,8 @@ public class MenuCharacterDetail : Menu
             .OnEnter(CharacterDetailState.SwappingMove, () =>
             {
                 UIEvents.RaiseMoveSlotUIMoveStarted(pickedMoveSlot);
+                if (pickedMoveSlot != null)
+                    SetDefaultSelectable(pickedMoveSlot.Button);
             })
             .OnExit(CharacterDetailState.SwappingMove, () =>
             {
@@ -141,7 +143,6 @@ public class MenuCharacterDetail : Menu
             return;
         }
 
-        SetLastSelected(firstSelected);
         RequestClose();
     }
 
@@ -207,11 +208,9 @@ public class MenuCharacterDetail : Menu
                 UIEvents.RaiseMoveSwapRequested(slot.Character, slot.Index, pickedMoveSlot.Index);
 
             stateMachine.Set(CharacterDetailState.Idle);
-            SetDefaultSelectable(slot.Button);
             return;
         }
 
-        SetDefaultSelectable(slot.Button);
         pickedMoveSlot = slot;
         UIEvents.RaiseMoveActionsOpenRequested(slot);
     }

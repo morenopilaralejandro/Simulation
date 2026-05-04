@@ -6,26 +6,28 @@ public abstract class SelectorListItem<T> : MonoBehaviour
 {
     [Header("Common")]
     [SerializeField] protected Button button;
+    [SerializeField] private ScrollRectForwarder scrollForwarder;
 
     protected T data;
+    protected ScrollRect parentScrollRect;
+
     public Button Button => button;
     public T Data => data;
+    public ScrollRect ParentScrollRect => parentScrollRect;
 
     public event System.Action<SelectorListItem<T>> Clicked;
     public event System.Action<SelectorListItem<T>> Selected;
     public event System.Action<SelectorListItem<T>> PointerEntered;
 
-    public void Bind(T value)
+    /// <summary>Inject the parent ScrollRect once when the item is created or pooled.</summary>
+    public void SetScrollRect(ScrollRect sr)
     {
-        data = value;
-        OnBind(value);
+        parentScrollRect = sr;
+        if (scrollForwarder != null) scrollForwarder.SetScrollRect(sr);
     }
 
-    public void Unbind()
-    {
-        OnUnbind();
-        data = default;
-    }
+    public void Bind(T value) { data = value; OnBind(value); }
+    public void Unbind()      { OnUnbind(); data = default; ClearListeners(); }
 
     protected abstract void OnBind(T value);
     protected abstract void OnUnbind();

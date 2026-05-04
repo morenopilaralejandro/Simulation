@@ -29,6 +29,7 @@ public abstract class Menu : MonoBehaviour, IClosableMenu
     private bool isRestoringFocus;
 
     public bool CloseAllPrevious => closeAllPreviousOnBack;
+    public GameObject LastSelected => lastSelected;
 
     #endregion
 

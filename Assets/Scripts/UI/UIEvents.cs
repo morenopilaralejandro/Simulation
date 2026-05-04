@@ -252,12 +252,6 @@ public static class UIEvents
     }
 
     // Menu Character
-    public static event Action<Character> OnCharacterSelected;
-    public static void RaiseCharacterSelected(Character character)
-    {
-        OnCharacterSelected?.Invoke(character);
-    }
-
     public static event System.Action<
         ISelectorSource<Character>,
         ISelectorClickAction<Character>,

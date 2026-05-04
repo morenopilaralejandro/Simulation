@@ -297,7 +297,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnFormationCharacterSlotUIReplaced          += HandleFormationCharacterSlotUIReplaced;
         UIEvents.OnFormationCharacterSlotUIMoveRequested     += HandleFormationCharacterSlotUIMoveRequested;
         UIEvents.OnFormationCharacterSlotUIMoveCanceled      += HandleFormationCharacterSlotUIMoveCanceled;
-        UIEvents.OnCharacterSelected                         += HandleCharacterSelected;
+        UIEvents.OnSelectorCharacterActionClicked            += HandleSelectorCharacterActionClicked;
         UIEvents.OnItemSelected                              += HandleItemSelected;
         UIEvents.OnSelectorItemSideListItemSelected          += HandleSelectorItemSideListItemSelected;
         UIEvents.OnSelectorItemSideListItemHighlighted       += HandleSelectorItemSideListItemHighlighted;
@@ -327,7 +327,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnFormationCharacterSlotUIReplaced          -= HandleFormationCharacterSlotUIReplaced;
         UIEvents.OnFormationCharacterSlotUIMoveRequested     -= HandleFormationCharacterSlotUIMoveRequested;
         UIEvents.OnFormationCharacterSlotUIMoveCanceled      -= HandleFormationCharacterSlotUIMoveCanceled;
-        UIEvents.OnCharacterSelected                         -= HandleCharacterSelected;
+        UIEvents.OnSelectorCharacterActionClicked            -= HandleSelectorCharacterActionClicked;
         UIEvents.OnItemSelected                              -= HandleItemSelected;
         UIEvents.OnSelectorItemSideListItemSelected          -= HandleSelectorItemSideListItemSelected;
         UIEvents.OnSelectorItemSideListItemHighlighted       -= HandleSelectorItemSideListItemHighlighted;
@@ -446,8 +446,8 @@ public class MenuTeamPanelTeam : Menu
         a.SetCharacter(b.GetCharacter());
         b.SetCharacter(temp);
 
-        UIEvents.RaiseCharacterDetailSideUpdateRequested(a.GetCharacter(), a.FormationCoord.Position);
-        SetDefaultSelectable(a.Button);
+        UIEvents.RaiseCharacterDetailSideUpdateRequested(b.GetCharacter(), b.FormationCoord.Position);
+        SetDefaultSelectable(b.Button);
 
         if (stateMachine.Is(MenuTeamState.Swapping))
             stateMachine.Set(MenuTeamState.Idle);
@@ -480,7 +480,7 @@ public class MenuTeamPanelTeam : Menu
         SetDefaultSelectable(slot.Button);
     }
 
-    private void HandleCharacterSelected(Character character)
+    private void HandleSelectorCharacterActionClicked(Character character)
     {
         if (!stateMachine.Is(MenuTeamState.Replacing)) return;
 

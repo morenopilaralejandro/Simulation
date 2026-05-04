@@ -15,6 +15,7 @@ public abstract class Selector<T, TItem> : Menu, IClosableMenu
 
     [Header("Selector — Scroll")]
     [SerializeField] protected ScrollViewAutoScroll autoScroll;
+    [SerializeField] protected ScrollRect           scrollRect;
 
     [Header("Selector — Behavior")]
     [SerializeField] protected bool closeOnSelect = false;
@@ -156,7 +157,9 @@ public abstract class Selector<T, TItem> : Menu, IClosableMenu
     private TItem InstantiateItem()
     {
         var go = Instantiate(listItemPrefab, listItemContainer);
-        return go.GetComponent<TItem>();
+        var view = go.GetComponent<TItem>();
+        view.SetScrollRect(scrollRect);
+        return view;
     }
 
     protected TItem GetFromPool()
