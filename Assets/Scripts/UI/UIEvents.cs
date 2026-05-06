@@ -209,17 +209,16 @@ public static class UIEvents
         OnTeamPanelEmblemOpened?.Invoke(emblemSprite);
     }
 
-    public static event Action OnEmblemSelectorOpened;
-    public static void RaiseEmblemSelectorOpened()
-    {
-        OnEmblemSelectorOpened?.Invoke();
-    }
-
-    public static event Action<string, Sprite> OnTeamEmblemSelected;
-    public static void RaiseTeamEmblemSelected(string emblemId, Sprite emblemSprite)
-    {
-        OnTeamEmblemSelected?.Invoke(emblemId, emblemSprite);
-    }
+    public static event System.Action<
+        ISelectorSource<SelectorTeamEmblemData>,
+        ISelectorClickAction<SelectorTeamEmblemData>,
+        ISelectorFilter<SelectorTeamEmblemData>
+    > OnTeamEmblemSelectorOpenRequested;
+    public static void RaiseTeamEmblemSelectorOpenRequested(
+        ISelectorSource<SelectorTeamEmblemData>      source,
+        ISelectorClickAction<SelectorTeamEmblemData> action,
+        ISelectorFilter<SelectorTeamEmblemData>      filter = null)
+    => OnTeamEmblemSelectorOpenRequested?.Invoke(source, action, filter);
 
     public static event Action<string> OnTeamEmblemChanged;
     public static void RaiseTeamEmblemChanged(string emblemId)
@@ -257,7 +256,6 @@ public static class UIEvents
         ISelectorClickAction<Character>,
         ISelectorFilter<Character>,
         bool> OnCharacterSelectorOpenRequested;
-
     public static void RaiseCharacterSelectorOpenRequested(
         ISelectorSource<Character>      source,
         ISelectorClickAction<Character> action,
@@ -309,6 +307,12 @@ public static class UIEvents
         OnMoveActionsOpenRequested?.Invoke(moveSlotUI);
     }
 
+    public static event Action<MoveSlotUI> OnMoveActionsCloseRequested;
+    public static void RaiseMoveActionsCloseRequested(MoveSlotUI moveSlotUI)
+    {
+        OnMoveActionsCloseRequested?.Invoke(moveSlotUI);
+    }
+
     public static event Action<Move, Move> OnMoveReplaceRequested;
     public static void RaiseMoveReplaceRequested(Move moveOld, Move moveNew)
     {
@@ -327,17 +331,16 @@ public static class UIEvents
         OnMoveSwapRequested?.Invoke(character, indexA, indexB);
     }
 
-    public static event Action<MoveSelectorModePopulate, Character> OnMoveSelectorOpenRequested;
-    public static void RaiseMoveSelectorOpenRequested(MoveSelectorModePopulate modePopulate, Character character)
-    {
-        OnMoveSelectorOpenRequested?.Invoke(modePopulate, character);
-    }
-
-    public static event Action<Move> OnMoveSelected;
-    public static void RaiseMoveSelected(Move move)
-    {
-        OnMoveSelected?.Invoke(move);
-    }
+    public static event System.Action<
+        ISelectorSource<Move>,
+        ISelectorClickAction<Move>,
+        ISelectorFilter<Move>
+    > OnMoveSelectorOpenRequested;
+    public static void RaiseMoveSelectorOpenRequested(
+        ISelectorSource<Move> source,
+        ISelectorClickAction<Move> action,
+        ISelectorFilter<Move> filter = null)
+    => OnMoveSelectorOpenRequested?.Invoke(source, action, filter);
 
     public static event Action OnBackFromMoveSelectorRequested;
     public static void RaiseBackFromMoveSelectorRequested()
@@ -400,34 +403,27 @@ public static class UIEvents
     }
 
     // Menu Item
-    public static event Action<Item> OnItemSelected;
-    public static void RaiseItemSelected(Item item)
+    public static event System.Action<
+        ISelectorSource<ItemStorageSlot>,
+        ISelectorClickAction<ItemStorageSlot>,
+        ISelectorFilter<ItemStorageSlot>
+    > OnItemStorageSlotSideSelectorOpenRequested;
+    public static void RaiseItemStorageSlotSideSelectorOpenRequested(
+        ISelectorSource<ItemStorageSlot> source,
+        ISelectorClickAction<ItemStorageSlot> action,
+        ISelectorFilter<ItemStorageSlot> filter = null)
+    => OnItemStorageSlotSideSelectorOpenRequested?.Invoke(source, action, filter);
+
+    public static event Action<ItemCategory> OnBackFromSelectorItemStorageSlotSideRequested;
+    public static void RaiseBackFromSelectorItemStorageSlotSideRequested(ItemCategory category)
     {
-        OnItemSelected?.Invoke(item);
+        OnBackFromSelectorItemStorageSlotSideRequested?.Invoke(category);
     }
 
-    public static event Action<ItemCategory, BattleType> OnItemSelectorSideOpened;
-    public static void RaiseItemSelectorSideOpened(ItemCategory category, BattleType battleType)
+    public static event Action<ItemStorageSlot> OnSelectorItemStorageSlotSideListItemSelected;
+    public static void RaiseSelectorItemStorageSlotSideListItemSelected(ItemStorageSlot itemStorageSlot)
     {
-        OnItemSelectorSideOpened?.Invoke(category, battleType);
-    }
-
-    public static event Action<ItemCategory> OnBackFromSelectorItemSideRequested;
-    public static void RaiseBackFromSelectorItemSideRequested(ItemCategory category)
-    {
-        OnBackFromSelectorItemSideRequested?.Invoke(category);
-    }
-
-    public static event Action<SelectorItemSideListItem> OnSelectorItemSideListItemHighlighted;
-    public static void RaiseSelectorItemSideListItemHighlighted(SelectorItemSideListItem listItem)
-    {
-        OnSelectorItemSideListItemHighlighted?.Invoke(listItem);
-    }
-
-    public static event Action<SelectorItemSideListItem> OnSelectorItemSideListItemSelected;
-    public static void RaiseSelectorItemSideListItemSelected(SelectorItemSideListItem listItem)
-    {
-        OnSelectorItemSideListItemSelected?.Invoke(listItem);
+        OnSelectorItemStorageSlotSideListItemSelected?.Invoke(itemStorageSlot);
     }
 
     public static event Action<LoadoutListItem> OnLoadoutListItemSelect;
@@ -447,6 +443,30 @@ public static class UIEvents
     public static void RaiseSelectorCharacterActionClicked(Character character)
     {
         OnSelectorCharacterActionClicked?.Invoke(character);
+    }
+
+    public static event Action<Move> OnSelectorMoveActionClicked;
+    public static void RaiseSelectorMoveActionClicked(Move move)
+    {
+        OnSelectorMoveActionClicked?.Invoke(move);
+    }
+
+    public static event Action<ItemStorageSlot> OnSelectorItemStorageSlotSideActionClicked;
+    public static void RaiseSelectorItemStorageSlotSideActionClicked(ItemStorageSlot itemStorageSlot)
+    {
+        OnSelectorItemStorageSlotSideActionClicked?.Invoke(itemStorageSlot);
+    }
+
+    public static event Action<SelectorTeamEmblemData> OnSelectorTeamEmblemActionClicked;
+    public static void RaiseSelectorTeamEmblemActionClicked(SelectorTeamEmblemData selectorTeamEmblemData)
+    {
+        OnSelectorTeamEmblemActionClicked?.Invoke(selectorTeamEmblemData);
+    }
+
+    public static event Action<Team> OnSelectorLoadoutActionClicked;
+    public static void RaiseSelectorLoadoutActionClicked(Team team)
+    {
+        OnSelectorLoadoutActionClicked?.Invoke(team);
     }
 
 }

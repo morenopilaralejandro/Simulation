@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 7048995267809712251}
   - component: {fileID: 4587021739948758032}
   - component: {fileID: 2120610901388911080}
+  - component: {fileID: 5058121399299741399}
   m_Layer: 5
   m_Name: Scrollbar Vertical
   m_TagString: Untagged
@@ -201,6 +202,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5058121399299741399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903871887269981427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 853c6231a61b185288956563b4ca0df7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollbar: {fileID: 7951345059995256496}
+  threshold: 0.02
 --- !u!1 &933405945267450977
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,6 +354,7 @@ GameObject:
   - component: {fileID: 4373968655456556598}
   - component: {fileID: 120549888067660124}
   - component: {fileID: 7951345059995256496}
+  - component: {fileID: 8965709728420766081}
   m_Layer: 5
   m_Name: Scrollbar Horizontal
   m_TagString: Untagged
@@ -453,6 +469,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8965709728420766081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3241766183814798109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 853c6231a61b185288956563b4ca0df7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollbar: {fileID: 7951345059995256496}
+  threshold: 0.02
 --- !u!1 &3399088760261252873
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,6 +532,7 @@ GameObject:
   - component: {fileID: 3147849375255564921}
   - component: {fileID: 1841046557904039742}
   - component: {fileID: 3828768855110364517}
+  - component: {fileID: 4125162042754457271}
   m_Layer: 5
   m_Name: ScrollViewDefault
   m_TagString: Untagged
@@ -615,6 +646,20 @@ MonoBehaviour:
   scrollSpeed: 8
   padding: 10
   instant: 0
+--- !u!114 &4125162042754457271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6461446766638525667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec99ca583c7be274b1f5f6f599adbc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 1841046557904039742}
+  scrollThreshold: 0.02
 --- !u!1 &6773955013722950968
 GameObject:
   m_ObjectHideFlags: 0

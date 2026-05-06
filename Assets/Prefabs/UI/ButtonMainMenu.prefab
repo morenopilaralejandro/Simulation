@@ -93,7 +93,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.8
+  m_fontSize: 38
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 7243787044983470859}
   - component: {fileID: 5374861759635586795}
   - component: {fileID: 9217816124113908489}
+  - component: {fileID: 6700115931298195440}
   m_Layer: 5
   m_Name: ButtonMainMenu
   m_TagString: Untagged
@@ -323,3 +324,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectable: {fileID: 7243787044983470859}
+--- !u!114 &6700115931298195440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9184928148092625549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 495a56abd76319761abb9ca068f166ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabledTriggers: 768
+  hoverSoundId: 
+  exitSoundId: 
+  downSoundId: 
+  upSoundId: 
+  clickSoundId: 
+  beginDragId: 
+  endDragId: 
+  dropSoundId: 
+  selectSoundId: sfx-menu_selected
+  submitSoundId: sfx-menu_tap

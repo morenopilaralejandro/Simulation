@@ -53,9 +53,9 @@ public class MenuManager : MonoBehaviour
         }
 
         menuStack.Push(menu);
+        menu.OnOpened();
         menu.Show();
         menu.SetInteractable(true);
-        menu.OnOpened();
         UIEvents.RaiseMenuOpened(menu);
     }
 
@@ -74,9 +74,9 @@ public class MenuManager : MonoBehaviour
         }
 
         menuStack.Push(newMenu);
+        newMenu.OnOpened();
         newMenu.Show();
         newMenu.SetInteractable(true);
-        newMenu.OnOpened();
         UIEvents.RaiseMenuOpened(newMenu);
     }
 

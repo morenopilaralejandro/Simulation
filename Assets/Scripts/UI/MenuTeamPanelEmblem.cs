@@ -21,11 +21,16 @@ public class MenuTeamPanelEmblem : Menu
 
     public void OnButtonChangeClicked()
     {
-        UIEvents.RaiseEmblemSelectorOpened();
+        UIEvents.RaiseTeamEmblemSelectorOpenRequested(
+            new SelectorTeamEmblemSource(),
+            new SelectorTeamEmblemAction(),
+            null
+        );
     }
 
     public void OnButtonConfirmClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         if (selectedId != null)
             UIEvents.RaiseTeamEmblemChanged(selectedId);
         RequestClose();
@@ -40,14 +45,14 @@ public class MenuTeamPanelEmblem : Menu
     {
         base.OnEnable();
         UIEvents.OnTeamPanelEmblemOpened += HandleTeamPanelEmblemOpened;
-        UIEvents.OnTeamEmblemSelected += HandleTeamEmblemSelected;
+        UIEvents.OnSelectorTeamEmblemActionClicked += HandleSelectorTeamEmblemActionClicked;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         UIEvents.OnTeamPanelEmblemOpened -= HandleTeamPanelEmblemOpened;
-        UIEvents.OnTeamEmblemSelected -= HandleTeamEmblemSelected;
+        UIEvents.OnSelectorTeamEmblemActionClicked -= HandleSelectorTeamEmblemActionClicked;
     }
 
     private void HandleTeamPanelEmblemOpened(Sprite emblemSprite)
@@ -57,9 +62,9 @@ public class MenuTeamPanelEmblem : Menu
         MenuManager.Instance.OpenMenu(this);
     }
 
-    private void HandleTeamEmblemSelected(string emblemId, Sprite emblemSprite)
+    private void HandleSelectorTeamEmblemActionClicked(SelectorTeamEmblemData data)
     {
-        selectedId = emblemId;
-        imageEmblem.sprite = emblemSprite;
+        selectedId = data.EmblemId;
+        imageEmblem.sprite = data.EmblemSprite;
     }
 }

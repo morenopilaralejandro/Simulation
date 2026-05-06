@@ -16,7 +16,8 @@ public class MenuCharacterDetailPanelMoveActions : Menu
     [SerializeField] private Button buttonBack;
 
     private MoveSlotUI moveSlotUI;
-    private bool isEquiping = false;
+    private bool isEquipping = false;
+    private SelectorMoveSourceFromLearnedExcludeEquipped selectorSource = new SelectorMoveSourceFromLearnedExcludeEquipped();
 
     private void InitializeUI()
     {
@@ -43,38 +44,51 @@ public class MenuCharacterDetailPanelMoveActions : Menu
 
     public void OnButtonMoveClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_change");
         RequestClose();
+        UIEvents.RaiseMoveActionsCloseRequested(moveSlotUI);
         UIEvents.RaiseMoveSlotUIMoveRequested(moveSlotUI);
     }
 
     public void OnButtonUnequipClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         RequestClose();
+        UIEvents.RaiseMoveActionsCloseRequested(moveSlotUI);
         UIEvents.RaiseMoveUnequipRequested(moveSlotUI.Move, moveSlotUI.Character);
     }
 
     public void OnButtonLimitBreakClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         RequestClose();
+        UIEvents.RaiseMoveActionsCloseRequested(moveSlotUI);
         UIEvents.RaiseMoveLimitBreakPanelOpenRequested(moveSlotUI.Move, moveSlotUI.Character);
     }
 
     public void OnButtonEquipClicked()
     {
-        isEquiping = true;
-        UIEvents.RaiseMoveSelectorOpenRequested(MoveSelectorModePopulate.GetFromLearnedExcludeEquiped, moveSlotUI.Character);
+        isEquipping = true;
+        selectorSource.SetCharacter(moveSlotUI.Character);
+        UIEvents.RaiseMoveSelectorOpenRequested(
+            selectorSource,
+            new SelectorMoveAction(),
+            null
+        );
     }
 
     public void OnButtonBackClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_back");
         RequestClose();
+        UIEvents.RaiseMoveActionsCloseRequested(moveSlotUI);
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
         UIEvents.OnMoveActionsOpenRequested += HandleMoveActionsOpenRequested;
-        UIEvents.OnMoveSelected += HandleMoveSelected;
+        UIEvents.OnSelectorMoveActionClicked += HandleSelectorMoveActionClicked;
         UIEvents.OnMoveUnequipRequested += HandleMoveUnequipRequested;
         UIEvents.OnMoveEquipRequested += HandleMoveEquipRequested;
         UIEvents.OnMoveSwapRequested += HandleMoveSwapRequested;
@@ -85,7 +99,7 @@ public class MenuCharacterDetailPanelMoveActions : Menu
     {
         base.OnDisable();
         UIEvents.OnMoveActionsOpenRequested -= HandleMoveActionsOpenRequested;
-        UIEvents.OnMoveSelected -= HandleMoveSelected;
+        UIEvents.OnSelectorMoveActionClicked -= HandleSelectorMoveActionClicked;
         UIEvents.OnMoveUnequipRequested -= HandleMoveUnequipRequested;
         UIEvents.OnMoveEquipRequested -= HandleMoveEquipRequested;
         UIEvents.OnMoveSwapRequested -= HandleMoveSwapRequested;
@@ -99,30 +113,34 @@ public class MenuCharacterDetailPanelMoveActions : Menu
         MenuManager.Instance.OpenMenu(this);
     }
 
-    private void HandleMoveSelected(Move move)
+    private void HandleSelectorMoveActionClicked(Move move)
     {
-        if (!isEquiping) return;
+        if (!isEquipping) return;
         UIEvents.RaiseMoveEquipRequested(move, moveSlotUI.Character);
-        isEquiping = false;
-        RequestClose();
+        isEquipping = false;
     }
 
     private void HandleMoveUnequipRequested(Move move, Character character)
     {
         character.UnequipMove(move);
         UIEvents.RaiseCharacterDetailRefreshRequested();
+        RequestClose();
+        UIEvents.RaiseMoveActionsCloseRequested(moveSlotUI);
     }
 
     private void HandleMoveEquipRequested(Move move, Character character)
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         character.EquipMove(move);
-        isEquiping = false;
+        isEquipping = false;
         UIEvents.RaiseCharacterDetailRefreshRequested();
+        RequestClose();
+        UIEvents.RaiseMoveActionsCloseRequested(moveSlotUI);
     }
 
     private void HandleBackFromMoveSelectorRequested()
     {
-        isEquiping = false;
+        isEquipping = false;
     }
 
     private void HandleMoveSwapRequested(Character character, int indexA, int indexB)

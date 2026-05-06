@@ -80,7 +80,7 @@ public class MenuTeamPanelTeam : Menu
             .OnEnter(MenuTeamState.Swapping, () =>
             {
                 pickedSlot = selectedSlot;
-                audioManager.PlaySfx("sfx-menu_change");
+                audioManager.PlaySfxUI("sfx-menu_change");
                 UIEvents.RaiseFormationCharacterSlotUIMoveStarted(selectedSlot);
             })
             .OnExit(MenuTeamState.Swapping, () =>
@@ -90,7 +90,6 @@ public class MenuTeamPanelTeam : Menu
             })
             .OnEnter(MenuTeamState.Replacing, () =>
             {
-                UIEvents.RaiseFormationCharacterSlotUIReplaceRequested();
                 UIEvents.RaiseCharacterSelectorOpenRequested(
                     source:        new SelectorCharacterSourceFromStorage(),
                     action:        new SelectorCharacterAction(),
@@ -202,7 +201,6 @@ public class MenuTeamPanelTeam : Menu
 
         if (stateMachine.Is(MenuTeamState.Swapping))
         {
-            stateMachine.Set(MenuTeamState.Idle);
             UIEvents.RaiseFormationCharacterSlotUIMoveCanceled(pickedSlot);
             return;
         }
@@ -220,6 +218,7 @@ public class MenuTeamPanelTeam : Menu
     private void HandleShortcutTeamActive()
     {
         if (!stateMachine.Is(MenuTeamState.Idle) || isBattleMode) return;
+        audioManager.PlaySfxUI("sfx-menu_tap");
         OnButtonSetActiveClicked();
     }
 
@@ -298,10 +297,9 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnFormationCharacterSlotUIMoveRequested     += HandleFormationCharacterSlotUIMoveRequested;
         UIEvents.OnFormationCharacterSlotUIMoveCanceled      += HandleFormationCharacterSlotUIMoveCanceled;
         UIEvents.OnSelectorCharacterActionClicked            += HandleSelectorCharacterActionClicked;
-        UIEvents.OnItemSelected                              += HandleItemSelected;
-        UIEvents.OnSelectorItemSideListItemSelected          += HandleSelectorItemSideListItemSelected;
-        UIEvents.OnSelectorItemSideListItemHighlighted       += HandleSelectorItemSideListItemHighlighted;
-        UIEvents.OnBackFromSelectorItemSideRequested         += HandleBackFromSelectorItemSideRequested;
+        UIEvents.OnSelectorItemStorageSlotSideActionClicked  += HandleSelectorItemStorageSlotSideActionClicked;
+        UIEvents.OnSelectorItemStorageSlotSideListItemSelected  += HandleSelectorItemStorageSlotSideListItemSelected;
+        UIEvents.OnBackFromSelectorItemStorageSlotSideRequested += HandleBackFromSelectorItemStorageSlotSideRequested;
         UIEvents.OnBattleTypeChangeRequested                 += HandleBattleTypeChangeRequested;
         UIEvents.OnTeamEmblemChanged                         += HandleTeamEmblemChanged;
         UIEvents.OnTeamNameChanged                           += HandleTeamNameChanged;
@@ -311,6 +309,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnBackFromCharacterSelectorRequested        += HandleBackFromCharacterSelectorRequested;
         TeamEvents.OnLoadoutDeleted                          += HandleLoadoutDeleted;
         BattleEvents.OnBattleStart                           += HandleBattleStart;
+        UIEvents.OnFormationCharacterSlotUIReplaceRequested  += HandleFormationCharacterSlotUIReplaceRequested;
     }
 
     protected override void OnDisable()
@@ -328,10 +327,9 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnFormationCharacterSlotUIMoveRequested     -= HandleFormationCharacterSlotUIMoveRequested;
         UIEvents.OnFormationCharacterSlotUIMoveCanceled      -= HandleFormationCharacterSlotUIMoveCanceled;
         UIEvents.OnSelectorCharacterActionClicked            -= HandleSelectorCharacterActionClicked;
-        UIEvents.OnItemSelected                              -= HandleItemSelected;
-        UIEvents.OnSelectorItemSideListItemSelected          -= HandleSelectorItemSideListItemSelected;
-        UIEvents.OnSelectorItemSideListItemHighlighted       -= HandleSelectorItemSideListItemHighlighted;
-        UIEvents.OnBackFromSelectorItemSideRequested         -= HandleBackFromSelectorItemSideRequested;
+        UIEvents.OnSelectorItemStorageSlotSideActionClicked     -= HandleSelectorItemStorageSlotSideActionClicked;
+        UIEvents.OnSelectorItemStorageSlotSideListItemSelected  -= HandleSelectorItemStorageSlotSideListItemSelected;
+        UIEvents.OnBackFromSelectorItemStorageSlotSideRequested -= HandleBackFromSelectorItemStorageSlotSideRequested;
         UIEvents.OnBattleTypeChangeRequested                 -= HandleBattleTypeChangeRequested;
         UIEvents.OnTeamEmblemChanged                         -= HandleTeamEmblemChanged;
         UIEvents.OnTeamNameChanged                           -= HandleTeamNameChanged;
@@ -341,6 +339,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnBackFromCharacterSelectorRequested        -= HandleBackFromCharacterSelectorRequested;
         TeamEvents.OnLoadoutDeleted                          -= HandleLoadoutDeleted;
         BattleEvents.OnBattleStart                           -= HandleBattleStart;
+        UIEvents.OnFormationCharacterSlotUIReplaceRequested  -= HandleFormationCharacterSlotUIReplaceRequested;
     }
 
     // --- Open requests ---
@@ -366,6 +365,7 @@ public class MenuTeamPanelTeam : Menu
 
         UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
         SetDefaultSelectable(slot.Button);
+        selectedSlot = slot;
         UIEvents.RaiseFormationCharacterSlotUISelected(slot);
     }
 
@@ -411,7 +411,7 @@ public class MenuTeamPanelTeam : Menu
     {
         if (!stateMachine.Is(MenuTeamState.Swapping)) return;
         stateMachine.Set(MenuTeamState.Idle);
-        audioManager.PlaySfx("sfx-menu_cancel");
+        audioManager.PlaySfxUI("sfx-menu_cancel");
     }
 
     private void HandleFormationCharacterSlotUISwapped(FormationCharacterSlotUI a, FormationCharacterSlotUI b)
@@ -447,6 +447,7 @@ public class MenuTeamPanelTeam : Menu
         b.SetCharacter(temp);
 
         UIEvents.RaiseCharacterDetailSideUpdateRequested(b.GetCharacter(), b.FormationCoord.Position);
+        audioManager.PlaySfxUI("sfx-menu_tap");
         SetDefaultSelectable(b.Button);
 
         if (stateMachine.Is(MenuTeamState.Swapping))
@@ -454,6 +455,11 @@ public class MenuTeamPanelTeam : Menu
     }
 
     // --- Replace ---
+
+    private void HandleFormationCharacterSlotUIReplaceRequested() 
+    {
+        stateMachine.Set(MenuTeamState.Replacing);
+    }
 
     private void HandleFormationCharacterSlotUIReplaced(FormationCharacterSlotUI slot, Character character)
     {
@@ -477,6 +483,7 @@ public class MenuTeamPanelTeam : Menu
         }
 
         UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
+        audioManager.PlaySfxUI("sfx-menu_tap");
         SetDefaultSelectable(slot.Button);
     }
 
@@ -496,9 +503,11 @@ public class MenuTeamPanelTeam : Menu
 
     // --- Item / Formation / Kit ---
 
-    private void HandleItemSelected(Item item)
+    private void HandleSelectorItemStorageSlotSideActionClicked(ItemStorageSlot slot)
     {
         if (!MenuManager.Instance.IsMenuOpen(this) || !isEditMode) return;
+
+        var item = slot.Item;
 
         if (item.Category == ItemCategory.Formation)
         {
@@ -518,31 +527,28 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
-    private void PreviewSelectorItem(SelectorItemSideListItem listItem)
+    private void PreviewKitOrFormation(ItemStorageSlot slot)
     {
         if (!MenuManager.Instance.IsMenuOpen(this) || !isEditMode) return;
 
-        if (listItem.ItemStorageSlot.Item.Category == ItemCategory.Formation)
+        if (slot.Item.Category == ItemCategory.Formation)
         {
-            cachedItemFormation = listItem.ItemStorageSlot.Item as ItemFormation;
+            cachedItemFormation = slot.Item as ItemFormation;
             cachedFormation     = formationDatabase.GetFormation(cachedItemFormation.FormationId);
             formationLayoutUI.SetFormation(cachedFormation, false);
         }
-        else if (listItem.ItemStorageSlot.Item.Category == ItemCategory.Kit)
+        else if (slot.Item.Category == ItemCategory.Kit)
         {
-            cachedItemKit = listItem.ItemStorageSlot.Item as ItemKit;
+            cachedItemKit = slot.Item as ItemKit;
             cachedKit     = kitDatabase.GetKit(cachedItemKit.KitId);
             formationLayoutUI.SetKit(cachedKit, false);
         }
     }
 
-    private void HandleSelectorItemSideListItemHighlighted(SelectorItemSideListItem listItem)
-        => PreviewSelectorItem(listItem);
+    private void HandleSelectorItemStorageSlotSideListItemSelected(ItemStorageSlot itemStorageSlot)
+        => PreviewKitOrFormation(itemStorageSlot);
 
-    private void HandleSelectorItemSideListItemSelected(SelectorItemSideListItem listItem)
-        => PreviewSelectorItem(listItem);
-
-    private void HandleBackFromSelectorItemSideRequested(ItemCategory category)
+    private void HandleBackFromSelectorItemStorageSlotSideRequested(ItemCategory category)
     {
         if (!MenuManager.Instance.IsMenuOpen(this) || !isEditMode) return;
 
@@ -557,6 +563,7 @@ public class MenuTeamPanelTeam : Menu
     private void HandleBattleTypeChangeRequested()
     {
         if (!isEditMode) return;
+        audioManager.PlaySfxUI("sfx-menu_tap");
 
         BattleType oldType = currentBattleType;
         currentBattleType  = (currentBattleType == BattleType.Full) ? BattleType.Mini : BattleType.Full;

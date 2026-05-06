@@ -1,4 +1,8 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
@@ -23,12 +27,13 @@ public class MenuCharacterDetail : Menu
     [SerializeField] private StatLayoutUI statLayoutUI;
 
     [Header("Other")]
-    [SerializeField] private GameObject firstSelected;
+    [SerializeField] private Button firstSelected;
 
     private Character    character;
     private MoveSlotUI   pickedMoveSlot;
 
     private MenuStateMachine<CharacterDetailState> stateMachine;
+    private Coroutine restoreFocusCoroutine;
 
     #endregion
 
@@ -46,7 +51,7 @@ public class MenuCharacterDetail : Menu
             {
                 UIEvents.RaiseMoveSlotUIMoveStarted(pickedMoveSlot);
                 if (pickedMoveSlot != null)
-                    SetDefaultSelectable(pickedMoveSlot.Button);
+                    EventSystem.current.SetSelectedGameObject(pickedMoveSlot.gameObject);
             })
             .OnExit(CharacterDetailState.SwappingMove, () =>
             {
@@ -68,7 +73,6 @@ public class MenuCharacterDetail : Menu
     public override void Hide()
     {
         ClearUI();
-        pickedMoveSlot = null;
 
         if (stateMachine != null && stateMachine.Is(CharacterDetailState.SwappingMove))
             stateMachine.Set(CharacterDetailState.Idle);
@@ -131,6 +135,33 @@ public class MenuCharacterDetail : Menu
         statLayoutUI.Clear();
     }
 
+    private IEnumerator RestoreFocusNextFrame(GameObject go)
+    {
+        // Wait for Refresh(), menu close, layout rebuild, OnDisable, etc.
+        yield return null;
+
+        Canvas.ForceUpdateCanvases();
+
+        GameObject target = null;
+
+        if (go != null && go.activeInHierarchy)
+        {
+            target = go;
+        }
+        else if (firstSelected != null)
+        {
+            target = firstSelected.gameObject;
+        }
+
+        if (target != null && target.activeInHierarchy)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(target);
+        }
+
+        restoreFocusCoroutine = null;
+    }
+
     #endregion
 
     #region Button Handlers
@@ -142,6 +173,8 @@ public class MenuCharacterDetail : Menu
             stateMachine.Set(CharacterDetailState.Idle);
             return;
         }
+
+        pickedMoveSlot = null;
 
         RequestClose();
     }
@@ -158,6 +191,7 @@ public class MenuCharacterDetail : Menu
         UIEvents.OnMoveSlotUIClicked               += HandleMoveSlotUIClicked;
         UIEvents.OnMoveSlotUIMoveRequested         += HandleMoveSlotUIMoveRequested;
         UIEvents.OnMoveSlotUIMoveCanceled          += HandleMoveSlotUIMoveCanceled;
+        UIEvents.OnMoveActionsCloseRequested       += HandleMoveActionsCloseRequested;
     }
 
     protected override void OnDisable()
@@ -168,6 +202,7 @@ public class MenuCharacterDetail : Menu
         UIEvents.OnMoveSlotUIClicked               -= HandleMoveSlotUIClicked;
         UIEvents.OnMoveSlotUIMoveRequested         -= HandleMoveSlotUIMoveRequested;
         UIEvents.OnMoveSlotUIMoveCanceled          -= HandleMoveSlotUIMoveCanceled;
+        UIEvents.OnMoveActionsCloseRequested       -= HandleMoveActionsCloseRequested;
     }
 
     private void HandleCharacterDetailOpenRequested(Character character)
@@ -175,6 +210,7 @@ public class MenuCharacterDetail : Menu
         if (MenuManager.Instance.IsMenuOpen(this)) return;
         this.character = character;
         MenuManager.Instance.OpenMenu(this);
+        SetDefaultSelectable(firstSelected);
     }
 
     private void HandleCharacterDetailRefreshRequested()
@@ -213,6 +249,14 @@ public class MenuCharacterDetail : Menu
 
         pickedMoveSlot = slot;
         UIEvents.RaiseMoveActionsOpenRequested(slot);
+    }
+
+    private void HandleMoveActionsCloseRequested(MoveSlotUI moveSlotUI) 
+    {
+        if (restoreFocusCoroutine != null)
+            StopCoroutine(restoreFocusCoroutine);
+
+        restoreFocusCoroutine = StartCoroutine(RestoreFocusNextFrame(pickedMoveSlot.gameObject));
     }
 
     #endregion

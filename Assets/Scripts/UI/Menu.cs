@@ -129,13 +129,13 @@ public abstract class Menu : MonoBehaviour, IClosableMenu
     public virtual void OnOpened()
     {
         if (!string.IsNullOrEmpty(sfxOpen))
-            AudioManager.Instance?.PlaySfx(sfxOpen);
+            AudioManager.Instance?.PlaySfxUI(sfxOpen);
     }
 
     public virtual void OnClosed()
     {
         if (!string.IsNullOrEmpty(sfxClose))
-            AudioManager.Instance?.PlaySfx(sfxClose);
+            AudioManager.Instance?.PlaySfxUI(sfxClose);
     }
 
     /// <summary>Called when another menu is pushed on top of this one.</summary>

@@ -1247,7 +1247,7 @@ MonoBehaviour:
   dimWhenCovered: 0
   dimmedAlpha: 0.5
   sfxOpen: sfx-menu_tap
-  sfxClose: sfx-menu_back
+  sfxClose: 
 --- !u!1 &5453844308908541045
 GameObject:
   m_ObjectHideFlags: 0
@@ -1512,6 +1512,7 @@ GameObject:
   - component: {fileID: 6477798740721386979}
   - component: {fileID: 92513552545510338}
   - component: {fileID: 6570543866765247359}
+  - component: {fileID: 8965755466527415255}
   m_Layer: 5
   m_Name: ButtonActive
   m_TagString: Untagged
@@ -1671,6 +1672,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectable: {fileID: 51712024353896777}
+--- !u!114 &8965755466527415255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5898210545670853569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 495a56abd76319761abb9ca068f166ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabledTriggers: 784
+  hoverSoundId: 
+  exitSoundId: 
+  downSoundId: 
+  upSoundId: 
+  clickSoundId: sfx-menu_tap
+  beginDragId: 
+  endDragId: 
+  dropSoundId: 
+  selectSoundId: sfx-menu_selected
+  submitSoundId: sfx-menu_tap
 --- !u!1 &5972719939827308444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2940,7 +2964,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7243787044983470859, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7243787044983470859, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode

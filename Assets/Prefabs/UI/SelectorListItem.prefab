@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 396108477336896021}
   - component: {fileID: 4490019150927770891}
   - component: {fileID: 3185037857115998220}
+  - component: {fileID: 4059817586302844269}
   m_Layer: 5
   m_Name: SelectorListItem
   m_TagString: Untagged
@@ -236,3 +237,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83fe1838101f2e6979d9a9cb588c3fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4059817586302844269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315962137850362506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 495a56abd76319761abb9ca068f166ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabledTriggers: 768
+  hoverSoundId: 
+  exitSoundId: 
+  downSoundId: 
+  upSoundId: 
+  clickSoundId: 
+  beginDragId: 
+  endDragId: 
+  dropSoundId: 
+  selectSoundId: sfx-menu_selected
+  submitSoundId: sfx-menu_tap

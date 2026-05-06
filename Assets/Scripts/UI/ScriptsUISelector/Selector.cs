@@ -18,6 +18,7 @@ public abstract class Selector<T, TItem> : Menu, IClosableMenu
     [SerializeField] protected ScrollRect           scrollRect;
 
     [Header("Selector — Behavior")]
+    [SerializeField] protected Button closeButton;
     [SerializeField] protected bool closeOnSelect = false;
 
     #endregion
@@ -130,8 +131,14 @@ public abstract class Selector<T, TItem> : Menu, IClosableMenu
         LayoutRebuilder.ForceRebuildLayoutImmediate(listItemContainer);
 
         // Default focus on the first item.
-        if (active.Count > 0)
-            SetDefaultSelectable(active[0].Button);
+        if (active.Count > 0) 
+        {
+            SetDefaultSelectable(active[0].Button); 
+        } else 
+        {
+            if (closeButton == null) return; 
+            SetDefaultSelectable(closeButton); 
+        }
     }
 
     private void HandleItemClicked(SelectorListItem<T> item)

@@ -9,7 +9,7 @@ using Aremoreno.Enums.Input;
 public class MenuTeamPanelName : Menu
 {
     [Header("UI References")]
-    [SerializeField] private TMP_InputField inputFieldName;
+    [SerializeField] private TMPInputFieldNoAutoActivate inputFieldName;
 
     protected override void OnGainedInput()
         => InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCancelClicked);
@@ -19,6 +19,7 @@ public class MenuTeamPanelName : Menu
 
     public void OnButtonConfirmClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         UIEvents.RaiseTeamNameChanged(inputFieldName.text);
         RequestClose();
     }

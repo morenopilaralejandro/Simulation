@@ -162,6 +162,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6210664318706306}
   - component: {fileID: 74352454620229489}
+  - component: {fileID: 322176106907125881}
+  - component: {fileID: 1789964815734696934}
+  - component: {fileID: 8416722712207055758}
   m_Layer: 5
   m_Name: ToggleButton
   m_TagString: Untagged
@@ -238,6 +241,54 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 0
+--- !u!114 &322176106907125881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4619847372305558361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2859e86bf4d983a5d841688c94fbbe7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectable: {fileID: 74352454620229489}
+--- !u!114 &1789964815734696934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4619847372305558361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef315e2e19f377e87bffa6012c62e78d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8416722712207055758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4619847372305558361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 495a56abd76319761abb9ca068f166ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabledTriggers: 772
+  hoverSoundId: 
+  exitSoundId: 
+  downSoundId: sfx-menu_tap
+  upSoundId: 
+  clickSoundId: 
+  beginDragId: 
+  endDragId: 
+  dropSoundId: 
+  selectSoundId: sfx-menu_selected
+  submitSoundId: sfx-menu_tap
 --- !u!1 &7037986373653157679
 GameObject:
   m_ObjectHideFlags: 0

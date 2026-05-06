@@ -18,23 +18,28 @@ public class MenuTeamPanelCharacterActions : Menu
 
     public void OnButtonSummaryClicked() 
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         RequestClose();
         UIEvents.RaiseCharacterDetailOpenRequested(character);
     }
 
     public void OnButtonMoveClicked() 
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_change");
         RequestClose();
         UIEvents.RaiseFormationCharacterSlotUIMoveRequested(null);
     }
 
     public void OnButtonReplaceClicked() 
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
+        RequestClose();
         UIEvents.RaiseFormationCharacterSlotUIReplaceRequested();
     }
 
     public void OnButtonBackClicked() 
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_back");
         RequestClose();
     }
 

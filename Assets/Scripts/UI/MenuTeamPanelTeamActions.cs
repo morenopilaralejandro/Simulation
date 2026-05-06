@@ -11,6 +11,7 @@ public class MenuTeamPanelTeamActions : Menu
 {
     private Team team;
     private BattleType battleType;
+    private SelectorItemStorageSlotSourceFromStorageByCategoryDiffereciateFormation sourceItemSelector = new ();
 
     protected override void OnGainedInput()
         => InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
@@ -20,12 +21,22 @@ public class MenuTeamPanelTeamActions : Menu
 
     public void OnButtonChangeFormationClicked() 
     {
-        UIEvents.RaiseItemSelectorSideOpened(ItemCategory.Formation, battleType);
+        sourceItemSelector.SetCategory(ItemCategory.Formation);
+        sourceItemSelector.SetBattleType(battleType);
+        UIEvents.RaiseItemStorageSlotSideSelectorOpenRequested(
+            sourceItemSelector, 
+            new SelectorItemStorageSlotSideAction(),
+            null);
     }
 
     public void OnButtonChangeKitClicked() 
     {
-        UIEvents.RaiseItemSelectorSideOpened(ItemCategory.Kit, battleType);
+        sourceItemSelector.SetCategory(ItemCategory.Kit);
+        sourceItemSelector.SetBattleType(battleType);
+        UIEvents.RaiseItemStorageSlotSideSelectorOpenRequested(
+            sourceItemSelector, 
+            new SelectorItemStorageSlotSideAction(),
+            null);
     }
 
     public void OnButtonChangeNameClicked() 
