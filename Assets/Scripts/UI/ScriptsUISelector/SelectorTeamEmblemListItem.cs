@@ -4,7 +4,7 @@ using TMPro;
 
 public class SelectorTeamEmblemListItem : SelectorListItem<SelectorTeamEmblemData>
 {
-    [Header("UI Elements")]
+    [Header("UI Elements")] 
     [SerializeField] private Image emblemImage;
 
     protected override void OnBind(SelectorTeamEmblemData data)

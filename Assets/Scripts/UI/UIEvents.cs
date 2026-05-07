@@ -47,17 +47,16 @@ public static class UIEvents
         OnBattleTypeChanged?.Invoke(newType, oldType);
     }
 
-    public static event Action OnTeamLoadoutRequested;
-    public static void RaiseTeamLoadoutRequested()
-    {
-        OnTeamLoadoutRequested?.Invoke();
-    }
-
-    public static event Action<Team> OnTeamLoadoutSelected;
-    public static void RaiseTeamLoadoutSelected(Team team)
-    {
-        OnTeamLoadoutSelected?.Invoke(team);
-    }
+    public static event System.Action<
+        ISelectorSource<Team>,
+        ISelectorClickAction<Team>,
+        ISelectorFilter<Team>
+    > OnLoadoutSelectorOpenRequested;
+    public static void RaiseLoadoutSelectorOpenRequested(
+        ISelectorSource<Team> source,
+        ISelectorClickAction<Team> action,
+        ISelectorFilter<Team> filter = null)
+    => OnLoadoutSelectorOpenRequested?.Invoke(source, action, filter);
 
     public static event Action<Team> OnMenuTeamBattleRequested;
     public static void RaiseMenuTeamBattleRequested(Team team)
@@ -424,12 +423,6 @@ public static class UIEvents
     public static void RaiseSelectorItemStorageSlotSideListItemSelected(ItemStorageSlot itemStorageSlot)
     {
         OnSelectorItemStorageSlotSideListItemSelected?.Invoke(itemStorageSlot);
-    }
-
-    public static event Action<LoadoutListItem> OnLoadoutListItemSelect;
-    public static void RaiseLoadoutListItemSelect(LoadoutListItem listItem)
-    {
-        OnLoadoutListItemSelect?.Invoke(listItem);
     }
 
     public static event Action<GameObject> OnSelectableSelected;

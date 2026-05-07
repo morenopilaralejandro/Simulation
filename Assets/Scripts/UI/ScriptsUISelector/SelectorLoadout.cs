@@ -7,26 +7,13 @@ public class SelectorLoadout : Selector<Team, SelectorLoadoutListItem>
 {
     #region Fields
 
-    [SerializeField] private TMP_Text loadoutCountText;
-    [SerializeField] private Button createButton;
-
-    private TeamManager teamManager;
-
     #endregion
 
     #region Menu Overrides
 
-    public override void Start()
-    {
-        base.Start();
-        teamManager = TeamManager.Instance;
-    }
-
     public override void Show()
     {
-        int count = teamManager.GetLoadoutCount();
-        UpdateCountText(count);
-        UpdateCreateButtonState(count);
+        // extra logic        
 
         base.Show();
     }
@@ -39,12 +26,12 @@ public class SelectorLoadout : Selector<Team, SelectorLoadoutListItem>
 
     protected override void OnGainedInput()
     {
-        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, HandleBack);
+        //InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, HandleBack);
     }
 
     protected override void OnLostInput()
     {
-        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, HandleBack);
+        //InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, HandleBack);
     }
 
     #endregion
@@ -66,11 +53,15 @@ public class SelectorLoadout : Selector<Team, SelectorLoadoutListItem>
 
     #region Input
 
+    /*
+
     private void HandleBack()
     {
-        UIEvents.RaiseBackFromMoveSelectorRequested();
+        // UIEvents.RaiseBackFromMoveSelectorRequested();
         RequestClose();
     }
+
+    */
 
     private SelectorLoadoutListItem GetLastSelectedItem()
     {
@@ -82,7 +73,7 @@ public class SelectorLoadout : Selector<Team, SelectorLoadoutListItem>
 
     #region Buttons
 
-    public void OnButtonBackClicked() => HandleBack();
+    // public void OnButtonBackClicked() => HandleBack();
 
     #endregion
 
@@ -91,13 +82,13 @@ public class SelectorLoadout : Selector<Team, SelectorLoadoutListItem>
     protected override void OnEnable()
     {
         base.OnEnable();
-        UIEvents.OnMoveSelectorOpenRequested += HandleOpenRequested;
+        UIEvents.OnLoadoutSelectorOpenRequested += HandleOpenRequested;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        UIEvents.OnMoveSelectorOpenRequested -= HandleOpenRequested;
+        UIEvents.OnLoadoutSelectorOpenRequested -= HandleOpenRequested;
     }
 
     private void HandleOpenRequested(
@@ -112,17 +103,4 @@ public class SelectorLoadout : Selector<Team, SelectorLoadoutListItem>
 
     #endregion
 
-    #region Logic
-
-    private void UpdateCountText(int count)
-    {
-        loadoutCountText.text = $"({count} / {TeamManager.MAX_LOADOUTS})";
-    }
-
-    private void UpdateCreateButtonState(int count)
-    {
-        createButton.interactable = count < TeamManager.MAX_LOADOUTS;
-    }
-
-    #endregion
 }

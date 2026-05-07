@@ -7,7 +7,7 @@ public class SelectorMove : Selector<Move, SelectorMoveListItem>
 {
     #region Fields
 
-    #endregion
+    #endregion 
 
     #region Menu Overrides
 

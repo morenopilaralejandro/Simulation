@@ -286,7 +286,7 @@ public class MenuTeamPanelTeam : Menu
     {
         base.OnEnable();
 
-        UIEvents.OnTeamLoadoutSelected                       += HandleLoadoutSelected;
+        UIEvents.OnSelectorLoadoutActionClicked              += HandleSelectorLoadoutActionClicked;
         UIEvents.OnMenuTeamBattleRequested                   += HandleMenuTeamBattleRequested;
         UIEvents.OnFormationCharacterSlotUISelectedDefault   += HandleFormationCharacterSlotUISelectedDefault;
         UIEvents.OnFormationCharacterSlotUIClicked           += HandleFormationCharacterSlotUIClicked;
@@ -316,7 +316,7 @@ public class MenuTeamPanelTeam : Menu
     {
         base.OnDisable();
 
-        UIEvents.OnTeamLoadoutSelected                       -= HandleLoadoutSelected;
+        UIEvents.OnSelectorLoadoutActionClicked              -= HandleSelectorLoadoutActionClicked;
         UIEvents.OnMenuTeamBattleRequested                   -= HandleMenuTeamBattleRequested;
         UIEvents.OnFormationCharacterSlotUISelectedDefault   -= HandleFormationCharacterSlotUISelectedDefault;
         UIEvents.OnFormationCharacterSlotUIClicked           -= HandleFormationCharacterSlotUIClicked;
@@ -344,7 +344,7 @@ public class MenuTeamPanelTeam : Menu
 
     // --- Open requests ---
 
-    private void HandleLoadoutSelected(Team team)
+    private void HandleSelectorLoadoutActionClicked(Team team)
     {
         currentTeam = team;
         MenuManager.Instance.OpenMenu(this);

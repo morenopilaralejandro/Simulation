@@ -5,7 +5,7 @@ using Aremoreno.Enums.Input;
 
 public class SelectorTeamEmblem : Selector<SelectorTeamEmblemData, SelectorTeamEmblemListItem>
 {
-    #region Fields
+    #region Fields 
 
     #endregion
 
