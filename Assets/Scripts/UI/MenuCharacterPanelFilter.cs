@@ -7,13 +7,12 @@ using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.UI;
 using Aremoreno.Enums.Input;
+using UnityEngine.EventSystems;
 
 public class MenuCharacterPanelFilter : Menu
 {
-    #region Fields
-
     [Header("UI References")]
-    [SerializeField] private TMP_InputField inputFieldName;
+    [SerializeField] private TMPInputFieldNoAutoActivate inputFieldName;
     [SerializeField] private Button buttonApply;
 
     [Header("Position Toggles")]
@@ -37,24 +36,16 @@ public class MenuCharacterPanelFilter : Menu
     [SerializeField] private Toggle toggleMale;
     [SerializeField] private Toggle toggleFemale;
 
-    private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
-    private bool isTop => menuManager != null && menuManager.IsMenuOnTop(this);
-    private MenuManager menuManager;
-    private AudioManager audioManager;
-
     private CharacterFilterData filterData = new CharacterFilterData();
     private Dictionary<Toggle, Position> positionToggles;
     private Dictionary<Toggle, Element> elementToggles;
     private Dictionary<Toggle, Gender> genderToggles;
 
-    private bool isPlaySfxSelectEnabled = false;
 
-    #endregion
-
-    #region Lifecycle
-
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         positionToggles = new Dictionary<Toggle, Position>
         {
             { toggleFW, Position.FW },
@@ -83,60 +74,75 @@ public class MenuCharacterPanelFilter : Menu
         };
     }
 
-    private void Start() 
-    {
-        base.Hide();
-        base.SetInteractable(false);
+    protected override void OnGainedInput()
+        => InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
 
-        menuManager = MenuManager.Instance;
-        audioManager = AudioManager.Instance;
+    protected override void OnLostInput()
+        => InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
+
+    public void OnButtonApplyClicked() 
+    {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
+        BuildFilterDataFromUI();
+        UIEvents.RaiseCharacterFilterUpdated(filterData);
+        RequestClose();
     }
 
-    #endregion
-
-    #region Menu Overrides
-
-    public override void Show()
+    public void OnButtonResetClicked() 
     {
-        base.Show();
-        base.SetInteractable(true);
-        ApplyFilterDataToUI();
+        AudioManager.Instance.PlaySfxUI("sfx-menu_cancel");
+        filterData.ResetUI();
+        ResetUI();
     }
 
-    public override void Hide()
+    public void OnInputValueChanged(string currentText)
     {
-        base.SetInteractable(false);
-        base.Hide();
+
     }
 
-    public override void SetInteractable(bool interactable)
+    public void OnInputEndEdit()
     {
-        base.SetInteractable(interactable);
-
-        if (interactable) 
-            SubscribeInput();
-        else
-            UnsubscribeInput();
-
-        if (interactable) 
-        {
-            base.SetDefaultSelectable(inputFieldName);
-            inputFieldName.DeactivateInputField();
-        }
-
-
-        isPlaySfxSelectEnabled = interactable;
+        if (EventSystem.current.alreadySelecting) return;
+        AudioManager.Instance.PlaySfxUI("sfx-menu_confirm");
+        EventSystem.current.SetSelectedGameObject(buttonApply.gameObject);
     }
 
-    public void Close()
+    public void OnButtonBackClicked() 
     {
-        if (!isOpen) return;
-        menuManager.CloseMenu();
+        RequestClose();
     }
 
-    #endregion
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        UIEvents.OnCharacterFilterRequested += HandleCharacterFilterRequested;
+        UIEvents.OnCharacterFilterResetRequested += HandleCharacterFilterResetRequested;
+        UIEvents.OnCharacterFilterUpdated += HandleCharacterFilterUpdated;
+    }
 
-    #region Logic
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        UIEvents.OnCharacterFilterRequested -= HandleCharacterFilterRequested;
+        UIEvents.OnCharacterFilterResetRequested -= HandleCharacterFilterResetRequested;
+        UIEvents.OnCharacterFilterUpdated -= HandleCharacterFilterUpdated;
+    }
+
+    private void HandleCharacterFilterRequested() 
+    {
+        MenuManager.Instance.OpenMenu(this);
+    }
+
+    private void HandleCharacterFilterResetRequested() 
+    {
+        filterData.Reset();
+        ResetUI();
+    }
+
+    private void HandleCharacterFilterUpdated(CharacterFilterData characterFilterData) 
+    {
+        filterData = characterFilterData;
+    }
 
     /// <summary>
     /// Reads all UI controls and writes into filterData.
@@ -179,7 +185,6 @@ public class MenuCharacterPanelFilter : Menu
     private void ApplyFilterDataToUI()
     {
         inputFieldName.SetTextWithoutNotify(filterData.Name ?? string.Empty);
-        inputFieldName.DeactivateInputField();
 
         foreach (var kvp in positionToggles)
             kvp.Key.SetIsOnWithoutNotify(filterData.Positions.Contains(kvp.Value));
@@ -194,7 +199,6 @@ public class MenuCharacterPanelFilter : Menu
     private void ResetUI()
     {
         inputFieldName.SetTextWithoutNotify(string.Empty);
-        inputFieldName.DeactivateInputField();
 
         foreach (var kvp in positionToggles)
             kvp.Key.SetIsOnWithoutNotify(false);
@@ -206,107 +210,4 @@ public class MenuCharacterPanelFilter : Menu
             kvp.Key.SetIsOnWithoutNotify(false);
     }
 
-    #endregion
-
-    #region Helper
-
-    #endregion
-
-    #region Input 
-
-    private void SubscribeInput()
-    {
-        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, HandleNavigationBack);
-    }
-
-    private void UnsubscribeInput()
-    {
-        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, HandleNavigationBack);
-    }
-
-    private void HandleNavigationBack() 
-    {
-        Close();
-        audioManager.PlaySfx("sfx-menu_back");
-    }
-
-    #endregion
-
-    #region Button Handle
-
-    public void OnButtonApplyClicked() 
-    {
-        audioManager.PlaySfx("sfx-menu_tap");
-        BuildFilterDataFromUI();
-        UIEvents.RaiseCharacterFilterUpdated(filterData);
-        Close();
-    }
-
-    public void OnButtonResetClicked() 
-    {
-        audioManager.PlaySfx("sfx-menu_change");
-        filterData.ResetUI();
-        ResetUI();
-    }
-
-    public void OnInputValueChanged(string currentText)
-    {
-
-    }
-
-    public void OnInputEndEdit()
-    {
-        inputFieldName.DeactivateInputField();
-        audioManager.PlaySfx("sfx-menu_confirm");
-        //base.SetDefaultSelectable(buttonApply);
-    }
-
-    public void OnButtonSelectedSfx() { 
-        if (isPlaySfxSelectEnabled)
-            audioManager.PlaySfx("sfx-menu_selected");
-    }
-
-    public void OnButtonTapSfx() { 
-        audioManager.PlaySfx("sfx-menu_tap");
-    }
-
-    public void OnButtonPointerEnter(Selectable selectable) 
-    {
-        base.SetDefaultSelectable(selectable);
-    }
-
-    #endregion
-
-    #region Events
-
-    private void OnEnable()
-    {
-        UIEvents.OnCharacterFilterRequested += HandleCharacterFilterRequested;
-        UIEvents.OnCharacterFilterResetRequested += HandleCharacterFilterResetRequested;
-        UIEvents.OnCharacterFilterUpdated += HandleCharacterFilterUpdated;
-    }
-
-    private void OnDisable()
-    {
-        UIEvents.OnCharacterFilterRequested -= HandleCharacterFilterRequested;
-        UIEvents.OnCharacterFilterResetRequested -= HandleCharacterFilterResetRequested;
-        UIEvents.OnCharacterFilterUpdated -= HandleCharacterFilterUpdated;
-    }
-
-    private void HandleCharacterFilterRequested() 
-    {
-        menuManager.OpenMenu(this);
-    }
-
-    private void HandleCharacterFilterResetRequested() 
-    {
-        filterData.Reset();
-    }
-
-    private void HandleCharacterFilterUpdated(CharacterFilterData characterFilterData) 
-    {
-        filterData = characterFilterData;
-    }
-
-    #endregion
 }

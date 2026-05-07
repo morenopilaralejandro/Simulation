@@ -9,131 +9,54 @@ using Aremoreno.Enums.Input;
 /// <summary>
 /// Displays all existing team loadouts and a "Create New" button.
 /// </summary>
-public class MenuTeamPanelLoadout : Menu
+public class MenuTeamPanelLoadout : SelectorLoadout
 {
     #region Fields
+
     [Header("References")]
-    [SerializeField] private ScrollViewAutoScroll autoScroll;
-    [SerializeField] private Transform listRoot;
-    [SerializeField] private LoadoutListItem itemPrefab;
     [SerializeField] private TMP_Text loadoutCountText;
     [SerializeField] private Button createButton;
-
-    private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
-    private bool isTop => menuManager.IsMenuOnTop(this);
-    private List<LoadoutListItem> spawnedItems = new();
-    private MenuManager menuManager;
-    private TeamManager teamManager;
-    private AudioManager audioManager;
-
-    private bool isPlaySfxSelectEnabled;
-
-    #endregion
-
-    #region Lifecycle
-
-    private void Awake()
-    {
-
-    }
-
-    private void Start()
-    {
-        base.Hide();
-        base.SetInteractable(false);
-
-        menuManager = MenuManager.Instance;
-        teamManager = TeamManager.Instance;
-        audioManager = AudioManager.Instance;
-    }
-
 
     #endregion
 
     #region Menu Overrides
 
-    public override void Show()
+    public void RefreshInternal()
     {
-        base.Show();
-        base.SetInteractable(true);
+        base.Refresh();
 
-        autoScroll.Activate();
-        autoScroll.ResetToTop();
-
-        Refresh();
+        int count = TeamManager.Instance.GetLoadoutCount();
+        UpdateCountText(count);
+        UpdateCreateButtonState(count);
     }
 
-    public override void Hide()
+    protected override void OnGainedInput()
     {
-        autoScroll.Deactivate();
-
-        base.SetInteractable(false);
-        base.Hide();
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, HandleBack);
     }
 
-    public override void SetInteractable(bool interactable)
+    protected override void OnLostInput()
     {
-        base.SetInteractable(interactable);
-
-        if (interactable)
-            autoScroll.Activate();
-        else
-            autoScroll.Deactivate();
-
-        if (interactable) 
-            SubscribeInput();
-        else
-            UnsubscribeInput();
-
-        isPlaySfxSelectEnabled = interactable;
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, HandleBack);
     }
 
-    public void Close()
+    #endregion
+
+    #region Input
+
+    private void HandleBack()
     {
-        if (!isOpen) return;
-        menuManager.CloseMenu();
         UIEvents.RaiseTeamMenuClosed();
+        RequestClose();
     }
 
     #endregion
 
     #region Logic
-
-    public void Refresh()
-    {
-        ClearList();
-
-        List<Team> allLoadouts = teamManager.GetAllLoadouts();
-        string activeGuid = teamManager.ActiveLoadoutGuid;
-
-        foreach (Team loadout in allLoadouts)
-        {
-            LoadoutListItem item = Instantiate(itemPrefab, listRoot);
-            bool isActive = loadout.TeamGuid == activeGuid;
-            item.Initialize(loadout, isActive, HandleItemClicked);
-            spawnedItems.Add(item);
-        }
-
-        base.SetDefaultSelectable(spawnedItems[0].GetComponent<Button>());
-
-        UpdateCountText(allLoadouts.Count);
-        UpdateCreateButtonState(allLoadouts.Count);
-    }
-
-    private void ClearList()
-    {
-        foreach (LoadoutListItem item in spawnedItems)
-        {
-            if (item != null)
-                Destroy(item.gameObject);
-        }
-        spawnedItems.Clear();
-    }
-
+ 
     private void UpdateCountText(int count)
     {
-        if (loadoutCountText != null)
-            loadoutCountText.text = $"({count} / {TeamManager.MAX_LOADOUTS})";
+        loadoutCountText.text = $"({count} / {TeamManager.MAX_LOADOUTS})";
     }
 
     private void UpdateCreateButtonState(int count)
@@ -147,101 +70,72 @@ public class MenuTeamPanelLoadout : Menu
 
     private void SubscribeInput()
     {
-        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCloseClicked);
+        InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
     }
 
     private void UnsubscribeInput()
     {
-        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonCloseClicked);
+        InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
     }
 
-    #endregion
-
-    #region Button Handlers
-
-    private void HandleItemClicked(Team team)
-    {
-        if (isPlaySfxSelectEnabled)
-            audioManager.PlaySfx("sfx-menu_tap");
-        UIEvents.RaiseTeamLoadoutSelected(team);
-    }
+    public void OnButtonBackClicked() => HandleBack();
 
     public void OnButtonCreateClicked()
     {
-        isPlaySfxSelectEnabled = false;
-        audioManager.PlaySfx("sfx-menu_tap");
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         UIEvents.RaiseTeamLoadoutCreateRequested();
-    }
-
-    public void OnButtonCloseClicked()
-    {
-        audioManager.PlaySfx("sfx-menu_back");
-        Close();
-    }
-
-    public void OnButtonSelectedSfx() 
-    { 
-        if (isPlaySfxSelectEnabled)
-            audioManager.PlaySfx("sfx-menu_selected");
-    }
-
-    public void OnButtonPointerEnter(Selectable selectable) 
-    {
-        base.SetDefaultSelectable(selectable);
-    }
-
-    public void OnScrollSfx() 
-    { 
-        audioManager.PlaySfx("sfx-menu_scroll");
     }
 
     #endregion
 
     #region Events
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        UIEvents.OnTeamLoadoutRequested += HandleRequested;
+        base.OnEnable();
+        UIEvents.OnLoadoutSelectorOpenRequested += HandleOpenRequested;
         UIEvents.OnTeamLoadoutCreateRequested += HandleCreateRequested;
         UIEvents.OnTeamLoadoutDeleteRequested += HandleDeleteRequested;
         TeamEvents.OnLoadoutDeleted += HandleLoadoutDeleted;
         TeamEvents.OnLoadoutUpdated += HandleLoadoutUpdated;
         UIEvents.OnBackFromTeamRequested += HandleBackToLoadoutList;
-        UIEvents.OnGenericScroll += HandleGenericScroll;
-        UIEvents.OnLoadoutListItemSelect += HandleLoadoutListItemSelect;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
-        UIEvents.OnTeamLoadoutRequested -= HandleRequested;
+        base.OnDisable();
+        UIEvents.OnLoadoutSelectorOpenRequested -= HandleOpenRequested;
         UIEvents.OnTeamLoadoutCreateRequested -= HandleCreateRequested;
         UIEvents.OnTeamLoadoutDeleteRequested -= HandleDeleteRequested;
         TeamEvents.OnLoadoutDeleted -= HandleLoadoutDeleted;
         TeamEvents.OnLoadoutUpdated -= HandleLoadoutUpdated;
         UIEvents.OnBackFromTeamRequested -= HandleBackToLoadoutList;
-        UIEvents.OnGenericScroll -= HandleGenericScroll;
-        UIEvents.OnLoadoutListItemSelect -= HandleLoadoutListItemSelect;
     }
 
-    private void HandleRequested() 
+    private void HandleOpenRequested(
+        ISelectorSource<Team>      source,
+        ISelectorClickAction<Team> action,
+        ISelectorFilter<Team>      filter)
     {
-        menuManager.OpenMenu(this);
+        if (MenuManager.Instance.IsMenuOpen(this)) return;
+
+        Open(source, action, filter);
     }
 
     private void HandleCreateRequested() 
     {
-        Team newLoadout = teamManager.CreateLoadout();
+        Team newLoadout = TeamManager.Instance.CreateLoadout();
         if (newLoadout == null) return;
    
         // Refresh the list, then navigate into the new loadout
-        Refresh();
-        UIEvents.RaiseTeamLoadoutSelected(newLoadout);
+        RefreshInternal();
+        UIEvents.RaiseSelectorLoadoutActionClicked(newLoadout);
     }
 
     private void HandleDeleteRequested(Team team)
     {
-        teamManager.DeleteLoadout(team.TeamGuid);
-        Refresh();
+        TeamManager.Instance.DeleteLoadout(team.TeamGuid);
+        RefreshInternal();
     }
 
     private void HandleLoadoutDeleted(Team team)
@@ -251,26 +145,12 @@ public class MenuTeamPanelLoadout : Menu
 
     private void HandleLoadoutUpdated(Team team)
     {
-        Refresh();
+        RefreshInternal();
     }
 
     private void HandleBackToLoadoutList(Team team, bool hasSwapped) 
     {
-        Refresh();
-    }
-
-    private void HandleGenericScroll(BaseEventData eventData) 
-    {
-        if (!isTop) return;
-        autoScroll.OnScroll(eventData);
-    }
-
-    private void HandleLoadoutListItemSelect(LoadoutListItem listItem) 
-    {
-        if (!isTop) return;
-
-        if (isPlaySfxSelectEnabled) 
-            audioManager.PlaySfx("sfx-menu_selected");
+        RefreshInternal();
     }
 
     #endregion

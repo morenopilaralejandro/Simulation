@@ -96,6 +96,10 @@ public class TeamPreviewUI : MonoBehaviour
     {
         if (!canvasGroup.interactable) return;
         if (slot == null || slot.gameObject == null) return;
+        if (InputManager.Instance.IsAndroid && !InputManager.Instance.IsUsingController) return;
+
+
+        UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
         EventSystem.current.SetSelectedGameObject(slot.gameObject);
         UIEvents.RaiseFormationCharacterSlotUISelected(slot);
     }

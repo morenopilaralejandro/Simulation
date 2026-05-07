@@ -82,6 +82,27 @@ public class AudioManager : MonoBehaviour
         src.PlayOneShot(clip);
     }
 
+    private float minIntervalPerSound = 0.05f;
+    private float _sfxNextAllowedTime = 0f;     
+
+    public async void PlaySfxUI(string address, bool isStack = false)
+    {
+        float now = Time.unscaledTime;
+
+        if (now < _sfxNextAllowedTime) return;
+        _sfxNextAllowedTime = now + minIntervalPerSound;
+
+        AudioClip clip = await LoadClipAsync(address);
+        if (clip == null)
+        {
+            LogManager.Error($"[AudioManager] Failed to load clip at address '{address}'");
+            return;
+        }
+
+        sourceSfx.spatialBlend = 0f;
+        sourceSfx.PlayOneShot(clip);
+    }
+
     public async void PlaySfxLoop(string address)
     {
         if (sourceSfxLoop.isPlaying && 

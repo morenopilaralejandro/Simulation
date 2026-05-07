@@ -121,6 +121,11 @@ public class TeamManagerLoadout
         return loadouts.Values.ToList();
     }
 
+    public int GetLoadoutCount()
+    {
+        return loadouts.Count();
+    }
+
     #endregion
 
     #region Active Loadout

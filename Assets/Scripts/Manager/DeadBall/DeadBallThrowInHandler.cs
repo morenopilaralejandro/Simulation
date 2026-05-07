@@ -98,6 +98,14 @@ public class DeadBallThrowInHandler : IDeadBallHandler
         //  Subscribe FIRST so cascades that end in Finish() can unsubscribe cleanly
         SubscribeInputConfirm();
 
+        bool needsOffenseInput =
+            deadBallManager.IsUserOffense &&
+            !characterKicker.IsEnemyAI &&
+            !isAutoBattleEnabled;
+
+        if (needsOffenseInput)
+            SubscribeInputPass();
+
         //  Set flags BEFORE any Notify* call so IsReady reflects the truth
         bool aiKicker = characterKicker.IsEnemyAI
             && characterKicker.TeamSide == deadBallManager.OffenseSide;
@@ -187,19 +195,7 @@ public class DeadBallThrowInHandler : IDeadBallHandler
         deadBallManager.NotifyReadinessChanged();
 
         if (deadBallManager.DeadBallState == DeadBallState.Executing)
-        {
             UnsubscribeInputConfirm();
-
-            // Only the user-offense human-kicker path needs the pass input.
-            // AI-kicker / auto-battle already set isKickExecuted, and Execute()
-            // already cascaded into Finish() via NotifyHandlerReady().
-            bool needsOffenseInput = deadBallManager.IsUserOffense
-                                  && !characterKicker.IsEnemyAI
-                                  && !isKickExecuted;
-
-            if (needsOffenseInput)
-                SubscribeInputPass();
-        }
     }
 
     private void HandlePassPressed()

@@ -241,8 +241,12 @@ public class MoveSlotUI : MonoBehaviour,
         MoveSlotUI draggedSlot =
             eventData.pointerDrag?.GetComponent<MoveSlotUI>();
 
-        if (draggedSlot != null && draggedSlot != this && draggedSlot.isDragging)
+        if (draggedSlot != null && draggedSlot != this && draggedSlot.isDragging) 
+        {
+            AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
             SwapMoves(draggedSlot);
+        }
+
     }
 
     private void SwapMoves(MoveSlotUI other)

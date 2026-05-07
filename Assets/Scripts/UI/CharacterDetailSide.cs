@@ -102,6 +102,8 @@ public class CharacterDetailSide : MonoBehaviour
 
     private void ChangePage() 
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
+
         page++;
 
         if (page > pageMax)
@@ -129,8 +131,6 @@ public class CharacterDetailSide : MonoBehaviour
         UIEvents.OnCharacterDetailSideUpdateRequested += HandleCharacterDetailSideUpdateRequested;
         UIEvents.OnCharacterDetailSideNextPageRequested += HandleCharacterDetailSideNextPageRequested;
         UIEvents.OnFormationCharacterSlotUISelected += HandleFormationCharacterSlotUISelected;
-        UIEvents.OnFormationCharacterSlotUIHighlighted += HandleFormationCharacterSlotUIHighlighted;
-        UIEvents.OnFormationCharacterSlotUIClicked += HandleFormationCharacterSlotUIClicked;
     }
 
     private void OnDisable()
@@ -138,8 +138,6 @@ public class CharacterDetailSide : MonoBehaviour
         UIEvents.OnCharacterDetailSideUpdateRequested -= HandleCharacterDetailSideUpdateRequested;
         UIEvents.OnCharacterDetailSideNextPageRequested -= HandleCharacterDetailSideNextPageRequested;
         UIEvents.OnFormationCharacterSlotUISelected -= HandleFormationCharacterSlotUISelected;
-        UIEvents.OnFormationCharacterSlotUIHighlighted -= HandleFormationCharacterSlotUIHighlighted;
-        UIEvents.OnFormationCharacterSlotUIClicked -= HandleFormationCharacterSlotUIClicked;
     }
 
     private void HandleCharacterDetailSideUpdateRequested(Character character, Position position) 
@@ -153,16 +151,6 @@ public class CharacterDetailSide : MonoBehaviour
     }
 
     private void HandleFormationCharacterSlotUISelected(FormationCharacterSlotUI slot) 
-    {
-        UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
-    }
-
-    private void HandleFormationCharacterSlotUIHighlighted(FormationCharacterSlotUI slot) 
-    {
-        UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
-    }
-
-    private void HandleFormationCharacterSlotUIClicked(FormationCharacterSlotUI slot) 
     {
         UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
     }

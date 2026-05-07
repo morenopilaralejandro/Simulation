@@ -69,6 +69,7 @@ public class TeamManager : MonoBehaviour
     public bool DeleteLoadout(string teamGuid) => loadoutSystem.DeleteLoadout(teamGuid);
     public Team GetLoadout(string teamGuid) => loadoutSystem.GetLoadout(teamGuid);
     public List<Team> GetAllLoadouts() => loadoutSystem.GetAllLoadouts();
+    public int GetLoadoutCount() => loadoutSystem.GetLoadoutCount();
     public void SetActiveLoadout(string teamGuid) => loadoutSystem.SetActiveLoadout(teamGuid);
     public bool HasActiveLoadout() => loadoutSystem.HasActiveLoadout();
     public void SetCharacterInLoadout(Team loadout, BattleType battleType, int slotIndex, string characterGuid) => loadoutSystem.SetCharacterInLoadout(loadout, battleType, slotIndex, characterGuid);
