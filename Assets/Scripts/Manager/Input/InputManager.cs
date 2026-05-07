@@ -293,7 +293,10 @@ public class InputManager : MonoBehaviour
         InputEvents.RaiseActionDown(customAction);
 
         if (_perActionDown.TryGetValue(customAction, out var cb))
-            cb?.Invoke();
+        {
+            var invokeList = cb;
+            invokeList?.Invoke();
+        }
     }
 
     private void OnButtonUp(CustomAction customAction)
@@ -305,7 +308,10 @@ public class InputManager : MonoBehaviour
         InputEvents.RaiseActionUp(customAction);
 
         if (_perActionUp.TryGetValue(customAction, out var cb))
-            cb?.Invoke();
+        {
+            var invokeList = cb;
+            invokeList?.Invoke();
+        }
     }
     #endregion
 
@@ -489,10 +495,17 @@ public class InputManager : MonoBehaviour
 
     public void SubscribeDown(CustomAction action, Action callback)
     {
-        if (_perActionDown.ContainsKey(action))
-            _perActionDown[action] += callback;
+        if (_perActionDown.TryGetValue(action, out var existing))
+        {
+            // prevent duplicates
+            existing -= callback;
+            existing += callback;
+            _perActionDown[action] = existing;
+        }
         else
+        {
             _perActionDown[action] = callback;
+        }
     }
 
     public void UnsubscribeDown(CustomAction action, Action callback)
@@ -507,10 +520,17 @@ public class InputManager : MonoBehaviour
 
     public void SubscribeUp(CustomAction action, Action callback)
     {
-        if (_perActionUp.ContainsKey(action))
-            _perActionUp[action] += callback;
+        if (_perActionDown.TryGetValue(action, out var existing))
+        {
+            // prevent duplicates
+            existing -= callback;
+            existing += callback;
+            _perActionUp[action] = existing;
+        }
         else
+        {
             _perActionUp[action] = callback;
+        }
     }
 
     public void UnsubscribeUp(CustomAction action, Action callback)

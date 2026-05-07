@@ -90,6 +90,14 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
 
         SubscribeInputConfirm();
 
+        bool needsOffenseInput =
+            deadBallManager.IsUserOffense &&
+            !characterKicker.IsEnemyAI &&
+            !isAutoBattleEnabled;
+
+        if (needsOffenseInput)
+            SubscribeInputPass();
+
         bool aiKicker = characterKicker.IsEnemyAI
             && characterKicker.TeamSide == deadBallManager.OffenseSide;
 
@@ -176,19 +184,8 @@ public class DeadBallCornerKickHandler : IDeadBallHandler
         deadBallManager.NotifyReadinessChanged();
 
         if (deadBallManager.DeadBallState == DeadBallState.Executing)
-        {
             UnsubscribeInputConfirm();
 
-            // Only the user-offense human-kicker path needs the pass input.
-            // AI-kicker / auto-battle already set isKickExecuted, and Execute()
-            // already cascaded into Finish() via NotifyHandlerReady().
-            bool needsOffenseInput = deadBallManager.IsUserOffense
-                                  && !characterKicker.IsEnemyAI
-                                  && !isKickExecuted;
-
-            if (needsOffenseInput)
-                SubscribeInputPass();
-        }
     }
 
     private void HandlePassPressed()
