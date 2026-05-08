@@ -1094,6 +1094,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6decff4c-a79d-4787-8eb4-8a364edaae8d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_OpenSideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""627e3175-ae63-4c1f-a4fd-e743d4f463f2"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
@@ -1118,6 +1129,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""a8bb639c-a68d-4b0f-ac3d-33122bb218ba"",
                     ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_CloseSideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c4679302-1e72-48b5-9a2e-07dba3b79637"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

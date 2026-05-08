@@ -1,101 +1,74 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
+using TMPro;
+using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.UI;
 using Aremoreno.Enums.Input;
 using Aremoreno.Enums.World;
 
-/*
-    menu things
-    MenuManager.Instance.ReplaceMenu(duelLogMenu);
-*/
-
 public class MenuSide : Menu
 {
+    [Header("UI References - Sub menues")]
     [SerializeField] private MenuTeam menuTeam;
     [SerializeField] private MenuSave menuSave;
     [SerializeField] private MenuCharacter menuCharacter;
 
+    [Header("UI References - Internal")]
+    [SerializeField] protected ScrollViewAutoScroll autoScroll;
+    //[SerializeField] protected ScrollRect           scrollRect;
+    [SerializeField] protected MenuSideLayout layout;
+
     private MenuManager menuManager;
     private WorldManager worldManager;
-    private bool isOpen => menuManager.IsMenuOpen(this);
-    private bool isTop => menuManager.IsMenuOnTop(this);
-    public bool IsSideMenuOpen => isOpen;
 
-    private void Awake()
-    {
-        //BattleUIManager.Instance.RegisterBattleMenu(this);
-    }
+    private int openedFrame;
 
-    private void OnDestroy()
-    {
-        //BattleUIManager.Instance.UnregisterBattleMenu(this);
-    }
-
-    void Start()
+    private void Start() 
     {
         menuManager = MenuManager.Instance;
         worldManager = WorldManager.Instance;
-        base.Hide();
-        base.SetInteractable(false);
     }
 
-    void Update()
-    {
-        HandleInput();
-    }
+    //show hide populate and clear layout
 
-    private void HandleInput()
+    public override void Show() 
     {
-        if (isTop)
-        {
-            if (InputManager.Instance.GetDown(CustomAction.World_CloseSideMenu))
-                Close();
-        } else 
-        {
-            if (!WorldManager.Instance.PlayerWorldEntity.CanOpenMenu) return;
-            if (InputManager.Instance.GetDown(CustomAction.World_OpenSideMenu))
-                Open();
-        }
-    }
-
-    public override void Show()
-    {
+        //layout.Populate();
         base.Show();
-        InputEvents.RaiseScreenControlsHideRequested();
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
     }
 
-    public override void Hide()
+    public override void Hide() 
     {
-        InputEvents.RaiseScreenControlsShowRequested();
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
         base.Hide();
+        layout.Clear();
     }
 
-    public void Open()
+    public override void SetInteractable(bool interactable)
     {
-        if (menuManager.CurrentMenu != null && 
-            !menuManager.IsMenuOnTop(this)) 
-            return;
+        base.SetInteractable(interactable);
+        if (autoScroll != null)
+        {
+            if (interactable) autoScroll.Activate();
+            else              autoScroll.Deactivate();
+        }
 
-        if (isOpen) return;
-
-        menuManager.OpenMenu(this);
-        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.InMenu);
+        if (interactable) layout.Populate();
     }
 
-    public void Close()
+    protected override void OnGainedInput()
     {
-        if (!menuManager.IsMenuOnTop(this)) return;
-        if (!isOpen) return;
-        menuManager.CloseMenu();
-        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.FreeRoam);
+        var input = InputManager.Instance;
+        input.UnsubscribeDown(CustomAction.World_OpenSideMenu, HandleOpenInput);
+        input.SubscribeDown(CustomAction.World_CloseSideMenu, OnButtonBackClicked);
     }
 
-    public void OnButtonTapped()
+    protected override void OnLostInput()
     {
-        Close();
+        var input = InputManager.Instance;
+        input.UnsubscribeDown(CustomAction.World_CloseSideMenu, OnButtonBackClicked);
+        input.SubscribeDown(CustomAction.World_OpenSideMenu, HandleOpenInput);
     }
 
     public void OnButtonTeamTapped()
@@ -113,4 +86,49 @@ public class MenuSide : Menu
         menuManager.OpenMenu(menuCharacter);
     }
 
+    public void OnButtonBackClicked()
+    {
+        if (Time.frameCount == openedFrame) return;
+
+        if (!IsInteractable()) return;
+        EventSystem.current.SetSelectedGameObject(null);
+        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.FreeRoam);
+        UIEvents.RaiseMenuSideCloseRequested();
+        RequestClose();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        UIEvents.OnMenuSideOpenRequested += HandleMenuSideOpenRequested;
+
+        // Start in "world" mode, so only open is active.
+        InputManager.Instance.SubscribeDown(CustomAction.World_OpenSideMenu, HandleOpenInput);
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        UIEvents.OnMenuSideOpenRequested -= HandleMenuSideOpenRequested;
+
+        var input = InputManager.Instance;
+        input.UnsubscribeDown(CustomAction.World_OpenSideMenu, HandleOpenInput);
+        input.UnsubscribeDown(CustomAction.World_CloseSideMenu, OnButtonBackClicked);
+    }
+
+    private void HandleMenuSideOpenRequested()
+    {
+        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.InMenu);
+        MenuManager.Instance.OpenMenu(this);
+    }
+
+    private void HandleOpenInput()
+    {
+        if (!WorldManager.Instance.PlayerWorldEntity.CanOpenMenu) return;
+
+        openedFrame = Time.frameCount;
+
+        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.InMenu);
+        MenuManager.Instance.OpenMenu(this);
+    }
 }

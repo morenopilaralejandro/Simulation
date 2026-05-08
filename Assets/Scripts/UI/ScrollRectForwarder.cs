@@ -9,7 +9,7 @@ public class ScrollRectForwarder : MonoBehaviour,
     IEndDragHandler,
     IInitializePotentialDragHandler
 {
-    private ScrollRect sr;
+    [SerializeField] private ScrollRect sr;
 
     public void SetScrollRect(ScrollRect scrollRect) => sr = scrollRect;
 

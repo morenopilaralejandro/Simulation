@@ -520,7 +520,7 @@ public class InputManager : MonoBehaviour
 
     public void SubscribeUp(CustomAction action, Action callback)
     {
-        if (_perActionDown.TryGetValue(action, out var existing))
+        if (_perActionUp.TryGetValue(action, out var existing))
         {
             // prevent duplicates
             existing -= callback;

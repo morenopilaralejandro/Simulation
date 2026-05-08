@@ -28,6 +28,19 @@ public static class UIEvents
         OnAllMenusClosed?.Invoke();
     }
 
+    // Menu Side
+    public static event Action OnMenuSideOpenRequested;
+    public static void RaiseMenuSideOpenRequested()
+    {
+        OnMenuSideOpenRequested?.Invoke();
+    }
+
+    public static event Action OnMenuSideCloseRequested;
+    public static void RaiseMenuSideCloseRequested()
+    {
+        OnMenuSideCloseRequested?.Invoke();
+    }
+
     // Menu Team
     public static event Action OnTeamMenuClosed;
     public static void RaiseTeamMenuClosed()

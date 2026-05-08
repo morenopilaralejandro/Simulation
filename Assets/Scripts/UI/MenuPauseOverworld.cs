@@ -9,7 +9,7 @@ using Aremoreno.Enums.World;
     menu things
     MenuManager.Instance.ReplaceMenu(duelLogMenu);
 */
-
+// TODO MenuQuitOverworld
 public class MenuPauseOverworld : Menu
 {
     private MenuManager menuManager;
@@ -37,7 +37,7 @@ public class MenuPauseOverworld : Menu
 
     void Update()
     {
-        HandleInput();
+        // HandleInput();
     }
 
     private void HandleInput()
