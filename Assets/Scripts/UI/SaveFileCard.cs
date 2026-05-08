@@ -52,8 +52,8 @@ public class SaveFileCard : MonoBehaviour
         SetData(
             worldManager.ZoneName,
             GetTimeFormated(
-                DateTimeOffset.UtcNow.ToUnixTimeSeconds(), 
-                persistenceManager.TimestampCreation
+                persistenceManager.TimestampCreation,
+                DateTimeOffset.UtcNow.ToUnixTimeSeconds()
             )
         );
     }

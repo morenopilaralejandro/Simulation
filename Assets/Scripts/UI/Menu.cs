@@ -48,6 +48,14 @@ public abstract class Menu : MonoBehaviour, IClosableMenu
     protected virtual void OnDisable()
     {
         UIEvents.OnSelectableSelected -= HandleSelectableSelected;
+
+        isRestoringFocus = false;
+
+        if (wasInteractable)
+        {
+            OnLostInput();
+            wasInteractable = false;
+        }
     }
 
     #endregion
@@ -98,6 +106,8 @@ public abstract class Menu : MonoBehaviour, IClosableMenu
 
     public virtual void SetInteractable(bool isInteractable)
     {
+        if (canvasGroup == null) return;
+    
         canvasGroup.interactable = canvasGroup.blocksRaycasts = isInteractable;
 
         if (hideWhenNotInteractable)

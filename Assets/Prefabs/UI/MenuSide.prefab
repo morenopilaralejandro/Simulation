@@ -716,7 +716,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1634,13 +1634,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8076753923990935306}
   - {fileID: 7505727802352799036}
+  - {fileID: 8076753923990935306}
   m_Father: {fileID: 2239795186411896431}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1032, y: 0}
+  m_AnchoredPosition: {x: 972, y: 0}
   m_SizeDelta: {x: 286, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &4911338990049183585
@@ -2039,6 +2039,7 @@ MonoBehaviour:
   sfxClose: sfx-menu_back
   menuTeam: {fileID: 0}
   menuSave: {fileID: 0}
+  menuQuit: {fileID: 0}
   menuCharacter: {fileID: 0}
   autoScroll: {fileID: 7181493229951778515}
   layout: {fileID: 6063536477379565020}
@@ -2834,10 +2835,22 @@ PrefabInstance:
     - target: {fileID: 6404027525539474288, guid: dbcefa173d50f6ad5b98f1bfbff1def3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 7792855188637134519}
+      objectReference: {fileID: 1480065297433756502}
     - target: {fileID: 6404027525539474288, guid: dbcefa173d50f6ad5b98f1bfbff1def3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6404027525539474288, guid: dbcefa173d50f6ad5b98f1bfbff1def3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnButtonQuitTapped
+      objectReference: {fileID: 0}
+    - target: {fileID: 6404027525539474288, guid: dbcefa173d50f6ad5b98f1bfbff1def3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MenuSide, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6404027525539474288, guid: dbcefa173d50f6ad5b98f1bfbff1def3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

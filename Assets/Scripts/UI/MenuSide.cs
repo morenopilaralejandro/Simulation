@@ -13,6 +13,7 @@ public class MenuSide : Menu
     [Header("UI References - Sub menues")]
     [SerializeField] private MenuTeam menuTeam;
     [SerializeField] private MenuSave menuSave;
+    [SerializeField] private MenuQuitOverworld menuQuit;
     [SerializeField] private MenuCharacter menuCharacter;
 
     [Header("UI References - Internal")]
@@ -84,6 +85,11 @@ public class MenuSide : Menu
     public void OnButtonCharacterTapped()
     {
         menuManager.OpenMenu(menuCharacter);
+    }
+
+    public void OnButtonQuitTapped()
+    {
+        menuManager.OpenMenu(menuQuit);
     }
 
     public void OnButtonBackClicked()
