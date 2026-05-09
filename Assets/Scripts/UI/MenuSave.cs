@@ -4,13 +4,14 @@ using UnityEngine.Localization;
 using TMPro;
 using System.Collections;
 using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.Input;
 
 /// <summary>
 /// Menu for saving the game.
 /// </summary>
 public class MenuSave : Menu
 {
-    [Header("References")]
+    [Header("UI References")]
     [SerializeField] private SaveFileCard saveFileCard;
     [SerializeField] private CanvasGroup canvasButtons;
     [SerializeField] private Button buttonConfirm;
@@ -20,91 +21,63 @@ public class MenuSave : Menu
     [SerializeField] private LocalizedString stringSaveProgress;
     [SerializeField] private LocalizedString stringSaveFinished;
 
-    private MenuManager menuManager;
-    private AudioManager audioManager;
-    private PersistenceManager persistenceManager;
     private float coroutineCloseDuration = 0.5f;
 
-    private bool isOpen => menuManager != null && menuManager.IsMenuOpen(this);
-    public bool IsTeamMenuOpen => isOpen;
-
-    #region Lifecycle
-
-    private void Awake()
+    public override void Show() 
     {
-        menuManager = MenuManager.Instance;
-        audioManager = AudioManager.Instance;
-        persistenceManager = PersistenceManager.Instance;
-    }
-
-    private void Start()
-    {
-        base.Hide();
-        base.SetInteractable(false);
-    }
-
-    /*
- 
-    private void Update()
-    {
-        HandleInput();
-    }
-
-    */
-
-    #endregion
-
-    #region Menu Overrides
-
-    public override void Show()
-    {
-        base.Show();
-        base.SetInteractable(true);
-
         saveFileCard.SetFromRuntime();
         textMessage.text = stringSaveDialog.GetLocalizedString();
         SetButtonVisible(true);
+
+        base.Show();
     }
 
-    public override void Hide()
-    {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
-        base.SetInteractable(false);
-        base.Hide();
-    }
+    protected override void OnGainedInput()
+        => InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCancelClicked);
 
-    #endregion
+    protected override void OnLostInput()
+        => InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonCancelClicked);
 
-    #region Navigation
-
-    public void OnButtonConfirmTapped()
+    public void OnButtonConfirmClicked()
     {
         textMessage.text = stringSaveProgress.GetLocalizedString();
         SetButtonVisible(false);
-        persistenceManager.SaveGame();
+        PersistenceManager.Instance.SaveGame();
         // Closes when event is fired
     }
 
-    public void OnButtonCancelTapped()
+    public void OnButtonCancelClicked()
     {
-        Close();
+        if(!buttonCancel.interactable) return;
+        RequestClose();
     }
 
-    public void Close()
+    protected override void OnEnable()
     {
-        if (!isOpen) return;
-        menuManager.CloseMenu();
+        base.OnEnable();
+        PersistenceEvents.OnGameSaved += HandleGameSaved;
     }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        PersistenceEvents.OnGameSaved -= HandleGameSaved;
+    }
+
+    private void HandleGameSaved(SaveData saveData) 
+    {
+        saveFileCard.SetFromSaveData(saveData);
+        textMessage.text = stringSaveFinished.GetLocalizedString();
+        StartCoroutine(CoroutineCloseMenu());
+    }
+
+    #region Helpers
 
     private IEnumerator CoroutineCloseMenu()
     {
         yield return new WaitForSeconds(coroutineCloseDuration);
-        Close();
+        RequestClose();
     }
-
-    #endregion
-
-    #region Helpers
 
     public void SetButtonVisible(bool boolValue)
     {
@@ -117,52 +90,4 @@ public class MenuSave : Menu
     }
 
     #endregion
-
-    #region Input
-
-    /*
-
-    private void HandleInput()
-    {
-        // Placeholder for input handling
-
-        if (isOpen)
-        {
-            if (InputManager.Instance.GetDown(CustomAction.World_CloseSideMenu))
-                Close();
-        }
-        else
-        {
-            if (!WorldManager.Instance.PlayerCanOpenMenu) return;
-            if (InputManager.Instance.GetDown(CustomAction.World_OpenSideMenu))
-                Open();
-        }
-
-    }
-
-    */
-
-    #endregion
-
-    #region Events
-
-    private void OnEnable()
-    {
-        PersistenceEvents.OnGameSaved += HandleGameSaved;
-    }
-
-    private void OnDisable()
-    {
-        PersistenceEvents.OnGameSaved -= HandleGameSaved;
-    }
-
-    private void HandleGameSaved(SaveData saveData) 
-    {
-        saveFileCard.SetFromSaveData(saveData);
-        textMessage.text = stringSaveFinished.GetLocalizedString();
-        StartCoroutine(CoroutineCloseMenu());
-    }
-
-    #endregion
-
 }

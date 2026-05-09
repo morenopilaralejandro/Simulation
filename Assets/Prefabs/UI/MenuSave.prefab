@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.10980392, g: 0, b: 0.11764706, a: 1}
+  m_Color: {r: 0.050980393, g: 0.039215688, b: 0.078431375, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -365,6 +365,14 @@ MonoBehaviour:
   canvasGroup: {fileID: 1650142064847329753}
   deactivateOnHide: 0
   closeAllPreviousOnBack: 0
+  hasMemory: 1
+  hideWhenNotInteractable: 0
+  startHidden: 1
+  hideWhenCovered: 0
+  dimWhenCovered: 0
+  dimmedAlpha: 0.5
+  sfxOpen: sfx-menu_tap
+  sfxClose: sfx-menu_back
   saveFileCard: {fileID: 2841761630993596659}
   canvasButtons: {fileID: 4586558369212655193}
   buttonConfirm: {fileID: 3096238237120260989}
@@ -372,27 +380,27 @@ MonoBehaviour:
   textMessage: {fileID: 9078762544781337383}
   stringSaveDialog:
     m_TableReference:
-      m_TableCollectionName: GUID:b5d13fbbe2c20ffcb8e8c8b8c5759e5a
+      m_TableCollectionName: GUID:c5bcd25bedf71ece09e94e9b350711be
     m_TableEntryReference:
-      m_KeyId: 14810886931488768
+      m_KeyId: 91902627223969792
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   stringSaveProgress:
     m_TableReference:
-      m_TableCollectionName: GUID:bf0b1ed26baba17d59cc64d0be0ed777
+      m_TableCollectionName: GUID:c5bcd25bedf71ece09e94e9b350711be
     m_TableEntryReference:
-      m_KeyId: 259675398144
+      m_KeyId: 91902627223969793
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
     m_LocalVariables: []
   stringSaveFinished:
     m_TableReference:
-      m_TableCollectionName: GUID:568ceae0f2d9f48db8c684673048b4f3
+      m_TableCollectionName: GUID:c5bcd25bedf71ece09e94e9b350711be
     m_TableEntryReference:
-      m_KeyId: 14946939591991296
+      m_KeyId: 91902627223969794
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
@@ -566,6 +574,10 @@ PrefabInstance:
       propertyPath: m_text
       value: No
       objectReference: {fileID: 0}
+    - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
+      propertyPath: m_fontSize
+      value: 38
+      objectReference: {fileID: 0}
     - target: {fileID: 7091285805655136620, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -672,7 +684,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7243787044983470859, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnButtonCancelTapped
+      value: OnButtonCancelClicked
       objectReference: {fileID: 0}
     - target: {fileID: 7243787044983470859, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -998,7 +1010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7243787044983470859, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnButtonConfirmTapped
+      value: OnButtonConfirmClicked
       objectReference: {fileID: 0}
     - target: {fileID: 7243787044983470859, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
