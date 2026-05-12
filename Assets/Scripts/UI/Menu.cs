@@ -74,6 +74,7 @@ public abstract class Menu : MonoBehaviour, IClosableMenu
 
     public virtual void Hide()
     {
+        if (canvasGroup == null) return;
         if (deactivateOnHide)
             gameObject.SetActive(false);
         else

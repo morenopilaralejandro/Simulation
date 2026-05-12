@@ -1,54 +1,60 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
 using Aremoreno.Enums.Input;
 
 public class ForfeitMenu : Menu
 {
+    //[Header("UI References")]
+    //[SerializeField] private TMPInputFieldNoAutoActivate inputFieldName;
+
     public bool IsForfeitMenuOpen => MenuManager.Instance.IsMenuOpen(this);
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         BattleUIManager.Instance.RegisterForfeitMenu(this);
     }
 
-    private void OnDestroy()
+    private void Destroy()
     {
         BattleUIManager.Instance.UnregisterForfeitMenu(this);
     }
 
-    void Start()
-    {
-        base.Hide();
-    }
+    protected override void OnGainedInput()
+        => InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCancelTapped);
 
-    public override void Show()
-    {
-        base.Show();
-    }
-
-    public override void Hide()
-    {
-        base.Hide();
-    }
+    protected override void OnLostInput()
+        => InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonCancelTapped);
 
     public void OnButtonConfimTapped()
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
+        RequestClose();
         BattleManager.Instance.ForfeitBattle();
-        MenuManager.Instance.CloseMenu();
     }
 
     public void OnButtonCancelTapped()
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
-        MenuManager.Instance.CloseMenu();
+        RequestClose();
     }
 
-    public void OnButtonSelected() 
+    /*
+    protected override void OnEnable()
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_change");
+        base.OnEnable();
+        UIEvents.OnTeamPanelNameOpened += HandleTeamPanelNameOpened;
     }
 
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        UIEvents.OnTeamPanelNameOpened -= HandleTeamPanelNameOpened;
+    }
+
+    private void HandleTeamPanelNameOpened(string teamName)
+    {
+        inputFieldName.text = teamName;
+        MenuManager.Instance.OpenMenu(this);
+    }
+    */
 }

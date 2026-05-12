@@ -1,13 +1,17 @@
-using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Aremoreno.Enums.Log;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Input;
+using Aremoreno.Enums.Log;
 
 public class DuelLogMenu : Menu
 {
-    [Header("References")]
+    [Header("UI References")]
     [SerializeField] private DuelLogPopup popupPrefab;
     [SerializeField] private Transform contentParent; 
     [SerializeField] private ScrollRect scrollRect;
@@ -20,32 +24,15 @@ public class DuelLogMenu : Menu
 
     public bool IsDuelLogMenuOpen => MenuManager.Instance.IsMenuOpen(this);
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         BattleUIManager.Instance.RegisterDuelLogMenu(this);
-    }
-
-    private void Start()
-    {
-        base.Hide();
-        base.SetInteractable(false);
     }
 
     private void OnDestroy()
     {
         BattleUIManager.Instance.UnregisterDuelLogMenu(this);
-    }
-
-    private void Update()
-    {
-        if (!IsInteractable()) return;
-        HandleInput();
-    }
-
-    private void HandleInput()
-    {
-        if (IsDuelLogMenuOpen && InputManager.Instance.GetUp(CustomAction.BattleUI_CloseBattleMenu))
-            MenuManager.Instance.CloseMenu();
     }
 
     public override void Show()
@@ -58,12 +45,38 @@ public class DuelLogMenu : Menu
         base.Show();
     }
 
-    /*
-    public override void Hide()
+    protected override void OnGainedInput()
+        => InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCloseClicked);
+
+    protected override void OnLostInput()
+        => InputManager.Instance.UnsubscribeDown(CustomAction.Navigation_Back, OnButtonCloseClicked);
+
+    public void OnButtonCloseClicked()
     {
-        base.SetInteractable(false);
-        base.Hide();
+        EventSystem.current.SetSelectedGameObject(null);
+        RequestClose();
     }
+
+    /*
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        UIEvents.OnTeamPanelNameOpened += HandleTeamPanelNameOpened;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        UIEvents.OnTeamPanelNameOpened -= HandleTeamPanelNameOpened;
+    }
+
+    private void HandleTeamPanelNameOpened(string teamName)
+    {
+        inputFieldName.text = teamName;
+        MenuManager.Instance.OpenMenu(this);
+    }
+
     */
 
     // Efficient coroutine-based population with pooling
@@ -121,13 +134,6 @@ public class DuelLogMenu : Menu
         // Scroll to bottom next frame
         yield return new WaitForEndOfFrame();
         scrollRect.verticalNormalizedPosition = 0f;
-    }
-
-    private void HandleMenuOpened(Menu menu)
-    {
-        if (menu == this) return;
-        if (!IsDuelLogMenuOpen) return;
-
-        MenuManager.Instance.CloseMenu();
+        //EventSystem.current.SetSelectedGameObject(null);
     }
 }

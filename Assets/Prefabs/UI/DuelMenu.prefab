@@ -317,13 +317,14 @@ GameObject:
   - component: {fileID: 7053189117864284604}
   - component: {fileID: 6417278920642345584}
   - component: {fileID: 4398667854442170896}
+  - component: {fileID: 2449129227043271108}
   m_Layer: 5
   m_Name: PanelCommand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7053189117864284604
 RectTransform:
   m_ObjectHideFlags: 0
@@ -383,6 +384,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &2449129227043271108
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5330212674274800791}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7732706450485780967
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,13 +483,14 @@ GameObject:
   - component: {fileID: 3736556962408214032}
   - component: {fileID: 869364301068363295}
   - component: {fileID: 3313955625772877972}
+  - component: {fileID: 7687456556664435865}
   m_Layer: 5
   m_Name: PanelMove
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3736556962408214032
 RectTransform:
   m_ObjectHideFlags: 0
@@ -537,6 +551,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &7687456556664435865
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8254176966793028873}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8594642278582375190
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,6 +575,7 @@ GameObject:
   - component: {fileID: 9137800302722140989}
   - component: {fileID: 8322425514251359309}
   - component: {fileID: 6381777598559297323}
+  - component: {fileID: 5939475302269543546}
   m_Layer: 5
   m_Name: DuelMenu
   m_TagString: Untagged
@@ -629,12 +656,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveCommandSlot0: {fileID: 4309206555504847156}
   moveCommandSlot1: {fileID: 8061735562272600229}
-  panelCommand: {fileID: 5330212674274800791}
-  panelMove: {fileID: 8254176966793028873}
+  rootCanvasGroup: {fileID: 5939475302269543546}
+  panelCommand: {fileID: 2449129227043271108}
+  panelMove: {fileID: 7687456556664435865}
   buttonCommandMelee: {fileID: 204982209706026466}
   buttonCommandRanged: {fileID: 4444889790814310511}
   buttonCommandMove: {fileID: 581979085050419264}
   buttonMoveNext: {fileID: 4820879946454113160}
+--- !u!225 &5939475302269543546
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8594642278582375190}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &464031982395676407
 PrefabInstance:
   m_ObjectHideFlags: 0
