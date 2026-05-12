@@ -108,6 +108,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadGroup(SceneGroup group, Action onComplete = null)
     {
+        MenuManager.Instance.CloseAllMenus();
         if (group == null)
         {
             LogManager.Error("[SceneLoader] Attempted to load a null SceneGroup.");
@@ -150,6 +151,7 @@ public class SceneLoader : MonoBehaviour
 
     public void UnloadGroup(SceneGroup group, Action onComplete = null)
     {
+        MenuManager.Instance.CloseAllMenus();
         if (group == null)
         {
             LogManager.Error("[SceneLoader] Attempted to unload a null SceneGroup.");

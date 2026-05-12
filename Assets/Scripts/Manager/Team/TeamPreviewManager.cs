@@ -42,6 +42,12 @@ public class TeamPreviewManager : MonoBehaviour
         inputManager = InputManager.Instance;
     }
 
+    private void OnDestroy()
+    {
+        if (inputManager == null) return;
+        UnsubscribeInput();
+    }
+
     #endregion
 
     #region Interface

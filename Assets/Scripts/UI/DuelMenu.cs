@@ -13,8 +13,9 @@ public class DuelMenu : MonoBehaviour
 {
     [SerializeField] private MoveCommandSlot moveCommandSlot0;
     [SerializeField] private MoveCommandSlot moveCommandSlot1;
-    [SerializeField] private GameObject panelCommand;
-    [SerializeField] private GameObject panelMove;
+    [SerializeField] private CanvasGroup rootCanvasGroup;
+    [SerializeField] private CanvasGroup panelCommand;
+    [SerializeField] private CanvasGroup panelMove;
     [SerializeField] private Button buttonCommandMelee;
     [SerializeField] private Button buttonCommandRanged;
     [SerializeField] private Button buttonCommandMove;
@@ -28,9 +29,11 @@ public class DuelMenu : MonoBehaviour
     private Category category;
     private List<Move> moves;
     private TeamSide userSide;
+    private InputManager inputManager;
 
     private void Awake()
     {
+        inputManager = InputManager.Instance;
         BattleUIManager.Instance?.RegisterDuelMenu(this);
         Hide();
 
@@ -43,45 +46,53 @@ public class DuelMenu : MonoBehaviour
             BattleUIManager.Instance.UnregisterDuelMenu(this);
 
         SettingsEvents.OnAutoBattleToggled -= HandleOnAutoBattleToggled;
+        UnsubscribeInput();
     }
 
-    private void Update() 
+    private void SubscribeInput()
     {
-        if (!isOpen) return;
-        if (BattleUIManager.Instance.IsBattleMenuOpen) return;
+        inputManager.SubscribeDown(CustomAction.BattleUI_ClickWestButton, HandleWest);
+        inputManager.SubscribeDown(CustomAction.BattleUI_ClickEastButton, HandleEast);
+        inputManager.SubscribeDown(CustomAction.BattleUI_ClickNorthButton, HandleNorth);
+        inputManager.SubscribeDown(CustomAction.BattleUI_CloseMoveMenu, HandleSouth);
+    }
 
-        if (isCommandOpen) 
-        {
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_ClickWestButton) && 
-                CanSelectRegularCommands())
-                OnCommandMeleeTapped();
+    private void UnsubscribeInput()
+    {
+        inputManager.UnsubscribeDown(CustomAction.BattleUI_ClickWestButton, HandleWest);
+        inputManager.UnsubscribeDown(CustomAction.BattleUI_ClickEastButton, HandleEast);
+        inputManager.UnsubscribeDown(CustomAction.BattleUI_ClickNorthButton, HandleNorth);
+        inputManager.UnsubscribeDown(CustomAction.BattleUI_CloseMoveMenu, HandleSouth);
+    }
 
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_ClickEastButton) && 
-                CanSelectRegularCommands())
-                OnCommandRangedTapped();
+    private void HandleWest() 
+    {
+        if (isCommandOpen && CanSelectRegularCommands()) 
+            OnCommandMeleeTapped();
+        else if (isMoveOpen && moveCommandSlot0.CanBeSelected())
+            OnMoveSlotTapped(moveCommandSlot0);
+    }
 
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_ClickNorthButton) &&
-                CanSelectMoveCommand())
-                OnCommandMoveTapped();
+    private void HandleEast() 
+    {
+        if (isCommandOpen && CanSelectRegularCommands()) 
+            OnCommandRangedTapped();
+        else if (isMoveOpen && moveCommandSlot1.CanBeSelected())
+            OnMoveSlotTapped(moveCommandSlot1);
+    }
 
-        } else if (isMoveOpen)
-        {
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_ClickWestButton) &&
-                moveCommandSlot0.CanBeSelected())
-                OnMoveSlotTapped(moveCommandSlot0);
+    private void HandleNorth() 
+    { 
+        if (isCommandOpen && CanSelectMoveCommand()) 
+            OnCommandMoveTapped();
+        else if (isMoveOpen && buttonMoveNext.interactable)
+            OnButtonNextTapped();
+    }
 
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_ClickEastButton) && 
-                moveCommandSlot1.CanBeSelected())
-                OnMoveSlotTapped(moveCommandSlot1);
-
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_ClickNorthButton) &&
-                buttonMoveNext.interactable)
-                OnButtonNextTapped();
-
-            if (InputManager.Instance.GetDown(CustomAction.BattleUI_CloseMoveMenu))
-                OnButtonBackTapped();
-
-        }
+    private void HandleSouth() 
+    { 
+        if (isMoveOpen)
+            OnButtonBackTapped();
     }
 
     private void SetCharacter() 
@@ -99,54 +110,69 @@ public class DuelMenu : MonoBehaviour
         BattleUIManager.Instance.SetDuelCategory(category);
     }
 
-    public void Show() 
+    public void Show()
     {
         SetCharacter();
+
         SetMoveButtonInteractable(CanSelectMoveCommand());
         SetRegularButtonsInteractable(CanSelectRegularCommands());
-        isOpen = true;
-        this.gameObject.SetActive(true);
 
-        if(SettingsManager.Instance.IsAutoBattleEnabled)
+        isOpen = true;
+
+        SetCanvasGroup(rootCanvasGroup, true);
+
+        SubscribeInput();
+
+        if (SettingsManager.Instance.IsAutoBattleEnabled)
             DuelSelectionManager.Instance.SelectionMadeAuto(userSide);
         else
             ShowCommand();
     }
 
-    public void Hide() 
+    public void Hide()
     {
         HideMove();
         HideCommand();
 
-        isOpen = false;    
-        this.gameObject.SetActive(false);
+        UnsubscribeInput();
+
+        isOpen = false;
+
+        SetCanvasGroup(rootCanvasGroup, false);
     }
 
-    public void ShowCommand() 
+    private static void SetCanvasGroup(CanvasGroup cg, bool visible)
+    {
+        cg.alpha = visible ? 1f : 0f;
+        cg.interactable = visible;
+        cg.blocksRaycasts = visible;
+    }
+
+    public void ShowCommand()
     {
         isCommandOpen = true;
-        panelCommand.SetActive(true);
+        SetCanvasGroup(panelCommand, true);
     }
 
-    public void HideCommand() 
+    public void HideCommand()
     {
         isCommandOpen = false;
-        panelCommand.SetActive(false);
+        SetCanvasGroup(panelCommand, false);
     }
 
-    public void ShowMove() 
+    public void ShowMove()
     {
         currentStartIndex = 0;
         UpdateMoveSlots();
 
         isMoveOpen = true;
-        panelMove.SetActive(true);
+        SetCanvasGroup(panelMove, true);
     }
 
-    public void HideMove() 
+    public void HideMove()
     {
         isMoveOpen = false;
-        panelMove.SetActive(false);
+        SetCanvasGroup(panelMove, false);
     }
 
     private void SetMoveButtonInteractable(bool isInteractable) 

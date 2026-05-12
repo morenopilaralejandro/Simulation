@@ -19,7 +19,7 @@ public class BattleUIManager : MonoBehaviour
     private DuelParticantsPanel duelParticantsPanel;
     private DuelMenu duelMenu;
     private DuelLogMenu duelLogMenu;
-    private BattleMenu battleMenu;
+    private MenuBattleActions battleMenu;
     private ForfeitMenu forfeitMenu;
 
     private PassCrosshairIndicator passCrosshairIndicator;
@@ -106,12 +106,12 @@ public class BattleUIManager : MonoBehaviour
         this.duelLogMenu = null;
     }
 
-    public void RegisterBattleMenu(BattleMenu battleMenu)
+    public void RegisterBattleMenu(MenuBattleActions battleMenu)
     {
         this.battleMenu = battleMenu;
     }
 
-    public void UnregisterBattleMenu(BattleMenu battleMenu)
+    public void UnregisterBattleMenu(MenuBattleActions battleMenu)
     {
         this.battleMenu = null;
     }
@@ -244,8 +244,8 @@ public class BattleUIManager : MonoBehaviour
     public void OpenDuelLogMenu() => MenuManager.Instance.ReplaceMenu(duelLogMenu);
     #endregion
 
-    #region BattleMenu
-    public BattleMenu BattleMenu => battleMenu;
+    #region MenuBattleActions
+    public MenuBattleActions MenuBattleActions => battleMenu;
     public bool IsBattleMenuOpen => battleMenu.IsBattleMenuOpen;
     #endregion
 

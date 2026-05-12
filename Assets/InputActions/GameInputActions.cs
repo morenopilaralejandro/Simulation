@@ -763,6 +763,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""43565471-254d-46cf-a7f5-8f61a5cdc508"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_CloseDimensionMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""095008ab-c93a-4809-8394-9e351129aea6"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",

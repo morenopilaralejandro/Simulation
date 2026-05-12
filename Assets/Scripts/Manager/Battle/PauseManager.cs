@@ -15,7 +15,6 @@ public class PauseManager : MonoBehaviour
     private Dictionary<TeamSide, bool> isTeamReady;
     private float actionTimer = 10f;
 
-
     public bool IsPaused => isPaused;
 
     private void Awake()
@@ -35,9 +34,9 @@ public class PauseManager : MonoBehaviour
         };
     }
 
-    private void OnDestroy()
+    private void Destroy()
     {
-
+        UnsubscribeInput();
     }
 
     public bool CanPause()
@@ -54,6 +53,7 @@ public class PauseManager : MonoBehaviour
         BattleManager.Instance.Freeze();
         ResetReady();
         BattleEvents.RaiseBattlePause(teamSide);
+        SubscribeInput();
         //BattleManager.Instance.SetBattlePhase(BattlePhase.Deadball);
         //AudioManager.Instance.PlaySfx("sfx-whistle_single");
 
@@ -101,9 +101,10 @@ public class PauseManager : MonoBehaviour
     {
         AudioManager.Instance.PlaySfx("sfx-menu_tap");
         //BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
-        BattleManager.Instance.Unfreeze();
         BattleEvents.RaiseBattleResume();
+        BattleManager.Instance.Unfreeze();
         isPaused = false;
+        UnsubscribeInput();
     }
 
     private IEnumerator ActionTimerRoutine()
@@ -116,5 +117,37 @@ public class PauseManager : MonoBehaviour
         }
         
         SetTeamReady(BattleManager.Instance.GetUserSide());
+    }
+
+    private void OnEnable() 
+    {
+        BattleEvents.OnBattleStart += HandleBattleStart;
+    }
+
+    private void OnDisable() 
+    {
+        BattleEvents.OnBattleStart -= HandleBattleStart;
+    }
+
+    private void SubscribeInput()
+    {
+        InputManager.Instance.SubscribeDown(CustomAction.BattleUI_TeamPreviewConfirm, HandleConfirmPressed);
+    }
+
+    private void UnsubscribeInput()
+    {
+        InputManager.Instance.UnsubscribeDown(CustomAction.BattleUI_TeamPreviewConfirm, HandleConfirmPressed);
+    }
+
+    private void HandleBattleStart(BattleType battleType) 
+    {
+        UnsubscribeInput();
+        isPaused = false;
+        isResumeReady = false;
+    }
+
+    private void HandleConfirmPressed() 
+    {
+        PauseManager.Instance.SetTeamReady(BattleManager.Instance.GetUserSide());
     }
 }

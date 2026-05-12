@@ -139,6 +139,23 @@ public class DeadBallManager : MonoBehaviour
         UnsubscribeInputMenu();
     }
 
+    private void CancelDeadBall()
+    {
+        if (currentHandler == null) return;
+
+        UnsubscribeInputMenu();
+
+        teamReadiness.Reset();
+        ResetMenuState();
+
+        DeadBallState = DeadBallState.Finished;
+
+        BattleManager.Instance.Unfreeze();
+        BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
+
+        currentHandler = null;
+    }
+
     #endregion
 
     #region Comunication with handler
@@ -263,6 +280,7 @@ public class DeadBallManager : MonoBehaviour
         DeadBallEvents.OnDeadBallStartRequested += HandleDeadBallStartRequested;
         UIEvents.OnBackFromTeamRequested += HandleBackFromTeamRequested;
         TeamEvents.OnSubstitutionResetPositions += HandleSubstitutionResetPositions;
+        BattleEvents.OnBattleEnd += HandleBattleEnd;
     }
 
     private void OnDisable() 
@@ -270,6 +288,7 @@ public class DeadBallManager : MonoBehaviour
         DeadBallEvents.OnDeadBallStartRequested -= HandleDeadBallStartRequested;
         UIEvents.OnBackFromTeamRequested -= HandleBackFromTeamRequested;
         TeamEvents.OnSubstitutionResetPositions -= HandleSubstitutionResetPositions;
+        BattleEvents.OnBattleEnd -= HandleBattleEnd;
     }
 
     private void HandleDeadBallStartRequested(DeadBallType type, TeamSide teamSide) 
@@ -297,6 +316,11 @@ public class DeadBallManager : MonoBehaviour
 
         BattleManager.Instance.ResetPlayerPositions();
         currentHandler.ResetPositions();
+    }
+
+    private void HandleBattleEnd()
+    {
+        CancelDeadBall();
     }
 
     #endregion

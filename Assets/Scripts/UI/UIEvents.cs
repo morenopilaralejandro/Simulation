@@ -475,4 +475,10 @@ public static class UIEvents
         OnSelectorLoadoutActionClicked?.Invoke(team);
     }
 
+    // Menu Battle Dimension Action
+    public static event Action<String> OnButtonDimensionActionPressed;
+    public static void RaiseButtonDimensionActionPressed(String dimensionActionId)
+    {
+        OnButtonDimensionActionPressed?.Invoke(dimensionActionId);
+    }
 }
