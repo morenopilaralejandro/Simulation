@@ -4,6 +4,7 @@ using Aremoreno.Enums.Kit;
 
 public class KitComponentColor
 {
+    /*
     private Kit kit;
     private Dictionary<(Variant, Role), KitColors> colors;
 
@@ -61,4 +62,5 @@ public class KitComponentColor
     {
         return colors[(variant, role)];
     }
+    */
 }

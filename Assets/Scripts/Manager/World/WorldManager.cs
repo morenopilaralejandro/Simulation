@@ -43,7 +43,7 @@ public class WorldManager : MonoBehaviour
 
     private void OnDestroy() 
     {
-        encounterSystem.Unsubscribe();
+        encounterSystem?.Unsubscribe();
     }
 
 

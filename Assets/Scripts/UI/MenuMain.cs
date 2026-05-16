@@ -22,8 +22,8 @@ public class MenuMain : Menu
     {
         AudioManager.Instance.PlaySfxUI("sfx-menu_tap");    
         BattleArgs.SetFull(
-            "faith_selection", 
-            "crimson_selection");
+            "team-00000-a-test_a", 
+            "team-00000-b-test_b");
         SceneLoader.Instance.LoadGroup(sceneBattle);
     }
 

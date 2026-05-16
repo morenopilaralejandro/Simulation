@@ -189,7 +189,7 @@ public class DuelLogManager : MonoBehaviour
 
     public void AddDeadBallKickoff(Character character, TeamSide teamSide)
     {
-        if(character.PortraitSprite == null) return;
+        //if(character.PortraitSprite == null) return;
         AddEntry(
             "deadball_kickoff", 
             LogLevel.Info,

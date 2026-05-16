@@ -1,57 +1,170 @@
 namespace Aremoreno.Enums.Kit
 {
-    public enum Role 
-    { 
-        Field, 
-        Keeper 
-    }
-
-    public enum Variant 
-    { 
-        Home, 
-        Away 
-    }
-
-    public enum KitColor
+    public enum Role
     {
-        Red,
-        Red_Light,
-        Red_Dark,
+        Field = 0,
+        Keeper = 1
+    }
 
-        Blue,
-        Blue_Light,
-        Blue_Dark,
+    public enum Variant
+    {
+        Home = 0,
+        Away = 1
+    }
 
-        Yellow,
-        Yellow_Light,
-        Yellow_Dark,
-
-        Orange,
-        Orange_Light,
-        Orange_Dark,
-
-        Purple,
-        Purple_Light,
-        Purple_Dark,
-
-        Pink,
-        Pink_Light,
-        Pink_Dark,
-
-        Green,
-        Green_Light,
-        Green_Dark,
-
+    public enum KitShirtColor
+    {
         Brown,
-        Brown_Light,
-        Brown_Dark,
-
-        Grey,
-        Grey_Light,
-        Grey_Dark,
-
-        Black,
+        Leather,
+        Walnut,
+        Yellow,
+        Tan,
+        Orange,
+        Rose,
+        Maroon,
+        Red,
+        Pink,
+        Lavender,
+        Purple,
+        Blue,
+        Navy,
+        Teal,
+        Bluegray,
+        Forest,
+        Green,
         White,
-        None
+        Sky,
+        Slate,
+        Gray,
+        Black,
+        Charcoal
+    }
+
+    public enum KitPantsColor
+    {
+        Brown,
+        Leather,
+        Walnut,
+        Yellow,
+        Tan,
+        Orange,
+        Rose,
+        Maroon,
+        Red,
+        Pink,
+        Lavender,
+        Purple,
+        Blue,
+        Navy,
+        Teal,
+        Bluegray,
+        Forest,
+        Green,
+        White,
+        Sky,
+        Slate,
+        Gray,
+        Black,
+        Charcoal
+    }
+
+    public enum SockColor
+    {
+        Leather,
+        Black,
+        Blue,
+        Bluegray,
+        Brown,
+        Charcoal,
+        Forest,
+        Gray,
+        Green,
+        Lavender,
+        Maroon,
+        Navy,
+        Orange,
+        Pink,
+        Purple,
+        Red,
+        Rose,
+        Sky,
+        Slate,
+        Tan,
+        Teal,
+        Walnut,
+        White,
+        Yellow
+    }
+
+    public enum SpikesColor
+    { 
+        Black,
+        Blue,
+        Bluegray,
+        Brown,
+        Charcoal,
+        Forest,
+        Gray,
+        Green,
+        Lavender,
+        Leather,
+        Maroon,
+        Navy,
+        Orange,
+        Pink,
+        Purple,
+        Red,
+        Rose,
+        Sky,
+        Slate,
+        Tan,
+        Teal,
+        Walnut,
+        White,
+        Yellow,
+        Steel,
+        Iron,
+        Ceramic,
+        Brass,
+        Copper,
+        Bronze,
+        Silver,
+        Gold
+    }
+
+    public enum GlovesColor
+    {
+        Ceramic,
+        Brass,
+        Copper,
+        Bronze,
+        Iron,
+        Steel,
+        Silver,
+        Gold,
+        Brown,
+        Leather,
+        Walnut,
+        Yellow,
+        Tan,
+        Orange,
+        Rose,
+        Maroon,
+        Red,
+        Pink,
+        Lavender,
+        Purple,
+        Blue,
+        Navy,
+        Teal,
+        Bluegray,
+        Forest,
+        Green,
+        White,
+        Sky,
+        Slate,
+        Gray,
+        Black,
+        Charcoal
     }
 }

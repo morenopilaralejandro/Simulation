@@ -47,7 +47,7 @@ public class PlayerWorldEntity : MonoBehaviour
     public void Initialize(CharacterData characterData, Kit kit, PlayerWorldConfig config)
     {
         character = new Character(characterData);
-        character.ApplyKit(kit, Variant.Home, Position.FW);
+        //character.ApplyKit(kit, Variant.Home, Position.FW);
 
         appearanceComponent.Initialize(character.AppearanceComponent, this);
         controllerComponent.Initialize(this, config);

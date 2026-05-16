@@ -32,13 +32,8 @@ public class Speaker
     public string SpeakerName => localizationComponent.GetString(LocalizationField.Name);
     // appearanceComponent
     public CharacterComponentAppearance AppearanceComponent => appearanceComponent;
-    public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
+    public Sprite PortraitSprite => null;
     public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
-    public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState
-    {
-        get => appearanceComponent.State;
-        set => appearanceComponent.State = value;
-    }
     //public void ApplyKit(Kit kit, Variant variant, Position position) => appearanceComponent.ApplyKit(kit, variant, position);
     //public void ApplyKit(Kit kit, Variant variant, Role role) => appearanceComponent.ApplyKit(kit, variant, role);
     public void ApplyKit(DialogKit dialogKit)
@@ -54,7 +49,7 @@ public class Speaker
             kit = kitManager.GetKit(dialogKit.KitId);
         }
 
-        appearanceComponent.ApplyKit(kit, variant, role);
+        //appearanceComponent.ApplyKit(kit, variant, role);
 
     }
 }

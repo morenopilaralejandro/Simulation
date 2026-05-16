@@ -38,15 +38,15 @@ public class DebugMainMenu : MonoBehaviour
 
     private void HandleButton1() {
         BattleArgs.SetFull(
-            "faith_selection", 
-            "crimson_selection");
+            "team-00000-a-test_a", 
+            "team-00000-b-test_b");
         sceneLoader.LoadGroup(sceneBattle);
     }
 
     private void HandleButton2() {
         BattleArgs.SetMini(
-            "faith_selection", 
-            "crimson_selection");
+            "team-00000-a-test_a", 
+            "team-00000-b-test_b");
         sceneLoader.LoadGroup(sceneBattle);
     }
 

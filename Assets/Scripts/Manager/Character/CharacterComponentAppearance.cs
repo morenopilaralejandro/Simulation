@@ -1,23 +1,20 @@
 using UnityEngine;
 using System;
-using System.Threading.Tasks;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Kit;
-using Aremoreno.Enums.SpriteLayer;
 
 public class CharacterComponentAppearance
 {
     #region Fields
 
-    public string PortraitSpriteId { get; private set; }
     public HairStyle HairStyle { get; private set; }
     public HairColorType HairColorType { get; private set; }
     public EyeColorType EyeColorType { get; private set; }
     public BodyColorType BodyColorType { get; private set; }
-
-    public SpriteLayerState<CharacterSpriteLayer> State { get; set; }
-    public Sprite PortraitSprite { get; set; }
     public PortraitSize PortraitSize { get; private set; }
+    public string KitId { get; private set; }
+    public Variant KitVariant { get; private set; }
+    public Role KitRole { get; private set; }
 
     #endregion
 
@@ -27,9 +24,8 @@ public class CharacterComponentAppearance
         Initialize(characterData, character, characterSaveData);
     }
 
-    public async void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
+    public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
-        PortraitSpriteId = characterData.CharacterId;
         HairStyle = characterData.HairStyle;
         HairColorType = characterData.HairColorType;
         EyeColorType = characterData.EyeColorType;
@@ -38,18 +34,12 @@ public class CharacterComponentAppearance
 
         if (characterSaveData != null && characterSaveData.IsCustomAvatar) 
         {
-            PortraitSpriteId = null;
             HairStyle = characterSaveData.CustomHairStyle;
             HairColorType = characterSaveData.CustomHairColorType;
             EyeColorType = characterSaveData.CustomEyeColorType;
             BodyColorType = characterSaveData.CustomBodyColorType;
             PortraitSize = characterSaveData.CustomPortraitSize;
         }
-
-        State = new SpriteLayerState<CharacterSpriteLayer>();
-
-        ApplyColors();
-        await LoadAsync();
     }
 
     public CharacterComponentAppearance(NpcData npcData)
@@ -57,84 +47,32 @@ public class CharacterComponentAppearance
         Initialize(npcData);
     }
 
-    public async void Initialize(NpcData data)
+    public void Initialize(NpcData data)
     {
-        PortraitSpriteId = null;
         HairStyle = data.HairStyle;
         HairColorType = data.HairColorType;
         EyeColorType = data.EyeColorType;
         BodyColorType = data.BodyColorType;
         PortraitSize = data.PortraitSize;
-
-        State = new SpriteLayerState<CharacterSpriteLayer>();
-
-        ApplyColors();
-        PortraitSprite = data.PortraitSprite;
-        await LoadAsync();
-    }
-
-    #endregion
-
-    #region Async Loading
-
-    public async Task LoadAsync()
-    {
-        await LoadPortraitSprite();
-    }
-
-    private async Task LoadPortraitSprite()
-    {
-        if (PortraitSpriteId == null) return;
-        PortraitSprite = await SpriteAtlasManager.Instance.GetCharacterPortrait(PortraitSpriteId);
-    }
-
-    #endregion
-
-    #region Appearance Application
-
-    private void ApplyColors()
-    {
-        State.Colors[CharacterSpriteLayer.Hair] = ColorManager.GetHairColor(HairColorType);
-        State.Colors[CharacterSpriteLayer.EyeIris] = ColorManager.GetEyeColor(EyeColorType);
-        State.Colors[CharacterSpriteLayer.Body] = ColorManager.GetBodyColor(BodyColorType);
-
-        //prevent missing key
-        State.Colors[CharacterSpriteLayer.KitBase] = Color.black;
-        State.Colors[CharacterSpriteLayer.KitDetail] = Color.black;
-        State.Colors[CharacterSpriteLayer.KitShocks] = Color.black;
-    }
-
-    public void ApplyKit(Kit kit, Variant variant, Position position)
-    {
-        ApplyKit(kit, variant, GetKitRole(position));
-    }
-
-    public void ApplyKit(Kit kit, Variant variant, Role role)
-    {
-        var kitColor = kit.GetColors(variant, role);
-
-        State.Colors[CharacterSpriteLayer.KitBase] = kitColor.Base;
-        State.Colors[CharacterSpriteLayer.KitDetail] = kitColor.Detail;
-        State.Colors[CharacterSpriteLayer.KitShocks] = kitColor.Shocks;
-    }
-
-    #endregion
-
-    #region Visibility
-
-    public void InitializeVisibility()
-    {
-        foreach (CharacterSpriteLayer layer in Enum.GetValues(typeof(CharacterSpriteLayer)))
-            State.VisibleLayers.Add(layer);
-
-        State.VisibleLayers.Remove(CharacterSpriteLayer.Aura);
-        State.VisibleLayers.Remove(CharacterSpriteLayer.Armor);
+        //pass everyting as data
+        //await LoadAsync();
     }
 
     #endregion
 
     #region Helpers
 
+    public void SetKitId(Kit kit) => KitId = kit.KitId;
+    public void SetKit(Kit kit, Variant variant, Role role) {
+        KitId = kit.KitId;
+        KitVariant = variant;
+        KitRole = role;
+    }
+    public void SetKit(Team team, Position position) {
+        KitId = team.Kit.KitId;
+        KitVariant = GetKitVariant(team);
+        KitRole = GetKitRole(position);
+    }
     public Variant GetKitVariant(Team team) => team?.Variant ?? Variant.Home;
     public Role GetKitRole(Position position) => position == Position.GK ? Role.Keeper : Role.Field;
 

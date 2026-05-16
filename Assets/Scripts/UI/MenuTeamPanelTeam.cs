@@ -443,8 +443,8 @@ public class MenuTeamPanelTeam : Menu
 
         if (isEditMode)
         {
-            a.GetCharacter().ApplyKit(currentTeam.Kit, currentTeam.Variant, b.FormationCoord.Position);
-            b.GetCharacter().ApplyKit(currentTeam.Kit, currentTeam.Variant, a.FormationCoord.Position);
+            a.GetCharacter().SetKit(currentTeam, b.FormationCoord.Position);
+            b.GetCharacter().SetKit(currentTeam, a.FormationCoord.Position);
 
             teamManager.SetCharacterInLoadout(currentTeam, currentBattleType, a.SlotIndex, guidB);
             teamManager.SetCharacterInLoadout(currentTeam, currentBattleType, b.SlotIndex, guidA);
@@ -487,7 +487,7 @@ public class MenuTeamPanelTeam : Menu
             audioManager.PlaySfxUI("sfx-menu_tap");
 
             if (isEditMode)
-                character.ApplyKit(currentTeam.Kit, currentTeam.Variant, slot.FormationCoord.Position);
+                character.SetKit(currentTeam, slot.FormationCoord.Position);
 
             teamManager.SetCharacterInLoadout(currentTeam, currentBattleType, slot.SlotIndex, newGuid);
             slot.SetCharacter(character);

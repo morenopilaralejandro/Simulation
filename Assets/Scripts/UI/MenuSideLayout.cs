@@ -93,10 +93,10 @@ public class MenuSideLayout : MonoBehaviour
 
         var character = CharacterManager.Instance.GetCharacter(guids[index]);
 
-        character.ApplyKit(
+        character.SetKit(
             currentKit, 
             currentVariant, 
-            position
+            character.GetKitRole(position)
         );
 
         if (character == null)

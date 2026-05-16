@@ -45,6 +45,7 @@ public class Npc
     public string NpcName => localizationStringComponent.GetString(LocalizationField.Name);
     // appearanceComponent
     public CharacterComponentAppearance AppearanceComponent => appearanceComponent;
+    /*
     public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
     public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
     public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
@@ -61,5 +62,6 @@ public class Npc
     public void InitializeVisibility() => appearanceComponent.InitializeVisibility();
     public Variant GetKitVariant(Team team) => appearanceComponent.GetKitVariant(team);
     public Role GetKitRole(Position position) => appearanceComponent.GetKitRole(position);
+    */
     #endregion
 }

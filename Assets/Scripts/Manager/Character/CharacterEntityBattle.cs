@@ -69,7 +69,6 @@ public class CharacterEntityBattle : MonoBehaviour
     public string CharacterId => character.CharacterId;
     public string CharacterGuid => character.CharacterGuid;
     public CharacterSize CharacterSize => character.CharacterSize;
-    public PortraitSize PortraitSize => character.PortraitSize;
     public Gender Gender => character.Gender;
     public Element Element => character.Element;
     public Position Position => character.Position;
@@ -148,21 +147,23 @@ public class CharacterEntityBattle : MonoBehaviour
     public CharacterSaveData Export() => character.Export();
 
     // appearanceComponent
-    public Sprite PortraitSprite => character.PortraitSprite;
-    public string PortraitSpriteId => character.PortraitSpriteId;
+    public CharacterComponentAppearance AppearanceComponent => character.AppearanceComponent;
+    public PortraitSize PortraitSize => character.PortraitSize;
     public HairStyle HairStyle => character.HairStyle;
     public HairColorType HairColorType => character.HairColorType;
     public EyeColorType EyeColorType => character.EyeColorType;
     public BodyColorType BodyColorType => character.BodyColorType;
-    public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState
-    {
-        get => character.SpriteLayerState;
-        set => character.SpriteLayerState = value;
+    public void SetKitId(Kit kit) => character.SetKitId(kit);
+    public void SetKit(Kit kit, Variant variant, Role role) => character.SetKit(kit, variant, role);
+    public void SetKit(Team team, Position position) { 
+        character.SetKit(team, position);
+        _ = LoadKitAsync();
     }
-    public void ApplyKit(Kit kit, Variant variant, Position position) => character.ApplyKit(kit, variant, position);
-    public void InitializeVisibility() => character.InitializeVisibility();
     public Variant GetKitVariant(Team team) => character.GetKitVariant(team);
     public Role GetKitRole(Position position) => character.GetKitRole(position);
+    public string KitId => character.KitId;
+    public Variant KitVariant => character.KitVariant;
+    public Role KitRole => character.KitRole;
     #endregion
 
     #region API CharacterEntityBattle
@@ -177,10 +178,10 @@ public class CharacterEntityBattle : MonoBehaviour
     public List<CharacterEntityBattle> GetTeammates() => teamMemberComponent.GetTeammates();
     public List<CharacterEntityBattle> GetOpponents() => teamMemberComponent.GetOpponents();
     //appearanceBattleComponent
-    public void SetCharacterVisible(bool isVisible) => appearanceBattleComponent.SetCharacterVisible(isVisible);
-    public void ApplyStateToRenderer() => appearanceBattleComponent.ApplyStateToRenderer();
-    public void ToggleGloves(Position position) => appearanceBattleComponent.ToggleGloves(position);
-    public Task AppearanceBattleLoadAsync() => appearanceBattleComponent.LoadAsync();
+    public bool IsLoaded => appearanceBattleComponent.IsLoaded;
+    public async Task LoadKitAsync() => await appearanceBattleComponent.LoadKitAsync();
+    public async Task AppearanceBattleLoadAsync() => await appearanceBattleComponent.AppearanceBattleLoadAsync();
+
 
     //modelComponent
     public Transform Model => modelComponent.Model;

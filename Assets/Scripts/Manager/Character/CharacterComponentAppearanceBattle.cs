@@ -1,4 +1,8 @@
 using UnityEngine;
+using UnityEngine.U2D;
+using UnityEngine.U2D.Animation;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using System;
 using System.Threading.Tasks;
 using Aremoreno.Enums.Character;
@@ -8,11 +12,16 @@ using Aremoreno.Enums.SpriteLayer;
 public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoader
 {
     #region Fields
-
-    [SerializeField] private SpriteLayerRendererCharacter spriteLayerRenderer;
+    [SerializeField] private SpriteLibrary bodySpriteLibrary;
+    [SerializeField] private SpriteLibrary kitSpriteLibrary;
 
     private CharacterEntityBattle characterEntityBattle;
-    private bool spritesLoaded;
+    private AsyncOperationHandle<SpriteLibraryAsset>? bodyHandle;
+    private AsyncOperationHandle<SpriteLibraryAsset>? kitHandle;
+
+    public bool IsLoaded =>
+        bodySpriteLibrary.spriteLibraryAsset != null &&
+        kitSpriteLibrary.spriteLibraryAsset != null;
 
     #endregion
 
@@ -23,73 +32,98 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         this.characterEntityBattle = characterEntityBattle;
     }
 
+    private void OnDestroy()
+    {
+        ReleaseBody();
+        ReleaseKit();
+    }
+
     #endregion
 
     #region Async Loading
 
     public async Task LoadAsync()
     {
-        await LoadSprites();
-
-        characterEntityBattle.InitializeVisibility();
-        ToggleGloves(characterEntityBattle.FormationCoord.Position);
-        ApplyStateToRenderer();
+        await LoadBodyAsync();
     }
 
-    private async Task LoadSprites()
+    private async Task LoadBodyAsync()
     {
-        characterEntityBattle.SpriteLayerState.Sprites[CharacterSpriteLayer.Hair] =
-            await SpriteAtlasManager.Instance.GetCharacterHair(characterEntityBattle.HairStyle.ToString().ToLower());
+        ReleaseBody();
 
-        spritesLoaded = true;
-    }
+        string address =
+            AddressableLoader.GetCharacterBodyAddress(characterEntityBattle.CharacterId);
 
-    #endregion
+        bodyHandle = Addressables.LoadAssetAsync<SpriteLibraryAsset>(address);
+        await bodyHandle.Value.Task;
 
-    #region Appearance Application
+        if (bodyHandle.Value.Status != AsyncOperationStatus.Succeeded)
+        {
+            LogManager.Error($"[CharacterComponentAppearanceBattle] Body load failed: {address}");
+            return;
+        }
 
-    public void ApplyStateToRenderer()
-    {
-        if (!spritesLoaded) return;
-
-        foreach (var (layer, sprite) in characterEntityBattle.SpriteLayerState.Sprites)
-            spriteLayerRenderer.SetSprite(layer, sprite);
-
-        foreach (var (layer, color) in characterEntityBattle.SpriteLayerState.Colors)
-            spriteLayerRenderer.SetColor(layer, color);
-
-        foreach (CharacterSpriteLayer layer in Enum.GetValues(typeof(CharacterSpriteLayer)))
-            spriteLayerRenderer.SetVisible(layer, characterEntityBattle.SpriteLayerState.Contains(layer));
+        bodySpriteLibrary.spriteLibraryAsset = bodyHandle.Value.Result;
     }
 
     #endregion
 
-    #region Visibility
+    #region Kit
 
-    public void ToggleGloves(Position position)
+    public async Task LoadKitAsync()
     {
-        bool isGoalkeeper = position == Position.GK;
-        bool hasGloves = characterEntityBattle.SpriteLayerState.VisibleLayers.Contains(CharacterSpriteLayer.Gloves);
+        ReleaseKit();
 
-        if (isGoalkeeper == hasGloves) return;
+        string address =
+            AddressableLoader.GetKitBodyAddress(
+                characterEntityBattle.KitId,
+                characterEntityBattle.KitVariant.ToString(),
+                characterEntityBattle.KitRole.ToString()
+            );
 
-        if (isGoalkeeper)
-            characterEntityBattle.SpriteLayerState.VisibleLayers.Add(CharacterSpriteLayer.Gloves);
-        else
-            characterEntityBattle.SpriteLayerState.VisibleLayers.Remove(CharacterSpriteLayer.Gloves);
+        kitHandle = Addressables.LoadAssetAsync<SpriteLibraryAsset>(address);
+        await kitHandle.Value.Task;
 
-        spriteLayerRenderer.SetActive(CharacterSpriteLayer.Gloves, isGoalkeeper);
-    }
+        if (kitHandle.Value.Status != AsyncOperationStatus.Succeeded)
+        {
+            LogManager.Error($"[CharacterComponentAppearanceBattle] Kit load failed: {address}");
+            return;
+        }
 
-    public void SetCharacterVisible(bool isVisible)
-    {
-        foreach (CharacterSpriteLayer layer in characterEntityBattle.SpriteLayerState.VisibleLayers)
-            spriteLayerRenderer.SetVisible(layer, isVisible);
+        kitSpriteLibrary.spriteLibraryAsset = kitHandle.Value.Result;
     }
 
     #endregion
 
     #region Helpers
+
+    private void ReleaseBody()
+    {
+        bodySpriteLibrary.spriteLibraryAsset = null;
+
+        if (bodyHandle.HasValue)
+        {
+            Addressables.Release(bodyHandle.Value);
+            bodyHandle = null;
+        }
+    }
+
+    private void ReleaseKit()
+    {
+        kitSpriteLibrary.spriteLibraryAsset = null;
+
+        if (kitHandle.HasValue)
+        {
+            Addressables.Release(kitHandle.Value);
+            kitHandle = null;
+        }
+    }
+
+    public async Task AppearanceBattleLoadAsync() 
+    {
+        await LoadBodyAsync();
+        await LoadKitAsync();
+    }
 
     #endregion
 }

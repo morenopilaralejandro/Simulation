@@ -1,62 +1,81 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Aremoreno.Enums.Character;
-using Aremoreno.Enums.SpriteLayer;
 
 public class CharacterPortraitBattle : MonoBehaviour
 {
-    [SerializeField] private Image imageKitPortraitBase;
-    [SerializeField] private Image imageKitPortraitDetail;
-    [SerializeField] private Image imageKitPortraitNeck;
+    [Header("UI")]
     [SerializeField] private Image imageCharacterPortrait;
-    [SerializeField] private KitPortraitLibrary kitPortraitLibrary;
+    [SerializeField] private Image imageKitPortrait;
 
-    private PortraitSize _cachedSize;
-    private string _cachedId;
+    private int _version;
 
-    public void SetCharacter(Character character)
-    {        
-        if(character.CharacterId != _cachedId)
-            UpdateCharacterPortraitSprite(character);
-        if(character.PortraitSize != _cachedSize)
-            UpdateKitPortraitSprites(character);
-        UpdateKitPortraitColors(character);
+    public async Task SetCharacterAsync(Character character)
+    {
+        int version = ++_version;
+
+        string characterAddress =
+            AddressableLoader.GetCharacterPortraitAddress(character.CharacterId);
+
+        string kitAddress =
+            AddressableLoader.GetKitPortraitAddress(
+                character.KitId,
+                character.KitVariant,
+                character.KitRole,
+                character.PortraitSize
+            );
+
+        var characterTask = LoadSpriteAsync(characterAddress);
+        var kitTask = LoadSpriteAsync(kitAddress);
+
+        Sprite characterSprite = await characterTask;
+        Sprite kitSprite = await kitTask;
+
+        // discard stale results
+        if (version != _version)
+            return;
+
+        imageCharacterPortrait.sprite = characterSprite;
+        imageKitPortrait.sprite = kitSprite;
     }
 
-    public void UpdateCharacterPortraitSprite(Character character)
+    private async Task<Sprite> LoadSpriteAsync(string address)
     {
-        imageCharacterPortrait.sprite = character.PortraitSprite;
-        _cachedId = character.CharacterId;
-    }
+        if (string.IsNullOrEmpty(address))
+            return null;
 
-    public void UpdateKitPortraitSprites(Character character)
-    {
-        var size = character.PortraitSize;
-        var kitPortraitSprites = kitPortraitLibrary.Get(size);
-        imageKitPortraitBase.sprite = kitPortraitSprites.SpriteBase;
-        imageKitPortraitDetail.sprite = kitPortraitSprites.SpriteDetail;
-        imageKitPortraitNeck.sprite = kitPortraitSprites.SpriteNeck;
-        _cachedSize = size;
-    }
+        var handle = Addressables.LoadAssetAsync<Sprite>(address);
 
-    public void UpdateKitPortraitColors(Character character)
-    {
-        imageKitPortraitBase.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.KitBase];
-        imageKitPortraitDetail.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.KitDetail];
-        imageKitPortraitNeck.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.Body];
+        try
+        {
+            await handle.Task;
+
+            if (handle.Status != AsyncOperationStatus.Succeeded)
+                return null;
+
+            return handle.Result;
+        }
+        finally
+        {
+            // release immediately after fetch to avoid leaks
+            if (handle.IsValid())
+                Addressables.Release(handle);
+        }
     }
 
     public void Clear()
     {
-        if (imageCharacterPortrait != null) imageCharacterPortrait.sprite = null;
-        if (imageKitPortraitBase != null) imageKitPortraitBase.sprite = null;
-        if (imageKitPortraitDetail != null) imageKitPortraitDetail.sprite = null;
-        if (imageKitPortraitNeck != null) imageKitPortraitNeck.sprite = null;
+        imageCharacterPortrait.sprite = null;
+        imageKitPortrait.sprite = null;
 
-        _cachedId = null;
-        _cachedSize = default;
+        _version++;
     }
 
+    private void OnDestroy()
+    {
+        Clear();
+    }
 }

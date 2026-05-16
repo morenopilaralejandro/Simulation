@@ -63,7 +63,7 @@ public class SelectorCharacter : Selector<Character, SelectorCharacterListItem>
     protected override void Bind(SelectorCharacterListItem view, Character data)
     {
         if (kit != null)
-            data.ApplyKit(kit, variant, role);
+            data.SetKit(kit, variant, role);
 
         view.Bind(data);
     }

@@ -48,7 +48,7 @@ public class CharacterComponentCustomAvatar
             IsCustomAvatar = false;
             CustomAvatarId = "";
             CustomName = "";
-            CustomCharacterSize = CharacterSize.M;
+            CustomCharacterSize = CharacterSize.Size_C1_M;
             CustomGender = Gender.M;
             CustomElement = Element.Fire;
             CustomPosition = Position.FW;
@@ -56,8 +56,8 @@ public class CharacterComponentCustomAvatar
             CustomHairStyle = HairStyle.Fade;
             CustomHairColorType = HairColorType.Blonde;
             CustomEyeColorType = EyeColorType.Blue;
-            CustomBodyColorType = BodyColorType.Generic;
-            CustomPortraitSize = PortraitSize.M;
+            CustomBodyColorType = BodyColorType.Light;
+            CustomPortraitSize = PortraitSize.Size_P3_M;
         }
     }
 

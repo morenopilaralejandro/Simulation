@@ -428,7 +428,7 @@ public class TeamManagerLoadout
 
             // Return the field entity to pool
             BattleCharacterManager.Instance.ReturnCharacterToPool(entityA);
-            characterA.ApplyKit(loadout.Kit, loadout.Variant, Position.FW);
+            characterA.SetKit(loadout, Position.FW);
 
             // Spawn fresh entity for slotA (where characterB is going)
             SpawnEntityForSlot(loadout, battleType, slotIndexA, coordA, characterB);
@@ -442,7 +442,7 @@ public class TeamManagerLoadout
 
             // Return the field entity to pool
             BattleCharacterManager.Instance.ReturnCharacterToPool(entityB);
-            characterB.ApplyKit(loadout.Kit, loadout.Variant, Position.FW);
+            characterB.SetKit(loadout, Position.FW);
 
             // Spawn fresh entity for slotB (where characterA is going)
             SpawnEntityForSlot(loadout, battleType, slotIndexB, coordB, characterA);
@@ -484,8 +484,6 @@ public class TeamManagerLoadout
             
             // Guard: entity may have been pooled during async load
             if (!entity.gameObject.activeInHierarchy) return;
-            
-            entity.ApplyStateToRenderer();
         }
         catch (Exception e)
         {

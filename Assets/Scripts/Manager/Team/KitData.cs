@@ -5,6 +5,7 @@ public class KitData : ScriptableObject
 {
     public string KitId;
 
+    /*
     public Color BaseColorHomeField;
     public Color DetailColorHomeField;
     public Color ShockColorHomeField;
@@ -20,4 +21,5 @@ public class KitData : ScriptableObject
     public Color BaseColorAwayKeeper;
     public Color DetailColorAwayKeeper;
     public Color ShockColorAwayKeeper;
+    */
 }

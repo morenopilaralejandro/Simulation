@@ -42,14 +42,10 @@ public class CharacterComponentTeamMember : MonoBehaviour
         if (!characterEntityBattle.IsOnUsersTeam())
             this.formationCoord.FlipDefaultPosition();
 
-        this.characterEntityBattle.ApplyKit(
-            team.Kit,
-            team.Variant,
+        this.characterEntityBattle.SetKit(
+            team,
             formationCoord.Position
         );
-
-        this.characterEntityBattle.ToggleGloves(formationCoord.Position);
-        this.characterEntityBattle.ApplyStateToRenderer();
 
         LogManager.Trace($"[CharacterComponentTeamMember] {this.characterEntityBattle.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
     }

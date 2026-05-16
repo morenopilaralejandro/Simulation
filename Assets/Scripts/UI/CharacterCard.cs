@@ -15,7 +15,7 @@ public class CharacterCard : MonoBehaviour
 
     public void SetCharacter(Character character, Position position)
     {
-        characterPortrait.SetCharacter(character);
+        _ = characterPortrait.SetCharacterAsync(character);
         imageElement.sprite = IconManager.Instance.Element.GetIcon(character.Element);
         imageGender.sprite = IconManager.Instance.Gender.GetIcon(character.Gender);
         imagePosition.color = ColorManager.GetPositionColor(position);

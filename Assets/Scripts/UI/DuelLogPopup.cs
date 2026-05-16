@@ -22,7 +22,7 @@ public class DuelLogPopup : MonoBehaviour
     {
         messageText.text = entry.EntryString;
         if (entry.Character != null)
-            characterPortrait.SetCharacter(entry.Character);
+            _ = characterPortrait.SetCharacterAsync(entry.Character);
         if (entry.Move != null && entry.Move.CurrentEvolution != MoveEvolution.None) 
         {
             imageEvolution.sprite = entry.Move.EvolutionSprite;

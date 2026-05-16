@@ -101,7 +101,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
 
         stunCoroutine = null;
         blinkCoroutine = null;
-        characterEntityBattle.SetCharacterVisible(true);
+        //characterEntityBattle.SetCharacterVisible(true);
     }
 
     private IEnumerator BlinkEffect(float duration)
@@ -120,19 +120,19 @@ public class CharacterComponentStatusEffects : MonoBehaviour
 
                 if (blinkElapsed >= blinkInterval)
                 {
-                    characterEntityBattle.SetCharacterVisible(visible);
+                    //characterEntityBattle.SetCharacterVisible(visible);
                     visible = !visible;
                     blinkElapsed = 0f;
                 }
             }
             else
             {
-                characterEntityBattle.SetCharacterVisible(true);
+                //characterEntityBattle.SetCharacterVisible(true);
             }
             yield return null;
         }
 
-        characterEntityBattle.SetCharacterVisible(true);
+        //characterEntityBattle.SetCharacterVisible(true);
     }
 
     private IEnumerator HandleTrip(float duration)

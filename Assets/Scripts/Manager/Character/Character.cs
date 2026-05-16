@@ -141,22 +141,18 @@ public class Character
 
     // appearanceComponent
     public CharacterComponentAppearance AppearanceComponent => appearanceComponent;
-    public Sprite PortraitSprite => appearanceComponent.PortraitSprite;
     public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
-    public string PortraitSpriteId => appearanceComponent.PortraitSpriteId;
     public HairStyle HairStyle => appearanceComponent.HairStyle;
     public HairColorType HairColorType => appearanceComponent.HairColorType;
     public EyeColorType EyeColorType => appearanceComponent.EyeColorType;
     public BodyColorType BodyColorType => appearanceComponent.BodyColorType;
-    public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState
-    {
-        get => appearanceComponent.State;
-        set => appearanceComponent.State = value;
-    }
-    public void ApplyKit(Kit kit, Variant variant, Position position) => appearanceComponent.ApplyKit(kit, variant, position);
-    public void ApplyKit(Kit kit, Variant variant, Role role) => appearanceComponent.ApplyKit(kit, variant, role);
-    public void InitializeVisibility() => appearanceComponent.InitializeVisibility();
+    public void SetKitId(Kit kit) => appearanceComponent.SetKitId(kit);
+    public void SetKit(Kit kit, Variant variant, Role role) => appearanceComponent.SetKit(kit, variant, role);
+    public void SetKit(Team team, Position position) => appearanceComponent.SetKit(team, position);
     public Variant GetKitVariant(Team team) => appearanceComponent.GetKitVariant(team);
     public Role GetKitRole(Position position) => appearanceComponent.GetKitRole(position);
+    public string KitId => appearanceComponent.KitId;
+    public Variant KitVariant => appearanceComponent.KitVariant;
+    public Role KitRole => appearanceComponent.KitRole;
     #endregion
 }

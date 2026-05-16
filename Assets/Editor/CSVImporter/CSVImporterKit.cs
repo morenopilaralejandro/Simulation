@@ -32,6 +32,7 @@ public class CSVImporterKit
 
         int kitIdIndex = System.Array.IndexOf(headers, "KitId");
 
+        /*
         int baseHomeFieldIndex = System.Array.IndexOf(headers, "BaseColorHomeField");
         int detailHomeFieldIndex = System.Array.IndexOf(headers, "DetailColorHomeField");
         int shockHomeFieldIndex = System.Array.IndexOf(headers, "ShockColorHomeField");
@@ -48,6 +49,8 @@ public class CSVImporterKit
         int detailAwayKeeperIndex = System.Array.IndexOf(headers, "DetailColorAwayKeeper");
         int shockAwayKeeperIndex = System.Array.IndexOf(headers, "ShockColorAwayKeeper");
 
+        */
+
         for (int i = 1; i < lines.Length; i++)
         {
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
@@ -57,6 +60,7 @@ public class CSVImporterKit
 
             kitData.KitId = values[kitIdIndex].Trim();
 
+            /*
             kitData.BaseColorHomeField   = ColorManager.GetKitColor(EnumManager.StringToEnum<KitColor>(values[baseHomeFieldIndex].Trim()));
             kitData.DetailColorHomeField = ColorManager.GetKitColor(EnumManager.StringToEnum<KitColor>(values[detailHomeFieldIndex].Trim()));
             kitData.ShockColorHomeField  = ColorManager.GetKitColor(EnumManager.StringToEnum<KitColor>(values[shockHomeFieldIndex].Trim()));
@@ -72,6 +76,7 @@ public class CSVImporterKit
             kitData.BaseColorAwayKeeper   = ColorManager.GetKitColor(EnumManager.StringToEnum<KitColor>(values[baseAwayKeeperIndex].Trim()));
             kitData.DetailColorAwayKeeper = ColorManager.GetKitColor(EnumManager.StringToEnum<KitColor>(values[detailAwayKeeperIndex].Trim()));
             kitData.ShockColorAwayKeeper  = ColorManager.GetKitColor(EnumManager.StringToEnum<KitColor>(values[shockAwayKeeperIndex].Trim()));
+            */
 
             string safeName = kitData.KitId.Replace(" ", "_").Replace("/", "_");
             string assetPath = $"{assetFolder}/{safeName}.asset";

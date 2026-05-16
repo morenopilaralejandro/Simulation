@@ -17,6 +17,8 @@ public class KitPortraitLibrary : ScriptableObject
 
     public KitPortraitSprites Get(PortraitSize size)
     {
+        return default;
+        /*
         return size switch
         {
             PortraitSize.XS => SpritesXS,
@@ -29,6 +31,7 @@ public class KitPortraitLibrary : ScriptableObject
 
             _ => SpritesM
         };
+        */
     }
 
 }

@@ -112,6 +112,13 @@ public class SpriteAtlasManager : MonoBehaviour
         return GetSpriteAsync(atlasId, spriteId);
     }
 
+    public Task<Sprite> GetKitPortrait(string id, string variant, string role)
+    {
+        var atlasId = CHARACTER_PORTRAIT_ATLAS_ID;
+        var spriteId = AddressableLoader.GetCharacterPortraitAddress(id);
+        return GetSpriteAsync(atlasId, spriteId);
+    }
+
     public Task<Sprite> GetCharacterHair(string id)
     {
         var atlasId = CHARACTER_COMMON_ATLAS_ID;
