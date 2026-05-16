@@ -938,6 +938,8 @@ public class CharacterComponentAI : MonoBehaviour
 
         dir.Normalize();
 
+        character.PlayRun(new Vector2(dir.x, dir.z));
+
         float speed = character.MovementSpeed;
         Vector3 desiredVelocity = dir * speed;
 

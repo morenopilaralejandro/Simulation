@@ -129,6 +129,8 @@ public class CharacterComponentController : MonoBehaviour
     #region Movement
     private void HandleMovement()
     {
+        characterEntityBattle.PlayRun(moveInput);
+
         float speed = characterEntityBattle.MovementSpeed;
 
         Vector3 desiredVelocity = new Vector3(

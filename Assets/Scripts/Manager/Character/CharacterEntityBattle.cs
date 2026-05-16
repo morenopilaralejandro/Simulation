@@ -16,6 +16,7 @@ public class CharacterEntityBattle : MonoBehaviour
     [SerializeField] private Character character;
     [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
     [SerializeField] private CharacterComponentAppearanceBattle appearanceBattleComponent;
+    [SerializeField] private CharacterComponentAnimationController animationControllerComponent;
     [SerializeField] private CharacterComponentModel modelComponent;
     [SerializeField] private CharacterComponentKeeper keeperComponent;
     [SerializeField] private CharacterComponentFatigue fatigueComponent;
@@ -182,6 +183,17 @@ public class CharacterEntityBattle : MonoBehaviour
     public async Task LoadKitAsync() => await appearanceBattleComponent.LoadKitAsync();
     public async Task AppearanceBattleLoadAsync() => await appearanceBattleComponent.AppearanceBattleLoadAsync();
 
+    //animationControllerComponent
+    public void PlayIdle(Vector2 direction) => animationControllerComponent.PlayIdle(direction);
+    public void PlayWalk(Vector2 direction) => animationControllerComponent.PlayWalk(direction);
+    public void PlayRun(Vector2 direction) => animationControllerComponent.PlayRun(direction);
+    public void PlayJump(Vector2 direction) => animationControllerComponent.PlayJump(direction);
+    public void PlayCombat(Vector2 direction) => animationControllerComponent.PlayCombat(direction);
+    public void PlayEmote(Vector2 direction) => animationControllerComponent.PlayEmote(direction);
+    public void PlaySlash(Vector2 direction) => animationControllerComponent.PlaySlash(direction);
+    public void PlayBackslash(Vector2 direction) => animationControllerComponent.PlayBackslash(direction);
+    public void PlaySpellcast(Vector2 direction) => animationControllerComponent.PlaySpellcast(direction);
+    public void PlayHurt() => animationControllerComponent.PlayHurt();
 
     //modelComponent
     public Transform Model => modelComponent.Model;

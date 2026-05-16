@@ -180,8 +180,8 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
     private void ProcessTexture(string path)
     {
         var existing = AssetDatabase.LoadAllAssetRepresentationsAtPath(path);
-        //if (existing != null && existing.Length > 0)
-          //  return;
+        //skip already sliced
+        if (existing != null && existing.Length > 0) return;
 
         var importer = AssetImporter.GetAtPath(path) as TextureImporter;
         if (importer == null) return;
