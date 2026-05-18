@@ -9,15 +9,13 @@ using Aremoreno.Enums.Character;
 
 public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
 {
+    // TODO In newer versions, it is possible to bind the category and label directly instead of using SpriteResolverFrameDriver
     [SerializeField] private CharacterAnimationConfig config;
 
     [Header("Output")]
     [SerializeField] private string outputFolder = "Assets/Animations/AnimationsCharacter";
     [SerializeField] private string controllerName = "CharacterAppearanceBattle.controller";
     [SerializeField] private string clipPrefix = "ani-";
-
-    [Header("Animation")]
-    [SerializeField] private float frameRate = 12f;
 
     [Header("Resolver Paths")]
     [SerializeField] private string bodyPath = "Body";
@@ -48,10 +46,6 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
         outputFolder = EditorGUILayout.TextField("Output Folder", outputFolder);
         controllerName = EditorGUILayout.TextField("Controller Name", controllerName);
         clipPrefix = EditorGUILayout.TextField("Clip Prefix", clipPrefix);
-
-        EditorGUILayout.Space();
-
-        frameRate = EditorGUILayout.FloatField("Frame Rate", frameRate);
 
         EditorGUILayout.Space();
 
@@ -96,7 +90,19 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
             if (anim == null || string.IsNullOrWhiteSpace(anim.name))
                 continue;
 
-            if (!Enum.TryParse(anim.name, true, out CharacterAnimationState animState))
+            if (anim.frameRate <= 0f)
+            {
+                Debug.LogWarning($"Animation '{anim.name}' has an invalid frameRate. Skipping.");
+                continue;
+            }
+
+            CharacterAnimationState animState;
+
+            if (anim.name == "1h_backslash")
+            {
+                animState = CharacterAnimationState.Backslash1H;
+            }
+            else if (!Enum.TryParse(anim.name, true, out animState))
             {
                 Debug.LogWarning(
                     $"Animation '{anim.name}' does not match a CharacterAnimationState enum name. " +
@@ -114,7 +120,7 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
                 if (!Enum.TryParse(dir, true, out CharacterDirection animDirection))
                     continue;
 
-                AnimationClip clip = CreateClip(anim.name, dir, anim.frames);
+                AnimationClip clip = CreateClip(anim.name, dir, anim.frames, anim.loop, anim.frameRate);
 
                 AnimatorState state = stateMachine.AddState(GetStateName(anim.name, dir));
                 state.motion = clip;
@@ -143,7 +149,7 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
         Debug.Log("CharacterAppearanceBattle animator generated.");
     }
 
-    private AnimationClip CreateClip(string animName, string dir, int frames)
+    private AnimationClip CreateClip(string animName, string dir, int frames, bool loop, float frameRate)
     {
         string clipName = $"{clipPrefix}{animName}_{dir}";
         string clipPath = Path.Combine(outputFolder, clipName + ".anim").Replace("\\", "/");
@@ -155,15 +161,32 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
         AnimationClip clip = new AnimationClip
         {
             frameRate = frameRate,
-            wrapMode = WrapMode.Loop
+            wrapMode = loop ? WrapMode.Loop : WrapMode.Once
         };
 
-        AddResolverBinding(clip, bodyPath, animName, dir, frames);
-        AddResolverBinding(clip, kitPath, animName, dir, frames);
-        AddResolverBinding(clip, wingsPath, animName, dir, frames);
+        AddResolverBinding(clip, bodyPath, frames, loop, frameRate);
+        AddResolverBinding(clip, kitPath, frames, loop, frameRate);
+        AddResolverBinding(clip, wingsPath, frames, loop, frameRate);
 
         AssetDatabase.CreateAsset(clip, clipPath);
+        AssetDatabase.SaveAssets();
+
+        // IMPORTANT: force Unity to fully import asset first
+        AssetDatabase.ImportAsset(clipPath, ImportAssetOptions.ForceUpdate);
+
+        clip = AssetDatabase.LoadAssetAtPath<AnimationClip>(clipPath);
+
+        AnimationClipSettings settings = AnimationUtility.GetAnimationClipSettings(clip);
+        settings.loopTime = loop;
+        //settings.loopBlend = loop; loop pose
+        settings.stopTime = loop
+            ? (frames + 1) / frameRate
+            : frames / frameRate;
+
+        AnimationUtility.SetAnimationClipSettings(clip, settings);
+
         EditorUtility.SetDirty(clip);
+        AssetDatabase.SaveAssets();
 
         return clip;
     }
@@ -171,26 +194,35 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
     private void AddResolverBinding(
         AnimationClip clip,
         string objectPath,
-        string animName,
-        string dir,
-        int frames
+        int frames,
+        bool loop,
+        float frameRate
     )
     {
         var binding = new EditorCurveBinding
         {
             type = typeof(SpriteResolverFrameDriver),
             path = objectPath,
-            propertyName = "frame" // IMPORTANT: serialized field name, not property
+            propertyName = "frame"
         };
 
         AnimationCurve curve = new AnimationCurve();
+
         float step = 1f / frameRate;
 
         for (int i = 0; i < frames; i++)
         {
-            curve.AddKey(i * step, i);
+            float time = i * step;
+            curve.AddKey(new Keyframe(time, i));
         }
 
+        if (loop && frames > 0)
+        {
+            float endTime = frames * step;
+            curve.AddKey(new Keyframe(endTime, 0f));
+        }
+
+        MakeConstant(curve);
         AnimationUtility.SetEditorCurve(clip, binding, curve);
     }
 
@@ -198,17 +230,8 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
     {
         for (int i = 0; i < curve.length; i++)
         {
-            AnimationUtility.SetKeyLeftTangentMode(
-                curve,
-                i,
-                AnimationUtility.TangentMode.Constant
-            );
-
-            AnimationUtility.SetKeyRightTangentMode(
-                curve,
-                i,
-                AnimationUtility.TangentMode.Constant
-            );
+            AnimationUtility.SetKeyLeftTangentMode(curve, i, AnimationUtility.TangentMode.Constant);
+            AnimationUtility.SetKeyRightTangentMode(curve, i, AnimationUtility.TangentMode.Constant);
         }
     }
 

@@ -91,9 +91,18 @@ public class FieldDuelHandler : IDuelHandler
             else
                 BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.DefenseSupports);
             
+            if (winner.Action == DuelAction.Offense) 
+            {
+                winner.CharacterEntityBattle.PlaySlash(winner.CharacterEntityBattle.FormationCoord.DefaultAnimationDirection);
+                winner.CharacterEntityBattle.ResetAnimationDirectionAI();
+            }
+
             await BattleEffectManager.Instance.PlayMoveParticle(
                 winner.Move,
                 winner.CharacterEntityBattle.transform.position);
+
+            if (winner.Action == DuelAction.Offense) 
+                winner.CharacterEntityBattle.PlayIdle(winner.CharacterEntityBattle.FormationCoord.DefaultAnimationDirection);
 
             MoveEvents.RaiseMoveUsed(winner.Move, winner.CharacterEntityBattle);
         }

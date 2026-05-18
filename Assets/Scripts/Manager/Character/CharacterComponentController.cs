@@ -36,6 +36,9 @@ public class CharacterComponentController : MonoBehaviour
 
     private bool useMouseAiming;
     private CharacterEntityBattle cachedTarget;
+
+    private Vector2 lastAnimDirection;
+    private bool wasMoving;
     #endregion
 
     #region Properties
@@ -97,6 +100,13 @@ public class CharacterComponentController : MonoBehaviour
         HandleMovement();
         HandleRotation();
     }
+
+    private void LateUpdate()
+    {
+        if (!CanProcessInput || characterEntityBattle.IsStunned()) return;
+
+        UpdateAnimation();
+    }
     #endregion
 
     #region Input
@@ -129,8 +139,6 @@ public class CharacterComponentController : MonoBehaviour
     #region Movement
     private void HandleMovement()
     {
-        characterEntityBattle.PlayRun(moveInput);
-
         float speed = characterEntityBattle.MovementSpeed;
 
         Vector3 desiredVelocity = new Vector3(
@@ -160,6 +168,48 @@ public class CharacterComponentController : MonoBehaviour
             targetRotation,
             rotationSpeed * Time.fixedDeltaTime
         );
+    }
+
+    private Vector2 GetAnimationDirection()
+    {
+        Vector3 f = characterEntityBattle.Model.forward;
+        f.y = 0f;
+
+        //if (f.sqrMagnitude < MIN_INPUT_SQR_MAGNITUDE)
+            //return cachedDirection;
+
+        f.Normalize();
+
+        if (Mathf.Abs(f.x) > Mathf.Abs(f.z))
+            return f.x > 0 ? Vector2.left : Vector2.right;
+
+        return f.z > 0 ? Vector2.up : Vector2.down;
+    }
+
+    private void UpdateAnimation()
+    {
+        Vector2 direction = GetAnimationDirection();
+        bool isMoving = moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE;
+
+        if (isMoving)
+        {
+            // Only play run if direction changed OR we just started moving
+            if (!wasMoving || direction != lastAnimDirection)
+            {
+                characterEntityBattle.PlayRun(direction);
+                lastAnimDirection = direction;
+            }
+        }
+        else
+        {
+            // Only play idle when transitioning from moving → idle
+            if (wasMoving)
+            {
+                characterEntityBattle.PlayIdle(lastAnimDirection);
+            }
+        }
+
+        wasMoving = isMoving;
     }
     #endregion
 

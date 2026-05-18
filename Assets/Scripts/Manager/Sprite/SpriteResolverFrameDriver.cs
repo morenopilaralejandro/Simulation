@@ -41,6 +41,6 @@ public class SpriteResolverFrameDriver : MonoBehaviour
     {
         category = animCategory;
         direction = animDirection;
-        lastFrame = -1;
+        //lastFrame = -1;
     }
 }

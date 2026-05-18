@@ -60,6 +60,8 @@ public class ShootDuelHandler : IDuelHandler
 
         if(offense.Move != null) 
         {
+            offense.CharacterEntityBattle.PlayCombat(offense.CharacterEntityBattle.FormationCoord.DefaultAnimationDirection);
+            offense.CharacterEntityBattle.ResetAnimationDirectionAI();
             await BattleEffectManager.Instance.PlayMoveParticle(offense.Move, offense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(offense.Move, offense.CharacterEntityBattle);
         }
@@ -113,8 +115,13 @@ public class ShootDuelHandler : IDuelHandler
 
         if(defense.Move != null) 
         {
+            if (isCategoryCatch) 
+            {
+                defense.CharacterEntityBattle.PlaySpellcast(defense.CharacterEntityBattle.FormationCoord.DefaultAnimationDirection);
+            }
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
+            defense.CharacterEntityBattle.PlayIdle(defense.CharacterEntityBattle.FormationCoord.DefaultAnimationDirection);
         }
 
         // if is reversal start else end
@@ -149,7 +156,11 @@ public class ShootDuelHandler : IDuelHandler
 
         if(defense.Move != null) 
         {
+            if (isCategoryCatch) 
+                defense.CharacterEntityBattle.PlaySpellcast(defense.CharacterEntityBattle.FormationCoord.DefaultAnimationDirection);
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
+            if (isCategoryCatch) 
+                defense.CharacterEntityBattle.PlayHurt();
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
         }
 

@@ -13,9 +13,14 @@ public class CharacterPortraitBattle : MonoBehaviour
 
     private int _version;
 
+    private AsyncOperationHandle<Sprite>? _characterHandle;
+    private AsyncOperationHandle<Sprite>? _kitHandle;
+
     public async Task SetCharacterAsync(Character character)
     {
         int version = ++_version;
+
+        ReleaseHandles();
 
         string characterAddress =
             AddressableLoader.GetCharacterPortraitAddress(character.CharacterId);
@@ -28,42 +33,36 @@ public class CharacterPortraitBattle : MonoBehaviour
                 character.PortraitSize
             );
 
-        var characterTask = LoadSpriteAsync(characterAddress);
-        var kitTask = LoadSpriteAsync(kitAddress);
+        _characterHandle = Addressables.LoadAssetAsync<Sprite>(characterAddress);
+        _kitHandle = Addressables.LoadAssetAsync<Sprite>(kitAddress);
 
-        Sprite characterSprite = await characterTask;
-        Sprite kitSprite = await kitTask;
+        await _characterHandle.Value.Task;
+        await _kitHandle.Value.Task;
 
-        // discard stale results
         if (version != _version)
             return;
 
-        imageCharacterPortrait.sprite = characterSprite;
-        imageKitPortrait.sprite = kitSprite;
+        imageCharacterPortrait.sprite =
+            _characterHandle.Value.Status == AsyncOperationStatus.Succeeded
+                ? _characterHandle.Value.Result
+                : null;
+
+        imageKitPortrait.sprite =
+            _kitHandle.Value.Status == AsyncOperationStatus.Succeeded
+                ? _kitHandle.Value.Result
+                : null;
     }
 
-    private async Task<Sprite> LoadSpriteAsync(string address)
+    private void ReleaseHandles()
     {
-        if (string.IsNullOrEmpty(address))
-            return null;
+        if (_characterHandle.HasValue && _characterHandle.Value.IsValid())
+            Addressables.Release(_characterHandle.Value);
 
-        var handle = Addressables.LoadAssetAsync<Sprite>(address);
+        if (_kitHandle.HasValue && _kitHandle.Value.IsValid())
+            Addressables.Release(_kitHandle.Value);
 
-        try
-        {
-            await handle.Task;
-
-            if (handle.Status != AsyncOperationStatus.Succeeded)
-                return null;
-
-            return handle.Result;
-        }
-        finally
-        {
-            // release immediately after fetch to avoid leaks
-            if (handle.IsValid())
-                Addressables.Release(handle);
-        }
+        _characterHandle = null;
+        _kitHandle = null;
     }
 
     public void Clear()
@@ -71,6 +70,7 @@ public class CharacterPortraitBattle : MonoBehaviour
         imageCharacterPortrait.sprite = null;
         imageKitPortrait.sprite = null;
 
+        ReleaseHandles();
         _version++;
     }
 

@@ -950,6 +950,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2918560542856892154, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 3eea816ac241b36bfb92f56dce5f8f92, type: 2}
     - target: {fileID: 3943641887977168860, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.5
@@ -997,6 +1001,14 @@ PrefabInstance:
     - target: {fileID: 3943641887977168860, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9110008143049604527, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_labelHash
+      value: 8.627778e-34
+      objectReference: {fileID: 0}
+    - target: {fileID: 9110008143049604527, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_CategoryHash
+      value: 5.449709e-22
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5992253294801766362, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}

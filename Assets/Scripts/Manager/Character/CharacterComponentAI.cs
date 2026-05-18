@@ -340,7 +340,14 @@ public class CharacterComponentAI : MonoBehaviour
     public void EnableAI() => isAIEnabled = true;
     public void EnableAI(bool isAIEnabled) => this.isAIEnabled = isAIEnabled;
     public void DisableAI() => isAIEnabled = false;
-
+    public void ResetAnimationDirection() 
+    { 
+        if(isEnemyAI)
+            lastAnimDirection = Vector2.up;
+        else 
+            lastAnimDirection = Vector2.down;
+    }
+    
     #endregion
 
     #region UPDATE LOOP
@@ -703,6 +710,9 @@ public class CharacterComponentAI : MonoBehaviour
             defaultRot,
             ROTATION_SPEED * Time.fixedDeltaTime
         );
+
+        //UpdateMovementAnimation(false);
+        character.PlayIdle(character.FormationCoord.DefaultAnimationDirection);
     }
 
     private void ActSupport()
@@ -933,12 +943,13 @@ public class CharacterComponentAI : MonoBehaviour
         if (dir.sqrMagnitude < MIN_TARGET_DIST_SQR)
         {
             StopAndResetRotation();
+            UpdateMovementAnimation(false);
             return;
         }
 
         dir.Normalize();
 
-        character.PlayRun(new Vector2(dir.x, dir.z));
+        UpdateMovementAnimation(true);
 
         float speed = character.MovementSpeed;
         Vector3 desiredVelocity = dir * speed;
@@ -1205,6 +1216,52 @@ public class CharacterComponentAI : MonoBehaviour
             : character.GetStrongestAffordableMoveByTrait(trait);
     }
 
+    #endregion
+
+    #region Animation
+    private Vector2 lastAnimDirection = Vector2.down;
+    private bool wasMoving = false;
+
+    private Vector2 GetAnimationDirection()
+    {
+        Vector3 f = modelTf.forward;
+        f.y = 0f;
+
+        if (f.sqrMagnitude <= 0.001f)
+            return lastAnimDirection;
+
+        f.Normalize();
+
+        if (Mathf.Abs(f.x) > Mathf.Abs(f.z))
+            return f.x > 0 ? Vector2.left : Vector2.right;
+
+        return f.z > 0 ? Vector2.up : Vector2.down;
+    }
+
+    private void UpdateMovementAnimation(bool isMoving)
+    {
+        if (BattleManager.Instance.IsTimeFrozen) return;
+
+        Vector2 direction = GetAnimationDirection();
+
+        if (isMoving)
+        {
+            if (!wasMoving || direction != lastAnimDirection)
+            {
+                character.PlayRun(direction);
+                lastAnimDirection = direction;
+            }
+        }
+        else
+        {
+            if (wasMoving)
+            {
+                character.PlayIdle(lastAnimDirection);
+            }
+        }
+
+        wasMoving = isMoving;
+    }
     #endregion
 }
 

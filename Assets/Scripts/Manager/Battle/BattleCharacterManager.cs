@@ -99,6 +99,7 @@ public class BattleCharacterManager : MonoBehaviour
 
         character.ClearAllStatus();
         character.ReleaseStateLock();
+        character.PlayIdle(character.FormationCoord.DefaultAnimationDirection);
     }
 
     public void ClearPool()

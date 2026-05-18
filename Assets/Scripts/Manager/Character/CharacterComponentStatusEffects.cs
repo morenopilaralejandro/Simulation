@@ -78,7 +78,8 @@ public class CharacterComponentStatusEffects : MonoBehaviour
 
     private IEnumerator HandleStun(float duration)
     {
-        blinkCoroutine = StartCoroutine(BlinkEffect(duration));
+        // blinkCoroutine = StartCoroutine(BlinkEffect(duration));
+        characterEntityBattle.PlayHurt();
 
         float elapsed = 0f;
         while (elapsed < duration)
@@ -101,6 +102,8 @@ public class CharacterComponentStatusEffects : MonoBehaviour
 
         stunCoroutine = null;
         blinkCoroutine = null;
+        characterEntityBattle.ResetAnimationDirectionAI();
+        characterEntityBattle.PlayIdle(characterEntityBattle.FormationCoord.DefaultAnimationDirection);
         //characterEntityBattle.SetCharacterVisible(true);
     }
 

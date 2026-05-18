@@ -68,6 +68,11 @@ public class CharacterComponentAnimationController : MonoBehaviour
 
     public void PlayHurt()
     {
+        string animName = CharacterAnimationState.Hurt.ToString().ToLowerInvariant();
+        string dirName = "down";
+
+        ConfigureResolvers(animName, dirName);
+
         animator.SetInteger(StateHash, (int)CharacterAnimationState.Hurt);
         animator.SetInteger(DirectionHash, (int)CharacterDirection.Down);
     }
@@ -77,6 +82,7 @@ public class CharacterComponentAnimationController : MonoBehaviour
         CharacterDirection resolvedDirection = ResolveDirection(direction);
 
         string animName = state.ToString().ToLowerInvariant();
+        if (state == CharacterAnimationState.Backslash1H) animName = "1h_backslash";
         string dirName = DirectionToString(resolvedDirection);
 
         ConfigureResolvers(animName, dirName);

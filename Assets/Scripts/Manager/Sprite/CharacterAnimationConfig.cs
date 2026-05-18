@@ -15,6 +15,9 @@ public class AnimationEntry
     public int frames;
 
     public AnimationDirection direction;
+
+    public bool loop = true;
+    public float frameRate = 12f;
 }
 
 public enum AnimationDirection

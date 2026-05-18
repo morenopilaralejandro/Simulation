@@ -6,34 +6,15 @@ using System.Linq;
 
 public class SpriteLibraryAutoBuilder : EditorWindow
 {
-    string outputFolder = "Assets/Addressables/AddressSpriteLibrary";
+    [SerializeField] private CharacterAnimationConfig config;
+    [SerializeField] private string outputFolder = "Assets/Addressables/AddressSpriteLibrary";
 
-    static readonly string[] Directions =
+    private static readonly string[] Directions =
     {
         "up",
         "left",
         "down",
         "right"
-    };
-
-    // frames per direction (4-dir animations)
-    static readonly Dictionary<string, int> Animations = new()
-    {
-        { "1h_backslash", 13 },
-        { "combat", 2 },
-        { "emote", 3 },
-        { "idle", 2 },
-        { "jump", 5 },
-        { "run", 8 },
-        { "slash", 6 },
-        { "spellcast", 7 },
-        { "walk", 9 }
-    };
-
-    // single-direction animations (always down)
-    static readonly Dictionary<string, int> DownOnlyAnimations = new()
-    {
-        { "hurt", 6 }
     };
 
     [MenuItem("Tools/Spritesheet/Build Sprite Libraries")]
@@ -42,12 +23,31 @@ public class SpriteLibraryAutoBuilder : EditorWindow
         GetWindow<SpriteLibraryAutoBuilder>("Sprite Library Builder");
     }
 
-    void OnGUI()
+    private void OnGUI()
     {
+        GUILayout.Label("Sprite Library Builder", EditorStyles.boldLabel);
+
+        config = (CharacterAnimationConfig)EditorGUILayout.ObjectField(
+            "Config",
+            config,
+            typeof(CharacterAnimationConfig),
+            false
+        );
+
         outputFolder = EditorGUILayout.TextField("Output Folder", outputFolder);
 
+        EditorGUILayout.Space();
+
         if (GUILayout.Button("Build"))
+        {
+            if (config == null)
+            {
+                Debug.LogError("CharacterAnimationConfig missing.");
+                return;
+            }
+
             Build();
+        }
     }
 
     class SpriteData
@@ -58,7 +58,7 @@ public class SpriteLibraryAutoBuilder : EditorWindow
         public Sprite sprite;
     }
 
-    int ExtractDirectionIndex(string name)
+    private int ExtractDirectionIndex(string name)
     {
         if (name.Contains("_up_")) return 0;
         if (name.Contains("_left_")) return 1;
@@ -67,15 +67,13 @@ public class SpriteLibraryAutoBuilder : EditorWindow
         return 0;
     }
 
-    int ExtractFrame(string name)
+    private int ExtractFrame(string name)
     {
         var parts = name.Split('_');
-        if (!int.TryParse(parts[^1], out int frame))
-            return -1;
-        return frame;
+        return int.TryParse(parts[^1], out int frame) ? frame : -1;
     }
 
-    void Build()
+    private void Build()
     {
         var sprites = AssetDatabase.FindAssets("t:Sprite")
             .Select(g => AssetDatabase.GUIDToAssetPath(g))
@@ -88,9 +86,9 @@ public class SpriteLibraryAutoBuilder : EditorWindow
 
         var map = new Dictionary<string, List<SpriteData>>();
 
-        foreach (var s in sprites)
+        foreach (var sprite in sprites)
         {
-            if (!TryParse(s.name, s, out var data))
+            if (!TryParse(sprite.name, sprite, out var data))
                 continue;
 
             if (!map.ContainsKey(data.libraryKey))
@@ -108,8 +106,7 @@ public class SpriteLibraryAutoBuilder : EditorWindow
         Debug.Log($"Built {map.Count} SpriteLibraries");
     }
 
-    // ---------------- PARSER ----------------
-    bool TryParse(string name, Sprite sprite, out SpriteData data)
+    private bool TryParse(string name, Sprite sprite, out SpriteData data)
     {
         data = null;
 
@@ -165,8 +162,7 @@ public class SpriteLibraryAutoBuilder : EditorWindow
         return true;
     }
 
-    // ---------------- ANIMATION SYSTEM ----------------
-    bool TryParseAnimation(string anim, out string category, out string label)
+    private bool TryParseAnimation(string anim, out string category, out string label)
     {
         category = null;
         label = null;
@@ -179,37 +175,37 @@ public class SpriteLibraryAutoBuilder : EditorWindow
 
         category = string.Join("_", parts.Take(parts.Length - 1));
 
-        // ---------------- DOWN ONLY ----------------
-        if (DownOnlyAnimations.TryGetValue(category, out int downFrames))
-        {
-            int frame = index;
+        string animationName = category;
 
-            if (frame < 0 || frame >= downFrames)
+        AnimationEntry entry = config.animations.FirstOrDefault(a =>
+            a != null && a.name == animationName);
+
+        if (entry == null)
+            return false;
+
+        // DownOnly animation
+        if (entry.direction == AnimationDirection.DownOnly)
+        {
+            if (index < 0 || index >= entry.frames)
                 return false;
 
-            // ALWAYS keep direction = down
-            label = $"{category}_down_{frame}";
+            label = $"{category}_down_{index}";
             return true;
         }
 
-        // ---------------- NORMAL 4-DIR ----------------
-        if (!Animations.TryGetValue(category, out int framesPerDir))
-            return false;
-
-        int dirIndex = index / framesPerDir;
-        int frameIndex = index % framesPerDir;
+        // FourDir animation
+        int dirIndex = index / entry.frames;
+        int frameIndex = index % entry.frames;
 
         if (dirIndex < 0 || dirIndex >= Directions.Length)
             return false;
 
         string dir = Directions[dirIndex];
-
         label = $"{category}_{dir}_{frameIndex}";
         return true;
     }
 
-    // ---------------- BUILDER ----------------
-    void CreateLibrary(string key, List<SpriteData> data)
+    private void CreateLibrary(string key, List<SpriteData> data)
     {
         string path = $"{outputFolder}/{key}.asset".Replace("\\", "/");
 
@@ -224,32 +220,29 @@ public class SpriteLibraryAutoBuilder : EditorWindow
         var labels = so.FindProperty("m_Labels");
         labels.ClearArray();
 
-        var grouped = data
-            .GroupBy(x => x.category)
-            .OrderBy(g => g.Key);
+        var grouped = data.GroupBy(x => x.category).OrderBy(g => g.Key);
 
         int i = 0;
 
-        foreach (var cat in grouped)
+        foreach (var category in grouped)
         {
             labels.InsertArrayElementAtIndex(i);
 
             var categoryProp = labels.GetArrayElementAtIndex(i);
-            categoryProp.FindPropertyRelative("m_Name").stringValue = cat.Key;
+            categoryProp.FindPropertyRelative("m_Name").stringValue = category.Key;
 
             var list = categoryProp.FindPropertyRelative("m_CategoryList");
             list.ClearArray();
 
             int j = 0;
 
-            foreach (var s in cat.OrderBy(x => x.label))
+            foreach (var sprite in category.OrderBy(x => x.label))
             {
                 list.InsertArrayElementAtIndex(j);
 
                 var entry = list.GetArrayElementAtIndex(j);
-
-                entry.FindPropertyRelative("m_Name").stringValue = s.label;
-                entry.FindPropertyRelative("m_Sprite").objectReferenceValue = s.sprite;
+                entry.FindPropertyRelative("m_Name").stringValue = sprite.label;
+                entry.FindPropertyRelative("m_Sprite").objectReferenceValue = sprite.sprite;
 
                 j++;
             }

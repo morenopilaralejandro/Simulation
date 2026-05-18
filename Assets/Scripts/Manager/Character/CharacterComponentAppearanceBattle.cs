@@ -49,7 +49,6 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     private async Task LoadBodyAsync()
     {
-/*
         ReleaseBody();
 
         string address = AddressableLoader.GetCharacterBodyAddress("chara-00001-are");
@@ -63,8 +62,8 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
             LogManager.Error($"[CharacterComponentAppearanceBattle] Body load failed: {address}");
             return;
         }
-*/
-        //bodySpriteLibrary.spriteLibraryAsset = bodyHandle.Value.Result;
+
+        bodySpriteLibrary.spriteLibraryAsset = bodyHandle.Value.Result;
     }
 
     #endregion
@@ -73,14 +72,13 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     public async Task LoadKitAsync()
     {
-    /*
         ReleaseKit();
 
         string address =
             AddressableLoader.GetKitBodyAddress(
                 characterEntityBattle.KitId,
-                characterEntityBattle.KitVariant.ToString(),
-                characterEntityBattle.KitRole.ToString()
+                characterEntityBattle.KitVariant.ToString().ToLower(),
+                characterEntityBattle.KitRole.ToString().ToLower()
             );
 
         kitHandle = Addressables.LoadAssetAsync<SpriteLibraryAsset>(address);
@@ -91,8 +89,9 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
             LogManager.Error($"[CharacterComponentAppearanceBattle] Kit load failed: {address}");
             return;
         }
-*/
-        //kitSpriteLibrary.spriteLibraryAsset = kitHandle.Value.Result;
+
+        kitSpriteLibrary.spriteLibraryAsset = kitHandle.Value.Result;
+        characterEntityBattle.PlayIdle(characterEntityBattle.FormationCoord.DefaultAnimationDirection); // play animation so that the new library is applied with the resolver
     }
 
     #endregion
