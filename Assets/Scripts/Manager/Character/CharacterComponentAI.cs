@@ -345,7 +345,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     #region UPDATE LOOP
 
-    private void FixedUpdate()
+    public void OnFixedUpdate()
     {
         // reduce repeated property lookups
         if ((character.IsControlled && !character.IsAutoBattleEnabled) ||

@@ -82,6 +82,9 @@ public class FieldDuelHandler : IDuelHandler
 
     public async void EndDuel(DuelParticipant winner, DuelParticipant loser) 
     { 
+        loser.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
+        StunSupports(loser.Action);
+
         if (winner.Move != null) 
         {
             winner.CharacterEntityBattle.ModifyBattleStat(Stat.Sp, -winner.Move.Cost);
@@ -106,8 +109,6 @@ public class FieldDuelHandler : IDuelHandler
         if (winner.CharacterEntityBattle.IsOnUsersTeam())
             BattleEffectManager.Instance.PlayDuelWinEffect(winner.CharacterEntityBattle.transform); 
         
-        loser.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
-        StunSupports(loser.Action);
         PossessionManager.Instance.GiveBallToCharacter(winner.CharacterEntityBattle);
         DuelManager.Instance.EndDuel(winner, loser);
     }

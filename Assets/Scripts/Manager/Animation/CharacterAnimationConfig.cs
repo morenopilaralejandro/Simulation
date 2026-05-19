@@ -6,7 +6,7 @@ using Aremoreno.Enums.Animation;
 [CreateAssetMenu(menuName = "ScriptableObject/Animation/CharacterAnimationConfig")]
 public class CharacterAnimationConfig : ScriptableObject
 {
-    public List<CharacterAnimationEntry> animations = new();
+    public List<CharacterAnimationEntry> animations = new(); 
 }
 
 [Serializable]

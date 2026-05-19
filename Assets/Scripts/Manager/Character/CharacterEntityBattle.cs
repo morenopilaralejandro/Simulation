@@ -59,6 +59,28 @@ public class CharacterEntityBattle : MonoBehaviour
 
     #endregion
 
+    #region Update
+
+    private void Update()
+    {
+        if(controllerComponent.enabled) controllerComponent.OnUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        if(controllerComponent.enabled) controllerComponent.OnFixedUpdate();
+        aiComponent.OnFixedUpdate();
+    }
+
+    private void LateUpdate()
+    {
+        if(controllerComponent.enabled) controllerComponent.OnLateUpdate();
+        animationMotorComponent.OnLateUpdate();
+        animationControllerComponent.OnLateUpdate();
+    }
+
+    #endregion
+
     #region API Character
     //character
     public Character Character => character;
@@ -181,6 +203,7 @@ public class CharacterEntityBattle : MonoBehaviour
 
     //animationControllerComponent
     public void Play(CharacterAnimationState state, CharacterDirection direction) => animationControllerComponent.Play(state, direction);
+    public void RefreshAnimation() => animationControllerComponent.RefreshAnimation();
 
     //animationMotorComponent
     public bool IsPlayingAction => animationMotorComponent.IsPlayingAction;

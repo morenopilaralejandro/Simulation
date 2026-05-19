@@ -64,6 +64,13 @@ public class CharacterComponentAnimationController : MonoBehaviour
         wingsDriver = transform.Find("Wings")?.GetComponent<SpriteResolverFrameDriver>();
     }
 
+    public void OnLateUpdate() 
+    {
+        bodyDriver.OnLateUpdate();
+        kitDriver.OnLateUpdate();
+        wingsDriver.OnLateUpdate();
+    }
+
     #endregion
 
     #region Public
@@ -81,6 +88,14 @@ public class CharacterComponentAnimationController : MonoBehaviour
 
         animator.SetInteger(StateHash, (int)state);
         animator.SetInteger(DirectionHash, (int)direction);
+    }
+
+    public void RefreshAnimation() 
+    {
+        ConfigureResolvers(currentState, currentDirection);
+
+        animator.SetInteger(StateHash, (int)currentState);
+        animator.SetInteger(DirectionHash, (int)currentDirection);
     }
 
     #endregion

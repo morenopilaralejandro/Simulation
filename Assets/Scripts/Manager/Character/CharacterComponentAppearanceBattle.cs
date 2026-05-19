@@ -92,7 +92,10 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
         kitSpriteLibrary.spriteLibraryAsset = kitHandle.Value.Result;
         // play animation so that the new library is applied with the resolver
-        characterEntityBattle.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
+        //characterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Slash, Vector2.left);
+        //characterEntityBattle.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
+        //characterEntityBattle.Play(Aremoreno.Enums.Animation.CharacterAnimationState.Idle, characterEntityBattle.FormationDirection);
+        characterEntityBattle.RefreshAnimation();
     }
 
     #endregion

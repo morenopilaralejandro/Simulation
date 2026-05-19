@@ -17,12 +17,9 @@ public class SpriteResolverFrameDriver : MonoBehaviour
         resolver = GetComponent<SpriteResolver>();
     }
 
-    private void LateUpdate()
+    public void OnLateUpdate()
     {
-        if (frame != lastFrame)
-        {
-            Apply();
-        }
+        if (frame != lastFrame) Apply();
     }
 
     private void Apply()

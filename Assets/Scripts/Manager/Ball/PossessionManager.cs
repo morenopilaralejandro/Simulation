@@ -90,10 +90,14 @@ public class PossessionManager : MonoBehaviour
             battleManager.CurrentPhase == BattlePhase.DeadBall || 
             battleManager.IsTimeFrozen ||
             IsOnCooldownDuel(now)) return;
-        if (IsPassCut())
+        if (IsPassCut()) 
+        {
             audioManager.PlaySfx("sfx-ball_pass_cut");
-        else if (ShowControlFeedback(character, now))
+        } else if (ShowControlFeedback(character, now)) 
+        {
+            character.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Jump);
             audioManager.PlaySfx("sfx-ball_control");
+        }
     }
 
     public void Release()

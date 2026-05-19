@@ -124,7 +124,7 @@ public class CharacterComponentAnimationMotor : MonoBehaviour
 
     #region Update
 
-    private void LateUpdate()
+    public void OnLateUpdate()
     {
         UpdateActionState();
         ResolveAnimation();
@@ -149,9 +149,7 @@ public class CharacterComponentAnimationMotor : MonoBehaviour
 
         CharacterDirection dir = ResolveDirection(data);
 
-        if (state == currentResolvedState &&
-            dir == currentDirection)
-            return;
+        if (state == currentResolvedState && dir == currentDirection) return;
 
         currentResolvedState = state;
         currentDirection = dir;
@@ -208,8 +206,7 @@ public class CharacterComponentAnimationMotor : MonoBehaviour
     {
         f.y = 0f;
 
-        //if (f.sqrMagnitude < MIN_INPUT_SQR_MAGNITUDE)
-            //return cachedDirection;
+        //if (f.sqrMagnitude < MIN_INPUT_SQR_MAGNITUDE) return cachedDirection;
 
         f.Normalize();
 
@@ -218,9 +215,6 @@ public class CharacterComponentAnimationMotor : MonoBehaviour
 
         return f.z > 0 ? CharacterDirection.Up : CharacterDirection.Down;
     }
-
-
-
 
     #endregion
 }

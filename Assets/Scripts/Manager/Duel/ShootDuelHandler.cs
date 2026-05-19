@@ -60,6 +60,7 @@ public class ShootDuelHandler : IDuelHandler
 
         if(offense.Move != null) 
         {
+            offense.CharacterEntityBattle.StopAction();
             offense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Combat);
             await BattleEffectManager.Instance.PlayMoveParticle(offense.Move, offense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(offense.Move, offense.CharacterEntityBattle);
@@ -116,6 +117,8 @@ public class ShootDuelHandler : IDuelHandler
         {
             if (isCategoryCatch) 
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Spellcast);
+            else if (isShootReversal) 
+                defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Combat);
 
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
@@ -148,11 +151,15 @@ public class ShootDuelHandler : IDuelHandler
     private async void HandleDefensePartial(DuelParticipant offense, DuelParticipant defense, bool isCategoryCatch)
     {
         LogManager.Info($"[ShootDuelHandler] Partial block.");
+        bool isShootReversal = defense.Move?.Category == Category.Shoot && DuelManager.Instance.IsShootReversalAllowed;
 
         if(defense.Move != null) 
         {
             if (isCategoryCatch) 
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Spellcast);
+            else if (isShootReversal) 
+                defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Combat);
+            
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
         }

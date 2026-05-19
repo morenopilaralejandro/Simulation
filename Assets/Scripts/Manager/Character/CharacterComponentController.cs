@@ -73,7 +73,7 @@ public class CharacterComponentController : MonoBehaviour
         BattleEvents.OnBattlePhaseChanged -= OnBattlePhaseChanged;
     }
 
-    private void Update()
+    public void OnUpdate()
     {
         if (IsControlledInternal && !characterEntityBattle.IsAutoBattleEnabled) 
         {
@@ -91,16 +91,15 @@ public class CharacterComponentController : MonoBehaviour
         HandleShootInput();
     }
 
-    private void FixedUpdate()
+    public void OnFixedUpdate()
     {
-        if (!CanProcessInput || !characterEntityBattle.CanMove())
-            return;
+        if (!CanProcessInput || !characterEntityBattle.CanMove()) return;
 
         HandleMovement();
         HandleRotation();
     }
 
-    private void LateUpdate()
+    public void OnLateUpdate()
     {
         if (!CanProcessInput || characterEntityBattle.IsStunned()) return;
 
@@ -277,7 +276,6 @@ public class CharacterComponentController : MonoBehaviour
         if (!characterEntityBattle.CanShoot() || !DuelManager.Instance.IsResolved)
             return;
 
-        if (isDirect) characterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Jump);
         bool isLongShootStart = !GoalManager.Instance.IsInShootDistance(characterEntityBattle);
         DuelManager.Instance.StartShootDuel(characterEntityBattle, isDirect, isLongShootStart);
     }
