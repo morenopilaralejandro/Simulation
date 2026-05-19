@@ -78,6 +78,13 @@ public class SettingsManager : MonoBehaviour
         SettingsEvents.RaiseLocalizationStyleChanged(localizationStyle);
     }
 
+    public void SetShowElementIndicator(bool boolValue)
+    {
+        CurrentSettings.ShowElementIndicator = boolValue;
+        SaveSettings();
+        SettingsEvents.RaiseShowElementIndicatorChanged(boolValue);
+    }
+
     // ======================================
     // Control settings management
     // ======================================

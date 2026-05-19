@@ -12,6 +12,9 @@ public class CharacterComponentElementIndicator : MonoBehaviour
 
     public void Initialize(CharacterData characterData, CharacterEntityBattle characterEntityBattle) 
     {
+        if (!SettingsManager.Instance.CurrentSettings.ShowElementIndicator)
+            this.gameObject.SetActive(false);
+
         this.characterEntityBattle = characterEntityBattle;
         this.character = characterEntityBattle.Character;
         elementRenderer.sprite = IconManager.Instance.Element.GetIcon(character.Element);
