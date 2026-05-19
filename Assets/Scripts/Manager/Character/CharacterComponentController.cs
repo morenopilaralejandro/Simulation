@@ -37,7 +37,6 @@ public class CharacterComponentController : MonoBehaviour
     private bool useMouseAiming;
     private CharacterEntityBattle cachedTarget;
 
-    private Vector2 lastAnimDirection;
     private bool wasMoving;
     #endregion
 
@@ -94,7 +93,7 @@ public class CharacterComponentController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!CanProcessInput || !characterEntityBattle.CanMove() || characterEntityBattle.IsStateLocked)
+        if (!CanProcessInput || !characterEntityBattle.CanMove())
             return;
 
         HandleMovement();
@@ -170,46 +169,15 @@ public class CharacterComponentController : MonoBehaviour
         );
     }
 
-    private Vector2 GetAnimationDirection()
-    {
-        Vector3 f = characterEntityBattle.Model.forward;
-        f.y = 0f;
-
-        //if (f.sqrMagnitude < MIN_INPUT_SQR_MAGNITUDE)
-            //return cachedDirection;
-
-        f.Normalize();
-
-        if (Mathf.Abs(f.x) > Mathf.Abs(f.z))
-            return f.x > 0 ? Vector2.left : Vector2.right;
-
-        return f.z > 0 ? Vector2.up : Vector2.down;
-    }
-
     private void UpdateAnimation()
     {
-        Vector2 direction = GetAnimationDirection();
         bool isMoving = moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE;
 
-        if (isMoving)
-        {
-            // Only play run if direction changed OR we just started moving
-            if (!wasMoving || direction != lastAnimDirection)
-            {
-                characterEntityBattle.PlayRun(direction);
-                lastAnimDirection = direction;
-            }
-        }
-        else
-        {
-            // Only play idle when transitioning from moving → idle
-            if (wasMoving)
-            {
-                characterEntityBattle.PlayIdle(lastAnimDirection);
-            }
-        }
-
-        wasMoving = isMoving;
+        characterEntityBattle.SetLocomotion(
+            isMoving
+                ? Aremoreno.Enums.Animation.CharacterAnimationState.Run
+                : Aremoreno.Enums.Animation.CharacterAnimationState.Idle
+        );
     }
     #endregion
 
@@ -309,6 +277,7 @@ public class CharacterComponentController : MonoBehaviour
         if (!characterEntityBattle.CanShoot() || !DuelManager.Instance.IsResolved)
             return;
 
+        if (isDirect) characterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Jump);
         bool isLongShootStart = !GoalManager.Instance.IsInShootDistance(characterEntityBattle);
         DuelManager.Instance.StartShootDuel(characterEntityBattle, isDirect, isLongShootStart);
     }

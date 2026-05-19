@@ -6,6 +6,7 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.U2D.Animation;
 using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Animation;
 
 public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
 {
@@ -111,7 +112,7 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
                 continue;
             }
 
-            string[] dirs = anim.direction == AnimationDirection.FourDir
+            string[] dirs = anim.direction == CharacterAnimationEntryDirection.FourDir
                 ? FourDirections
                 : DownOnly;
 

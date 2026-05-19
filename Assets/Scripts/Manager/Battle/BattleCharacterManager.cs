@@ -99,7 +99,7 @@ public class BattleCharacterManager : MonoBehaviour
 
         character.ClearAllStatus();
         character.ReleaseStateLock();
-        character.PlayIdle(character.FormationCoord.DefaultAnimationDirection);
+        character.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
     }
 
     public void ClearPool()

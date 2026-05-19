@@ -1,131 +1,103 @@
 using UnityEngine;
-using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Animation;
 
 [RequireComponent(typeof(Animator))]
 public class CharacterComponentAnimationController : MonoBehaviour
 {
+    #region Animator Hashes
+
     private static readonly int StateHash = Animator.StringToHash("State");
     private static readonly int DirectionHash = Animator.StringToHash("Direction");
 
+    #endregion
+
+    #region Cached Names
+
+    private static readonly string[] StateNames =
+    {
+        "idle",
+        "walk",
+        "run",
+        "jump",
+        "combat",
+        "emote",
+        "slash",
+        "1h_backslash",
+        "spellcast",
+        "hurt"
+    };
+
+    private static readonly string[] DirectionNames =
+    {
+        "down",
+        "up",
+        "left",
+        "right"
+    };
+
+    #endregion
+
+    #region Serialized
+
     [SerializeField] private Animator animator;
+
     [SerializeField] private SpriteResolverFrameDriver bodyDriver;
     [SerializeField] private SpriteResolverFrameDriver kitDriver;
     [SerializeField] private SpriteResolverFrameDriver wingsDriver;
 
+    #endregion
+
+    #region Runtime
+
+    private CharacterAnimationState currentState = CharacterAnimationState.Idle;
+    private CharacterDirection currentDirection = CharacterDirection.Down;
+
+    #endregion
+
+    #region Initialization
+
     private void Reset()
     {
         animator = GetComponent<Animator>();
-
         bodyDriver = transform.Find("Body")?.GetComponent<SpriteResolverFrameDriver>();
         kitDriver = transform.Find("Kit")?.GetComponent<SpriteResolverFrameDriver>();
         wingsDriver = transform.Find("Wings")?.GetComponent<SpriteResolverFrameDriver>();
     }
 
-    public void PlayIdle(Vector2 direction)
+    #endregion
+
+    #region Public
+
+    public void Play(
+        CharacterAnimationState state,
+        CharacterDirection direction)
     {
-        PlayDirectional(CharacterAnimationState.Idle, direction);
-    }
+        if (state == currentState && direction == currentDirection) return;
 
-    public void PlayWalk(Vector2 direction)
-    {
-        PlayDirectional(CharacterAnimationState.Walk, direction);
-    }
+        currentState = state;
+        currentDirection = direction;
 
-    public void PlayRun(Vector2 direction)
-    {
-        PlayDirectional(CharacterAnimationState.Run, direction);
-    }
-
-    public void PlayJump(Vector2 direction)
-    {
-        PlayDirectional(CharacterAnimationState.Jump, direction);
-    }
-
-    public void PlayCombat(Vector2 direction)
-    {
-        PlayDirectional(CharacterAnimationState.Combat, direction);
-    }
-
-    public void PlayEmote(Vector2 direction)
-    {
-        PlayDirectional(CharacterAnimationState.Emote, direction);
-    }
-
-    public void PlaySlash(Vector2 direction)
-    {
-        PlayDirectional(CharacterAnimationState.Slash, direction);
-    }
-
-    public void PlayBackslash(Vector2 direction)
-    {
-        PlayDirectional(CharacterAnimationState.Backslash1H, direction);
-    }
-
-    public void PlaySpellcast(Vector2 direction)
-    {
-        PlayDirectional(CharacterAnimationState.Spellcast, direction);
-    }
-
-    public void PlayHurt()
-    {
-        string animName = CharacterAnimationState.Hurt.ToString().ToLowerInvariant();
-        string dirName = "down";
-
-        ConfigureResolvers(animName, dirName);
-
-        animator.SetInteger(StateHash, (int)CharacterAnimationState.Hurt);
-        animator.SetInteger(DirectionHash, (int)CharacterDirection.Down);
-    }
-
-    private void PlayDirectional(CharacterAnimationState state, Vector2 direction)
-    {
-        CharacterDirection resolvedDirection = ResolveDirection(direction);
-
-        string animName = state.ToString().ToLowerInvariant();
-        if (state == CharacterAnimationState.Backslash1H) animName = "1h_backslash";
-        string dirName = DirectionToString(resolvedDirection);
-
-        ConfigureResolvers(animName, dirName);
+        ConfigureResolvers(state, direction);
 
         animator.SetInteger(StateHash, (int)state);
-        animator.SetInteger(DirectionHash, (int)resolvedDirection);
+        animator.SetInteger(DirectionHash, (int)direction);
     }
 
-    private CharacterDirection ResolveDirection(Vector2 direction)
+    #endregion
+
+    #region Resolver
+
+    private void ConfigureResolvers(
+        CharacterAnimationState state,
+        CharacterDirection direction)
     {
-        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-        {
-            return direction.x > 0
-                ? CharacterDirection.Right
-                : CharacterDirection.Left;
-        }
+        string animName = StateNames[(int)state];
+        string dirName = DirectionNames[(int)direction];
 
-        return direction.y > 0
-            ? CharacterDirection.Up
-            : CharacterDirection.Down;
+        bodyDriver.Configure(animName, dirName);
+        kitDriver.Configure(animName, dirName);
+        wingsDriver.Configure(animName, dirName);
     }
 
-    private void ConfigureResolvers(string animName, string dir)
-    {
-        bodyDriver?.Configure(animName, dir);
-        kitDriver?.Configure(animName, dir);
-        wingsDriver?.Configure(animName, dir);
-    }
-
-    private string DirectionToString(CharacterDirection direction)
-    {
-        switch (direction)
-        {
-            case CharacterDirection.Down:
-                return "down";
-            case CharacterDirection.Up:
-                return "up";
-            case CharacterDirection.Left:
-                return "left";
-            case CharacterDirection.Right:
-                return "right";
-            default:
-                return "down";
-        }
-    }
+    #endregion
 }

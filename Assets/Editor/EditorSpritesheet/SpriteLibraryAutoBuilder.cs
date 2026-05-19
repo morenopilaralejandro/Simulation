@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine.U2D.Animation;
 using System.Collections.Generic;
 using System.Linq;
+using Aremoreno.Enums.Animation;
 
 public class SpriteLibraryAutoBuilder : EditorWindow
 {
@@ -177,14 +178,14 @@ public class SpriteLibraryAutoBuilder : EditorWindow
 
         string animationName = category;
 
-        AnimationEntry entry = config.animations.FirstOrDefault(a =>
+        CharacterAnimationEntry entry = config.animations.FirstOrDefault(a =>
             a != null && a.name == animationName);
 
         if (entry == null)
             return false;
 
         // DownOnly animation
-        if (entry.direction == AnimationDirection.DownOnly)
+        if (entry.direction == CharacterAnimationEntryDirection.DownOnly)
         {
             if (index < 0 || index >= entry.frames)
                 return false;

@@ -10,7 +10,7 @@ public class SpriteLayerRendererCharacter : MonoBehaviour
 
     private void Awake()
     {
-        //spriteLayerRenderer = new SpriteLayerRenderer<CharacterSpriteLayer>(renderers);
+        spriteLayerRenderer = new SpriteLayerRenderer<CharacterSpriteLayer>(renderers);
     }
 
 

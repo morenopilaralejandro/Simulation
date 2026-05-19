@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 5961866174626013939}
   - component: {fileID: 7991242717706007770}
   - component: {fileID: 2746996385961722605}
+  - component: {fileID: 5587356172106451140}
   m_Layer: 6
   m_Name: CharacterEntityBattle
   m_TagString: Untagged
@@ -88,6 +89,7 @@ MonoBehaviour:
   teamMemberComponent: {fileID: 6836031487143785858}
   appearanceBattleComponent: {fileID: 7280216825872862926}
   animationControllerComponent: {fileID: 6945314671771341290}
+  animationMotorComponent: {fileID: 5587356172106451140}
   modelComponent: {fileID: 1079745700778812747}
   keeperComponent: {fileID: 3331189019823129065}
   fatigueComponent: {fileID: 2688248699970926485}
@@ -244,6 +246,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 7496539539959397621}
+--- !u!114 &5587356172106451140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181741452733680261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc06a8185ef1eba04897fcdb37554245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 7496539539959397621}
+  model: {fileID: 2814813283466834418}
+  animationController: {fileID: 6945314671771341290}
+  actionConfig: {fileID: 11400000, guid: fffbe8f59c0653c17981a379458bb53d, type: 2}
 --- !u!1 &2176928981764195961
 GameObject:
   m_ObjectHideFlags: 0
@@ -1148,6 +1166,10 @@ PrefabInstance:
     - target: {fileID: 2739915572514983274, guid: a1fbb0b1247741502b8fa92b781a2ea2, type: 3}
       propertyPath: m_Name
       value: StatusIndicator
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739915572514983274, guid: a1fbb0b1247741502b8fa92b781a2ea2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3320058011326014825, guid: a1fbb0b1247741502b8fa92b781a2ea2, type: 3}
       propertyPath: m_LocalPosition.x

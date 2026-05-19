@@ -13,7 +13,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
     private float normalSpeedMultiplier = 1.0f;
     private float trippingSpeedMultiplier = 0.6f;
     private Coroutine stunCoroutine;
-    private Coroutine blinkCoroutine;
+    //private Coroutine blinkCoroutine;
     private Coroutine tripCoroutine;
 
     public HashSet<StatusEffect> ActiveStatusEffects => activeStatusEffects;
@@ -43,7 +43,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
                 tripCoroutine = StartCoroutine(HandleTrip(1f));
                 break;
         }
-        characterEntityBattle.UpdateStatusIndicator(effect);
+        //characterEntityBattle.UpdateStatusIndicator(effect);
     }
 
     public void ClearStatus(StatusEffect effect)
@@ -63,7 +63,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
         }
 
         activeStatusEffects.Remove(effect);
-        characterEntityBattle.UpdateStatusIndicator(null);
+        //characterEntityBattle.UpdateStatusIndicator(null);
         characterEntityBattle.UpdateFatigue();
     }
 
@@ -79,7 +79,7 @@ public class CharacterComponentStatusEffects : MonoBehaviour
     private IEnumerator HandleStun(float duration)
     {
         // blinkCoroutine = StartCoroutine(BlinkEffect(duration));
-        characterEntityBattle.PlayHurt();
+        characterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Hurt);
 
         float elapsed = 0f;
         while (elapsed < duration)
@@ -96,14 +96,13 @@ public class CharacterComponentStatusEffects : MonoBehaviour
     {
         if (stunCoroutine != null)
             StopCoroutine(stunCoroutine);
-
+        /*
         if (blinkCoroutine != null)
             StopCoroutine(blinkCoroutine);
-
+        */
         stunCoroutine = null;
-        blinkCoroutine = null;
-        characterEntityBattle.ResetAnimationDirectionAI();
-        characterEntityBattle.PlayIdle(characterEntityBattle.FormationCoord.DefaultAnimationDirection);
+        characterEntityBattle.StopAction();
+        //blinkCoroutine = null;
         //characterEntityBattle.SetCharacterVisible(true);
     }
 

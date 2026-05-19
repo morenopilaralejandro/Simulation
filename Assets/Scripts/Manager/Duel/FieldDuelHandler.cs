@@ -87,22 +87,18 @@ public class FieldDuelHandler : IDuelHandler
             winner.CharacterEntityBattle.ModifyBattleStat(Stat.Sp, -winner.Move.Cost);
 
             if (winner.Action == DuelAction.Offense) 
-                BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.OffenseSupports);
-            else
-                BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.DefenseSupports);
-            
-            if (winner.Action == DuelAction.Offense) 
             {
-                winner.CharacterEntityBattle.PlaySlash(winner.CharacterEntityBattle.FormationCoord.DefaultAnimationDirection);
-                winner.CharacterEntityBattle.ResetAnimationDirectionAI();
+                winner.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Slash);
+                BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.OffenseSupports);
+            }
+            else 
+            {
+                BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.DefenseSupports);
             }
 
             await BattleEffectManager.Instance.PlayMoveParticle(
                 winner.Move,
                 winner.CharacterEntityBattle.transform.position);
-
-            if (winner.Action == DuelAction.Offense) 
-                winner.CharacterEntityBattle.PlayIdle(winner.CharacterEntityBattle.FormationCoord.DefaultAnimationDirection);
 
             MoveEvents.RaiseMoveUsed(winner.Move, winner.CharacterEntityBattle);
         }

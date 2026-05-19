@@ -39,8 +39,8 @@ public class CharacterComponentFatigue : MonoBehaviour
             fatigueState = FatigueState.Normal;
             fatigueSpeedMultiplier = normalSpeedMultiplier;
         }
-        if (!characterEntityBattle.HasStatusEffect()) 
-            characterEntityBattle.UpdateStatusIndicator(null);
+        //if (!characterEntityBattle.HasStatusEffect()) 
+            //characterEntityBattle.UpdateStatusIndicator(null);
 
         characterEntityBattle.CalculateSpeed();
     }

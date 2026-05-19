@@ -39,8 +39,14 @@ public class CharacterComponentTeamMember : MonoBehaviour
         this.formationCoord = new FormationCoord(formationCoord);
         this.battleManager = BattleManager.Instance;
 
-        if (!characterEntityBattle.IsOnUsersTeam())
-            this.formationCoord.FlipDefaultPosition();
+        if (!characterEntityBattle.IsOnUsersTeam()) 
+        {
+            this.formationCoord.FlipDefaultPosition();    
+            characterEntityBattle.SetFormationDirection(Vector2.down);
+        } else 
+        {
+            characterEntityBattle.SetFormationDirection(Vector2.up);
+        }
 
         this.characterEntityBattle.SetKit(
             team,
