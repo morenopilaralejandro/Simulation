@@ -131,7 +131,7 @@ namespace Aremoreno.Enums.Kit
         Silver,
         Gold
     }
-
+    //cloth_
     public enum GlovesColor
     {
         Ceramic,

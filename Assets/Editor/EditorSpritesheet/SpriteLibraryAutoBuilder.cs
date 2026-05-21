@@ -147,6 +147,15 @@ public class SpriteLibraryAutoBuilder : EditorWindow
 
             libraryKey = $"library-kit-{id}-{variant}-{role}";
         }
+        else if (type == "wings" || type == "hair")
+        {
+            if (parts.Length < 3) return false;
+
+            string id = string.Join("-", parts.Take(parts.Length - 2));
+            string position = parts[^2];
+
+            libraryKey = $"library-{type}-{id}-{position}";
+        }
         else
         {
             return false;

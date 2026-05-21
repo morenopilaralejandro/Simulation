@@ -47,9 +47,10 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         await LoadBodyAsync();
     }
 
+
     private async Task LoadBodyAsync()
     {
-        ReleaseBody();
+        //ReleaseBody();
 
         string address = AddressableLoader.GetCharacterBodyAddress("chara-00001-are");
             //AddressableLoader.GetCharacterBodyAddress(characterEntityBattle.CharacterId);
@@ -63,8 +64,9 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
             return;
         }
 
-        bodySpriteLibrary.spriteLibraryAsset = bodyHandle.Value.Result;
+        //bodySpriteLibrary.spriteLibraryAsset = bodyHandle.Value.Result;
     }
+    
 
     #endregion
 

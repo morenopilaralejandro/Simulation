@@ -3,8 +3,8 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.U2D;
 using UnityEngine;
-using UnityEditor.U2D.Sprites;
 using UnityEngine.U2D;
+using UnityEditor.U2D.Sprites;
 
 public class SpritesheetAutoSlicerWindow : EditorWindow
 {
@@ -13,20 +13,13 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
     private List<SpriteAtlas> selectedAtlases = new List<SpriteAtlas>();
     private bool isProcessing;
 
+    private Vector2 scroll;
+
     [MenuItem("Tools/Spritesheet/Spritesheet Auto Slicer")]
     public static void Open()
     {
         GetWindow<SpritesheetAutoSlicerWindow>("Spritesheet Slicer");
     }
-
-    SerializedObject so;
-
-    private void OnEnable()
-    {
-        so = new SerializedObject(this);
-    }
-
-    private Vector2 scroll;
 
     private void OnGUI()
     {
@@ -34,14 +27,11 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
 
         scroll = EditorGUILayout.BeginScrollView(scroll);
 
-        GUILayout.Space(5);
         GUILayout.Label("Sprite Atlases", EditorStyles.boldLabel);
 
-        // ensure list exists
         if (selectedAtlases == null)
             selectedAtlases = new List<SpriteAtlas>();
 
-        // draw list
         for (int i = 0; i < selectedAtlases.Count; i++)
         {
             EditorGUILayout.BeginHorizontal();
@@ -68,14 +58,10 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
         EditorGUILayout.BeginHorizontal();
 
         if (GUILayout.Button("Add Atlas"))
-        {
             selectedAtlases.Add(null);
-        }
 
         if (GUILayout.Button("Clear"))
-        {
             selectedAtlases.Clear();
-        }
 
         EditorGUILayout.EndHorizontal();
 
@@ -84,19 +70,47 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
         GUI.enabled = !isProcessing;
 
         if (GUILayout.Button("Process Assets", GUILayout.Height(35)))
-        {
             ProcessAll();
-        }
 
         GUI.enabled = true;
 
         if (isProcessing)
-        {
-            GUILayout.Space(5);
             GUILayout.Label("Processing...", EditorStyles.helpBox);
-        }
 
         EditorGUILayout.EndScrollView();
+    }
+
+    private void OnEnable()
+    {
+        if (selectedAtlases == null)
+            selectedAtlases = new List<SpriteAtlas>();
+
+        AutoLoadAtlases();
+    }
+
+    private void AutoLoadAtlases()
+    {
+        selectedAtlases.Clear();
+
+        string[] atlasNames =
+        {
+            "atlases-characters-animations",
+            "atlases-kits-portraits"
+        };
+
+        foreach (var name in atlasNames)
+        {
+            string[] guids = AssetDatabase.FindAssets($"{name} t:SpriteAtlas");
+
+            foreach (var guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                var atlas = AssetDatabase.LoadAssetAtPath<SpriteAtlas>(path);
+
+                if (atlas != null && !selectedAtlases.Contains(atlas))
+                    selectedAtlases.Add(atlas);
+            }
+        }
     }
 
     private void ProcessAll()
@@ -114,7 +128,6 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
             }
 
             string[] textures = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets" });
-
             HashSet<string> validFolders = FindMarkedFolders();
 
             AssetDatabase.StartAssetEditing();
@@ -155,9 +168,7 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
         foreach (string guid in markers)
         {
             string path = AssetDatabase.GUIDToAssetPath(guid);
-
             string folder = Path.GetDirectoryName(path).Replace("\\", "/");
-
             result.Add(folder);
         }
 
@@ -179,23 +190,27 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
 
     private void ProcessTexture(string path)
     {
-        var existing = AssetDatabase.LoadAllAssetRepresentationsAtPath(path);
-        //skip already sliced
-        if (existing != null && existing.Length > 0) return;
-
         var importer = AssetImporter.GetAtPath(path) as TextureImporter;
         if (importer == null) return;
+
+        // check slicing first
+        var factory = new SpriteDataProviderFactories();
+        factory.Init();
+
+        var dataProvider = factory.GetSpriteEditorDataProviderFromObject(importer);
+        dataProvider.InitSpriteEditorDataProvider();
+
+        var existingRects = dataProvider.GetSpriteRects();
+        if (existingRects != null && existingRects.Length > 0)
+            return; // already sliced → DO NOTHING
 
         importer.textureType = TextureImporterType.Sprite;
         importer.spriteImportMode = SpriteImportMode.Multiple;
         importer.isReadable = true;
         importer.SaveAndReimport();
 
-        var factory = new SpriteDataProviderFactories();
-        factory.Init();
-
-        var dataProvider = factory.GetSpriteEditorDataProviderFromObject(importer);
-        dataProvider.InitSpriteEditorDataProvider();
+        AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+        AssetDatabase.Refresh();
 
         var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         if (texture == null) return;
@@ -204,7 +219,6 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
 
         var rows = new List<List<Rect>>();
 
-        // 1. Build grid normally
         for (int y = 0; y < texture.height; y += TileSize)
         {
             var row = new List<Rect>();
@@ -221,14 +235,11 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
                 rows.Add(row);
         }
 
-        // 2. FULL inversion:
-        // reverse rows (bottom -> top)
         rows.Reverse();
 
         var spriteRects = new List<SpriteRect>();
         int index = 0;
 
-        // 3. traverse each row right -> left
         for (int r = 0; r < rows.Count; r++)
         {
             var row = rows[r];
@@ -244,10 +255,10 @@ public class SpritesheetAutoSlicerWindow : EditorWindow
             }
         }
 
-        // 4. Apply
         dataProvider.SetSpriteRects(spriteRects.ToArray());
         dataProvider.Apply();
-        importer.SaveAndReimport();
+
+        AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
     }
 
     private bool IsTileEmpty(Texture2D tex, int startX, int startY)

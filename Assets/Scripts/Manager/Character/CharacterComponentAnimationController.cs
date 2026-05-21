@@ -24,7 +24,8 @@ public class CharacterComponentAnimationController : MonoBehaviour
         "slash",
         "1h_backslash",
         "spellcast",
-        "hurt"
+        "hurt",
+        "1h_halfslash"
     };
 
     private static readonly string[] DirectionNames =
@@ -43,7 +44,10 @@ public class CharacterComponentAnimationController : MonoBehaviour
 
     [SerializeField] private SpriteResolverFrameDriver bodyDriver;
     [SerializeField] private SpriteResolverFrameDriver kitDriver;
-    [SerializeField] private SpriteResolverFrameDriver wingsDriver;
+    [SerializeField] private SpriteResolverFrameDriver hairFrontDriver;
+    [SerializeField] private SpriteResolverFrameDriver hairBackDriver;
+    [SerializeField] private SpriteResolverFrameDriver wingsFrontDriver;
+    [SerializeField] private SpriteResolverFrameDriver wingsBackDriver;
 
     #endregion
 
@@ -61,14 +65,21 @@ public class CharacterComponentAnimationController : MonoBehaviour
         animator = GetComponent<Animator>();
         bodyDriver = transform.Find("Body")?.GetComponent<SpriteResolverFrameDriver>();
         kitDriver = transform.Find("Kit")?.GetComponent<SpriteResolverFrameDriver>();
-        wingsDriver = transform.Find("Wings")?.GetComponent<SpriteResolverFrameDriver>();
+
+        hairFrontDriver = transform.Find("HairFront")?.GetComponent<SpriteResolverFrameDriver>();
+        hairBackDriver = transform.Find("HairBack")?.GetComponent<SpriteResolverFrameDriver>();
+        wingsFrontDriver = transform.Find("WingsFront")?.GetComponent<SpriteResolverFrameDriver>();
+        wingsBackDriver = transform.Find("WingsBack")?.GetComponent<SpriteResolverFrameDriver>();
     }
 
     public void OnLateUpdate() 
     {
         bodyDriver.OnLateUpdate();
         kitDriver.OnLateUpdate();
-        wingsDriver.OnLateUpdate();
+        hairFrontDriver.OnLateUpdate();
+        hairBackDriver.OnLateUpdate();
+        wingsFrontDriver.OnLateUpdate();
+        wingsBackDriver.OnLateUpdate();
     }
 
     #endregion
@@ -111,7 +122,10 @@ public class CharacterComponentAnimationController : MonoBehaviour
 
         bodyDriver.Configure(animName, dirName);
         kitDriver.Configure(animName, dirName);
-        wingsDriver.Configure(animName, dirName);
+        hairFrontDriver.Configure(animName, dirName);
+        hairBackDriver.Configure(animName, dirName);
+        wingsFrontDriver.Configure(animName, dirName);
+        wingsBackDriver.Configure(animName, dirName);
     }
 
     #endregion

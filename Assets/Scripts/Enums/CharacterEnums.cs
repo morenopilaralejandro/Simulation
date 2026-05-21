@@ -147,10 +147,11 @@ namespace Aremoreno.Enums.Character
         Green,
         Fur_Black,
         Fur_White,
-        Porcelain,
-        Amethyst,
-        Purple
+        Lpcr_Porcelain,
+        Lpcr_Amethyst,
+        Lpcr_Purple
     }
+    // replace . with _ converting casting from string to enum
 
     public enum EyeColorType
     {
@@ -162,8 +163,8 @@ namespace Aremoreno.Enums.Character
         Yellow,
         Brown,
         Gray,
-        Black,
-        Hazel
+        Lpcr_Black,
+        Lpcr_Hazel
     }
 
     public enum HairColorType

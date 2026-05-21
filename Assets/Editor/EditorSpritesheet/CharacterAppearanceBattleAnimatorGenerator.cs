@@ -21,7 +21,10 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
     [Header("Resolver Paths")]
     [SerializeField] private string bodyPath = "Body";
     [SerializeField] private string kitPath = "Kit";
-    [SerializeField] private string wingsPath = "Wings";
+    [SerializeField] private string hairFrontPath = "HairFront";
+    [SerializeField] private string hairBackPath = "HairBack";
+    [SerializeField] private string wingsFrontPath = "WingsFront";
+    [SerializeField] private string wingsBackPath = "WingsBack";
 
     private static readonly string[] FourDirections = { "down", "up", "left", "right" };
     private static readonly string[] DownOnly = { "down" };
@@ -52,7 +55,10 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
 
         bodyPath = EditorGUILayout.TextField("Body Path", bodyPath);
         kitPath = EditorGUILayout.TextField("Kit Path", kitPath);
-        wingsPath = EditorGUILayout.TextField("Wings Path", wingsPath);
+        hairFrontPath = EditorGUILayout.TextField("Hair Front Path", hairFrontPath);
+        hairBackPath = EditorGUILayout.TextField("Hair BackPath Path", hairBackPath);
+        wingsFrontPath = EditorGUILayout.TextField("Wings FrontPath Path", wingsFrontPath);
+        wingsBackPath = EditorGUILayout.TextField("Wings BackPath Path", wingsBackPath);
 
         EditorGUILayout.Space();
 
@@ -102,6 +108,10 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
             if (anim.name == "1h_backslash")
             {
                 animState = CharacterAnimationState.Backslash1H;
+            }
+            else if (anim.name == "1h_halfslash")
+            {
+                animState = CharacterAnimationState.Halfslash1H;
             }
             else if (!Enum.TryParse(anim.name, true, out animState))
             {
@@ -167,7 +177,10 @@ public class CharacterAppearanceBattleAnimatorGenerator : EditorWindow
 
         AddResolverBinding(clip, bodyPath, frames, loop, frameRate);
         AddResolverBinding(clip, kitPath, frames, loop, frameRate);
-        AddResolverBinding(clip, wingsPath, frames, loop, frameRate);
+        AddResolverBinding(clip, hairFrontPath, frames, loop, frameRate);
+        AddResolverBinding(clip, hairBackPath, frames, loop, frameRate);
+        AddResolverBinding(clip, wingsFrontPath, frames, loop, frameRate);
+        AddResolverBinding(clip, wingsBackPath, frames, loop, frameRate);
 
         AssetDatabase.CreateAsset(clip, clipPath);
         AssetDatabase.SaveAssets();

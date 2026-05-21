@@ -26,7 +26,8 @@ namespace Aremoreno.Enums.Animation
         Slash = 6,
         Backslash1H = 7,
         Spellcast = 8,
-        Hurt = 9
+        Hurt = 9,
+        Halfslash1H = 10
     }
 
     public enum CharacterDirection
