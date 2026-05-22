@@ -8,7 +8,7 @@ using Aremoreno.Enums.Animation;
 public class SpriteLibraryAutoBuilder : EditorWindow
 {
     [SerializeField] private CharacterAnimationConfig config;
-    [SerializeField] private string outputFolder = "Assets/Addressables/AddressSpriteLibrary";
+    [SerializeField] private string outputFolder = "Assets/Addressables/AddressSpriteLibraryCharacter";
 
     private static readonly string[] Directions =
     {

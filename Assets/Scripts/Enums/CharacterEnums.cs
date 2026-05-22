@@ -23,8 +23,8 @@ namespace Aremoreno.Enums.Character
 
     public enum Gender 
     { 
-        M, 
-        F 
+        Male,
+        Female
     }
 
     public enum TeamSide
@@ -199,13 +199,21 @@ namespace Aremoreno.Enums.Character
 
     public enum HairStyle 
     {
-        Short_Bedhead,
-        Fade,
-        Butterfly,
-        Spiky,
-        Ponytail1,
-        Ponytail2,
-        Bald
+        Bedhead,
+        Spiked_beehive,
+        Bob,
+        Long_center_part,
+        Spiked_porcupine,
+        Long_straight,
+        Spiked2,
+        Plain,
+        Curtains_long,
+        Loose,
+        Messy3,
+        Sara,
+        Xlong,
+        Lob,
+        Relm_Short
     }
 
 }

@@ -122,8 +122,8 @@ public class SpriteAtlasManager : MonoBehaviour
     public Task<Sprite> GetCharacterHair(string id)
     {
         var atlasId = CHARACTER_COMMON_ATLAS_ID;
-        var spriteId = AddressableLoader.GetCharacterHairAddress(id);
-        return GetSpriteAsync(atlasId, spriteId);
+        //var spriteId = AddressableLoader.GetCharacterHairAddress(id);
+        return GetSpriteAsync(atlasId, null);
     }
 
     public Task<Sprite> GetCharacterHairWorld(string id)

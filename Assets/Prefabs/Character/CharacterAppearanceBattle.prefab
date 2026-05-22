@@ -80,8 +80,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e755aaecc7d3501a7f16fe6037dd0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bodySpriteLibrary: {fileID: 3018380579868142077}
   kitSpriteLibrary: {fileID: 4454475054272076213}
+  hairFrontLibrary: {fileID: 2239191564084016738}
+  hairBackLibrary: {fileID: 3023216191592973915}
+  bodyRenderer: {fileID: 2848161408656511802}
+  hairFrontRenderer: {fileID: 6996319660223339382}
+  hairBackRenderer: {fileID: 2658883503152208289}
+  hairBackObject: {fileID: 8345606475657748399}
 --- !u!95 &2918560542856892154
 Animator:
   serializedVersion: 5
@@ -141,7 +146,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8936779762995161373
 Transform:
   m_ObjectHideFlags: 0
@@ -673,7 +678,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5453173285393570640
 Transform:
   m_ObjectHideFlags: 0
@@ -730,7 +735,7 @@ SpriteRenderer:
   m_SortingLayerID: 166002685
   m_SortingLayer: 1
   m_SortingOrder: -2
-  m_Sprite: {fileID: 9208984056018806188, guid: a96ace06cd674c571ba8213e8e0c2f47, type: 3}
+  m_Sprite: {fileID: 7472619350850325286, guid: a96ace06cd674c571ba8213e8e0c2f47, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -770,9 +775,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_CategoryHash: 5.449709e-22
-  m_labelHash: 8.0403317e-25
+  m_labelHash: 8.627778e-34
   m_SpriteKey: 0
-  m_SpriteHash: 120012102
+  m_SpriteHash: 416330198
 --- !u!114 &4932805922020730869
 MonoBehaviour:
   m_ObjectHideFlags: 0

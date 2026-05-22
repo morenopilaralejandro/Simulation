@@ -49,11 +49,11 @@ public class CharacterComponentCustomAvatar
             CustomAvatarId = "";
             CustomName = "";
             CustomCharacterSize = CharacterSize.Size_C1_M;
-            CustomGender = Gender.M;
+            CustomGender = Gender.Male;
             CustomElement = Element.Fire;
             CustomPosition = Position.FW;
 
-            CustomHairStyle = HairStyle.Fade;
+            CustomHairStyle = default;
             CustomHairColorType = HairColorType.Blonde;
             CustomEyeColorType = EyeColorType.Blue;
             CustomBodyColorType = BodyColorType.Light;

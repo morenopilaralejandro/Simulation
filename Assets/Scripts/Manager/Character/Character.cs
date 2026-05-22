@@ -154,5 +154,13 @@ public class Character
     public string KitId => appearanceComponent.KitId;
     public Variant KitVariant => appearanceComponent.KitVariant;
     public Role KitRole => appearanceComponent.KitRole;
+    public string KitAddress => appearanceComponent.KitAddress;
+    public string PortraitCharacterAddress => appearanceComponent.PortraitCharacterAddress;
+    public string PortraitKitAddress => appearanceComponent.PortraitKitAddress;
+    public string HairFrontAddress => appearanceComponent.HairFrontAddress;
+    public string HairBackAddress => appearanceComponent.HairBackAddress;
+    public Color ColorBody => appearanceComponent.ColorBody;
+    public Color ColorHair => appearanceComponent.ColorHair;
+
     #endregion
 }

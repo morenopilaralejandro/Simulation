@@ -183,6 +183,14 @@ public class CharacterEntityBattle : MonoBehaviour
     public string KitId => character.KitId;
     public Variant KitVariant => character.KitVariant;
     public Role KitRole => character.KitRole;
+    public string KitAddress => character.KitAddress;
+    public string PortraitCharacterAddress => character.PortraitCharacterAddress;
+    public string PortraitKitAddress => character.PortraitKitAddress;
+    public string HairFrontAddress => character.HairFrontAddress;
+    public string HairBackAddress => character.HairBackAddress;
+    public Color ColorBody => character.ColorBody;
+    public Color ColorHair => character.ColorHair;
+
     #endregion
 
     #region API CharacterEntityBattle

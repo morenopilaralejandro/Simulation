@@ -119,6 +119,8 @@ public class ShootDuelHandler : IDuelHandler
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Spellcast);
             else if (isShootReversal) 
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Combat);
+            else
+                defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Halfslash1H);
 
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
@@ -159,6 +161,8 @@ public class ShootDuelHandler : IDuelHandler
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Spellcast);
             else if (isShootReversal) 
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Combat);
+            else 
+                defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Halfslash1H);
             
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);

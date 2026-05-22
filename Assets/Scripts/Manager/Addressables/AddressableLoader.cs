@@ -82,8 +82,10 @@ public static class AddressableLoader
         $"{AddressableConfig.CharacterBodyPath}{AddressableConfig.PathSeparator}{tone}";
     public static string GetCharacterPortraitAddress(string id) =>
         $"{AddressableConfig.CharacterPortraitPath}{AddressableConfig.PathSeparator}{id}";
-    public static string GetCharacterHairAddress(string id) =>
-        $"{AddressableConfig.CharacterHairPath}{AddressableConfig.PathSeparator}{id}";
+    public static string GetCharacterHairFrontAddress(string id) =>
+        $"{AddressableConfig.CharacterHairFrontPath}{AddressableConfig.PathSeparator}{id}{AddressableConfig.PathSeparator}front";
+    public static string GetCharacterHairBackAddress(string id) =>
+        $"{AddressableConfig.CharacterHairBackPath}{AddressableConfig.PathSeparator}{id}{AddressableConfig.PathSeparator}back";
     public static string GetCharacterHairWorldAddress(string id) =>
         $"{AddressableConfig.CharacterHairWorldPath}{AddressableConfig.PathSeparator}{id}";
 

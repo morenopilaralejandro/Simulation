@@ -22,19 +22,8 @@ public class CharacterPortraitBattle : MonoBehaviour
 
         ReleaseHandles();
 
-        string characterAddress =
-            AddressableLoader.GetCharacterPortraitAddress(character.CharacterId);
-
-        string kitAddress =
-            AddressableLoader.GetKitPortraitAddress(
-                character.KitId,
-                character.KitVariant,
-                character.KitRole,
-                character.PortraitSize
-            );
-
-        _characterHandle = Addressables.LoadAssetAsync<Sprite>(characterAddress);
-        _kitHandle = Addressables.LoadAssetAsync<Sprite>(kitAddress);
+        _characterHandle = Addressables.LoadAssetAsync<Sprite>(character.PortraitCharacterAddress);
+        _kitHandle = Addressables.LoadAssetAsync<Sprite>(character.PortraitKitAddress);
 
         await _characterHandle.Value.Task;
         await _kitHandle.Value.Task;

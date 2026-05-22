@@ -6,7 +6,8 @@ public static class AddressableConfig
     public const string CharacterHeadPath = "characters-heads";
     public const string CharacterBodyPath = "library-body";
     public const string CharacterPortraitPath = "characters-portraits";
-    public const string CharacterHairPath = "character-hair";
+    public const string CharacterHairFrontPath = "library-hair";
+    public const string CharacterHairBackPath = "library-hair";
     public const string CharacterHairWorldPath = "character-world-hair";
     public const string ItemIconPath = "item-icon";
 

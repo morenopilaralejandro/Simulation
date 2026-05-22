@@ -96,6 +96,7 @@ public class FieldDuelHandler : IDuelHandler
             }
             else 
             {
+                winner.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Halfslash1H);
                 BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.DefenseSupports);
             }
 

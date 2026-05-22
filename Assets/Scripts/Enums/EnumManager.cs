@@ -112,4 +112,13 @@ public static class EnumManager
     {
         return System.Enum.GetNames(typeof(T));
     }
+
+    /// <summary>
+    /// Replaces . for _
+    /// </summary>
+    public static string GetSafeEnumString(string stringValue)
+    {
+        return stringValue.Replace('.', '_');
+    }
+
 }
