@@ -188,6 +188,7 @@ public class OffsideManager : MonoBehaviour
     {
         if (BattleManager.Instance.CurrentType == BattleType.Mini) return;
         BattleManager.Instance.Ball.CancelTravel();
+        DuelManager.Instance.CancelDuel();
         BattleManager.Instance.Freeze();
         snapshot.isActive = false;
         snapshot.offsideCandidates.Clear();

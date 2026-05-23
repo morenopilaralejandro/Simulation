@@ -5,6 +5,7 @@ using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Item;
 using Aremoreno.Enums.Move;
 using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.Wings;
 
 public static class ColorManager
 {
@@ -122,122 +123,6 @@ public static class ColorManager
         return Color.white;
     }
 
-    private static readonly Dictionary<KitColor, Color> kitColors = new Dictionary<KitColor, Color>()
-    {
-        { KitColor.Red,        new Color(218f/255f, 24f/255f, 24f/255f, 1f) },
-        { KitColor.Red_Light,  new Color(255f/255f, 102f/255f, 102f/255f, 1f) },
-        { KitColor.Red_Dark,   new Color(139f/255f, 0f/255f, 0f/255f, 1f) },
-
-        { KitColor.Blue,       new Color(30f/255f, 62f/255f, 186f/255f, 1f) },
-        { KitColor.Blue_Light, new Color(100f/255f, 149f/255f, 237f/255f, 1f) },
-        { KitColor.Blue_Dark,  new Color(0f/255f, 0f/255f, 139f/255f, 1f) },
-
-        { KitColor.Yellow,       new Color(255f/255f, 214f/255f, 0f/255f, 1f) },
-        { KitColor.Yellow_Light, new Color(255f/255f, 239f/255f, 153f/255f, 1f) },
-        { KitColor.Yellow_Dark,  new Color(204f/255f, 173f/255f, 0f/255f, 1f) },
-
-        { KitColor.Orange,       new Color(255f/255f, 140f/255f, 0f/255f, 1f) },
-        { KitColor.Orange_Light, new Color(255f/255f, 190f/255f, 120f/255f, 1f) },
-        { KitColor.Orange_Dark,  new Color(205f/255f, 102f/255f, 0f/255f, 1f) },
-
-        { KitColor.Purple,       new Color(128f/255f, 0f/255f, 128f/255f, 1f) },
-        { KitColor.Purple_Light, new Color(186f/255f, 85f/255f, 211f/255f, 1f) },
-        { KitColor.Purple_Dark,  new Color(75f/255f, 0f/255f, 130f/255f, 1f) },
-
-        { KitColor.Pink,       new Color(255f/255f, 105f/255f, 180f/255f, 1f) },
-        { KitColor.Pink_Light, new Color(255f/255f, 182f/255f, 193f/255f, 1f) },
-        { KitColor.Pink_Dark,  new Color(199f/255f, 21f/255f, 133f/255f, 1f) },
-
-        { KitColor.Green,       new Color(34f/255f, 139f/255f, 34f/255f, 1f) },
-        { KitColor.Green_Light, new Color(144f/255f, 238f/255f, 144f/255f, 1f) },
-        { KitColor.Green_Dark,  new Color(0f/255f, 100f/255f, 0f/255f, 1f) },
-
-        { KitColor.Brown,       new Color(139f/255f, 69f/255f, 19f/255f, 1f) },
-        { KitColor.Brown_Light, new Color(205f/255f, 133f/255f, 63f/255f, 1f) },
-        { KitColor.Brown_Dark,  new Color(92f/255f, 51f/255f, 23f/255f, 1f) },
-
-        { KitColor.Grey,       new Color(128f/255f, 128f/255f, 128f/255f, 1f) },
-        { KitColor.Grey_Light, new Color(211f/255f, 211f/255f, 211f/255f, 1f) },
-        { KitColor.Grey_Dark,  new Color(64f/255f, 64f/255f, 64f/255f, 1f) },
-
-        { KitColor.Black,       new Color(0f/255f, 0f/255f, 0f/255f, 1f) },
-        { KitColor.White,       new Color(255f/255f, 255f/255f, 255f/255f, 1f) },
-        { KitColor.None,       new Color(255f/255f, 255f/255f, 255f/255f, 0f) }
-
-    };
-
-    public static Color GetKitColor(KitColor kitColor)
-    {
-        if (kitColors.TryGetValue(kitColor, out Color color))
-            return color;
-        return Color.white;
-    }
-
-    private static readonly Dictionary<BodyColorType, Color> bodyColors =
-        new Dictionary<BodyColorType, Color>()
-    {
-        { BodyColorType.White,      new Color(1f, 0.95f, 0.9f, 1f) },
-        { BodyColorType.Pale,       new Color(0.85f, 0.75f, 0.65f, 1f) },
-        { BodyColorType.Generic,    new Color(0.980f, 0.678f, 0.306f, 1f) },
-        { BodyColorType.Tanned,     new Color(0.839f, 0.549f, 0.184f, 1f) },
-        { BodyColorType.Asian,      new Color(0.90f, 0.78f, 0.64f, 1f) },
-        { BodyColorType.Hispanic,   new Color(0.741f, 0.451f, 0.153f, 1f) },
-        { BodyColorType.Indian,     new Color(0.62f, 0.45f, 0.30f, 1f) },
-        { BodyColorType.Arab,       new Color(0.70f, 0.52f, 0.36f, 1f) },
-        { BodyColorType.African,    new Color(0.36f, 0.25f, 0.18f, 1f) },
-        { BodyColorType.Black,      new Color(0.15f, 0.10f, 0.08f, 1f) },
-        { BodyColorType.Green,      new Color(0.2f, 0.8f, 0.2f, 1f) }
-    };
-
-    public static Color GetBodyColor(BodyColorType bodyColorType)
-    {
-        return bodyColors.TryGetValue(bodyColorType, out var color)
-            ? color : Color.white;
-    }
-
-    private static readonly Dictionary<EyeColorType, Color> eyeColors =
-        new Dictionary<EyeColorType, Color>()
-    {
-        { EyeColorType.Brown,  new Color(0.36f, 0.24f, 0.15f, 1f) },
-        { EyeColorType.Blue,   new Color(0.2f, 0.4f, 0.8f, 1f) },
-        { EyeColorType.Green,  new Color(0.2f, 0.6f, 0.3f, 1f) },
-        { EyeColorType.Gray,   new Color(0.6f, 0.6f, 0.6f, 1f) },
-        { EyeColorType.Red,    new Color(0.8f, 0.1f, 0.1f, 1f) },
-        { EyeColorType.Purple, new Color(0.5f, 0.2f, 0.6f, 1f) },
-        { EyeColorType.Gold,   new Color(1f, 0.84f, 0.0f, 1f) },
-        { EyeColorType.Silver, new Color(0.75f, 0.75f, 0.75f, 1f) },
-        { EyeColorType.Black,  new Color(0f, 0f, 0f, 1f) },
-        { EyeColorType.White,  new Color(1f, 1f, 1f, 1f) },
-        { EyeColorType.Pink,   new Color(1f, 0.6f, 0.8f, 1f) }
-    };
-
-    public static Color GetEyeColor(EyeColorType eyeColorType)
-    {
-        return eyeColors.TryGetValue(eyeColorType, out var color)
-            ? color : Color.white;
-    }
-
-    private static readonly Dictionary<HairColorType, Color> hairColors =
-        new Dictionary<HairColorType, Color>()
-    {
-        { HairColorType.Black,  new Color(0.05f, 0.05f, 0.05f, 1f) },
-        { HairColorType.Blonde, new Color(0.95f, 0.85f, 0.55f, 1f) },
-        { HairColorType.Blue,   new Color(0.2f, 0.4f, 0.9f, 1f) },
-        { HairColorType.Brown,  new Color(0.4f, 0.25f, 0.1f, 1f) },
-        { HairColorType.Green,  new Color(0.2f, 0.7f, 0.3f, 1f) },
-        { HairColorType.Orange, new Color(1f, 0.5f, 0.1f, 1f) },
-        { HairColorType.Pink,   new Color(1f, 0.6f, 0.8f, 1f) },
-        { HairColorType.Purple, new Color(0.6f, 0.3f, 0.7f, 1f) },
-        { HairColorType.Red,    new Color(0.8f, 0.2f, 0.1f, 1f) },
-        { HairColorType.White,  new Color(0.95f, 0.95f, 0.95f, 1f) }
-    };
-
-    public static Color GetHairColor(HairColorType hairColorType)
-    {
-        return hairColors.TryGetValue(hairColorType, out var color)
-            ? color : Color.white;
-    }
-
     private static readonly Dictionary<MessageType, Color> battleMessageColors =
         new Dictionary<MessageType, Color>()
     {
@@ -268,4 +153,351 @@ public static class ColorManager
             ? color : Color.white;
     }
 
+    private static readonly Dictionary<BodyColorType, Color> bodyColors =
+        new Dictionary<BodyColorType, Color>()
+    {
+        { BodyColorType.Light,      new Color(0xF9/255f, 0xD5/255f, 0xBA/255f, 1f) },
+        { BodyColorType.Amber,      new Color(0xFD/255f, 0xD0/255f, 0x82/255f, 1f) },
+        { BodyColorType.Olive,      new Color(0xD3/255f, 0x8B/255f, 0x59/255f, 1f) },
+        { BodyColorType.Taupe,      new Color(0xBA/255f, 0x84/255f, 0x54/255f, 1f) },
+        { BodyColorType.Bronze,     new Color(0xAE/255f, 0x6B/255f, 0x3F/255f, 1f) },
+        { BodyColorType.Brown,      new Color(0x9C/255f, 0x66/255f, 0x3E/255f, 1f) },
+        { BodyColorType.Black,      new Color(0x60/255f, 0x34/255f, 0x29/255f, 1f) },
+
+        { BodyColorType.Blue,       new Color(0xA9/255f, 0xC9/255f, 0xCA/255f, 1f) },
+        { BodyColorType.Green,      new Color(0x39/255f, 0xAA/255f, 0x4E/255f, 1f) },
+
+        { BodyColorType.Fur_Black,  new Color(0x1B/255f, 0x2C/255f, 0x36/255f, 1f) },
+        { BodyColorType.Fur_White,  new Color(0xB8/255f, 0xBB/255f, 0xBC/255f, 1f) },
+
+        { BodyColorType.Lpcr_Porcelain,  new Color(0xFA/255f, 0xEC/255f, 0xE7/255f, 1f) },
+        { BodyColorType.Lpcr_Amethyst,   new Color(0xA4/255f, 0xB0/255f, 0xDC/255f, 1f) },
+        { BodyColorType.Lpcr_Purple,     new Color(0x65/255f, 0x57/255f, 0x89/255f, 1f) }
+    };
+
+    public static Color GetBodyColor(BodyColorType bodyColorType)
+    {
+        return bodyColors.TryGetValue(bodyColorType, out var color)
+            ? color : Color.white;
+    }
+
+    private static readonly Dictionary<HairColorType, Color> hairColors =
+        new Dictionary<HairColorType, Color>()
+    {
+        { HairColorType.Orange,       new Color(0xE5/255f, 0x56/255f, 0x00/255f, 1f) },
+        { HairColorType.Ash,          new Color(0xED/255f, 0xDF/255f, 0x95/255f, 1f) },
+        { HairColorType.Platinum,     new Color(0xED/255f, 0xDF/255f, 0x95/255f, 1f) },
+
+        { HairColorType.White,        new Color(1f, 1f, 1f, 1f) },
+        { HairColorType.Gray,         new Color(0xAA/255f, 0xAA/255f, 0xAA/255f, 1f) },
+
+        { HairColorType.Blonde,       new Color(0xFC/255f, 0xCF/255f, 0x56/255f, 1f) },
+        { HairColorType.Sandy,        new Color(0xED/255f, 0xDC/255f, 0x7E/255f, 1f) },
+        { HairColorType.Strawberry,   new Color(0xFA/255f, 0xF0/255f, 0x80/255f, 1f) },
+        { HairColorType.Gold,         new Color(0xFF/255f, 0xE4/255f, 0x53/255f, 1f) },
+
+        { HairColorType.Ginger,       new Color(0xFA/255f, 0xA3/255f, 0x01/255f, 1f) },
+        { HairColorType.Carrot,       new Color(0xF6/255f, 0x87/255f, 0x64/255f, 1f) },
+
+        { HairColorType.Redhead,      new Color(0xE2/255f, 0x14/255f, 0x14/255f, 1f) },
+        { HairColorType.Red,          new Color(0xE2/255f, 0x14/255f, 0x14/255f, 1f) },
+
+        { HairColorType.Light_Brown,  new Color(0xAE/255f, 0x68/255f, 0x2A/255f, 1f) },
+        { HairColorType.Chestnut,     new Color(0xB6/255f, 0x55/255f, 0x0E/255f, 1f) },
+        { HairColorType.Dark_Brown,   new Color(0x5F/255f, 0x1F/255f, 0x04/255f, 1f) },
+
+        { HairColorType.Dark_Gray,    new Color(0x7C/255f, 0x7C/255f, 0x7C/255f, 1f) },
+        { HairColorType.Black,        new Color(0x31/255f, 0x31/255f, 0x3E/255f, 1f) },
+        { HairColorType.Raven,        new Color(0x0D/255f, 0x38/255f, 0x4D/255f, 1f) },
+
+        { HairColorType.Rose,         new Color(0xFA/255f, 0xBB/255f, 0xC6/255f, 1f) },
+        { HairColorType.Pink,         new Color(0xE9/255f, 0x76/255f, 0xC4/255f, 1f) },
+
+        { HairColorType.Purple,       new Color(0xA9/255f, 0x66/255f, 0xDD/255f, 1f) },
+        { HairColorType.Violet,       new Color(0x56/255f, 0x62/255f, 0xF3/255f, 1f) },
+
+        { HairColorType.Navy,         new Color(0x3C/255f, 0x49/255f, 0xAD/255f, 1f) },
+        { HairColorType.Blue,         new Color(0x00/255f, 0x74/255f, 0xCB/255f, 1f) },
+
+        { HairColorType.Green,        new Color(0x00/255f, 0x7C/255f, 0x00/255f, 1f) }
+    };
+
+    public static Color GetHairColor(HairColorType hairColorType)
+    {
+        return hairColors.TryGetValue(hairColorType, out var color)
+            ? color : Color.white;
+    }
+
+    private static readonly Dictionary<WingsColorType, Color> wingsColors =
+        new Dictionary<WingsColorType, Color>()
+    {
+        { WingsColorType.Amber,         new Color(0xFB/255f, 0xE7/255f, 0xA4/255f, 1f) },
+        { WingsColorType.Ash,           new Color(0xFF/255f, 0xF1/255f, 0xC1/255f, 1f) },
+        { WingsColorType.Black,         new Color(0x4A/255f, 0x50/255f, 0x57/255f, 1f) },
+        { WingsColorType.Blonde,        new Color(0xFC/255f, 0xCF/255f, 0x56/255f, 1f) },
+        { WingsColorType.Blue,          new Color(0x1E/255f, 0x85/255f, 0xEF/255f, 1f) },
+        { WingsColorType.Bluegray,      new Color(0x79/255f, 0x97/255f, 0x9D/255f, 1f) },
+        { WingsColorType.Bright_Green,  new Color(0x99/255f, 0xD2/255f, 0x48/255f, 1f) },
+        { WingsColorType.Bronze,        new Color(0xD3/255f, 0x8B/255f, 0x59/255f, 1f) },
+        { WingsColorType.Brown,         new Color(0x9C/255f, 0x66/255f, 0x3E/255f, 1f) },
+        { WingsColorType.Carrot,        new Color(0xFF/255f, 0xB3/255f, 0x9C/255f, 1f) },
+        { WingsColorType.Ceramic,       new Color(0x7D/255f, 0x60/255f, 0x4D/255f, 1f) },
+        { WingsColorType.Chestnut,      new Color(0xD2/255f, 0x81/255f, 0x02/255f, 1f) },
+        { WingsColorType.Dark_Brown,    new Color(0x79/255f, 0x28/255f, 0x06/255f, 1f) },
+        { WingsColorType.Dark_Gray,     new Color(0x7C/255f, 0x7C/255f, 0x7C/255f, 1f) },
+        { WingsColorType.Dark_Green,    new Color(0x50/255f, 0x9E/255f, 0x59/255f, 1f) },
+        { WingsColorType.Dragonfly,     new Color(0x83/255f, 0xE5/255f, 0xF7/255f, 1f) },
+        { WingsColorType.Forest,        new Color(0x1B/255f, 0x55/255f, 0x02/255f, 1f) },
+
+        { WingsColorType.Fur_Black,     new Color(0x15/255f, 0x42/255f, 0x59/255f, 1f) },
+        { WingsColorType.Fur_Brown,     new Color(0x62/255f, 0x41/255f, 0x35/255f, 1f) },
+        { WingsColorType.Fur_Copper,    new Color(0xCC/255f, 0x69/255f, 0x01/255f, 1f) },
+        { WingsColorType.Fur_Gold,      new Color(0xFC/255f, 0xCF/255f, 0x56/255f, 1f) },
+        { WingsColorType.Fur_Grey,      new Color(0x90/255f, 0x96/255f, 0x99/255f, 1f) },
+        { WingsColorType.Fur_Tan,       new Color(0xB8/255f, 0x87/255f, 0x51/255f, 1f) },
+        { WingsColorType.Fur_White,     new Color(0xB8/255f, 0xBB/255f, 0xBC/255f, 1f) },
+
+        { WingsColorType.Ginger,        new Color(0xFA/255f, 0xA3/255f, 0x01/255f, 1f) },
+        { WingsColorType.Gold,          new Color(0xFF/255f, 0xE4/255f, 0x53/255f, 1f) },
+        { WingsColorType.Gray,          new Color(0xD9/255f, 0xD9/255f, 0xD9/255f, 1f) },
+        { WingsColorType.Green,         new Color(0x00/255f, 0xA7/255f, 0x00/255f, 1f) },
+        { WingsColorType.Iron,          new Color(0x34/255f, 0x30/255f, 0x43/255f, 1f) },
+        { WingsColorType.Lavender,      new Color(0xFB/255f, 0xEC/255f, 0xE6/255f, 1f) },
+        { WingsColorType.Light,         new Color(0xFA/255f, 0xEC/255f, 0xE7/255f, 1f) },
+        { WingsColorType.Light_Brown,   new Color(0xC8/255f, 0x8D/255f, 0x58/255f, 1f) },
+        { WingsColorType.Lunar,         new Color(0xAB/255f, 0xEA/255f, 0xA9/255f, 1f) },
+        { WingsColorType.Maroon,        new Color(0xAE/255f, 0x42/255f, 0x4A/255f, 1f) },
+        { WingsColorType.Monarch,       new Color(0xE6/255f, 0x91/255f, 0x10/255f, 1f) },
+        { WingsColorType.Navy,          new Color(0x46/255f, 0x6A/255f, 0xC9/255f, 1f) },
+        { WingsColorType.Olive,         new Color(0xE4/255f, 0xA4/255f, 0x7C/255f, 1f) },
+        { WingsColorType.Orange,        new Color(0xE5/255f, 0x56/255f, 0x00/255f, 1f) },
+        { WingsColorType.Pale_Green,    new Color(0xAD/255f, 0xCC/255f, 0xA6/255f, 1f) },
+        { WingsColorType.Pink,          new Color(0xEA/255f, 0x95/255f, 0xD5/255f, 1f) },
+        { WingsColorType.Pixie,         new Color(0x25/255f, 0xD3/255f, 0xF3/255f, 1f) },
+        { WingsColorType.Platinum,      new Color(0xF6/255f, 0xF6/255f, 0xF3/255f, 1f) },
+        { WingsColorType.Purple,        new Color(0xA9/255f, 0x66/255f, 0xDD/255f, 1f) },
+        { WingsColorType.Raven,         new Color(0x1A/255f, 0x53/255f, 0x69/255f, 1f) },
+        { WingsColorType.Red,           new Color(0xF1/255f, 0x58/255f, 0x3A/255f, 1f) },
+        { WingsColorType.Redhead,       new Color(0xE7/255f, 0x47/255f, 0x16/255f, 1f) },
+        { WingsColorType.Rose,          new Color(0xFA/255f, 0xE1/255f, 0xE5/255f, 1f) },
+        { WingsColorType.Sandy,         new Color(0xF6/255f, 0xF6/255f, 0xC2/255f, 1f) },
+        { WingsColorType.Silver,        new Color(0x81/255f, 0x8B/255f, 0x8B/255f, 1f) },
+        { WingsColorType.Sky,           new Color(0xB9/255f, 0xE3/255f, 0xF7/255f, 1f) },
+        { WingsColorType.Strawberry,    new Color(0xF6/255f, 0xF6/255f, 0xC2/255f, 1f) },
+        { WingsColorType.Taupe,         new Color(0xC7/255f, 0x93/255f, 0x5F/255f, 1f) },
+        { WingsColorType.Teal,          new Color(0x2D/255f, 0xAC/255f, 0xD9/255f, 1f) },
+        { WingsColorType.Violet,        new Color(0x57/255f, 0x92/255f, 0xF2/255f, 1f) },
+        { WingsColorType.White,         Color.white },
+        { WingsColorType.Yellow,        new Color(0xF3/255f, 0xC0/255f, 0x3F/255f, 1f) },
+        { WingsColorType.Zombie_Green,  new Color(0xF2/255f, 0xF0/255f, 0xC4/255f, 1f) }
+    };
+
+    public static Color GetWingsColor(WingsColorType wingsColorType)
+    {
+        return wingsColors.TryGetValue(wingsColorType, out var color)
+            ? color
+            : Color.white;
+    }
+
+    /*
+    private static readonly Dictionary<EyeColorType, Color> eyeColors =
+        new Dictionary<EyeColorType, Color>()
+    {
+        { EyeColorType.Blue,    new Color(0x57/255f, 0xCE/255f, 0xE4/255f, 1f) },
+        { EyeColorType.Green,   new Color(0x84/255f, 0xEC/255f, 0x50/255f, 1f) },
+        { EyeColorType.Purple,  new Color(0xEB/255f, 0xA0/255f, 0xE0/255f, 1f) },
+        { EyeColorType.Red,     new Color(0xFF/255f, 0x3D/255f, 0x62/255f, 1f) },
+        { EyeColorType.Orange,  new Color(0xEA/255f, 0x9B/255f, 0x71/255f, 1f) },
+        { EyeColorType.Yellow,  new Color(0xFE/255f, 0xDF/255f, 0x47/255f, 1f) },
+        { EyeColorType.Brown,   new Color(0x7E/255f, 0x4E/255f, 0x20/255f, 1f) },
+        { EyeColorType.Gray,    new Color(0xAD/255f, 0xA1/255f, 0x8F/255f, 1f) },
+        { EyeColorType.Lpcr_Black,   new Color(0x81/255f, 0x8E/255f, 0x97/255f, 1f) },
+        { EyeColorType.Lpcr_Hazel,   new Color(0xA4/255f, 0xDD/255f, 0xDB/255f, 1f) }
+    };
+
+    private static readonly Dictionary<HairColorType, Color> hairColors =
+        new Dictionary<HairColorType, Color>()
+    {
+        { HairColorType.Orange,       new Color(0xE5/255f, 0x56/255f, 0x00/255f, 1f) },
+        { HairColorType.Ash,          new Color(0xED/255f, 0xDF/255f, 0x95/255f, 1f) },
+        { HairColorType.Platinum,     new Color(0xED/255f, 0xDF/255f, 0x95/255f, 1f) },
+
+        { HairColorType.White,        new Color(1f, 1f, 1f, 1f) },
+        { HairColorType.Gray,         new Color(0xAA/255f, 0xAA/255f, 0xAA/255f, 1f) },
+
+        { HairColorType.Blonde,       new Color(0xFC/255f, 0xCF/255f, 0x56/255f, 1f) },
+        { HairColorType.Sandy,        new Color(0xED/255f, 0xDC/255f, 0x7E/255f, 1f) },
+        { HairColorType.Strawberry,   new Color(0xFA/255f, 0xF0/255f, 0x80/255f, 1f) },
+        { HairColorType.Gold,         new Color(0xFF/255f, 0xE4/255f, 0x53/255f, 1f) },
+
+        { HairColorType.Ginger,       new Color(0xFA/255f, 0xA3/255f, 0x01/255f, 1f) },
+        { HairColorType.Carrot,       new Color(0xF6/255f, 0x87/255f, 0x64/255f, 1f) },
+
+        { HairColorType.Redhead,      new Color(0xE2/255f, 0x14/255f, 0x14/255f, 1f) },
+        { HairColorType.Red,          new Color(0xE2/255f, 0x14/255f, 0x14/255f, 1f) },
+
+        { HairColorType.Light_Brown,  new Color(0xAE/255f, 0x68/255f, 0x2A/255f, 1f) },
+        { HairColorType.Chestnut,     new Color(0xB6/255f, 0x55/255f, 0x0E/255f, 1f) },
+        { HairColorType.Dark_Brown,   new Color(0x5F/255f, 0x1F/255f, 0x04/255f, 1f) },
+
+        { HairColorType.Dark_Gray,    new Color(0x7C/255f, 0x7C/255f, 0x7C/255f, 1f) },
+        { HairColorType.Black,        new Color(0x31/255f, 0x31/255f, 0x3E/255f, 1f) },
+        { HairColorType.Raven,        new Color(0x0D/255f, 0x38/255f, 0x4D/255f, 1f) },
+
+        { HairColorType.Rose,         new Color(0xFA/255f, 0xBB/255f, 0xC6/255f, 1f) },
+        { HairColorType.Pink,         new Color(0xE9/255f, 0x76/255f, 0xC4/255f, 1f) },
+
+        { HairColorType.Purple,       new Color(0xA9/255f, 0x66/255f, 0xDD/255f, 1f) },
+        { HairColorType.Violet,       new Color(0x56/255f, 0x62/255f, 0xF3/255f, 1f) },
+
+        { HairColorType.Navy,         new Color(0x3C/255f, 0x49/255f, 0xAD/255f, 1f) },
+        { HairColorType.Blue,         new Color(0x00/255f, 0x74/255f, 0xCB/255f, 1f) },
+
+        { HairColorType.Green,        new Color(0x00/255f, 0x7C/255f, 0x00/255f, 1f) }
+    };
+
+    private static readonly Dictionary<SockColor, Color> sockColors =
+        new Dictionary<SockColor, Color>()
+    {
+        { SockColor.Leather,    new Color(0x9A/255f, 0x6F/255f, 0x37/255f, 1f) },
+        { SockColor.Black,      new Color(0x4A/255f, 0x50/255f, 0x57/255f, 1f) },
+
+        { SockColor.Blue,       new Color(0x61/255f, 0xA0/255f, 0xEF/255f, 1f) },
+        { SockColor.Bluegray,   new Color(0x79/255f, 0x97/255f, 0x9D/255f, 1f) },
+
+        { SockColor.Brown,      new Color(0x99/255f, 0x6B/255f, 0x4A/255f, 1f) },
+        { SockColor.Charcoal,   new Color(0x6E/255f, 0x76/255f, 0x75/255f, 1f) },
+
+        { SockColor.Forest,     new Color(0x1B/255f, 0x55/255f, 0x02/255f, 1f) },
+        { SockColor.Gray,       new Color(0xA2/255f, 0xA0/255f, 0xA4/255f, 1f) },
+
+        { SockColor.Green,      new Color(0x64/255f, 0xA4/255f, 0x2C/255f, 1f) },
+        { SockColor.Lavender,   new Color(0xD0/255f, 0x85/255f, 0xED/255f, 1f) },
+
+        { SockColor.Maroon,     new Color(0xAE/255f, 0x42/255f, 0x4A/255f, 1f) },
+        { SockColor.Navy,       new Color(0x46/255f, 0x6A/255f, 0xC9/255f, 1f) },
+
+        { SockColor.Orange,     new Color(0xFF/255f, 0xA7/255f, 0x49/255f, 1f) },
+        { SockColor.Pink,       new Color(0xE0/255f, 0x80/255f, 0x80/255f, 1f) },
+
+        { SockColor.Purple,     new Color(0x81/255f, 0x30/255f, 0x89/255f, 1f) },
+        { SockColor.Red,        new Color(0xCD/255f, 0x24/255f, 0x29/255f, 1f) },
+
+        { SockColor.Rose,       new Color(0xB0/255f, 0x5F/255f, 0x3C/255f, 1f) },
+        { SockColor.Sky,        Color.white },
+
+        { SockColor.Slate,      new Color(0xE5/255f, 0xE6/255f, 0xC7/255f, 1f) },
+        { SockColor.Tan,        new Color(0xCF/255f, 0xC5/255f, 0x87/255f, 1f) },
+
+        { SockColor.Teal,       new Color(0x00/255f, 0xCF/255f, 0xDF/255f, 1f) },
+        { SockColor.Walnut,     new Color(0xA1/255f, 0x7C/255f, 0x50/255f, 1f) },
+
+        { SockColor.White,      Color.white },
+        { SockColor.Yellow,     new Color(0xFF/255f, 0xE3/255f, 0x60/255f, 1f) }
+    };
+
+    private static readonly Dictionary<SpikesColor, Color> spikesColors =
+        new Dictionary<SpikesColor, Color>()
+    {
+        { SpikesColor.Black,      new Color(0x2A/255f, 0x30/255f, 0x34/255f, 1f) },
+        { SpikesColor.Blue,       new Color(0x46/255f, 0x6A/255f, 0xC9/255f, 1f) },
+        { SpikesColor.Bluegray,   new Color(0x55/255f, 0x7E/255f, 0x85/255f, 1f) },
+
+        { SpikesColor.Brown,      new Color(0x74/255f, 0x4B/255f, 0x30/255f, 1f) },
+        { SpikesColor.Charcoal,   new Color(0x4A/255f, 0x50/255f, 0x57/255f, 1f) },
+
+        { SpikesColor.Forest,     new Color(0x13/255f, 0x45/255f, 0x07/255f, 1f) },
+        { SpikesColor.Gray,       new Color(0x79/255f, 0x75/255f, 0x80/255f, 1f) },
+
+        { SpikesColor.Green,      new Color(0x2F/255f, 0x81/255f, 0x36/255f, 1f) },
+        { SpikesColor.Lavender,   new Color(0xA9/255f, 0x66/255f, 0xDD/255f, 1f) },
+
+        { SpikesColor.Leather,    new Color(0x75/255f, 0x50/255f, 0x2D/255f, 1f) },
+        { SpikesColor.Maroon,     new Color(0x83/255f, 0x21/255f, 0x21/255f, 1f) },
+
+        { SpikesColor.Navy,       new Color(0x3C/255f, 0x49/255f, 0xAD/255f, 1f) },
+        { SpikesColor.Orange,     new Color(0xEF/255f, 0x7E/255f, 0x19/255f, 1f) },
+
+        { SpikesColor.Pink,       new Color(0xC3/255f, 0x60/255f, 0x72/255f, 1f) },
+        { SpikesColor.Purple,     new Color(0x62/255f, 0x1E/255f, 0x78/255f, 1f) },
+
+        { SpikesColor.Red,        new Color(0xAB/255f, 0x1E/255f, 0x1E/255f, 1f) },
+        { SpikesColor.Rose,       new Color(0x8A/255f, 0x3D/255f, 0x28/255f, 1f) },
+
+        { SpikesColor.Sky,        new Color(0xC6/255f, 0xEE/255f, 0xFD/255f, 1f) },
+        { SpikesColor.Slate,      new Color(0xB3/255f, 0xAF/255f, 0xA1/255f, 1f) },
+
+        { SpikesColor.Tan,        new Color(0xB7/255f, 0x99/255f, 0x6A/255f, 1f) },
+        { SpikesColor.Teal,       new Color(0x00/255f, 0x98/255f, 0xB2/255f, 1f) },
+
+        { SpikesColor.Walnut,     new Color(0x99/255f, 0x6B/255f, 0x4A/255f, 1f) },
+        { SpikesColor.White,      Color.white },
+
+        { SpikesColor.Yellow,     new Color(0xF3/255f, 0xC0/255f, 0x3F/255f, 1f) },
+
+        { SpikesColor.Steel,      new Color(0xC4/255f, 0xB5/255f, 0x9F/255f, 1f) },
+        { SpikesColor.Iron,       new Color(0x48/255f, 0x41/255f, 0x52/255f, 1f) },
+        { SpikesColor.Ceramic,    new Color(0xBA/255f, 0x90/255f, 0x69/255f, 1f) },
+
+        { SpikesColor.Brass,      new Color(0xFD/255f, 0xD0/255f, 0x82/255f, 1f) },
+        { SpikesColor.Copper,     new Color(0xEC/255f, 0x85/255f, 0x5C/255f, 1f) },
+
+        { SpikesColor.Bronze,     new Color(0xE7/255f, 0xA8/255f, 0x20/255f, 1f) },
+        { SpikesColor.Silver,     new Color(0xD6/255f, 0xE1/255f, 0xD3/255f, 1f) },
+
+        { SpikesColor.Gold,       new Color(0xFF/255f, 0xC9/255f, 0x5A/255f, 1f) }
+    };
+
+    private static readonly Dictionary<GlovesColor, Color> glovesColors =
+        new Dictionary<GlovesColor, Color>()
+    {
+        { GlovesColor.Ceramic,    new Color(0xBA/255f, 0x90/255f, 0x69/255f, 1f) },
+        { GlovesColor.Brass,      new Color(0xFD/255f, 0xD0/255f, 0x82/255f, 1f) },
+        { GlovesColor.Copper,     new Color(0xEC/255f, 0x85/255f, 0x5C/255f, 1f) },
+        { GlovesColor.Bronze,     new Color(0xE7/255f, 0xA8/255f, 0x20/255f, 1f) },
+
+        { GlovesColor.Iron,       new Color(0x48/255f, 0x41/255f, 0x52/255f, 1f) },
+        { GlovesColor.Steel,      new Color(0xC4/255f, 0xB5/255f, 0x9F/255f, 1f) },
+
+        { GlovesColor.Silver,     new Color(0xD6/255f, 0xE1/255f, 0xD3/255f, 1f) },
+        { GlovesColor.Gold,       new Color(0xFF/255f, 0xC9/255f, 0x5A/255f, 1f) },
+
+        { GlovesColor.Cloth_Brown,      new Color(0x99/255f, 0x6B/255f, 0x4A/255f, 1f) },
+        { GlovesColor.Cloth_Leather,    new Color(0x9A/255f, 0x6F/255f, 0x37/255f, 1f) },
+        { GlovesColor.Cloth_Walnut,     new Color(0xA1/255f, 0x7C/255f, 0x50/255f, 1f) },
+
+        { GlovesColor.Cloth_Yellow,     new Color(0xFF/255f, 0xE3/255f, 0x60/255f, 1f) },
+        { GlovesColor.Cloth_Tan,        new Color(0xCF/255f, 0xC5/255f, 0x87/255f, 1f) },
+
+        { GlovesColor.Cloth_Orange,     new Color(0xFF/255f, 0xA7/255f, 0x49/255f, 1f) },
+        { GlovesColor.Cloth_Rose,       new Color(0xB0/255f, 0x5F/255f, 0x3C/255f, 1f) },
+
+        { GlovesColor.Cloth_Maroon,     new Color(0xAE/255f, 0x42/255f, 0x4A/255f, 1f) },
+        { GlovesColor.Cloth_Red,        new Color(0xCD/255f, 0x24/255f, 0x29/255f, 1f) },
+
+        { GlovesColor.Cloth_Pink,       new Color(0xE0/255f, 0x80/255f, 0x80/255f, 1f) },
+        { GlovesColor.Cloth_Lavender,   new Color(0xD0/255f, 0x85/255f, 0xED/255f, 1f) },
+
+        { GlovesColor.Cloth_Purple,     new Color(0x81/255f, 0x30/255f, 0x89/255f, 1f) },
+        { GlovesColor.Cloth_Blue,       new Color(0x61/255f, 0xA0/255f, 0xEF/255f, 1f) },
+
+        { GlovesColor.Cloth_Navy,       new Color(0x46/255f, 0x6A/255f, 0xC9/255f, 1f) },
+        { GlovesColor.Cloth_Teal,       new Color(0x00/255f, 0xCF/255f, 0xDF/255f, 1f) },
+
+        { GlovesColor.Cloth_Bluegray,   new Color(0x79/255f, 0x97/255f, 0x9D/255f, 1f) },
+        { GlovesColor.Cloth_Forest,     new Color(0x1B/255f, 0x55/255f, 0x02/255f, 1f) },
+
+        { GlovesColor.Cloth_Green,      new Color(0x64/255f, 0xA4/255f, 0x2C/255f, 1f) },
+        { GlovesColor.Cloth_White,      Color.white },
+
+        { GlovesColor.Cloth_Sky,        new Color(0xC6/255f, 0xEE/255f, 0xFD/255f, 1f) },
+        { GlovesColor.Cloth_Slate,      new Color(0xE5/255f, 0xE6/255f, 0xC7/255f, 1f) },
+
+        { GlovesColor.Cloth_Gray,       new Color(0xA2/255f, 0xA0/255f, 0xA4/255f, 1f) },
+        { GlovesColor.Cloth_Black,      new Color(0x4A/255f, 0x50/255f, 0x57/255f, 1f) },
+
+        { GlovesColor.Cloth_Charcoal,   new Color(0x6E/255f, 0x76/255f, 0x75/255f, 1f) }
+    };
+
+    */
 }

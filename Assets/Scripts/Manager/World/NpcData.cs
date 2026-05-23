@@ -12,7 +12,7 @@ public class NpcData : ScriptableObject
     public HairStyle HairStyle;
     public PortraitSize PortraitSize;
     public Gender Gender;
-    public KitColor KitBaseColor;
-    public KitColor KitDetailColor;
+    public KitShirtColor KitBaseColor;
+    public KitPantsColor KitDetailColor;
     public Sprite PortraitSprite;
 }

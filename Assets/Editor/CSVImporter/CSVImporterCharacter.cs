@@ -74,8 +74,8 @@ public class CSVImporterCharacter
 
             characterData.CharacterId   = values[characterIdIndex].Trim();
 			
-            characterData.BodyColorType = EnumManager.StringToEnum<BodyColorType>(values[bodyColorTypeIndex].Trim());
-            characterData.EyeColorType  = EnumManager.StringToEnum<EyeColorType>(values[eyeColorTypeIndex].Trim());
+            characterData.BodyColorType = EnumManager.StringToEnum<BodyColorType>(EnumManager.GetSafeEnumString(values[bodyColorTypeIndex].Trim()));
+            characterData.EyeColorType  = EnumManager.StringToEnum<EyeColorType>(EnumManager.GetSafeEnumString(values[eyeColorTypeIndex].Trim()));
             characterData.HairColorType = EnumManager.StringToEnum<HairColorType>(values[hairColorTypeIndex].Trim());
             characterData.HairStyle = EnumManager.StringToEnum<HairStyle>(values[hairStyleIndex].Trim());
 

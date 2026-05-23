@@ -340,12 +340,12 @@ public class CharacterComponentAI : MonoBehaviour
     public void EnableAI() => isAIEnabled = true;
     public void EnableAI(bool isAIEnabled) => this.isAIEnabled = isAIEnabled;
     public void DisableAI() => isAIEnabled = false;
-
+    
     #endregion
 
     #region UPDATE LOOP
 
-    private void FixedUpdate()
+    public void OnFixedUpdate()
     {
         // reduce repeated property lookups
         if ((character.IsControlled && !character.IsAutoBattleEnabled) ||
@@ -365,7 +365,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void UpdateCurrentAIState()
     {
-        if (!character.CanMove() || character.IsStateLocked)
+        if (!character.CanMove())
         {
             currentState = AIState.Idle;
             return;
@@ -924,8 +924,7 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void MoveTowards(Vector3 target)
     {
-        if (!character.CanMove() || character.IsStateLocked)
-            return;
+        if (!character.CanMove()) return;
 
         Vector3 dir = target - _transform.position;
         dir.y = 0f;
@@ -933,7 +932,11 @@ public class CharacterComponentAI : MonoBehaviour
         if (dir.sqrMagnitude < MIN_TARGET_DIST_SQR)
         {
             StopAndResetRotation();
+            character.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
             return;
+        } else 
+        {
+            character.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Run);
         }
 
         dir.Normalize();

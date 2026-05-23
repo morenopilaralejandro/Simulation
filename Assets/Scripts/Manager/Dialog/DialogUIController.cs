@@ -170,7 +170,7 @@ public class DialogUIController : MonoBehaviour
                 var portrait = speaker.PortraitSprite;
                 if (portrait != null)
                 {
-                    _portraitSpeaker.SetSpeaker(speaker);
+                    _ = _portraitSpeaker.SetSpeakerAsync(speaker);
                     _portraitPanel.SetActive(true);
                 }
                 else

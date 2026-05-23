@@ -36,6 +36,8 @@ public class CharacterComponentController : MonoBehaviour
 
     private bool useMouseAiming;
     private CharacterEntityBattle cachedTarget;
+
+    private bool wasMoving;
     #endregion
 
     #region Properties
@@ -71,7 +73,7 @@ public class CharacterComponentController : MonoBehaviour
         BattleEvents.OnBattlePhaseChanged -= OnBattlePhaseChanged;
     }
 
-    private void Update()
+    public void OnUpdate()
     {
         if (IsControlledInternal && !characterEntityBattle.IsAutoBattleEnabled) 
         {
@@ -89,13 +91,19 @@ public class CharacterComponentController : MonoBehaviour
         HandleShootInput();
     }
 
-    private void FixedUpdate()
+    public void OnFixedUpdate()
     {
-        if (!CanProcessInput || !characterEntityBattle.CanMove() || characterEntityBattle.IsStateLocked)
-            return;
+        if (!CanProcessInput || !characterEntityBattle.CanMove()) return;
 
         HandleMovement();
         HandleRotation();
+    }
+
+    public void OnLateUpdate()
+    {
+        if (!CanProcessInput || characterEntityBattle.IsStunned()) return;
+
+        UpdateAnimation();
     }
     #endregion
 
@@ -157,6 +165,17 @@ public class CharacterComponentController : MonoBehaviour
             characterEntityBattle.Model.rotation,
             targetRotation,
             rotationSpeed * Time.fixedDeltaTime
+        );
+    }
+
+    private void UpdateAnimation()
+    {
+        bool isMoving = moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE;
+
+        characterEntityBattle.SetLocomotion(
+            isMoving
+                ? Aremoreno.Enums.Animation.CharacterAnimationState.Run
+                : Aremoreno.Enums.Animation.CharacterAnimationState.Idle
         );
     }
     #endregion

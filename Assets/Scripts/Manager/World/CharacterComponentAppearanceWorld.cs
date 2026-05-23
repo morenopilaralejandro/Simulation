@@ -7,6 +7,9 @@ using Aremoreno.Enums.SpriteLayer;
 
 public class CharacterComponentAppearanceWorld : MonoBehaviour, IAsyncSceneLoader
 {
+    public async Task LoadAsync() {}
+    public void Initialize(CharacterComponentAppearance appearanceComponent, PlayerWorldEntity playerWorldEntity = null) {}
+    /*
     #region Fields
 
     [SerializeField] private SpriteLayerRendererCharacter spriteLayerRenderer;
@@ -67,5 +70,5 @@ public class CharacterComponentAppearanceWorld : MonoBehaviour, IAsyncSceneLoade
     }
 
     #endregion
-
+    */
 }

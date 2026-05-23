@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a9dbd99f12ca03e9a3cb1a8742e2138, type: 3}
+  m_Name: CharacterActionAnimationConfig
+  m_EditorClassIdentifier: 
+  animations:
+  - State: 7
+    Duration: 0.1
+    Priority: 2
+    LocksMovement: 0
+    Interruptible: 0
+    FacingMode: 1
+  - State: 6
+    Duration: 0.1
+    Priority: 1
+    LocksMovement: 0
+    Interruptible: 0
+    FacingMode: 1
+  - State: 4
+    Duration: 0.1
+    Priority: 1
+    LocksMovement: 0
+    Interruptible: 0
+    FacingMode: 1
+  - State: 8
+    Duration: 0.1
+    Priority: 2
+    LocksMovement: 1
+    Interruptible: 0
+    FacingMode: 1
+  - State: 9
+    Duration: 3
+    Priority: 3
+    LocksMovement: 0
+    Interruptible: 0
+    FacingMode: 3
+  - State: 3
+    Duration: 0.3
+    Priority: 1
+    LocksMovement: 0
+    Interruptible: 0
+    FacingMode: 0
+  - State: 10
+    Duration: 0.1
+    Priority: 1
+    LocksMovement: 0
+    Interruptible: 0
+    FacingMode: 1

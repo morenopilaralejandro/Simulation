@@ -127,7 +127,7 @@ public class FormationLayoutUI : MonoBehaviour
             slot.SetDragLayer(dragLayer);
             slot.Initialize(i, coord);
             slot.SetCanDrag(canDrag);
-            teamRoster[i].ApplyKit(currentKit, currentVariant, coord.Position);
+            teamRoster[i].SetKit(currentKit, currentVariant, teamRoster[i].GetKitRole(coord.Position));
             slot.SetCharacter(teamRoster[i]);
         }
 
@@ -148,8 +148,8 @@ public class FormationLayoutUI : MonoBehaviour
             slot.SetDragLayer(dragLayer);
             slot.SetAsBench(rosterIndex);
             slot.SetCanDrag(canDrag);
-            teamRoster[rosterIndex].ApplyKit(
-                currentKit, currentVariant, teamRoster[rosterIndex].Position);
+            teamRoster[rosterIndex].SetKit(
+                currentKit, currentVariant, teamRoster[rosterIndex].GetKitRole(teamRoster[rosterIndex].Position));
             slot.SetCharacter(teamRoster[rosterIndex]);
         }
 

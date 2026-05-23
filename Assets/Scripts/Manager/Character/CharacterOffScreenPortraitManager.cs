@@ -96,7 +96,7 @@ public class OffScreenPortraitManager : MonoBehaviour
         }
 
         playerTransform = characterEntity.transform;
-        characterPortrait.SetCharacter(characterEntity.Character);
+        _ = characterPortrait.SetCharacterAsync(characterEntity.Character);
         imageElement.sprite = IconManager.Instance.Element.GetIcon(characterEntity.Element);
         isInitialized = true;
     }

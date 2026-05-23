@@ -99,6 +99,7 @@ public class BattleCharacterManager : MonoBehaviour
 
         character.ClearAllStatus();
         character.ReleaseStateLock();
+        character.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
     }
 
     public void ClearPool()

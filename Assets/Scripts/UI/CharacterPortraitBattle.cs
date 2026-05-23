@@ -1,62 +1,70 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Aremoreno.Enums.Character;
-using Aremoreno.Enums.SpriteLayer;
 
 public class CharacterPortraitBattle : MonoBehaviour
 {
-    [SerializeField] private Image imageKitPortraitBase;
-    [SerializeField] private Image imageKitPortraitDetail;
-    [SerializeField] private Image imageKitPortraitNeck;
+    [Header("UI")]
     [SerializeField] private Image imageCharacterPortrait;
-    [SerializeField] private KitPortraitLibrary kitPortraitLibrary;
+    [SerializeField] private Image imageKitPortrait;
 
-    private PortraitSize _cachedSize;
-    private string _cachedId;
+    private int _version;
 
-    public void SetCharacter(Character character)
-    {        
-        if(character.CharacterId != _cachedId)
-            UpdateCharacterPortraitSprite(character);
-        if(character.PortraitSize != _cachedSize)
-            UpdateKitPortraitSprites(character);
-        UpdateKitPortraitColors(character);
+    private AsyncOperationHandle<Sprite>? _characterHandle;
+    private AsyncOperationHandle<Sprite>? _kitHandle;
+
+    public async Task SetCharacterAsync(Character character)
+    {
+        int version = ++_version;
+
+        ReleaseHandles();
+
+        _characterHandle = Addressables.LoadAssetAsync<Sprite>(character.PortraitCharacterAddress);
+        _kitHandle = Addressables.LoadAssetAsync<Sprite>(character.PortraitKitAddress);
+
+        await _characterHandle.Value.Task;
+        await _kitHandle.Value.Task;
+
+        if (version != _version)
+            return;
+
+        imageCharacterPortrait.sprite =
+            _characterHandle.Value.Status == AsyncOperationStatus.Succeeded
+                ? _characterHandle.Value.Result
+                : null;
+
+        imageKitPortrait.sprite =
+            _kitHandle.Value.Status == AsyncOperationStatus.Succeeded
+                ? _kitHandle.Value.Result
+                : null;
     }
 
-    public void UpdateCharacterPortraitSprite(Character character)
+    private void ReleaseHandles()
     {
-        imageCharacterPortrait.sprite = character.PortraitSprite;
-        _cachedId = character.CharacterId;
-    }
+        if (_characterHandle.HasValue && _characterHandle.Value.IsValid())
+            Addressables.Release(_characterHandle.Value);
 
-    public void UpdateKitPortraitSprites(Character character)
-    {
-        var size = character.PortraitSize;
-        var kitPortraitSprites = kitPortraitLibrary.Get(size);
-        imageKitPortraitBase.sprite = kitPortraitSprites.SpriteBase;
-        imageKitPortraitDetail.sprite = kitPortraitSprites.SpriteDetail;
-        imageKitPortraitNeck.sprite = kitPortraitSprites.SpriteNeck;
-        _cachedSize = size;
-    }
+        if (_kitHandle.HasValue && _kitHandle.Value.IsValid())
+            Addressables.Release(_kitHandle.Value);
 
-    public void UpdateKitPortraitColors(Character character)
-    {
-        imageKitPortraitBase.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.KitBase];
-        imageKitPortraitDetail.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.KitDetail];
-        imageKitPortraitNeck.color = character.SpriteLayerState.Colors[CharacterSpriteLayer.Body];
+        _characterHandle = null;
+        _kitHandle = null;
     }
 
     public void Clear()
     {
-        if (imageCharacterPortrait != null) imageCharacterPortrait.sprite = null;
-        if (imageKitPortraitBase != null) imageKitPortraitBase.sprite = null;
-        if (imageKitPortraitDetail != null) imageKitPortraitDetail.sprite = null;
-        if (imageKitPortraitNeck != null) imageKitPortraitNeck.sprite = null;
+        imageCharacterPortrait.sprite = null;
+        imageKitPortrait.sprite = null;
 
-        _cachedId = null;
-        _cachedSize = default;
+        ReleaseHandles();
+        _version++;
     }
 
+    private void OnDestroy()
+    {
+        Clear();
+    }
 }

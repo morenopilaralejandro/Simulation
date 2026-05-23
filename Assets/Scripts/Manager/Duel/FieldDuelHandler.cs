@@ -82,15 +82,24 @@ public class FieldDuelHandler : IDuelHandler
 
     public async void EndDuel(DuelParticipant winner, DuelParticipant loser) 
     { 
+        loser.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
+        StunSupports(loser.Action);
+
         if (winner.Move != null) 
         {
             winner.CharacterEntityBattle.ModifyBattleStat(Stat.Sp, -winner.Move.Cost);
 
             if (winner.Action == DuelAction.Offense) 
+            {
+                winner.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Slash);
                 BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.OffenseSupports);
-            else
+            }
+            else 
+            {
+                winner.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Halfslash1H);
                 BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.DefenseSupports);
-            
+            }
+
             await BattleEffectManager.Instance.PlayMoveParticle(
                 winner.Move,
                 winner.CharacterEntityBattle.transform.position);
@@ -101,8 +110,6 @@ public class FieldDuelHandler : IDuelHandler
         if (winner.CharacterEntityBattle.IsOnUsersTeam())
             BattleEffectManager.Instance.PlayDuelWinEffect(winner.CharacterEntityBattle.transform); 
         
-        loser.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
-        StunSupports(loser.Action);
         PossessionManager.Instance.GiveBallToCharacter(winner.CharacterEntityBattle);
         DuelManager.Instance.EndDuel(winner, loser);
     }

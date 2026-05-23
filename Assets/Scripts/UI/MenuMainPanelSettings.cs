@@ -9,16 +9,19 @@ public class MenuMainPanelSettings : Menu
     [SerializeField] private DropdownLanguage dropdownLanguage;
     [SerializeField] private Slider sliderBgm;
     [SerializeField] private Slider sliderSfx;
+    [SerializeField] private Toggle toggleElementIndicator;
 
     private float cachedBgmVolume;
     private float cachedSfxVolume;
     private int cachedLanguageIndex;
+    private bool cachedShowElementIndicator;
 
     public override void Show() 
     {
         base.Show();
 
         dropdownLanguage.InitializeDropdown();
+        toggleElementIndicator.isOn = SettingsManager.Instance.CurrentSettings.ShowElementIndicator;
         CacheSettings();
     }
 
@@ -30,7 +33,9 @@ public class MenuMainPanelSettings : Menu
 
     public void OnButtonConfirmClicked()
     {
-        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");    
+        SettingsManager.Instance.SetShowElementIndicator(toggleElementIndicator.isOn);
+
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         RequestClose();
     }
 
@@ -66,6 +71,7 @@ public class MenuMainPanelSettings : Menu
     {
         cachedBgmVolume = SettingsManager.Instance.CurrentSettings.BgmVolume;
         cachedSfxVolume = SettingsManager.Instance.CurrentSettings.SfxVolume;
+        cachedShowElementIndicator = SettingsManager.Instance.CurrentSettings.ShowElementIndicator;
 
         int defaultLanguageIndex = LocalizationSettings.AvailableLocales.Locales.IndexOf(LocalizationSettings.SelectedLocale);
         int savedLanguageIndex = SettingsManager.Instance.CurrentSettings.LocaleIndex;
@@ -82,6 +88,7 @@ public class MenuMainPanelSettings : Menu
         SettingsManager.Instance.SetBgmVolume(cachedBgmVolume);
         SettingsManager.Instance.SetSfxVolume(cachedSfxVolume);
         SettingsManager.Instance.SetLanguage(cachedLanguageIndex);
+        SettingsManager.Instance.SetShowElementIndicator(cachedShowElementIndicator);
 
         sliderBgm.value = cachedBgmVolume;
         sliderSfx.value = cachedSfxVolume;

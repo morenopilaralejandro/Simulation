@@ -1,63 +1,169 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Aremoreno.Enums.Character;
-using Aremoreno.Enums.SpriteLayer;
 
 public class CharacterPortraitSpeaker : MonoBehaviour
 {
-    [SerializeField] private Image imageKitPortraitBase;
-    [SerializeField] private Image imageKitPortraitDetail;
-    [SerializeField] private Image imageKitPortraitNeck;
+    [Header("UI")]
     [SerializeField] private Image imageCharacterPortrait;
-    [SerializeField] private KitPortraitLibrary kitPortraitLibrary;
+    [SerializeField] private Image imageKitPortrait;
 
-    private PortraitSize _cachedSize;
-    private string _cachedId;
+    private string _currentCharacterAddress;
+    private string _currentKitAddress;
 
-    public void SetSpeaker(Speaker speaker)
+    private AsyncOperationHandle<Sprite>? _characterHandle;
+    private AsyncOperationHandle<Sprite>? _kitHandle;
+
+    private int _version;
+
+    public async Task SetSpeakerAsync(Speaker speaker)
     {
-        if(speaker.SpeakerId == _cachedId) return;
+        int version = ++_version;
 
-        UpdateCharacterPortraitSprite(speaker);
+        await UpdateCharacterPortraitAsync(speaker, version);
 
-        UpdateKitVisibility(speaker.HasKit);
-
-        if(!speaker.HasKit) return;
-        if(speaker.PortraitSize != _cachedSize)
-            UpdateKitPortraitSprites(speaker);
-        UpdateKitPortraitColors(speaker);
+        if (speaker.HasKit)
+            await UpdateKitPortraitAsync(speaker, version);
+        else
+            DisableKit();
     }
 
-    private void UpdateCharacterPortraitSprite(Speaker speaker)
+    #region Character
+
+    private async Task UpdateCharacterPortraitAsync(Speaker speaker, int version)
     {
-        imageCharacterPortrait.sprite = speaker.PortraitSprite;
-        _cachedId = speaker.SpeakerId;
+        /*
+        if (speaker.HasKit 
+        {
+            address from character            
+        } else 
+        {
+            address from npc
+        }
+        */
+
+        string address =
+            AddressableLoader.GetCharacterPortraitAddress(speaker.SpeakerId);
+
+        if (address == _currentCharacterAddress && _characterHandle.HasValue)
+            return;
+
+        _currentCharacterAddress = address;
+
+        ReleaseCharacter();
+
+        _characterHandle = Addressables.LoadAssetAsync<Sprite>(address);
+        await _characterHandle.Value.Task;
+
+        if (version != _version)
+            return;
+
+        if (_characterHandle.Value.Status != AsyncOperationStatus.Succeeded)
+            return;
+
+        imageCharacterPortrait.sprite = _characterHandle.Value.Result;
     }
 
-    private void UpdateKitPortraitSprites(Speaker speaker)
+    #endregion
+
+    #region Kit
+
+    private async Task UpdateKitPortraitAsync(Speaker speaker, int version)
     {
-        var size = speaker.PortraitSize;
-        var kitPortraitSprites = kitPortraitLibrary.Get(size);
-        imageKitPortraitBase.sprite = kitPortraitSprites.SpriteBase;
-        imageKitPortraitDetail.sprite = kitPortraitSprites.SpriteDetail;
-        imageKitPortraitNeck.sprite = kitPortraitSprites.SpriteNeck;
-        _cachedSize = size;
+        /*
+        string address =
+            AddressableLoader.GetKitPortraitAddress(
+                speaker.KitId,
+                speaker.KitVariant.ToString(),
+                speaker.KitRole.ToString(),
+                speaker.PortraitSize.ToString()
+            );
+        */
+
+        string address = "";
+
+        if (address == _currentKitAddress && _kitHandle.HasValue)
+            return;
+
+        _currentKitAddress = address;
+
+        EnableKit();
+
+        ReleaseKit();
+
+        _kitHandle = Addressables.LoadAssetAsync<Sprite>(address);
+        await _kitHandle.Value.Task;
+
+        if (version != _version)
+            return;
+
+        if (_kitHandle.Value.Status != AsyncOperationStatus.Succeeded)
+            return;
+
+        imageKitPortrait.sprite = _kitHandle.Value.Result;
     }
 
-    private void UpdateKitPortraitColors(Speaker speaker)
+    #endregion
+
+    #region Kit Visibility
+
+    private void EnableKit()
     {
-        imageKitPortraitBase.color = speaker.SpriteLayerState.Colors[CharacterSpriteLayer.KitBase];
-        imageKitPortraitDetail.color = speaker.SpriteLayerState.Colors[CharacterSpriteLayer.KitDetail];
-        imageKitPortraitNeck.color = speaker.SpriteLayerState.Colors[CharacterSpriteLayer.Body];
+        imageKitPortrait.enabled = true;
     }
 
-    private void UpdateKitVisibility(bool enable) 
+    private void DisableKit()
     {
-        imageKitPortraitBase.enabled = enable;
-        imageKitPortraitDetail.enabled = enable;
-        imageKitPortraitNeck.enabled = enable;
+        imageKitPortrait.enabled = false;
+        imageKitPortrait.sprite = null;
+        _currentKitAddress = null;
+
+        ReleaseKit();
     }
 
+    #endregion
+
+    #region Cleanup
+
+    private void ReleaseCharacter()
+    {
+        if (_characterHandle.HasValue)
+        {
+            Addressables.Release(_characterHandle.Value);
+            _characterHandle = null;
+        }
+    }
+
+    private void ReleaseKit()
+    {
+        if (_kitHandle.HasValue)
+        {
+            Addressables.Release(_kitHandle.Value);
+            _kitHandle = null;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        ReleaseCharacter();
+        ReleaseKit();
+    }
+
+    public void Clear()
+    {
+        ReleaseCharacter();
+        ReleaseKit();
+
+        imageCharacterPortrait.sprite = null;
+        imageKitPortrait.sprite = null;
+        imageKitPortrait.enabled = false;
+
+        _currentCharacterAddress = null;
+        _currentKitAddress = null;
+    }
+
+    #endregion
 }

@@ -113,10 +113,70 @@ public class SubstitutionManager : MonoBehaviour
     public void ShowSubstitutions() 
     {
         if (cachedSubstitutions.Count == 0) return;
-        var orderedList = cachedSubstitutions.OrderBy(s => s.TeamSide).ToList();
+
+        // 1. Group substitutions by TeamSide to handle them independently
+        var subsByTeam = new Dictionary<TeamSide, List<SubstitutionData>>();
+        foreach (var sub in cachedSubstitutions)
+        {
+            if (!subsByTeam.ContainsKey(sub.TeamSide))
+            {
+                subsByTeam[sub.TeamSide] = new List<SubstitutionData>();
+            }
+            subsByTeam[sub.TeamSide].Add(sub);
+        }
+
+        var finalSubstitutions = new List<SubstitutionData>();
+
+        // 2. Process each team's substitution chain
+        foreach (var kvp in subsByTeam)
+        {
+            TeamSide side = kvp.Key;
+            List<SubstitutionData> teamSubs = kvp.Value;
+
+            // Track the current state of characters on the field for this team
+            // Key: The character currently IN, Value: The original character they replaced (OUT)
+            var activeSubs = new Dictionary<Character, Character>();
+
+            foreach (var sub in teamSubs)
+            {
+                // If the character coming OUT was already swapped IN during this sequence,
+                // we collapse/chain the substitution.
+                if (activeSubs.ContainsKey(sub.CharacterOut))
+                {
+                    Character originalOut = activeSubs[sub.CharacterOut];
+                    activeSubs.Remove(sub.CharacterOut);
+
+                    // Only keep the chain if it didn't completely revert to the original state
+                    if (sub.CharacterIn != originalOut)
+                    {
+                        activeSubs[sub.CharacterIn] = originalOut;
+                    }
+                }
+                else
+                {
+                    // New substitution chain link: only add if it's not a dummy self-substitution
+                    if (sub.CharacterIn != sub.CharacterOut)
+                    {
+                        activeSubs[sub.CharacterIn] = sub.CharacterOut;
+                    }
+                }
+            }
+
+            // 3. Reconstruct the valid, non-cancelled substitution data
+            foreach (var pair in activeSubs)
+            {
+                finalSubstitutions.Add(new SubstitutionData(pair.Key, pair.Value, side));
+            }
+        }
+
+        // 4. Order by TeamSide and display the clean list
+        var orderedList = finalSubstitutions.OrderBy(s => s.TeamSide).ToList();
         foreach (SubstitutionData substitution in orderedList)
+        {
             duelLogManager.AddActionSubstitution(substitution.CharacterIn, substitution.TeamSide);
-        cachedSubstitutions.Clear();
+        }
+
+        cachedSubstitutions.Clear(); 
     }
 
     #endregion

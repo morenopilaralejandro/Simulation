@@ -25,7 +25,7 @@ public class DataLoadManager : MonoBehaviour
     {
         LogManager.Trace("[DataLoadManager] Starting data initialization...");
         // Generic
-        Task loadSpriteAtlas = SpriteAtlasManager.Instance.LoadAllSpriteAtlasAsync();
+        //Task loadSpriteAtlas = SpriteAtlasManager.Instance.LoadAllSpriteAtlasAsync();
         Task loadFormationCoord = FormationCoordManager.Instance.LoadAllFormationCoordDataAsync();
         Task loadBalls = BallManager.Instance.LoadAllBallDataAsync();
         Task loadFields = FieldManager.Instance.LoadAllFieldDataAsync();
@@ -40,7 +40,7 @@ public class DataLoadManager : MonoBehaviour
         Task loadOverworldDefinition = OverworldDefinitionDatabase.Instance.LoadAllOverworldDefinitionDataAsync();
 
         // SpriteAtlas
-        await loadSpriteAtlas;
+        //await loadSpriteAtlas;
         // Formation     
         await loadFormationCoord;
         Task loadFormations = FormationManager.Instance.LoadAllFormationsAsync();

@@ -11,17 +11,21 @@ public class DuelSide : MonoBehaviour
 {
     [SerializeField] private BarHPSP hpBar;
     [SerializeField] private BarHPSP spBar;
-    [SerializeField] private CanvasGroup canvasGroupPossession;
+    [SerializeField] private Image imagePossession;
+    [SerializeField] private Image imageFatigue;
     [SerializeField] private CharacterCard characterCard;
     [SerializeField] private List<CharacterCardMini> characterCardMiniList;
     [SerializeField] private DuelFieldDamageIndicator fieldDamageIndicator;
+    [SerializeField] private Sprite spriteFatigueTired;
+    [SerializeField] private Sprite spriteFatigueExhausted;
 
     public void SetSide(CharacterEntityBattle character, List<CharacterEntityBattle> supports)
     {
         HideMiniCards();
         hpBar.SetCharacter(character.Character, Stat.Hp);
         spBar.SetCharacter(character.Character, Stat.Sp);
-        SetPossessionCanvasState(character.HasBall());
+        SetPossession(character);
+        SetFatigue(character);
         characterCard.SetCharacter(character.Character, character.FormationCoord.Position);
         if (supports != null)
             SetMiniCards(supports);
@@ -43,11 +47,20 @@ public class DuelSide : MonoBehaviour
             card.SetCanvasState(false);
     }
 
-    public void SetPossessionCanvasState(bool isVisible)
+    public void SetPossession(CharacterEntityBattle character)
     {
-        canvasGroupPossession.alpha = isVisible ? 1f : 0f;
-        canvasGroupPossession.interactable = isVisible;
-        canvasGroupPossession.blocksRaycasts = isVisible;
+        imagePossession.enabled = character.HasBall();
+    }
+
+    public void SetFatigue(CharacterEntityBattle character)
+    {
+        imageFatigue.enabled = character.FatigueState != FatigueState.Normal;
+        if (character.FatigueState == FatigueState.Normal) return;
+        
+        if(character.FatigueState == FatigueState.Tired)
+            imageFatigue.sprite = spriteFatigueTired;        
+        else
+            imageFatigue.sprite = spriteFatigueExhausted;
     }
 
     public void SetFieldDamage(float damage, DuelAction action) => fieldDamageIndicator.SetDamage(damage, action);

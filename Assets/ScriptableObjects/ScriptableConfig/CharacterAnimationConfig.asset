@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56d0343cfd326095aa58a27d0a90620, type: 3}
+  m_Name: CharacterAnimationConfig
+  m_EditorClassIdentifier: 
+  animations:
+  - name: 1h_backslash
+    frames: 13
+    direction: 0
+    loop: 0
+    frameRate: 12
+  - name: combat
+    frames: 2
+    direction: 0
+    loop: 1
+    frameRate: 6
+  - name: emote
+    frames: 3
+    direction: 0
+    loop: 0
+    frameRate: 12
+  - name: idle
+    frames: 2
+    direction: 0
+    loop: 1
+    frameRate: 2
+  - name: jump
+    frames: 5
+    direction: 0
+    loop: 0
+    frameRate: 12
+  - name: run
+    frames: 8
+    direction: 0
+    loop: 1
+    frameRate: 12
+  - name: slash
+    frames: 6
+    direction: 0
+    loop: 0
+    frameRate: 12
+  - name: spellcast
+    frames: 7
+    direction: 0
+    loop: 0
+    frameRate: 12
+  - name: walk
+    frames: 9
+    direction: 0
+    loop: 1
+    frameRate: 12
+  - name: hurt
+    frames: 4
+    direction: 1
+    loop: 0
+    frameRate: 12
+  - name: 1h_halfslash
+    frames: 6
+    direction: 0
+    loop: 0
+    frameRate: 12

@@ -237,9 +237,12 @@ public class MenuTeamPanelTeam : Menu
 
     private void HandleShortcutCharacterMove()
     {
-        if (!stateMachine.Is(MenuTeamState.Idle)) return;
         if (selectedSlot == null) return;
-        stateMachine.Set(MenuTeamState.Swapping);
+
+        if (stateMachine.Is(MenuTeamState.Swapping))
+            HandleFormationCharacterSlotUIClicked(selectedSlot);
+        else if (stateMachine.Is(MenuTeamState.Idle)) 
+            stateMachine.Set(MenuTeamState.Swapping);
     }
 
     private void HandleShortcutTeamCharacterReplace()
@@ -417,7 +420,13 @@ public class MenuTeamPanelTeam : Menu
     private void HandleFormationCharacterSlotUISwapped(FormationCharacterSlotUI a, FormationCharacterSlotUI b)
     {
         bool isValidSwap = isEditMode || substitutionManager.ValidateSwap(currentTeam.TeamSide, a, b);
-        if (!isValidSwap) return;
+        if (!isValidSwap) 
+        {
+            audioManager.PlaySfxUI("sfx-menu_forbidden");        
+            return;
+        }
+
+        audioManager.PlaySfxUI("sfx-menu_tap");
 
         hasSwapped = true;
 
@@ -434,8 +443,8 @@ public class MenuTeamPanelTeam : Menu
 
         if (isEditMode)
         {
-            a.GetCharacter().ApplyKit(currentTeam.Kit, currentTeam.Variant, b.FormationCoord.Position);
-            b.GetCharacter().ApplyKit(currentTeam.Kit, currentTeam.Variant, a.FormationCoord.Position);
+            a.GetCharacter().SetKit(currentTeam, b.FormationCoord.Position);
+            b.GetCharacter().SetKit(currentTeam, a.FormationCoord.Position);
 
             teamManager.SetCharacterInLoadout(currentTeam, currentBattleType, a.SlotIndex, guidB);
             teamManager.SetCharacterInLoadout(currentTeam, currentBattleType, b.SlotIndex, guidA);
@@ -447,7 +456,7 @@ public class MenuTeamPanelTeam : Menu
         b.SetCharacter(temp);
 
         UIEvents.RaiseCharacterDetailSideUpdateRequested(b.GetCharacter(), b.FormationCoord.Position);
-        audioManager.PlaySfxUI("sfx-menu_tap");
+
         SetDefaultSelectable(b.Button);
 
         if (stateMachine.Is(MenuTeamState.Swapping))
@@ -475,15 +484,16 @@ public class MenuTeamPanelTeam : Menu
         }
         else
         {
+            audioManager.PlaySfxUI("sfx-menu_tap");
+
             if (isEditMode)
-                character.ApplyKit(currentTeam.Kit, currentTeam.Variant, slot.FormationCoord.Position);
+                character.SetKit(currentTeam, slot.FormationCoord.Position);
 
             teamManager.SetCharacterInLoadout(currentTeam, currentBattleType, slot.SlotIndex, newGuid);
             slot.SetCharacter(character);
         }
 
         UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
-        audioManager.PlaySfxUI("sfx-menu_tap");
         SetDefaultSelectable(slot.Button);
     }
 

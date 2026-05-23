@@ -39,8 +39,8 @@ public class NpcEntity : MonoBehaviour
         if (interactableComponent != null)
             interactableComponent.Initialize(this);
 
-        Kit kit = KitManager.Instance.GetKit(kitData.KitId);
-        character.ApplyKit(kit, Variant.Home, role);
+        //Kit kit = KitManager.Instance.GetKit(kitData.KitId);
+        //character.ApplyKit(kit, Variant.Home, role);
     }
 
     public void Initialize(NpcData npcData)
@@ -51,7 +51,7 @@ public class NpcEntity : MonoBehaviour
         if (interactableComponent != null)
             interactableComponent.Initialize(this);
 
-        appearanceComponent.ApplyClothes(npcData);
+        //appearanceComponent.ApplyClothes(npcData);
     }
 
     #endregion
@@ -63,8 +63,10 @@ public class NpcEntity : MonoBehaviour
     public bool IsGeneric => isGeneric;
 
     public string NpcName => isGeneric ? npc.NpcName : character.CharacterNick;
-    public Sprite PortraitSprite => isGeneric ? npcData.PortraitSprite : character.PortraitSprite;
-    public PortraitSize PortraitSize => isGeneric ? npc.PortraitSize : character.PortraitSize;
+    //public Sprite PortraitSprite => isGeneric ? npcData.PortraitSprite : character.PortraitSprite;
+    public Sprite PortraitSprite => null;
+//    public PortraitSize PortraitSize => isGeneric ? npc.PortraitSize : character.PortraitSize;
+  public Sprite PortraitSize => null;
 
     #endregion
 

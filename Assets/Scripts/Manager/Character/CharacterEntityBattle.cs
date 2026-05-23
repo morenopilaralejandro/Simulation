@@ -9,6 +9,7 @@ using Aremoreno.Enums.Move;
 using Aremoreno.Enums.Duel;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Localization;
+using Aremoreno.Enums.Animation;
 
 public class CharacterEntityBattle : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class CharacterEntityBattle : MonoBehaviour
     [SerializeField] private Character character;
     [SerializeField] private CharacterComponentTeamMember teamMemberComponent;
     [SerializeField] private CharacterComponentAppearanceBattle appearanceBattleComponent;
+    [SerializeField] private CharacterComponentAnimationController animationControllerComponent;
+    [SerializeField] private CharacterComponentAnimationMotor animationMotorComponent;
     [SerializeField] private CharacterComponentModel modelComponent;
     [SerializeField] private CharacterComponentKeeper keeperComponent;
     [SerializeField] private CharacterComponentFatigue fatigueComponent;
@@ -36,20 +39,14 @@ public class CharacterEntityBattle : MonoBehaviour
     #region Initialize
     public void Initialize(CharacterData characterData, Character character = null)
     {
-        if (character != null) 
-        {
-            this.character = character;
-        } else 
-        {
-            this.character = new Character(characterData);
-        }
+        this.character = character != null ? character : new Character(characterData);
 
         teamMemberComponent.Initialize(this);
         appearanceBattleComponent.Initialize(this);
         keeperComponent.Initialize(this);
         fatigueComponent.Initialize(this);
         statusEffectsComponent.Initialize(this);
-        statusIndicatorComponent.Initialize(this);
+        //statusIndicatorComponent.Initialize(this);
         speedComponent.Initialize(this);
         controllerComponent.Initialize(this);
         aiComponent.Initialize(this);
@@ -62,6 +59,28 @@ public class CharacterEntityBattle : MonoBehaviour
 
     #endregion
 
+    #region Update
+
+    private void Update()
+    {
+        if(controllerComponent.enabled) controllerComponent.OnUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        if(controllerComponent.enabled) controllerComponent.OnFixedUpdate();
+        aiComponent.OnFixedUpdate();
+    }
+
+    private void LateUpdate()
+    {
+        if(controllerComponent.enabled) controllerComponent.OnLateUpdate();
+        animationMotorComponent.OnLateUpdate();
+        animationControllerComponent.OnLateUpdate();
+    }
+
+    #endregion
+
     #region API Character
     //character
     public Character Character => character;
@@ -69,7 +88,6 @@ public class CharacterEntityBattle : MonoBehaviour
     public string CharacterId => character.CharacterId;
     public string CharacterGuid => character.CharacterGuid;
     public CharacterSize CharacterSize => character.CharacterSize;
-    public PortraitSize PortraitSize => character.PortraitSize;
     public Gender Gender => character.Gender;
     public Element Element => character.Element;
     public Position Position => character.Position;
@@ -148,21 +166,31 @@ public class CharacterEntityBattle : MonoBehaviour
     public CharacterSaveData Export() => character.Export();
 
     // appearanceComponent
-    public Sprite PortraitSprite => character.PortraitSprite;
-    public string PortraitSpriteId => character.PortraitSpriteId;
+    public CharacterComponentAppearance AppearanceComponent => character.AppearanceComponent;
+    public PortraitSize PortraitSize => character.PortraitSize;
     public HairStyle HairStyle => character.HairStyle;
     public HairColorType HairColorType => character.HairColorType;
     public EyeColorType EyeColorType => character.EyeColorType;
     public BodyColorType BodyColorType => character.BodyColorType;
-    public SpriteLayerState<CharacterSpriteLayer> SpriteLayerState
-    {
-        get => character.SpriteLayerState;
-        set => character.SpriteLayerState = value;
+    public void SetKitId(Kit kit) => character.SetKitId(kit);
+    public void SetKit(Kit kit, Variant variant, Role role) => character.SetKit(kit, variant, role);
+    public void SetKit(Team team, Position position) { 
+        character.SetKit(team, position);
+        _ = LoadKitAsync();
     }
-    public void ApplyKit(Kit kit, Variant variant, Position position) => character.ApplyKit(kit, variant, position);
-    public void InitializeVisibility() => character.InitializeVisibility();
     public Variant GetKitVariant(Team team) => character.GetKitVariant(team);
     public Role GetKitRole(Position position) => character.GetKitRole(position);
+    public string KitId => character.KitId;
+    public Variant KitVariant => character.KitVariant;
+    public Role KitRole => character.KitRole;
+    public string KitAddress => character.KitAddress;
+    public string PortraitCharacterAddress => character.PortraitCharacterAddress;
+    public string PortraitKitAddress => character.PortraitKitAddress;
+    public string HairFrontAddress => character.HairFrontAddress;
+    public string HairBackAddress => character.HairBackAddress;
+    public Color ColorBody => character.ColorBody;
+    public Color ColorHair => character.ColorHair;
+
     #endregion
 
     #region API CharacterEntityBattle
@@ -177,23 +205,38 @@ public class CharacterEntityBattle : MonoBehaviour
     public List<CharacterEntityBattle> GetTeammates() => teamMemberComponent.GetTeammates();
     public List<CharacterEntityBattle> GetOpponents() => teamMemberComponent.GetOpponents();
     //appearanceBattleComponent
-    public void SetCharacterVisible(bool isVisible) => appearanceBattleComponent.SetCharacterVisible(isVisible);
-    public void ApplyStateToRenderer() => appearanceBattleComponent.ApplyStateToRenderer();
-    public void ToggleGloves(Position position) => appearanceBattleComponent.ToggleGloves(position);
-    public Task AppearanceBattleLoadAsync() => appearanceBattleComponent.LoadAsync();
+    public bool IsLoaded => appearanceBattleComponent.IsLoaded;
+    public async Task LoadKitAsync() => await appearanceBattleComponent.LoadKitAsync();
+    public async Task AppearanceBattleLoadAsync() => await appearanceBattleComponent.AppearanceBattleLoadAsync();
+
+    //animationControllerComponent
+    public void Play(CharacterAnimationState state, CharacterDirection direction) => animationControllerComponent.Play(state, direction);
+    public void RefreshAnimation() => animationControllerComponent.RefreshAnimation();
+
+    //animationMotorComponent
+    public bool IsPlayingAction => animationMotorComponent.IsPlayingAction;
+    public bool IsAnimationLocked => animationMotorComponent.IsAnimationLocked;
+    public void SetFormationDirection(Vector2 dir) => animationMotorComponent.SetFormationDirection(dir);
+    public void SetLocomotion(CharacterAnimationState state) => animationMotorComponent.SetLocomotion(state);
+    public bool RequestAction(CharacterAnimationState state, Vector2? direction = null) => animationMotorComponent.RequestAction(state, direction);
+    public void ForceAction(CharacterAnimationState state) => animationMotorComponent.ForceAction(state);
+    public void StopAction() => animationMotorComponent.StopAction();
 
     //modelComponent
     public Transform Model => modelComponent.Model;
+
     //keeperComponent
     public bool IsKeeper => keeperComponent.IsKeeper;
     public bool HasBallInHand => keeperComponent.HasBallInHand;
     public void UpdateKeeperColliderState() => keeperComponent.UpdateKeeperColliderState();
     public void PunchBall(Trait trait) => keeperComponent.PunchBall(trait);
     public void ActivateBallInHand() => keeperComponent.ActivateBallInHand();
+
     //fatigueComponent
     public FatigueState FatigueState => fatigueComponent.FatigueState;
     public float FatigueSpeedMultiplier => fatigueComponent.FatigueSpeedMultiplier;
     public void UpdateFatigue() => fatigueComponent.UpdateFatigue();
+
     //statusEffectsComponent
     public HashSet<StatusEffect> ActiveStatusEffects => statusEffectsComponent.ActiveStatusEffects;
     public float StatusSpeedMultiplier => statusEffectsComponent.StatusSpeedMultiplier;
@@ -202,14 +245,17 @@ public class CharacterEntityBattle : MonoBehaviour
     public void ClearAllStatus() => statusEffectsComponent.ClearAllStatus();
     public bool HasStatusEffect() => ActiveStatusEffects.Count != 0;
     public bool IsStunned() => ActiveStatusEffects.Contains(StatusEffect.Stunned);
+
     //statusIndicatorComponent
-    public void UpdateStatusIndicator(StatusEffect? newStatus) => statusIndicatorComponent.UpdateStatusIndicator(newStatus);   
+    public void UpdateStatusIndicator(StatusEffect? newStatus) => statusIndicatorComponent.UpdateStatusIndicator(newStatus);
+
     //speedComponent
     public float MovementSpeed => speedComponent.MovementSpeed;
     public void CalculateSpeed() => speedComponent.CalculateSpeed();
 
     //controllerComponent
     public bool IsControlled => controllerComponent.IsControlled;
+
     //aiComponent
     public bool IsEnemyAI => aiComponent.IsEnemyAI;
     public bool IsAIEnabled => aiComponent.IsAIEnabled;
@@ -225,10 +271,12 @@ public class CharacterEntityBattle : MonoBehaviour
     public DuelCommand GetCommandByTrait(Trait trait) => aiComponent.GetCommandByTrait(trait);
     public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
     public Move GetMoveByCommandAndTrait(DuelCommand command, Trait trait) => aiComponent.GetMoveByCommandAndTrait(command, trait);
+
     //stateLockComponent
     public bool IsStateLocked => stateLockComponent.IsStateLocked;
     public void StartStateLock(CharacterState state) => stateLockComponent.StartStateLock(state);
     public void ReleaseStateLock() => stateLockComponent.ReleaseStateLock();
+
     //stateMachineComponent
     public CharacterState CurrentState => stateMachineComponent.CurrentState;
     public void SetCharacterState(CharacterState state) => stateMachineComponent.SetCharacterState(state);
@@ -238,6 +286,7 @@ public class CharacterEntityBattle : MonoBehaviour
     public void OnKickAnimationEnd() => stateMachineComponent.OnKickAnimationEnd();
     public void OnControlAnimationEnd() => stateMachineComponent.OnControlAnimationEnd();
     public void OnMoveAnimationEnd() => stateMachineComponent.OnMoveAnimationEnd();
+
     //rigidbodyComponent
     public void ResetPhysics() => rigidbodyComponent.ResetPhysics();
     public void StopVelocity() => rigidbodyComponent.StopVelocity();
@@ -246,6 +295,7 @@ public class CharacterEntityBattle : MonoBehaviour
     //elementIndicatorComponent
     public void SetElementIndicatorEnabled(bool enabled) => elementIndicatorComponent.SetEnabled(enabled);
     public void SetElementIndicatorActive(bool active) => elementIndicatorComponent.SetActive(active);
+
     //speechBubbleComponent
     public void ShowSpeechBubble(SpeechMessage speechMessage) => speechBubbleComponent.ShowSpeechBubble(speechMessage);
     public void HideSpeechBubble() => speechBubbleComponent.HideSpeechBubble();
@@ -264,7 +314,7 @@ public class CharacterEntityBattle : MonoBehaviour
     public bool HasBallInHandThrowIn;
 
     //misc
-    public bool CanMove() => !IsStunned();
+    public bool CanMove() => !IsStunned() && !IsStateLocked && !IsAnimationLocked;
     public bool CanDuel() => !IsStunned() && !HasBallInHand;
     
     #endregion

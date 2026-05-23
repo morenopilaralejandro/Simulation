@@ -3,6 +3,8 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
 
 /// <summary>
 /// Addressable loader with LRU cache + reference counting for shared assets.
@@ -80,16 +82,48 @@ public static class AddressableLoader
         $"{AddressableConfig.CharacterBodyPath}{AddressableConfig.PathSeparator}{tone}";
     public static string GetCharacterPortraitAddress(string id) =>
         $"{AddressableConfig.CharacterPortraitPath}{AddressableConfig.PathSeparator}{id}";
-    public static string GetCharacterHairAddress(string id) =>
-        $"{AddressableConfig.CharacterHairPath}{AddressableConfig.PathSeparator}{id}";
+    public static string GetCharacterHairFrontAddress(string id) =>
+        $"{AddressableConfig.CharacterHairFrontPath}{AddressableConfig.PathSeparator}{id}{AddressableConfig.PathSeparator}front";
+    public static string GetCharacterHairBackAddress(string id) =>
+        $"{AddressableConfig.CharacterHairBackPath}{AddressableConfig.PathSeparator}{id}{AddressableConfig.PathSeparator}back";
     public static string GetCharacterHairWorldAddress(string id) =>
         $"{AddressableConfig.CharacterHairWorldPath}{AddressableConfig.PathSeparator}{id}";
 
-
     public static string GetKitBodyAddress(string kitId, string variant, string role) =>
         $"{AddressableConfig.KitBodyPath}{AddressableConfig.PathSeparator}{kitId}{AddressableConfig.PathSeparator}{variant}{AddressableConfig.PathSeparator}{role}";
-    public static string GetKitPortraitAddress(string kitId, string variant, string role, string size) =>
-        $"{AddressableConfig.KitPortraitPath}{AddressableConfig.PathSeparator}{kitId}{AddressableConfig.PathSeparator}{variant}{AddressableConfig.PathSeparator}{role}{AddressableConfig.PathSeparator}{size}";
+   
+    public static string GetKitPortraitAddress(
+        string kitId,
+        Variant variant,
+        Role role,
+        PortraitSize size)
+    {
+        int portraitIndex = GetPortraitIndex(
+            variant,
+            role,
+            size);
+
+        string baseAddress = string.Concat(
+            AddressableConfig.KitPortraitPath,
+            AddressableConfig.PathSeparator,
+            kitId);
+
+        return string.Concat(
+            baseAddress,
+            "[",
+            baseAddress,
+            AddressableConfig.SubSeparator,
+            portraitIndex.ToString(),
+            "]"
+        );
+    }
+
+    public static int GetPortraitIndex(Variant variant, Role role, PortraitSize size)
+    {
+        return ((int)variant * 14) +
+               ((int)role * 7) +
+               (int)size;
+    }
 
     public static string GetTeamCrestAddress(string id) =>
         $"{AddressableConfig.TeamCrestPath}{AddressableConfig.PathSeparator}{id}";

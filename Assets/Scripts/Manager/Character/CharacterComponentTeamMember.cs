@@ -39,17 +39,19 @@ public class CharacterComponentTeamMember : MonoBehaviour
         this.formationCoord = new FormationCoord(formationCoord);
         this.battleManager = BattleManager.Instance;
 
-        if (!characterEntityBattle.IsOnUsersTeam())
-            this.formationCoord.FlipDefaultPosition();
+        if (!characterEntityBattle.IsOnUsersTeam()) 
+        {
+            this.formationCoord.FlipDefaultPosition();    
+            characterEntityBattle.SetFormationDirection(Vector2.down);
+        } else 
+        {
+            characterEntityBattle.SetFormationDirection(Vector2.up);
+        }
 
-        this.characterEntityBattle.ApplyKit(
-            team.Kit,
-            team.Variant,
+        this.characterEntityBattle.SetKit(
+            team,
             formationCoord.Position
         );
-
-        this.characterEntityBattle.ToggleGloves(formationCoord.Position);
-        this.characterEntityBattle.ApplyStateToRenderer();
 
         LogManager.Trace($"[CharacterComponentTeamMember] {this.characterEntityBattle.CharacterId} assigned to team {team.TeamId} on side {team.TeamSide} at {formationCoord.FormationCoordId}", this);
     }

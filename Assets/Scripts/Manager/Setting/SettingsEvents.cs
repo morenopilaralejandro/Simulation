@@ -28,6 +28,12 @@ public static class SettingsEvents
         OnSfxVolumeChanged?.Invoke(volume);
     }
 
+    public static event Action<bool> OnShowElementIndicatorChanged;
+    public static void RaiseShowElementIndicatorChanged(bool boolValue)
+    {
+        OnShowElementIndicatorChanged?.Invoke(boolValue);
+    }
+
     public static event Action<ControlScheme, ControlSettings> OnControlSchemeChanged;
     public static void RaiseControlSchemeChanged(ControlScheme scheme, ControlSettings controlSettings)
     {

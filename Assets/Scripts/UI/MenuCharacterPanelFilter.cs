@@ -69,8 +69,8 @@ public class MenuCharacterPanelFilter : Menu
 
         genderToggles = new Dictionary<Toggle, Gender>
         {
-            { toggleMale,   Gender.M },
-            { toggleFemale, Gender.F },
+            { toggleMale,   Gender.Male },
+            { toggleFemale, Gender.Female },
         };
     }
 
