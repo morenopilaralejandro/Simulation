@@ -118,7 +118,10 @@ public static class EnumManager
     /// </summary>
     public static string GetSafeEnumString(string stringValue)
     {
-        return stringValue.Replace('.', '_');
+        return stringValue
+            .Replace('.', '_')
+            .Replace("w%2f", "With_")
+            .Replace("w%2F", "With_");
     }
 
 }

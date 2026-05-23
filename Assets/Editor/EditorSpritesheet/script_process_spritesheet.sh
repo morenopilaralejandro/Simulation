@@ -54,6 +54,6 @@ OUTPUT_DIR="/home/alejandro/unity-workspace/Simulation/Assets/Sprites/SpritesCha
 #   -p "sprite-character-armor" \
 #   -b "SpritesCharacterArmor"
 
-find "${OUTPUT_DIR}SpritesCharacterHair/" -type d -empty
+find "${OUTPUT_DIR}SpritesCharacterHair/" -type d -empty -delete
 
 echo "All sprite batches processed."

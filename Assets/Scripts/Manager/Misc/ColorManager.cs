@@ -5,6 +5,7 @@ using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Item;
 using Aremoreno.Enums.Move;
 using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.Wings;
 
 public static class ColorManager
 {
@@ -225,6 +226,77 @@ public static class ColorManager
     {
         return hairColors.TryGetValue(hairColorType, out var color)
             ? color : Color.white;
+    }
+
+    private static readonly Dictionary<WingsColorType, Color> wingsColors =
+        new Dictionary<WingsColorType, Color>()
+    {
+        { WingsColorType.Amber,         new Color(0xFB/255f, 0xE7/255f, 0xA4/255f, 1f) },
+        { WingsColorType.Ash,           new Color(0xFF/255f, 0xF1/255f, 0xC1/255f, 1f) },
+        { WingsColorType.Black,         new Color(0x4A/255f, 0x50/255f, 0x57/255f, 1f) },
+        { WingsColorType.Blonde,        new Color(0xFC/255f, 0xCF/255f, 0x56/255f, 1f) },
+        { WingsColorType.Blue,          new Color(0x1E/255f, 0x85/255f, 0xEF/255f, 1f) },
+        { WingsColorType.Bluegray,      new Color(0x79/255f, 0x97/255f, 0x9D/255f, 1f) },
+        { WingsColorType.Bright_Green,  new Color(0x99/255f, 0xD2/255f, 0x48/255f, 1f) },
+        { WingsColorType.Bronze,        new Color(0xD3/255f, 0x8B/255f, 0x59/255f, 1f) },
+        { WingsColorType.Brown,         new Color(0x9C/255f, 0x66/255f, 0x3E/255f, 1f) },
+        { WingsColorType.Carrot,        new Color(0xFF/255f, 0xB3/255f, 0x9C/255f, 1f) },
+        { WingsColorType.Ceramic,       new Color(0x7D/255f, 0x60/255f, 0x4D/255f, 1f) },
+        { WingsColorType.Chestnut,      new Color(0xD2/255f, 0x81/255f, 0x02/255f, 1f) },
+        { WingsColorType.Dark_Brown,    new Color(0x79/255f, 0x28/255f, 0x06/255f, 1f) },
+        { WingsColorType.Dark_Gray,     new Color(0x7C/255f, 0x7C/255f, 0x7C/255f, 1f) },
+        { WingsColorType.Dark_Green,    new Color(0x50/255f, 0x9E/255f, 0x59/255f, 1f) },
+        { WingsColorType.Dragonfly,     new Color(0x83/255f, 0xE5/255f, 0xF7/255f, 1f) },
+        { WingsColorType.Forest,        new Color(0x1B/255f, 0x55/255f, 0x02/255f, 1f) },
+
+        { WingsColorType.Fur_Black,     new Color(0x15/255f, 0x42/255f, 0x59/255f, 1f) },
+        { WingsColorType.Fur_Brown,     new Color(0x62/255f, 0x41/255f, 0x35/255f, 1f) },
+        { WingsColorType.Fur_Copper,    new Color(0xCC/255f, 0x69/255f, 0x01/255f, 1f) },
+        { WingsColorType.Fur_Gold,      new Color(0xFC/255f, 0xCF/255f, 0x56/255f, 1f) },
+        { WingsColorType.Fur_Grey,      new Color(0x90/255f, 0x96/255f, 0x99/255f, 1f) },
+        { WingsColorType.Fur_Tan,       new Color(0xB8/255f, 0x87/255f, 0x51/255f, 1f) },
+        { WingsColorType.Fur_White,     new Color(0xB8/255f, 0xBB/255f, 0xBC/255f, 1f) },
+
+        { WingsColorType.Ginger,        new Color(0xFA/255f, 0xA3/255f, 0x01/255f, 1f) },
+        { WingsColorType.Gold,          new Color(0xFF/255f, 0xE4/255f, 0x53/255f, 1f) },
+        { WingsColorType.Gray,          new Color(0xD9/255f, 0xD9/255f, 0xD9/255f, 1f) },
+        { WingsColorType.Green,         new Color(0x00/255f, 0xA7/255f, 0x00/255f, 1f) },
+        { WingsColorType.Iron,          new Color(0x34/255f, 0x30/255f, 0x43/255f, 1f) },
+        { WingsColorType.Lavender,      new Color(0xFB/255f, 0xEC/255f, 0xE6/255f, 1f) },
+        { WingsColorType.Light,         new Color(0xFA/255f, 0xEC/255f, 0xE7/255f, 1f) },
+        { WingsColorType.Light_Brown,   new Color(0xC8/255f, 0x8D/255f, 0x58/255f, 1f) },
+        { WingsColorType.Lunar,         new Color(0xAB/255f, 0xEA/255f, 0xA9/255f, 1f) },
+        { WingsColorType.Maroon,        new Color(0xAE/255f, 0x42/255f, 0x4A/255f, 1f) },
+        { WingsColorType.Monarch,       new Color(0xE6/255f, 0x91/255f, 0x10/255f, 1f) },
+        { WingsColorType.Navy,          new Color(0x46/255f, 0x6A/255f, 0xC9/255f, 1f) },
+        { WingsColorType.Olive,         new Color(0xE4/255f, 0xA4/255f, 0x7C/255f, 1f) },
+        { WingsColorType.Orange,        new Color(0xE5/255f, 0x56/255f, 0x00/255f, 1f) },
+        { WingsColorType.Pale_Green,    new Color(0xAD/255f, 0xCC/255f, 0xA6/255f, 1f) },
+        { WingsColorType.Pink,          new Color(0xEA/255f, 0x95/255f, 0xD5/255f, 1f) },
+        { WingsColorType.Pixie,         new Color(0x25/255f, 0xD3/255f, 0xF3/255f, 1f) },
+        { WingsColorType.Platinum,      new Color(0xF6/255f, 0xF6/255f, 0xF3/255f, 1f) },
+        { WingsColorType.Purple,        new Color(0xA9/255f, 0x66/255f, 0xDD/255f, 1f) },
+        { WingsColorType.Raven,         new Color(0x1A/255f, 0x53/255f, 0x69/255f, 1f) },
+        { WingsColorType.Red,           new Color(0xF1/255f, 0x58/255f, 0x3A/255f, 1f) },
+        { WingsColorType.Redhead,       new Color(0xE7/255f, 0x47/255f, 0x16/255f, 1f) },
+        { WingsColorType.Rose,          new Color(0xFA/255f, 0xE1/255f, 0xE5/255f, 1f) },
+        { WingsColorType.Sandy,         new Color(0xF6/255f, 0xF6/255f, 0xC2/255f, 1f) },
+        { WingsColorType.Silver,        new Color(0x81/255f, 0x8B/255f, 0x8B/255f, 1f) },
+        { WingsColorType.Sky,           new Color(0xB9/255f, 0xE3/255f, 0xF7/255f, 1f) },
+        { WingsColorType.Strawberry,    new Color(0xF6/255f, 0xF6/255f, 0xC2/255f, 1f) },
+        { WingsColorType.Taupe,         new Color(0xC7/255f, 0x93/255f, 0x5F/255f, 1f) },
+        { WingsColorType.Teal,          new Color(0x2D/255f, 0xAC/255f, 0xD9/255f, 1f) },
+        { WingsColorType.Violet,        new Color(0x57/255f, 0x92/255f, 0xF2/255f, 1f) },
+        { WingsColorType.White,         Color.white },
+        { WingsColorType.Yellow,        new Color(0xF3/255f, 0xC0/255f, 0x3F/255f, 1f) },
+        { WingsColorType.Zombie_Green,  new Color(0xF2/255f, 0xF0/255f, 0xC4/255f, 1f) }
+    };
+
+    public static Color GetWingsColor(WingsColorType wingsColorType)
+    {
+        return wingsColors.TryGetValue(wingsColorType, out var color)
+            ? color
+            : Color.white;
     }
 
     /*

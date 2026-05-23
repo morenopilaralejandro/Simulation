@@ -20,6 +20,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     [SerializeField] private SpriteRenderer bodyRenderer;
     [SerializeField] private SpriteRenderer hairFrontRenderer;
     [SerializeField] private SpriteRenderer hairBackRenderer;
+    [SerializeField] private GameObject hairFrontObject;
     [SerializeField] private GameObject hairBackObject;
 
     private CharacterEntityBattle characterEntityBattle;
@@ -134,8 +135,11 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         if (hairFrontHandle.Value.Status != AsyncOperationStatus.Succeeded)
         {
             LogManager.Error($"[CharacterComponentAppearanceBattle] Hair front load failed: {characterEntityBattle.HairFrontAddress}");
+            hairFrontObject.SetActive(false);
             return;
         }
+
+        if (!hairFrontObject.activeSelf) hairFrontObject.SetActive(true);
 
         hairFrontLibrary.spriteLibraryAsset = hairFrontHandle.Value.Result;
     }
@@ -153,6 +157,8 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
             hairBackObject.SetActive(false);
             return;
         }
+
+        if (!hairBackObject.activeSelf) hairBackObject.SetActive(true);
 
         hairBackLibrary.spriteLibraryAsset = hairBackHandle.Value.Result;
     }
