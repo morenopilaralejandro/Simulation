@@ -584,10 +584,10 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.RaiseBackFromTeamActionsRequested();
     }
 
-    private void HandleTeamEmblemChanged(string emblemId)
+    private void HandleTeamEmblemChanged(Emblem emblem)
     {
         if (!isEditMode) return;
-        currentTeam.UpdateAppearance(emblemId);
+        currentTeam.SetEmblem(emblem);
         formationLayoutUI.Initialize(currentTeam, currentBattleType, mode, false);
         UIEvents.RaiseBackFromTeamActionsRequested();
     }

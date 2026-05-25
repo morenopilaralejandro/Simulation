@@ -1,16 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class SelectorTeamEmblemSource : ISelectorSource<SelectorTeamEmblemData>
+public class SelectorTeamEmblemSource : ISelectorSource<Emblem>
 {
-    public IEnumerable<SelectorTeamEmblemData> Enumerate() 
+    public IEnumerable<Emblem> Enumerate() 
     {
-        List<SelectorTeamEmblemData> list = new ();
+        List<Emblem> list = new ();
 
-        var dict = SpriteAtlasManager.Instance.GetAllSpritesFromAtlasTeamCrest();
+        var dict = EmblemDatabase.Instance.Emblems;
 
         foreach (var kvp in dict)
-            list.Add(new SelectorTeamEmblemData(kvp.Key, kvp.Value));
+            list.Add(kvp.Value);
 
         return list;
     }

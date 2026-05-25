@@ -16,7 +16,7 @@ public static class AddressableConfig
     public const string KitPortraitPath = "portrait";
 
     [Header("Team Paths")]
-    public const string TeamCrestPath = "teams-crests";
+    public const string TeamEmblemPath = "";
 
     [Header("Path Settings")]
     public const string PathSeparator = "-";

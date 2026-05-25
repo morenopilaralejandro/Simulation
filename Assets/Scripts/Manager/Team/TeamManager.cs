@@ -56,9 +56,9 @@ public class TeamManager : MonoBehaviour
     public void SetDefaultBattleType(BattleType battleType) => loadoutSystem.SetDefaultBattleType(battleType);
     public string DEFAULT_NAME => loadoutSystem.DEFAULT_NAME;
     public const int MAX_LOADOUTS = TeamManagerLoadout.MAX_LOADOUTS;
-    public const string DEFAULT_CREST_ID = TeamManagerLoadout.DEFAULT_CREST_ID;
-    public const string TEAM_CREST_ID_COMMON = TeamManagerLoadout.TEAM_CREST_ID_COMMON;
-    public const string TEAM_CREST_ID_RARE = TeamManagerLoadout.TEAM_CREST_ID_RARE;
+    public const string DEFAULT_EMBLEM_ID = TeamManagerLoadout.DEFAULT_EMBLEM_ID;
+    public const string TEAM_EMBLEM_ID_COMMON = TeamManagerLoadout.TEAM_EMBLEM_ID_COMMON;
+    public const string TEAM_EMBLEM_ID_RARE = TeamManagerLoadout.TEAM_EMBLEM_ID_RARE;
     public const string DEFAULT_KIT_ID = TeamManagerLoadout.DEFAULT_KIT_ID;
     public const string DEFAULT_FULL_BATTLE_FORMATION_ID = TeamManagerLoadout.DEFAULT_FULL_BATTLE_FORMATION_ID;
     public const string DEFAULT_MINI_BATTLE_FORMATION_ID = TeamManagerLoadout.DEFAULT_MINI_BATTLE_FORMATION_ID;

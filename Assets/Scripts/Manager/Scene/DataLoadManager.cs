@@ -33,7 +33,8 @@ public class DataLoadManager : MonoBehaviour
         Task loadMoveEvolutionGrowthProfile = MoveEvolutionGrowthProfileManager.Instance.LoadAllMoveEvolutionGrowthProfileAsync();
         Task loadMoveEvolutionPath =  MoveEvolutionPathManager.Instance.LoadAllMoveEvolutionPathAsync();
         Task loadCharacters = CharacterDatabase.Instance.LoadAllCharacterDataAsync();
-        Task loadKits = KitManager.Instance.LoadAllKitsAsync();   
+        Task loadKits = KitManager.Instance.LoadAllKitsAsync();
+        Task loadEmblems = EmblemDatabase.Instance.LoadAllEmblemsAsync();
         Task loadScenes = SceneGroupRegistry.Instance.LoadAllSceneGroupAsync();
         Task loadNpcs = NpcManager.Instance.LoadAllNpcDataAsync();
         Task loadItems = ItemDatabase.Instance.LoadAllItemDataAsync();
@@ -48,7 +49,8 @@ public class DataLoadManager : MonoBehaviour
         await Task.WhenAll(
             loadKits, 
             loadCharacters,
-            loadFormations);
+            loadFormations,
+            loadEmblems);
         Task loadTeams = TeamDatabase.Instance.LoadAllTeamsAsync();
         // Misc
         await Task.WhenAll(

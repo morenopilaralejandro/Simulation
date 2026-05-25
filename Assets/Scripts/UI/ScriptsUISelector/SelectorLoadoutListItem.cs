@@ -10,10 +10,11 @@ public class SelectorLoadoutListItem : SelectorListItem<Team>
     [SerializeField] private Image imageEmblem;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private GameObject activeIndicator;
+    private readonly AddressableBinding<Sprite> _binding = new();
 
     protected override void OnBind(Team data)
     {
-        imageEmblem.sprite = data.TeamCrestSprite;
+        _ = SetEmblemAsync(data.Emblem.EmblemAddress);
         nameText.text = data.TeamName;
 
         bool isActive = TeamManager.Instance.ActiveLoadoutGuid == data.TeamGuid;
@@ -24,5 +25,14 @@ public class SelectorLoadoutListItem : SelectorListItem<Team>
     {
         imageEmblem.sprite = null;
         nameText.text = "";
+
+        _binding.Release();
+        _binding.Cancel();
+    }
+
+    private async System.Threading.Tasks.Task SetEmblemAsync(string teamEmblemAddress)
+    {
+        var task = _binding.LoadAsync(teamEmblemAddress);
+        imageEmblem.sprite = await task;
     }
 }

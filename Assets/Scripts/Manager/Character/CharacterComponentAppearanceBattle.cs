@@ -1,18 +1,12 @@
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.U2D.Animation;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using System;
 using System.Threading.Tasks;
-using Aremoreno.Enums.Character;
-using Aremoreno.Enums.Kit;
-using Aremoreno.Enums.SpriteLayer;
 
 public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoader
 {
     #region Fields
-    //[SerializeField] private SpriteLibrary bodySpriteLibrary;
+
     [SerializeField] private SpriteLibrary kitSpriteLibrary;
     [SerializeField] private SpriteLibrary hairFrontLibrary;
     [SerializeField] private SpriteLibrary hairBackLibrary;
@@ -20,18 +14,21 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     [SerializeField] private SpriteRenderer bodyRenderer;
     [SerializeField] private SpriteRenderer hairFrontRenderer;
     [SerializeField] private SpriteRenderer hairBackRenderer;
+
     [SerializeField] private GameObject hairFrontObject;
     [SerializeField] private GameObject hairBackObject;
 
     private CharacterEntityBattle characterEntityBattle;
-    private AsyncOperationHandle<SpriteLibraryAsset>? hairFrontHandle;
-    private AsyncOperationHandle<SpriteLibraryAsset>? hairBackHandle;
-    private AsyncOperationHandle<SpriteLibraryAsset>? kitHandle;
+
+    private readonly AddressableBinding<SpriteLibraryAsset> _kitBinding = new();
+    private readonly AddressableBinding<SpriteLibraryAsset> _hairFrontBinding = new();
+    private readonly AddressableBinding<SpriteLibraryAsset> _hairBackBinding = new();
 
     public bool IsLoaded =>
         kitSpriteLibrary.spriteLibraryAsset != null &&
         hairFrontLibrary.spriteLibraryAsset != null &&
         hairBackLibrary.spriteLibraryAsset != null;
+
     #endregion
 
     #region Initialization
@@ -43,9 +40,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     private void OnDestroy()
     {
-        ReleaseHairFront();
-        ReleaseHairBack();
-        ReleaseKit();
+        Clear();
     }
 
     #endregion
@@ -56,39 +51,29 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     {
         SetBodyColor();
         SetHairColor();
+
         await LoadHairFrontAsync();
         await LoadHairBackAsync();
+    }
+
+    public async Task AppearanceBattleLoadAsync()
+    {
+        SetBodyColor();
+        SetHairColor();
+
+        await LoadHairFrontAsync();
+        await LoadHairBackAsync();
+        await LoadKitAsync();
     }
 
     #endregion
 
     #region Body
 
-    private void SetBodyColor() 
+    private void SetBodyColor()
     {
         bodyRenderer.color = characterEntityBattle.ColorBody;
     }
-
-    /*
-    private async Task LoadBodyAsync()
-    {
-        //ReleaseBody();
-
-        string address = AddressableLoader.GetCharacterBodyAddress("chara-00001-are");
-            //AddressableLoader.GetCharacterBodyAddress(characterEntityBattle.CharacterId);
-
-        bodyHandle = Addressables.LoadAssetAsync<SpriteLibraryAsset>(address);
-        await bodyHandle.Value.Task;
-
-        if (bodyHandle.Value.Status != AsyncOperationStatus.Succeeded)
-        {
-            LogManager.Error($"[CharacterComponentAppearanceBattle] Body load failed: {address}");
-            return;
-        }
-
-        //bodySpriteLibrary.spriteLibraryAsset = bodyHandle.Value.Result;
-    }
-    */
 
     #endregion
 
@@ -96,22 +81,19 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     public async Task LoadKitAsync()
     {
-        ReleaseKit();
+        kitSpriteLibrary.spriteLibraryAsset = null;
 
-        kitHandle = Addressables.LoadAssetAsync<SpriteLibraryAsset>(characterEntityBattle.KitAddress);
-        await kitHandle.Value.Task;
+        SpriteLibraryAsset asset =
+            await _kitBinding.LoadAsync(characterEntityBattle.KitAddress);
 
-        if (kitHandle.Value.Status != AsyncOperationStatus.Succeeded)
+        if (asset == null)
         {
             LogManager.Error($"[CharacterComponentAppearanceBattle] Kit load failed: {characterEntityBattle.KitAddress}");
             return;
         }
 
-        kitSpriteLibrary.spriteLibraryAsset = kitHandle.Value.Result;
-        // play animation so that the new library is applied with the resolver
-        //characterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Slash, Vector2.left);
-        //characterEntityBattle.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
-        //characterEntityBattle.Play(Aremoreno.Enums.Animation.CharacterAnimationState.Idle, characterEntityBattle.FormationDirection);
+        kitSpriteLibrary.spriteLibraryAsset = asset;
+
         characterEntityBattle.RefreshAnimation();
     }
 
@@ -119,7 +101,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     #region Hair
 
-    private void SetHairColor() 
+    private void SetHairColor()
     {
         hairFrontRenderer.color = characterEntityBattle.ColorHair;
         hairBackRenderer.color = characterEntityBattle.ColorHair;
@@ -127,99 +109,63 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     private async Task LoadHairFrontAsync()
     {
-        ReleaseHairFront();
+        hairFrontLibrary.spriteLibraryAsset = null;
 
-        hairFrontHandle = Addressables.LoadAssetAsync<SpriteLibraryAsset>(characterEntityBattle.HairFrontAddress);
-        await hairFrontHandle.Value.Task;
+        SpriteLibraryAsset asset =
+            await _hairFrontBinding.LoadOptionalAsync(characterEntityBattle.HairFrontAddress);
 
-        if (hairFrontHandle.Value.Status != AsyncOperationStatus.Succeeded)
+        if (asset == null)
         {
             LogManager.Error($"[CharacterComponentAppearanceBattle] Hair front load failed: {characterEntityBattle.HairFrontAddress}");
+
             hairFrontObject.SetActive(false);
             return;
         }
 
-        if (!hairFrontObject.activeSelf) hairFrontObject.SetActive(true);
+        if (!hairFrontObject.activeSelf)
+            hairFrontObject.SetActive(true);
 
-        hairFrontLibrary.spriteLibraryAsset = hairFrontHandle.Value.Result;
+        hairFrontLibrary.spriteLibraryAsset = asset;
     }
 
     private async Task LoadHairBackAsync()
     {
-        ReleaseHairBack();
+        hairBackLibrary.spriteLibraryAsset = null;
 
-        hairBackHandle = Addressables.LoadAssetAsync<SpriteLibraryAsset>(characterEntityBattle.HairBackAddress);
-        await hairBackHandle.Value.Task;
+        SpriteLibraryAsset asset =
+            await _hairBackBinding.LoadOptionalAsync(characterEntityBattle.HairBackAddress);
 
-        if (hairBackHandle.Value.Status != AsyncOperationStatus.Succeeded)
+        if (asset == null)
         {
             LogManager.Trace($"[CharacterComponentAppearanceBattle] Hair back load failed: {characterEntityBattle.HairBackAddress}");
+
             hairBackObject.SetActive(false);
             return;
         }
 
-        if (!hairBackObject.activeSelf) hairBackObject.SetActive(true);
+        if (!hairBackObject.activeSelf)
+            hairBackObject.SetActive(true);
 
-        hairBackLibrary.spriteLibraryAsset = hairBackHandle.Value.Result;
+        hairBackLibrary.spriteLibraryAsset = asset;
     }
 
     #endregion
 
-    #region Helpers
+    #region Cleanup
 
-    /*
-    private void ReleaseBody()
-    {
-        bodySpriteLibrary.spriteLibraryAsset = null;
-
-        if (bodyHandle.HasValue)
-        {
-            Addressables.Release(bodyHandle.Value);
-            bodyHandle = null;
-        }
-    }
-    */
-
-    private void ReleaseKit()
+    public void Clear()
     {
         kitSpriteLibrary.spriteLibraryAsset = null;
-
-        if (kitHandle.HasValue)
-        {
-            Addressables.Release(kitHandle.Value);
-            kitHandle = null;
-        }
-    }
-
-    private void ReleaseHairFront()
-    {
         hairFrontLibrary.spriteLibraryAsset = null;
-
-        if (hairFrontHandle.HasValue)
-        {
-            Addressables.Release(hairFrontHandle.Value);
-            hairFrontHandle = null;
-        }
-    }
-
-    private void ReleaseHairBack()
-    {
         hairBackLibrary.spriteLibraryAsset = null;
 
-        if (hairBackHandle.HasValue)
-        {
-            Addressables.Release(hairBackHandle.Value);
-            hairBackHandle = null;
-        }
-    }
+        _kitBinding.Release();
+        _hairFrontBinding.Release();
+        _hairBackBinding.Release();
 
-    public async Task AppearanceBattleLoadAsync() 
-    {
-        await LoadHairFrontAsync();
-        await LoadHairBackAsync();
-        await LoadKitAsync();
-        SetBodyColor();
-        SetHairColor();
+        _kitBinding.Cancel();
+        _hairFrontBinding.Cancel();
+        _hairBackBinding.Cancel();
     }
 
     #endregion

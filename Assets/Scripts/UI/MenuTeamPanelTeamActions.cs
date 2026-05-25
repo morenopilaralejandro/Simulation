@@ -46,7 +46,7 @@ public class MenuTeamPanelTeamActions : Menu
 
     public void OnButtonChangeEmblemClicked() 
     {
-        UIEvents.RaiseTeamPanelEmblemOpened(team.TeamCrestSprite);
+        UIEvents.RaiseTeamPanelEmblemOpened(team.Emblem);
     }
 
     public void OnButtonChangeBattleTypeClicked() 

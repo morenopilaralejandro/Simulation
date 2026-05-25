@@ -17,7 +17,7 @@ public class FormationLayoutUI : MonoBehaviour
     [SerializeField] private RectTransform benchArea;
     [SerializeField] private RectTransform dragLayer;
     [SerializeField] private TMP_Text textTeamName;
-    [SerializeField] private Image imageTeamCrest;
+    [SerializeField] private Image imageTeamEmblem;
     [SerializeField] private bool canDrag = true;
 
     [Header("Pitch Padding")]
@@ -35,6 +35,8 @@ public class FormationLayoutUI : MonoBehaviour
 
     private TeamManager teamManager;
     private List<Character> teamRoster;
+
+    private readonly AddressableBinding<Sprite> _binding = new();
 
     #endregion
 
@@ -64,7 +66,7 @@ public class FormationLayoutUI : MonoBehaviour
             teamRoster = teamManager.ResolveCharactersFromBattle(team, battleType);
 
         textTeamName.text = team.TeamName;
-        imageTeamCrest.sprite = team.TeamCrestSprite;
+        _ = SetEmblemAsync(team.Emblem.EmblemAddress);
         currentKit = team.Kit;
         currentVariant = team.Variant;
         this.showDefaultSelected = showDefaultSelected;
@@ -89,6 +91,12 @@ public class FormationLayoutUI : MonoBehaviour
         currentKit = kit;
         this.showDefaultSelected = showDefaultSelected;
         RebuildLayout();
+    }
+
+    private async System.Threading.Tasks.Task SetEmblemAsync(string teamEmblemAddress)
+    {
+        var task = _binding.LoadAsync(teamEmblemAddress);
+        imageTeamEmblem.sprite = await task;
     }
 
     #endregion
@@ -215,7 +223,10 @@ public class FormationLayoutUI : MonoBehaviour
 
         // Clear UI references that hold asset data
         if (textTeamName != null) textTeamName.text = string.Empty;
-        if (imageTeamCrest != null) imageTeamCrest.sprite = null;
+        if (imageTeamEmblem != null) imageTeamEmblem.sprite = null;
+
+        _binding.Release();
+        _binding.Cancel();
     }
 
     #endregion

@@ -215,27 +215,27 @@ public static class UIEvents
         OnTeamNameChanged?.Invoke(teamName);
     }
 
-    public static event Action<Sprite> OnTeamPanelEmblemOpened;
-    public static void RaiseTeamPanelEmblemOpened(Sprite emblemSprite)
+    public static event Action<Emblem> OnTeamPanelEmblemOpened;
+    public static void RaiseTeamPanelEmblemOpened(Emblem emblem)
     {
-        OnTeamPanelEmblemOpened?.Invoke(emblemSprite);
+        OnTeamPanelEmblemOpened?.Invoke(emblem);
     }
 
     public static event System.Action<
-        ISelectorSource<SelectorTeamEmblemData>,
-        ISelectorClickAction<SelectorTeamEmblemData>,
-        ISelectorFilter<SelectorTeamEmblemData>
+        ISelectorSource<Emblem>,
+        ISelectorClickAction<Emblem>,
+        ISelectorFilter<Emblem>
     > OnTeamEmblemSelectorOpenRequested;
     public static void RaiseTeamEmblemSelectorOpenRequested(
-        ISelectorSource<SelectorTeamEmblemData>      source,
-        ISelectorClickAction<SelectorTeamEmblemData> action,
-        ISelectorFilter<SelectorTeamEmblemData>      filter = null)
+        ISelectorSource<Emblem>      source,
+        ISelectorClickAction<Emblem> action,
+        ISelectorFilter<Emblem>      filter = null)
     => OnTeamEmblemSelectorOpenRequested?.Invoke(source, action, filter);
 
-    public static event Action<string> OnTeamEmblemChanged;
-    public static void RaiseTeamEmblemChanged(string emblemId)
+    public static event Action<Emblem> OnTeamEmblemChanged;
+    public static void RaiseTeamEmblemChanged(Emblem emblem)
     {
-        OnTeamEmblemChanged?.Invoke(emblemId);
+        OnTeamEmblemChanged?.Invoke(emblem);
     }
 
     public static event Action<Character> OnCharacterDetailOpenRequested;
@@ -463,10 +463,10 @@ public static class UIEvents
         OnSelectorItemStorageSlotSideActionClicked?.Invoke(itemStorageSlot);
     }
 
-    public static event Action<SelectorTeamEmblemData> OnSelectorTeamEmblemActionClicked;
-    public static void RaiseSelectorTeamEmblemActionClicked(SelectorTeamEmblemData selectorTeamEmblemData)
+    public static event Action<Emblem> OnSelectorTeamEmblemActionClicked;
+    public static void RaiseSelectorTeamEmblemActionClicked(Emblem emblem)
     {
-        OnSelectorTeamEmblemActionClicked?.Invoke(selectorTeamEmblemData);
+        OnSelectorTeamEmblemActionClicked?.Invoke(emblem);
     }
 
     public static event Action<Team> OnSelectorLoadoutActionClicked;

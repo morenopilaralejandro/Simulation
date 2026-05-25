@@ -3,7 +3,7 @@ using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.Input;
 
-public class SelectorTeamEmblem : Selector<SelectorTeamEmblemData, SelectorTeamEmblemListItem>
+public class SelectorTeamEmblem : Selector<Emblem, SelectorTeamEmblemListItem>
 {
     #region Fields 
 
@@ -37,7 +37,7 @@ public class SelectorTeamEmblem : Selector<SelectorTeamEmblemData, SelectorTeamE
 
     #region Bind
 
-    protected override void Bind(SelectorTeamEmblemListItem view, SelectorTeamEmblemData data)
+    protected override void Bind(SelectorTeamEmblemListItem view, Emblem data)
     {
         // extra logic here
 
@@ -86,9 +86,9 @@ public class SelectorTeamEmblem : Selector<SelectorTeamEmblemData, SelectorTeamE
     }
 
     private void HandleOpenRequested(
-        ISelectorSource<SelectorTeamEmblemData>      source,
-        ISelectorClickAction<SelectorTeamEmblemData> action,
-        ISelectorFilter<SelectorTeamEmblemData>      filter)
+        ISelectorSource<Emblem>      source,
+        ISelectorClickAction<Emblem> action,
+        ISelectorFilter<Emblem>      filter)
     {
         if (MenuManager.Instance.IsMenuOpen(this)) return;
 

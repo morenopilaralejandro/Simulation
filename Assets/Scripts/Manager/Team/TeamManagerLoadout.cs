@@ -32,9 +32,9 @@ public class TeamManagerLoadout
     public string DEFAULT_NAME = "custom team";
     public const int MAX_LOADOUTS = 10;
 
-    public const string DEFAULT_CREST_ID = "faith_selection";
-    public const string TEAM_CREST_ID_COMMON = "generic_common";
-    public const string TEAM_CREST_ID_RARE = "generic_rare";
+    public const string DEFAULT_EMBLEM_ID = "faith_selection";
+    public const string TEAM_EMBLEM_ID_COMMON = "generic_common";
+    public const string TEAM_EMBLEM_ID_RARE = "generic_rare";
     public const string DEFAULT_KIT_ID = "faith";
     public const string DEFAULT_FULL_BATTLE_FORMATION_ID = "faith";
     public const string DEFAULT_MINI_BATTLE_FORMATION_ID = "offense";

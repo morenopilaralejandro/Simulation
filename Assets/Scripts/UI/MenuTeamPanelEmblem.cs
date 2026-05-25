@@ -10,8 +10,14 @@ public class MenuTeamPanelEmblem : Menu
 {
     [Header("UI References")]
     [SerializeField] private Image imageEmblem;
+    private readonly AddressableBinding<Sprite> _binding = new();
+    private Emblem selectedEmblem;
 
-    private string selectedId;
+    public override void Hide() 
+    {
+        _binding.Release();
+        _binding.Cancel();
+    }
 
     protected override void OnGainedInput()
         => InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonCancelClicked);
@@ -31,8 +37,8 @@ public class MenuTeamPanelEmblem : Menu
     public void OnButtonConfirmClicked()
     {
         AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
-        if (selectedId != null)
-            UIEvents.RaiseTeamEmblemChanged(selectedId);
+        if (selectedEmblem != null)
+            UIEvents.RaiseTeamEmblemChanged(selectedEmblem);
         RequestClose();
     }
 
@@ -55,16 +61,22 @@ public class MenuTeamPanelEmblem : Menu
         UIEvents.OnSelectorTeamEmblemActionClicked -= HandleSelectorTeamEmblemActionClicked;
     }
 
-    private void HandleTeamPanelEmblemOpened(Sprite emblemSprite)
+    private void HandleTeamPanelEmblemOpened(Emblem emblem)
     {
-        imageEmblem.sprite = emblemSprite;
-        selectedId = null;
+        _ = SetEmblemAsync(emblem);
+        selectedEmblem = null;
         MenuManager.Instance.OpenMenu(this);
     }
 
-    private void HandleSelectorTeamEmblemActionClicked(SelectorTeamEmblemData data)
+    private void HandleSelectorTeamEmblemActionClicked(Emblem emblem)
     {
-        selectedId = data.EmblemId;
-        imageEmblem.sprite = data.EmblemSprite;
+        selectedEmblem = emblem;
+        _ = SetEmblemAsync(emblem);
+    }
+
+    private async System.Threading.Tasks.Task SetEmblemAsync(Emblem emblem)
+    {
+        var task = _binding.LoadAsync(emblem.EmblemAddress);
+        imageEmblem.sprite = await task;
     }
 }
