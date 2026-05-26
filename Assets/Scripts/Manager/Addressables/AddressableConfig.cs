@@ -18,6 +18,9 @@ public static class AddressableConfig
     [Header("Team Paths")]
     public const string TeamEmblemPath = "";
 
+    [Header("Move Paths")]
+    public const string MoveEvolutionPath = "evolution";
+
     [Header("Path Settings")]
     public const string PathSeparator = "-";
     public const string SubSeparator = "_";

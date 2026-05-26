@@ -167,7 +167,7 @@ public static class AddressableLoader
 
     public static string GetKitBodyAddress(string kitId, string variant, string role) =>
         $"{AddressableConfig.KitBodyPath}{AddressableConfig.PathSeparator}{kitId}{AddressableConfig.PathSeparator}{variant}{AddressableConfig.PathSeparator}{role}";
-   
+
     public static string GetKitPortraitAddress(
         string kitId,
         Variant variant,
@@ -207,6 +207,9 @@ public static class AddressableLoader
     */
 
     public static string GetTeamEmblemAddress(string id) => $"{id}";
+
+    public static string GetMoveEvolutionAddress(string id, string languageCode, string localizationSyle) =>
+        $"{AddressableConfig.MoveEvolutionPath}{AddressableConfig.PathSeparator}{id}{AddressableConfig.PathSeparator}{languageCode}{AddressableConfig.PathSeparator}{localizationSyle}";
 
     public static string GetItemIconAddress(string id) =>
         $"{AddressableConfig.ItemIconPath}{AddressableConfig.PathSeparator}{id}";

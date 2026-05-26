@@ -44,6 +44,9 @@ public class BoundOut : MonoBehaviour
 
         audioManager.PlaySfx("sfx-whistle_single");
 
+        BattleManager.Instance.Ball.CancelTravel();
+        DuelManager.Instance.CancelDuel();
+
         battleManager.Freeze();
         var ball = battleManager.Ball;
         deadBallManager.SetBallPosition(ball.transform.position);

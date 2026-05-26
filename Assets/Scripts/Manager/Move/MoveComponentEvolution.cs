@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Localization.Settings;
 using System.Collections.Generic;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Move;
@@ -9,15 +10,17 @@ public class MoveComponentEvolution
     private Move move;
     private MoveEvolutionGrowthProfile growthProfile;
     private MoveEvolutionPath path;
-    private LocalizationComponentAsset<Sprite> assetLocalizationComponent;
+    //private LocalizationComponentAsset<Sprite> assetLocalizationComponent;
     
     public MoveEvolution CurrentEvolution { get; private set; }
     public GrowthType GrowthType { get; private set; }
     public GrowthRate GrowthRate { get; private set; }
-    public Sprite EvolutionSprite { get; private set; }
+    public string EvolutionAddress { get; private set; }
 
     public int TimesUsedTotal { get; private set; }
     public int TimesUsedCurrentEvolution { get; private set; }
+
+    private static readonly string EmptyAddress = string.Empty;
 
     public MoveComponentEvolution(MoveData moveData, Move move, MoveSaveData moveSaveData = null)
     {
@@ -112,22 +115,34 @@ public class MoveComponentEvolution
         UpdateLocalization();
     }
 
-    private async void UpdateLocalization()
+    private void UpdateLocalization()
     {
-        if(this.CurrentEvolution == MoveEvolution.None)
+        if (CurrentEvolution == MoveEvolution.None)
         {
-            this.assetLocalizationComponent = null;
-            this.EvolutionSprite = null;
+            EvolutionAddress = EmptyAddress;
             return;
         }
 
-        this.assetLocalizationComponent = new LocalizationComponentAsset<Sprite>(
-            LocalizationEntity.Move,
-            this.CurrentEvolution.ToString().ToLower(),
-            new[] { LocalizationField.Evolution }
+        MoveEvolution evolution = CurrentEvolution;
+        var locale = LocalizationSettings.SelectedLocale;
+        var settings = SettingsManager.Instance.CurrentSettings;
+        string type = GrowthType.ToString().ToLowerInvariant();
+        string evolutionId = evolution.ToString().ToLowerInvariant();
+        string localizationCode = locale.Identifier.Code.ToLowerInvariant();
+        string localizationStyle = settings.CurrentLocalizationStyle.ToString().ToLowerInvariant();
+        int numCode = path.GetEvolutionIndex(evolution);
+
+        string id = string.Concat(
+            type, "-",
+            numCode.ToString(), "-",
+            evolutionId
         );
 
-        this.EvolutionSprite = await assetLocalizationComponent.GetAssetAsync(LocalizationField.Evolution);
+        EvolutionAddress = AddressableLoader.GetMoveEvolutionAddress(
+            id,
+            localizationCode,
+            localizationStyle
+        );
     }
 
 }

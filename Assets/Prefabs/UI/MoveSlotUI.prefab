@@ -451,6 +451,7 @@ GameObject:
   - component: {fileID: 7072892331430439409}
   - component: {fileID: 6264512505663370890}
   - component: {fileID: 1139559470394215681}
+  - component: {fileID: 2639996836295472601}
   m_Layer: 5
   m_Name: MoveSlotUI
   m_TagString: Untagged
@@ -586,11 +587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageBlock: {fileID: 5347738168885823873}
-  imageCategoty: {fileID: 2900549945718389839}
-  imageTrait: {fileID: 730373203949914404}
-  imageEvolution: {fileID: 2027523349619146466}
-  textName: {fileID: 4590774313050794094}
-  textCost: {fileID: 191028880697657699}
+  moveUI: {fileID: 2639996836295472601}
   button: {fileID: 4365400252945568042}
   canvasGroup: {fileID: 96007751632855889}
   rectTransform: {fileID: 8515811080977998032}
@@ -654,6 +651,24 @@ MonoBehaviour:
   dropSoundId: 
   selectSoundId: sfx-menu_selected
   submitSoundId: sfx-menu_tap
+--- !u!114 &2639996836295472601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934353217105782246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8893d2088df2239ecbdd30341d2e956f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageCategoty: {fileID: 2900549945718389839}
+  imageTrait: {fileID: 730373203949914404}
+  imageEvolution: {fileID: 2027523349619146466}
+  textName: {fileID: 4590774313050794094}
+  textCost: {fileID: 191028880697657699}
+  isNameRecolor: 1
 --- !u!1 &5986503652652892794
 GameObject:
   m_ObjectHideFlags: 0

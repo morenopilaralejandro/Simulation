@@ -7,13 +7,26 @@ public class MoveCutscenePanel : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI textMoveName;
-    [SerializeField] private GameObject imageEvolutionGo;
-    [SerializeField] private Image imageEvolution;
+    [SerializeField] private GameObject imageEvolutionGoBefore;
+    [SerializeField] private GameObject imageEvolutionGoAfter;
+    [SerializeField] private Image imageEvolutionBefore;
+    [SerializeField] private Image imageEvolutionAfter;
     [SerializeField] private CanvasGroup canvasGroup;
+
+    private readonly AddressableBinding<Sprite> _bindingEvolution = new();
+    private MoveEvolution _cachedEvolution = MoveEvolution.None;
 
     private void Awake() 
     {
         SetVisible(false);
+        imageEvolutionGoBefore.SetActive(false);
+        imageEvolutionGoAfter.SetActive(false);
+    }
+
+    private void OnDestroy() 
+    {
+        _bindingEvolution.Release();
+        _bindingEvolution.Cancel();
     }
 
     private void OnEnable()
@@ -63,13 +76,46 @@ public class MoveCutscenePanel : MonoBehaviour
         textMoveName.text = move.MoveName;
         textMoveName.color = ColorManager.GetElementColor(move.Element);
 
+        if(move.CurrentEvolution == _cachedEvolution) return;
+
+        _cachedEvolution = move.CurrentEvolution;
+
         if(move.CurrentEvolution == MoveEvolution.None) 
         {
-            imageEvolutionGo.SetActive(false);
+            imageEvolutionGoBefore.SetActive(false);
+            imageEvolutionGoAfter.SetActive(false);
         } else 
         {
-            imageEvolutionGo.SetActive(true);
-            imageEvolution.sprite = move.EvolutionSprite;
+            SetEvolution(move);
         }
+    }
+
+    private void SetEvolution(Move move) 
+    {
+        if (IsBefore(move.CurrentEvolution)) 
+        {
+            _ = SetEvolutionAsync(move.EvolutionAddress, imageEvolutionBefore);
+            imageEvolutionGoBefore.SetActive(true);
+            imageEvolutionGoAfter.SetActive(false);
+        } else 
+        {
+            _ = SetEvolutionAsync(move.EvolutionAddress, imageEvolutionAfter);
+            imageEvolutionGoAfter.SetActive(true);
+            imageEvolutionGoBefore.SetActive(false);
+        }
+    }
+
+    private bool IsBefore(MoveEvolution moveEvolution) => 
+        moveEvolution == MoveEvolution.Ura ||
+        moveEvolution == MoveEvolution.Galaxy ||
+        moveEvolution == MoveEvolution.Legend;
+
+    // -------------------------
+    // Address
+    // -------------------------
+    private async System.Threading.Tasks.Task SetEvolutionAsync(string address, Image imageEvolution)
+    {
+        var task = _bindingEvolution.LoadAsync(address);
+        imageEvolution.sprite = await task;
     }
 }

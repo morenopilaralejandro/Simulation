@@ -10,16 +10,23 @@ public class CharacterPortraitBattle : MonoBehaviour
     private readonly AddressableBinding<Sprite> _characterBinding = new();
     private readonly AddressableBinding<Sprite> _kitBinding = new();
 
+    private int _setVersion;
+
     public async Task SetCharacterAsync(Character character)
     {
-        var portraitTask =
-            _characterBinding.LoadAsync(character.PortraitCharacterAddress);
+        int version = ++_setVersion;
 
-        var kitTask =
-            _kitBinding.LoadAsync(character.PortraitKitAddress);
+        var portraitTask = _characterBinding.LoadAsync(character.PortraitCharacterAddress);
 
-        imageCharacterPortrait.sprite = await portraitTask;
-        imageKitPortrait.sprite = await kitTask;
+        var kitTask = _kitBinding.LoadAsync(character.PortraitKitAddress);
+
+        var portrait = await portraitTask;
+        var kit = await kitTask;
+
+        if (version != _setVersion) return;
+
+        imageCharacterPortrait.sprite = portrait;
+        imageKitPortrait.sprite = kit;
     }
 
     public void Clear()
@@ -32,6 +39,8 @@ public class CharacterPortraitBattle : MonoBehaviour
 
         _characterBinding.Cancel();
         _kitBinding.Cancel();
+
+        _setVersion++;
     }
 
     private void OnDestroy()
