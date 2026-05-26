@@ -7,7 +7,7 @@ public class TeamSaveData
     public string TeamGuid;
     public bool IsCustomLoadout;
     public string CustomName;
-    public string CustomCrestId;
+    public string CustomEmblemId;
     public string CustomKitId;
     public string CustomFullBattleFormationId;
     public List<string> CustomFullBattleCharacterGuids;

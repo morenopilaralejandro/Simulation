@@ -10,7 +10,8 @@ public class Team
     #region Components
     private TeamComponentAttributes attributesComponent;
     private LocalizationComponentString localizationStringComponent;
-    private TeamComponentAppearance appearanceComponent;
+    //private TeamComponentAppearance appearanceComponent;
+    private TeamComponentEmblem emblemComponent;
     private TeamComponentFormation formationComponent;
     private TeamComponentKit kitComponent;
     private TeamComponentLevels levelsComponent;
@@ -39,7 +40,8 @@ public class Team
             );
         }
 
-        appearanceComponent = new TeamComponentAppearance(teamData, this, teamSaveData);
+        //appearanceComponent = new TeamComponentAppearance(teamData, this, teamSaveData);
+        emblemComponent = new TeamComponentEmblem(teamData, this, teamSaveData);
         formationComponent = new TeamComponentFormation(teamData, this, teamSaveData);
         kitComponent = new TeamComponentKit(teamData, this, teamSaveData);
         levelsComponent = new TeamComponentLevels(teamData, this);
@@ -65,9 +67,14 @@ public class Team
             CustomName : 
             localizationStringComponent.GetString(LocalizationField.Name);
     //appearanceComponent
-    public Sprite TeamCrestSprite => appearanceComponent.TeamCrestSprite;
-    public string TeamCrestId => appearanceComponent.TeamCrestId;
-    public void UpdateAppearance(string teamCrestId) => appearanceComponent.UpdateAppearance(teamCrestId); 
+    //public string TeamEmblemId => appearanceComponent.TeamEmblemId;
+    //public string TeamEmblemAddress => appearanceComponent.TeamEmblemAddress;
+    //public void UpdateAppearance(string teamEmblemId) => appearanceComponent.UpdateAppearance(teamEmblemId);
+
+    //emblemComponent
+    public Emblem Emblem => emblemComponent.Emblem;
+    public void SetEmblem(Emblem emblem) => emblemComponent.SetEmblem(emblem);
+
     //formationComponent
     public Formation FullBattleFormation => formationComponent.FullBattleFormation;
     public Formation MiniBattleFormation => formationComponent.MiniBattleFormation;

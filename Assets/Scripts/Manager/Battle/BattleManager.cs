@@ -163,7 +163,7 @@ public class BattleManager : MonoBehaviour
 
         foreach (Team team in Teams.Values)
         {
-            BattleUIManager.Instance.SetTeam(team);
+            _ = BattleUIManager.Instance.SetTeamAsync(team);
             PopulateTeamWithCharacters(team, CurrentTeamSize);
         }
     }

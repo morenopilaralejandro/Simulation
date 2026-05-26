@@ -6,6 +6,7 @@ public class TeamData : ScriptableObject
 {
     public string TeamId;
     public string KitId;
+    public string EmblemId;
     public int Lv;
 
     public string FullBattleFormationId;

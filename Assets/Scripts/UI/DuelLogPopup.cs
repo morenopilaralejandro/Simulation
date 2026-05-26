@@ -17,6 +17,13 @@ public class DuelLogPopup : MonoBehaviour
     [SerializeField] private Image imageBackground;
 
     public float SpawnTime { get; private set; }
+    private readonly AddressableBinding<Sprite> _bindingEvolution = new();
+
+    private void OnDestroy() 
+    {
+        _bindingEvolution.Release();
+        _bindingEvolution.Cancel();
+    }
 
     private void Configure(DuelLogEntry entry)
     {
@@ -24,9 +31,13 @@ public class DuelLogPopup : MonoBehaviour
         if (entry.Character != null)
             _ = characterPortrait.SetCharacterAsync(entry.Character);
         if (entry.Move != null && entry.Move.CurrentEvolution != MoveEvolution.None) 
-        {
-            imageEvolution.sprite = entry.Move.EvolutionSprite;
-        }
+            _ = SetEvolutionAsync(entry.Move.EvolutionAddress);
+    }
+
+    private async System.Threading.Tasks.Task SetEvolutionAsync(string address)
+    {
+        var task = _bindingEvolution.LoadAsync(address);
+        imageEvolution.sprite = await task;
     }
 
     private void UpdateActivePanels(DuelLogEntry entry)

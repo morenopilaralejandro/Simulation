@@ -42,7 +42,7 @@ public class TeamComponentPersistence
             TeamGuid = team.TeamGuid,
             IsCustomLoadout = team.IsCustomLoadout,
             CustomName = team.CustomName,
-            CustomCrestId = team.TeamCrestId,
+            CustomEmblemId = team.Emblem.EmblemId,
             CustomKitId = team.Kit.KitId,
             CustomFullBattleFormationId = team.FullBattleFormation.FormationId,
             CustomFullBattleCharacterGuids = team.FullBattleCharacterGuids,

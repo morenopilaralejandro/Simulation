@@ -1,57 +1,32 @@
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using Aremoreno.Enums.Character;
 
 public class CharacterPortraitBattle : MonoBehaviour
 {
-    [Header("UI")]
     [SerializeField] private Image imageCharacterPortrait;
     [SerializeField] private Image imageKitPortrait;
 
-    private int _version;
+    private readonly AddressableBinding<Sprite> _characterBinding = new();
+    private readonly AddressableBinding<Sprite> _kitBinding = new();
 
-    private AsyncOperationHandle<Sprite>? _characterHandle;
-    private AsyncOperationHandle<Sprite>? _kitHandle;
+    private int _setVersion;
 
     public async Task SetCharacterAsync(Character character)
     {
-        int version = ++_version;
+        int version = ++_setVersion;
 
-        ReleaseHandles();
+        var portraitTask = _characterBinding.LoadAsync(character.PortraitCharacterAddress);
 
-        _characterHandle = Addressables.LoadAssetAsync<Sprite>(character.PortraitCharacterAddress);
-        _kitHandle = Addressables.LoadAssetAsync<Sprite>(character.PortraitKitAddress);
+        var kitTask = _kitBinding.LoadAsync(character.PortraitKitAddress);
 
-        await _characterHandle.Value.Task;
-        await _kitHandle.Value.Task;
+        var portrait = await portraitTask;
+        var kit = await kitTask;
 
-        if (version != _version)
-            return;
+        if (version != _setVersion) return;
 
-        imageCharacterPortrait.sprite =
-            _characterHandle.Value.Status == AsyncOperationStatus.Succeeded
-                ? _characterHandle.Value.Result
-                : null;
-
-        imageKitPortrait.sprite =
-            _kitHandle.Value.Status == AsyncOperationStatus.Succeeded
-                ? _kitHandle.Value.Result
-                : null;
-    }
-
-    private void ReleaseHandles()
-    {
-        if (_characterHandle.HasValue && _characterHandle.Value.IsValid())
-            Addressables.Release(_characterHandle.Value);
-
-        if (_kitHandle.HasValue && _kitHandle.Value.IsValid())
-            Addressables.Release(_kitHandle.Value);
-
-        _characterHandle = null;
-        _kitHandle = null;
+        imageCharacterPortrait.sprite = portrait;
+        imageKitPortrait.sprite = kit;
     }
 
     public void Clear()
@@ -59,8 +34,13 @@ public class CharacterPortraitBattle : MonoBehaviour
         imageCharacterPortrait.sprite = null;
         imageKitPortrait.sprite = null;
 
-        ReleaseHandles();
-        _version++;
+        _characterBinding.Release();
+        _kitBinding.Release();
+
+        _characterBinding.Cancel();
+        _kitBinding.Cancel();
+
+        _setVersion++;
     }
 
     private void OnDestroy()

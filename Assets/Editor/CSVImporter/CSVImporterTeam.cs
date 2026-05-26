@@ -32,6 +32,7 @@ public class CSVImporterTeam
 
         int teamIdIndex = System.Array.IndexOf(headers, "TeamId");
         int kitIdIndex = System.Array.IndexOf(headers, "KitId");
+        int emblemIdIndex = System.Array.IndexOf(headers, "EmblemId");
         int lvIndex = System.Array.IndexOf(headers, "Lv");
         
         // Full Battle fields
@@ -69,6 +70,7 @@ public class CSVImporterTeam
 
             teamData.TeamId = values[teamIdIndex].Trim();
             teamData.KitId = values[kitIdIndex].Trim();
+            teamData.EmblemId = values[emblemIdIndex].Trim();
             teamData.Lv = int.Parse(values[lvIndex].Trim());
             
             // Full Battle data

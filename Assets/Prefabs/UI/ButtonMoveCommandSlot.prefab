@@ -431,6 +431,7 @@ GameObject:
   - component: {fileID: 3867775298042161668}
   - component: {fileID: 4910761000303720637}
   - component: {fileID: 1178178189286565754}
+  - component: {fileID: 3233417045682657135}
   m_Layer: 5
   m_Name: ButtonMoveCommandSlot
   m_TagString: Untagged
@@ -555,7 +556,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e3cb91b03ccbf547964a198ce23df3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textName: {fileID: 7130879090902639159}
-  textCost: {fileID: 3436741626433361099}
+  moveUI: {fileID: 3233417045682657135}
+--- !u!114 &3233417045682657135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9202780684474119342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8893d2088df2239ecbdd30341d2e956f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageCategoty: {fileID: 0}
   imageTrait: {fileID: 8632153704490620065}
   imageEvolution: {fileID: 6467125820230415558}
+  textName: {fileID: 7130879090902639159}
+  textCost: {fileID: 3436741626433361099}
+  isNameRecolor: 1

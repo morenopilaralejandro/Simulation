@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using TMPro;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Battle;
@@ -138,10 +141,9 @@ public class BattleUIManager : MonoBehaviour
     #endregion
 
     #region Scoreboard
-    public void SetTeam(Team team)
+    public async Task SetTeamAsync(Team team)
     {
-        if (battleScoreboard != null) 
-            battleScoreboard.SetTeam(team);
+        if (battleScoreboard != null) await battleScoreboard.SetTeamAsync(team);
     }
 
     public void UpdateScoreDisplay(Team team, int newScore)

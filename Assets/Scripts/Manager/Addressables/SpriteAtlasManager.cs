@@ -101,8 +101,8 @@ public class SpriteAtlasManager : MonoBehaviour
     public Task<Sprite> GetTeamCrest(string id)
     {
         var atlasId = TEAM_CREST_ATLAS_ID;
-        var spriteId = AddressableLoader.GetTeamCrestAddress(id);
-        return GetSpriteAsync(atlasId, spriteId);
+        //var spriteId = AddressableLoader.GetTeamCrestAddress(id);
+        return GetSpriteAsync(atlasId, null);
     }
 
     public Task<Sprite> GetCharacterPortrait(string id)

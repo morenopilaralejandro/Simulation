@@ -99,7 +99,7 @@ public class MenuBattleDimensionAction : Menu
 
         openedFrame = Time.frameCount;
 
-        MenuManager.Instance.OpenMenu(this);
+        //MenuManager.Instance.OpenMenu(this);
     }
 
     private void HandleCloseInput()
@@ -117,7 +117,7 @@ public class MenuBattleDimensionAction : Menu
     {
         // if (!IsInteractable()) return;
 
-        buttonPause.OnButtonPressed();
+        //buttonPause.OnButtonPressed();
     }
 
     private void HandleBattlePhaseChanged(BattlePhase newPhase, BattlePhase oldPhase)

@@ -77,7 +77,7 @@ public class Move
     public MoveEvolution CurrentEvolution => evolutionComponent.CurrentEvolution;
     public GrowthType GrowthType => evolutionComponent.GrowthType;
     public GrowthRate GrowthRate => evolutionComponent.GrowthRate;
-    public Sprite EvolutionSprite => evolutionComponent.EvolutionSprite;
+    public string EvolutionAddress => evolutionComponent.EvolutionAddress;
     public int TimesUsedTotal => evolutionComponent.TimesUsedTotal;
     public int TimesUsedCurrentEvolution => evolutionComponent.TimesUsedCurrentEvolution;
     public bool IsAtFinalEvolution => evolutionComponent.IsAtFinalEvolution;

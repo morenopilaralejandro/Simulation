@@ -5,8 +5,8 @@ public class TeamComponentAppearance
 {
     #region Sprite
 
-    public Sprite TeamCrestSprite { get; private set; }
-    public string TeamCrestId { get; private set; }
+    public string TeamEmblemId { get; private set; }
+    public string TeamEmblemAddress { get; private set; }
 
     #endregion
 
@@ -27,13 +27,13 @@ public class TeamComponentAppearance
 
         if (teamSaveData != null) 
         {
-            TeamCrestId = teamSaveData.CustomCrestId;
-            _ = InitializeAsync(TeamCrestId);
+            TeamEmblemId = teamSaveData.CustomEmblemId;
+            TeamEmblemAddress = AddressableLoader.GetTeamEmblemAddress(teamSaveData.CustomEmblemId);
             return;
         }
 
-        TeamCrestId = teamData.TeamId;
-        _ = InitializeAsync(TeamCrestId);
+        TeamEmblemId = teamData.TeamId;
+        TeamEmblemAddress = AddressableLoader.GetTeamEmblemAddress(TeamEmblemId);
 
         /*
         if (teamSaveData != null) 
@@ -58,16 +58,18 @@ public class TeamComponentAppearance
 
     }
 
+    /*
     private async Task InitializeAsync(string teamCrestId)
-    { 
+    {
         TeamCrestSprite = await SpriteAtlasManager.Instance.GetTeamCrest(teamCrestId);
         TeamEvents.RaiseTeamCrestSpriteUpdated(team);
     }
+    */
 
-    public void UpdateAppearance(string teamCrestId) 
+    public void UpdateAppearance(string teamEmblemId)
     {
-        TeamCrestId = teamCrestId;
-        _ = InitializeAsync(TeamCrestId);
+        TeamEmblemId = teamEmblemId;
+        TeamEmblemAddress = AddressableLoader.GetTeamEmblemAddress(TeamEmblemId);
     }
 
 }

@@ -11,7 +11,7 @@ public static class TeamFactory
             TeamGuid = Guid.NewGuid().ToString(),
             IsCustomLoadout = true,
             CustomName = TeamManager.Instance.DEFAULT_NAME,
-            CustomCrestId = TeamManager.DEFAULT_CREST_ID,
+            CustomEmblemId = TeamManager.DEFAULT_EMBLEM_ID,
             CustomKitId = TeamManager.DEFAULT_KIT_ID,
             CustomFullBattleFormationId = TeamManager.DEFAULT_FULL_BATTLE_FORMATION_ID,
             CustomFullBattleCharacterGuids = null,
