@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoader
 {
     #region Fields
-
     [SerializeField] private SpriteLibrary kitSpriteLibrary;
     [SerializeField] private SpriteLibrary hairFrontLibrary;
     [SerializeField] private SpriteLibrary hairBackLibrary;
@@ -18,6 +17,8 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     [SerializeField] private GameObject hairFrontObject;
     [SerializeField] private GameObject hairBackObject;
 
+    [SerializeField] private CharacterComponentAnimationController animationControllerComponent;
+    private CharacterComponentAppearance appearanceComponent;
     private CharacterEntityBattle characterEntityBattle;
 
     private readonly AddressableBinding<SpriteLibraryAsset> _kitBinding = new();
@@ -33,9 +34,9 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     #region Initialization
 
-    public void Initialize(CharacterEntityBattle characterEntityBattle)
+    public void Initialize(CharacterComponentAppearance appearanceComponent)
     {
-        this.characterEntityBattle = characterEntityBattle;
+        this.appearanceComponent = appearanceComponent;
     }
 
     private void OnDestroy()
@@ -72,7 +73,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     private void SetBodyColor()
     {
-        bodyRenderer.color = characterEntityBattle.ColorBody;
+        bodyRenderer.color = appearanceComponent.ColorBody;
     }
 
     #endregion
@@ -84,17 +85,17 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         kitSpriteLibrary.spriteLibraryAsset = null;
 
         SpriteLibraryAsset asset =
-            await _kitBinding.LoadAsync(characterEntityBattle.KitAddress);
+            await _kitBinding.LoadAsync(appearanceComponent.KitAddress);
 
         if (asset == null)
         {
-            LogManager.Error($"[CharacterComponentAppearanceBattle] Kit load failed: {characterEntityBattle.KitAddress}");
+            LogManager.Error($"[CharacterComponentAppearanceBattle] Kit load failed: {appearanceComponent.KitAddress}");
             return;
         }
 
         kitSpriteLibrary.spriteLibraryAsset = asset;
 
-        characterEntityBattle.RefreshAnimation();
+        animationControllerComponent.RefreshAnimation();
     }
 
     #endregion
@@ -103,8 +104,8 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     private void SetHairColor()
     {
-        hairFrontRenderer.color = characterEntityBattle.ColorHair;
-        hairBackRenderer.color = characterEntityBattle.ColorHair;
+        hairFrontRenderer.color = appearanceComponent.ColorHair;
+        hairBackRenderer.color = appearanceComponent.ColorHair;
     }
 
     private async Task LoadHairFrontAsync()
@@ -112,11 +113,11 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         hairFrontLibrary.spriteLibraryAsset = null;
 
         SpriteLibraryAsset asset =
-            await _hairFrontBinding.LoadOptionalAsync(characterEntityBattle.HairFrontAddress);
+            await _hairFrontBinding.LoadOptionalAsync(appearanceComponent.HairFrontAddress);
 
         if (asset == null)
         {
-            LogManager.Error($"[CharacterComponentAppearanceBattle] Hair front load failed: {characterEntityBattle.HairFrontAddress}");
+            LogManager.Error($"[CharacterComponentAppearanceBattle] Hair front load failed: {appearanceComponent.HairFrontAddress}");
 
             hairFrontObject.SetActive(false);
             return;
@@ -133,11 +134,11 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         hairBackLibrary.spriteLibraryAsset = null;
 
         SpriteLibraryAsset asset =
-            await _hairBackBinding.LoadOptionalAsync(characterEntityBattle.HairBackAddress);
+            await _hairBackBinding.LoadOptionalAsync(appearanceComponent.HairBackAddress);
 
         if (asset == null)
         {
-            LogManager.Trace($"[CharacterComponentAppearanceBattle] Hair back load failed: {characterEntityBattle.HairBackAddress}");
+            LogManager.Trace($"[CharacterComponentAppearanceBattle] Hair back load failed: {appearanceComponent.HairBackAddress}");
 
             hairBackObject.SetActive(false);
             return;

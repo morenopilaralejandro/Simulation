@@ -5,11 +5,13 @@ using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.SpriteLayer;
 
-public class CharacterComponentAppearanceWorld : MonoBehaviour, IAsyncSceneLoader
+public class CharacterComponentAppearanceWorld : MonoBehaviour
 {
+    /*
+    IAsyncSceneLoader
     public async Task LoadAsync() {}
     public void Initialize(CharacterComponentAppearance appearanceComponent, PlayerWorldEntity playerWorldEntity = null) {}
-    /*
+
     #region Fields
 
     [SerializeField] private SpriteLayerRendererCharacter spriteLayerRenderer;

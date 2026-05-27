@@ -18,7 +18,7 @@ public class PlayerWorldEntity : MonoBehaviour
     #region Components
 
     [SerializeField] private Character character;
-    [SerializeField] private CharacterComponentAppearanceWorld appearanceComponent;
+    [SerializeField] private CharacterComponentAppearanceBattle appearanceComponent;
     [SerializeField] private PlayerWorldComponentController controllerComponent;
     [SerializeField] private PlayerWorldComponentInteraction interactionComponent;
     [SerializeField] private PlayerWorldComponentDialog dialogComponent;
@@ -47,9 +47,11 @@ public class PlayerWorldEntity : MonoBehaviour
     public void Initialize(CharacterData characterData, Kit kit, PlayerWorldConfig config)
     {
         character = new Character(characterData);
-        //character.ApplyKit(kit, Variant.Home, Position.FW);
 
-        appearanceComponent.Initialize(character.AppearanceComponent, this);
+        appearanceComponent.Initialize(character.AppearanceComponent);
+        character.SetKit(kit, Variant.Home, Role.Field);
+        _ = appearanceComponent.LoadKitAsync();
+
         controllerComponent.Initialize(this, config);
         interactionComponent.Initialize(this, config);
         dialogComponent.Initialize(this, config);

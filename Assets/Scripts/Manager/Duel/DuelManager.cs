@@ -318,7 +318,7 @@ public class DuelManager : MonoBehaviour
         duel.IsResolved = true;
         BattleUIManager.Instance.HideDuelParticipantsPanel();
         BattleUIManager.Instance.HideDuelMenu();
-        duelHandler.CancelDuel();
+        if(duelHandler != null) duelHandler.CancelDuel();
     }
 
     public void EndDuel(DuelParticipant winner, DuelParticipant loser)

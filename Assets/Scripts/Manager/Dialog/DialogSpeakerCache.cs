@@ -42,6 +42,12 @@ public class DialogSpeakerCache : MonoBehaviour
 
     private Speaker ResolveSpeaker(DialogLine dialogLine)
     {
+        // TODO
+        // check context CurrentNpc, LastNpc, PlayerCharacter, PlayerCompanion
+        // if there is no context resolve from character or npc
+            // then set kit or clothes
+
+
         reusableCharacterData = characterDatabase.GetCharacterData(dialogLine.SpeakerId);
         if (reusableCharacterData != null)
         {

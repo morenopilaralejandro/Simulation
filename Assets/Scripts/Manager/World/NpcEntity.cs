@@ -34,7 +34,7 @@ public class NpcEntity : MonoBehaviour
     public void Initialize(CharacterData characterData)
     {
         character = new Character(characterData);
-        appearanceComponent.Initialize(character.AppearanceComponent);
+        //appearanceComponent.Initialize(character.AppearanceComponent);
 
         if (interactableComponent != null)
             interactableComponent.Initialize(this);
@@ -46,7 +46,7 @@ public class NpcEntity : MonoBehaviour
     public void Initialize(NpcData npcData)
     {
         npc = new Npc(npcData);
-        appearanceComponent.Initialize(npc.AppearanceComponent);
+        //appearanceComponent.Initialize(npc.AppearanceComponent);
 
         if (interactableComponent != null)
             interactableComponent.Initialize(this);
