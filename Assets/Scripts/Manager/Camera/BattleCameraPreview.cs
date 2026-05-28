@@ -28,7 +28,7 @@ public class BattleCameraPreview : MonoBehaviour
 
     private void OnDisable()
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStart -= HandleBattleStart;
         TeamEvents.OnTeamPreviewStarted -= HandlePreviewStarted;
         TeamEvents.OnTeamPreviewEnded -= HandlePreviewEnded;
     }

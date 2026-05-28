@@ -1,4 +1,5 @@
 using UnityEngine;
+using Aremoreno.Enums.Animation;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.World;
@@ -19,6 +20,9 @@ public class NpcEntityCharacter : NpcEntity
     #region Components
 
     [SerializeField] private CharacterComponentAppearanceBattle appearanceComponentBattle;
+    [SerializeField] private CharacterComponentAnimationController animationControllerComponent;
+    [SerializeField] private YSort ySortComponent;
+    [SerializeField] private NpcComponentInteractableDialog interactableDialogComponent;
 
     #endregion
 
@@ -37,13 +41,40 @@ public class NpcEntityCharacter : NpcEntity
         appearanceComponentBattle.Initialize(appearanceComponent);
         appearanceComponent.SetKit(KitManager.Instance.GetKit(kitData.KitId), variant, role);
         _ = appearanceComponentBattle.LoadKitAsync();
+
+        interactableDialogComponent?.Initialize(this);
+    }
+
+    #endregion
+
+    #region Update
+
+    private void LateUpdate()
+    {
+        ySortComponent.OnLateUpdate();
+        animationControllerComponent.OnLateUpdate();
+    }
+
+    #endregion
+
+    #region Methods
+
+    public override void FacePlayer()
+    {
+        CharacterDirection direction = WorldManager.Instance.PlayerWorldEntity.GetOppositeFacingDirection();
+        SetFacing(direction);
+        Play(CharacterAnimationState.Idle, direction);
     }
 
     #endregion
 
     #region API
-
+    // appearanceComponent
     public PortraitSize PortraitSize => appearanceComponent.PortraitSize;
+
+    // animationControllerComponent
+    public void Play(CharacterAnimationState state, CharacterDirection direction) => animationControllerComponent.Play(state, direction);
+    public void RefreshAnimation() => animationControllerComponent.RefreshAnimation();
 
     #endregion
 

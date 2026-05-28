@@ -1,4 +1,5 @@
 using UnityEngine;
+using Aremoreno.Enums.Animation;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.World;
@@ -13,7 +14,7 @@ public class NpcEntity : MonoBehaviour
 
     #region Components
 
-    // [SerializeField] private IInteractable interactableComponent;
+    [SerializeField] private NpcComponentModel modelComponent;
 
     #endregion
 
@@ -56,10 +57,20 @@ public class NpcEntity : MonoBehaviour
 
     #endregion
 
+    #region Methods
+
+    public virtual void FacePlayer() {}
+
+    #endregion
+
     #region API
 
     public void SetNpc(Npc npc) => this.npc = npc;
     public Npc Npc => npc;
+
+    //modelComponent
+    public CharacterDirection FacingDirection => modelComponent.FacingDirection;
+    public void SetFacing(CharacterDirection dir) => modelComponent.SetFacing(dir);
    
     #endregion
 

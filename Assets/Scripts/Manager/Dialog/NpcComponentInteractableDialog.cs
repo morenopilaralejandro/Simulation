@@ -25,13 +25,16 @@ public class NpcComponentInteractableDialog : MonoBehaviour, IInteractable
     private DialogManager _dialogManager;
     private IDialogGameDataProvider _gameData;
     //private bool _isInteracting = false;
+    private NpcEntity npcEntity;
 
-    public void Awake()
+    public void Initialize(NpcEntity npcEntity)
     {
+        this.npcEntity = npcEntity;
         _dialogManager = DialogManager.Instance;
         _gameData = _dialogManager.DialogGameDataProvider;
         //UpdateIndicators();
     }
+
 
     public void Interact()
     {
@@ -46,6 +49,7 @@ public class NpcComponentInteractableDialog : MonoBehaviour, IInteractable
     {
         //_isInteracting = true;
         // Face the player toward the NPC (optional)
+        npcEntity?.FacePlayer();
 
         // Determine which knot to use
         string knotToUse = ResolveDialogKnot();

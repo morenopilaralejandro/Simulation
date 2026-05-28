@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8119332572451387997}
   - component: {fileID: 6295520630769381338}
   - component: {fileID: 5966419588041885156}
+  - component: {fileID: 336342684474940816}
   m_Layer: 0
   m_Name: NpcEntity
   m_TagString: Untagged
@@ -47,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1009a64f3420a5aa25fa87d6bd2832, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelComponent: {fileID: 336342684474940816}
 --- !u!114 &5966419588041885156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +64,18 @@ MonoBehaviour:
   sortPoint: {fileID: 1441973429755658804}
   sortingGroup: {fileID: 0}
   offset: 0
+--- !u!114 &336342684474940816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206506222289524903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44dceb97199196314a92687be9810151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2006894730912548205
 GameObject:
   m_ObjectHideFlags: 0
