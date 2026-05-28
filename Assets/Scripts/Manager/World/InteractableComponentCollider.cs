@@ -8,8 +8,15 @@ public class InteractableComponentCollider : MonoBehaviour
 {
     #region Fields
 
-    [SerializeField] private Interactable interactable;
-    public Interactable Interactable => interactable;
+    private IInteractable interactable;
+    public IInteractable Interactable => interactable;
+
+    private void Awake()
+    {
+        interactable = GetComponent<IInteractable>();
+        if (interactable == null) LogManager.Error("[InteractableComponentCollider] No IInteractable found!");
+    }
+
 
     #endregion
 

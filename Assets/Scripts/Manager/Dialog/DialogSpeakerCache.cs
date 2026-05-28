@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Aremoreno.Enums.Localization;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
 
 public class DialogSpeakerCache : MonoBehaviour
 {
@@ -12,17 +15,29 @@ public class DialogSpeakerCache : MonoBehaviour
         = new LinkedList<KeyValuePair<string, Speaker>>();
 
     // Reusable objects to avoid per-resolve allocations
-    private Character reusableCharacter;
     private CharacterData reusableCharacterData;
-    private Npc reusableNpc;
+    private NpcData reusableNpcData;
+
+    private string id;
+    private string portraitCharacterAddress;
+    private string portraitKitAddress;
+    private LocalizationEntity localizationEntity;
+    private LocalizationField localizationField;
+    private bool hasKit;
+    private string kitId;
+    private Variant variant;
+    private Role role;
+    private bool hasData;
 
     private Speaker speaker;
     public Speaker Speaker => speaker;
     private CharacterDatabase characterDatabase;
+    private NpcManager npcDatabase;
 
     private void Start() 
     {
         characterDatabase = CharacterDatabase.Instance;
+        npcDatabase = NpcManager.Instance;
     }
 
     public Speaker GetSpeaker(DialogLine dialogLine)
@@ -42,48 +57,65 @@ public class DialogSpeakerCache : MonoBehaviour
 
     private Speaker ResolveSpeaker(DialogLine dialogLine)
     {
-        // TODO
-        // check context CurrentNpc, LastNpc, PlayerCharacter, PlayerCompanion
-        // if there is no context resolve from character or npc
-            // then set kit or clothes
+        // shared
+        hasData = false;
+        hasKit = dialogLine.DialogKit != null && dialogLine.DialogKit.KitId != "none";
 
-
+        // character path
         reusableCharacterData = characterDatabase.GetCharacterData(dialogLine.SpeakerId);
         if (reusableCharacterData != null)
         {
-            reusableCharacter = new Character(reusableCharacterData);
+            hasData = true;
+            id = reusableCharacterData.CharacterId;
+            localizationEntity = LocalizationEntity.Character;
+            localizationField = LocalizationField.Nick;
+            portraitCharacterAddress = AddressableLoader.GetCharacterPortraitAddress(id);
 
-            return AddToCache(
-                reusableCharacter.CharacterId,
-                reusableCharacter.LocalizationComponent,
-                reusableCharacter.AppearanceComponent,
-                dialogLine.DialogKit
-            );
+            if (hasKit) 
+            {
+                if (dialogLine.DialogKit.KitId == "default")
+                {
+                    kitId = TeamManager.Instance.ActiveLoadout.Kit.KitId;
+                    variant = Variant.Home;
+                    role = Role.Field;
+                } else {
+                    kitId = dialogLine.DialogKit.KitId;
+                    variant = EnumManager.StringToEnum<Variant>(dialogLine.DialogKit.VariantId);
+                    role = EnumManager.StringToEnum<Role>(dialogLine.DialogKit.RoleId);
+                }
+                portraitKitAddress = AddressableLoader.GetKitPortraitAddress(kitId, variant, role, reusableCharacterData.PortraitSize);
+            }
         }
 
-        NpcData npcData = NpcManager.Instance.GetNpcData(dialogLine.SpeakerId);
-        if (npcData != null)
-        {
-            reusableNpc = new Npc(npcData);
-
-            return AddToCache(
-                reusableNpc.NpcId,
-                reusableNpc.LocalizationComponent,
-                reusableNpc.AppearanceComponent,
-                dialogLine.DialogKit
-            );
+        // npc path
+        if (!hasData) {
+            reusableNpcData = npcDatabase.GetNpcData(dialogLine.SpeakerId);
+            if (reusableNpcData != null)
+            {
+                hasData = true;
+                id = reusableNpcData.NpcId;
+                localizationEntity = LocalizationEntity.Npc;
+                localizationField = LocalizationField.Name;
+                portraitCharacterAddress = AddressableLoader.GetNpcPortraitAddress(id);
+            }
         }
 
-        // Avoid string interpolation allocation in non-error path
-        LogManager.Error(string.Concat("[DialogSpeakerCache] No Character or NPC found for speakerId: ", dialogLine.SpeakerId));
+        if (hasData)
+            return AddToCache(id, localizationEntity, localizationField, portraitCharacterAddress, portraitKitAddress, hasKit);
+        else
+            LogManager.Error(string.Concat("[DialogSpeakerCache] No Character or NPC found for speakerId: ", dialogLine.SpeakerId));
+
         return null;
     }
 
     private Speaker AddToCache(
-        string id,
-        LocalizationComponentString localizationComponent,
-        CharacterComponentAppearance appearanceComponent,
-        DialogKit dialogKit)
+        string id, 
+        LocalizationEntity localizationEntity,
+        LocalizationField localizationField,
+        string portraitCharacterAddress,
+        string portraitKitAddress,
+        bool hasKit
+    )
     {
         // Evict LRU entry if cache is full
         if (speakerCacheDict.Count >= CACHE_SIZE)
@@ -91,7 +123,7 @@ public class DialogSpeakerCache : MonoBehaviour
             EvictOldestEntry();
         }
 
-        Speaker newSpeaker = new Speaker(id, localizationComponent, appearanceComponent, dialogKit);
+        Speaker newSpeaker = new Speaker(id, localizationEntity, localizationField, portraitCharacterAddress, portraitKitAddress, hasKit);
         var kvp = new KeyValuePair<string, Speaker>(id, newSpeaker);
         var node = lruList.AddFirst(kvp);
         speakerCacheDict[id] = node;

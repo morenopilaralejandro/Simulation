@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2997425801702192739}
   - component: {fileID: 4605420065884193424}
   - component: {fileID: 3650414595611371519}
+  - component: {fileID: 3869045729751823638}
   m_Layer: 5
   m_Name: PanelName
   m_TagString: Untagged
@@ -60,7 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.55197024, g: 0.2382566, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -76,6 +77,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &3869045729751823638
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678977476333554492}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &761399200073491552
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,7 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -482,7 +495,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.5529412, g: 0.23921569, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -602,7 +615,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -938,7 +951,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.6712128, b: 0.013638496, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -978,21 +991,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40335adc069b69f74ad7e54576be3e32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dialogBoxRoot: {fileID: 4683681546979130300}
   _dialogBoxCanvasGroup: {fileID: 5552968445485223756}
   _dialogText: {fileID: 515625823341536460}
   _characterNameText: {fileID: 6258938764248526752}
-  _characterPortrait: {fileID: 0}
-  _characterNamePanel: {fileID: 678977476333554492}
-  _portraitPanel: {fileID: 7468294271757485123}
+  _characterNamePanel: {fileID: 3869045729751823638}
+  _portraitPanel: {fileID: 5308670918700731123}
   _portraitSpeaker: {fileID: 4250356702690879408}
-  _continueIndicator: {fileID: 761399200073491552}
-  _yesNoPanel: {fileID: 5010082604688569246}
+  _continueIndicator: {fileID: 5988300247323800817}
+  _yesNoPanel: {fileID: 6438580282054504711}
   _yesButton: {fileID: 1034913911990884721}
   _noButton: {fileID: 1034913911990884721}
   _yesButtonText: {fileID: 698289385081144846}
   _noButtonText: {fileID: 698289385081144846}
-  _choiceListPanel: {fileID: 5669953403292356880}
+  _choiceListPanel: {fileID: 1837264971159691792}
   _choiceListContainer: {fileID: 7802278953671616143}
   _choiceButtonPrefab: {fileID: 3636715819202859314}
   _typewriterSpeed: 0.03
@@ -1064,7 +1075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1091,6 +1102,7 @@ GameObject:
   - component: {fileID: 531145333561045321}
   - component: {fileID: 9022075509557680824}
   - component: {fileID: 7211346405044315447}
+  - component: {fileID: 6438580282054504711}
   m_Layer: 5
   m_Name: PanelYesNo
   m_TagString: Untagged
@@ -1140,7 +1152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1156,6 +1168,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &6438580282054504711
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5010082604688569246}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &5669953403292356880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1167,6 +1191,7 @@ GameObject:
   - component: {fileID: 7802278953671616143}
   - component: {fileID: 1373784427066171543}
   - component: {fileID: 6009884883781852244}
+  - component: {fileID: 1837264971159691792}
   m_Layer: 5
   m_Name: PanelChoiceList
   m_TagString: Untagged
@@ -1216,7 +1241,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1232,6 +1257,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &1837264971159691792
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5669953403292356880}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &6059095045945167281
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,7 +1328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.5529412, g: 0.23921569, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1366,7 +1403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.09124297, b: 0.013690435, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1393,6 +1430,7 @@ GameObject:
   - component: {fileID: 2696498793772398982}
   - component: {fileID: 78642138869691215}
   - component: {fileID: 6191803279789668649}
+  - component: {fileID: 5988300247323800817}
   m_Layer: 5
   m_Name: PanelContinue
   m_TagString: Untagged
@@ -1442,7 +1480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1458,6 +1496,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &5988300247323800817
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6372509517220657282}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &7468294271757485123
 GameObject:
   m_ObjectHideFlags: 0
@@ -1469,6 +1519,7 @@ GameObject:
   - component: {fileID: 8771032770715608188}
   - component: {fileID: 2401793654111643827}
   - component: {fileID: 3996479243836057976}
+  - component: {fileID: 5308670918700731123}
   m_Layer: 5
   m_Name: PanelPortrait
   m_TagString: Untagged
@@ -1518,7 +1569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.7141876, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1534,6 +1585,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &5308670918700731123
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7468294271757485123}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &9175694049732482335
 GameObject:
   m_ObjectHideFlags: 0

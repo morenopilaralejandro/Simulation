@@ -7,7 +7,7 @@ public class PlayerWorldComponentStateMachine : MonoBehaviour
     private PlayerWorldEntity playerWorldEntity;
     private PlayerWorldConfig config;
 
-    private PlayerWorldState state = PlayerWorldState.FreeRoam;
+    [SerializeField] private PlayerWorldState state = PlayerWorldState.FreeRoam;
     public PlayerWorldState PlayerWorldState => state;
 
     public void Initialize(PlayerWorldEntity playerWorldEntity, PlayerWorldConfig cfg)

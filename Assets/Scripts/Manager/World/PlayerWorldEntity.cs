@@ -79,6 +79,22 @@ public class PlayerWorldEntity : MonoBehaviour
 
     #endregion
 
+    #region Update
+
+    private void Update()
+    {
+        controllerComponent.OnUpdate();
+        interactionComponent.OnUpdate();
+        dialogComponent.OnUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        controllerComponent.OnFixedUpdate();
+    }
+
+    #endregion
+
     #region API Character
 
     public Character Character => character;
@@ -101,7 +117,7 @@ public class PlayerWorldEntity : MonoBehaviour
     public Vector2 CurrentTilePosition => controllerComponent.CurrentTilePosition;
     public Vector3 CurrentTilePosition3d() => controllerComponent.CurrentTilePosition3d();
     //interactionComponent
-    public Interactable CurrentInteractionTarget => interactionComponent.CurrentTarget;
+    public IInteractable CurrentInteractionTarget => interactionComponent.CurrentTarget;
     //dialogComponent
     public void SetDialogEnabled(bool enable) => dialogComponent.enabled = enable;
     //modelComponent

@@ -49,7 +49,7 @@ public class PlayerWorldComponentController : MonoBehaviour
     //  UPDATE  — input only
     // ================================================================
 
-    private void Update()
+    public void OnUpdate()
     {
         if (!playerWorldEntity.IsControlEnabled) return;
         ReadInput();
@@ -61,7 +61,7 @@ public class PlayerWorldComponentController : MonoBehaviour
     //  FIXED UPDATE  — physics movement
     // ================================================================
 
-    private void FixedUpdate()
+    public void OnFixedUpdate()
     {
         if (!playerWorldEntity.IsControlEnabled) return;
 

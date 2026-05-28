@@ -28,6 +28,7 @@ public class CharacterComponentAppearance
     #endregion
 
     #region Initialization
+
     public CharacterComponentAppearance(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null)
     {
         Initialize(characterData, character, characterSaveData);
@@ -40,6 +41,7 @@ public class CharacterComponentAppearance
         EyeColorType = characterData.EyeColorType;
         BodyColorType = characterData.BodyColorType;
         PortraitSize = characterData.PortraitSize;
+        PortraitCharacterAddress = AddressableLoader.GetCharacterPortraitAddress(characterData.CharacterId);
 
         if (characterSaveData != null && characterSaveData.IsCustomAvatar) 
         {
@@ -50,28 +52,12 @@ public class CharacterComponentAppearance
             PortraitSize = characterSaveData.CustomPortraitSize;
         }
 
-        PortraitCharacterAddress = AddressableLoader.GetCharacterPortraitAddress(character.CharacterId);
+
         HairFrontAddress = AddressableLoader.GetCharacterHairFrontAddress(HairStyle.ToString().ToLower());
         HairBackAddress = AddressableLoader.GetCharacterHairBackAddress(HairStyle.ToString().ToLower());
 
         ColorBody = ColorManager.GetBodyColor(BodyColorType);
         ColorHair = ColorManager.GetHairColor(HairColorType);
-    }
-
-    public CharacterComponentAppearance(NpcData npcData)
-    {
-        Initialize(npcData);
-    }
-
-    public void Initialize(NpcData data)
-    {
-        HairStyle = data.HairStyle;
-        HairColorType = data.HairColorType;
-        EyeColorType = data.EyeColorType;
-        BodyColorType = data.BodyColorType;
-        PortraitSize = data.PortraitSize;
-        //pass everyting as data
-        //await LoadAsync();
     }
 
     #endregion

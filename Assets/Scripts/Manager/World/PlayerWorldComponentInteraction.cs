@@ -11,10 +11,10 @@ public class PlayerWorldComponentInteraction : MonoBehaviour
 
     private Transform _cachedTransform;
     private int _frameCounter;
-    private Interactable _currentTarget;
+    private IInteractable _currentTarget;
     private RaycastHit2D _hitInfo2D;
 
-    public Interactable CurrentTarget => _currentTarget;
+    public IInteractable CurrentTarget => _currentTarget;
 
     public void Initialize(PlayerWorldEntity playerWorldEntity, PlayerWorldConfig cfg)
     {
@@ -30,7 +30,7 @@ public class PlayerWorldComponentInteraction : MonoBehaviour
             interactionOrigin = _cachedTransform;
     }
 
-    private void Update()
+    public void OnUpdate()
     {
         if (!playerWorldEntity.CanInteract) return;
 
@@ -61,7 +61,9 @@ public class PlayerWorldComponentInteraction : MonoBehaviour
 
         if (_hitInfo2D.collider != null)
         {
-            Interactable interactable = _hitInfo2D.collider.GetComponent<InteractableComponentCollider>().Interactable;
+            IInteractable interactable = _hitInfo2D.collider
+                .GetComponent<InteractableComponentCollider>()
+                .Interactable;
 
             if (interactable != null)
             {
@@ -79,4 +81,39 @@ public class PlayerWorldComponentInteraction : MonoBehaviour
         _frameCounter = 0;
     }
 
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        if (config == null) return;
+
+        Transform origin = interactionOrigin != null ? interactionOrigin : transform;
+
+        Vector3 direction = Vector3.right;
+
+        if (Application.isPlaying && playerWorldEntity != null)
+        {
+            direction = playerWorldEntity.FacingToVector(playerWorldEntity.FacingDirection);
+        }
+
+        Vector3 start = origin.position;
+        Vector3 end = start + (direction.normalized * config.interactionRange);
+
+        // Detection path
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(start, end);
+
+        // Start circle
+        Gizmos.DrawWireSphere(start, config.castRadius);
+
+        // End circle
+        Gizmos.DrawWireSphere(end, config.castRadius);
+
+        // Hit point
+        if (Application.isPlaying && _hitInfo2D.collider != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(_hitInfo2D.point, 0.08f);
+        }
+    }
+#endif
 }

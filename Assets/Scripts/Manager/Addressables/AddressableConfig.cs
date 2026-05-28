@@ -21,6 +21,9 @@ public static class AddressableConfig
     [Header("Move Paths")]
     public const string MoveEvolutionPath = "evolution";
 
+    [Header("NPC Paths")]
+    public const string NpcPortraitPath = "npc-portraits";
+
     [Header("Path Settings")]
     public const string PathSeparator = "-";
     public const string SubSeparator = "_";

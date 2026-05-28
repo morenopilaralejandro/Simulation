@@ -59,5 +59,12 @@ namespace Aremoreno.Enums.World
         Locked,
         Opened
     }
+
+    public enum NpcType
+    {
+        Character,
+        //Modular,
+        Monolitic
+    }
 }
 

@@ -1,27 +1,25 @@
 using UnityEngine;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.World;
 
 public class NpcEntity : MonoBehaviour
 {
     #region Fields
-    [SerializeField] private bool isGeneric;
-    [SerializeField] private NpcData npcData;
-    [SerializeField] private CharacterData characterData;
-    [SerializeField] private KitData kitData;
-    [SerializeField] private Role role;
-    private Character character;
+
     private Npc npc;
+
     #endregion
 
     #region Components
 
-    [SerializeField] private CharacterComponentAppearanceWorld appearanceComponent;
-    [SerializeField] private NpcComponentInteractable interactableComponent;
+    // [SerializeField] private IInteractable interactableComponent;
 
     #endregion
 
     #region Initialize
+
+    /*
 
     public void Start() 
     {
@@ -54,25 +52,15 @@ public class NpcEntity : MonoBehaviour
         //appearanceComponent.ApplyClothes(npcData);
     }
 
+    */
+
     #endregion
 
     #region API
 
-    public Character Character => character;
+    public void SetNpc(Npc npc) => this.npc = npc;
     public Npc Npc => npc;
-    public bool IsGeneric => isGeneric;
-
-    public string NpcName => isGeneric ? npc.NpcName : character.CharacterNick;
-    //public Sprite PortraitSprite => isGeneric ? npcData.PortraitSprite : character.PortraitSprite;
-    public Sprite PortraitSprite => null;
-//    public PortraitSize PortraitSize => isGeneric ? npc.PortraitSize : character.PortraitSize;
-  public Sprite PortraitSize => null;
-
+   
     #endregion
 
-    #region API Npc
-
-    public string NpcId => isGeneric ? npc.NpcId : null;
-
-    #endregion
 }
