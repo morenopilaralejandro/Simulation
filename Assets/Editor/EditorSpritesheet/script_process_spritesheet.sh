@@ -4,7 +4,7 @@ set -euo pipefail
 SCRIPT1="./script_process_spritesheet_by_animation.sh"
 SCRIPT2="./script_process_spritesheet_by_animation_and_item.sh"
 
-INPUT_DIR="/media/gamedisk/Workspace/ProjectsWorkspace/Simulation/LpcDownloaded"
+INPUT_DIR="/media/gamedisk/Workspace/ProjectsWorkspace/GAME-SS-0001-Simulation/LpcDownloaded"
 #OUTPUT_DIR="/media/gamedisk/Workspace/ProjectsWorkspace/Simulation/AssetsTest/"
 OUTPUT_DIR="/home/alejandro/unity-workspace/Simulation/Assets/Sprites/SpritesCharacter/"
 
@@ -44,9 +44,18 @@ OUTPUT_DIR="/home/alejandro/unity-workspace/Simulation/Assets/Sprites/SpritesCha
   -p "sprite-character" \
   -b "SpritesCharacter"
 
+# =========================
+# CONFIG 5 - Npc
+# =========================
+"$SCRIPT1" \
+  -i "${INPUT_DIR}/LpcDownloadedNpc" \
+  -o "/home/alejandro/unity-workspace/Simulation/Assets/Sprites/SpritesNpc/" \
+  -p "sprite" \
+  -b "Sprites"
+
 
 # =========================
-# CONFIG 3 - OPTIONAL EXTRA (example)
+# CONFIG OPTIONAL - EXTRA (example)
 # =========================
 # "$SCRIPT" \
 #   -i "$INPUT_DIR" \

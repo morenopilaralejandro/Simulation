@@ -403,5 +403,29 @@ public class PlayerWorldComponentController : MonoBehaviour
         DistanceTravelledSinceReset = 0f;
     }
 
+    public void ResetMovementState()
+    {
+        IsMoving = false;
+        MoveInput = Vector2.zero;
+        IsRunning = false;
+
+        _currentCardinalInput = Vector2.zero;
+        _lastFacingInput = Vector2.zero;
+        _wasHoldingDirection = false;
+
+        _inputHeldTime = 0f;
+        _isGridMoving = false;
+        _gridMoveTarget = Vector2.zero;
+
+        _lockFacingDuringMove = false;
+
+        _stuckTimer = 0f;
+        _lastPosition = rb.position;
+
+        rb.angularVelocity = 0f;
+
+        UpdateAnimation();
+    }
+
     #endregion
 }

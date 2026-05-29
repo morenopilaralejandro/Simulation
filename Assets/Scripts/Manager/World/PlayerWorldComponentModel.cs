@@ -7,7 +7,7 @@ public class PlayerWorldComponentModel : MonoBehaviour
     private PlayerWorldEntity playerWorldEntity;
     private PlayerWorldConfig config;
 
-    private CharacterDirection facingDirection = CharacterDirection.Down;
+    [SerializeField] private CharacterDirection facingDirection = CharacterDirection.Down;
     public CharacterDirection FacingDirection => facingDirection;
 
     public void Initialize(PlayerWorldEntity playerWorldEntity, PlayerWorldConfig cfg)

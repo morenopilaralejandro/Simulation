@@ -12,7 +12,8 @@ public class ZoneTransitionTrigger : MonoBehaviour
     public string targetSpawnId;
 
     [Header("Transition Settings")]
-    public float transitionDelay = 0.2f;
+    private float transitionDelayInternal = 0.4f;
+    public float transitionDelay => transitionDelayInternal;
     public bool requireInteraction = false; // If true, player must press a button
 
     //private bool _playerInTrigger = false;

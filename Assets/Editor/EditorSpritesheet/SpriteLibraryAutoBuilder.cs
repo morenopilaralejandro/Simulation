@@ -8,7 +8,9 @@ using Aremoreno.Enums.Animation;
 public class SpriteLibraryAutoBuilder : EditorWindow
 {
     [SerializeField] private CharacterAnimationConfig config;
-    [SerializeField] private string outputFolder = "Assets/Addressables/AddressSpriteLibraryCharacter";
+    [SerializeField] private string outputFolderCharacter = "Assets/Addressables/AddressSpriteLibraryCharacter";
+    [SerializeField] private string outputFolderNpc = "Assets/Addressables/AddressSpriteLibraryNpc";
+    private string outputFolder;
 
     private static readonly string[] Directions =
     {
@@ -111,10 +113,42 @@ public class SpriteLibraryAutoBuilder : EditorWindow
     {
         data = null;
 
-        if (!name.StartsWith("sprite-character-"))
+        string prefix;
+        if (name.StartsWith("sprite-character-"))
+            prefix = "sprite-character-";
+        else if (name.StartsWith("sprite-npc-"))
+            prefix = "sprite-npc-";
+        else
             return false;
+        string body = name.Substring(prefix.Length);
 
-        string body = name.Substring("sprite-character-".Length);
+        if (prefix == "sprite-npc-")
+        {
+            var npcParts = body.Split('-');
+
+            if (npcParts.Length < 2)
+                return false;
+
+            string npcId = string.Join("-", npcParts.Take(npcParts.Length - 1));
+            string animationPartAux = npcParts[^1];
+
+            if (!TryParseAnimation(animationPartAux, out string categoryAux, out string labelAux))
+                return false;
+
+            data = new SpriteData
+            {
+                libraryKey = $"library-npc-{npcId}",
+                category = categoryAux,
+                label = labelAux,
+                sprite = sprite
+            };
+
+            outputFolder = outputFolderNpc;
+
+            return true;
+        }
+
+        outputFolder = outputFolderCharacter;
 
         int firstDash = body.IndexOf('-');
         if (firstDash < 0) return false;
@@ -155,6 +189,14 @@ public class SpriteLibraryAutoBuilder : EditorWindow
             string position = parts[^2];
 
             libraryKey = $"library-{type}-{id}-{position}";
+        }
+        else if (type == "npc")
+        {
+            if (parts.Length < 2) return false;
+
+            string id = string.Join("-", parts.Take(parts.Length - 1));
+
+            libraryKey = $"library-npc-{id}";
         }
         else
         {
@@ -220,8 +262,12 @@ public class SpriteLibraryAutoBuilder : EditorWindow
         string path = $"{outputFolder}/{key}.asset".Replace("\\", "/");
 
         var existing = AssetDatabase.LoadAssetAtPath<SpriteLibraryAsset>(path);
+        //if (existing != null) AssetDatabase.DeleteAsset(path);
         if (existing != null)
-            AssetDatabase.DeleteAsset(path);
+        {
+            Debug.Log($"Skipped existing library: {path}");
+            return;
+        }
 
         var asset = ScriptableObject.CreateInstance<SpriteLibraryAsset>();
         AssetDatabase.CreateAsset(asset, path);

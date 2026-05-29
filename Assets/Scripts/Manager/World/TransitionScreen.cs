@@ -12,7 +12,7 @@ public class TransitionScreen : MonoBehaviour
     public Image fadeImage;
 
     [Header("Settings")]
-    private float fadeDuration = 0.5f;
+    private float fadeDuration = 0.4f;
 
     private void Awake()
     {

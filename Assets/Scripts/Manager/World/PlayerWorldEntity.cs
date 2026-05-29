@@ -127,6 +127,7 @@ public class PlayerWorldEntity : MonoBehaviour
     public void ResetDistance() => controllerComponent.ResetDistance();
     public Vector2 CurrentTilePosition => controllerComponent.CurrentTilePosition;
     public Vector3 CurrentTilePosition3d() => controllerComponent.CurrentTilePosition3d();
+    public void ResetMovementState() => controllerComponent.ResetMovementState();
     //interactionComponent
     public IInteractable CurrentInteractionTarget => interactionComponent.CurrentTarget;
     //dialogComponent

@@ -14,11 +14,23 @@ BASEFOLDER="SpritesCharacter"
 # PREFIX="sprite-character-body"
 # BASEFOLDER="SpritesCharacterBody"
 
+#character
+
+
+#npc
 IGNORE_NAMES=(
+    "1h_backslash.png"
+    "1h_halfslash.png"
     "1h_slash.png"
     "climb.png"
+    "combat.png"
+    "hurt.png"
+    "jump.png"
+    "run.png"
     "shoot.png"
     "sit.png"
+    "slash.png"
+    "spellcast.png"
     "thrust.png"
     "watering.png"
 )

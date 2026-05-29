@@ -168,7 +168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnId: spawn_hospital_checkpoint
   spawnType: 5
-  facingDirection: {x: 0, y: -1}
+  facingDirection: 0
   connectedZone: {fileID: 0}
   connectedSpawnId: 
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnId: spawn_hospital_entry
   spawnType: 1
-  facingDirection: {x: 0, y: -1}
+  facingDirection: 1
   connectedZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
   connectedSpawnId: spawn_park_hospital_entry
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
@@ -386,7 +386,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
   targetSpawnId: spawn_hospital_exit
-  transitionDelay: 0.2
   requireInteraction: 0
 --- !u!61 &496984877
 BoxCollider2D:
