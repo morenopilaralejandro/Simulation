@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Aremoreno.Enums.World;
 
-public class ChestComponentDialog : MonoBehaviour
+public class ChestComponentDialog : MonoBehaviour, IInteractable
 {
     private ChestEntity chestEntity;
 
@@ -23,6 +23,11 @@ public class ChestComponentDialog : MonoBehaviour
         inkStoryManager = dialogManager.InkStoryManager;
         localizationBridge = dialogManager.DialogLocalizationBridge;
         dialogGameDataProvider = dialogManager.DialogGameDataProvider;
+    }
+
+    public void Interact() 
+    {
+        StartDialog();
     }
 
     public void StartDialog()

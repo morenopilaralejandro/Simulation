@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 5121372763092395306}
   - component: {fileID: 7921670827097666377}
   - component: {fileID: 4339189551857113814}
+  - component: {fileID: 6200642543070115762}
   m_Layer: 5
   m_Name: CharacterPortraitBattle
   m_TagString: Untagged
@@ -242,3 +243,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageCharacterPortrait: {fileID: 4555096006452673716}
   imageKitPortrait: {fileID: 2444225833519746689}
+  canvasGroup: {fileID: 6200642543070115762}
+--- !u!225 &6200642543070115762
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7687615292314258037}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0

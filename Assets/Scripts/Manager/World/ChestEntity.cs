@@ -14,7 +14,6 @@ public class ChestEntity : MonoBehaviour
 
     #region Components
     
-    [SerializeField] private ChestComponentInteractable interactableComponent;
     [SerializeField] private ChestComponentAppearance appearanceComponent;
     [SerializeField] private ChestComponentDialog dialogComponent;
 
@@ -39,7 +38,6 @@ public class ChestEntity : MonoBehaviour
             itemData,
             isPersistent);
 
-        interactableComponent.Initialize(this);
         appearanceComponent.Initialize(this);
         dialogComponent.Initialize(this);
     }
@@ -88,8 +86,6 @@ public class ChestEntity : MonoBehaviour
     #endregion
 
     #region API Entity
-
-    //interactableComponent
 
     //appearanceComponent
     public void SetSpriteOpened() => appearanceComponent.SetSpriteOpened();

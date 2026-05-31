@@ -6,6 +6,7 @@ public class CharacterPortraitBattle : MonoBehaviour
 {
     [SerializeField] private Image imageCharacterPortrait;
     [SerializeField] private Image imageKitPortrait;
+    [SerializeField] private CanvasGroup canvasGroup;
 
     private readonly AddressableBinding<Sprite> _characterBinding = new();
     private readonly AddressableBinding<Sprite> _kitBinding = new();
@@ -27,10 +28,14 @@ public class CharacterPortraitBattle : MonoBehaviour
 
         imageCharacterPortrait.sprite = portrait;
         imageKitPortrait.sprite = kit;
+
+        SetVisible(true);
     }
 
     public void Clear()
     {
+        SetVisible(false);
+
         imageCharacterPortrait.sprite = null;
         imageKitPortrait.sprite = null;
 
@@ -46,5 +51,10 @@ public class CharacterPortraitBattle : MonoBehaviour
     private void OnDestroy()
     {
         Clear();
+    }
+
+    public void SetVisible(bool boolValue) 
+    {
+        canvasGroup.alpha = boolValue ? 1f : 0f;
     }
 }

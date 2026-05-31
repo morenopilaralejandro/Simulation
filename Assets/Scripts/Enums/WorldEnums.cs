@@ -45,19 +45,18 @@ namespace Aremoreno.Enums.World
         Paused
     }
 
-    public enum FacingDirection
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
-
     public enum ChestState
     {
         Closed,
         Locked,
         Opened
+    }
+
+    public enum NpcType
+    {
+        Character,
+        //Modular,
+        Monolitic
     }
 }
 

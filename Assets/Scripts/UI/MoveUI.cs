@@ -30,7 +30,7 @@ public class MoveUI : MonoBehaviour
         Clear();
     }
 
-    private void Start()
+    private void Awake()
     {
         iconManager = IconManager.Instance;
     }

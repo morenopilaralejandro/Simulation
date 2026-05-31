@@ -25,7 +25,7 @@ public class ItemComponentAppearance
         SpriteType = itemData.SpriteType;
         SpriteColor = itemData.SpriteColor;
         IconColor = ColorManager.GetItemSpriteColor(SpriteColor);
-        await LoadAsync();
+        //await LoadAsync();
     }
 
     #region Async Loading

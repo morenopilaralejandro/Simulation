@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 /// Attach to NPC GameObjects. When the player interacts, starts the appropriate dialog.
 /// Supports different dialogs based on quest state via the ink script's internal logic.
 /// </summary>
-public class NpcComponentInteractableDialog : NpcComponentInteractable
+public class NpcComponentInteractableDialog : MonoBehaviour, IInteractable
 {
     [Header("Dialog Settings")]
     [Tooltip("The ink knot name to start (e.g., 'elder_oak_talk')")]
@@ -25,16 +25,18 @@ public class NpcComponentInteractableDialog : NpcComponentInteractable
     private DialogManager _dialogManager;
     private IDialogGameDataProvider _gameData;
     //private bool _isInteracting = false;
+    private NpcEntity npcEntity;
 
-    public override void Initialize(NpcEntity npcEntity)
+    public void Initialize(NpcEntity npcEntity)
     {
-        base.Initialize(npcEntity);
+        this.npcEntity = npcEntity;
         _dialogManager = DialogManager.Instance;
         _gameData = _dialogManager.DialogGameDataProvider;
         //UpdateIndicators();
     }
 
-    protected override void InteractInternal()
+
+    public void Interact()
     {
         //if (_isInteracting) return;
         if (DialogManager.Instance == null) return;
@@ -47,6 +49,7 @@ public class NpcComponentInteractableDialog : NpcComponentInteractable
     {
         //_isInteracting = true;
         // Face the player toward the NPC (optional)
+        npcEntity?.FacePlayer();
 
         // Determine which knot to use
         string knotToUse = ResolveDialogKnot();

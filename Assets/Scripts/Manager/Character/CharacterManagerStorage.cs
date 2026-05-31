@@ -26,28 +26,28 @@ public class CharacterManagerStorage
     {
         CharacterDatabase characterDatabase = CharacterDatabase.Instance;
 
-        AddCharacterFromScout(characterDatabase.GetCharacterData("almu"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("sofireca"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("satu"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("are"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("fran"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("rocinante"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("ainara"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("teruel"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("alexander"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("wang"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("navarro"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("mohamed"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("meiga"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("ruperta"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("malaki"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("ayud"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("isa"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("nina"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("gambino"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("inquina"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("apa"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("ali"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00027-almu"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00088-sofireca"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00067-satu"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00001-are"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00013-fran"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00103-rocinante"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00017-ainara"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00070-teruel"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00075-alexander"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00019-wang"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00095-navarro"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00002-mohamed"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00119-meiga"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00117-ruperta"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00040-malaki"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00023-ayud"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00140-isa"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00048-nina"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00042-gambino"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00124-inquina"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00030-apa"), 50);
+        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00010-ali"), 50);
 
         TeamManager.Instance.InitializeFirstLoadout();
     }

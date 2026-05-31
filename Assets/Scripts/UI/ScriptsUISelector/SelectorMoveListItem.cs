@@ -12,8 +12,6 @@ public class SelectorMoveListItem : SelectorListItem<Move>
 
     protected override void OnBind(Move move)
     {
-        IconManager iconManager = IconManager.Instance;
-
         moveUI.SetMoveAsync(move);
         imageBlock.enabled = false;
     }

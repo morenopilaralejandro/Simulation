@@ -17,11 +17,10 @@ public class PlayerWorldComponentDialog : MonoBehaviour
         inputManager = InputManager.Instance;
     }
 
-    private void Update()
+    public void OnUpdate()
     {
         if (!dialogManager.CanAcceptInput) return;
         if (inputManager.GetDown(CustomAction.Dialog_Submit))
             dialogManager.InputPressed();
     }
-
 }

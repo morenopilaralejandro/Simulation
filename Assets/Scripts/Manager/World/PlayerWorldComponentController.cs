@@ -1,6 +1,7 @@
 using UnityEngine;
 using Aremoreno.Enums.Input;
 using Aremoreno.Enums.World;
+using Aremoreno.Enums.Animation;
 
 public class PlayerWorldComponentController : MonoBehaviour
 {
@@ -13,228 +14,266 @@ public class PlayerWorldComponentController : MonoBehaviour
     public bool IsRunning { get; private set; }
     public float DistanceTravelledSinceReset { get; private set; }
     public Vector2 CurrentTilePosition { get; private set; }
+
+    // instantly animate when player presses direction,
+    // even before tile movement begins.
+    public bool WantsToMove =>
+        _currentCardinalInput != Vector2.zero;
+
     public Vector3 CurrentTilePosition3d()
     {
-        return new Vector3(CurrentTilePosition.x, CurrentTilePosition.y, transform.position.z);
+        return new Vector3(
+            CurrentTilePosition.x,
+            CurrentTilePosition.y,
+            transform.position.z
+        );
     }
 
-    private Vector3 _velocity;
+    [Header("Grid Movement")]
+    [SerializeField] private float holdToMoveDelay = 0.04f;
+    [SerializeField] private float inputDeadZone = 0.1f;
+
+    private Vector2 _lastFacingInput;
+    private bool _wasHoldingDirection;
+    private bool _lockFacingDuringMove;
+
     private bool _isGridMoving;
     private Vector2 _gridMoveTarget;
-    private float acceleration = 50f;
+
+    private Vector2 _currentCardinalInput;
+    private float _inputHeldTime;
 
     // stuck detection
     private Vector2 _lastPosition;
     private float _stuckTimer;
+
     private const float STUCK_THRESHOLD = 0.15f;
 
-    // ---- INPUT BUFFER ----
-    private Vector2 _bufferedDirection;
-    private float _bufferTimer;
-    private const float INPUT_BUFFER_WINDOW = 0.1f;
+    #region Initialization
 
-    public void Initialize(PlayerWorldEntity playerWorldEntity, PlayerWorldConfig cfg)
+    public void Initialize(
+        PlayerWorldEntity playerWorldEntity,
+        PlayerWorldConfig cfg)
     {
         this.playerWorldEntity = playerWorldEntity;
         config = cfg;
-        rb = playerWorldEntity.Rb;
 
+        rb = playerWorldEntity.Rb;
         rb.bodyType = RigidbodyType2D.Kinematic;
 
-        // Cache initial tile position
         CurrentTilePosition = SnapToGrid(rb.position);
-    }
 
-    // ================================================================
-    //  UPDATE  — input only
-    // ================================================================
-
-    private void Update()
-    {
-        if (!playerWorldEntity.IsControlEnabled) return;
-        ReadInput();
-        UpdateInputBuffer();
         UpdateAnimation();
     }
 
-    // ================================================================
-    //  FIXED UPDATE  — physics movement
-    // ================================================================
+    #endregion
 
-    private void FixedUpdate()
+    #region Unity Loop
+
+    public void OnUpdate()
     {
-        if (!playerWorldEntity.IsControlEnabled) return;
+        if (!playerWorldEntity.IsControlEnabled)
+            return;
 
-        float dt = Time.fixedDeltaTime;
+        ReadInput();
+        UpdateFacingAndHoldState();
 
-        if (config.gridBasedMovement)
-            HandleGridMovement(dt);
-        else
-            HandleFreeMovement(dt);
+        // Update animation immediately in Update
+        // so direction changes feel instant.
+        UpdateAnimation();
     }
 
-    // ================================================================
-    //  INPUT
-    // ================================================================
+    public void OnFixedUpdate()
+    {
+        if (!playerWorldEntity.IsControlEnabled)
+            return;
+
+        if (_isGridMoving)
+            HandleGridMovement(Time.fixedDeltaTime);
+        else
+            TryStartHeldGridStep();
+    }
+
+    #endregion
+
+    #region Input
 
     private void ReadInput()
     {
         MoveInput = InputManager.Instance.GetMoveWorld();
+
+        // Your existing inversion logic preserved
         IsRunning = !InputManager.Instance.GetHeld(CustomAction.World_Run);
     }
 
-    // ================================================================
-    //  INPUT BUFFER
-    // ================================================================
-
-    private void UpdateInputBuffer()
+    private void UpdateFacingAndHoldState()
     {
-        if (!config.gridBasedMovement) return;
+        Vector2 cardinal =
+            GetCardinalDirection(MoveInput, inputDeadZone);
 
-        if (_bufferTimer > 0f)
-            _bufferTimer -= Time.deltaTime;
+        bool hasDirection = cardinal != Vector2.zero;
 
-        Vector2 cardinal = GetCardinalDirection(MoveInput);
-        if (cardinal != Vector2.zero)
+        // NEW PRESS
+        if (hasDirection && !_wasHoldingDirection)
         {
-            _bufferedDirection = cardinal;
-            _bufferTimer = INPUT_BUFFER_WINDOW;
-        }
-    }
+            _currentCardinalInput = cardinal;
+            _lastFacingInput = cardinal;
 
-    private Vector2 ConsumeBuffer()
-    {
-        if (_bufferTimer > 0f && _bufferedDirection != Vector2.zero)
+            if (!_lockFacingDuringMove) playerWorldEntity.SetFacing(cardinal);
+
+            _inputHeldTime = 0f;
+        }
+        // DIRECTION CHANGED
+        else if (hasDirection && cardinal != _lastFacingInput)
         {
-            Vector2 dir = _bufferedDirection;
-            ClearBuffer();
-            return dir;
+            _currentCardinalInput = cardinal;
+            _lastFacingInput = cardinal;
+
+            // instantly face new direction
+            if (!_lockFacingDuringMove) playerWorldEntity.SetFacing(cardinal);
+
+            // restart hold delay
+            _inputHeldTime = 0f;
         }
-        return Vector2.zero;
+        // CONTINUE HOLD
+        else if (hasDirection)
+        {
+            _inputHeldTime += Time.deltaTime;
+        }
+        // RELEASE
+        else
+        {
+            _currentCardinalInput = Vector2.zero;
+            _inputHeldTime = 0f;
+        }
+
+        _wasHoldingDirection = hasDirection;
     }
 
-    private void ClearBuffer()
+    #endregion
+
+    #region Grid Movement
+
+    private void TryStartHeldGridStep()
     {
-        _bufferedDirection = Vector2.zero;
-        _bufferTimer = 0f;
+        if (_currentCardinalInput == Vector2.zero)
+            return;
+
+        if (_inputHeldTime < holdToMoveDelay)
+            return;
+
+        TryStartGridStepInDirection(
+            SnapToGrid(rb.position),
+            _currentCardinalInput
+        );
     }
-
-    // ================================================================
-    //  FREE MOVEMENT (analog)
-    // ================================================================
-
-    private void HandleFreeMovement(float dt)
-    {
-        float speed = IsRunning ? config.runSpeed : config.walkSpeed;
-
-        Vector2 desiredVelocity = MoveInput * speed;
-        Vector2 velocityDelta = desiredVelocity - rb.velocity;
-        rb.AddForce(velocityDelta * acceleration, ForceMode2D.Force);
-
-        IsMoving = rb.velocity.sqrMagnitude > 0.01f;
-    }
-
-    // ================================================================
-    //  GRID-BASED MOVEMENT
-    // ================================================================
 
     private void HandleGridMovement(float dt)
     {
-        if (_isGridMoving)
+        float speed =
+            IsRunning
+                ? config.runSpeed
+                : config.walkSpeed;
+
+        float stepBudget = speed * dt;
+
+        Vector2 newPos = Vector2.MoveTowards(
+            rb.position,
+            _gridMoveTarget,
+            stepBudget
+        );
+
+        // stuck detection
+        if (Vector2.Distance(newPos, _lastPosition) < 0.001f)
         {
-            float speed = IsRunning ? config.runSpeed : config.walkSpeed;
-            float stepBudget = speed * dt;
+            _stuckTimer += dt;
 
-            Vector2 newPos = Vector2.MoveTowards(
-                rb.position, _gridMoveTarget, stepBudget);
-
-            // ---- stuck detection ----
-            if (Vector2.Distance(newPos, _lastPosition) < 0.001f)
+            if (_stuckTimer >= STUCK_THRESHOLD)
             {
-                _stuckTimer += dt;
-                if (_stuckTimer >= STUCK_THRESHOLD)
-                {
-                    CancelGridStep();
-                    return;
-                }
-            }
-            else
-            {
-                _stuckTimer = 0f;
-            }
-            _lastPosition = newPos;
-
-            // ---- arrival check ----
-            if (Vector2.Distance(newPos, _gridMoveTarget) < 0.005f)
-            {
-                // Snap precisely to the target
-                rb.MovePosition(_gridMoveTarget);
-                _isGridMoving = false;
-                IsMoving = false;
-
-                // Cache the tile we just arrived on
-                CurrentTilePosition = _gridMoveTarget;
-
-                // Tick encounter system once per tile arrival
-                WorldManager.Instance.OnTileArrived(IsRunning);
-
-                // If an encounter was triggered, stop here
-                if (!playerWorldEntity.IsControlEnabled) return;
-
-                // === INPUT BUFFER: try to chain immediately ===
-                Vector2 buffered = ConsumeBuffer();
-                if (buffered != Vector2.zero)
-                {
-                    if (TryStartGridStepInDirection(_gridMoveTarget, buffered))
-                        return;
-                }
-
-                if (MoveInput.sqrMagnitude > 0.01f)
-                {
-                    TryStartGridStepFrom(_gridMoveTarget);
-                }
-            }
-            else
-            {
-                rb.MovePosition(newPos);
+                CancelGridStep();
+                return;
             }
         }
-        else if (MoveInput.sqrMagnitude > 0.01f)
+        else
         {
-            TryStartGridStepFrom(SnapToGrid(rb.position));
+            _stuckTimer = 0f;
+        }
+
+        _lastPosition = newPos;
+
+        // arrival
+        if (Vector2.Distance(newPos, _gridMoveTarget) < 0.005f)
+        {
+            rb.MovePosition(_gridMoveTarget);
+
+            _isGridMoving = false;
+            IsMoving = false;
+
+            _lockFacingDuringMove = false;
+
+            CurrentTilePosition = _gridMoveTarget;
+
+            WorldManager.Instance.OnTileArrived(IsRunning);
+
+            if (!playerWorldEntity.IsControlEnabled)
+                return;
+
+            // chain movement
+            if (_currentCardinalInput != Vector2.zero &&
+                _inputHeldTime >= holdToMoveDelay)
+            {
+                TryStartGridStepInDirection(
+                    _gridMoveTarget,
+                    _currentCardinalInput
+                );
+            }
+        }
+        else
+        {
+            rb.MovePosition(newPos);
         }
     }
 
-    // ================================================================
-    //  GRID STEP HELPERS
-    // ================================================================
-
-    private bool TryStartGridStepFrom(Vector2 fromPosition)
+    private bool TryStartGridStepInDirection(
+        Vector2 fromPosition,
+        Vector2 cardinal)
     {
-        Vector2 cardinal = GetCardinalDirection(MoveInput);
-        return TryStartGridStepInDirection(fromPosition, cardinal);
-    }
-
-    private bool TryStartGridStepInDirection(Vector2 fromPosition, Vector2 cardinal)
-    {
-        if (cardinal == Vector2.zero) return false;
-
-        playerWorldEntity.SetFacing(cardinal);
-
-        Vector2 target = SnapToGrid(fromPosition + cardinal * config.gridSize);
-
-        if (IsPathBlocked(fromPosition, cardinal, config.gridSize))
+        if (cardinal == Vector2.zero)
             return false;
 
+        if (!_lockFacingDuringMove) playerWorldEntity.SetFacing(cardinal);
+
+        Vector2 target =
+            SnapToGrid(
+                fromPosition +
+                cardinal * config.gridSize
+            );
+
+        if (IsPathBlocked(
+                fromPosition,
+                cardinal,
+                config.gridSize))
+        {
+            return false;
+        }
+
         _gridMoveTarget = target;
+
         _isGridMoving = true;
         IsMoving = true;
+
+        _lockFacingDuringMove = true;
+
         _stuckTimer = 0f;
         _lastPosition = fromPosition;
+
         return true;
     }
 
-    private bool IsPathBlocked(Vector2 origin, Vector2 direction, float distance)
+    private bool IsPathBlocked(
+        Vector2 origin,
+        Vector2 direction,
+        float distance)
     {
         RaycastHit2D hit = Physics2D.CircleCast(
             origin,
@@ -243,6 +282,7 @@ public class PlayerWorldComponentController : MonoBehaviour
             distance,
             config.collisionMask
         );
+
         return hit.collider != null;
     }
 
@@ -250,26 +290,71 @@ public class PlayerWorldComponentController : MonoBehaviour
     {
         _isGridMoving = false;
         IsMoving = false;
-        _stuckTimer = 0f;
-        ClearBuffer();
-    }
-
-    private void CancelFreeMovement()
-    {
-        IsMoving = false;
-        _velocity = Vector3.zero;
-        _isGridMoving = false;
+        _lockFacingDuringMove = false;
         _stuckTimer = 0f;
     }
 
-    private static Vector2 GetCardinalDirection(Vector2 raw)
+    #endregion
+
+    #region Animation
+
+    private void UpdateAnimation()
     {
-        if (raw.sqrMagnitude < 0.01f) return Vector2.zero;
+        // animate immediately on directional input,
+        // not only after movement begins.
+
+        bool shouldAnimateMove =
+            WantsToMove || IsMoving;
+
+        if (shouldAnimateMove)
+        {
+            if (IsRunning)
+            {
+                playerWorldEntity.Play(
+                    CharacterAnimationState.Run,
+                    playerWorldEntity.FacingDirection
+                );
+            }
+            else
+            {
+                playerWorldEntity.Play(
+                    CharacterAnimationState.Walk,
+                    playerWorldEntity.FacingDirection
+                );
+            }
+        }
+        else
+        {
+            playerWorldEntity.Play(
+                CharacterAnimationState.Idle,
+                playerWorldEntity.FacingDirection
+            );
+        }
+    }
+
+    #endregion
+
+    #region Utility
+
+    private static Vector2 GetCardinalDirection(
+        Vector2 raw,
+        float deadZone)
+    {
+        if (raw.sqrMagnitude < deadZone * deadZone)
+            return Vector2.zero;
 
         if (Mathf.Abs(raw.x) >= Mathf.Abs(raw.y))
-            return new Vector2(Mathf.Sign(raw.x), 0f);
-        else
-            return new Vector2(0f, Mathf.Sign(raw.y));
+        {
+            return new Vector2(
+                Mathf.Sign(raw.x),
+                0f
+            );
+        }
+
+        return new Vector2(
+            0f,
+            Mathf.Sign(raw.y)
+        );
     }
 
     private Vector2 SnapToGrid(Vector2 pos)
@@ -283,41 +368,64 @@ public class PlayerWorldComponentController : MonoBehaviour
         );
     }
 
-    // ================================================================
-    //  ANIMATION
-    // ================================================================
+    #endregion
 
-    private void UpdateAnimation()
-    {
-        // ...
-    }
-
-    // ================================================================
-    //  PUBLIC API
-    // ================================================================
+    #region Public
 
     public void StopMovement()
     {
-        if (config.gridBasedMovement)
+        if (_isGridMoving)
         {
-            if (_isGridMoving)
-            {
-                rb.MovePosition(SnapToGrid(rb.position));
-            }
-            CancelGridStep();
-        }
-        else
-        {
-            CancelFreeMovement();
+            rb.MovePosition(
+                SnapToGrid(rb.position)
+            );
         }
 
-        // Cache tile position on stop
-        CurrentTilePosition = SnapToGrid(rb.position);
+        _isGridMoving = false;
+        IsMoving = false;
+        _stuckTimer = 0f;
+
+        _currentCardinalInput = Vector2.zero;
+        _inputHeldTime = 0f;
 
         MoveInput = Vector2.zero;
-        ClearBuffer();
+
+        CurrentTilePosition =
+            SnapToGrid(rb.position);
+
         playerWorldEntity.SetControlEnabled(false);
+
+        UpdateAnimation();
     }
 
-    public void ResetDistance() => DistanceTravelledSinceReset = 0f;
+    public void ResetDistance()
+    {
+        DistanceTravelledSinceReset = 0f;
+    }
+
+    public void ResetMovementState()
+    {
+        IsMoving = false;
+        MoveInput = Vector2.zero;
+        IsRunning = false;
+
+        _currentCardinalInput = Vector2.zero;
+        _lastFacingInput = Vector2.zero;
+        _wasHoldingDirection = false;
+
+        _inputHeldTime = 0f;
+        _isGridMoving = false;
+        _gridMoveTarget = Vector2.zero;
+
+        _lockFacingDuringMove = false;
+
+        _stuckTimer = 0f;
+        _lastPosition = rb.position;
+
+        rb.angularVelocity = 0f;
+
+        UpdateAnimation();
+    }
+
+    #endregion
 }

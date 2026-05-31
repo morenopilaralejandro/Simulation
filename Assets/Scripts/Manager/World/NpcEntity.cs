@@ -1,27 +1,26 @@
 using UnityEngine;
+using Aremoreno.Enums.Animation;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.World;
 
 public class NpcEntity : MonoBehaviour
 {
     #region Fields
-    [SerializeField] private bool isGeneric;
-    [SerializeField] private NpcData npcData;
-    [SerializeField] private CharacterData characterData;
-    [SerializeField] private KitData kitData;
-    [SerializeField] private Role role;
-    private Character character;
+
     private Npc npc;
+
     #endregion
 
     #region Components
 
-    [SerializeField] private CharacterComponentAppearanceWorld appearanceComponent;
-    [SerializeField] private NpcComponentInteractable interactableComponent;
+    [SerializeField] private NpcComponentModel modelComponent;
 
     #endregion
 
     #region Initialize
+
+    /*
 
     public void Start() 
     {
@@ -34,7 +33,7 @@ public class NpcEntity : MonoBehaviour
     public void Initialize(CharacterData characterData)
     {
         character = new Character(characterData);
-        appearanceComponent.Initialize(character.AppearanceComponent);
+        //appearanceComponent.Initialize(character.AppearanceComponent);
 
         if (interactableComponent != null)
             interactableComponent.Initialize(this);
@@ -46,7 +45,7 @@ public class NpcEntity : MonoBehaviour
     public void Initialize(NpcData npcData)
     {
         npc = new Npc(npcData);
-        appearanceComponent.Initialize(npc.AppearanceComponent);
+        //appearanceComponent.Initialize(npc.AppearanceComponent);
 
         if (interactableComponent != null)
             interactableComponent.Initialize(this);
@@ -54,25 +53,25 @@ public class NpcEntity : MonoBehaviour
         //appearanceComponent.ApplyClothes(npcData);
     }
 
+    */
+
+    #endregion
+
+    #region Methods
+
+    public virtual void FacePlayer() {}
+
     #endregion
 
     #region API
 
-    public Character Character => character;
+    public void SetNpc(Npc npc) => this.npc = npc;
     public Npc Npc => npc;
-    public bool IsGeneric => isGeneric;
 
-    public string NpcName => isGeneric ? npc.NpcName : character.CharacterNick;
-    //public Sprite PortraitSprite => isGeneric ? npcData.PortraitSprite : character.PortraitSprite;
-    public Sprite PortraitSprite => null;
-//    public PortraitSize PortraitSize => isGeneric ? npc.PortraitSize : character.PortraitSize;
-  public Sprite PortraitSize => null;
-
+    //modelComponent
+    public CharacterDirection FacingDirection => modelComponent.FacingDirection;
+    public void SetFacing(CharacterDirection dir) => modelComponent.SetFacing(dir);
+   
     #endregion
 
-    #region API Npc
-
-    public string NpcId => isGeneric ? npc.NpcId : null;
-
-    #endregion
 }

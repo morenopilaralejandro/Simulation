@@ -10,6 +10,7 @@ using Aremoreno.Enums.Duel;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Localization;
 using Aremoreno.Enums.World;
+using Aremoreno.Enums.Animation;
 
 public class PlayerWorldEntity : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class PlayerWorldEntity : MonoBehaviour
     #region Components
 
     [SerializeField] private Character character;
-    [SerializeField] private CharacterComponentAppearanceWorld appearanceComponent;
+    [SerializeField] private CharacterComponentAppearanceBattle appearanceComponent;
     [SerializeField] private PlayerWorldComponentController controllerComponent;
     [SerializeField] private PlayerWorldComponentInteraction interactionComponent;
     [SerializeField] private PlayerWorldComponentDialog dialogComponent;
@@ -26,6 +27,8 @@ public class PlayerWorldEntity : MonoBehaviour
     [SerializeField] private PlayerWorldComponentPersistence persistenceComponent;
     [SerializeField] private PlayerWorldComponentRigidbody rigidbodyComponent;
     [SerializeField] private PlayerWorldComponentStateMachine stateMachineComponent;
+    [SerializeField] private CharacterComponentAnimationController animationControllerComponent;
+    [SerializeField] private YSort ySortComponent;
 
     [SerializeField] private GameObject modelObject;
     [SerializeField] private GameObject collidersObject;
@@ -47,9 +50,12 @@ public class PlayerWorldEntity : MonoBehaviour
     public void Initialize(CharacterData characterData, Kit kit, PlayerWorldConfig config)
     {
         character = new Character(characterData);
-        //character.ApplyKit(kit, Variant.Home, Position.FW);
 
-        appearanceComponent.Initialize(character.AppearanceComponent, this);
+        appearanceComponent.Initialize(character.AppearanceComponent);
+        RefreshAnimation();
+        character.SetKit(kit, Variant.Home, Role.Field);
+        _ = appearanceComponent.LoadKitAsync();
+
         controllerComponent.Initialize(this, config);
         interactionComponent.Initialize(this, config);
         dialogComponent.Initialize(this, config);
@@ -77,6 +83,28 @@ public class PlayerWorldEntity : MonoBehaviour
 
     #endregion
 
+    #region Update
+
+    private void Update()
+    {
+        controllerComponent.OnUpdate();
+        interactionComponent.OnUpdate();
+        dialogComponent.OnUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        controllerComponent.OnFixedUpdate();
+    }
+
+    private void LateUpdate()
+    {
+        ySortComponent.OnLateUpdate();
+        animationControllerComponent.OnLateUpdate();
+    }
+
+    #endregion
+
     #region API Character
 
     public Character Character => character;
@@ -86,6 +114,7 @@ public class PlayerWorldEntity : MonoBehaviour
     #region API PlayerWorldEntity
 
     //appearanceComponent
+
     //controllerComponent
     private bool isControlEnabled;
     public bool IsControlEnabled => isControlEnabled;
@@ -98,16 +127,19 @@ public class PlayerWorldEntity : MonoBehaviour
     public void ResetDistance() => controllerComponent.ResetDistance();
     public Vector2 CurrentTilePosition => controllerComponent.CurrentTilePosition;
     public Vector3 CurrentTilePosition3d() => controllerComponent.CurrentTilePosition3d();
+    public void ResetMovementState() => controllerComponent.ResetMovementState();
     //interactionComponent
-    public Interactable CurrentInteractionTarget => interactionComponent.CurrentTarget;
+    public IInteractable CurrentInteractionTarget => interactionComponent.CurrentTarget;
     //dialogComponent
     public void SetDialogEnabled(bool enable) => dialogComponent.enabled = enable;
     //modelComponent
-    public FacingDirection FacingDirection => modelComponent.FacingDirection;
+    public CharacterDirection FacingDirection => modelComponent.FacingDirection;
     public void SetFacing(Vector2 input) => modelComponent.SetFacing(input);
-    public void SetFacing(FacingDirection dir) => modelComponent.SetFacing(dir);
+    public void SetFacing(CharacterDirection dir) => modelComponent.SetFacing(dir);
     public Vector3 VectorToFacing() => modelComponent.VectorToFacing();
-    public Vector2 FacingToVector(FacingDirection dir) => modelComponent.FacingToVector(dir);
+    public Vector2 FacingToVector(CharacterDirection dir) => modelComponent.FacingToVector(dir);
+    public CharacterDirection GetOppositeFacingDirection() => modelComponent.GetOppositeFacingDirection();
+
     //persistenceComponent
     public void MakePersistent() => persistenceComponent.MakePersistent();
     //rigidbodyComponent
@@ -118,6 +150,9 @@ public class PlayerWorldEntity : MonoBehaviour
     //stateMachineComponent
     public PlayerWorldState PlayerWorldState => stateMachineComponent.PlayerWorldState;
     public void SetState(PlayerWorldState newState) => stateMachineComponent.SetState(newState);
+    //animationControllerComponent
+    public void Play(CharacterAnimationState state, CharacterDirection direction) => animationControllerComponent.Play(state, direction);
+    public void RefreshAnimation() => animationControllerComponent.RefreshAnimation();
 
     #endregion
 

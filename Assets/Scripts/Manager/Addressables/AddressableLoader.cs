@@ -213,4 +213,7 @@ public static class AddressableLoader
 
     public static string GetItemIconAddress(string id) =>
         $"{AddressableConfig.ItemIconPath}{AddressableConfig.PathSeparator}{id}";
+
+    public static string GetNpcPortraitAddress(string id) =>
+        $"{AddressableConfig.NpcPortraitPath}{AddressableConfig.PathSeparator}{id}";
 }

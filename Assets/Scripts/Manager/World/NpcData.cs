@@ -6,13 +6,5 @@ using Aremoreno.Enums.Kit;
 public class NpcData : ScriptableObject
 {
     public string NpcId;
-    public BodyColorType BodyColorType;
-    public EyeColorType EyeColorType;
-    public HairColorType HairColorType;
-    public HairStyle HairStyle;
-    public PortraitSize PortraitSize;
     public Gender Gender;
-    public KitShirtColor KitBaseColor;
-    public KitPantsColor KitDetailColor;
-    public Sprite PortraitSprite;
 }

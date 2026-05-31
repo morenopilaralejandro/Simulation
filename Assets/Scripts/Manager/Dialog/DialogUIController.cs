@@ -16,24 +16,23 @@ using System.Collections.Generic;
 public class DialogUIController : MonoBehaviour
 {
     [Header("Dialog Box")]
-    [SerializeField] private GameObject _dialogBoxRoot;
     [SerializeField] private CanvasGroup _dialogBoxCanvasGroup;
     [SerializeField] private TextMeshProUGUI _dialogText;
     [SerializeField] private TextMeshProUGUI _characterNameText;
-    [SerializeField] private GameObject _characterNamePanel;
-    [SerializeField] private GameObject _portraitPanel;
+    [SerializeField] private CanvasGroup _characterNamePanel;
+    [SerializeField] private CanvasGroup _portraitPanel;
     [SerializeField] private CharacterPortraitSpeaker _portraitSpeaker;
-    [SerializeField] private GameObject _continueIndicator; // little arrow/triangle
+    [SerializeField] private CanvasGroup _continueIndicator;
 
     [Header("Yes/No Panel")]
-    [SerializeField] private GameObject _yesNoPanel;
+    [SerializeField] private CanvasGroup _yesNoPanel;
     [SerializeField] private Button _yesButton;
     [SerializeField] private Button _noButton;
     [SerializeField] private TextMeshProUGUI _yesButtonText;
     [SerializeField] private TextMeshProUGUI _noButtonText;
 
     [Header("Choice List")]
-    [SerializeField] private GameObject _choiceListPanel;
+    [SerializeField] private CanvasGroup _choiceListPanel;
     [SerializeField] private Transform _choiceListContainer;
     [SerializeField] private GameObject _choiceButtonPrefab;
 
@@ -42,22 +41,28 @@ public class DialogUIController : MonoBehaviour
     [SerializeField] private float _fastTypewriterSpeed = 0.005f;
     [SerializeField] private float _fadeSpeed = 0.3f;
     [SerializeField] private AudioClip _typewriterSFX;
-    [SerializeField] private int _typewriterSFXInterval = 2; // play sfx every N characters
+    [SerializeField] private int _typewriterSFXInterval = 2;
 
     // State
-    private bool _isTyping = false;
-    private bool _skipRequested = false;
-    private bool _isFading = false;
+    private bool _isTyping;
+    private bool _skipRequested;
+    private bool _isFading;
+
     private Coroutine _typewriterCoroutine;
-    private List<GameObject> _spawnedChoiceButtons = new List<GameObject>();
-    private DialogLocalizationBridge _locBridge;
     private Coroutine _fadeCoroutine;
+
+    private readonly List<GameObject> _spawnedChoiceButtons = new();
+
+    private DialogLocalizationBridge _locBridge;
     private AudioManager _audioManager;
     private DialogManager _dialogManager;
 
-    public bool IsVisible => _dialogBoxRoot.activeSelf;
+    public bool IsVisible => _dialogBoxCanvasGroup.alpha > 0.001f;
     public bool IsTyping => _isTyping;
     public bool IsFading => _isFading;
+
+    private int _yesChoiceIndex = 0;
+    private int _noChoiceIndex = 1;
 
     private void Awake()
     {
@@ -74,71 +79,89 @@ public class DialogUIController : MonoBehaviour
     {
         _locBridge = locBridge;
 
-        _yesButton.onClick.AddListener(() => DialogEvents.RaiseChoiceSelected(GetYesChoiceIndex()));
-        _noButton.onClick.AddListener(() => DialogEvents.RaiseChoiceSelected(GetNoChoiceIndex()));
+        _yesButton.onClick.AddListener(() =>
+            DialogEvents.RaiseChoiceSelected(_yesChoiceIndex));
 
-        // Immediately hide — no fade needed at startup
-        _dialogBoxRoot.SetActive(false);
-        if (_dialogBoxCanvasGroup != null)
-            _dialogBoxCanvasGroup.alpha = 0f;
-        _isFading = false;
+        _noButton.onClick.AddListener(() =>
+            DialogEvents.RaiseChoiceSelected(_noChoiceIndex));
 
         _audioManager = AudioManager.Instance;
+
+        Clear();
+        SetCanvasGroupVisible(_dialogBoxCanvasGroup, false);
     }
-
-    private int _yesChoiceIndex = 0;
-    private int _noChoiceIndex = 1;
-
-    private int GetYesChoiceIndex() => _yesChoiceIndex;
-    private int GetNoChoiceIndex() => _noChoiceIndex;
 
     public void Show()
     {
-        // Cancel any in-progress fade (prevents the race condition)
-        if (_fadeCoroutine != null && gameObject.activeInHierarchy)
+        if (_fadeCoroutine != null)
             StopCoroutine(_fadeCoroutine);
 
-        _dialogBoxRoot.SetActive(true);
-        _isFading = false;
+        _isFading = true;
 
-        if (_dialogBoxCanvasGroup != null)
-        {
-            _isFading = true;
-            _fadeCoroutine = StartCoroutine(FadeCanvasGroup(_dialogBoxCanvasGroup, 0f, 1f, _fadeSpeed, () =>
-            {
-                _isFading = false;
-                _fadeCoroutine = null;
-            }));
-        }
+        SetCanvasGroupInteractable(_dialogBoxCanvasGroup, true);
+
+        _fadeCoroutine = StartCoroutine(
+            FadeCanvasGroup(
+                _dialogBoxCanvasGroup,
+                _dialogBoxCanvasGroup.alpha,
+                1f,
+                _fadeSpeed,
+                () =>
+                {
+                    _isFading = false;
+                    _fadeCoroutine = null;
+                }));
     }
 
     public void Hide()
     {
-        // Cancel any in-progress fade
-        if (_fadeCoroutine != null && gameObject.activeInHierarchy)
+        if (_fadeCoroutine != null)
             StopCoroutine(_fadeCoroutine);
+
         _fadeCoroutine = null;
 
         HideChoices();
-        _continueIndicator.SetActive(false);
+        SetCanvasGroupVisible(_continueIndicator, false);
 
-        // Guard: can't start coroutines on an inactive GameObject
-        if (_dialogBoxCanvasGroup != null && gameObject.activeInHierarchy)
+        _isFading = true;
+
+        _fadeCoroutine = StartCoroutine(
+            FadeCanvasGroup(
+                _dialogBoxCanvasGroup,
+                _dialogBoxCanvasGroup.alpha,
+                0f,
+                _fadeSpeed,
+                () =>
+                {
+                    _isFading = false;
+                    _fadeCoroutine = null;
+
+                    SetCanvasGroupInteractable(_dialogBoxCanvasGroup, false);
+                }));
+    }
+
+    public void Clear()
+    {
+        if (_typewriterCoroutine != null)
         {
-            _isFading = true;
-            _fadeCoroutine = StartCoroutine(FadeCanvasGroup(_dialogBoxCanvasGroup, 1f, 0f, _fadeSpeed, () =>
-            {
-                _isFading = false;
-                _fadeCoroutine = null;
-                _dialogBoxRoot.SetActive(false);
-            }));
+            StopCoroutine(_typewriterCoroutine);
+            _typewriterCoroutine = null;
         }
-        else
-        {
-            // Already inactive or no canvas group — just deactivate immediately
-            _isFading = false;
-            _dialogBoxRoot.SetActive(false);
-        }
+
+        _isTyping = false;
+        _skipRequested = false;
+
+        _dialogText.text = string.Empty;
+        _dialogText.maxVisibleCharacters = 0;
+
+        _characterNameText.text = string.Empty;
+        _portraitSpeaker.Clear();
+
+        HideChoices();
+
+        SetCanvasGroupVisible(_characterNamePanel, false);
+        SetCanvasGroupVisible(_portraitPanel, false);
+        SetCanvasGroupVisible(_continueIndicator, false);
     }
 
     /// <summary>
@@ -146,56 +169,44 @@ public class DialogUIController : MonoBehaviour
     /// </summary>
     public void ShowLine(DialogLine line)
     {
-        // Stop any current typewriter
         if (_typewriterCoroutine != null)
             StopCoroutine(_typewriterCoroutine);
 
         HideChoices();
-        _continueIndicator.SetActive(false);
+        SetCanvasGroupVisible(_continueIndicator, false);
 
-        // Set character info
         if (!line.IsSystemMessage && !string.IsNullOrEmpty(line.SpeakerId))
         {
             var speaker = _dialogManager.GetSpeaker(line);
+
             if (speaker != null)
             {
-                // Character name (localized)
-                //_characterNameText.text = _locBridge.ResolveCharacterName(line.SpeakerId);
-                //_characterNameText.color = character.nameColor;
                 _characterNameText.text = speaker.SpeakerName;
-                _characterNamePanel.SetActive(true);
 
-                // Portrait
-                //var portrait = character.GetPortrait(line.Mood);
-                var portrait = speaker.PortraitSprite;
-                if (portrait != null)
-                {
-                    _ = _portraitSpeaker.SetSpeakerAsync(speaker);
-                    _portraitPanel.SetActive(true);
-                }
-                else
-                {
-                    _portraitPanel.SetActive(false);
-                }
+                SetCanvasGroupVisible(_characterNamePanel, true);
+
+                _ = _portraitSpeaker.SetSpeakerAsync(speaker);
+
+                SetCanvasGroupVisible(_portraitPanel, true);
             }
             else
             {
                 _characterNameText.text = line.SpeakerId;
-                _characterNamePanel.SetActive(false);
-                _portraitPanel.SetActive(false);
+
+                SetCanvasGroupVisible(_characterNamePanel, false);
+                SetCanvasGroupVisible(_portraitPanel, false);
             }
         }
         else
         {
-            // System message or no speaker
-            _characterNamePanel.SetActive(false);
-            if (line.IsSystemMessage)
-                _characterNameText.text = ""; // or "System" if you want
-            _portraitPanel.SetActive(false);
+            _characterNameText.text = string.Empty;
+
+            SetCanvasGroupVisible(_characterNamePanel, false);
+            SetCanvasGroupVisible(_portraitPanel, false);
         }
 
-        // Start typewriter
-        _typewriterCoroutine = StartCoroutine(TypewriterEffect(line.ResolvedText));
+        _typewriterCoroutine = StartCoroutine(
+            TypewriterEffect(line.ResolvedText));
     }
 
     /// <summary>
@@ -203,25 +214,20 @@ public class DialogUIController : MonoBehaviour
     /// </summary>
     public void ShowChoices(List<DialogChoice> choices)
     {
-        _continueIndicator.SetActive(false);
+        SetCanvasGroupVisible(_continueIndicator, false);
 
-        // Check if this is a Yes/No choice
         bool isYesNo = choices.Exists(c => c.IsYesNoChoice);
 
         if (isYesNo)
-        {
             ShowYesNoChoices(choices);
-        }
         else
-        {
             ShowMultipleChoices(choices);
-        }
     }
 
     private void ShowYesNoChoices(List<DialogChoice> choices)
     {
-        _yesNoPanel.SetActive(true);
-        _choiceListPanel.SetActive(false);
+        SetCanvasGroupVisible(_yesNoPanel, true);
+        SetCanvasGroupVisible(_choiceListPanel, false);
 
         foreach (var choice in choices)
         {
@@ -240,24 +246,26 @@ public class DialogUIController : MonoBehaviour
 
     private void ShowMultipleChoices(List<DialogChoice> choices)
     {
-        _yesNoPanel.SetActive(false);
-        _choiceListPanel.SetActive(true);
+        SetCanvasGroupVisible(_yesNoPanel, false);
+        SetCanvasGroupVisible(_choiceListPanel, true);
 
-        // Clear old buttons
         ClearChoiceButtons();
 
         foreach (var choice in choices)
         {
             var buttonObj = Instantiate(_choiceButtonPrefab, _choiceListContainer);
-            buttonObj.SetActive(true);
 
             var buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
+
             if (buttonText != null)
                 buttonText.text = choice.ResolvedText;
 
             var button = buttonObj.GetComponent<Button>();
-            int capturedIndex = choice.Index; // capture for closure
-            button.onClick.AddListener(() => DialogEvents.RaiseChoiceSelected(capturedIndex));
+
+            int capturedIndex = choice.Index;
+
+            button.onClick.AddListener(() =>
+                DialogEvents.RaiseChoiceSelected(capturedIndex));
 
             _spawnedChoiceButtons.Add(buttonObj);
         }
@@ -265,8 +273,9 @@ public class DialogUIController : MonoBehaviour
 
     public void HideChoices()
     {
-        _yesNoPanel.SetActive(false);
-        _choiceListPanel.SetActive(false);
+        SetCanvasGroupVisible(_yesNoPanel, false);
+        SetCanvasGroupVisible(_choiceListPanel, false);
+
         ClearChoiceButtons();
     }
 
@@ -274,8 +283,10 @@ public class DialogUIController : MonoBehaviour
     {
         foreach (var btn in _spawnedChoiceButtons)
         {
-            if (btn != null) Destroy(btn);
+            if (btn != null)
+                Destroy(btn);
         }
+
         _spawnedChoiceButtons.Clear();
     }
 
@@ -285,7 +296,9 @@ public class DialogUIController : MonoBehaviour
     /// </summary>
     public void HandleAdvanceInput()
     {
-        if (_isFading) return;
+        if (_isFading)
+            return;
+
         if (_isTyping)
             _skipRequested = true;
         else
@@ -296,9 +309,7 @@ public class DialogUIController : MonoBehaviour
     {
         _isTyping = true;
         _skipRequested = false;
-        _dialogText.text = "";
 
-        // Use TMP's maxVisibleCharacters for proper rich text support
         _dialogText.text = fullText;
         _dialogText.maxVisibleCharacters = 0;
 
@@ -310,7 +321,6 @@ public class DialogUIController : MonoBehaviour
         {
             if (_skipRequested)
             {
-                // Show all text immediately
                 _dialogText.maxVisibleCharacters = totalCharacters;
                 break;
             }
@@ -318,36 +328,73 @@ public class DialogUIController : MonoBehaviour
             visibleCount++;
             _dialogText.maxVisibleCharacters = visibleCount;
 
-            // Typewriter sound
             sfxCounter++;
-            if (_typewriterSFX != null && sfxCounter >= _typewriterSFXInterval)
+
+            if (_typewriterSFX != null &&
+                sfxCounter >= _typewriterSFXInterval)
             {
                 _audioManager.PlaySfxClip(_typewriterSFX);
                 sfxCounter = 0;
             }
 
-            float speed = _skipRequested ? _fastTypewriterSpeed : _typewriterSpeed;
+            float speed = _skipRequested
+                ? _fastTypewriterSpeed
+                : _typewriterSpeed;
+
             yield return new WaitForSeconds(speed);
         }
 
         _isTyping = false;
-        _continueIndicator.SetActive(true);
+
+        SetCanvasGroupVisible(_continueIndicator, true);
+
         DialogEvents.RaiseTextDisplayComplete();
     }
 
-    private IEnumerator FadeCanvasGroup(CanvasGroup cg, float from, float to, float duration, Action onComplete = null)
+    private IEnumerator FadeCanvasGroup(
+        CanvasGroup cg,
+        float from,
+        float to,
+        float duration,
+        Action onComplete = null)
     {
         float elapsed = 0f;
+
         cg.alpha = from;
 
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            cg.alpha = Mathf.Lerp(from, to, elapsed / duration);
+
+            cg.alpha = Mathf.Lerp(
+                from,
+                to,
+                elapsed / duration);
+
             yield return null;
         }
 
         cg.alpha = to;
+
         onComplete?.Invoke();
+    }
+
+    private void SetCanvasGroupVisible(CanvasGroup cg, bool visible)
+    {
+        if (cg == null)
+            return;
+
+        cg.alpha = visible ? 1f : 0f;
+        cg.interactable = visible;
+        cg.blocksRaycasts = visible;
+    }
+
+    private void SetCanvasGroupInteractable(CanvasGroup cg, bool interactable)
+    {
+        if (cg == null)
+            return;
+
+        cg.interactable = interactable;
+        cg.blocksRaycasts = interactable;
     }
 }

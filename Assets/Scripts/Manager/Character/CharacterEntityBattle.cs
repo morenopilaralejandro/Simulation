@@ -42,7 +42,7 @@ public class CharacterEntityBattle : MonoBehaviour
         this.character = character != null ? character : new Character(characterData);
 
         teamMemberComponent.Initialize(this);
-        appearanceBattleComponent.Initialize(this);
+        appearanceBattleComponent.Initialize(AppearanceComponent);
         keeperComponent.Initialize(this);
         fatigueComponent.Initialize(this);
         statusEffectsComponent.Initialize(this);
