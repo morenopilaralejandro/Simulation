@@ -211,7 +211,7 @@ public class CharacterComponentAnimationMotor : MonoBehaviour
         f.Normalize();
 
         if (Mathf.Abs(f.x) > Mathf.Abs(f.z))
-            return f.x > 0 ? CharacterDirection.Left : CharacterDirection.Right;
+            return f.x > 0 ? CharacterDirection.Right : CharacterDirection.Left;
 
         return f.z > 0 ? CharacterDirection.Up : CharacterDirection.Down;
     }

@@ -23,22 +23,29 @@ public class FieldLine : MonoBehaviour
         ApplyToChildren();
     }
 
+
     private void ApplyToChildren()
     {
-        //mesh
+        // Mesh renderers with MaterialPropertyBlock
         var meshRenderers = GetComponentsInChildren<MeshRenderer>(includeInactive: true);
-        meshRenderers[0].GetPropertyBlock(propertyBlock);
-        propertyBlock.SetColor("_Color", lineColor);
-
-        foreach (var mr in meshRenderers) 
+        
+        foreach (var mr in meshRenderers)
+        {
+            mr.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetColor("_BaseColor", lineColor);
             mr.SetPropertyBlock(propertyBlock);
+        }
 
-        //sprite
+        // Sprite renderers with MaterialPropertyBlock
         var spriteRenderers = GetComponentsInChildren<SpriteRenderer>(includeInactive: true);
-
+        
         foreach (var sr in spriteRenderers)
-            sr.color = lineColor;
+        {
+            sr.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetColor("_BaseColor", lineColor);
+            sr.SetPropertyBlock(propertyBlock);
+        }
 
-        LogManager.Trace($"[FieldLine] Updated renderers under {name}.");
+        LogManager.Trace($"[FieldLine] Updated {meshRenderers.Length} mesh + {spriteRenderers.Length} sprite renderers under {name}.");
     }
 }
