@@ -104,6 +104,7 @@ MonoBehaviour:
   teamIndicatorComponent: {fileID: 4891902300048776065}
   elementIndicatorComponent: {fileID: 2440512885607086343}
   speechBubbleComponent: {fileID: 3209649348049751416}
+  billboardComponent: {fileID: 831528681612535533}
   HasBallInHandThrowIn: 0
 --- !u!114 &6836031487143785858
 MonoBehaviour:
@@ -1039,6 +1040,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3943641887977168860, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
   m_PrefabInstance: {fileID: 4451080291270812642}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &831528681612535533 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3913424799742821647, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+  m_PrefabInstance: {fileID: 4451080291270812642}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0943adf5ad7278ebe9d60f54f65498cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6945314671771341290 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6748607844767838728, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}

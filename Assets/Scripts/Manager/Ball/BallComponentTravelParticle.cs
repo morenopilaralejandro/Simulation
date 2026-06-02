@@ -113,7 +113,7 @@ public class BallComponentTravelParticle : MonoBehaviour
     private void SetElementColor(Element element)
     {
         var main = particleTravel.main;
-        main.startColor = ColorManager.GetElementColor(element);
+        main.startColor = ColorManager.GetElementTravelColor(element);
     }
 
     #endregion

@@ -108,6 +108,26 @@ public static class ColorManager
         return Color.white;
     }
 
+    private static readonly Dictionary<Element, Color> elementTravelColors = new Dictionary<Element, Color>()
+    {
+        { Element.Fire,         new Color(1f, 0.118f, 0.118f, 1f) },
+        { Element.Ice,          new Color(0.271f, 0.918f, 1f, 1f) },
+        { Element.Holy,         new Color(1f, 0.471f, 0.427f, 1f) },
+        { Element.Evil,         new Color(0.243f, 0f, 0.776f, 1f) },
+        { Element.Air,          new Color(0.271f, 0.282f, 0.314f, 1f) },
+        { Element.Forest,       new Color(0.631f, 1f, 0.396f, 1f) },
+        { Element.Earth,        new Color(0.18f, 0.09f, 0f, 1f) },
+        { Element.Electric,     new Color(1f, 0.718f, 0f, 1f) },
+        { Element.Water,        new Color(0.043f, 0.153f, 0.357f, 1f) }
+    };
+
+    public static Color GetElementTravelColor(Element element)
+    {
+        if (elementTravelColors.TryGetValue(element, out Color color))
+            return color;
+        return Color.white;
+    }
+
     private static readonly Dictionary<Position, Color> positionColors = new Dictionary<Position, Color>()
     {
         { Position.FW,  new Color(0.8549f, 0.0941f, 0.0941f, 1f) },
@@ -126,7 +146,7 @@ public static class ColorManager
     private static readonly Dictionary<MessageType, Color> battleMessageColors =
         new Dictionary<MessageType, Color>()
     {
-        { MessageType.Goal,         new Color(1f, 0.5948128f, 0.015686274f, 1f) },
+        { MessageType.Goal,         new Color(0.839f, 0.494f, 0f, 1f) },
         { MessageType.HalfTime,     new Color(1f, 1f, 1f, 1f) },
         { MessageType.FullTime,     new Color(1f, 1f, 1f, 1f) },
         { MessageType.TimeUp,       new Color(1f, 1f, 1f, 1f) },

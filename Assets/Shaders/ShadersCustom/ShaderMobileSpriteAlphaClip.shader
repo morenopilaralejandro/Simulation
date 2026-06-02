@@ -1,32 +1,32 @@
-Shader "Custom/Unlit/Mobile/MobileAdditiveParticle"
+Shader "Custom/Unlit/Mobile/MobileSpriteAlphaClip"
 {
     Properties
     {
-        _BaseMap("Particle Texture", 2D) = "white" {}
-        _Color("Color", Color) = (1, 1, 1, 1)
-        _Intensity("Intensity", Range(0, 2)) = 1.0
+        _BaseMap("Sprite Texture", 2D) = "white" {}
+        _BaseColor("Tint Color", Color) = (1, 1, 1, 1)
+        _Cutoff("Alpha Cutoff", Range(0, 1)) = 0.5
     }
 
     SubShader
     {
         Tags
         {
-            "RenderType" = "Transparent"
+            "RenderType" = "TransparentCutout"
             "RenderPipeline" = "UniversalPipeline"
             "UniversalMaterialType" = "Unlit"
             "IgnoreProjector" = "True"
-            "Queue" = "Transparent"
+            "Queue" = "AlphaTest"
         }
 
         LOD 100
 
         Pass
         {
-            Name "AdditiveParticle"
+            Name "SpriteAlphaClip"
             Tags { "LightMode" = "UniversalForward" }
 
-            Blend One One
-            ZWrite Off
+            Blend Off
+            ZWrite On
             ZTest LEqual
             Cull Back
 
@@ -34,10 +34,9 @@ Shader "Custom/Unlit/Mobile/MobileAdditiveParticle"
             #pragma prefer_hlsl3
             #pragma target 3.0
 
-            #pragma vertex ParticleVertex
-            #pragma fragment ParticleFragment
+            #pragma vertex SpriteVertex
+            #pragma fragment SpriteFragment
 
-            #pragma multi_compile_particles
             #pragma multi_compile_instancing
             #pragma multi_compile _ UNITY_COLORSPACE_GAMMA
 
@@ -45,8 +44,8 @@ Shader "Custom/Unlit/Mobile/MobileAdditiveParticle"
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
-                half4 _Color;
-                half _Intensity;
+                half4 _BaseColor;
+                half _Cutoff;
             CBUFFER_END
 
             TEXTURE2D(_BaseMap);
@@ -56,7 +55,6 @@ Shader "Custom/Unlit/Mobile/MobileAdditiveParticle"
             {
                 float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
-                half4 color : COLOR;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -64,11 +62,10 @@ Shader "Custom/Unlit/Mobile/MobileAdditiveParticle"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                half4 color : COLOR;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
-            Varyings ParticleVertex(Attributes input)
+            Varyings SpriteVertex(Attributes input)
             {
                 UNITY_SETUP_INSTANCE_ID(input);
                 Varyings output = (Varyings)0;
@@ -77,24 +74,20 @@ Shader "Custom/Unlit/Mobile/MobileAdditiveParticle"
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
                 output.positionHCS = vertexInput.positionCS;
                 output.uv = TRANSFORM_TEX(input.uv, _BaseMap);
-                output.color = input.color;
 
-                return output;
+                return output; 
             }
 
-            half4 ParticleFragment(Varyings input) : SV_Target
+            half4 SpriteFragment(Varyings input) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(input);
 
                 half4 texColor = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
+                clip(texColor.a - _Cutoff);
 
-                if (texColor.a < 0.01h)
-                    discard;
+                half4 finalColor = texColor * _BaseColor;
 
-                half3 finalColor = texColor.rgb * _Color.rgb * input.color.rgb * _Intensity;
-                half finalAlpha = texColor.a * input.color.a;
-
-                return half4(finalColor, finalAlpha);
+                return finalColor;
             }
             ENDHLSL
         }

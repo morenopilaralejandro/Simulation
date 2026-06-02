@@ -34,6 +34,7 @@ public class CharacterEntityBattle : MonoBehaviour
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private CharacterComponentElementIndicator elementIndicatorComponent;
     [SerializeField] private CharacterComponentSpeechBubble speechBubbleComponent;
+    [SerializeField] private Billboard billboardComponent;
     #endregion
 
     #region Initialize
@@ -77,6 +78,7 @@ public class CharacterEntityBattle : MonoBehaviour
         if(controllerComponent.enabled) controllerComponent.OnLateUpdate();
         animationMotorComponent.OnLateUpdate();
         animationControllerComponent.OnLateUpdate();
+        billboardComponent.OnLateUpdate();
     }
 
     #endregion

@@ -32,7 +32,7 @@ public sealed class Billboard : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
+    public void OnLateUpdate()
     {
         if (targetCamera == null) return;
 
