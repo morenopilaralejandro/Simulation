@@ -21,6 +21,8 @@ public class MenuMainPanelSettings : Menu
         base.Show();
 
         dropdownLanguage.InitializeDropdown();
+        sliderBgm.value = SettingsManager.Instance.CurrentSettings.BgmVolume;
+        sliderSfx.value = SettingsManager.Instance.CurrentSettings.SfxVolume;
         toggleElementIndicator.isOn = SettingsManager.Instance.CurrentSettings.ShowElementIndicator;
         CacheSettings();
     }
@@ -43,6 +45,18 @@ public class MenuMainPanelSettings : Menu
     {
         RequestClose();
         RestoreSettings();
+    }
+
+    public void OnSliderBgmValueChanged()
+    {
+        float volume = sliderBgm.value;
+        SettingsManager.Instance.SetBgmVolume(volume);
+    }
+
+    public void OnSliderSfxValueChanged()
+    {
+        float volume = sliderSfx.value;
+        SettingsManager.Instance.SetSfxVolume(volume);
     }
 
     /*

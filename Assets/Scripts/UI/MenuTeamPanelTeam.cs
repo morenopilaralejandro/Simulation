@@ -80,7 +80,7 @@ public class MenuTeamPanelTeam : Menu
             .OnEnter(MenuTeamState.Swapping, () =>
             {
                 pickedSlot = selectedSlot;
-                audioManager.PlaySfxUI("sfx-menu_change");
+                audioManager.PlaySfxUI("sfx-menu_pick");
                 UIEvents.RaiseFormationCharacterSlotUIMoveStarted(selectedSlot);
             })
             .OnExit(MenuTeamState.Swapping, () =>
@@ -205,6 +205,7 @@ public class MenuTeamPanelTeam : Menu
             return;
         }
 
+        AudioManager.Instance.PlaySfxUI("sfx-menu_back");
         UIEvents.RaiseBackFromTeamRequested(currentTeam, hasSwapped);
         RequestClose();
     }
@@ -271,6 +272,7 @@ public class MenuTeamPanelTeam : Menu
 
     public void OnButtonCloseClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_back");
         UIEvents.RaiseBackFromTeamRequested(currentTeam, hasSwapped);
         RequestClose();
     }
@@ -414,7 +416,7 @@ public class MenuTeamPanelTeam : Menu
     {
         if (!stateMachine.Is(MenuTeamState.Swapping)) return;
         stateMachine.Set(MenuTeamState.Idle);
-        audioManager.PlaySfxUI("sfx-menu_cancel");
+        audioManager.PlaySfxUI("sfx-menu_drop");
     }
 
     private void HandleFormationCharacterSlotUISwapped(FormationCharacterSlotUI a, FormationCharacterSlotUI b)
@@ -615,7 +617,11 @@ public class MenuTeamPanelTeam : Menu
 
     // --- Misc ---
 
-    private void HandleLoadoutDeleted(Team _) => RequestClose();
+    private void HandleLoadoutDeleted(Team _) 
+    { 
+        AudioManager.Instance.PlaySfxUI("sfx-menu_back");
+        RequestClose(); 
+    }
 
     private void HandleSubstitutionChangesUpdated(int currentValue, int maxValue)
         => UpdateChangesText(currentValue, maxValue);

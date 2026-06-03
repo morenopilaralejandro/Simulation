@@ -111,6 +111,8 @@ public class TeamPreviewManager : MonoBehaviour
         if (state != TeamPreviewState.Previewing && state != TeamPreviewState.WaitingForReady)
             return;
 
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
+
         if (isMultiplayer)
         {
             TeamSide userSide = battleManager.GetUserSide();

@@ -5,6 +5,7 @@ public class BallComponentCollider : MonoBehaviour
     private Ball ball;
     private string tagCharacterKeep = "Character-Keep";
     private string tagCharacterKeeper = "Character-Duel-Keeper";
+    private string tagGoalPost = "Goal-Post";
     private string tagBound = "Bound";
     
     
@@ -71,6 +72,8 @@ public class BallComponentCollider : MonoBehaviour
             LogManager.Trace($"[BallComponentCollider] [OnCollisionEnter] {hitObj.name} (Tag: {hitObj.tag}", this);
             ball.CancelTravel();
         }
+        if (hitObj.CompareTag(tagGoalPost))
+            AudioManager.Instance.PlaySfx("sfx-ball_bounce_goal_post");
     }
 
     private void OnCollisionStay(Collision collision)

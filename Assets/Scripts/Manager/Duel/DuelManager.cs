@@ -238,6 +238,22 @@ public class DuelManager : MonoBehaviour
         //UI
         BattleUIManager.Instance.SetDuelParticipant(character, null);
         //AudioManager.Instance.PlaySfx("SfxDuelShoot");
+
+        switch (category)
+        {
+            case Category.Shoot:
+                AudioManager.Instance.PlaySfx("sfx-duel_chance_combo_offence");
+                break;
+            case Category.Block:
+                AudioManager.Instance.PlaySfx("sfx-duel_chance_combo_defense");
+                break;
+            case Category.Catch:
+                AudioManager.Instance.PlaySfx("sfx-duel_chance_keeper");
+                break;
+            default:
+                LogManager.Trace("[DuelManager] Unknown category for combo chance sfx");
+                break;
+        }
         
 
         //RegisterTrigger

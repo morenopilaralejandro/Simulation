@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 3024222406222049119}
   m_Layer: 0
   m_Name: BounceRightSide
-  m_TagString: Untagged
+  m_TagString: Goal-Post
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 2272796174025441597}
   m_Layer: 0
   m_Name: BounceTopPost
-  m_TagString: Untagged
+  m_TagString: Goal-Post
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 531336043719278637}
   m_Layer: 0
   m_Name: BounceLeftSide
-  m_TagString: Untagged
+  m_TagString: Goal-Post
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -494,7 +494,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teamSideComponent: {fileID: 681774158548089047}
   triggerComponent: {fileID: 4457930167690848557}
-  positionComponent: {fileID: 0}
 --- !u!114 &681774158548089047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,7 +519,7 @@ GameObject:
   - component: {fileID: 3836673565865977712}
   m_Layer: 0
   m_Name: BounceTopSide
-  m_TagString: Untagged
+  m_TagString: Goal-Post
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -889,7 +888,7 @@ GameObject:
   - component: {fileID: 8371682307710303397}
   m_Layer: 0
   m_Name: BounceLeftPost
-  m_TagString: Untagged
+  m_TagString: Goal-Post
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1044,7 +1043,7 @@ GameObject:
   - component: {fileID: 208568281988006545}
   m_Layer: 0
   m_Name: BounceRightPost
-  m_TagString: Untagged
+  m_TagString: Goal-Post
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

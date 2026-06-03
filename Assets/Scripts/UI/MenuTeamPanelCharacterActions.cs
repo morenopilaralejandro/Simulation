@@ -25,7 +25,7 @@ public class MenuTeamPanelCharacterActions : Menu
 
     public void OnButtonMoveClicked() 
     {
-        AudioManager.Instance.PlaySfxUI("sfx-menu_change");
+        AudioManager.Instance.PlaySfxUI("sfx-menu_pick");
         RequestClose();
         UIEvents.RaiseFormationCharacterSlotUIMoveRequested(null);
     }

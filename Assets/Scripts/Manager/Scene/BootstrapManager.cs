@@ -30,6 +30,8 @@ public class BootstrapManager : MonoBehaviour
         yield return new WaitUntil(() => DataLoadManager.Instance != null);
         yield return new WaitUntil(() => DataLoadManager.Instance.IsReady);
 
+        AudioManager.Instance.PlaySfx("sfx-double_screen");
+
         SceneManager.UnloadSceneAsync("LoadingScene");
 
     #if UNITY_EDITOR || DEVELOPMENT_BUILD
