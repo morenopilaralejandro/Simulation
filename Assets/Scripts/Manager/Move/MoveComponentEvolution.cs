@@ -19,6 +19,7 @@ public class MoveComponentEvolution
 
     public int TimesUsedTotal { get; private set; }
     public int TimesUsedCurrentEvolution { get; private set; }
+    public bool IsBefore { get; private set; }
 
     private static readonly string EmptyAddress = string.Empty;
 
@@ -117,6 +118,7 @@ public class MoveComponentEvolution
 
     private void UpdateLocalization()
     {
+        IsBefore = false;
         if (CurrentEvolution == MoveEvolution.None)
         {
             EvolutionAddress = EmptyAddress;
@@ -143,6 +145,13 @@ public class MoveComponentEvolution
             localizationCode,
             localizationStyle
         );
+
+
+        if (localizationCode == "ja" || localizationStyle == "romanized")
+        {
+            if (CurrentEvolution == MoveEvolution.Yari || CurrentEvolution == MoveEvolution.Mori || CurrentEvolution == MoveEvolution.Shi)
+                IsBefore = true;
+        }
     }
 
 }

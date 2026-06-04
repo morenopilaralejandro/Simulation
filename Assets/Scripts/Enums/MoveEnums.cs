@@ -22,8 +22,8 @@ namespace Aremoreno.Enums.Move
     public enum GrowthType
     {
         Delchi,
-        S,
-        Uraga
+        Gou,
+        Yamo
     }
 
     public enum GrowthRate 
@@ -39,11 +39,11 @@ namespace Aremoreno.Enums.Move
         Delta,
         Chi,
         Phi,
-        S,
-        Ss,
-        Sss,
-        Ura,
-        Galaxy,
-        Legend
+        Gou1,
+        Gou2,
+        Gou3,
+        Yari,
+        Mori,
+        Shi
     }
 }

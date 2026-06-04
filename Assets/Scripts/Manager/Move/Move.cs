@@ -80,6 +80,7 @@ public class Move
     public string EvolutionAddress => evolutionComponent.EvolutionAddress;
     public int TimesUsedTotal => evolutionComponent.TimesUsedTotal;
     public int TimesUsedCurrentEvolution => evolutionComponent.TimesUsedCurrentEvolution;
+    public bool IsBefore => evolutionComponent.IsBefore;
     public bool IsAtFinalEvolution => evolutionComponent.IsAtFinalEvolution;
     public void ProgressEvolution() => evolutionComponent.ProgressEvolution();
     public bool TryEvolve() => evolutionComponent.TryEvolve();

@@ -92,7 +92,7 @@ public class MoveCutscenePanel : MonoBehaviour
 
     private void SetEvolution(Move move) 
     {
-        if (IsBefore(move.CurrentEvolution)) 
+        if (move.IsBefore) 
         {
             _ = SetEvolutionAsync(move.EvolutionAddress, imageEvolutionBefore);
             imageEvolutionGoBefore.SetActive(true);
@@ -104,11 +104,6 @@ public class MoveCutscenePanel : MonoBehaviour
             imageEvolutionGoBefore.SetActive(false);
         }
     }
-
-    private bool IsBefore(MoveEvolution moveEvolution) => 
-        moveEvolution == MoveEvolution.Ura ||
-        moveEvolution == MoveEvolution.Galaxy ||
-        moveEvolution == MoveEvolution.Legend;
 
     // -------------------------
     // Address
