@@ -9,12 +9,18 @@ public class MoveCutsceneHideRenderer : MonoBehaviour
     {
         MoveEvents.OnMoveCutsceneStart += HandleMoveCutsceneStart;
         MoveEvents.OnMoveCutsceneEnd += HandleMoveCutsceneEnd;
+
+        WingEvents.OnWingCutsceneStart += HandleWingCutsceneStart;
+        WingEvents.OnWingCutsceneEnd += HandleWingCutsceneEnd;
     }
 
     private void OnDisable()
     {
         MoveEvents.OnMoveCutsceneStart -= HandleMoveCutsceneStart;
         MoveEvents.OnMoveCutsceneEnd -= HandleMoveCutsceneEnd;
+
+        WingEvents.OnWingCutsceneStart -= HandleWingCutsceneStart;
+        WingEvents.OnWingCutsceneEnd -= HandleWingCutsceneEnd;
     }
 
     private void HandleMoveCutsceneStart(Move move)
@@ -26,6 +32,22 @@ public class MoveCutsceneHideRenderer : MonoBehaviour
     }
 
     private void HandleMoveCutsceneEnd()
+    {
+        if (targetRenderer != null)
+        {
+            targetRenderer.enabled = false;
+        }
+    }
+
+    private void HandleWingCutsceneStart(Wing wing)
+    {
+        if (targetRenderer != null)
+        {
+            targetRenderer.enabled = true;
+        }
+    }
+
+    private void HandleWingCutsceneEnd()
     {
         if (targetRenderer != null)
         {

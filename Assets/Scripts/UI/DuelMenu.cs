@@ -220,7 +220,7 @@ public class DuelMenu : MonoBehaviour
 
     public void OnCommandMeleeTapped()
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        AudioManager.Instance.PlaySfx("sfx-menu-regular-command");
         DuelSelectionManager.Instance.SelectionMadeHuman(
             userSide, 
             DuelCommand.Melee, 
@@ -229,7 +229,7 @@ public class DuelMenu : MonoBehaviour
 
     public void OnCommandRangedTapped()
     {
-        AudioManager.Instance.PlaySfx("sfx-menu_tap");
+        AudioManager.Instance.PlaySfx("sfx-menu-regular-command");
         DuelSelectionManager.Instance.SelectionMadeHuman(
             userSide, 
             DuelCommand.Ranged, 

@@ -32,6 +32,9 @@ public class DataLoadManager : MonoBehaviour
         Task loadMoves = MoveManager.Instance.LoadAllMoveDataAsync();
         Task loadMoveEvolutionGrowthProfile = MoveEvolutionGrowthProfileManager.Instance.LoadAllMoveEvolutionGrowthProfileAsync();
         Task loadMoveEvolutionPath =  MoveEvolutionPathManager.Instance.LoadAllMoveEvolutionPathAsync();
+        Task loadWings = WingDatabase.Instance.LoadAllWingDataAsync();
+        Task loadWingEvolutionGrowthProfile = WingDatabase.Instance.LoadAllWingEvolutionGrowthProfileAsync();
+        Task loadWingEvolutionPath =  WingDatabase.Instance.LoadAllWingEvolutionPathAsync();
         Task loadCharacters = CharacterDatabase.Instance.LoadAllCharacterDataAsync();
         Task loadKits = KitManager.Instance.LoadAllKitsAsync();
         Task loadEmblems = EmblemDatabase.Instance.LoadAllEmblemsAsync();
@@ -59,18 +62,14 @@ public class DataLoadManager : MonoBehaviour
             loadMoves,
             loadMoveEvolutionGrowthProfile,
             loadMoveEvolutionPath,
+            loadWings,
+            loadWingEvolutionGrowthProfile,
+            loadWingEvolutionPath,
             loadTeams, 
             loadScenes,
             loadNpcs,
             loadItems,
             loadOverworldDefinition);
-
-
-
-
-
-
-
 
         //Quest
         Task loadQuestObjective = QuestObjectiveDatabase.Instance.LoadAllQuestObjectiveDataAsync();

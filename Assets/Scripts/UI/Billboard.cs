@@ -1,40 +1,47 @@
 using UnityEngine;
 using Cinemachine;
 
-public class Billboard : MonoBehaviour
+public sealed class Billboard : MonoBehaviour
 {
-    public Camera targetCamera; // If left null, will auto-use Camera.main
-    public bool keepUpright = true;
+    [SerializeField] private Camera targetCamera;
+    [SerializeField] private bool keepUpright = true;
 
-    void Start()
+    private Transform cachedTransform;
+    private static Camera cachedMainCamera;
+
+    private void Awake()
     {
+        cachedTransform = transform;
+
         if (targetCamera == null)
         {
-            // Try to find the main camera or one with a Cinemachine Brain
-            var brain = FindObjectOfType<CinemachineBrain>();
-            if (brain != null)
-                targetCamera = brain.OutputCamera;
-            else
-                targetCamera = Camera.main;
+            if (cachedMainCamera == null)
+            {
+                var brain = FindFirstObjectByType<CinemachineBrain>();
+                if (brain != null && brain.OutputCamera != null)
+                {
+                    cachedMainCamera = brain.OutputCamera;
+                }
+                else
+                {
+                    cachedMainCamera = Camera.main;
+                }
+            }
+
+            targetCamera = cachedMainCamera;
         }
     }
 
-    void LateUpdate()
+    public void OnLateUpdate()
     {
         if (targetCamera == null) return;
 
-        Vector3 lookDirection = transform.position - targetCamera.transform.position;
+        Vector3 toCamera = targetCamera.transform.position - cachedTransform.position;
 
-        if (keepUpright)
-        {
-            Vector3 lookPos = targetCamera.transform.position;
-            lookPos.x = transform.position.x; // Lock vertical
-            lookPos.y = transform.position.y; // Lock vertical
-            transform.LookAt(lookPos, Vector3.up);
-        }
-        else
-        {
-            transform.LookAt(targetCamera.transform);
-        }
+        if (keepUpright) toCamera.y = 0f;
+
+        if (toCamera.sqrMagnitude < 0.0001f) return;
+
+        cachedTransform.rotation = Quaternion.LookRotation(-toCamera, Vector3.up);
     }
 }

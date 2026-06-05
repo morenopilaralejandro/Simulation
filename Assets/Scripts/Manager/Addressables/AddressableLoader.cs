@@ -216,4 +216,12 @@ public static class AddressableLoader
 
     public static string GetNpcPortraitAddress(string id) =>
         $"{AddressableConfig.NpcPortraitPath}{AddressableConfig.PathSeparator}{id}";
+
+
+    public static string GetWingEvolutionAddress(string id, string languageCode, string localizationSyle) =>
+        $"{AddressableConfig.WingEvolutionPath}{AddressableConfig.PathSeparator}{id}{AddressableConfig.PathSeparator}{languageCode}{AddressableConfig.PathSeparator}{localizationSyle}";
+    public static string GetWingFrontAddress(string id) =>
+        $"{AddressableConfig.WingFrontPath}{AddressableConfig.PathSeparator}{id}{AddressableConfig.PathSeparator}front";
+    public static string GetWingBackAddress(string id) =>
+        $"{AddressableConfig.WingBackPath}{AddressableConfig.PathSeparator}{id}{AddressableConfig.PathSeparator}back";
 }
