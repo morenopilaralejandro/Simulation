@@ -99,7 +99,7 @@ public static class DamageCalculator
         if (isDirect)
             damage += DIRECT_BONUS;
 
-        if (damage == 666 || damage == 665 || damage == 667)
+        if (damage > 665 && damage < 667)
             damage -= 10; 
 
         damage = Mathf.Max(damage, 1f); // Prevent negative damage

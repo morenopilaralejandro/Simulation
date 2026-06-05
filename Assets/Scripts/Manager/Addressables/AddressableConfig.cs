@@ -24,6 +24,11 @@ public static class AddressableConfig
     [Header("NPC Paths")]
     public const string NpcPortraitPath = "npc-portraits";
 
+    [Header("Wing Paths")]
+    public const string WingFrontPath = "library-wings";
+    public const string WingBackPath = "library-wings";
+    public const string WingEvolutionPath = "wing-evolution";
+
     [Header("Path Settings")]
     public const string PathSeparator = "-";
     public const string SubSeparator = "_";

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Wing;
 
 public class MoveCutscenePanel : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class MoveCutscenePanel : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
 
     private readonly AddressableBinding<Sprite> _bindingEvolution = new();
-    private MoveEvolution _cachedEvolution = MoveEvolution.None;
+    private MoveEvolution _cachedMoveEvolution = MoveEvolution.None;
+    private WingEvolution _cachedWingEvolution = WingEvolution.None;
 
     private void Awake() 
     {
@@ -33,12 +35,18 @@ public class MoveCutscenePanel : MonoBehaviour
     {
         MoveEvents.OnMoveCutsceneStart += HandleMoveCutsceneStart;
         MoveEvents.OnMoveCutsceneEnd += HandleMoveCutsceneEnd;
+
+        WingEvents.OnWingCutsceneStart -= HandleWingCutsceneStart;
+        WingEvents.OnWingCutsceneEnd -= HandleWingCutsceneEnd;
     }
 
     private void OnDisable()
     {
         MoveEvents.OnMoveCutsceneStart -= HandleMoveCutsceneStart;
         MoveEvents.OnMoveCutsceneEnd -= HandleMoveCutsceneEnd;
+
+        WingEvents.OnWingCutsceneStart -= HandleWingCutsceneStart;
+        WingEvents.OnWingCutsceneEnd -= HandleWingCutsceneEnd;
     }
 
     // -------------------------
@@ -56,6 +64,17 @@ public class MoveCutscenePanel : MonoBehaviour
         SetVisible(false);
     }
 
+    private void HandleWingCutsceneStart(Wing wing)
+    {
+        SetWing(wing);
+        SetVisible(true);
+    }
+
+    private void HandleWingCutsceneEnd()
+    {
+        SetVisible(false);
+    }
+
     // -------------------------
     // Visibility
     // -------------------------
@@ -68,7 +87,7 @@ public class MoveCutscenePanel : MonoBehaviour
     }
 
     // -------------------------
-    // Move Data
+    // Move
     // -------------------------
 
     private void SetMove(Move move)
@@ -76,9 +95,9 @@ public class MoveCutscenePanel : MonoBehaviour
         textMoveName.text = move.MoveName;
         textMoveName.color = ColorManager.GetElementColor(move.Element);
 
-        if(move.CurrentEvolution == _cachedEvolution) return;
+        if(move.CurrentEvolution == _cachedMoveEvolution) return;
 
-        _cachedEvolution = move.CurrentEvolution;
+        _cachedMoveEvolution = move.CurrentEvolution;
 
         if(move.CurrentEvolution == MoveEvolution.None) 
         {
@@ -86,11 +105,11 @@ public class MoveCutscenePanel : MonoBehaviour
             imageEvolutionGoAfter.SetActive(false);
         } else 
         {
-            SetEvolution(move);
+            SetMoveEvolution(move);
         }
     }
 
-    private void SetEvolution(Move move) 
+    private void SetMoveEvolution(Move move) 
     {
         if (move.IsBefore) 
         {
@@ -103,6 +122,50 @@ public class MoveCutscenePanel : MonoBehaviour
             imageEvolutionGoAfter.SetActive(true);
             imageEvolutionGoBefore.SetActive(false);
         }
+    }
+
+    // -------------------------
+    // Wing
+    // -------------------------
+    private void SetWing(Wing wing)
+    {
+        textMoveName.text = wing.WingName;
+        textMoveName.color = ColorManager.GetElementColor(wing.Element);
+
+        if(wing.CurrentEvolution == _cachedWingEvolution) return;
+
+        _cachedWingEvolution = wing.CurrentEvolution;
+
+        if(wing.CurrentEvolution == WingEvolution.None) 
+        {
+            imageEvolutionGoBefore.SetActive(false);
+            imageEvolutionGoAfter.SetActive(false);
+        } else 
+        {
+            SetWingEvolution(wing);
+        }
+    }
+
+    private void SetWingEvolution(Wing wing) 
+    {
+        /*
+        if (move.IsBefore) 
+        {
+            _ = SetEvolutionAsync(move.EvolutionAddress, imageEvolutionBefore);
+            imageEvolutionGoBefore.SetActive(true);
+            imageEvolutionGoAfter.SetActive(false);
+        } else 
+        {
+            _ = SetEvolutionAsync(move.EvolutionAddress, imageEvolutionAfter);
+            imageEvolutionGoAfter.SetActive(true);
+            imageEvolutionGoBefore.SetActive(false);
+        }
+        */
+
+            _ = SetEvolutionAsync(wing.WingEvolutionAddress, imageEvolutionAfter);
+            imageEvolutionGoAfter.SetActive(true);
+            imageEvolutionGoBefore.SetActive(false);
+
     }
 
     // -------------------------
