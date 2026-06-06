@@ -67,7 +67,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         await LoadHairBackAsync();
     }
 
-    public async Task AppearanceBattleLoadAsync(bool hasWing = false)
+    public async Task AppearanceBattleLoadAsync(bool hasWingActivated = false)
     {
         SetBodyColor();
         SetHairColor();
@@ -76,7 +76,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         await LoadHairBackAsync();
         await LoadKitAsync();
 
-        if (hasWing)
+        if (hasWingActivated)
             await LoadWingAsync();
         else
             UnloadWing();

@@ -5,6 +5,7 @@ using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.Move;
 using Aremoreno.Enums.Localization;
 using Aremoreno.Enums.SpriteLayer;
+using Aremoreno.Enums.Wing;
 
 public class Character
 {
@@ -19,6 +20,7 @@ public class Character
     private CharacterComponentMoves movesComponent;
     private CharacterComponentPersistence persistenceComponent;
     private CharacterComponentAppearance appearanceComponent;
+    private CharacterComponentWing wingComponent;
 
     #endregion
 
@@ -44,6 +46,7 @@ public class Character
         movesComponent = new CharacterComponentMoves(characterData, this, characterSaveData);
         persistenceComponent = new CharacterComponentPersistence(characterData, this);
         appearanceComponent = new CharacterComponentAppearance(characterData, this, characterSaveData);
+        wingComponent = new CharacterComponentWing(characterData, this, characterSaveData);
     }
 
     #endregion
@@ -161,6 +164,21 @@ public class Character
     public string HairBackAddress => appearanceComponent.HairBackAddress;
     public Color ColorBody => appearanceComponent.ColorBody;
     public Color ColorHair => appearanceComponent.ColorHair;
+    public void SetWingType(WingType wingType) => appearanceComponent.SetWingType(wingType);
+    public void SetWingColorType(WingColorType wingColorType) => appearanceComponent.SetWingColorType(wingColorType);
+    public void SetWing(Wing wing) => appearanceComponent.SetWing(wing);
+    public void SetWingAddress() => appearanceComponent.SetWingAddress();
+    public void SetWingColor() => appearanceComponent.SetWingColor();
+
+    //wingComponent
+    public Wing Wing => wingComponent.Wing;
+    public bool HasWingActivated => wingComponent.HasWingActivated;
+    public bool HasWingEquipped => wingComponent.HasWingEquipped;
+    public void EquipWing(Wing wing) => wingComponent.EquipWing(wing);
+    public void UnequipWing() => wingComponent.UnequipWing();
+    public void SetWingEquipped(Wing wing) => wingComponent.SetWingEquipped(wing);
+    public void SetWingActive(bool boolValue) => wingComponent.SetWingActive(boolValue);
+    public void ForceMaxEvolutionOnEquippedWing() => wingComponent.ForceMaxEvolutionOnEquippedWing();
 
     #endregion
 }

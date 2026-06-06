@@ -106,6 +106,8 @@ public class Wing
     public bool IsEquipped() => equipComponent.IsEquipped();
 
     //persistenceComponent
+    public WingSaveData Export() => persistenceComponent.Export();
+    public void Import(WingSaveData saveData) => persistenceComponent.Import(saveData);
 
     #endregion
 }

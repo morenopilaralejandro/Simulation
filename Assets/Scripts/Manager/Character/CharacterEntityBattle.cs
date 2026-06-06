@@ -10,6 +10,7 @@ using Aremoreno.Enums.Duel;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Localization;
 using Aremoreno.Enums.Animation;
+using Aremoreno.Enums.Wing;
 
 public class CharacterEntityBattle : MonoBehaviour
 {
@@ -192,6 +193,21 @@ public class CharacterEntityBattle : MonoBehaviour
     public string HairBackAddress => character.HairBackAddress;
     public Color ColorBody => character.ColorBody;
     public Color ColorHair => character.ColorHair;
+    public void SetWingType(WingType wingType) => character.SetWingType(wingType);
+    public void SetWingColorType(WingColorType wingColorType) => character.SetWingColorType(wingColorType);
+    public void SetWing(Wing wing) => character.SetWing(wing);
+    public void SetWingAddress() => character.SetWingAddress();
+    public void SetWingColor() => character.SetWingColor();
+
+    //wingComponent
+    public Wing Wing => character.Wing;
+    public bool HasWingActivated => character.HasWingActivated;
+    public bool HasWingEquipped => character.HasWingEquipped;
+    public void EquipWing(Wing wing) => character.EquipWing(wing);
+    public void UnequipWing() => character.UnequipWing();
+    public void SetWingEquipped(Wing wing) => character.SetWingEquipped(wing);
+    public void SetWingActive(bool boolValue) => character.SetWingActive(boolValue);
+    public void ForceMaxEvolutionOnEquippedWing() => character.ForceMaxEvolutionOnEquippedWing();
 
     #endregion
 
@@ -206,10 +222,13 @@ public class CharacterEntityBattle : MonoBehaviour
     public Team GetOpponentTeam() => teamMemberComponent.GetOpponentTeam();
     public List<CharacterEntityBattle> GetTeammates() => teamMemberComponent.GetTeammates();
     public List<CharacterEntityBattle> GetOpponents() => teamMemberComponent.GetOpponents();
+
     //appearanceBattleComponent
     public bool IsLoaded => appearanceBattleComponent.IsLoaded;
     public async Task LoadKitAsync() => await appearanceBattleComponent.LoadKitAsync();
     public async Task AppearanceBattleLoadAsync() => await appearanceBattleComponent.AppearanceBattleLoadAsync();
+    public async Task LoadWingAsync() => await appearanceBattleComponent.LoadWingAsync();
+    public void UnloadWing() => appearanceBattleComponent.UnloadWing();
 
     //animationControllerComponent
     public void Play(CharacterAnimationState state, CharacterDirection direction) => animationControllerComponent.Play(state, direction);
@@ -314,6 +333,24 @@ public class CharacterEntityBattle : MonoBehaviour
     public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this) || HasAffordableMoveWithTrait(Trait.Long);
     public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
     public bool HasBallInHandThrowIn;
+
+    //wing
+    public void ActivateWings()
+    {
+        if (!character.HasWingEquipped) return;
+        character.SetWingActive(true);
+        WingEvents.RaiseWingActivated(this, Wing);
+        _ = LoadWingAsync();
+
+        //stats
+    }
+
+    public void DeactivateWings()
+    {
+        character.SetWingActive(false);
+        UnloadWing();
+        //stats
+    }
 
     //misc
     public bool CanMove() => !IsStunned() && !IsStateLocked && !IsAnimationLocked;

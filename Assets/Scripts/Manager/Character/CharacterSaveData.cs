@@ -43,4 +43,7 @@ public class CharacterSaveData
     public PortraitSize CustomPortraitSize;
 
     //TODO scouting with time stamp
+
+    //wing
+    public string EquippedWingGuid;
 }
