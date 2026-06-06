@@ -26,61 +26,28 @@ public class WingComponentPersistence
     }
 
     #endregion
-    /*
+
     #region Import
 
-    public void Import(CharacterSaveData characterSaveData)
+    public void Import(WingSaveData saveData)
     {
-        CharacterData characterData = CharacterDatabase.Instance.GetCharacterData(
-            characterSaveData.IsCustomAvatar ? 
-                characterSaveData.CustomAvatarId : 
-                characterSaveData.CharacterId);
-        character.Initialize(characterData, characterSaveData);
+        WingData data = WingDatabase.Instance.GetWingData(saveData.WingId);
+        wing.Initialize(data, saveData);
     }
 
     #endregion
 
     #region Export
 
-    public CharacterSaveData Export()
+    public WingSaveData Export()
     {
-        return new CharacterSaveData
+        return new WingSaveData
         {
-            // identity
-            CharacterId = character.CharacterId,
-            CharacterGuid = character.CharacterGuid,
+            // atributtes
+            WingId = wing.WingId,
+            WingGuid = wing.WingGuid,
 
-            // level
-            Level = character.Level,
-            CurrentExp = character.CurrentExp,
-            ExpToNextLevel = character.ExpToNextLevel,
-
-            // stats
-            CurrentHp = character.GetBattleStat(Stat.Hp),
-            CurrentSp = character.GetBattleStat(Stat.Sp),
-            TrainedStats = GetTrainedStatsForSave(),
-
-            // training
-            CurrentFreedom = character.TrueFreedom,
-            TrainingResetCount = character.TrainingResetCount,
-
-            // moves
-            LearnedMoves = ExportLearnedMoves(),
-            EquippedMovesIds = ExportEquippedMoveIds(),
-
-            //avatar
-            IsCustomAvatar = character.IsCustomAvatar,
-            CustomAvatarId = character.CustomAvatarId,
-            CustomName = character.CustomName,
-            CustomCharacterSize = character.CustomCharacterSize,
-            CustomGender = character.CustomGender,
-            CustomElement = character.CustomElement,
-            CustomPosition = character.CustomPosition,
-            CustomHairStyle = character.CustomHairStyle,
-            CustomHairColorType = character.CustomHairColorType,
-            CustomEyeColorType = character.CustomEyeColorType,
-            CustomBodyColorType = character.CustomBodyColorType,
-            CustomPortraitSize = character.CustomPortraitSize
+            IndividualStats = GetIndividualStatsForSave()
         };
     }
 
@@ -88,37 +55,21 @@ public class WingComponentPersistence
 
     #region Helpers
 
-    private List<CharacterStatSaveData> GetTrainedStatsForSave()
+    private List<WingStatSaveData> GetIndividualStatsForSave()
     {
-        List<CharacterStatSaveData> trainedStats = new List<CharacterStatSaveData>();
+        List<WingStatSaveData> individualStats = new List<WingStatSaveData>();
         foreach (Stat stat in Enum.GetValues(typeof(Stat)))
         {
-            trainedStats.Add(new CharacterStatSaveData
+            if (stat == Stat.Hp || stat == Stat.Sp) continue;
+            individualStats.Add(new WingStatSaveData
             {
                 Stat = stat,
-                Val = character.GetTrainedStat(stat)
+                Val = wing.GetIndividualStat(stat)
             });
         }
-        return trainedStats;
+        return individualStats;
     }
 
-    private List<MoveSaveData> ExportLearnedMoves()
-    {
-        List<MoveSaveData> learnedMoves = new List<MoveSaveData>();
-        foreach (Move move in character.LearnedMoves)
-            learnedMoves.Add(move.Export());
-
-        return learnedMoves;
-    }
-
-    private List<string> ExportEquippedMoveIds()
-    {
-        List<string> equippedMoveIds = new List<string>();
-        foreach (Move move in character.EquippedMoves)
-            equippedMoveIds.Add(move.MoveId);
-
-        return equippedMoveIds;
-    }
     #endregion
-    */
+
 }

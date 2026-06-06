@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Kit;
+using Aremoreno.Enums.Wing;
 
 public class CharacterComponentAppearance
 {
@@ -16,14 +17,19 @@ public class CharacterComponentAppearance
     public Variant KitVariant { get; private set; }
     public Role KitRole { get; private set; }
     public string KitAddress { get; private set; }
+    public WingType WingType { get; private set; }
+    public WingColorType WingColorType { get; private set; }
 
     public string PortraitCharacterAddress { get; private set; }
     public string PortraitKitAddress { get; private set; }
     public string HairFrontAddress { get; private set; }
     public string HairBackAddress { get; private set; }
+    public string WingFrontAddress { get; private set; }
+    public string WingBackAddress { get; private set; }
 
     public Color ColorBody { get; private set; }
     public Color ColorHair { get; private set; }
+    public Color ColorWing { get; private set; }
 
     #endregion
 
@@ -86,13 +92,15 @@ public class CharacterComponentAppearance
                 PortraitSize
             );
     }
-    public void SetKit(Kit kit, Variant variant, Role role) {
+    public void SetKit(Kit kit, Variant variant, Role role) 
+    {
         KitId = kit.KitId;
         KitVariant = variant;
         KitRole = role;
         SetKitAddress();
     }
-    public void SetKit(Team team, Position position) {
+    public void SetKit(Team team, Position position) 
+    {
         KitId = team.Kit.KitId;
         KitVariant = GetKitVariant(team);
         KitRole = GetKitRole(position);
@@ -100,6 +108,39 @@ public class CharacterComponentAppearance
     }
     public Variant GetKitVariant(Team team) => team?.Variant ?? Variant.Home;
     public Role GetKitRole(Position position) => position == Position.GK ? Role.Keeper : Role.Field;
+
+    #endregion
+
+    #region Wing
+
+    public void SetWingType(WingType wingType) 
+    {
+        WingType = wingType;
+        SetWingAddress();
+    }
+
+    public void SetWingColorType(WingColorType wingColorType) 
+    {
+        WingColorType = wingColorType;
+        SetWingColor();
+    }
+
+    public void SetWing(Wing wing) 
+    {
+        SetWingType(wing.WingType);
+        SetWingColorType(wing.WingColorType);
+    }
+
+    public void SetWingAddress() 
+    {
+        WingFrontAddress = AddressableLoader.GetWingFrontAddress(WingType.ToString().ToLower());
+        WingBackAddress = AddressableLoader.GetWingBackAddress(WingType.ToString().ToLower());
+    }
+
+    public void SetWingColor() 
+    {
+        ColorWing = ColorManager.GetWingColor(WingColorType);
+    }
 
     #endregion
 }

@@ -76,6 +76,7 @@ public class WingComponentEvolution
         {
             this.CurrentEvolution = next;
             UpdateLocalization();
+            wing.UpdateStats();
             LogManager.Trace($"[WingComponentEvolution] [{wing.WingId}] evolved to {this.CurrentEvolution}");
             return true;
         }
@@ -92,6 +93,7 @@ public class WingComponentEvolution
             this.CurrentEvolution = next;
             this.TimesUsedCurrentEvolution = 0;
             UpdateLocalization();
+            wing.UpdateStats();
             LogManager.Trace($"[WingComponentEvolution] [{wing.WingId}] performed LIMIT BREAK -> {this.CurrentEvolution}");
             return true;
         }
@@ -104,18 +106,20 @@ public class WingComponentEvolution
         this.CurrentEvolution = path.GetLastEvolution();
         this.TimesUsedCurrentEvolution = 0;
         UpdateLocalization();
+            wing.UpdateStats();
         LogManager.Trace($"WingComponentEvolution] [{wing.WingId}] was force-evolved to MAX: {this.CurrentEvolution}");
     }
 
     //public int GetExtraPower() => growthProfile.GetBonus(this.CurrentEvolution);
 
-    public int GetThreshold() => growthProfile.GetUsageThreshold(this.CurrentEvolution);
+    public int GetUsageThreshold() => growthProfile.GetUsageThreshold(this.CurrentEvolution);
 
     public void ResetEvolution()
     {
         this.CurrentEvolution = WingEvolution.None;
         this.TimesUsedTotal = TimesUsedCurrentEvolution = 0;
         UpdateLocalization();
+        wing.UpdateStats();
     }
 
     private void UpdateLocalization()
