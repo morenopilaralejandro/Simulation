@@ -179,6 +179,11 @@ public class Character
     public void SetWingEquipped(Wing wing) => wingComponent.SetWingEquipped(wing);
     public void SetWingActive(bool boolValue) => wingComponent.SetWingActive(boolValue);
     public void ForceMaxEvolutionOnEquippedWing() => wingComponent.ForceMaxEvolutionOnEquippedWing();
+    public void ForceEquipWing(Wing wing) => wingComponent.ForceEquipWing(wing);
+    public int WingTimesUsed => wingComponent.WingTimesUsed;
+    public void IncreaseWingTimesUsed() => wingComponent.IncreaseWingTimesUsed();
+    public void ResetWingTimesUsed() => wingComponent.ResetWingTimesUsed();
+    public bool CanApplyWingElementMatchBonus(Element element) => wingComponent.CanApplyWingElementMatchBonus(element);
 
     #endregion
 }

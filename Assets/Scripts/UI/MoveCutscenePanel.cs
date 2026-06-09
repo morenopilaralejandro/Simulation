@@ -36,8 +36,8 @@ public class MoveCutscenePanel : MonoBehaviour
         MoveEvents.OnMoveCutsceneStart += HandleMoveCutsceneStart;
         MoveEvents.OnMoveCutsceneEnd += HandleMoveCutsceneEnd;
 
-        WingEvents.OnWingCutsceneStart -= HandleWingCutsceneStart;
-        WingEvents.OnWingCutsceneEnd -= HandleWingCutsceneEnd;
+        WingEvents.OnWingCutsceneStart += HandleWingCutsceneStart;
+        WingEvents.OnWingCutsceneEnd += HandleWingCutsceneEnd;
     }
 
     private void OnDisable()

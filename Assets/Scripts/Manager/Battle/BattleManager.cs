@@ -516,6 +516,8 @@ public class BattleManager : MonoBehaviour
 
                 BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
                 character.gameObject.name = character.CharacterId;
+                character.SetWingActive(false);
+                character.ResetBattleStats();
                 team.GetCharacterEntities(currentType).Add(character);
                 team.GetCharacters(currentType).Add(character.Character);
 
@@ -534,6 +536,8 @@ public class BattleManager : MonoBehaviour
             if (index >= guids.Count) return;
 
             Character characterObject = CharacterManager.Instance.GetCharacter(guids[index]);
+            characterObject.SetWingActive(false);
+            characterObject.ResetBattleStats();
             team.GetCharacters(currentType).Add(characterObject);
         }
         else

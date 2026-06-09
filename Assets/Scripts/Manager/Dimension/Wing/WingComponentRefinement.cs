@@ -82,4 +82,5 @@ public class WingComponentRefinement
     {
         return 0.05f * (CurrentRankIndex +1);
     }
+
 }

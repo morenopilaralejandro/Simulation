@@ -8,6 +8,7 @@ public class BattleEffectSpawnPoint : MonoBehaviour
 {
     public ParticleSystem DuelStartEffect;
     public ParticleSystem DuelWinEffect;
+    public ParticleSystem WingEffect;
 
     [SerializeField] private ParticleSystem MoveFireEffect;
     [SerializeField] private ParticleSystem MoveIceEffect;

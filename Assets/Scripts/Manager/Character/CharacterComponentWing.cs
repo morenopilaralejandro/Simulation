@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Move;
@@ -12,6 +11,7 @@ public class CharacterComponentWing
 
     public Wing Wing { get; private set; }
     public bool HasWingActivated { get; private set; }
+    public int WingTimesUsed { get; private set; }
 
     #endregion
 
@@ -58,6 +58,11 @@ public class CharacterComponentWing
         if (wing != null) character.SetWing(wing);
     }
 
+    public void ForceEquipWing(Wing wing)
+    {
+        SetWingEquipped(wing);
+    }
+
     #endregion
 
     #region Activation
@@ -77,4 +82,33 @@ public class CharacterComponentWing
     }
 
     #endregion
+
+    #region Refinement
+
+    public bool CanApplyWingElementMatchBonus(Element element) 
+    {
+        if (!character.HasWingActivated) return false;
+        return character.Wing.ContainsElement(element);
+    }
+
+    #endregion
+
+    #region Stats
+
+    #endregion
+
+    #region Usage
+
+    public void IncreaseWingTimesUsed() 
+    {
+        WingTimesUsed++;
+    }
+
+    public void ResetWingTimesUsed() 
+    {
+        WingTimesUsed = 0;
+    }
+
+    #endregion
+
 }

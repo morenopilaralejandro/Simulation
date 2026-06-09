@@ -31,6 +31,7 @@ public class CharacterEntityBattle : MonoBehaviour
     [SerializeField] private CharacterComponentStateLock stateLockComponent;
     [SerializeField] private CharacterComponentStateMachine stateMachineComponent;
     [SerializeField] private CharacterComponentRigidbody rigidbodyComponent;
+    [SerializeField] private CharacterComponentWingBattle wingBattleComponent;
 
     [SerializeField] private CharacterComponentTeamIndicator teamIndicatorComponent;
     [SerializeField] private CharacterComponentElementIndicator elementIndicatorComponent;
@@ -57,6 +58,7 @@ public class CharacterEntityBattle : MonoBehaviour
         teamIndicatorComponent.Initialize(this);
         elementIndicatorComponent.Initialize(characterData, this);
         speechBubbleComponent.Initialize(this.character);
+        wingBattleComponent.Initialize(this);
     }
 
     #endregion
@@ -208,6 +210,11 @@ public class CharacterEntityBattle : MonoBehaviour
     public void SetWingEquipped(Wing wing) => character.SetWingEquipped(wing);
     public void SetWingActive(bool boolValue) => character.SetWingActive(boolValue);
     public void ForceMaxEvolutionOnEquippedWing() => character.ForceMaxEvolutionOnEquippedWing();
+    public void ForceEquipWing(Wing wing) => character.ForceEquipWing(wing);
+    public int WingTimesUsed => character.WingTimesUsed;
+    public void IncreaseWingTimesUsed() => character.IncreaseWingTimesUsed();
+    public void ResetWingTimesUsed() => character.ResetWingTimesUsed();
+    public bool CanApplyWingElementMatchBonus(Element element) => character.CanApplyWingElementMatchBonus(element);
 
     #endregion
 
@@ -226,7 +233,7 @@ public class CharacterEntityBattle : MonoBehaviour
     //appearanceBattleComponent
     public bool IsLoaded => appearanceBattleComponent.IsLoaded;
     public async Task LoadKitAsync() => await appearanceBattleComponent.LoadKitAsync();
-    public async Task AppearanceBattleLoadAsync() => await appearanceBattleComponent.AppearanceBattleLoadAsync();
+    public async Task AppearanceBattleLoadAsync(bool boolValue) => await appearanceBattleComponent.AppearanceBattleLoadAsync(boolValue);
     public async Task LoadWingAsync() => await appearanceBattleComponent.LoadWingAsync();
     public void UnloadWing() => appearanceBattleComponent.UnloadWing();
 
@@ -292,6 +299,7 @@ public class CharacterEntityBattle : MonoBehaviour
     public DuelCommand GetCommandByTrait(Trait trait) => aiComponent.GetCommandByTrait(trait);
     public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
     public Move GetMoveByCommandAndTrait(DuelCommand command, Trait trait) => aiComponent.GetMoveByCommandAndTrait(command, trait);
+    public bool ShouldActivateWings() => aiComponent.ShouldActivateWings();
 
     //stateLockComponent
     public bool IsStateLocked => stateLockComponent.IsStateLocked;
@@ -313,6 +321,18 @@ public class CharacterEntityBattle : MonoBehaviour
     public void StopVelocity() => rigidbodyComponent.StopVelocity();
     public void Teleport(Vector3 position) => rigidbodyComponent.Teleport(position);
 
+    //wingBattleComponent
+    public bool HasPendingWingActivation => wingBattleComponent.HasPendingWingActivation;
+    public bool HasPendingWingCutscene => wingBattleComponent.HasPendingWingCutscene;
+    public void ActivateWings() => wingBattleComponent.ActivateWings();
+    public void DeactivateWings() => wingBattleComponent.DeactivateWings();
+    public void TryDeactivateWings() => wingBattleComponent.TryDeactivateWings();
+    public bool CanActivateWings() => wingBattleComponent.CanActivateWings();
+    public void ShowWings() => wingBattleComponent.ShowWings();
+    public void HideWings() => wingBattleComponent.HideWings();
+    public void SetPendingWingActivation(bool boolValue) => wingBattleComponent.SetPendingWingActivation(boolValue);
+    public void SetPendingWingCutscene(bool boolValue) => wingBattleComponent.SetPendingWingCutscene(boolValue);
+
     //elementIndicatorComponent
     public void SetElementIndicatorEnabled(bool enabled) => elementIndicatorComponent.SetEnabled(enabled);
     public void SetElementIndicatorActive(bool active) => elementIndicatorComponent.SetActive(active);
@@ -333,24 +353,6 @@ public class CharacterEntityBattle : MonoBehaviour
     public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this) || HasAffordableMoveWithTrait(Trait.Long);
     public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
     public bool HasBallInHandThrowIn;
-
-    //wing
-    public void ActivateWings()
-    {
-        if (!character.HasWingEquipped) return;
-        character.SetWingActive(true);
-        WingEvents.RaiseWingActivated(this, Wing);
-        _ = LoadWingAsync();
-
-        //stats
-    }
-
-    public void DeactivateWings()
-    {
-        character.SetWingActive(false);
-        UnloadWing();
-        //stats
-    }
 
     //misc
     public bool CanMove() => !IsStunned() && !IsStateLocked && !IsAnimationLocked;

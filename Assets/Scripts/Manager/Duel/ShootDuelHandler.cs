@@ -58,6 +58,8 @@ public class ShootDuelHandler : IDuelHandler
         duel.OffensePressure += offense.Damage;
         LogParticipantAction(offense);
 
+        await DuelManager.Instance.TryPlayWingCutscene(offense.CharacterEntityBattle);
+
         if(offense.Move != null) 
         {
             offense.CharacterEntityBattle.StopAction();
@@ -81,7 +83,7 @@ public class ShootDuelHandler : IDuelHandler
 
         HandleShootSfx(offense);
         CharacterChangeControlManager.Instance.TryChangeOnShootCombo(offense.CharacterEntityBattle);
-
+        offense.CharacterEntityBattle.TryDeactivateWings();
     }
     #endregion
 
@@ -113,6 +115,8 @@ public class ShootDuelHandler : IDuelHandler
         BattleEvents.RaiseShootStopped(defense.CharacterEntityBattle);
         offense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
 
+        await DuelManager.Instance.TryPlayWingCutscene(defense.CharacterEntityBattle);
+
         if(defense.Move != null) 
         {
             if (isCategoryCatch) 
@@ -125,6 +129,8 @@ public class ShootDuelHandler : IDuelHandler
             await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
         }
+
+        defense.CharacterEntityBattle.TryDeactivateWings();
 
         // if is reversal start else end
         if (isShootReversal) 
@@ -155,6 +161,8 @@ public class ShootDuelHandler : IDuelHandler
         LogManager.Info($"[ShootDuelHandler] Partial block.");
         bool isShootReversal = defense.Move?.Category == Category.Shoot && DuelManager.Instance.IsShootReversalAllowed;
 
+        await DuelManager.Instance.TryPlayWingCutscene(defense.CharacterEntityBattle);
+
         if(defense.Move != null) 
         {
             if (isCategoryCatch) 
@@ -171,6 +179,8 @@ public class ShootDuelHandler : IDuelHandler
         defense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
 
         BattleManager.Instance.Ball.ResumeTravel();
+
+        defense.CharacterEntityBattle.TryDeactivateWings();
 
         if (isCategoryCatch)
         {

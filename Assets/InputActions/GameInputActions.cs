@@ -538,6 +538,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleUI_ToggleWings"",
+                    ""type"": ""Button"",
+                    ""id"": ""37b2ff1a-74ea-4dc2-be0f-20cffb961660"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -901,6 +910,28 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""BattleUI_TeamPreviewConfirm"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d910bc12-ffdd-49a0-93cf-b3d8f14ffb24"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_ToggleWings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fbdb8007-36a5-45a8-92b2-7add2974976f"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleUI_ToggleWings"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1678,6 +1709,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_BattleUIActions_BattleUI_CloseTeamMenu = m_BattleUIActions.FindAction("BattleUI_CloseTeamMenu", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_DeadBallConfirm = m_BattleUIActions.FindAction("BattleUI_DeadBallConfirm", throwIfNotFound: true);
         m_BattleUIActions_BattleUI_TeamPreviewConfirm = m_BattleUIActions.FindAction("BattleUI_TeamPreviewConfirm", throwIfNotFound: true);
+        m_BattleUIActions_BattleUI_ToggleWings = m_BattleUIActions.FindAction("BattleUI_ToggleWings", throwIfNotFound: true);
         // WorldActions
         m_WorldActions = asset.FindActionMap("WorldActions", throwIfNotFound: true);
         m_WorldActions_World_Move = m_WorldActions.FindAction("World_Move", throwIfNotFound: true);
@@ -1965,6 +1997,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_BattleUIActions_BattleUI_CloseTeamMenu;
     private readonly InputAction m_BattleUIActions_BattleUI_DeadBallConfirm;
     private readonly InputAction m_BattleUIActions_BattleUI_TeamPreviewConfirm;
+    private readonly InputAction m_BattleUIActions_BattleUI_ToggleWings;
     /// <summary>
     /// Provides access to input actions defined in input action map "BattleUIActions".
     /// </summary>
@@ -2037,6 +2070,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @BattleUI_TeamPreviewConfirm => m_Wrapper.m_BattleUIActions_BattleUI_TeamPreviewConfirm;
         /// <summary>
+        /// Provides access to the underlying input action "BattleUIActions/BattleUI_ToggleWings".
+        /// </summary>
+        public InputAction @BattleUI_ToggleWings => m_Wrapper.m_BattleUIActions_BattleUI_ToggleWings;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_BattleUIActions; }
@@ -2107,6 +2144,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_TeamPreviewConfirm.started += instance.OnBattleUI_TeamPreviewConfirm;
             @BattleUI_TeamPreviewConfirm.performed += instance.OnBattleUI_TeamPreviewConfirm;
             @BattleUI_TeamPreviewConfirm.canceled += instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_ToggleWings.started += instance.OnBattleUI_ToggleWings;
+            @BattleUI_ToggleWings.performed += instance.OnBattleUI_ToggleWings;
+            @BattleUI_ToggleWings.canceled += instance.OnBattleUI_ToggleWings;
         }
 
         /// <summary>
@@ -2163,6 +2203,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @BattleUI_TeamPreviewConfirm.started -= instance.OnBattleUI_TeamPreviewConfirm;
             @BattleUI_TeamPreviewConfirm.performed -= instance.OnBattleUI_TeamPreviewConfirm;
             @BattleUI_TeamPreviewConfirm.canceled -= instance.OnBattleUI_TeamPreviewConfirm;
+            @BattleUI_ToggleWings.started -= instance.OnBattleUI_ToggleWings;
+            @BattleUI_ToggleWings.performed -= instance.OnBattleUI_ToggleWings;
+            @BattleUI_ToggleWings.canceled -= instance.OnBattleUI_ToggleWings;
         }
 
         /// <summary>
@@ -2840,6 +2883,13 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnBattleUI_TeamPreviewConfirm(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleUI_ToggleWings" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleUI_ToggleWings(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "WorldActions" which allows adding and removing callbacks.

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Move;
 using Aremoreno.Enums.Duel;
@@ -478,5 +479,25 @@ public class DuelManager : MonoBehaviour
         */
         AddParticipant(participant);
     }
+    #endregion
+
+    #region Cutscene
+
+    public async Task TryPlayWingCutscene(CharacterEntityBattle character)
+    {
+        if (character == null || !character.HasPendingWingCutscene) return;
+
+        character.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Backslash1H);
+        character.ShowWings();
+
+        await BattleEffectManager.Instance.PlayWingParticle(
+            character.Wing,
+            character.transform.position);
+
+        character.StopAction();
+        character.SetPendingWingCutscene(false);
+        WingEvents.RaiseWingActivated(character,character.Wing);
+    }
+
     #endregion
 }

@@ -34,7 +34,7 @@ public class FieldDuelHandler : IDuelHandler
             Resolve();
     }
 
-    public void Resolve() 
+    public async void Resolve() 
     { 
         LogManager.Trace($"[FieldDuelHandler] Start OffensePressure {duel.LastOffense.Damage}");
         LogManager.Trace($"[FieldDuelHandler] Start DefensePressure {duel.LastDefense.Damage}");
@@ -74,6 +74,10 @@ public class FieldDuelHandler : IDuelHandler
             duel.LastDefense.Action);
         */
 
+        //wing
+        await DuelManager.Instance.TryPlayWingCutscene(duel.LastOffense.CharacterEntityBattle);
+        await DuelManager.Instance.TryPlayWingCutscene(duel.LastDefense.CharacterEntityBattle);
+
         if (duel.OffensePressure > duel.DefensePressure) 
             EndDuel(duel.LastOffense, duel.LastDefense);
         else
@@ -106,6 +110,9 @@ public class FieldDuelHandler : IDuelHandler
 
             MoveEvents.RaiseMoveUsed(winner.Move, winner.CharacterEntityBattle);
         }
+
+        duel.LastOffense.CharacterEntityBattle.TryDeactivateWings();
+        duel.LastDefense.CharacterEntityBattle.TryDeactivateWings();
 
         if (winner.CharacterEntityBattle.IsOnUsersTeam())
             BattleEffectManager.Instance.PlayDuelWinEffect(winner.CharacterEntityBattle.transform); 

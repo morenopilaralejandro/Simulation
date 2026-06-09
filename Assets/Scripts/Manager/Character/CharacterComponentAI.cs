@@ -1206,6 +1206,20 @@ public class CharacterComponentAI : MonoBehaviour
             : character.GetStrongestAffordableMoveByTrait(trait);
     }
 
+    public bool ShouldActivateWings()
+    {
+        float chance = character.FormationCoord.Position switch
+        {
+            Position.FW => 0.60f,
+            Position.MF => 0.10f,
+            Position.DF => 0.05f,
+            Position.GK => 0.50f,
+            _ => 0f
+        };
+
+        return UnityEngine.Random.value < chance;
+    }
+
     #endregion
 }
 

@@ -480,7 +480,7 @@ public class TeamManagerLoadout
     {
         try
         {
-            await entity.AppearanceBattleLoadAsync();
+            await entity.AppearanceBattleLoadAsync(entity.HasWingActivated);
             
             // Guard: entity may have been pooled during async load
             if (!entity.gameObject.activeInHierarchy) return;

@@ -109,6 +109,13 @@ public class DuelSelectionManager : MonoBehaviour
                 selection.Category);
         }
 
+        if(character.CanActivateWings())
+        {
+            bool shouldActivateWings = character.ShouldActivateWings();
+            character.SetPendingWingActivation(shouldActivateWings);
+            character.SetPendingWingCutscene(shouldActivateWings);
+        }
+
         FinalizeSelection(
             character.TeamSide, 
             command, 
@@ -150,6 +157,9 @@ public class DuelSelectionManager : MonoBehaviour
         selection.Command = command;
         selection.Move = move;
         selection.IsReady = true;
+
+        if(selection.CharacterEntityBattle.HasPendingWingActivation)   
+            selection.CharacterEntityBattle.ActivateWings();
 
         //BattleUIManager.Instance.HideDuelMenu();
         TryFinalizeBothSelections();
@@ -201,7 +211,7 @@ public class DuelSelectionManager : MonoBehaviour
             }
         }
         
-        if (!BattleEffectManager.Instance.IsPlayingMove)
+        if (!BattleEffectManager.Instance.IsPlayingMove && !BattleEffectManager.Instance.IsPlayingWing)
             BattleManager.Instance.Unfreeze();
         BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
         OnSelectionsComplete?.Invoke();

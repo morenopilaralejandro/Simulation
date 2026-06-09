@@ -86,7 +86,10 @@ public class CharacterComponentStats
     {
         if (stat == Stat.Hp && amount < 0) 
             amount = GetReducedHpAmount(amount);
-        battleStats[stat] = Mathf.Clamp(battleStats[stat] + amount, 0, trueStats[stat]);
+        if (stat == Stat.Hp || stat == Stat.Sp)
+            battleStats[stat] = Mathf.Clamp(battleStats[stat] + amount, 0, trueStats[stat]);
+        else
+            battleStats[stat] = Mathf.Max(battleStats[stat] + amount, 0);
     }
 
     public void ModifyTrainedStat(Stat stat, int amount)

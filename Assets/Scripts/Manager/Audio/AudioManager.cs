@@ -30,18 +30,6 @@ public class AudioManager : MonoBehaviour
         SetSfxVolume(SettingsManager.Instance.CurrentSettings.SfxVolume);
     }
 
-    private void OnEnable()
-    {
-        SettingsEvents.OnBgmVolumeChanged += SetBgmVolume;
-        SettingsEvents.OnSfxVolumeChanged += SetSfxVolume;
-    }
-
-    private void OnDisable()
-    {
-        SettingsEvents.OnBgmVolumeChanged -= SetBgmVolume;
-        SettingsEvents.OnSfxVolumeChanged -= SetSfxVolume;
-    }
-
     public void SetBgmVolume(float volume)
     {
         sourceBgm.volume = volume;
@@ -203,4 +191,27 @@ public class AudioManager : MonoBehaviour
 
         audioClipCache.Clear();
     }
+
+    #region Events
+
+    private void OnEnable()
+    {
+        SettingsEvents.OnBgmVolumeChanged += SetBgmVolume;
+        SettingsEvents.OnSfxVolumeChanged += SetSfxVolume;
+        BattleEvents.OnBattleEnd += HandleBattleEnd;
+    }
+
+    private void OnDisable()
+    {
+        SettingsEvents.OnBgmVolumeChanged -= SetBgmVolume;
+        SettingsEvents.OnSfxVolumeChanged -= SetSfxVolume;
+        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+    }
+
+    private void HandleBattleEnd() 
+    {
+        StopSfxLoop();
+    }
+
+    #endregion
 }

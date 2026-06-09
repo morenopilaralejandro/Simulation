@@ -27,16 +27,6 @@ public class BattleTeamManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void AssignTeamToSide(Team team, TeamSide teamSide) {
         teams[teamSide] = team;
         team.SetSide(teamSide);

@@ -27,11 +27,6 @@ public class BattleCharacterManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-
-    }
-
     public void RegisterSpawnPoint(Transform spawner)
     {
         spawnPoint = spawner;
