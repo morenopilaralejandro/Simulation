@@ -37,6 +37,7 @@ public class CharacterComponentWingBattle : MonoBehaviour
         character.ResetWingTimesUsed();
         character.SetWingActive(true);
         SetPendingWingActivation(false);
+        DuelLogManager.Instance.AddActionWingActivate(character.Character, character.TeamSide, character.Wing);
         //WingEvents.RaiseWingActivated(character, character.Wing); -> called on DuelManager TryPlayWingCutscene
 
         foreach (Stat stat in Enum.GetValues(typeof(Stat))) 
@@ -51,6 +52,7 @@ public class CharacterComponentWingBattle : MonoBehaviour
     {
         if (!character.HasWingActivated) return;
         character.SetWingActive(false);
+        DuelLogManager.Instance.AddActionWingDeactivate(character.Character, character.TeamSide, character.Wing);
 
         foreach (Stat stat in Enum.GetValues(typeof(Stat))) 
         {
@@ -70,7 +72,7 @@ public class CharacterComponentWingBattle : MonoBehaviour
         }
     }
 
-    public bool CanActivateWings() => BattleWingManager.Instance.CanActivateWings(character.TeamSide) && !character.HasWingActivated;
+    public bool CanActivateWings() => character.HasWingEquipped && BattleWingManager.Instance.CanActivateWings(character.TeamSide) && character.HasWingActivated;
 
     #endregion
 

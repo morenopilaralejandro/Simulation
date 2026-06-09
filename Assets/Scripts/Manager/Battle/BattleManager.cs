@@ -497,29 +497,19 @@ public class BattleManager : MonoBehaviour
             int characterIndex = i;
             bool needsEntity = i < teamSize;
 
-            if (!needsEntity)
+            Character characterObject = AddCharacterToRoster(team, characterIndex);
+
+            if (!needsEntity || characterObject == null) continue;
+
+            BattleCharacterManager.Instance.GetPooledCharacter((characterEntity) =>
             {
-                // Add to roster without spawning an entity
-                AddCharacterToRoster(team, characterIndex);
-                continue;
-            }
+                if (characterEntity == null) return;
 
-            BattleCharacterManager.Instance.GetPooledCharacter((character) =>
-            {
-                if (character == null) return;
-
-                bool initialized = team.IsCustomLoadout
-                    ? TryInitializeFromLoadout(character, team, characterIndex)
-                    : TryInitializeFromData(character, team, characterIndex);
-
-                if (!initialized) return;
-
-                BattleCharacterManager.Instance.AssignCharacterToTeamBattle(character, team, characterIndex);
-                character.gameObject.name = character.CharacterId;
-                character.SetWingActive(false);
-                character.ResetBattleStats();
-                team.GetCharacterEntities(currentType).Add(character);
-                team.GetCharacters(currentType).Add(character.Character);
+                characterEntity.Initialize(null, characterObject);
+                characterEntity.CalculateSpeed();
+                BattleCharacterManager.Instance.AssignCharacterToTeamBattle(characterEntity, team, characterIndex);
+                characterEntity.gameObject.name = characterEntity.CharacterId;
+                team.GetCharacterEntities(currentType).Add(characterEntity);
 
                 charactersReady++;
                 if (charactersReady >= charactersReadyMax)
@@ -528,32 +518,30 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void AddCharacterToRoster(Team team, int index)
+    private Character AddCharacterToRoster(Team team, int index)
     {
-        if (team.IsCustomLoadout)
+        Character characterObject = null;
+        if (team.IsCustomLoadout) 
         {
             var guids = team.GetCharacterGuids(currentType);
-            if (index >= guids.Count) return;
+            if (index >= guids.Count) return null;
 
-            Character characterObject = CharacterManager.Instance.GetCharacter(guids[index]);
-            characterObject.SetWingActive(false);
-            characterObject.ResetBattleStats();
-            team.GetCharacters(currentType).Add(characterObject);
+            characterObject = CharacterManager.Instance.GetCharacter(guids[index]);
+            TryInitializeFromLoadout(characterObject, team, index);
         }
-        else
+        else 
         {
             var dataList = team.GetCharacterDataList(currentType);
-            if (index >= dataList.Count) return;
+            if (index >= dataList.Count) return null;
 
-            // Create a Character from data without an entity
-            Character characterObject = new Character(dataList[index]);
-            characterObject.SetLevel(characterObject.MaxLevel);
-            characterObject.ForceMaxEvolutionOnEquippedMoves();
-            team.GetCharacters(currentType).Add(characterObject);
+            characterObject = new Character(dataList[index]);
+            TryInitializeFromData(characterObject, team, index);
         }
+        team.GetCharacters(currentType).Add(characterObject);
+        return characterObject;
     }
 
-    private bool TryInitializeFromData(CharacterEntityBattle character, Team team, int index)
+    private bool TryInitializeFromData(Character character, Team team, int index)
     {
         var dataList = team.GetCharacterDataList(currentType);
         if (index >= dataList.Count) return false;
@@ -564,14 +552,11 @@ public class BattleManager : MonoBehaviour
         return true;
     }
 
-    private bool TryInitializeFromLoadout(CharacterEntityBattle character, Team team, int index)
+    private bool TryInitializeFromLoadout(Character character, Team team, int index)
     {
         var guids = team.GetCharacterGuids(currentType);
         if (index >= guids.Count) return false;
 
-        Character characterObject = CharacterManager.Instance.GetCharacter(guids[index]);
-        character.Initialize(null, characterObject);
-        character.CalculateSpeed();
         return true;
     }
 

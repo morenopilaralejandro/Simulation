@@ -13,11 +13,14 @@ public class DuelSide : MonoBehaviour
     [SerializeField] private BarHPSP spBar;
     [SerializeField] private Image imagePossession;
     [SerializeField] private Image imageFatigue;
+    [SerializeField] private Image imageWing;
     [SerializeField] private CharacterCard characterCard;
     [SerializeField] private List<CharacterCardMini> characterCardMiniList;
     [SerializeField] private DuelFieldDamageIndicator fieldDamageIndicator;
     [SerializeField] private Sprite spriteFatigueTired;
     [SerializeField] private Sprite spriteFatigueExhausted;
+    [SerializeField] private Sprite spriteWingBoth;
+    [SerializeField] private Sprite spriteWingOne;
 
     public void SetSide(CharacterEntityBattle character, List<CharacterEntityBattle> supports)
     {
@@ -26,6 +29,7 @@ public class DuelSide : MonoBehaviour
         spBar.SetCharacter(character.Character, Stat.Sp);
         SetPossession(character);
         SetFatigue(character);
+        SetWing(character);
         characterCard.SetCharacter(character.Character, character.FormationCoord.Position);
         if (supports != null)
             SetMiniCards(supports);
@@ -61,6 +65,17 @@ public class DuelSide : MonoBehaviour
             imageFatigue.sprite = spriteFatigueTired;        
         else
             imageFatigue.sprite = spriteFatigueExhausted;
+    }
+
+    public void SetWing(CharacterEntityBattle character)
+    {
+        imageWing.enabled = character.HasWingActivated;
+        if (!character.HasWingActivated) return;
+
+        if(character.WingTimesUsed == 0)
+            imageWing.sprite = spriteWingBoth;        
+        else
+            imageWing.sprite = spriteWingOne;
     }
 
     public void SetFieldDamage(float damage, DuelAction action) => fieldDamageIndicator.SetDamage(damage, action);
