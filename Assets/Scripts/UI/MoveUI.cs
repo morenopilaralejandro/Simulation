@@ -73,7 +73,6 @@ public class MoveUI : MonoBehaviour
             if (imageEvolution != null) 
             {
                 _ = SetEvolutionAsync(move.EvolutionAddress);
-                imageEvolution.enabled = true;
             }
         } else 
         {
@@ -108,6 +107,7 @@ public class MoveUI : MonoBehaviour
     private async System.Threading.Tasks.Task SetEvolutionAsync(string address)
     {
         int version = ++_setVersion;
+        imageEvolution.enabled = false;
         var task = _bindingEvolution.LoadAsync(address);
 
         var asset = await task;
@@ -115,6 +115,7 @@ public class MoveUI : MonoBehaviour
         if (version != _setVersion) return;
 
         imageEvolution.sprite = asset;
+        imageEvolution.enabled = true;
     }
 
     #endregion

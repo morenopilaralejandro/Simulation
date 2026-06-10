@@ -12,6 +12,7 @@ public class CharacterComponentWing
     public Wing Wing { get; private set; }
     public bool HasWingActivated { get; private set; }
     public int WingTimesUsed { get; private set; }
+    private string wingIdDefault;
 
     #endregion
 
@@ -26,6 +27,7 @@ public class CharacterComponentWing
     {
         this.character = character;
         HasWingActivated = false;
+        wingIdDefault = characterData.WingId;
 
         if (characterSaveData != null) 
         {
@@ -61,6 +63,14 @@ public class CharacterComponentWing
     public void ForceEquipWing(Wing wing)
     {
         SetWingEquipped(wing);
+    }
+
+    public void TryEquipWingDefault()
+    {
+        if (string.IsNullOrEmpty(wingIdDefault)) return;
+        if (!BattleArgs.AwayTeamCanUseWing) return;
+
+        ForceEquipWing(WingFactory.CreateFromData(wingIdDefault));
     }
 
     #endregion

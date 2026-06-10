@@ -48,8 +48,6 @@ public class CharacterComponentTeamMember : MonoBehaviour
             characterEntityBattle.SetFormationDirection(Vector2.up);
         }
 
-        //this.characterEntityBattle.ForceEquipWing(WingFactory.CreateFromData("wing-00001-angel")); //TODO use character data
-
         this.characterEntityBattle.SetKit(
             team,
             formationCoord.Position

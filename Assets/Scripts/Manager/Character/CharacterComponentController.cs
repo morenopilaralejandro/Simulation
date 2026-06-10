@@ -43,7 +43,7 @@ public class CharacterComponentController : MonoBehaviour
     #region Properties
     private bool IsControlledInternal =>
         BattleManager.Instance.ControlledCharacter[
-        BattleTeamManager.Instance.GetUserSide()] == characterEntityBattle;
+        BattleManager.Instance.GetUserSide()] == characterEntityBattle;
 
     public bool IsControlled => IsControlledInternal;
 
@@ -123,7 +123,7 @@ public class CharacterComponentController : MonoBehaviour
     #region Targeting
     private void UpdateTargeting()
     {
-        if (isAimingPass || BattleEffectManager.Instance.IsPlayingMove || DeadBallManager.Instance.PreventTarget())
+        if (isAimingPass || BattleManager.Instance.IsPlayingMove || DeadBallManager.Instance.PreventTarget())
             return;
 
         CharacterEntityBattle target = moveDirection.sqrMagnitude > MIN_INPUT_SQR_MAGNITUDE
@@ -285,7 +285,7 @@ public class CharacterComponentController : MonoBehaviour
     private void OnAssignCharacter(CharacterEntityBattle assigned, Team team, FormationCoord coord)
     {
         if (assigned == characterEntityBattle &&
-            team.TeamSide != BattleTeamManager.Instance.GetUserSide())
+            team.TeamSide != BattleManager.Instance.GetUserSide())
         {
             enabled = false;
         }

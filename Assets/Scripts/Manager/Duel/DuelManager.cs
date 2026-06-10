@@ -309,7 +309,7 @@ public class DuelManager : MonoBehaviour
         Reset();
         duel.DuelMode = duelMode;
         DuelEvents.RaiseDuelStart(duelMode);
-        BattleEffectManager.Instance.PlayDuelStartEffect(BattleManager.Instance.Ball.transform);
+        BattleManager.Instance.PlayDuelStartEffect(BattleManager.Instance.Ball.transform);
         switch (DuelMode)
         {
             case DuelMode.Field:
@@ -357,7 +357,7 @@ public class DuelManager : MonoBehaviour
         else
             AudioManager.Instance.PlaySfx("sfx-duel_lose");
 
-        BattleEffectManager.Instance.StopDuelStartEffect();
+        BattleManager.Instance.StopDuelStartEffect();
 
         BattleUIManager.Instance.HideDuelParticipantsPanel();
         duel.IsResolved = true;
@@ -490,7 +490,7 @@ public class DuelManager : MonoBehaviour
         character.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Backslash1H);
         character.ShowWings();
 
-        await BattleEffectManager.Instance.PlayWingParticle(
+        await BattleManager.Instance.PlayWingParticle(
             character.Wing,
             character.transform.position);
 

@@ -3,12 +3,18 @@ using System.Threading.Tasks;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Move;
 
-public class MoveParticlePlayer : MonoBehaviour
+public class MoveParticlePlayer
 {
     private ParticleSystem activeParticle;
     private bool isPlayingMove;
 
     public bool IsPlayingMove => isPlayingMove;
+
+    #region Constructor
+
+    public MoveParticlePlayer() { }
+
+    #endregion
 
     public async Task Play(Move move, Vector3 position)
     {
@@ -18,7 +24,7 @@ public class MoveParticlePlayer : MonoBehaviour
         BattleManager.Instance.Freeze();
         isPlayingMove = true;
 
-        activeParticle = BattleEffectManager.Instance.GetMoveParticle(element);
+        activeParticle = BattleManager.Instance.GetMoveParticle(element);
         activeParticle.transform.position = position;
         activeParticle.Play();
         AudioManager.Instance.PlaySfx("sfx-secret_" + element.ToString().ToLower());

@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.DeadBall;
+using Aremoreno.Enums.Kit;
 
 public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance { get; private set; }
-
+    [Header("Battle")]
     [SerializeField] private BattlePhase currentPhase;
     [SerializeField] private BattlePhase lastPhase;
     [SerializeField] private BattleType currentType;
@@ -23,6 +25,10 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private float timeScale = 30f;
     [SerializeField] private TimerHalf timerHalf;
     [SerializeField] private Dictionary<TeamSide, int> scoreDict;
+
+    [Header("Battle Subsystem")]
+    [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private GameObject characterEntityBattlePrefab;
 
     [Header("Scenes")]
     [SerializeField] private SceneGroup sceneBattle;
@@ -39,12 +45,6 @@ public class BattleManager : MonoBehaviour
     public bool IsMovementFrozen => isMovementFrozen;
     public bool IsTimeFrozen => isTimeFrozen;
 
-    public Dictionary<TeamSide, Team> Teams => battleTeamManager.Teams;
-    public Dictionary<TeamSide, CharacterEntityBattle> TargetedCharacter => CharacterTargetManager.Instance.TargetedCharacter;
-    public Dictionary<TeamSide, CharacterEntityBattle> ControlledCharacter => CharacterChangeControlManager.Instance.ControlledCharacter;
-    public Ball Ball => BattleBallManager.Instance.Ball;
-    public TeamSide GetUserSide() => battleTeamManager.GetUserSide();
-
     // Win condition
     private WinCondition winCondition;
     public WinCondition WinCondition => winCondition;
@@ -52,7 +52,12 @@ public class BattleManager : MonoBehaviour
     private int charactersReadyMax;
     private int charactersReady;
 
-    private BattleTeamManager battleTeamManager;
+    private BattleManagerBall ballSystem;
+    private BattleManagerCharacter characterSystem;
+    private BattleManagerEffect effectSystem;
+    private BattleManagerField fieldSystem;
+    private BattleManagerTeam teamSystem;
+    private BattleManagerWing wingSystem;
 
     #region Lifecycle
     private void Awake()
@@ -72,7 +77,17 @@ public class BattleManager : MonoBehaviour
     void Start()
     {
         sceneLoader = SceneLoader.Instance;
-        battleTeamManager = BattleTeamManager.Instance;
+
+        ballSystem = new BattleManagerBall(ballPrefab);
+        characterSystem = new BattleManagerCharacter(characterEntityBattlePrefab);
+        effectSystem = new BattleManagerEffect();
+        fieldSystem = new BattleManagerField();
+        teamSystem = new BattleManagerTeam();
+        wingSystem = new BattleManagerWing();
+
+        teamSystem.Subscribe();
+        wingSystem.Subscribe();
+
         Freeze();
         SetTeamSize();
     }
@@ -91,18 +106,23 @@ public class BattleManager : MonoBehaviour
     private void OnDestroy()
     {
         BattleEvents.OnAllCharactersReady -= HandleAllCharactersReady;
+
+        if (teamSystem != null) teamSystem.Unsubscribe();
+        if (teamSystem != null) wingSystem.Unsubscribe();
     }
     #endregion
 
     #region Generic
     public void Freeze()
     {
+        //LogManager.Trace("[BattleManager] Freeze");
         isMovementFrozen = true;
         isTimeFrozen = true;
     }
 
     public void Unfreeze()
     {
+        //LogManager.Trace("[BattleManager] Unfreeze");
         isMovementFrozen = false;
         isTimeFrozen = false;
     }
@@ -151,15 +171,15 @@ public class BattleManager : MonoBehaviour
 
         ResetBattle();
 
-        BattleFieldManager.Instance.InitializeField();
+        InitializeField();
 
-        battleTeamManager.AssignTeamToSide(
-            battleTeamManager.ResolveTeamForSide(TeamSide.Home), 
+        teamSystem.AssignTeamToSide(
+            teamSystem.ResolveTeamForSide(TeamSide.Home), 
             TeamSide.Home);
-        battleTeamManager.AssignTeamToSide(
-            battleTeamManager.ResolveTeamForSide(TeamSide.Away), 
+        teamSystem.AssignTeamToSide(
+            teamSystem.ResolveTeamForSide(TeamSide.Away), 
             TeamSide.Away);
-        battleTeamManager.AssignVariants();
+        teamSystem.AssignVariants();
 
         foreach (Team team in Teams.Values)
         {
@@ -170,7 +190,7 @@ public class BattleManager : MonoBehaviour
 
     private void ResetBattle()
     {
-        battleTeamManager.Reset();
+        teamSystem.Reset();
         charactersReady = 0;
         ResetScore();
         ResetTimer();
@@ -227,7 +247,20 @@ public class BattleManager : MonoBehaviour
             scoringTeam, 
             scoreDict[scoringTeam.TeamSide]);
 
-        BattleEvents.RaiseGoalScored(PossessionManager.Instance.LastCharacter);
+        CharacterEntityBattle scoringCharacter = null;
+
+        if (PossessionManager.Instance.CurrentCharacter == null)
+        {
+            scoringCharacter = PossessionManager.Instance.LastCharacter;
+        }
+        else 
+        {
+            scoringCharacter = PossessionManager.Instance.CurrentCharacter;
+            scoringCharacter.TryDeactivateWings(); //prevent goal by dash
+        }
+
+        BattleEvents.RaiseGoalScored(scoringCharacter);
+
 
         // Check if the win condition triggers an immediate end on goal
         if (winCondition.ShouldEndOnGoal(scoreDict, timerHalf))
@@ -501,13 +534,13 @@ public class BattleManager : MonoBehaviour
 
             if (!needsEntity || characterObject == null) continue;
 
-            BattleCharacterManager.Instance.GetPooledCharacter((characterEntity) =>
+            characterSystem.GetPooledCharacter((characterEntity) =>
             {
                 if (characterEntity == null) return;
 
                 characterEntity.Initialize(null, characterObject);
                 characterEntity.CalculateSpeed();
-                BattleCharacterManager.Instance.AssignCharacterToTeamBattle(characterEntity, team, characterIndex);
+                characterSystem.AssignCharacterToTeamBattle(characterEntity, team, characterIndex);
                 characterEntity.gameObject.name = characterEntity.CharacterId;
                 team.GetCharacterEntities(currentType).Add(characterEntity);
 
@@ -548,7 +581,8 @@ public class BattleManager : MonoBehaviour
 
         character.Initialize(dataList[index]);
         character.SetLevel(character.MaxLevel);
-        character.ForceMaxEvolutionOnEquippedMoves();
+        character.TryEquipWingDefault();
+        character.ScaleDifficultySystem();
         return true;
     }
 
@@ -564,7 +598,7 @@ public class BattleManager : MonoBehaviour
     {
         AudioManager.Instance.PlayBgm("bgm-battle_crimson");
         ResetPlayerPositions();
-        BattleBallManager.Instance.ResetBallPosition();
+        ballSystem.ResetBallPosition();
     }
 
     public void ResetPlayerPositions()
@@ -573,7 +607,7 @@ public class BattleManager : MonoBehaviour
         {
             foreach (var character in team.GetCharacterEntities(currentType))
             {
-                BattleCharacterManager.Instance.ResetCharacterPosition(character);
+                characterSystem.ResetCharacterPosition(character);
             }
         }
     }
@@ -590,6 +624,74 @@ public class BattleManager : MonoBehaviour
     {
         TeamEvents.OnTeamPreviewEnded -= HandleTeamPreviewEnded;
     }
+
+    #endregion
+
+    #region API
+
+    //ballSystem
+    public Ball Ball => ballSystem.Ball; 
+    public void RegisterSpawnPointBall(Transform spawner) => ballSystem.RegisterSpawnPoint(spawner);
+    public void UnregisterSpawnPointBall() => ballSystem.UnregisterSpawnPoint();
+    public void SpawnBall() => ballSystem.Spawn();
+    public void ResetBallPosition() => ballSystem.ResetBallPosition();
+
+    //characterSystem
+    public void RegisterSpawnPointCharacter(Transform spawner) => characterSystem.RegisterSpawnPoint(spawner);
+    public void UnregisterSpawnPointCharacter() => characterSystem.UnregisterSpawnPoint();
+    public void GetPooledCharacter(Action<CharacterEntityBattle> onCharacterReady) => characterSystem.GetPooledCharacter(onCharacterReady);
+    public void ReturnCharacterToPool(CharacterEntityBattle character) => characterSystem.ReturnCharacterToPool(character);
+    public void AssignCharacterToTeamBattle(CharacterEntityBattle character, Team team, int characterIndex) => characterSystem.AssignCharacterToTeamBattle(character, team, characterIndex);
+    public void ResetCharacterPosition(CharacterEntityBattle character) => characterSystem.ResetCharacterPosition(character);
+    public void ClearCharacterPool() => characterSystem.ClearPool();
+
+    //effectSystem
+    public bool IsPlayingMove => effectSystem.IsPlayingMove;
+    public bool IsPlayingWing => effectSystem.IsPlayingWing;
+    public void RegisterSpawnPointEffect(BattleEffectSpawnPoint spawner) => effectSystem.RegisterSpawnPoint(spawner);
+    public void UnregisterSpawnPointEffect() => effectSystem.UnregisterSpawnPoint();
+    public void PlayDuelStartEffect(Transform originTransform) => effectSystem.PlayDuelStartEffect(originTransform);
+    public void StopDuelStartEffect() => effectSystem.StopDuelStartEffect();
+    public void PlayDuelWinEffect(Transform originTransform) => effectSystem.PlayDuelWinEffect(originTransform);
+    public ParticleSystem GetMoveParticle(Element element) => effectSystem.GetMoveParticle(element);
+    public async Task PlayMoveParticle(Move move, Vector3 position) => await effectSystem.PlayMoveParticle(move, position);
+    public async Task PlayWingParticle(Wing wing, Vector3 position) => await effectSystem.PlayWingParticle(wing, position);
+
+    //fieldSystem
+    public void RegisterField(Field field) => fieldSystem.RegisterField(field);
+    public void UnregisterField() => fieldSystem.UnregisterField();
+    public void InitializeField() => fieldSystem.InitializeField();
+
+    //teamSystem
+    public Dictionary<TeamSide, Team> Teams => teamSystem.Teams;
+    public void AssignTeamToSide(Team team, TeamSide teamSide) => teamSystem.AssignTeamToSide(team, teamSide);
+    public void AssignVariantToTeam(Team team, Variant variant) => teamSystem.AssignVariantToTeam(team, variant);
+    public void AssignVariants() => teamSystem.AssignVariants();
+    public TeamSide GetUserSide() => teamSystem.GetUserSide();
+    public void ResetTeamSystem() => teamSystem.Reset();
+    public Team ResolveTeamForSide(TeamSide side) => teamSystem.ResolveTeamForSide(side);
+
+    //wingSystem
+    public void InitializeForBattleWingSystem() => wingSystem.InitializeForBattle();
+    public bool CanActivateWings(TeamSide teamside) => wingSystem.CanActivateWings(teamside);
+
+    //misc
+    public GameObject InstantiateBall(GameObject prefabGo, Vector3 spawnPosition, Quaternion spawnRotation, Transform spawnPoint)
+    {
+        return Instantiate(prefabGo, spawnPosition, spawnRotation, spawnPoint);
+    }
+    public GameObject InstantiateCharacter(GameObject prefabGo, Transform spawnPoint) 
+    {
+        return Instantiate(prefabGo, spawnPoint);
+    }
+    public void DestroyGameObject(GameObject go)
+    {
+        Destroy(go);
+    }
+
+    //other
+    public Dictionary<TeamSide, CharacterEntityBattle> TargetedCharacter => CharacterTargetManager.Instance.TargetedCharacter;
+    public Dictionary<TeamSide, CharacterEntityBattle> ControlledCharacter => CharacterChangeControlManager.Instance.ControlledCharacter;
 
     #endregion
 }

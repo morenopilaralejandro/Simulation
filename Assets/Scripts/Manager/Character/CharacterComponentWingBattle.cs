@@ -45,7 +45,6 @@ public class CharacterComponentWingBattle : MonoBehaviour
             if (stat == Stat.Hp || stat == Stat.Sp) continue;
             character.ModifyBattleStat(stat, character.Wing.GetTrueStat(stat));
         }
-
     }
 
     public void DeactivateWings()
@@ -65,14 +64,14 @@ public class CharacterComponentWingBattle : MonoBehaviour
     {
         if (!character.HasWingActivated) return;
         character.IncreaseWingTimesUsed();
-        if (character.WingTimesUsed >= BattleWingManager.MAX_USAGES) 
+        if (character.WingTimesUsed >= BattleManagerWing.MAX_USAGES) 
         {
             DeactivateWings();
             HideWings();
         }
     }
 
-    public bool CanActivateWings() => character.HasWingEquipped && BattleWingManager.Instance.CanActivateWings(character.TeamSide) && character.HasWingActivated;
+    public bool CanActivateWings() => character.HasWingEquipped && BattleManager.Instance.CanActivateWings(character.TeamSide) && !character.HasWingActivated;
 
     #endregion
 

@@ -107,4 +107,14 @@ public class WingComponentStats
 
         return roundedResult;
     }
+
+    public void ForceMaxIndividual()
+    {
+        foreach (Stat stat in Enum.GetValues(typeof(Stat))) 
+        {
+            if (stat == Stat.Hp || stat == Stat.Sp) continue;
+            individualStats[stat] = WingManagerInheritance.MAX_INDIVIDUAL;
+        }
+        UpdateStats();
+    }
 }

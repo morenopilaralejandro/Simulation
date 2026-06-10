@@ -427,7 +427,7 @@ public class TeamManagerLoadout
             TeamEvents.RaiseCharacterSubstituted(characterB, characterA, loadout.TeamSide);
 
             // Return the field entity to pool
-            BattleCharacterManager.Instance.ReturnCharacterToPool(entityA);
+            BattleManager.Instance.ReturnCharacterToPool(entityA);
             characterA.SetKit(loadout, Position.FW);
 
             // Spawn fresh entity for slotA (where characterB is going)
@@ -441,7 +441,7 @@ public class TeamManagerLoadout
             TeamEvents.RaiseCharacterSubstituted(characterA, characterB, loadout.TeamSide);
 
             // Return the field entity to pool
-            BattleCharacterManager.Instance.ReturnCharacterToPool(entityB);
+            BattleManager.Instance.ReturnCharacterToPool(entityB);
             characterB.SetKit(loadout, Position.FW);
 
             // Spawn fresh entity for slotB (where characterA is going)
@@ -456,7 +456,7 @@ public class TeamManagerLoadout
     {
         if (character == null) return;
 
-        BattleCharacterManager.Instance.GetPooledCharacter((entity) =>
+        BattleManager.Instance.GetPooledCharacter((entity) =>
         {
             if (entity == null) return;
 

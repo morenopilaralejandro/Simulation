@@ -104,7 +104,7 @@ public class FieldDuelHandler : IDuelHandler
                 BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.DefenseSupports);
             }
 
-            await BattleEffectManager.Instance.PlayMoveParticle(
+            await BattleManager.Instance.PlayMoveParticle(
                 winner.Move,
                 winner.CharacterEntityBattle.transform.position);
 
@@ -115,7 +115,7 @@ public class FieldDuelHandler : IDuelHandler
         duel.LastDefense.CharacterEntityBattle.TryDeactivateWings();
 
         if (winner.CharacterEntityBattle.IsOnUsersTeam())
-            BattleEffectManager.Instance.PlayDuelWinEffect(winner.CharacterEntityBattle.transform); 
+            BattleManager.Instance.PlayDuelWinEffect(winner.CharacterEntityBattle.transform); 
         
         PossessionManager.Instance.GiveBallToCharacter(winner.CharacterEntityBattle);
         DuelManager.Instance.EndDuel(winner, loser);

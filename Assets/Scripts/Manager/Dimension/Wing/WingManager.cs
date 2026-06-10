@@ -11,7 +11,7 @@ public class WingManager : MonoBehaviour
 
     private WingManagerStorage storageSystem;
     private WingManagerEquip equipSystem;
-    //inheritance system
+    private WingManagerInheritance inheritanceSystem;
     private WingManagerPersistance persistanceSystem;
 
     #endregion
@@ -39,6 +39,7 @@ public class WingManager : MonoBehaviour
     {
         storageSystem = new WingManagerStorage();
         equipSystem = new WingManagerEquip();
+        inheritanceSystem = new WingManagerInheritance();
         persistanceSystem = new WingManagerPersistance();
         
         //encounterSystem.Subscribe();
@@ -71,6 +72,8 @@ public class WingManager : MonoBehaviour
     public void EquipWing(Character character, Wing wing) => equipSystem.EquipWing(character, wing);
     public void UnequipWing(Character character) => equipSystem.UnequipWing(character);
     public void UnequipWing(Wing wing) => equipSystem.UnequipWing(wing);
+
+    //inheritanceSystem
 
     // persistanceSystem
     public WingSystemSaveData Export() => persistanceSystem.Export();

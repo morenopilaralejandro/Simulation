@@ -78,6 +78,16 @@ public class WingComponentRefinement
         }
     }
 
+    public void ForceMaxRefinement()
+    {
+        // Safely determine the highest possible enum value defined in WingRefinementRank
+        var enumValues = Enum.GetValues(typeof(WingRefinementRank));
+        if (enumValues.Length > 0)
+            CurrentRank = (WingRefinementRank)enumValues.GetValue(enumValues.Length - 1);
+
+        CurrentRankProgress = 0;
+    }
+
     public float GetElementMatchBonus() 
     {
         return 0.05f * (CurrentRankIndex +1);

@@ -11,9 +11,13 @@ public class WingManagerEquip
 
     public IReadOnlyDictionary<string, Character> Characters => characters;
     public int Count => characters.Count;
+    */
+
+    #region Constuctor
 
     public WingManagerEquip() { }
-    */
+
+    #endregion
 
     #region Equip
 

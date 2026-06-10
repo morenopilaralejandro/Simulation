@@ -64,7 +64,7 @@ public class ShootDuelHandler : IDuelHandler
         {
             offense.CharacterEntityBattle.StopAction();
             offense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Combat);
-            await BattleEffectManager.Instance.PlayMoveParticle(offense.Move, offense.CharacterEntityBattle.transform.position);
+            await BattleManager.Instance.PlayMoveParticle(offense.Move, offense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(offense.Move, offense.CharacterEntityBattle);
         }
 
@@ -126,7 +126,7 @@ public class ShootDuelHandler : IDuelHandler
             else
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Halfslash1H);
 
-            await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
+            await BattleManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
         }
 
@@ -172,7 +172,7 @@ public class ShootDuelHandler : IDuelHandler
             else 
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Halfslash1H);
             
-            await BattleEffectManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
+            await BattleManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
         }
 

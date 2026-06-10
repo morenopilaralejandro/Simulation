@@ -21,6 +21,7 @@ public class Character
     private CharacterComponentPersistence persistenceComponent;
     private CharacterComponentAppearance appearanceComponent;
     private CharacterComponentWing wingComponent;
+    private CharacterComponentAIDifficulty aiDifficultyComponent;
 
     #endregion
 
@@ -47,6 +48,7 @@ public class Character
         persistenceComponent = new CharacterComponentPersistence(characterData, this);
         appearanceComponent = new CharacterComponentAppearance(characterData, this, characterSaveData);
         wingComponent = new CharacterComponentWing(characterData, this, characterSaveData);
+        aiDifficultyComponent = new CharacterComponentAIDifficulty(characterData, this, characterSaveData);
     }
 
     #endregion
@@ -184,6 +186,11 @@ public class Character
     public void IncreaseWingTimesUsed() => wingComponent.IncreaseWingTimesUsed();
     public void ResetWingTimesUsed() => wingComponent.ResetWingTimesUsed();
     public bool CanApplyWingElementMatchBonus(Element element) => wingComponent.CanApplyWingElementMatchBonus(element);
+    public void TryEquipWingDefault() => wingComponent.TryEquipWingDefault();
+
+    //aiDifficultyComponent
+    public AIDifficulty AIDifficulty => aiDifficultyComponent.AIDifficulty;
+    public void ScaleDifficultySystem()  => aiDifficultyComponent.ScaleDifficultySystem();
 
     #endregion
 }

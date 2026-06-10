@@ -91,6 +91,7 @@ public class Wing
     public int GetTrueStat(Stat stat) => statComponent.GetTrueStat(stat);
     public void SetIndividualStat(Stat stat, int amount) => statComponent.SetIndividualStat(stat, amount);
     public void UpdateStats() => statComponent.UpdateStats();
+    public void ForceMaxIndividual() => statComponent.ForceMaxIndividual();
 
     //refinementComponent
     public WingRefinementRank CurrentRank => refinementComponent.CurrentRank;
@@ -99,6 +100,7 @@ public class Wing
     public int GetRefinementThreshold() => refinementComponent.GetRefinementThreshold();
     public bool AddDuplicate(Wing duplicate) => refinementComponent.AddDuplicate(duplicate);
     public float GetElementMatchBonus() => refinementComponent.GetElementMatchBonus();
+    public void ForceMaxRefinement() => refinementComponent.ForceMaxRefinement();
 
     //equipComponent
     public Character EquippedCharacter => equipComponent.EquippedCharacter;

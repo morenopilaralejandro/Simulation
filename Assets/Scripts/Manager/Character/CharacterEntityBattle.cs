@@ -123,6 +123,7 @@ public class CharacterEntityBattle : MonoBehaviour
     {
         character.ModifyBattleStat(stat, amount);
         if (stat == Stat.Hp) UpdateFatigue();
+        if (stat == Stat.Speed) CalculateSpeed();
     }
     public void ModifyTrainedStat(Stat stat, int amount) => character.ModifyTrainedStat(stat, amount);
     public void UpdateStats() => character.UpdateStats();
@@ -216,6 +217,10 @@ public class CharacterEntityBattle : MonoBehaviour
     public void ResetWingTimesUsed() => character.ResetWingTimesUsed();
     public bool CanApplyWingElementMatchBonus(Element element) => character.CanApplyWingElementMatchBonus(element);
 
+    //aiDifficultyComponent
+    public AIDifficulty AIDifficulty => character.AIDifficulty;
+    public void ScaleDifficultySystem()  => character.ScaleDifficultySystem();
+
     #endregion
 
     #region API CharacterEntityBattle
@@ -291,7 +296,6 @@ public class CharacterEntityBattle : MonoBehaviour
     public void EnableAI() => aiComponent.EnableAI();
     public void EnableAI(bool isAIEnabled) => aiComponent.EnableAI(isAIEnabled);
     public void DisableAI() => aiComponent.DisableAI();
-    public AIDifficulty AIDifficulty => aiComponent.AIDifficulty;
     public AIState AIState => aiComponent.AIState;
     public CharacterEntityBattle GetBestPassTeammate() => aiComponent.GetBestPassTeammate();
     public DuelCommand GetRegularCommand() => aiComponent.GetRegularCommand();
