@@ -156,6 +156,14 @@ public class DuelLogManager : MonoBehaviour
             Character = character,
             TeamSide = teamSide
         });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_kickoff",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddDeadBallThrowIn(Character character, TeamSide teamSide)
@@ -164,6 +172,14 @@ public class DuelLogManager : MonoBehaviour
         {
             EntryId = "deadball_throw_in",
             LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_throw_in",
+            LogLevel = LogLevel.Trace,
             Character = character,
             TeamSide = teamSide
         });
@@ -178,6 +194,14 @@ public class DuelLogManager : MonoBehaviour
             Character = character,
             TeamSide = teamSide
         });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_corner_kick",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddDeadBallGoalKick(Character character, TeamSide teamSide)
@@ -186,6 +210,14 @@ public class DuelLogManager : MonoBehaviour
         {
             EntryId = "deadball_goal_kick",
             LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_goal_kick",
+            LogLevel = LogLevel.Trace,
             Character = character,
             TeamSide = teamSide
         });
@@ -200,6 +232,14 @@ public class DuelLogManager : MonoBehaviour
             Character = character,
             TeamSide = teamSide
         });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_free_kick_direct",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddDeadBallFreeKickIndirect(Character character, TeamSide teamSide)
@@ -208,6 +248,60 @@ public class DuelLogManager : MonoBehaviour
         {
             EntryId = "deadball_free_kick_indirect",
             LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_free_kick_indirect",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
+    }
+
+    public void AddDeadBallOffside(Character character, TeamSide teamSide)
+    {
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_offside",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
+    }
+
+    public void AddDeadBallOut() => AddEntry(Trace("deadball_out"));
+
+    public void AddDeadBallFoul(Character character, TeamSide teamSide)
+    {
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_foul",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
+    }
+
+    public void AddDeadBallCardYellow(Character character, TeamSide teamSide)
+    {
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_card_yellow",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
+    }
+
+    public void AddDeadBallCardRed(Character character, TeamSide teamSide)
+    {
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_card_red",
+            LogLevel = LogLevel.Trace,
             Character = character,
             TeamSide = teamSide
         });

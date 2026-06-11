@@ -46,6 +46,7 @@ public class BoundOut : MonoBehaviour
 
         BattleManager.Instance.Ball.CancelTravel();
         DuelManager.Instance.CancelDuel();
+        DuelLogManager.Instance.AddDeadBallOut();
 
         battleManager.Freeze();
         var ball = battleManager.Ball;

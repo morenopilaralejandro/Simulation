@@ -15,15 +15,15 @@ public class MenuMain : Menu
     public void Start() 
     {
         MenuManager.Instance.OpenMenu(this);
-        AudioManager.Instance.PlayBgm("bgm-simulation");    
+        AudioManager.Instance.PlayBgm("bgm-opening");    
     }
 
     public void OnButtonDreamMatchTapped() 
     {
         AudioManager.Instance.PlaySfxUI("sfx-menu_tap");    
         BattleArgs.SetFull(
-            "team-00000-a-test_a", 
-            "team-00000-b-test_b");
+            "team-00001-s-faith_selection", 
+            "team-00002-s-crimson_selection");
         SceneLoader.Instance.LoadGroup(sceneBattle);
     }
 

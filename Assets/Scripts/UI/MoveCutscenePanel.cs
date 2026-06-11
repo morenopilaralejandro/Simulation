@@ -129,7 +129,7 @@ public class MoveCutscenePanel : MonoBehaviour
     private void SetWing(Wing wing)
     {
         textMoveName.text = wing.WingName;
-        textMoveName.color = ColorManager.GetWingColor(wing.WingColorType);
+        textMoveName.color = ColorManager.GetElementColor(wing.Elements[0]);
 
         if(wing.WingEvolutionAddress == _cachedEvolutionAddress) return;
 

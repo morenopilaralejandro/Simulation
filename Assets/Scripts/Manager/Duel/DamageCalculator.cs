@@ -14,7 +14,7 @@ public static class DamageCalculator
     private const float ELEMENT_MATCH_MULTIPLIER = 1.5f;
     public const float ELEMENT_EFFECTIVE_MULTIPLIER = 1.5f;
 
-    private const float KEEPER_MULTIPLIER = 1.5f;
+    private const float KEEPER_MULTIPLIER = 2.5f;
 
     private const float DISTANCE_MULTIPLIER = 10f;
     private const float DIRECT_BONUS = 50f;

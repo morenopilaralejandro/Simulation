@@ -313,11 +313,11 @@ public class DuelManager : MonoBehaviour
         switch (DuelMode)
         {
             case DuelMode.Field:
-                duelHandler = new FieldDuelHandler(duel);
+                duelHandler = new DuelHandlerField(duel);
                 AudioManager.Instance.PlaySfx("sfx-duel_start_field");
                 break;
             case DuelMode.Shoot:
-                duelHandler = new ShootDuelHandler(duel);
+                duelHandler = new DuelHandlerShoot(duel);
                 AudioManager.Instance.PlaySfx("sfx-duel_start_shoot");
                 break;
             /*
@@ -330,6 +330,7 @@ public class DuelManager : MonoBehaviour
 
     public void CancelDuel()
     {
+        if(duel.IsResolved) return;
         LogManager.Info("[DuelManager] Duel cancelled", this);
         DuelEvents.RaiseDuelCancel(duel.DuelMode);
         duel.IsResolved = true;
