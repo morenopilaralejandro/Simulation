@@ -116,148 +116,195 @@ public class DuelLogManager : MonoBehaviour
 
     #region Add Methods
 
-    private void AddEntry(string entryId, LogLevel logLevel, Character character, TeamSide teamSide, Move move, object args) 
+    private void AddEntry(DuelLogEntryData data)
     {
-        DuelLogEntry entry = new DuelLogEntry(entryId, logLevel, character, teamSide, move, args);
+        var entry = new DuelLogEntry(data);
         DuelLogEntries.Add(entry);
-        LogManager.Trace($"[DuelLogManager] Shown: {logLevel == LogLevel.Info} String: {entry.EntryString}");
+        LogManager.Trace($"[DuelLogManager] Shown: {data.LogLevel == LogLevel.Info} String: {entry.EntryString}");
         DuelLogEvents.RaiseNewEntry(entry);
     }
 
-    public void AddMatchStart()
-    {
-        AddEntry(
-            "match_start", 
-            LogLevel.Trace,
-            null,
-            default,
-            null,
-            null
-        );
-    }
+    public void AddMatchStart() => AddEntry(Trace("match_start"));
 
-    public void AddMatchHalf()
-    {
-        AddEntry(
-            "match_half", 
-            LogLevel.Trace,
-            null,
-            default,
-            null,
-            null
-        );
-    }
+    public void AddMatchHalf() => AddEntry(Trace("match_half"));
 
-    public void AddMatchEnd()
-    {
-        AddEntry(
-            "match_end", 
-            LogLevel.Trace,
-            null,
-            default,
-            null,
-            null
-        );
-    }
+    public void AddMatchEnd() => AddEntry(Trace("match_end"));
 
     public void AddMatchPause(CharacterEntityBattle character)
     {
         var args = new { 
             teamName = character.GetTeam().TeamName
         };
-        AddEntry(
-            "match_pause", 
-            LogLevel.Trace,
-            character.Character,
-            character.TeamSide,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "match_pause",
+            LogLevel = LogLevel.Trace,
+            Character = character.Character,
+            TeamSide = character.TeamSide,
+            Args = args
+        });
     }
 
-    public void AddMatchResume()
-    {
-        AddEntry(
-            "match_resume", 
-            LogLevel.Trace,
-            null,
-            default,
-            null,
-            null
-        );
-    }
+    public void AddMatchResume() => AddEntry(Trace("match_resume"));
 
     public void AddDeadBallKickoff(Character character, TeamSide teamSide)
     {
-        //if(character.PortraitSprite == null) return;
-        AddEntry(
-            "deadball_kickoff", 
-            LogLevel.Info,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_kickoff",
+            LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_kickoff",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddDeadBallThrowIn(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "deadball_throw_in", 
-            LogLevel.Info,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_throw_in",
+            LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_throw_in",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddDeadBallCornerKick(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "deadball_corner_kick", 
-            LogLevel.Info,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_corner_kick",
+            LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_corner_kick",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddDeadBallGoalKick(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "deadball_goal_kick", 
-            LogLevel.Info,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_goal_kick",
+            LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_goal_kick",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddDeadBallFreeKickDirect(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "deadball_free_kick_direct", 
-            LogLevel.Info,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_free_kick_direct",
+            LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_free_kick_direct",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddDeadBallFreeKickIndirect(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "deadball_free_kick_indirect", 
-            LogLevel.Info,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_free_kick_indirect",
+            LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_free_kick_indirect",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
+    }
+
+    public void AddDeadBallOffside(Character character, TeamSide teamSide)
+    {
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_offside",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
+    }
+
+    public void AddDeadBallOut() => AddEntry(Trace("deadball_out"));
+
+    public void AddDeadBallFoul(Character character, TeamSide teamSide)
+    {
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_foul",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
+    }
+
+    public void AddDeadBallCardYellow(Character character, TeamSide teamSide)
+    {
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_card_yellow",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
+    }
+
+    public void AddDeadBallCardRed(Character character, TeamSide teamSide)
+    {
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "deadball_card_red",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddActionPass(Character character, TeamSide teamSide)
@@ -267,14 +314,14 @@ public class DuelLogManager : MonoBehaviour
         var args = new { 
             characterName = character.CharacterNick
         };
-        AddEntry(
-            "action_pass", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_pass",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Args = args
+        });
     }
 
     public void AddActionShoot(Character character, TeamSide teamSide)
@@ -282,26 +329,25 @@ public class DuelLogManager : MonoBehaviour
         var args = new { 
             characterName = character.CharacterNick
         };
-        AddEntry(
-            "action_shoot", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_shoot",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Args = args
+        });
     }
 
     public void AddActionDirect(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "action_direct", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_direct",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddActionCommand(Character character, TeamSide teamSide, DuelCommand command, Move move)
@@ -328,14 +374,15 @@ public class DuelLogManager : MonoBehaviour
             commandName = commandName
         };
 
-        AddEntry(
-            "action_command", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            move,
-            argsLong
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_command",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Move = move,
+            Args = argsLong
+        });
     }
 
     public void AddActionDamage(Character character, TeamSide teamSide, DuelAction action, float damage)
@@ -350,14 +397,14 @@ public class DuelLogManager : MonoBehaviour
             actionSymbol = actionSymbol,
             damageNumber = damageNumber
         };
-        AddEntry(
-            "action_damage", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_damage",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Args = args
+        });
     }
 
     public void AddActionScore(Character character, TeamSide teamSide)
@@ -365,14 +412,14 @@ public class DuelLogManager : MonoBehaviour
         var args = new { 
             characterName = character.CharacterNick
         };
-        AddEntry(
-            "action_score", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_score",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Args = args
+        });
     }
 
     public void AddActionStop(Character character, TeamSide teamSide)
@@ -380,14 +427,14 @@ public class DuelLogManager : MonoBehaviour
         var args = new { 
             characterName = character.CharacterNick
         };
-        AddEntry(
-            "action_stop", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_stop",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Args = args
+        });
     }
 
     public void AddActionSubstitution(Character character, TeamSide teamSide)
@@ -396,108 +443,131 @@ public class DuelLogManager : MonoBehaviour
             characterName = character.CharacterNick
         };
 
-        AddEntry(
-            "action_substitution", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_substitution",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Args = args
+        });
 
-        AddEntry(
-            "action_substitution", 
-            LogLevel.Info,
-            character,
-            teamSide,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_substitution",
+            LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide,
+            Args = args
+        });
+    }
+
+    public void AddActionWingActivate(Character character, TeamSide teamSide, Wing wing)
+    {
+        var args = new { 
+            wingName = wing.WingName
+        };
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_wing_activate",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Wing = wing,
+            Args = args
+        });
+
+        /*
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_wing_activate_short",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Wing = wing,
+            Args = argsLong
+        });
+        */
+    }
+
+    public void AddActionWingDeactivate(Character character, TeamSide teamSide, Wing wing)
+    {
+        /*
+        var args = new { 
+            wingName = wing.WingName
+        };
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_wing_activate",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Wing = wing,
+            Args = args
+        });
+        */
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "action_wing_deactivate",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Wing = wing
+        });
     }
 
     public void AddElementOffense(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "element_offense", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "element_offense",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddElementDefense(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "element_defense", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "element_defense",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
-    public void AddDuelStart()
-    {
-        AddEntry(
-            "duel_start", 
-            LogLevel.Trace,
-            null,
-            default,
-            null,
-            null
-        );
-    }
+    public void AddDuelStart() => AddEntry(Trace("duel_start"));
 
     public void AddDuelWin(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "duel_win", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "duel_win",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
     public void AddDuelLose(Character character, TeamSide teamSide)
     {
-        AddEntry(
-            "duel_lose", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "duel_lose",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide
+        });
     }
 
-    public void AddDuelCancel()
-    {
-        AddEntry(
-            "duel_cancel", 
-            LogLevel.Trace,
-            null,
-            default,
-            null,
-            null
-        );
-    }
+    public void AddDuelCancel() => AddEntry(Trace("duel_cancel"));
 
-    public void AddGoal()
-    {
-        AddEntry(
-            "goal", 
-            LogLevel.Trace,
-            null,
-            default,
-            null,
-            null
-        );
-    }
+    public void AddGoal() => AddEntry(Trace("goal"));
 
     public void AddPossessionGained(Character character, TeamSide teamSide)
     {
@@ -506,14 +576,14 @@ public class DuelLogManager : MonoBehaviour
         var args = new { 
             characterName = character.CharacterNick
         };
-        AddEntry(
-            "possession_gained", 
-            LogLevel.Trace,
-            character,
-            teamSide,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "possession_gained",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Args = args
+        });
     }
 
     public void AddCondition(string condition)
@@ -521,18 +591,17 @@ public class DuelLogManager : MonoBehaviour
         var args = new { 
             condition = condition
         };
-        AddEntry(
-            "condition", 
-            LogLevel.Trace,
-            null,
-            default,
-            null,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "condition",
+            LogLevel = LogLevel.Trace,
+            Args = args
+        });
     }
 
-    public void AddNotifyMoveLevelUp(Character character, TeamSide teamSide, Move move)
-    {
+    public void AddNotifyMoveEvolved(Character character, TeamSide teamSide, Move move)
+    {   
+        /*
         string characterName = character.CharacterNick;
         string moveName = move.MoveName;
 
@@ -541,29 +610,44 @@ public class DuelLogManager : MonoBehaviour
             moveName = moveName
         };
 
-        AddEntry(
-            "notify_move_evolved", 
-            LogLevel.Info,
-            character,
-            teamSide,
-            null,
-            null
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "notify_move_evolved",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Move move = move,
+            Args = args
+        });
 
-        /*
-        AddEntry(
-            "notify_move_level_up", 
-            LogLevel.Info,
-            character,
-            move,
-            args
-        );
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "notify_move_evolved",
+            LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide,
+            Move move = move,
+            Args = args
+        });
         */
+
+        AddEntry(Trace("notify_move_evolved"));
+        AddEntry(Info("notify_move_evolved"));
+
+    }
+
+    public void AddNotifyWingEvolved(Character character, TeamSide teamSide, Wing wing)
+    {
+        AddEntry(Trace("notify_wing_evolved"));
+        AddEntry(Info("notify_wing_evolved"));
     }
 
     #endregion
 
     #region Helper Methods
+
+    private DuelLogEntryData Trace(string entryId) => new() { EntryId = entryId, LogLevel = LogLevel.Trace };
+    private DuelLogEntryData Info(string entryId) => new() { EntryId = entryId, LogLevel = LogLevel.Info };
 
     #endregion
 

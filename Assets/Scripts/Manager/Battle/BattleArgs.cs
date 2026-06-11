@@ -8,6 +8,10 @@ public static class BattleArgs
     public static string AwayTeamGuid;
     public static string BallId;
     public static string FieldId;
+    public static int HomeTeamLevel;
+    public static int AwayTeamLevel;
+    public static bool HomeTeamCanUseWing = true;
+    public static bool AwayTeamCanUseWing = true;
     public static BattleType BattleType;
     public static BattleResultsType BattleResultsType;
     public static WinConditionType WinConditionType;

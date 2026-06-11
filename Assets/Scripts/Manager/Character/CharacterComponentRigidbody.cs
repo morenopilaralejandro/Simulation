@@ -22,6 +22,8 @@ public class CharacterComponentRigidbody : MonoBehaviour
         BattleEvents.OnBattlePhaseChanged += HandleBattlePhaseChanged;
         MoveEvents.OnMoveCutsceneStart += HandleMoveCutsceneStart;
         MoveEvents.OnMoveCutsceneEnd += HandleMoveCutsceneEnd;
+        WingEvents.OnWingCutsceneStart += HandleWingCutsceneStart;
+        WingEvents.OnWingCutsceneEnd += HandleWingCutsceneEnd;
     }
 
     void OnDisable()
@@ -29,6 +31,8 @@ public class CharacterComponentRigidbody : MonoBehaviour
         BattleEvents.OnBattlePhaseChanged -= HandleBattlePhaseChanged;
         MoveEvents.OnMoveCutsceneStart -= HandleMoveCutsceneStart;
         MoveEvents.OnMoveCutsceneEnd -= HandleMoveCutsceneEnd;
+        WingEvents.OnWingCutsceneStart -= HandleWingCutsceneStart;
+        WingEvents.OnWingCutsceneEnd -= HandleWingCutsceneEnd;
     }
 
     private void HandleBattlePhaseChanged(BattlePhase newPhase, BattlePhase oldPhase) 
@@ -39,12 +43,14 @@ public class CharacterComponentRigidbody : MonoBehaviour
             return;
         }
 
-        if (newPhase == BattlePhase.Battle && oldPhase == BattlePhase.Selection && !BattleEffectManager.Instance.IsPlayingMove)
+        if (newPhase == BattlePhase.Battle && oldPhase == BattlePhase.Selection && !BattleManager.Instance.IsPlayingMove && !BattleManager.Instance.IsPlayingWing)
             ResumePhysics();
     }
 
     private void HandleMoveCutsceneStart(Move move) => PausePhysics();
     private void HandleMoveCutsceneEnd() => ResumePhysics();
+    private void HandleWingCutsceneStart(Wing wing) => PausePhysics();
+    private void HandleWingCutsceneEnd() => ResumePhysics();
 
     private void PausePhysics()
     {

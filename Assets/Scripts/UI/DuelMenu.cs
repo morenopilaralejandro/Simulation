@@ -16,10 +16,12 @@ public class DuelMenu : MonoBehaviour
     [SerializeField] private CanvasGroup rootCanvasGroup;
     [SerializeField] private CanvasGroup panelCommand;
     [SerializeField] private CanvasGroup panelMove;
+    [SerializeField] private CanvasGroup panelWing;
     [SerializeField] private Button buttonCommandMelee;
     [SerializeField] private Button buttonCommandRanged;
     [SerializeField] private Button buttonCommandMove;
     [SerializeField] private Button buttonMoveNext;
+    [SerializeField] private Toggle toggleWing;
 
     private bool isOpen;
     private bool isCommandOpen;
@@ -55,6 +57,7 @@ public class DuelMenu : MonoBehaviour
         inputManager.SubscribeDown(CustomAction.BattleUI_ClickEastButton, HandleEast);
         inputManager.SubscribeDown(CustomAction.BattleUI_ClickNorthButton, HandleNorth);
         inputManager.SubscribeDown(CustomAction.BattleUI_CloseMoveMenu, HandleSouth);
+        inputManager.SubscribeDown(CustomAction.BattleUI_ToggleWings, HandleToggleWings);
     }
 
     private void UnsubscribeInput()
@@ -63,6 +66,7 @@ public class DuelMenu : MonoBehaviour
         inputManager.UnsubscribeDown(CustomAction.BattleUI_ClickEastButton, HandleEast);
         inputManager.UnsubscribeDown(CustomAction.BattleUI_ClickNorthButton, HandleNorth);
         inputManager.UnsubscribeDown(CustomAction.BattleUI_CloseMoveMenu, HandleSouth);
+        inputManager.UnsubscribeDown(CustomAction.BattleUI_ToggleWings, HandleToggleWings);
     }
 
     private void HandleWest() 
@@ -95,6 +99,11 @@ public class DuelMenu : MonoBehaviour
             OnButtonBackTapped();
     }
 
+    private void HandleToggleWings() 
+    { 
+        toggleWing.isOn = !toggleWing.isOn;
+    }
+
     private void SetCharacter() 
     {
         category = DuelSelectionManager.Instance.GetUserCategory();
@@ -106,6 +115,8 @@ public class DuelMenu : MonoBehaviour
             moves = character.GetEquippedMovesByTrait(requiredTrait.Value);
         else 
             moves = character.GetEquippedMovesByCategory(category);
+
+        toggleWing.isOn = false;
 
         BattleUIManager.Instance.SetDuelCategory(category);
     }
@@ -123,16 +134,21 @@ public class DuelMenu : MonoBehaviour
 
         SubscribeInput();
 
-        if (SettingsManager.Instance.IsAutoBattleEnabled)
+        if (SettingsManager.Instance.IsAutoBattleEnabled) 
+        {
             DuelSelectionManager.Instance.SelectionMadeAuto(userSide);
-        else
-            ShowCommand();
+            return;
+        }
+
+        ShowCommand();
+        SetCanvasGroup(panelWing, character.CanActivateWings());
     }
 
     public void Hide()
     {
         HideMove();
         HideCommand();
+        SetCanvasGroup(panelWing, false);
 
         UnsubscribeInput();
 
@@ -221,6 +237,8 @@ public class DuelMenu : MonoBehaviour
     public void OnCommandMeleeTapped()
     {
         AudioManager.Instance.PlaySfx("sfx-menu-regular-command");
+        character.SetPendingWingActivation(toggleWing.isOn);
+        character.SetPendingWingCutscene(toggleWing.isOn);
         DuelSelectionManager.Instance.SelectionMadeHuman(
             userSide, 
             DuelCommand.Melee, 
@@ -230,6 +248,8 @@ public class DuelMenu : MonoBehaviour
     public void OnCommandRangedTapped()
     {
         AudioManager.Instance.PlaySfx("sfx-menu-regular-command");
+        character.SetPendingWingActivation(toggleWing.isOn);
+        character.SetPendingWingCutscene(toggleWing.isOn);
         DuelSelectionManager.Instance.SelectionMadeHuman(
             userSide, 
             DuelCommand.Ranged, 
@@ -285,6 +305,9 @@ public class DuelMenu : MonoBehaviour
         }
         */
 
+
+        character.SetPendingWingActivation(toggleWing.isOn);
+        character.SetPendingWingCutscene(toggleWing.isOn);
         DuelSelectionManager.Instance.SelectionMadeHuman(
             userSide, 
             DuelCommand.Move, 

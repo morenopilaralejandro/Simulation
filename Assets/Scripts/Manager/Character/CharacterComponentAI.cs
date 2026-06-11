@@ -43,11 +43,11 @@ public class CharacterComponentAI : MonoBehaviour
     private const float MIN_SPACING_BETWEEN_MATES = 1.5f;
 
     // Keeper
-    private const float KEEPER_INTERCEPT_RANGE = 2f;
-    private const float KEEPER_STANDING_OFFSET = 0.5f;
+    private const float KEEPER_INTERCEPT_RANGE = 4f;
+    private const float KEEPER_STANDING_OFFSET = 0.3f;
     private const float KEEPER_PREDICT_AHEAD = 0.3f;
-    private const float KEEPER_MIN_X = -0.8f;
-    private const float KEEPER_MAX_X =  0.8f;
+    private const float KEEPER_MIN_X = -0.6f;
+    private const float KEEPER_MAX_X =  0.6f;
 
     // Defensive line limits
     private float HOME_DEFENSIVE_MIN_Z;
@@ -137,13 +137,12 @@ public class CharacterComponentAI : MonoBehaviour
 
     [SerializeField] private bool isEnemyAI;
     [SerializeField] private bool isAIEnabled = false;
-    [SerializeField] private AIDifficulty difficulty;
+    [SerializeField] private AIDifficulty difficulty => character.AIDifficulty;
     [SerializeField] private AIState currentState = AIState.Idle;
     [SerializeField] private bool isAutoBattleEnabled = false;
 
     public bool IsEnemyAI => isEnemyAI;
     public bool IsAIEnabled => isAIEnabled;
-    public AIDifficulty AIDifficulty => difficulty;
     public AIState AIState => currentState;
     public bool IsAutoBattleEnabled => isAutoBattleEnabled;
 
@@ -181,11 +180,9 @@ public class CharacterComponentAI : MonoBehaviour
     public void Initialize(CharacterEntityBattle character)
     {
         this.character = character;
-        this.difficulty = AIDifficulty.Hard;
 
         _transform = character.transform;
         modelTf = character.Model;
-        InitializeDecisionDelay();
     }
 
     private void InitializeDistances(Position position)
@@ -306,6 +303,7 @@ public class CharacterComponentAI : MonoBehaviour
             opponentGoalTf = opponentGoal ? opponentGoal.transform : null;
             teammates = character.GetTeammates();
             opponents = character.GetOpponents();
+            InitializeDecisionDelay();
             InitializeDistances(formationCoord.Position);
             InitializeSupportForwardOffset(formationCoord.Position);
             isAIEnabled = true;
@@ -586,9 +584,9 @@ public class CharacterComponentAI : MonoBehaviour
 
         float keeperZ = character.FormationCoord.DefaultPosition.z;
 
-        if (distSqr < KEEPER_INTERCEPT_RANGE * KEEPER_INTERCEPT_RANGE)
+        if (distSqr < KEEPER_INTERCEPT_RANGE)
         {
-            Vector3 target = PredictBallFuturePosition(KEEPER_PREDICT_AHEAD);;
+            Vector3 target = PredictBallFuturePosition(KEEPER_PREDICT_AHEAD);
             target.z = keeperZ;
             target.x = Mathf.Clamp(target.x, KEEPER_MIN_X, KEEPER_MAX_X);
 
@@ -1206,6 +1204,26 @@ public class CharacterComponentAI : MonoBehaviour
             : character.GetStrongestAffordableMoveByTrait(trait);
     }
 
+    public bool ShouldActivateWings()
+    {
+        float chance = character.FormationCoord.Position switch
+        {   /*
+            Position.FW => 0.60f,
+            Position.MF => 0.10f,
+            Position.DF => 0.05f,
+            Position.GK => 0.50f,
+            */
+            Position.FW => 0.00f,
+            Position.MF => 0.00f,
+            Position.DF => 0.00f,
+            Position.GK => 1.00f,
+            _ => 0f
+        };
+
+        return UnityEngine.Random.value < chance;
+    }
+
     #endregion
+
 }
 

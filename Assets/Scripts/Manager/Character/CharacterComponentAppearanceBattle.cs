@@ -9,13 +9,19 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     [SerializeField] private SpriteLibrary kitSpriteLibrary;
     [SerializeField] private SpriteLibrary hairFrontLibrary;
     [SerializeField] private SpriteLibrary hairBackLibrary;
+    [SerializeField] private SpriteLibrary wingFrontLibrary;
+    [SerializeField] private SpriteLibrary wingBackLibrary;
 
     [SerializeField] private SpriteRenderer bodyRenderer;
     [SerializeField] private SpriteRenderer hairFrontRenderer;
     [SerializeField] private SpriteRenderer hairBackRenderer;
+    [SerializeField] private SpriteRenderer wingFrontRenderer;
+    [SerializeField] private SpriteRenderer wingBackRenderer;
 
     [SerializeField] private GameObject hairFrontObject;
     [SerializeField] private GameObject hairBackObject;
+    [SerializeField] private GameObject wingFrontObject;
+    [SerializeField] private GameObject wingBackObject;
 
     [SerializeField] private CharacterComponentAnimationController animationControllerComponent;
     private CharacterComponentAppearance appearanceComponent;
@@ -24,6 +30,8 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     private readonly AddressableBinding<SpriteLibraryAsset> _kitBinding = new();
     private readonly AddressableBinding<SpriteLibraryAsset> _hairFrontBinding = new();
     private readonly AddressableBinding<SpriteLibraryAsset> _hairBackBinding = new();
+    private readonly AddressableBinding<SpriteLibraryAsset> _wingFrontBinding = new();
+    private readonly AddressableBinding<SpriteLibraryAsset> _wingBackBinding = new();
 
     public bool IsLoaded =>
         kitSpriteLibrary.spriteLibraryAsset != null &&
@@ -50,6 +58,8 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     public async Task LoadAsync()
     {
+        UnloadWing();
+
         SetBodyColor();
         SetHairColor();
 
@@ -57,7 +67,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         await LoadHairBackAsync();
     }
 
-    public async Task AppearanceBattleLoadAsync()
+    public async Task AppearanceBattleLoadAsync(bool hasWingActivated = false)
     {
         SetBodyColor();
         SetHairColor();
@@ -65,6 +75,11 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         await LoadHairFrontAsync();
         await LoadHairBackAsync();
         await LoadKitAsync();
+
+        if (hasWingActivated)
+            await LoadWingAsync();
+        else
+            UnloadWing();
     }
 
     #endregion
@@ -152,6 +167,80 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     #endregion
 
+    #region Hair
+
+    private void SetWingColor()
+    {
+        wingFrontRenderer.color = appearanceComponent.ColorWing;
+        wingBackRenderer.color = appearanceComponent.ColorWing;
+    }
+
+    private async Task LoadWingFrontAsync()
+    {
+        wingFrontLibrary.spriteLibraryAsset = null;
+
+        SpriteLibraryAsset asset =
+            await _wingFrontBinding.LoadOptionalAsync(appearanceComponent.WingFrontAddress);
+
+        if (asset == null)
+        {
+            LogManager.Error($"[CharacterComponentAppearanceBattle] Wing front load failed: {appearanceComponent.WingFrontAddress}");
+
+            wingFrontObject.SetActive(false);
+            return;
+        }
+
+        if (!wingFrontObject.activeSelf)
+            wingFrontObject.SetActive(true);
+
+        wingFrontLibrary.spriteLibraryAsset = asset;
+    }
+
+    private async Task LoadWingBackAsync()
+    {
+        wingBackLibrary.spriteLibraryAsset = null;
+
+        SpriteLibraryAsset asset =
+            await _wingBackBinding.LoadOptionalAsync(appearanceComponent.WingBackAddress);
+
+        if (asset == null)
+        {
+            LogManager.Trace($"[CharacterComponentAppearanceBattle] Wing back load failed: {appearanceComponent.WingBackAddress}");
+
+            wingBackObject.SetActive(false);
+            return;
+        }
+
+        if (!wingBackObject.activeSelf)
+            wingBackObject.SetActive(true);
+
+        wingBackLibrary.spriteLibraryAsset = asset;
+    }
+
+    public async Task LoadWingAsync()
+    {
+        await LoadWingFrontAsync();
+        await LoadWingBackAsync();
+        SetWingColor();
+    }
+
+    public void UnloadWing()
+    {
+        wingFrontObject.SetActive(false);
+        wingBackObject.SetActive(false);
+
+        wingFrontLibrary.spriteLibraryAsset = null;
+        wingBackLibrary.spriteLibraryAsset = null;
+
+        _hairFrontBinding.Release();
+        _hairBackBinding.Release();
+
+        _hairFrontBinding.Cancel();
+        _hairBackBinding.Cancel();
+    }
+
+    #endregion
+
     #region Cleanup
 
     public void Clear()
@@ -159,14 +248,20 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         kitSpriteLibrary.spriteLibraryAsset = null;
         hairFrontLibrary.spriteLibraryAsset = null;
         hairBackLibrary.spriteLibraryAsset = null;
+        wingFrontLibrary.spriteLibraryAsset = null;
+        wingBackLibrary.spriteLibraryAsset = null;
 
         _kitBinding.Release();
         _hairFrontBinding.Release();
         _hairBackBinding.Release();
+        _wingFrontBinding.Release();
+        _wingBackBinding.Release();
 
         _kitBinding.Cancel();
         _hairFrontBinding.Cancel();
         _hairBackBinding.Cancel();
+        _wingFrontBinding.Cancel();
+        _wingBackBinding.Cancel();
     }
 
     #endregion

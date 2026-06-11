@@ -194,6 +194,7 @@ public class OffsideManager : MonoBehaviour
         snapshot.offsideCandidates.Clear();
         DeadBallManager.Instance.SetBallPosition(offender.transform.position);
         audioManager.PlaySfx("sfx-whistle_double");
+        DuelLogManager.Instance.AddDeadBallOffside(offender.Character, offender.GetOpponentSide());
         BattleManager.Instance.StartOffside(offender.GetOpponentSide());
     }
 

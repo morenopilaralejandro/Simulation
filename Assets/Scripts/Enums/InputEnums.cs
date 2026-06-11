@@ -46,6 +46,8 @@ namespace Aremoreno.Enums.Input
         BattleUI_CloseTeamMenu,
         BattleUI_DeadBallConfirm,
         BattleUI_TeamPreviewConfirm,
+        BattleUI_ToggleWings,
+
         //WorldActions
         World_Move,
         World_Run,

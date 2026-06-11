@@ -452,6 +452,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "BattleUI_ToggleWings",
+                    "type": "Button",
+                    "id": "37b2ff1a-74ea-4dc2-be0f-20cffb961660",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -815,6 +824,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "BattleUI_TeamPreviewConfirm",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d910bc12-ffdd-49a0-93cf-b3d8f14ffb24",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_ToggleWings",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fbdb8007-36a5-45a8-92b2-7add2974976f",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleUI_ToggleWings",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

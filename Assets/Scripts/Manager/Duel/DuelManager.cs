@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Move;
 using Aremoreno.Enums.Duel;
@@ -308,15 +309,15 @@ public class DuelManager : MonoBehaviour
         Reset();
         duel.DuelMode = duelMode;
         DuelEvents.RaiseDuelStart(duelMode);
-        BattleEffectManager.Instance.PlayDuelStartEffect(BattleManager.Instance.Ball.transform);
+        BattleManager.Instance.PlayDuelStartEffect(BattleManager.Instance.Ball.transform);
         switch (DuelMode)
         {
             case DuelMode.Field:
-                duelHandler = new FieldDuelHandler(duel);
+                duelHandler = new DuelHandlerField(duel);
                 AudioManager.Instance.PlaySfx("sfx-duel_start_field");
                 break;
             case DuelMode.Shoot:
-                duelHandler = new ShootDuelHandler(duel);
+                duelHandler = new DuelHandlerShoot(duel);
                 AudioManager.Instance.PlaySfx("sfx-duel_start_shoot");
                 break;
             /*
@@ -329,6 +330,7 @@ public class DuelManager : MonoBehaviour
 
     public void CancelDuel()
     {
+        if(duel.IsResolved) return;
         LogManager.Info("[DuelManager] Duel cancelled", this);
         DuelEvents.RaiseDuelCancel(duel.DuelMode);
         duel.IsResolved = true;
@@ -356,7 +358,7 @@ public class DuelManager : MonoBehaviour
         else
             AudioManager.Instance.PlaySfx("sfx-duel_lose");
 
-        BattleEffectManager.Instance.StopDuelStartEffect();
+        BattleManager.Instance.StopDuelStartEffect();
 
         BattleUIManager.Instance.HideDuelParticipantsPanel();
         duel.IsResolved = true;
@@ -478,5 +480,25 @@ public class DuelManager : MonoBehaviour
         */
         AddParticipant(participant);
     }
+    #endregion
+
+    #region Cutscene
+
+    public async Task TryPlayWingCutscene(CharacterEntityBattle character)
+    {
+        if (character == null || !character.HasPendingWingCutscene) return;
+
+        character.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Backslash1H);
+        character.ShowWings();
+
+        await BattleManager.Instance.PlayWingParticle(
+            character.Wing,
+            character.transform.position);
+
+        character.StopAction();
+        character.SetPendingWingCutscene(false);
+        WingEvents.RaiseWingActivated(character,character.Wing);
+    }
+
     #endregion
 }

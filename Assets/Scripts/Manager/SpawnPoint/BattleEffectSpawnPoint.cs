@@ -8,6 +8,7 @@ public class BattleEffectSpawnPoint : MonoBehaviour
 {
     public ParticleSystem DuelStartEffect;
     public ParticleSystem DuelWinEffect;
+    public ParticleSystem WingEffect;
 
     [SerializeField] private ParticleSystem MoveFireEffect;
     [SerializeField] private ParticleSystem MoveIceEffect;
@@ -36,14 +37,14 @@ public class BattleEffectSpawnPoint : MonoBehaviour
             { Element.Water,    MoveWaterEffect }
         };
 
-        if (BattleEffectManager.Instance != null)
-            BattleEffectManager.Instance.RegisterSpawnPoint(this);
+        if (BattleManager.Instance != null)
+            BattleManager.Instance.RegisterSpawnPointEffect(this);
     }
 
     private void OnDestroy()
     {
-        if (BattleEffectManager.Instance != null)
-            BattleEffectManager.Instance.UnregisterSpawnPoint();
+        if (BattleManager.Instance != null)
+            BattleManager.Instance.UnregisterSpawnPointEffect();
     }
 
     public ParticleSystem GetMoveParticle(Element element) 

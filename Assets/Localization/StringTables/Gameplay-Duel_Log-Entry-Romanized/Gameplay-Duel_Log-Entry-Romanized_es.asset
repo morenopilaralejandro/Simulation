@@ -83,11 +83,11 @@ MonoBehaviour:
       m_Items:
       - rid: 2307362037524856842
   - m_Id: 17609531403
-    m_Localized: "\xA1Poder ofensivo X2!"
+    m_Localized: "\xA1Ataque eficaz!"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531404
-    m_Localized: "\xA1Poder defensivo X2!"
+    m_Localized: "\xA1Defensa eficaz!"
     m_Metadata:
       m_Items: []
   - m_Id: 17609531405
@@ -146,7 +146,50 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 48508269162668032
-    m_Localized: "T\xE9cnica evolucion\xF3!"
+    m_Localized: "\xA1T\xE9cnica evolucion\xF3!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 78608810106429440
+    m_Localized: "\xA1Entra {characterName} !"
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856842
+  - m_Id: 78608810106429441
+    m_Localized: "\xA1{wingName} activadas!"
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856842
+  - m_Id: 78608810106429442
+    m_Localized: "\xA1{wingName}!"
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856842
+  - m_Id: 78608810106429443
+    m_Localized: "\xA1Alas evolucionaron!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 78614382369316864
+    m_Localized: "Degradaci\xF3n..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79340034609389568
+    m_Localized: "\xA1Fuera de juego!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79346498002493440
+    m_Localized: "\xA1Fuera!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79346498065408000
+    m_Localized: "\xA1Falta!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79346498065408001
+    m_Localized: "\xA1Tarjeta amarilla!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79346498065408002
+    m_Localized: "\xA1Tarjeta roja!"
     m_Metadata:
       m_Items: []
   references:
@@ -167,3 +210,6 @@ MonoBehaviour:
         - id: 17609531410
         - id: 8025185430806528
         - id: 17609531411
+        - id: 78608810106429442
+        - id: 78608810106429441
+        - id: 78608810106429440

@@ -79,7 +79,10 @@ public class CharacterComponentPersistence
             CustomHairColorType = character.CustomHairColorType,
             CustomEyeColorType = character.CustomEyeColorType,
             CustomBodyColorType = character.CustomBodyColorType,
-            CustomPortraitSize = character.CustomPortraitSize
+            CustomPortraitSize = character.CustomPortraitSize,
+
+            //Wing
+            EquippedWingGuid = character.Wing.WingGuid
         };
     }
 

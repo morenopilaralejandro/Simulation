@@ -6,17 +6,17 @@ public class BattleCharacterSpawnPoint : MonoBehaviour
 {
     private void Awake()
     {
-        if (BattleCharacterManager.Instance != null)
+        if (BattleManager.Instance != null)
         {
-            BattleCharacterManager.Instance.RegisterSpawnPoint(this.transform);
+            BattleManager.Instance.RegisterSpawnPointCharacter(this.transform);
         }
     }
 
     private void OnDestroy()
     {
-        if (BattleCharacterManager.Instance != null)
+        if (BattleManager.Instance != null)
         {
-            BattleCharacterManager.Instance.UnregisterSpawnPoint();
+            BattleManager.Instance.UnregisterSpawnPointCharacter();
         }
     }
 

@@ -19,12 +19,12 @@ public class Field : MonoBehaviour
 
     void Start() 
     {
-        BattleFieldManager.Instance.RegisterField(this);
+        BattleManager.Instance.RegisterField(this);
     }
 
     void Destroy() 
     {
-        BattleFieldManager.Instance.UnregisterField();
+        BattleManager.Instance.UnregisterField();
     }
 
     public void Initialize(FieldData fieldData)

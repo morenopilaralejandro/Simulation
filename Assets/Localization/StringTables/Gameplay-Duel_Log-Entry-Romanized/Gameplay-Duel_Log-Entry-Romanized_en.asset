@@ -70,11 +70,11 @@ MonoBehaviour:
       m_Items:
       - rid: 2307362037524856840
   - m_Id: 17609531403
-    m_Localized: Offense power X2!
+    m_Localized: Offense effective!
     m_Metadata:
       m_Items: []
   - m_Id: 17609531404
-    m_Localized: Defense power X2!
+    m_Localized: Defense effective!
     m_Metadata:
       m_Items: []
   - m_Id: 17609531405
@@ -149,6 +149,49 @@ MonoBehaviour:
     m_Localized: Move evolved!
     m_Metadata:
       m_Items: []
+  - m_Id: 78608810106429440
+    m_Localized: '{characterName} IN!'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856840
+  - m_Id: 78608810106429441
+    m_Localized: '{wingName} activated!'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856840
+  - m_Id: 78608810106429442
+    m_Localized: '{wingName}!'
+    m_Metadata:
+      m_Items:
+      - rid: 2307362037524856840
+  - m_Id: 78608810106429443
+    m_Localized: Wings evolved!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 78614382369316864
+    m_Localized: Degradation...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79340034609389568
+    m_Localized: Offside!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79346498002493440
+    m_Localized: Out!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79346498065408000
+    m_Localized: Foul!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79346498065408001
+    m_Localized: Yellow card!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 79346498065408002
+    m_Localized: Red card!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:
@@ -167,3 +210,6 @@ MonoBehaviour:
         - id: 17609531410
         - id: 8025185430806528
         - id: 17609531411
+        - id: 78608810106429442
+        - id: 78608810106429441
+        - id: 78608810106429440

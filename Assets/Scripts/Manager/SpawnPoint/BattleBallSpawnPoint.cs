@@ -6,17 +6,17 @@ public class BattleBallSpawnPoint : MonoBehaviour
 {
     private void Awake()
     {
-        if (BattleBallManager.Instance != null)
+        if (BattleManager.Instance != null)
         {
-            BattleBallManager.Instance.RegisterSpawnPoint(this.transform);
+            BattleManager.Instance.RegisterSpawnPointBall(this.transform);
         }
     }
 
     private void OnDestroy()
     {
-        if (BattleBallManager.Instance != null)
+        if (BattleManager.Instance != null)
         {
-            BattleBallManager.Instance.UnregisterSpawnPoint();
+            BattleManager.Instance.UnregisterSpawnPointBall();
         }
     }
 }

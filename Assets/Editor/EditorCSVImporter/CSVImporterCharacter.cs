@@ -65,6 +65,8 @@ public class CSVImporterCharacter
         int moveId3Index  = System.Array.IndexOf(headers, "MoveId3");
         int moveLv3Index  = System.Array.IndexOf(headers, "MoveLv3");
 
+        int wingIdIndex  = System.Array.IndexOf(headers, "WingId");
+
         for (int i = 1; i < lines.Length; i++)
         {
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
@@ -112,6 +114,8 @@ public class CSVImporterCharacter
                 int.Parse(values[moveLv2Index].Trim()),
                 int.Parse(values[moveLv3Index].Trim())
             };
+
+            characterData.WingId   = values[wingIdIndex].Trim();
 
             string safeName = characterData.CharacterId.Replace(" ", "_").Replace("/", "_");
             string assetPath = $"{assetFolder}/{safeName}.asset";

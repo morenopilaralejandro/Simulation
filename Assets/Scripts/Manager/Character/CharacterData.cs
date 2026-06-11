@@ -28,4 +28,5 @@ public class CharacterData : ScriptableObject
     public int Freedom;
     public string[] MoveIds = new string[4];
     public int[] MoveLvs = new int[4];
+    public string WingId;
 }

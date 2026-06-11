@@ -15,9 +15,21 @@ public static class WingEvents
         OnWingCutsceneEnd?.Invoke();
     }
 
-    public static event Action<Wing, CharacterEntityBattle> OnWingUsed;
-    public static void RaiseWingUsed(Wing wing, CharacterEntityBattle character)
+    public static event Action<CharacterEntityBattle, Wing> OnWingActivated;
+    public static void RaiseWingActivated(CharacterEntityBattle characterEntityBattle, Wing wing)
     {
-        OnWingUsed?.Invoke(wing, character);
+        OnWingActivated?.Invoke(characterEntityBattle, wing);
+    }
+
+    public static event Action<Wing> OnWingAdded;
+    public static void RaiseWingAdded(Wing wing)
+    {
+        OnWingAdded?.Invoke(wing);
+    }
+
+    public static event Action<Wing> OnWingRemoved;
+    public static void RaiseWingRemoved(Wing wing)
+    {
+        OnWingRemoved?.Invoke(wing);
     }
 }

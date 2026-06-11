@@ -15,8 +15,7 @@ public class MoveCutscenePanel : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
 
     private readonly AddressableBinding<Sprite> _bindingEvolution = new();
-    private MoveEvolution _cachedMoveEvolution = MoveEvolution.None;
-    private WingEvolution _cachedWingEvolution = WingEvolution.None;
+    private string _cachedEvolutionAddress = "";
 
     private void Awake() 
     {
@@ -36,8 +35,8 @@ public class MoveCutscenePanel : MonoBehaviour
         MoveEvents.OnMoveCutsceneStart += HandleMoveCutsceneStart;
         MoveEvents.OnMoveCutsceneEnd += HandleMoveCutsceneEnd;
 
-        WingEvents.OnWingCutsceneStart -= HandleWingCutsceneStart;
-        WingEvents.OnWingCutsceneEnd -= HandleWingCutsceneEnd;
+        WingEvents.OnWingCutsceneStart += HandleWingCutsceneStart;
+        WingEvents.OnWingCutsceneEnd += HandleWingCutsceneEnd;
     }
 
     private void OnDisable()
@@ -95,9 +94,9 @@ public class MoveCutscenePanel : MonoBehaviour
         textMoveName.text = move.MoveName;
         textMoveName.color = ColorManager.GetElementColor(move.Element);
 
-        if(move.CurrentEvolution == _cachedMoveEvolution) return;
+        if(move.EvolutionAddress == _cachedEvolutionAddress) return;
 
-        _cachedMoveEvolution = move.CurrentEvolution;
+        _cachedEvolutionAddress = move.EvolutionAddress;
 
         if(move.CurrentEvolution == MoveEvolution.None) 
         {
@@ -130,11 +129,11 @@ public class MoveCutscenePanel : MonoBehaviour
     private void SetWing(Wing wing)
     {
         textMoveName.text = wing.WingName;
-        textMoveName.color = ColorManager.GetElementColor(wing.Element);
+        textMoveName.color = ColorManager.GetElementColor(wing.Elements[0]);
 
-        if(wing.CurrentEvolution == _cachedWingEvolution) return;
+        if(wing.WingEvolutionAddress == _cachedEvolutionAddress) return;
 
-        _cachedWingEvolution = wing.CurrentEvolution;
+        _cachedEvolutionAddress = wing.WingEvolutionAddress;
 
         if(wing.CurrentEvolution == WingEvolution.None) 
         {
@@ -173,7 +172,9 @@ public class MoveCutscenePanel : MonoBehaviour
     // -------------------------
     private async System.Threading.Tasks.Task SetEvolutionAsync(string address, Image imageEvolution)
     {
+        imageEvolution.enabled = false;
         var task = _bindingEvolution.LoadAsync(address);
         imageEvolution.sprite = await task;
+        imageEvolution.enabled = true;
     }
 }

@@ -14,7 +14,7 @@ public static class DamageCalculator
     private const float ELEMENT_MATCH_MULTIPLIER = 1.5f;
     public const float ELEMENT_EFFECTIVE_MULTIPLIER = 1.5f;
 
-    private const float KEEPER_MULTIPLIER = 1.5f;
+    private const float KEEPER_MULTIPLIER = 2.5f;
 
     private const float DISTANCE_MULTIPLIER = 10f;
     private const float DIRECT_BONUS = 50f;
@@ -34,12 +34,17 @@ public static class DamageCalculator
     private static float CalcMove(Character character, Move move, Stat main)
     {
         if (move == null) return 0f;
+
         float baseDamage =
             move.Power * MOVE_MULTIPLIER +
             character.GetBattleStat(main) * MAIN_MULTIPLIER +
             character.GetBattleStat(Stat.Courage) * MAIN_MULTIPLIER;
-        if (character.Element == move.Element)
+
+        if (character.CanApplyWingElementMatchBonus(move.Element))
+            baseDamage *= ELEMENT_MATCH_MULTIPLIER + character.Wing.GetElementMatchBonus();
+        else if (character.Element == move.Element)
             baseDamage *= ELEMENT_MATCH_MULTIPLIER;
+
         return baseDamage;
     }
 

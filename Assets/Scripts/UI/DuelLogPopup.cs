@@ -5,6 +5,7 @@ using TMPro;
 using System;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Move;
+using Aremoreno.Enums.Wing;
 
 public class DuelLogPopup : MonoBehaviour
 {
@@ -32,22 +33,27 @@ public class DuelLogPopup : MonoBehaviour
             _ = characterPortrait.SetCharacterAsync(entry.Character);
         if (entry.Move != null && entry.Move.CurrentEvolution != MoveEvolution.None) 
             _ = SetEvolutionAsync(entry.Move.EvolutionAddress);
+        if (entry.Wing != null && entry.Wing.CurrentEvolution != WingEvolution.None) 
+            _ = SetEvolutionAsync(entry.Wing.WingEvolutionAddress);
     }
 
     private async System.Threading.Tasks.Task SetEvolutionAsync(string address)
     {
+        imageEvolution.enabled = false;
         var task = _bindingEvolution.LoadAsync(address);
         imageEvolution.sprite = await task;
+        imageEvolution.enabled = true;
     }
 
     private void UpdateActivePanels(DuelLogEntry entry)
     {
         bool hasCharacter = entry.Character != null;
         bool hasMove = entry.Move != null && entry.Move.CurrentEvolution != MoveEvolution.None;
+        bool hasWing = entry.Wing != null && entry.Wing.CurrentEvolution != WingEvolution.None;
 
         panelPortraitCharacter.SetActive(hasCharacter);
         panelPortraitDefault.SetActive(!hasCharacter);
-        panelEvolution.SetActive(hasMove);
+        panelEvolution.SetActive(hasMove || hasWing);
 
         UpdateBackgroundColor(hasCharacter, entry.Character, entry.TeamSide);
     }

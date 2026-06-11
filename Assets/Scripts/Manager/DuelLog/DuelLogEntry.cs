@@ -6,27 +6,30 @@ using Aremoreno.Enums.Localization;
 
 public class DuelLogEntry
 {
-    private LocalizationComponentString localizationStringComponent;
+    private readonly LocalizationComponentString localizationStringComponent;
 
-    public LogLevel LogLevel { get; private set; }
-    public Character Character { get; private set; }
-    public TeamSide TeamSide { get; private set; }
-    public Move Move { get; private set; }
+    public DuelLogEntryData Data { get; }
 
-    public DuelLogEntry(string entryId, LogLevel logLevel, Character character, TeamSide teamSide, Move move, object args)
+    public LogLevel LogLevel => Data.LogLevel;
+    public Character Character => Data.Character;
+    public TeamSide TeamSide => Data.TeamSide;
+    public Move Move => Data.Move;
+    public Wing Wing => Data.Wing;
+
+    public DuelLogEntry(DuelLogEntryData data)
     {
-        LogLevel = logLevel;
-        Character = character;
-        TeamSide = teamSide;
-        Move = move;
+        Data = data;
 
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Duel_Log,
-            entryId,
-            new [] {  LocalizationField.Entry }
+            data.EntryId,
+            new[] { LocalizationField.Entry }
         );
 
-        localizationStringComponent.SetArguments(LocalizationField.Entry, args);
+        localizationStringComponent.SetArguments(
+            LocalizationField.Entry,
+            data.Args
+        );
     }
 
     public string EntryString => localizationStringComponent.GetString(LocalizationField.Entry);

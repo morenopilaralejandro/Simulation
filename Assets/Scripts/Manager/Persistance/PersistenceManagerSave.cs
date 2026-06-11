@@ -70,6 +70,7 @@ public class PersistenceManagerSave
         SetTimestampCreation(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         CharacterManager.Instance.FirstTimeInitialize();
         ItemManager.Instance.FirstTimeInitialize();
+        WingManager.Instance.FirstTimeInitialize();
         StorySystemManager.Instance.SetChapter(0);
     }
 
