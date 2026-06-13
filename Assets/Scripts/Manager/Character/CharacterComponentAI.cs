@@ -1207,16 +1207,11 @@ public class CharacterComponentAI : MonoBehaviour
     public bool ShouldActivateWings()
     {
         float chance = character.FormationCoord.Position switch
-        {   /*
+        {
             Position.FW => 0.60f,
             Position.MF => 0.10f,
             Position.DF => 0.05f,
             Position.GK => 0.50f,
-            */
-            Position.FW => 0.00f,
-            Position.MF => 0.00f,
-            Position.DF => 0.00f,
-            Position.GK => 1.00f,
             _ => 0f
         };
 
