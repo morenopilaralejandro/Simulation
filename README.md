@@ -22,7 +22,7 @@
 
 ## License
 
-This project is dual-licensed under **GNU GPL v3** and **CC BY-SA 4.0**. See the [LICENSE](LICENSE) file for details.
+This project is dual-licensed under **GNU GPL v3** and **CC BY-SA 4.0**. See the [LICENSE](Licenses) file for details.
 
 ---
 
