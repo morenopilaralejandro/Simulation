@@ -1,6 +1,5 @@
 # Soccer Secret Simulation
-**Soccer Secret Simulation** is an AI generated game 
-for Android and PC featuring traditional controls and dream match battles.
+**Soccer Secret Simulation** is an AI generated game for Android and PC.
 
 ---
 
@@ -15,9 +14,9 @@ for Android and PC featuring traditional controls and dream match battles.
 
 ## Generated With AI
 
-- **Code Generation:** GPT-5.2
-- **Image Generation:** DALL·E 3
-- **Music Generation:** [Enzostvs Ai-jukebox](https://huggingface.co/spaces/enzostvs/ai-jukebox)
+- **Code Generation:** Claude Opus 4.6, GPT-5.5 and Gemini 3.5
+- **Image Generation:** ChatGPT Images 2.0
+- **Music Generation:** [Enzostvs Ai-jukebox](https://huggingface.co/spaces/enzostvs/ai-jukebox) and Suno v4.5-all
 
 ---
 
@@ -32,7 +31,9 @@ This project is dual-licensed under **GNU GPL v3** and **CC BY-SA 4.0**. See the
 Here are some screenshots to give you a taste of the action:
 
 ![Screenshot](Assets/Screenshots/promo-battle.png)
-![Screenshot](Assets/Screenshots/promo-menu.png)
+![Screenshot](Assets/Screenshots/promo-menu_main.png)
+![Screenshot](Assets/Screenshots/promo-menu_team.png)
+![Screenshot](Assets/Screenshots/promo_team_preview.png)
 
 ---
 

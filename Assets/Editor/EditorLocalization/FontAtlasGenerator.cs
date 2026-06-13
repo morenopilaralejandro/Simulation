@@ -64,12 +64,14 @@ public static class FontAtlasGenerator
         // Add characters
         //characters.Add(' ');   // space
         //characters.Add('\n');
+        characters.Add(' ');
         characters.Add('-');
         characters.Add('_');
         characters.Add('.');
         characters.Add(',');
         characters.Add(':');
         characters.Add(';');
+        characters.Add('"');
         characters.Add('#');
         characters.Add('%');
         characters.Add('/');

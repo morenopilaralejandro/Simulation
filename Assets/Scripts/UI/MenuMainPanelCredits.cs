@@ -12,7 +12,7 @@ public class MenuMainPanelCredits : Menu
     [SerializeField] private float scrollSpeed = 30f;
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Vector2 startPosition;
-    private float endY = 4964f;
+    private float endY = 5964f;
 
     public override void Show() 
     {
