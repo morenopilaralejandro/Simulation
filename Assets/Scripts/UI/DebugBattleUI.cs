@@ -8,15 +8,17 @@ public class DebugBattleUI : MonoBehaviour
 {
     [SerializeField] private GameObject panelMaximized;
     [SerializeField] private GameObject panelMinimized;
+    [SerializeField] private SceneGroup debugMainMenu;
+    [SerializeField] private bool isEnemyAiEnabled = false;
 
     void OnEnable() 
     {
-        BattleEvents.OnAllCharactersReady += ToggleAI;
+        BattleEvents.OnAllCharactersReady += UpdateEnemyAI;
     }
 
     void Disable() 
     {
-        BattleEvents.OnAllCharactersReady -= ToggleAI;
+        BattleEvents.OnAllCharactersReady -= UpdateEnemyAI;
     }
 
     void Start()
@@ -27,7 +29,7 @@ public class DebugBattleUI : MonoBehaviour
     public void OnButtonMaximizeTapped() => Maximize();
     public void OnButtonMinimizeTapped() => Minimize();
     public void OnButtonToggleAITapped() => ToggleAI();
-    public void OnButtonRestartBattleTapped() => RestartBattle();
+    public void OnButtonExitBattleTapped() => ExitBattle();
 
     private void Maximize() 
     {
@@ -41,18 +43,26 @@ public class DebugBattleUI : MonoBehaviour
         panelMinimized.SetActive(true);
     }
 
-    private void RestartBattle() 
+    private void ExitBattle() 
     {
-        BattleManager.Instance.StartBattle();
+        BattleManager.Instance.SetBattlePhase(BattlePhase.End);
+        BattleEvents.RaiseBattleEnd();
+        SceneLoader.Instance.LoadGroup(debugMainMenu);
     }
 
     private void ToggleAI() 
+    {
+        isEnemyAiEnabled = !isEnemyAiEnabled;
+        UpdateEnemyAI();
+    }
+
+    private void UpdateEnemyAI() 
     {
         foreach (
             CharacterEntityBattle character in 
             BattleManager.Instance.Teams[TeamSide.Away].GetCharacterEntities(BattleManager.Instance.CurrentType)
         ) 
-            character.EnableAI(!character.IsAIEnabled);
+            character.EnableAI(isEnemyAiEnabled);
     }
 
 }

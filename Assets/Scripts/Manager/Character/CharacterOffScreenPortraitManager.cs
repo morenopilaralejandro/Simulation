@@ -21,7 +21,9 @@ public class OffScreenPortraitManager : MonoBehaviour
 
     [Header("Settings")]
     private float edgeMargin = 0.08f;
-    private float updateInterval = 0.01f;
+    private float updateInterval = 0.1f;
+    private float updateIntervalLong = 0.5f;
+    private float updateIntervalShort = 0.05f;
 
     // Tracked references
     private Transform playerTransform;
@@ -62,6 +64,7 @@ public class OffScreenPortraitManager : MonoBehaviour
         maxViewportY = 1f - edgeMargin;
 
         // Start hidden but keep manager active
+        updateInterval = updateIntervalLong;
         HidePortrait();
     }
 
@@ -131,10 +134,16 @@ public class OffScreenPortraitManager : MonoBehaviour
 
         if (isOffScreen != wasOffScreen)
         {
-            if (isOffScreen)
+            if (isOffScreen) 
+            {
+                updateInterval = updateIntervalShort;
                 ShowPortrait();
-            else
+            }
+            else 
+            {
+                updateInterval = updateIntervalLong;
                 HidePortrait();
+            }
 
             wasOffScreen = isOffScreen;
         }
