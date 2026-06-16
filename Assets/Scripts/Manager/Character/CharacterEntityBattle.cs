@@ -37,6 +37,8 @@ public class CharacterEntityBattle : MonoBehaviour
     [SerializeField] private CharacterComponentElementIndicator elementIndicatorComponent;
     [SerializeField] private CharacterComponentSpeechBubble speechBubbleComponent;
     [SerializeField] private Billboard billboardComponent;
+
+    private CharacterComponentAIDuelCommand commandComponent;
     #endregion
 
     #region Initialize
@@ -53,6 +55,7 @@ public class CharacterEntityBattle : MonoBehaviour
         speedComponent.Initialize(this);
         controllerComponent.Initialize(this);
         aiComponent.Initialize(this);
+        commandComponent = new CharacterComponentAIDuelCommand(this);
         stateLockComponent.Initialize(this);
         stateMachineComponent.Initialize(this);
         teamIndicatorComponent.Initialize(this);
@@ -298,12 +301,14 @@ public class CharacterEntityBattle : MonoBehaviour
     public void DisableAI() => aiComponent.DisableAI();
     public AIState AIState => aiComponent.AIState;
     public CharacterEntityBattle GetBestPassTeammate() => aiComponent.GetBestPassTeammate();
-    public DuelCommand GetRegularCommand() => aiComponent.GetRegularCommand();
-    public DuelCommand GetCommandByCategory(Category category) => aiComponent.GetCommandByCategory(category);
-    public DuelCommand GetCommandByTrait(Trait trait) => aiComponent.GetCommandByTrait(trait);
-    public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => aiComponent.GetMoveByCommandAndCategory(command, category);
-    public Move GetMoveByCommandAndTrait(DuelCommand command, Trait trait) => aiComponent.GetMoveByCommandAndTrait(command, trait);
-    public bool ShouldActivateWings() => aiComponent.ShouldActivateWings();
+
+    //commandComponent
+    public DuelCommand GetRegularCommand() => commandComponent.GetRegularCommand();
+    public DuelCommand GetCommandByCategory(Category category) => commandComponent.GetCommandByCategory(category);
+    public DuelCommand GetCommandByTrait(Trait trait) => commandComponent.GetCommandByTrait(trait);
+    public Move GetMoveByCommandAndCategory(DuelCommand command, Category category) => commandComponent.GetMoveByCommandAndCategory(command, category);
+    public Move GetMoveByCommandAndTrait(DuelCommand command, Trait trait) => commandComponent.GetMoveByCommandAndTrait(command, trait);
+    public bool ShouldActivateWings() => commandComponent.ShouldActivateWings();
 
     //stateLockComponent
     public bool IsStateLocked => stateLockComponent.IsStateLocked;

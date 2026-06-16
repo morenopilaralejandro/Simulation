@@ -71,7 +71,16 @@ public class CharacterComponentStats
 
     public int GetTrainedStat(Stat stat) => trainedStats[stat];
     public int GetTrueStat(Stat stat) => trueStats[stat];
-    public int GetBattleStat(Stat stat) => battleStats[stat]; //add equipment from character
+    public int GetBattleStat(Stat stat) 
+    {
+        int total = battleStats[stat];
+
+        if (character.HasWingActivated) total += character.Wing.GetTrueStat(stat);
+
+        //equipment
+
+        return total;
+    }
 
     public void ResetBattleStats()
     {

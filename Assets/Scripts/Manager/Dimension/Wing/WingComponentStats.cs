@@ -81,7 +81,11 @@ public class WingComponentStats
     }
 
     public int GetIndividualStat(Stat stat) => individualStats[stat];
-    public int GetTrueStat(Stat stat) => trueStats[stat];
+    public int GetTrueStat(Stat stat) 
+    {
+        trueStats.TryGetValue(stat, out int intValue);
+        return intValue;
+    }
 
     public void SetIndividualStat(Stat stat, int amount)
     {
