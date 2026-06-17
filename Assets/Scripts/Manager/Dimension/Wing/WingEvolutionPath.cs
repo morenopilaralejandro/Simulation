@@ -16,7 +16,7 @@ public class WingEvolutionPath : ScriptableObject
     private List<WingEvolution> _orderedEvolutions;
 
 
-    public void Initialize()    
+    public void OnEnable()    
     {
         _pathMap = evolutionPath.ToDictionary(p => p.Previous, p => p.Next);
 

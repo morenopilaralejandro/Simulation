@@ -33,8 +33,7 @@ public class MenuTeamPanelTeam : Menu
     private TeamManager           teamManager;
     private SubstitutionManager   substitutionManager;
     private InputManager          inputManager;
-    private FormationManager      formationDatabase;
-    private KitManager            kitDatabase;
+    private DatabaseManager       db;
     private AudioManager          audioManager;
 
     // Runtime state
@@ -65,8 +64,7 @@ public class MenuTeamPanelTeam : Menu
         teamManager         = TeamManager.Instance;
         substitutionManager = SubstitutionManager.Instance;
         inputManager        = InputManager.Instance;
-        formationDatabase   = FormationManager.Instance;
-        kitDatabase         = KitManager.Instance;
+        db                  = DatabaseManager.Instance;
         audioManager        = AudioManager.Instance;
 
         currentBattleType   = teamManager.DefaultBattleType;
@@ -524,14 +522,14 @@ public class MenuTeamPanelTeam : Menu
         if (item.Category == ItemCategory.Formation)
         {
             cachedItemFormation = item as ItemFormation;
-            cachedFormation     = formationDatabase.GetFormation(cachedItemFormation.FormationId);
+            cachedFormation     = db.GetFormation(cachedItemFormation.FormationId);
             currentTeam.SetFormation(cachedFormation, currentBattleType);
             formationLayoutUI.SetFormation(cachedFormation);
         }
         else if (item.Category == ItemCategory.Kit)
         {
             cachedItemKit = item as ItemKit;
-            cachedKit     = kitDatabase.GetKit(cachedItemKit.KitId);
+            cachedKit     = db.GetKit(cachedItemKit.KitId);
             currentTeam.SetKit(cachedKit);
             formationLayoutUI.SetKit(cachedKit, false);
         }
@@ -546,13 +544,13 @@ public class MenuTeamPanelTeam : Menu
         if (slot.Item.Category == ItemCategory.Formation)
         {
             cachedItemFormation = slot.Item as ItemFormation;
-            cachedFormation     = formationDatabase.GetFormation(cachedItemFormation.FormationId);
+            cachedFormation     = db.GetFormation(cachedItemFormation.FormationId);
             formationLayoutUI.SetFormation(cachedFormation, false);
         }
         else if (slot.Item.Category == ItemCategory.Kit)
         {
             cachedItemKit = slot.Item as ItemKit;
-            cachedKit     = kitDatabase.GetKit(cachedItemKit.KitId);
+            cachedKit     = db.GetKit(cachedItemKit.KitId);
             formationLayoutUI.SetKit(cachedKit, false);
         }
     }

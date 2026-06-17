@@ -16,7 +16,7 @@ public class WingEvolutionGrowthProfile : ScriptableObject
     private Dictionary<WingEvolution, int> _usageThresholdMap;
     private Dictionary<WingRefinementRank, int> _refinementThresholdMap;
 
-    public void Initialize()
+    public void OnEnable()
     {
         _usageThresholdMap = listUsageThreshold.ToDictionary(t => t.Evolution, t => t.UsageThreshold);
         _refinementThresholdMap = listRefinementThreshold.ToDictionary(t => t.Rank, t => t.RefinementThreshold);

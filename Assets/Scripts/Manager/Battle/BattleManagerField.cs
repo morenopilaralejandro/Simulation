@@ -35,7 +35,7 @@ public class BattleManagerField
 
     public void InitializeField()
     {
-        var fieldData = FieldManager.Instance.GetFieldData(BattleArgs.FieldId);
+        var fieldData = DatabaseManager.Instance.GetFieldData(BattleArgs.FieldId);
         field.Initialize(fieldData);
     }
 

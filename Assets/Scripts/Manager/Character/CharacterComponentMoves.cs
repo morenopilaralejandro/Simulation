@@ -78,7 +78,7 @@ public class CharacterComponentMoves
 
     public void LearnMove(string moveId)
     {
-        Move move = new Move(MoveManager.Instance.GetMoveData(moveId));
+        Move move = new Move(DatabaseManager.Instance.GetMoveData(moveId));
         learnedMoves.Add(move);
         LogManager.Trace($"[CharacterComponentMoves] {this.character.CharacterId} learned {move.MoveId}");
         EquipMove(move);
@@ -87,7 +87,7 @@ public class CharacterComponentMoves
     public bool CanLearnMove(string moveId)
     {
         if (IsMoveLearned(moveId)) return false;
-        MoveData moveData = MoveManager.Instance.GetMoveData(moveId);
+        MoveData moveData = DatabaseManager.Instance.GetMoveData(moveId);
         if (moveData.AllowedElements.Count > 0  && !moveData.AllowedElements.Contains(this.character.Element)) return false;
         if (moveData.AllowedPositions.Count > 0 && !moveData.AllowedPositions.Contains(this.character.Position)) return false;
         if (moveData.AllowedGenders.Count > 0   && !moveData.AllowedGenders.Contains(this.character.Gender)) return false;
@@ -316,7 +316,7 @@ public class CharacterComponentMoves
     {
         foreach (var moveSaveData in characterSaveData.LearnedMoves)
         {
-            MoveData moveData = MoveManager.Instance.GetMoveData(moveSaveData.MoveId);
+            MoveData moveData = DatabaseManager.Instance.GetMoveData(moveSaveData.MoveId);
             Move move = new Move(moveData, moveSaveData);
             learnedMoves.Add(move);
         }

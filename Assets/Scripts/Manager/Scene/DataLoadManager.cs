@@ -24,68 +24,54 @@ public class DataLoadManager : MonoBehaviour
     private async void Start()
     {
         LogManager.Trace("[DataLoadManager] Starting data initialization...");
-        // Generic
-        //Task loadSpriteAtlas = SpriteAtlasManager.Instance.LoadAllSpriteAtlasAsync();
-        Task loadFormationCoord = FormationCoordManager.Instance.LoadAllFormationCoordDataAsync();
-        Task loadBalls = BallManager.Instance.LoadAllBallDataAsync();
-        Task loadFields = FieldManager.Instance.LoadAllFieldDataAsync();
-        Task loadMoves = MoveManager.Instance.LoadAllMoveDataAsync();
-        Task loadMoveEvolutionGrowthProfile = MoveEvolutionGrowthProfileManager.Instance.LoadAllMoveEvolutionGrowthProfileAsync();
-        Task loadMoveEvolutionPath =  MoveEvolutionPathManager.Instance.LoadAllMoveEvolutionPathAsync();
-        Task loadWings = WingDatabase.Instance.LoadAllWingDataAsync();
-        Task loadWingEvolutionGrowthProfile = WingDatabase.Instance.LoadAllWingEvolutionGrowthProfileAsync();
-        Task loadWingEvolutionPath =  WingDatabase.Instance.LoadAllWingEvolutionPathAsync();
-        Task loadCharacters = CharacterDatabase.Instance.LoadAllCharacterDataAsync();
-        Task loadKits = KitManager.Instance.LoadAllKitsAsync();
-        Task loadEmblems = EmblemDatabase.Instance.LoadAllEmblemsAsync();
-        Task loadScenes = SceneGroupRegistry.Instance.LoadAllSceneGroupAsync();
-        Task loadNpcs = NpcManager.Instance.LoadAllNpcDataAsync();
-        Task loadItems = ItemDatabase.Instance.LoadAllItemDataAsync();
-        Task loadOverworldDefinition = OverworldDefinitionDatabase.Instance.LoadAllOverworldDefinitionDataAsync();
 
-        // SpriteAtlas
-        //await loadSpriteAtlas;
-        // Formation     
-        await loadFormationCoord;
-        Task loadFormations = FormationManager.Instance.LoadAllFormationsAsync();
-        // Team        
-        await Task.WhenAll(
-            loadKits, 
-            loadCharacters,
-            loadFormations,
-            loadEmblems);
-        Task loadTeams = TeamDatabase.Instance.LoadAllTeamsAsync();
-        // Misc
-        await Task.WhenAll(
-            loadBalls, 
-            loadFields,
-            loadMoves,
-            loadMoveEvolutionGrowthProfile,
-            loadMoveEvolutionPath,
-            loadWings,
-            loadWingEvolutionGrowthProfile,
-            loadWingEvolutionPath,
-            loadTeams, 
-            loadScenes,
-            loadNpcs,
-            loadItems,
-            loadOverworldDefinition);
+        var databases = DatabaseManager.Instance.DatabaseRegistry;
+        var deps = new DatabaseDependencies();
 
-        //Quest
-        Task loadQuestObjective = QuestObjectiveDatabase.Instance.LoadAllQuestObjectiveDataAsync();
-        await loadQuestObjective;
-        Task loadQuest = QuestDatabase.Instance.LoadAllQuestDataAsync();
-        //Story
-        Task loadStoryEvent = StoryEventDatabase.Instance.LoadAllStoryEventDataAsync();
-        await loadStoryEvent;
-        Task loadStoryAutoTrigger = StoryAutoTriggerDatabase.Instance.LoadAllStoryAutoTriggerDataAsync();
-        Task loadStoryChapter = StoryChapterDatabase.Instance.LoadAllStoryChapterDataAsync();
-        await Task.WhenAll(
-            loadQuest,
-            loadStoryAutoTrigger,
-            loadStoryChapter);
+        // Formation dependencies
+        deps.Register(databases.FormationData,
+            databases.FormationCoordData);
+
+        // Team dependencies
+        deps.Register(databases.TeamData,
+            databases.FormationData,
+            databases.CharacterData,
+            databases.KitData);
+
+        // Move evolution dependencies
+        deps.Register(databases.MoveEvolutionPath,
+            databases.MoveData);
+
+        deps.Register(databases.MoveEvolutionGrowthProfile,
+            databases.MoveData);
+
+        // Wing evolution dependencies
+        deps.Register(databases.WingEvolutionPath,
+            databases.WingData);
+
+        deps.Register(databases.WingEvolutionGrowthProfile,
+            databases.WingData);
+
+        // Quest dependencies
+        deps.Register(databases.QuestData,
+            databases.QuestObjectiveData);
+
+        // Story dependencies
+        deps.Register(databases.StoryAutoTriggerData,
+            databases.StoryEventData);
+
+        deps.Register(databases.StoryChapterData,
+            databases.StoryEventData);
+
+        // -------------------------
+        // LOAD EVERYTHING
+        // -------------------------
+
+        var loader = new DatabaseLoader(databases, deps);
+        await loader.LoadAllAsync();
 
         IsReady = true;
+
         LogManager.Trace("[DataLoadManager] All data loaded.");
     }
 }

@@ -18,10 +18,10 @@ public class TeamComponentKit
 
         if (teamSaveData != null)
         {
-            this.Kit = KitManager.Instance.GetKit(teamSaveData.CustomKitId);
+            this.Kit = DatabaseManager.Instance.GetKit(teamSaveData.CustomKitId);
         } else 
         {
-            this.Kit = KitManager.Instance.GetKit(teamData.KitId);
+            this.Kit = DatabaseManager.Instance.GetKit(teamData.KitId);
         }
 
     }

@@ -35,8 +35,8 @@ public class WingComponentEvolution
         this.wing = wing;
         this.WingGrowthType = wingData.WingGrowthType;
         this.WingGrowthRate = wingData.WingGrowthRate;
-        this.growthProfile = WingDatabase.Instance.GetWingEvolutionGrowthProfile(wingData);
-        this.path = WingDatabase.Instance.GetWingEvolutionPath(wingData);
+        this.growthProfile = DatabaseManager.Instance.GetWingEvolutionGrowthProfile(wingData.GrowthProfileId);
+        this.path = DatabaseManager.Instance.GetWingEvolutionPath(wingData.EvolutionPathId);
 
         if (wingSaveData != null) 
         {

@@ -39,7 +39,7 @@ public class NpcEntityCharacter : NpcEntity
 
         appearanceComponent = new CharacterComponentAppearance(characterData, null, null);
         appearanceComponentBattle.Initialize(appearanceComponent);
-        appearanceComponent.SetKit(KitManager.Instance.GetKit(kitData.KitId), variant, role);
+        appearanceComponent.SetKit(DatabaseManager.Instance.GetKit(kitData.KitId), variant, role);
         _ = appearanceComponentBattle.LoadKitAsync();
 
         interactableDialogComponent?.Initialize(this);

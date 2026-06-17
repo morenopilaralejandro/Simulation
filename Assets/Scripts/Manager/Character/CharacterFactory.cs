@@ -6,7 +6,7 @@ public static class CharacterFactory
 {
     public static Character CreateFromSaveData(CharacterSaveData characterSaveData) 
     {
-        CharacterData characterData = CharacterDatabase.Instance.GetCharacterData(
+        CharacterData characterData = DatabaseManager.Instance.GetCharacterData(
             characterSaveData.IsCustomAvatar ? 
                 characterSaveData.CustomAvatarId : 
                 characterSaveData.CharacterId);

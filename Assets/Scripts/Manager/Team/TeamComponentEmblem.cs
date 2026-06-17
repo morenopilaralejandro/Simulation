@@ -18,10 +18,10 @@ public class TeamComponentEmblem
 
         if (teamSaveData != null)
         {
-            this.Emblem = EmblemDatabase.Instance.GetEmblem(teamSaveData.CustomEmblemId);
+            this.Emblem = DatabaseManager.Instance.GetEmblem(teamSaveData.CustomEmblemId);
         } else 
         {
-            this.Emblem = EmblemDatabase.Instance.GetEmblem(teamData.EmblemId);
+            this.Emblem = DatabaseManager.Instance.GetEmblem(teamData.EmblemId);
         }
 
         /*

@@ -31,13 +31,11 @@ public class DialogSpeakerCache : MonoBehaviour
 
     private Speaker speaker;
     public Speaker Speaker => speaker;
-    private CharacterDatabase characterDatabase;
-    private NpcManager npcDatabase;
+    private DatabaseManager database;
 
     private void Start() 
     {
-        characterDatabase = CharacterDatabase.Instance;
-        npcDatabase = NpcManager.Instance;
+        database = DatabaseManager.Instance;
     }
 
     public Speaker GetSpeaker(DialogLine dialogLine)
@@ -62,7 +60,7 @@ public class DialogSpeakerCache : MonoBehaviour
         hasKit = dialogLine.DialogKit != null && dialogLine.DialogKit.KitId != "none";
 
         // character path
-        reusableCharacterData = characterDatabase.GetCharacterData(dialogLine.SpeakerId);
+        reusableCharacterData = database.GetCharacterData(dialogLine.SpeakerId);
         if (reusableCharacterData != null)
         {
             hasData = true;
@@ -89,7 +87,7 @@ public class DialogSpeakerCache : MonoBehaviour
 
         // npc path
         if (!hasData) {
-            reusableNpcData = npcDatabase.GetNpcData(dialogLine.SpeakerId);
+            reusableNpcData = database.GetNpcData(dialogLine.SpeakerId);
             if (reusableNpcData != null)
             {
                 hasData = true;

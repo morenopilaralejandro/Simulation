@@ -10,6 +10,6 @@ public static class QuestFactory
 
     public static Quest CreateById(string questId) 
     {
-        return Create(QuestDatabase.Instance.GetQuestData(questId));
+        return Create(DatabaseManager.Instance.GetQuestData(questId));
     }
 }
