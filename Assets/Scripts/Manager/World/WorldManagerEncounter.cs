@@ -95,7 +95,8 @@ public class WorldManagerEncounter
                 realm : worldManager.CurrentRealm,
                 playerPosition : player.CurrentTilePosition3d(),
                 facingDirection : player.FacingToVector(player.FacingDirection),
-                worldState : WorldState.InEncounter
+                worldState : WorldState.InEncounter,
+                hour : worldManager.CurrentHour
             );
 
             // Fade out so the player doesn't see scenes disappearing
@@ -244,7 +245,9 @@ public class WorldManagerEncounter
         BattleArgs.SetMini(
             homeTeamGuid : TeamManager.Instance.ActiveLoadoutGuid, 
             awayTeamId : encounter.teamId,
-            battleResultsType : BattleResultsType.Drop);
+            battleResultsType : BattleResultsType.Drop,
+            timeOfDay : worldManager.CurrentTimeOfDay
+        );
         sceneLoader.LoadGroup(sceneBattle);
     }
 

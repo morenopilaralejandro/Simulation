@@ -57,4 +57,10 @@ public static class WorldEvents
     {
         OnRealmChanged?.Invoke(realm);
     }
+
+    public static event Action<TimeOfDay> OnTimeOfDayChanged;
+    public static void RaiseTimeOfDayChanged(TimeOfDay timeOfDay)
+    {
+        OnTimeOfDayChanged?.Invoke(timeOfDay);
+    }
 }

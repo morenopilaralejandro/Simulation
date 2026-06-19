@@ -40,7 +40,8 @@ public class PersistenceManagerLoad
             realm : saveData.SaveDataWorldSystem.Realm,
             playerPosition : saveData.SaveDataWorldSystem.PlayerPosition,
             facingDirection : saveData.SaveDataWorldSystem.FacingDirection,
-            worldState : WorldState.Loading
+            worldState : WorldState.Loading,
+            hour : saveData.SaveDataWorldSystem.Hour
         );
 
         PersistenceEvents.RaiseGameLoaded(saveData);

@@ -1,4 +1,5 @@
 using Aremoreno.Enums.Battle;
+using Aremoreno.Enums.World;
 
 public static class BattleArgs
 {
@@ -12,6 +13,7 @@ public static class BattleArgs
     public static int AwayTeamLevel;
     public static bool HomeTeamCanUseWing = true;
     public static bool AwayTeamCanUseWing = true;
+    public static TimeOfDay TimeOfDay;
     public static BattleType BattleType;
     public static BattleResultsType BattleResultsType;
     public static WinConditionType WinConditionType;
@@ -31,6 +33,7 @@ public static class BattleArgs
         string awayTeamGuid = null,
         string ballId = "crimson",
         string fieldId = "stadium_main",
+        TimeOfDay timeOfDay = TimeOfDay.Day,
         BattleType battleType = BattleType.Mini,
         BattleResultsType battleResultsType = BattleResultsType.Summary,
         WinConditionType winConditionType = WinConditionType.ScoreGoals,
@@ -42,6 +45,7 @@ public static class BattleArgs
         AwayTeamGuid = awayTeamGuid;
         BallId = ballId;
         FieldId = fieldId;
+        TimeOfDay = timeOfDay;
         BattleType = battleType;
         BattleResultsType = battleResultsType;
         WinConditionType = winConditionType;
@@ -55,6 +59,7 @@ public static class BattleArgs
         string awayTeamGuid = null,
         string ballId = "crimson",
         string fieldId = "stadium_main",
+        TimeOfDay timeOfDay = TimeOfDay.Day,
         BattleType battleType = BattleType.Mini,
         BattleResultsType battleResultsType = BattleResultsType.Summary,
         WinConditionType winConditionType = WinConditionType.ScoreGoals,
@@ -66,6 +71,7 @@ public static class BattleArgs
         AwayTeamGuid = awayTeamGuid;
         BallId = ballId;
         FieldId = fieldId;
+        TimeOfDay = timeOfDay;
         BattleType = battleType;
         BattleResultsType = battleResultsType;
         WinConditionType = winConditionType;
@@ -79,6 +85,7 @@ public static class BattleArgs
         string awayTeamGuid = null,
         string ballId = "crimson",
         string fieldId = "stadium_main",
+        TimeOfDay timeOfDay = TimeOfDay.Day,
         BattleType battleType = BattleType.Full,
         BattleResultsType battleResultsType = BattleResultsType.Summary,
         WinConditionType winConditionType = WinConditionType.WinMatch,
@@ -90,6 +97,7 @@ public static class BattleArgs
         AwayTeamGuid = awayTeamGuid;
         BallId = ballId;
         FieldId = fieldId;
+        TimeOfDay = timeOfDay;
         BattleType = battleType;
         BattleResultsType = battleResultsType;
         WinConditionType = winConditionType;
