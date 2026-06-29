@@ -31,7 +31,8 @@ public class CharacterComponentWing
 
         if (characterSaveData != null) 
         {
-            EquipWing(WingManager.Instance.GetWing(characterSaveData.EquippedWingGuid));
+            if (!string.IsNullOrEmpty(characterSaveData.EquippedWingGuid))
+                EquipWing(WingManager.Instance.GetWing(characterSaveData.EquippedWingGuid));
         } else 
         {
             Wing = null;

@@ -33,7 +33,7 @@ public class MenuSideLayout : MonoBehaviour
     public void Populate()
     {
         if (textTime != null)
-            textTime.text = "12:00";
+            textTime.text = WorldManager.Instance?.GetTimeAsString();
 
         if (textZoneName != null)
             textZoneName.text = WorldManager.Instance != null ? WorldManager.Instance.ZoneName : string.Empty;

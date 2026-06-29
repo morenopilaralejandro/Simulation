@@ -9,6 +9,7 @@ public static class BattleArgs
     public static string AwayTeamGuid;
     public static string BallId;
     public static string FieldId;
+    public static string BgmId;
     public static int HomeTeamLevel;
     public static int AwayTeamLevel;
     public static bool HomeTeamCanUseWing = true;
@@ -31,8 +32,9 @@ public static class BattleArgs
         string awayTeamId = null,
         string homeTeamGuid = null,
         string awayTeamGuid = null,
-        string ballId = "crimson",
-        string fieldId = "stadium_main",
+        string ballId = "ball-00001-default",
+        string fieldId = "field-00001-stadium_main",
+        string bgmId = "bgm-battle",
         TimeOfDay timeOfDay = TimeOfDay.Day,
         BattleType battleType = BattleType.Mini,
         BattleResultsType battleResultsType = BattleResultsType.Summary,
@@ -45,6 +47,7 @@ public static class BattleArgs
         AwayTeamGuid = awayTeamGuid;
         BallId = ballId;
         FieldId = fieldId;
+        BgmId = bgmId;
         TimeOfDay = timeOfDay;
         BattleType = battleType;
         BattleResultsType = battleResultsType;
@@ -57,8 +60,9 @@ public static class BattleArgs
         string awayTeamId = null,
         string homeTeamGuid = null,
         string awayTeamGuid = null,
-        string ballId = "crimson",
-        string fieldId = "stadium_main",
+        string ballId = "ball-00001-default",
+        string fieldId = "field-00001-stadium_main",
+        string bgmId = "bgm-battle",
         TimeOfDay timeOfDay = TimeOfDay.Day,
         BattleType battleType = BattleType.Mini,
         BattleResultsType battleResultsType = BattleResultsType.Summary,
@@ -71,6 +75,7 @@ public static class BattleArgs
         AwayTeamGuid = awayTeamGuid;
         BallId = ballId;
         FieldId = fieldId;
+        BgmId = bgmId;
         TimeOfDay = timeOfDay;
         BattleType = battleType;
         BattleResultsType = battleResultsType;
@@ -83,8 +88,9 @@ public static class BattleArgs
         string awayTeamId = null,
         string homeTeamGuid = null,
         string awayTeamGuid = null,
-        string ballId = "crimson",
-        string fieldId = "stadium_main",
+        string ballId = "ball-00001-default",
+        string fieldId = "field-00001-stadium_main",
+        string bgmId = "bgm-battle",
         TimeOfDay timeOfDay = TimeOfDay.Day,
         BattleType battleType = BattleType.Full,
         BattleResultsType battleResultsType = BattleResultsType.Summary,
@@ -97,6 +103,7 @@ public static class BattleArgs
         AwayTeamGuid = awayTeamGuid;
         BallId = ballId;
         FieldId = fieldId;
+        BgmId = bgmId;
         TimeOfDay = timeOfDay;
         BattleType = battleType;
         BattleResultsType = battleResultsType;

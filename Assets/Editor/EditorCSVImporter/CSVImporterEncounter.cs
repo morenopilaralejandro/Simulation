@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
+using Aremoreno.Enums.World;
 
 public class CSVImporterEncounter
 {
@@ -32,13 +33,12 @@ public class CSVImporterEncounter
         int zoneIdIndex         = System.Array.IndexOf(headers, "ZoneId");
         int teamIdIndex         = System.Array.IndexOf(headers, "TeamId");
         int levelIndex          = System.Array.IndexOf(headers, "Level");
+        int bgmIdIndex          = System.Array.IndexOf(headers, "BgmId");
+        int ballIdIndex         = System.Array.IndexOf(headers, "BallId");
         int encounterRateIndex  = System.Array.IndexOf(headers, "EncounterRate");
-
-        if (zoneIdIndex == -1 || teamIdIndex == -1 || levelIndex == -1 || encounterRateIndex == -1)
-        {
-            Debug.LogError("[CSVImporterEncounter] CSV is missing one or more required headers: ZoneId, TeamId, Level, EncounterRate");
-            return;
-        }
+        int hasTimeOfDayRestrictionIndex  = System.Array.IndexOf(headers, "HasTimeOfDayRestriction");
+        int timeOfDayIndex      = System.Array.IndexOf(headers, "TimeOfDay");
+        int dropsIndex          = System.Array.IndexOf(headers, "Drops");
 
         // Group encounters by zoneId
         Dictionary<string, List<EncounterData>> encountersByZone = new Dictionary<string, List<EncounterData>>();
@@ -53,9 +53,14 @@ public class CSVImporterEncounter
 
             EncounterData encounterData = new EncounterData
             {
-                teamId          = values[teamIdIndex].Trim(),
-                level           = int.Parse(values[levelIndex].Trim()),
-                encounterRate   = float.Parse(values[encounterRateIndex].Trim())
+                TeamId = values[teamIdIndex].Trim(),
+                Level = int.Parse(values[levelIndex].Trim()),
+                BgmId = values[bgmIdIndex].Trim(),
+                BallId = values[ballIdIndex].Trim(),
+                EncounterRate   = float.Parse(values[encounterRateIndex].Trim()),
+                HasTimeOfDayRestriction = CSVImporterParser.ParseBool(values[hasTimeOfDayRestrictionIndex].Trim()),
+                TimeOfDay = EnumManager.StringToEnum<TimeOfDay>(values[timeOfDayIndex].Trim()),
+                Drops = CSVImporterParser.ParseListItemDrop(values[dropsIndex].Trim())
             };
 
             if (!encountersByZone.ContainsKey(zoneId))

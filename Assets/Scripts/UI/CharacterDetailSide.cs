@@ -47,7 +47,7 @@ public class CharacterDetailSide : MonoBehaviour
 
         if(character == null) return;
 
-        characterCard.SetCharacter(character, Position.FW);
+        characterCard.SetCharacter(character, position);
         barHp.SetCharacter(character, Stat.Hp);
         barSp.SetCharacter(character, Stat.Sp);
         barXp.SetCharacter(character);

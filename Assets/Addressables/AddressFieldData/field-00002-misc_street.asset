@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d40716a9144ed62da8fce1d0ad38a95, type: 3}
-  m_Name: crimson
+  m_Script: {fileID: 11500000, guid: 8389942ce30cbd6da91e9efbb06629b1, type: 3}
+  m_Name: field-00002-misc_street
   m_EditorClassIdentifier: 
-  BallId: crimson
-  Texture: {fileID: 2800000, guid: aa345c295edae5005b63daab7214a90d, type: 3}
+  FieldId: field-00002-misc_street
+  FieldLineColor: 0
+  TextureInnerAddress: texture-field_asphalt
+  TextureOuterAddress: texture-field_dirt

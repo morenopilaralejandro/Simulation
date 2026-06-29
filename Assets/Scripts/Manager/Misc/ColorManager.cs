@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Field;
 using Aremoreno.Enums.Item;
 using Aremoreno.Enums.Move;
 using Aremoreno.Enums.Kit;
@@ -158,6 +159,18 @@ public static class ColorManager
     {
         return battleMessageColors.TryGetValue(messageType, out var color)
             ? color : Color.white;
+    }
+
+    private static readonly Dictionary<FieldLineColor, Color> fieldLineColors =
+        new Dictionary<FieldLineColor, Color>()
+    {
+        { FieldLineColor.White , Color.white },
+        { FieldLineColor.Gray_Dark, new Color(0.376f, 0.376f, 0.376f, 1f) }
+    };
+
+    public static Color GetFieldLineColor(FieldLineColor fieldLineColor)
+    {
+        return fieldLineColors.TryGetValue(fieldLineColor, out var color) ? color : Color.white;
     }
 
     private static readonly Dictionary<ItemSpriteColor, Color> itemSpriteColors =

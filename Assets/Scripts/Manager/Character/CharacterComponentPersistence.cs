@@ -82,7 +82,7 @@ public class CharacterComponentPersistence
             CustomPortraitSize = character.CustomPortraitSize,
 
             //Wing
-            EquippedWingGuid = character.Wing.WingGuid
+            EquippedWingGuid = character.Wing?.WingGuid
         };
     }
 

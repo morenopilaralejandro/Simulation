@@ -38,8 +38,10 @@ public class DebugMainMenu : MonoBehaviour
 
     private void HandleButton1() {
         BattleArgs.SetFull(
-            "team-00000-a-test_a", 
-            "team-00000-b-test_b");
+            homeTeamId : "team-00000-a-test_a", 
+            awayTeamId : "team-00000-b-test_b",
+            fieldId : "field-00002-misc_street"
+        );
         sceneLoader.LoadGroup(sceneBattle);
     }
 

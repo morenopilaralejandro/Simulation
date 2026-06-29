@@ -17,6 +17,7 @@ public class ZoneDefinition : ScriptableObject
     public AudioClip backgroundMusic;
 
     [Header("Encounter")]
+    public string fieldId;
     public List<EncounterData> encounters;
 }
 

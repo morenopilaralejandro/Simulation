@@ -597,7 +597,7 @@ public class BattleManager : MonoBehaviour
 
     public void ResetDefaultPositions()
     {
-        AudioManager.Instance.PlayBgm("bgm-battle_crimson");
+        AudioManager.Instance.PlayBgm(BattleArgs.BgmId);
         ResetPlayerPositions();
         ballSystem.ResetBallPosition();
     }

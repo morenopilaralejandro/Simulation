@@ -212,22 +212,37 @@ public class WorldManagerEncounter
         List<EncounterData> encounters = worldManager.CurrentZone.encounters;
         if (encounters == null || encounters.Count == 0) return null;
 
-        // Weighted random selection by encounterRate
+        TimeOfDay currentTimeOfDay = worldManager.CurrentTimeOfDay;
         float totalWeight = 0f;
-        foreach (var e in encounters)
-            totalWeight += e.encounterRate;
+        EncounterData selectedEncounter = null;
+
+        // Single pass: calculate weight and select encounter simultaneously
+        foreach (var encounter in encounters)
+        {
+            if (!encounter.HasTimeOfDayRestriction || encounter.TimeOfDay == currentTimeOfDay)
+            {
+                totalWeight += encounter.EncounterRate;
+                selectedEncounter = encounter; // Always keep the last valid one as fallback
+            }
+        }
+
+        if (totalWeight <= 0f) return null;
 
         float roll = Random.Range(0f, totalWeight);
         float running = 0f;
 
-        foreach (var e in encounters)
+        // Second pass: weighted selection
+        foreach (var encounter in encounters)
         {
-            running += e.encounterRate;
-            if (roll <= running)
-                return e;
+            if (!encounter.HasTimeOfDayRestriction || encounter.TimeOfDay == currentTimeOfDay)
+            {
+                running += encounter.EncounterRate;
+                if (roll <= running)
+                    return encounter;
+            }
         }
 
-        return encounters[^1];
+        return selectedEncounter;
     }
 
     private void TriggerEncounter(EncounterData encounter)
@@ -244,9 +259,12 @@ public class WorldManagerEncounter
     {
         BattleArgs.SetMini(
             homeTeamGuid : TeamManager.Instance.ActiveLoadoutGuid, 
-            awayTeamId : encounter.teamId,
+            awayTeamId : encounter.TeamId,
             battleResultsType : BattleResultsType.Drop,
-            timeOfDay : worldManager.CurrentTimeOfDay
+            timeOfDay : worldManager.CurrentTimeOfDay, //if currentZone.zoneType == ZoneType.Interior use day
+            ballId : encounter.BallId,
+            bgmId : encounter.BgmId,
+            fieldId : worldManager.CurrentZone.fieldId
         );
         sceneLoader.LoadGroup(sceneBattle);
     }
