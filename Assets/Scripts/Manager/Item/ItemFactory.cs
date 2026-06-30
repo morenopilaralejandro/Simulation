@@ -40,7 +40,7 @@ public static class ItemFactory
 
     public static Item CreateById(string itemId) 
     {
-        auxItemData = ItemDatabase.Instance.GetItemData(itemId);
+        auxItemData = DatabaseManager.Instance.GetItemData(itemId);
         return Create(auxItemData);
     }
 
@@ -48,14 +48,14 @@ public static class ItemFactory
     {
         auxItemData = category switch
         {
-            ItemCategory.Equipment  => ItemDatabase.Instance.GetItemData<ItemDataEquipment>(itemId),
-            ItemCategory.Formation  => ItemDatabase.Instance.GetItemData<ItemDataFormation>(itemId),
-            ItemCategory.Important  => ItemDatabase.Instance.GetItemData<ItemDataImportant>(itemId),
-            ItemCategory.Kit        => ItemDatabase.Instance.GetItemData<ItemDataKit>(itemId),
-            ItemCategory.Material   => ItemDatabase.Instance.GetItemData<ItemDataMaterial>(itemId),
-            ItemCategory.Misc       => ItemDatabase.Instance.GetItemData<ItemDataMisc>(itemId),
-            ItemCategory.Move       => ItemDatabase.Instance.GetItemData<ItemDataMove>(itemId),
-            ItemCategory.Recovery   => ItemDatabase.Instance.GetItemData<ItemDataRecovery>(itemId),
+            ItemCategory.Equipment  => DatabaseManager.Instance.GetItemData<ItemDataEquipment>(itemId),
+            ItemCategory.Formation  => DatabaseManager.Instance.GetItemData<ItemDataFormation>(itemId),
+            ItemCategory.Important  => DatabaseManager.Instance.GetItemData<ItemDataImportant>(itemId),
+            ItemCategory.Kit        => DatabaseManager.Instance.GetItemData<ItemDataKit>(itemId),
+            ItemCategory.Material   => DatabaseManager.Instance.GetItemData<ItemDataMaterial>(itemId),
+            ItemCategory.Misc       => DatabaseManager.Instance.GetItemData<ItemDataMisc>(itemId),
+            ItemCategory.Move       => DatabaseManager.Instance.GetItemData<ItemDataMove>(itemId),
+            ItemCategory.Recovery   => DatabaseManager.Instance.GetItemData<ItemDataRecovery>(itemId),
             _ => null
         };
 

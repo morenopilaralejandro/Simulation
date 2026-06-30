@@ -4,5 +4,5 @@ using UnityEngine;
 public class BallData : ScriptableObject
 {
     public string BallId;
-    public Texture Texture;
+    public string BallTextureAddress;
 }

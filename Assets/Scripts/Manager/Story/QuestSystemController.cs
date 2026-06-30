@@ -6,14 +6,12 @@ using Aremoreno.Enums.Story;
 
 public class QuestSystemController
 {
-    private QuestSystemManager questSystemManager;
-    private QuestDatabase questDatabase;
-    private QuestObjectiveDatabase questObjectiveDatabase;
     private Quest auxQuest;
 
     private Dictionary<string, Quest> questDict = new Dictionary<string, Quest>();
     private string currentMainQuestId = "";
     private string currentActiveQuestId = "";
+    private QuestSystemManager questSystemManager;
 
     public IReadOnlyDictionary<string, Quest> QuestDict => questDict;
     public string CurrentMainQuestId => currentMainQuestId;
@@ -22,14 +20,12 @@ public class QuestSystemController
     public QuestSystemController()
     {
         questSystemManager = QuestSystemManager.Instance;
-        questDatabase = QuestDatabase.Instance;
-        questObjectiveDatabase = QuestObjectiveDatabase.Instance;
         InitializeFromDatabase();
     }
 
     private void InitializeFromDatabase()
     {
-        foreach (QuestData questData in questDatabase.QuestDataDict.Values)
+        foreach (QuestData questData in DatabaseManager.Instance.DatabaseRegistry.QuestData.Data.Values)
         {
             questDict[questData.QuestId] = new Quest(questData);
         }

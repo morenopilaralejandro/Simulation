@@ -31,7 +31,7 @@ public class WingComponentPersistence
 
     public void Import(WingSaveData saveData)
     {
-        WingData data = WingDatabase.Instance.GetWingData(saveData.WingId);
+        WingData data = DatabaseManager.Instance.GetWingData(saveData.WingId);
         wing.Initialize(data, saveData);
     }
 

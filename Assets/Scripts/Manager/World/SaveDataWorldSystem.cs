@@ -14,5 +14,6 @@ public class SaveDataWorldSystem
     public Vector2 FacingDirection;
     // zoneTrackerSystem;
     public string ZoneId;
+    public int Hour;
     // encounterSystem;
 }

@@ -58,5 +58,13 @@ namespace Aremoreno.Enums.World
         //Modular,
         Monolitic
     }
+
+    public enum TimeOfDay
+    {
+        Morning,
+        Day,
+        Evening,
+        Night
+    }
 }
 

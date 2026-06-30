@@ -18,7 +18,7 @@ public class WingManagerStorage
 
     public void FirstTimeInitialize()
     {
-        WingDatabase wingDatabase = WingDatabase.Instance;
+        var wingDatabase = DatabaseManager.Instance;
 
         AddWing(wingDatabase.GetWingData("wing-00001-angel"));
         AddWing(wingDatabase.GetWingData("wing-00002-devil"));

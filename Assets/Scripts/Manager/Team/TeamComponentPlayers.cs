@@ -71,7 +71,7 @@ public class TeamComponentPlayers
         {
             if (string.IsNullOrEmpty(characterId)) continue;
 
-            CharacterData characterData = CharacterDatabase.Instance.GetCharacterData(characterId);
+            CharacterData characterData = DatabaseManager.Instance.GetCharacterData(characterId);
             if (characterData != null)
             {
                 characterDataList.Add(characterData);

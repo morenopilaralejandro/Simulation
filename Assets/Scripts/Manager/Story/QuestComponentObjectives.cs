@@ -13,10 +13,9 @@ public class QuestComponentObjectives
 
     public QuestComponentObjectives(QuestData questData, Quest quest, QuestSaveData questSaveData = null)
     {
-        QuestObjectiveDatabase questObjectiveDatabase = QuestObjectiveDatabase.Instance;
         foreach (string objectiveId in questData.ObjectiveIds)
         {
-            var questObjectiveData = questObjectiveDatabase.GetQuestObjectiveData(objectiveId);
+            var questObjectiveData = DatabaseManager.Instance.GetQuestObjectiveData(objectiveId);
             var questObjectiveSaveData = questSaveData?.QuestObjectiveSaveDataDict[objectiveId];
             objectives[objectiveId] = new QuestObjective(questObjectiveData, questObjectiveSaveData);
         }

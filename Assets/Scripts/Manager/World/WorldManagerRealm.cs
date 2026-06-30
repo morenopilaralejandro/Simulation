@@ -9,7 +9,6 @@ public class WorldManagerRealm
     #region Fields
 
     public Realm CurrentRealm { get; private set; }
-    private OverworldDefinitionDatabase overworldDefinitionDatabase;
 
     #endregion
 
@@ -17,7 +16,7 @@ public class WorldManagerRealm
 
     public WorldManagerRealm() 
     {
-        overworldDefinitionDatabase = OverworldDefinitionDatabase.Instance;
+
     }
 
     #endregion
@@ -32,7 +31,7 @@ public class WorldManagerRealm
 
     public OverworldDefinition GetOverworldDefinition() 
     {
-        return overworldDefinitionDatabase.GetOverworldDefinitionByRealm(CurrentRealm);
+        return DatabaseManager.Instance.GetOverworldDefinitionByRealm(CurrentRealm);
     }
 
     #endregion

@@ -97,6 +97,35 @@ public static class CSVImporterParser
         return list;
     }
 
+    public static List<ItemDrop> ParseListItemDrop(
+        string strValue,
+        char delimiter1 = '|',
+        char delimiter2 = '#')
+    {
+        var list = new List<ItemDrop>();
+
+        if (string.IsNullOrWhiteSpace(strValue)) return list;
+
+        string[] parts = strValue.Split(delimiter1);
+        foreach (string part in parts)
+        {
+            string trimmed = part.Trim();
+            if (string.IsNullOrEmpty(trimmed)) continue;
+
+            string[] subParts = trimmed.Split(delimiter2);
+
+            var itemDrop = new ItemDrop();
+            itemDrop.ItemId = subParts[0].Trim();
+            itemDrop.QuantityMin = ParseInt(subParts[1].Trim());
+            itemDrop.QuantityMax = ParseInt(subParts[2].Trim());
+            itemDrop.DropChance = float.Parse(subParts[3].Trim());
+
+            list.Add(itemDrop);
+        }
+
+        return list;
+    }
+
     #endregion
 
 

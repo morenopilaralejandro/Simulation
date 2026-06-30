@@ -32,7 +32,8 @@ public class WorldManagerPersistance
             Realm = worldManager.CurrentRealm,
             PlayerPosition = playerWorldEntity.CurrentTilePosition3d(),
             FacingDirection = playerWorldEntity.FacingToVector(playerWorldEntity.FacingDirection),
-            ZoneId = worldManager.CurrentZone.zoneId
+            ZoneId = worldManager.CurrentZone.zoneId,
+            Hour = worldManager.CurrentHour
         };
     }
 

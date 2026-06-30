@@ -85,7 +85,7 @@ public class BattleManagerTeam
 
     private Team CreateTeamFromData(string teamId)
     {
-        Team team = TeamDatabase.Instance.GetTeam(teamId);
+        Team team = DatabaseManager.Instance.GetTeam(teamId);
         return team;
     }
 

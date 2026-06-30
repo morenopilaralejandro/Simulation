@@ -386,6 +386,7 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(duration);
 
+        AudioManager.Instance.StopBgm();
         BattleUIManager.Instance.SetMessageActive(MessageType.Goal, false);
 
         EndGame();
@@ -596,7 +597,7 @@ public class BattleManager : MonoBehaviour
 
     public void ResetDefaultPositions()
     {
-        AudioManager.Instance.PlayBgm("bgm-battle_crimson");
+        AudioManager.Instance.PlayBgm(BattleArgs.BgmId);
         ResetPlayerPositions();
         ballSystem.ResetBallPosition();
     }

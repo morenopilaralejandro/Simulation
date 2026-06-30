@@ -27,7 +27,6 @@ public class ItemManagerStorage
 
     private ItemFormation cachedItemFormation;
     private Formation cachedFormation;
-    private FormationManager formationDatabase;
 
     #endregion
 
@@ -35,8 +34,6 @@ public class ItemManagerStorage
 
     public ItemManagerStorage() 
     {
-        formationDatabase = FormationManager.Instance;
-
         categoryMap = new Dictionary<ItemCategory, List<ItemStorageSlot>>
         {
             { ItemCategory.Equipment, listEquipment },
@@ -146,7 +143,7 @@ public class ItemManagerStorage
         if (item.Category != ItemCategory.Formation) return false;
 
         cachedItemFormation = item as ItemFormation;
-        cachedFormation = formationDatabase.GetFormation(cachedItemFormation.FormationId);
+        cachedFormation = DatabaseManager.Instance.GetFormation(cachedItemFormation.FormationId);
 
         return cachedFormation.BattleType == battleType;
     }

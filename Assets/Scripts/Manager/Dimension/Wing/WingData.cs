@@ -12,6 +12,8 @@ public class WingData : ScriptableObject
     public Element[] Elements;
     public WingGrowthType WingGrowthType;
     public WingGrowthRate WingGrowthRate;
+    public string GrowthProfileId;
+    public string EvolutionPathId;
 
     public int KickBase;
     public int BodyBase;
@@ -32,4 +34,10 @@ public class WingData : ScriptableObject
     public int TechniqueIndividual;
     public int LuckIndividual;
     public int CourageIndividual;
+
+    private void OnEnable()
+    {
+        GrowthProfileId = $"{WingGrowthType}_{WingGrowthRate}";
+        EvolutionPathId = WingGrowthType.ToString();
+    }
 }

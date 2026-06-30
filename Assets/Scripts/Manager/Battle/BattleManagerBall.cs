@@ -50,7 +50,7 @@ public class BattleManagerBall
 
         GameObject go = BattleManager.Instance.InstantiateBall(ballPrefab, spawnPoint.position, spawnPoint.rotation, spawnPoint);
         ball = go.GetComponent<Ball>();
-        ball.Initialize(BallManager.Instance.GetBallData(BattleArgs.BallId));
+        ball.Initialize(DatabaseManager.Instance.GetBallData(BattleArgs.BallId));
         ball.name = ball.BallId;
         BallEvents.RaiseBallSpawned(ball);
         Debug.Log("[BattleBallManager] Ball spawned successfully.");

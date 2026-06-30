@@ -17,8 +17,21 @@ MonoBehaviour:
   zoneType: 0
   interiorSceneAddress: 
   backgroundMusic: {fileID: 8300000, guid: 38d24e005d5aed9b685085695e76cae0, type: 3}
+  fieldId: field-00003-park
   encounters:
-  - teamId: team-00000-b-test_b
-    level: 99
-    bgmId: 
-    encounterRate: 0
+  - TeamId: team-00000-a-test_a
+    Level: 50
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.5
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 0
+    Drops: []
+  - TeamId: team-00000-b-test_b
+    Level: 50
+    BgmId: bgm-training
+    BallId: ball-00002-crimson
+    EncounterRate: 0.5
+    HasTimeOfDayRestriction: 1
+    TimeOfDay: 3
+    Drops: []

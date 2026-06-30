@@ -10,6 +10,6 @@ public static class StoryEventFactory
 
     public static StoryEvent CreateById(string storyEventId) 
     {
-        return Create(StoryEventDatabase.Instance.GetStoryEventData(storyEventId));
+        return Create(DatabaseManager.Instance.GetStoryEventData(storyEventId));
     }
 }

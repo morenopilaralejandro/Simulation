@@ -28,7 +28,7 @@ public class MoveComponentPersistence
 
     public void Import(MoveSaveData moveSaveData)
     {
-        MoveData moveData = MoveManager.Instance.GetMoveData(moveSaveData.MoveId);
+        MoveData moveData = DatabaseManager.Instance.GetMoveData(moveSaveData.MoveId);
         move.Initialize(moveData, moveSaveData);
     }
 

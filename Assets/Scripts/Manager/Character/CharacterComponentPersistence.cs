@@ -30,7 +30,7 @@ public class CharacterComponentPersistence
 
     public void Import(CharacterSaveData characterSaveData)
     {
-        CharacterData characterData = CharacterDatabase.Instance.GetCharacterData(
+        CharacterData characterData = DatabaseManager.Instance.GetCharacterData(
             characterSaveData.IsCustomAvatar ? 
                 characterSaveData.CustomAvatarId : 
                 characterSaveData.CharacterId);
@@ -82,7 +82,7 @@ public class CharacterComponentPersistence
             CustomPortraitSize = character.CustomPortraitSize,
 
             //Wing
-            EquippedWingGuid = character.Wing.WingGuid
+            EquippedWingGuid = character.Wing?.WingGuid
         };
     }
 

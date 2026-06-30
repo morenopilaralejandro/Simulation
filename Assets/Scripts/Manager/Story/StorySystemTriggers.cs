@@ -8,16 +8,27 @@ public class StorySystemTriggers
 {
     private StorySystemManager storySystemManager;
     private QuestSystemManager questSystemManager;
-    private StoryAutoTriggerDatabase storyAutoTriggerDatabase;
 
     private HashSet<string> triggeredHashSet = new HashSet<string>();
+    private Dictionary<string, StoryAutoTrigger> storyAutoTriggerDictionary;
+
     public IReadOnlyCollection<string> TriggeredCollection => triggeredHashSet;
 
     public StorySystemTriggers() 
     {
         storySystemManager = StorySystemManager.Instance;
         questSystemManager = QuestSystemManager.Instance;
-        storyAutoTriggerDatabase = StoryAutoTriggerDatabase.Instance;
+        InitializeStoryAutoTriggers();
+    }
+
+    private void InitializeStoryAutoTriggers()
+    {
+        storyAutoTriggerDictionary = new Dictionary<string, StoryAutoTrigger>();
+        
+        foreach (var storyAutoTriggerData in DatabaseManager.Instance.DatabaseRegistry.StoryAutoTriggerData.Data.Values)
+        {
+            storyAutoTriggerDictionary[storyAutoTriggerData.StoryAutoTriggerId] = new StoryAutoTrigger(storyAutoTriggerData);
+        }
     }
 
     public void TriggerAutoTrigger(string storyAutoTriggerId)
@@ -32,7 +43,7 @@ public class StorySystemTriggers
 
     public void EvaluateTriggers()
     {
-        foreach (var storyAutoTrigger in storyAutoTriggerDatabase.StoryAutoTriggerDict.Values)
+        foreach (var storyAutoTrigger in storyAutoTriggerDictionary.Values)
         {
             if (storyAutoTrigger.HasTriggered) continue;
             if (!questSystemManager.CheckPrerequisites(storyAutoTrigger.Prerequisites)) continue;
@@ -40,6 +51,11 @@ public class StorySystemTriggers
             TriggerAutoTrigger(storyAutoTrigger.StoryAutoTriggerId);
             storySystemManager.TriggerStoryEvent(storyAutoTrigger.StoryEvent.StoryEventId);
         }
+    }
+
+    public StoryAutoTrigger GetStoryAutoTrigger(string storyAutoTriggerId)
+    {
+        return storyAutoTriggerDictionary.TryGetValue(storyAutoTriggerId, out var trigger) ? trigger : null;
     }
 
     public void Import(StorySystemSaveData saveData) 

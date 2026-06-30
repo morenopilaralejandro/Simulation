@@ -6,7 +6,7 @@ using Aremoreno.Enums.Story;
 
 public class StorySystemChapters
 {
-    private StoryChapterDatabase storyChapterDatabase;
+    private DatabaseManager db;
 
     private StoryChapter currentChapter;
     public StoryChapter CurrentChapter => currentChapter;
@@ -14,26 +14,26 @@ public class StorySystemChapters
 
     public StorySystemChapters() 
     {
-        storyChapterDatabase = StoryChapterDatabase.Instance;
+        db = DatabaseManager.Instance;
     }
 
     public void AdvanceChapter()
     {
         int auxInt = currentChapter.StoryChapterNumber;
         auxInt++;
-        currentChapter = storyChapterDatabase.GetStoryChapter(auxInt);
+        currentChapter = db.GetStoryChapter(auxInt.ToString());
         StoryEvents.RaiseChapterChanged(currentChapter);
         LogManager.Trace($"[StorySystemChapters] Advanced to Chapter {auxInt}");
     }
 
     public void SetChapter(int intValue)
     {
-        currentChapter = storyChapterDatabase.GetStoryChapter(intValue);
+        currentChapter = db.GetStoryChapter(intValue.ToString());
         StoryEvents.RaiseChapterChanged(currentChapter);
     }
 
     public void Import(StorySystemSaveData saveData) 
     {
-        currentChapter = storyChapterDatabase.GetStoryChapter(saveData.ChapterNumber);
+        currentChapter = db.GetStoryChapter(saveData.ChapterNumber.ToString());
     }
 }

@@ -77,6 +77,7 @@ public class StorySystemManager : MonoBehaviour
     public bool HasAutoTriggerTriggered(string storyAutoTriggerId) => triggerSystem.HasAutoTriggerTriggered(storyAutoTriggerId);
     public void EvaluateTriggers() => triggerSystem.EvaluateTriggers();
     public void ImportTriggerSystem(StorySystemSaveData saveData) => triggerSystem.Import(saveData);
+    public StoryAutoTrigger GetStoryAutoTrigger(string storyAutoTriggerId) => triggerSystem.GetStoryAutoTrigger(storyAutoTriggerId);
 
     // chapterSystem
     public StoryChapter CurrentChapter => chapterSystem.CurrentChapter;

@@ -24,7 +24,7 @@ public class CharacterManagerStorage
 
     public void FirstTimeInitialize()
     {
-        CharacterDatabase characterDatabase = CharacterDatabase.Instance;
+        var characterDatabase = DatabaseManager.Instance;
 
         AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00027-almu"), 50);
         AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00088-sofireca"), 50);

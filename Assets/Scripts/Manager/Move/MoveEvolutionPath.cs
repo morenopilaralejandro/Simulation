@@ -15,8 +15,7 @@ public class MoveEvolutionPath : ScriptableObject
 
     private List<MoveEvolution> _orderedEvolutions;
 
-
-    public void Initialize()    
+    public void OnEnable()    
     {
         _pathMap = evolutionPath.ToDictionary(p => p.Previous, p => p.Next);
 

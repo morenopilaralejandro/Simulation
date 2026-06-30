@@ -12,6 +12,8 @@ public class MoveData : ScriptableObject
     public Trait Trait;
     public GrowthType GrowthType;
     public GrowthRate GrowthRate;
+    public string GrowthProfileId;
+    public string EvolutionPathId;
 
     public int Cost;
     public int BasePower;
@@ -28,4 +30,10 @@ public class MoveData : ScriptableObject
 
     public List<Element> RequiredParticipantElements = new List<Element>();
     public List<string> RequiredParticipantMoves = new List<string>();
+
+    private void OnEnable()
+    {
+        GrowthProfileId = $"{GrowthType}_{GrowthRate}";
+        EvolutionPathId = GrowthType.ToString();
+    }
 }

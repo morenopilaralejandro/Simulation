@@ -25,6 +25,7 @@ public class Formation
     [SerializeField] private int kickoff1;
     public int Kickoff1 => kickoff1;
 
+    public Formation(FormationData formationData) => Initialize(formationData);
     public void Initialize(FormationData formationData)
     {
         formationId = formationData.FormationId;
@@ -39,7 +40,7 @@ public class Formation
         for (int i = 0; i < formationData.CoordIds.Count; i++) 
         {
             if (!string.IsNullOrEmpty(formationData.CoordIds[i])) {
-                FormationCoordData formationCoordData = FormationCoordManager.Instance.GetFormationCoordData(formationData.CoordIds[i]);
+                FormationCoordData formationCoordData = DatabaseManager.Instance.GetFormationCoordData(formationData.CoordIds[i]);
                 formationCoords.Add(
                     new FormationCoord (
                         formationData.CoordIds[i],

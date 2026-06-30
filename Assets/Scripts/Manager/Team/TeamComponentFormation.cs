@@ -20,12 +20,12 @@ public class TeamComponentFormation
 
         if (teamSaveData != null)
         {
-            FullBattleFormation = FormationManager.Instance.GetFormation(teamSaveData.CustomFullBattleFormationId);
-            MiniBattleFormation = FormationManager.Instance.GetFormation(teamSaveData.CustomMiniBattleFormationId);
+            FullBattleFormation = DatabaseManager.Instance.GetFormation(teamSaveData.CustomFullBattleFormationId);
+            MiniBattleFormation = DatabaseManager.Instance.GetFormation(teamSaveData.CustomMiniBattleFormationId);
         } else 
         {
-            FullBattleFormation = FormationManager.Instance.GetFormation(teamData.FullBattleFormationId);
-            MiniBattleFormation = FormationManager.Instance.GetFormation(teamData.MiniBattleFormationId);
+            FullBattleFormation = DatabaseManager.Instance.GetFormation(teamData.FullBattleFormationId);
+            MiniBattleFormation = DatabaseManager.Instance.GetFormation(teamData.MiniBattleFormationId);
         }
     }
 

@@ -7,11 +7,13 @@ public class SelectorTeamEmblemSource : ISelectorSource<Emblem>
     {
         List<Emblem> list = new ();
 
-        var dict = EmblemDatabase.Instance.Emblems;
+        var dict = DatabaseManager.Instance.DatabaseRegistry.EmblemData.Data;
 
-        foreach (var kvp in dict)
-            list.Add(kvp.Value);
-
+        foreach (var kvp in dict) 
+        {
+            list.Add(new Emblem(kvp.Value));
+        }
+        
         return list;
     }
 }

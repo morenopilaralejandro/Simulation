@@ -8,7 +8,6 @@ public class StorySystemEvents
 {
     private StorySystemManager storySystemManager;
     private QuestSystemManager questSystemManager;
-    private StoryEventDatabase storyEventDatabase;
     private StoryEvent auxStoryEvent;
 
     private HashSet<string> completedEventsHashSet = new HashSet<string>();
@@ -18,7 +17,6 @@ public class StorySystemEvents
     {
         storySystemManager = StorySystemManager.Instance;
         questSystemManager = QuestSystemManager.Instance;
-        storyEventDatabase = StoryEventDatabase.Instance;
     }
 
     public void TriggerStoryEvent(string storyEventId)
@@ -33,7 +31,7 @@ public class StorySystemEvents
         StoryEvents.RaiseStoryEventTriggered(storyEventId);
         LogManager.Trace($"[StorySystemEvents] Event '{storyEventId}' triggered.");
 
-        StoryEventData storyEventData = storyEventDatabase.GetStoryEventData(storyEventId);
+        StoryEventData storyEventData = DatabaseManager.Instance.GetStoryEventData(storyEventId);
         if (storyEventData != null) 
         {
             ProcessStoryEvent(new StoryEvent(storyEventData));

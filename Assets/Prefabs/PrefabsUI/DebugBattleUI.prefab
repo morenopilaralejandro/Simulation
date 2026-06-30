@@ -622,7 +622,7 @@ GameObject:
   - component: {fileID: 2732217375272569337}
   - component: {fileID: 1974638605740167269}
   m_Layer: 5
-  m_Name: ButtonReset
+  m_Name: ButtonExit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -732,7 +732,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7867183626564767307}
         m_TargetAssemblyTypeName: DebugBattleUI, Assembly-CSharp
-        m_MethodName: OnButtonRestartBattleTapped
+        m_MethodName: OnButtonExitBattleTapped
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1153,7 +1153,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Reset Battle
+  m_text: Exit Battle
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a9f36e37efa25cc5e86c7820b2e6c9a4, type: 2}
   m_sharedMaterial: {fileID: -5082097396079963576, guid: a9f36e37efa25cc5e86c7820b2e6c9a4, type: 2}
@@ -1460,6 +1460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelMaximized: {fileID: 8958692531003072754}
   panelMinimized: {fileID: 2763155514498353254}
+  debugMainMenu: {fileID: 11400000, guid: 1f97d28b51fa14d24a52206c7db97258, type: 2}
 --- !u!224 &6920404562601884414 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5521708924501442333, guid: 82e44876f400c2483a4c1c634de9aed0, type: 3}

@@ -72,6 +72,7 @@ public class PersistenceManagerSave
         ItemManager.Instance.FirstTimeInitialize();
         WingManager.Instance.FirstTimeInitialize();
         StorySystemManager.Instance.SetChapter(0);
+        WorldArgs.Hour = 12;
     }
 
     #endregion

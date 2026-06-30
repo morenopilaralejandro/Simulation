@@ -24,6 +24,7 @@ public class WorldManager : MonoBehaviour
     private WorldManagerZone zoneSystem;
     private WorldManagerZoneTracker zoneTrackerSystem;
     private WorldManagerEncounter encounterSystem;
+    private WorldManagerTimeOfDay timeOfDaySystem;
     private WorldManagerPersistance persistanceSystem;
 
     #endregion
@@ -44,6 +45,7 @@ public class WorldManager : MonoBehaviour
     private void OnDestroy() 
     {
         encounterSystem?.Unsubscribe();
+        timeOfDaySystem?.Unsubscribe();
     }
 
 
@@ -58,6 +60,8 @@ public class WorldManager : MonoBehaviour
         zoneSystem = new WorldManagerZone(overworldDefinition);
         encounterSystem = new WorldManagerEncounter(sceneBattle);
         encounterSystem.Subscribe();
+        timeOfDaySystem = new WorldManagerTimeOfDay();
+        timeOfDaySystem.Subscribe();
         persistanceSystem = new WorldManagerPersistance();
 
         InitializeAsync(overworldDefinition);
@@ -75,6 +79,7 @@ public class WorldManager : MonoBehaviour
         else
         {
             LoadZoneFromUnloaded();
+            SetHour(WorldArgs.Hour);
         }
     }
 
@@ -123,6 +128,17 @@ public class WorldManager : MonoBehaviour
     // persistanceSystem
     public SaveDataWorldSystem Export() => persistanceSystem.Export();
     public void Import(SaveDataWorldSystem saveData) => persistanceSystem.Import(saveData);
+
+    // timeOfDaySystem
+    public int CurrentHour => timeOfDaySystem.CurrentHour;
+    public TimeOfDay CurrentTimeOfDay => timeOfDaySystem.CurrentTimeOfDay;
+    public TimeOfDay PreviousTimeOfDay => timeOfDaySystem.PreviousTimeOfDay;
+
+    public void AdvanceHour() => timeOfDaySystem.AdvanceHour();
+    public void AdvanceHours(int hours) => timeOfDaySystem.AdvanceHours(hours);
+    public void SetHour(int hour) => timeOfDaySystem.SetHour(hour);
+    public void ChangeTime(TimeOfDay newTime) => timeOfDaySystem.ChangeTime(newTime);
+    public string GetTimeAsString() => timeOfDaySystem.GetTimeAsString();
 
     #endregion
 

@@ -33,8 +33,8 @@ public class MoveComponentEvolution
         this.move = move;
         this.GrowthType = moveData.GrowthType;
         this.GrowthRate = moveData.GrowthRate;
-        this.growthProfile = MoveEvolutionGrowthProfileManager.Instance.GetMoveEvolutionGrowthProfile(moveData);
-        this.path = MoveEvolutionPathManager.Instance.GetMoveEvolutionPath(moveData);
+        this.growthProfile = DatabaseManager.Instance.GetMoveEvolutionGrowthProfile(moveData.GrowthProfileId);
+        this.path = DatabaseManager.Instance.GetMoveEvolutionPath(moveData.EvolutionPathId);
 
         if (moveSaveData != null) 
         {
