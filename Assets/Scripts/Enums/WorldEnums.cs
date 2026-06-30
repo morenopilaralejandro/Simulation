@@ -66,5 +66,5 @@ namespace Aremoreno.Enums.World
         Evening,
         Night
     }
-}
 
+}
