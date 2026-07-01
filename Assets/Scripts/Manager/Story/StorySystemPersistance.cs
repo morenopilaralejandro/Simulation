@@ -32,6 +32,7 @@ public class StorySystemPersistance
         storySystemManager.ImportEventSystem(saveData);
         storySystemManager.ImportTriggerSystem(saveData);
         storySystemManager.ImportChapterSystem(saveData);
+        storySystemManager.ImportMatchChainSystem(saveData);
         LogManager.Trace("[StorySystemPersistance] Save data loaded successfully.");
     }
 
@@ -47,7 +48,8 @@ public class StorySystemPersistance
             VariablesList = persistenceManager.ParseIReadOnlyDict<string, int>(storySystemManager.VariablesDict),
             CompletedEventsList = new List<string>(storySystemManager.CompletedEventsCollection),
             TriggeredList = new List<string>(storySystemManager.TriggeredCollection),
-            ChapterNumber = storySystemManager.CurrentChapter.StoryChapterNumber
+            ChapterNumber = storySystemManager.CurrentChapter.StoryChapterNumber,
+            MatchChainSystemSaveData = storySystemManager.ExportMatchChainSystem()
         };
     }
 

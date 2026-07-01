@@ -20,6 +20,7 @@ public class StorySystemManager : MonoBehaviour
     private StorySystemEvents eventSystem;
     private StorySystemTriggers triggerSystem;
     private StorySystemChapters chapterSystem;
+    private StorySystemMatchChain matchChainSystem;
     private StorySystemPersistance persistanceSystem;
 
     #endregion
@@ -45,6 +46,7 @@ public class StorySystemManager : MonoBehaviour
         triggerSystem = new StorySystemTriggers();
         chapterSystem = new StorySystemChapters();
         persistanceSystem = new StorySystemPersistance();
+        matchChainSystem = new StorySystemMatchChain();
     }
 
     #endregion
@@ -84,6 +86,12 @@ public class StorySystemManager : MonoBehaviour
     public void AdvanceChapter() => chapterSystem.AdvanceChapter();
     public void SetChapter(int intValue) => chapterSystem.SetChapter(intValue);
     public void ImportChapterSystem(StorySystemSaveData saveData) => chapterSystem.Import(saveData);
+
+    //matchChainSystem
+    public void ImportMatchChainSystem(StorySystemSaveData saveData) => matchChainSystem.Import(saveData);
+    public MatchChainSystemSaveData ExportMatchChainSystem() => matchChainSystem.Export();
+    public string GetTeamEmblemAddressByMatchId(string matchId) => matchChainSystem.GetTeamEmblemAddressByMatchId(matchId);
+    public void TryUnlockNextNode(string sourceNodeId) => matchChainSystem.TryUnlockNextNode(sourceNodeId);
 
     // persistanceSystem
     public void Import(StorySystemSaveData data) => persistanceSystem.Import(data);

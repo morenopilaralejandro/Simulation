@@ -24,5 +24,8 @@ public class MatchChainNodeImage : MatchChainNode
 
     #region API
 
+    //imageComponent
+    public string ImageAddress => imageComponent.ImageAddress;
+
     #endregion
 }

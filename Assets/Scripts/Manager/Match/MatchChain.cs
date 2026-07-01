@@ -41,6 +41,8 @@ public class MatchChain
     //nodesComponent
     public List<MatchChainNode> Nodes => nodesComponent.Nodes;
     public void SortNodexByIndex() => nodesComponent.SortNodexByIndex();
+    public MatchChainNode GetNodeById(string matchChainNodeId) => nodesComponent.GetNodeById(matchChainNodeId);
+    public MatchChainNode GetNodeByIndex(int nodeIndex) => nodesComponent.GetNodeByIndex(nodeIndex);
 
     //persistenceComponent
     public void Import(MatchChainSaveData saveData) => persistenceComponent.Import(saveData);

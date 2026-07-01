@@ -31,4 +31,32 @@ public class MatchChainComponentNodes
     {
         Nodes.Sort((a, b) => a.NodeIndex.CompareTo(b.NodeIndex));
     }
+
+    public MatchChainNode GetNodeById(string matchChainNodeId)
+    {
+        if (string.IsNullOrEmpty(matchChainNodeId)) return null;
+
+        for (int i = 0; i < Nodes.Count; i++)
+        {
+            MatchChainNode node = Nodes[i];
+
+            if (node != null && node.MatchChainNodeId == matchChainNodeId)
+                return node;
+        }
+
+        return null;
+    }
+
+    public MatchChainNode GetNodeByIndex(int nodeIndex)
+    {
+        for (int i = 0; i < Nodes.Count; i++)
+        {
+            MatchChainNode node = Nodes[i];
+
+            if (node != null && node.NodeIndex == nodeIndex)
+                return node;
+        }
+
+        return null;
+    }
 }
