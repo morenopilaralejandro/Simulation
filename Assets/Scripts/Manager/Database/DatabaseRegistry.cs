@@ -31,6 +31,11 @@ public class DatabaseRegistry
     public Database<StoryAutoTriggerData> StoryAutoTriggerData;
     public Database<StoryChapterData> StoryChapterData;
 
+    public Database<MatchChainNodeData> MatchChainNodeData;
+    public Database<MatchChainData> MatchChainData;
+    public Database<MatchData> MatchData;
+
+
     public DatabaseRegistry()
     {
         // Formation & Field
@@ -71,5 +76,10 @@ public class DatabaseRegistry
         StoryEventData = new Database<StoryEventData>("StoryEvent-Data", s => s.StoryEventId);
         StoryAutoTriggerData = new Database<StoryAutoTriggerData>("StoryAutoTrigger-Data", s => s.StoryAutoTriggerId);
         StoryChapterData = new Database<StoryChapterData>("StoryChapter-Data", s => s.StoryChapterNumber.ToString());
+
+        // Match
+        MatchChainNodeData = new Database<MatchChainNodeData>("Match-Chain-Node-Data", m => m.MatchChainNodeId);
+        MatchChainData = new Database<MatchChainData>("Match-Chain-Data", m => m.MatchChainId);
+        MatchData = new Database<MatchData>("Match-Data", m => m.MatchId);
     }
 }

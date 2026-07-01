@@ -4,21 +4,21 @@ public static class MatchChainNodeFactory
 {
     private static MatchChainNodeData auxData;
 
-    public static MatchChainNode Create(MatchChainNodeData data)
+    public static MatchChainNode Create(MatchChainNodeData data, MatchChainNodeSaveData saveData = null)
     {
         switch (data)
         {
             case MatchChainNodeDataMatch matchData:
-                return new MatchChainNodeMatch(matchData);
+                return new MatchChainNodeMatch(matchData, saveData);
 
             case MatchChainNodeDataText textData:
-                return new MatchChainNodeText(textData);
+                return new MatchChainNodeText(textData, saveData);
 
             case MatchChainNodeDataImage imageData:
-                return new MatchChainNodeImage(imageData);
+                return new MatchChainNodeImage(imageData, saveData);
 
             case MatchChainNodeDataChest chestData:
-                return new MatchChainNodeChest(chestData);
+                return new MatchChainNodeChest(chestData, saveData);
 
             default:
                 LogManager.Warning($"[MatchChainNodeFactory] No runtime class for {data.GetType().Name}. Using base MatchChainNode.");
@@ -26,30 +26,23 @@ public static class MatchChainNodeFactory
         }
     }
 
-    /*
-    public static MatchChainNode Create(MatchChainNodeSaveData saveData)
-    {
-        return new MatchChainNode(null, saveData);
-    }
-    */
-
     public static MatchChainNode CreateById(string nodeId)
     {
         auxData = DatabaseManager.Instance.GetMatchChainNodeData(nodeId);
-        return Create(auxData);
+        return CreateByIdAndCategory(auxData.MatchChainNodeId, auxData.NodeCategory);
     }
 
-    public static MatchChainNode CreateByIdAndCategory(string nodeId, MatchChainNodeCategory category)
+    public static MatchChainNode CreateByIdAndCategory(string nodeId, MatchChainNodeCategory category, MatchChainNodeSaveData saveData = null)
     {
         auxData = category switch
         {
-            MatchChainNodeType.Match => DatabaseManager.Instance.GetMatchChainNodeData<MatchChainNodeDataMatch>(nodeId),
-            MatchChainNodeType.Text  => DatabaseManager.Instance.GetMatchChainNodeData<MatchChainNodeDataText>(nodeId),
-            MatchChainNodeType.Image => DatabaseManager.Instance.GetMatchChainNodeData<MatchChainNodeDataImage>(nodeId),
-            MatchChainNodeType.Chest => DatabaseManager.Instance.GetMatchChainNodeData<MatchChainNodeDataChest>(nodeId),
+            MatchChainNodeCategory.Match => DatabaseManager.Instance.GetMatchChainNodeData<MatchChainNodeDataMatch>(nodeId),
+            MatchChainNodeCategory.Text  => DatabaseManager.Instance.GetMatchChainNodeData<MatchChainNodeDataText>(nodeId),
+            MatchChainNodeCategory.Image => DatabaseManager.Instance.GetMatchChainNodeData<MatchChainNodeDataImage>(nodeId),
+            MatchChainNodeCategory.Chest => DatabaseManager.Instance.GetMatchChainNodeData<MatchChainNodeDataChest>(nodeId),
             _ => null
         };
 
-        return Create(auxData);
+        return Create(auxData, saveData);
     }
 }

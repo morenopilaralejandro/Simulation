@@ -1,16 +1,20 @@
+using UnityEngine;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using Aremoreno.Enums.Match;
 
 public class MatchChainNodeComponentMatch
 {
-    private MatchChainNode matchChainNode;
+    private MatchChainNodeMatch matchChainNodeMatch;
     public string MatchId { get; private set; }
+    public MatchRank MatchRank { get; private set; }
 
-    public MatchChainNodeComponentMatch(MatchChainNodeDataMatch data, MatchChainNode obj, MatchChainNodeSaveData saveData = null)
+    public MatchChainNodeComponentMatch(MatchChainNodeDataMatch data, MatchChainNodeMatch obj, MatchChainNodeSaveData saveData = null)
     {
-        this.matchChainNode = obj;
+        this.matchChainNodeMatch = obj;
         MatchId = data.MatchId;
     }
+
+    public void SetMatchRank(MatchRank rank) => MatchRank = rank;
+    public void SetMatchRankBest(MatchRank rank) => MatchRank = (MatchRank)Mathf.Max((int)MatchRank, (int)rank);
 }

@@ -8,6 +8,6 @@ public class MatchChainSaveData
 {
     //attributes
     public string MatchChainId;
-
+    public int SelectedIndex;
     public List<MatchChainNodeSaveData> Nodes;
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Aremoreno.Enums.Quest;
 using Aremoreno.Enums.Story;
 
-public class MatchChainNodeComponentPersistance
+public class MatchChainNodeComponentPersistence
 {
     #region Fields
 
@@ -16,9 +16,11 @@ public class MatchChainNodeComponentPersistance
 
     #region Construcor
 
-    public MatchChainNodeComponentPersistance(MatchChainNodeData data, MatchChainNode obj, MatchChainNodeSaveData saveData)
+    public MatchChainNodeComponentPersistence(MatchChainNodeData data, MatchChainNode obj, MatchChainNodeSaveData saveData)
     {
         this.matchChainNode = obj;
+        IsNodeUnlocked = false;
+        if (saveData == null) return;
         IsNodeUnlocked = saveData.IsNodeUnlocked;
     }
 
@@ -28,9 +30,7 @@ public class MatchChainNodeComponentPersistance
 
     public void Import(MatchChainNodeSaveData saveData)
     {
-        matchChainNode.Initialize(
-            DatabaseManager.Instance.GetMatchChainNodeData(saveData.MatchChainNodeId), 
-            saveData);
+        matchChainNode = MatchChainNodeFactory.CreateByIdAndCategory(saveData.MatchChainNodeId, saveData.NodeCategory, saveData);
     }
 
     #endregion
@@ -54,12 +54,14 @@ public class MatchChainNodeComponentPersistance
             case MatchChainNodeChest matchChainNodeChest:
                 saveData.IsChestOpen = matchChainNodeChest.IsChestOpen;
                 break;
-
+            /*
             case MatchChainNodeLock matchChainNodeLock:
                 saveData.IsLockOpen = matchChainNodeLock.IsLockOpen;;
                 break;
+            */
         }
 
+        return saveData;
     }
 
     #endregion

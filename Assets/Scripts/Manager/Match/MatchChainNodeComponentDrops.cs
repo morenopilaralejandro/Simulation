@@ -5,22 +5,15 @@ using Aremoreno.Enums.Match;
 
 public class MatchChainNodeComponentDrops
 {
-    /*
     public string DropIdB { get; private set; }
     public string DropIdA { get; private set; }
     public string DropIdS { get; private set; }
 
-    public Item ItemB { get; private set; }
-    public Item ItemA { get; private set; }
-    public Item ItemS { get; private set; }
-
-    todo
-
-    public MatchChainNodeComponentDrops(MatchChainNodeData data) 
+    public MatchChainNodeComponentDrops(MatchChainNodeDataMatch data) 
     {
-        DropIdB = data.DropIdB
-        DropIdA = data.DropIdA
-        DropIdS = data.DropIdS
+        DropIdB = data.DropIdB;
+        DropIdA = data.DropIdA;
+        DropIdS = data.DropIdS;
     }
 
     public List<ItemReward> GetRewardsByRank(MatchRank rank)
@@ -31,7 +24,7 @@ public class MatchChainNodeComponentDrops
         {
             rewards.Add(new ItemReward
             {
-                ItemId = _data.DropIdB,
+                ItemId = DropIdB,
                 Quantity = 1
             });
         }
@@ -40,7 +33,7 @@ public class MatchChainNodeComponentDrops
         {
             rewards.Add(new ItemReward
             {
-                ItemId = _data.DropIdA,
+                ItemId = DropIdA,
                 Quantity = 1
             });
         }
@@ -49,12 +42,11 @@ public class MatchChainNodeComponentDrops
         {
             rewards.Add(new ItemReward
             {
-                ItemId = _data.DropIdS,
+                ItemId = DropIdS,
                 Quantity = 1
             });
         }
 
         return rewards;
     }
-    */
 }

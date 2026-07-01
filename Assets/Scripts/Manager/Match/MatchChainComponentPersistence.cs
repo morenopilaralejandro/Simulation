@@ -5,19 +5,23 @@ using System.Collections.Generic;
 using Aremoreno.Enums.Quest;
 using Aremoreno.Enums.Story;
 
-public class MatchChainComponentPersistance
+public class MatchChainComponentPersistence
 {
     #region Fields
 
     private MatchChain matchChain;
+    public int SelectedIndex { get; private set; }
 
     #endregion        
 
     #region Construcor
 
-    public MatchChainComponentPersistance(MatchChainData data, MatchChain obj, MatchChainSaveData saveData)
+    public MatchChainComponentPersistence(MatchChainData data, MatchChain obj, MatchChainSaveData saveData)
     {
         this.matchChain = obj;
+        SelectedIndex = 0;
+        if (saveData == null) return;
+        SelectedIndex = saveData.SelectedIndex;
     }
 
     #endregion
@@ -26,9 +30,7 @@ public class MatchChainComponentPersistance
 
     public void Import(MatchChainSaveData saveData)
     {
-        matchChain.Initialize(
-            DatabaseManager.Instance.GetMatchChainData(saveData.MatchChainId), 
-            saveData);
+        matchChain = MatchChainFactory.Create(saveData);    
     }
 
     #endregion
@@ -40,6 +42,7 @@ public class MatchChainComponentPersistance
         return new MatchChainSaveData
         {
             MatchChainId = matchChain.MatchChainId,
+            SelectedIndex = matchChain.SelectedIndex,
             Nodes = GetNodeSaveData()
         };
     }
@@ -57,6 +60,8 @@ public class MatchChainComponentPersistance
 
         return list;
     }
+
+    public void SetSelectedIndex(int intValue) => SelectedIndex = intValue;
 
     #endregion
 }

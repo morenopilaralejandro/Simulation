@@ -63,6 +63,13 @@ public class DataLoadManager : MonoBehaviour
         deps.Register(databases.StoryChapterData,
             databases.StoryEventData);
 
+        // Match dependencies
+        deps.Register(databases.MatchChainNodeData,
+            databases.MatchChainData);
+
+        deps.Register(databases.MatchChainData,
+            databases.MatchChainNodeData);
+
         // -------------------------
         // LOAD EVERYTHING
         // -------------------------

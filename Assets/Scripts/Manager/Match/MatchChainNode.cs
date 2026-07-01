@@ -8,7 +8,7 @@ public class MatchChainNode
 
     private MatchChainNodeComponentAttributes attributesComponent;
     private MatchChainNodeComponentAppearance appearanceComponent;
-    private MatchChainNodeComponentPersistance persistanceComponent;
+    private MatchChainNodeComponentPersistence persistenceComponent;
 
     #endregion
 
@@ -18,7 +18,7 @@ public class MatchChainNode
     {
         attributesComponent = new MatchChainNodeComponentAttributes(data);
         appearanceComponent = new MatchChainNodeComponentAppearance(data);
-        persistanceComponent = new MatchChainNodeComponentPersistance(data, this, saveData);
+        persistenceComponent = new MatchChainNodeComponentPersistence(data, this, saveData);
     }
 
     #endregion
@@ -33,6 +33,12 @@ public class MatchChainNode
     // appearanceComponent
     public string IconAddress => appearanceComponent.IconAddress;
     public void SetIconAddress(string address) => appearanceComponent.SetIconAddress(address);
+
+    //persistenceComponent
+    public bool IsNodeUnlocked => persistenceComponent.IsNodeUnlocked;
+    public void Import(MatchChainNodeSaveData saveData) => persistenceComponent.Import(saveData);
+    public MatchChainNodeSaveData Export() => persistenceComponent.Export();
+    public void SetIsNodeUnlocked(bool boolValue) => persistenceComponent.SetIsNodeUnlocked(boolValue);
 
     #endregion
 

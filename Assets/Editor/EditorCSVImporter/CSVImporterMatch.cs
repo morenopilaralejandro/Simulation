@@ -39,9 +39,6 @@ public class CSVImporterMatch
         int bgmIdIndex = System.Array.IndexOf(headers, "BgmId");
         int ballIdIndex = System.Array.IndexOf(headers, "BallId");
         int fieldIdIndex = System.Array.IndexOf(headers, "FieldId");
-        int dropIdAIndex = System.Array.IndexOf(headers, "DropIdA");
-        int dropIdBIndex = System.Array.IndexOf(headers, "DropIdB");
-        int dropIdSIndex = System.Array.IndexOf(headers, "DropIdS");
 
         for (int i = 1; i < lines.Length; i++)
         {
@@ -58,9 +55,6 @@ public class CSVImporterMatch
             matchData.BgmId = values[bgmIdIndex].Trim();
             matchData.BallId = values[ballIdIndex].Trim();
             matchData.FieldId = values[fieldIdIndex].Trim();
-            matchData.DropIdA = values[dropIdAIndex].Trim();
-            matchData.DropIdB = values[dropIdBIndex].Trim();
-            matchData.DropIdS = values[dropIdSIndex].Trim();
 
             string safeName = matchData.MatchId.Replace(" ", "_").Replace("/", "_");
             string assetPath = $"{assetFolder}/{safeName}.asset";

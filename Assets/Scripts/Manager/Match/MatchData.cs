@@ -13,8 +13,4 @@ public class MatchData : ScriptableObject
     public string BgmId;
     public string BallId;
     public string FieldId;
-
-    public string DropIdA;
-    public string DropIdB;
-    public string DropIdS;
 }

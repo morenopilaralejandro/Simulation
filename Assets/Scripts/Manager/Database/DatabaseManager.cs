@@ -93,5 +93,19 @@ public class DatabaseManager : MonoBehaviour
 
     public NpcData GetNpcData(string id) => DatabaseRegistry.NpcData.Get(id);
 
+    public MatchData GetMatchData(string id) => DatabaseRegistry.MatchData.Get(id);
+    public MatchChainData GetMatchChainData(string id) => DatabaseRegistry.MatchChainData.Get(id);
+    public MatchChainNodeData GetMatchChainNodeData(string id) => DatabaseRegistry.MatchChainNodeData.Get(id);
+    public T GetMatchChainNodeData<T>(string id) where T : MatchChainNodeData
+    {
+        var data = GetMatchChainNodeData(id);
+        if (data == null) return null;
+
+        if (data is T typed) return typed;
+
+        LogManager.Error($"[DatabaseManager] MatchChainNodeData '{id}' is {data.GetType().Name}, not {typeof(T).Name}.");
+        return null;
+    }
+
     #endregion
 }

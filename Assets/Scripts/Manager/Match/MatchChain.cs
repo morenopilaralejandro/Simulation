@@ -9,12 +9,14 @@ public class MatchChain
 
     private MatchChainComponentAttributes attributesComponent;
     private LocalizationComponentString localizationStringComponent;
+    private MatchChainComponentNodes nodesComponent;
+    private MatchChainComponentPersistence persistenceComponent;
 
     #endregion
 
     #region Initialize
 
-    public MatchChain(MatchChainData data) 
+    public MatchChain(MatchChainData data, MatchChainSaveData saveData = null) 
     {
         attributesComponent = new MatchChainComponentAttributes(data);
         localizationStringComponent = new LocalizationComponentString(
@@ -22,6 +24,8 @@ public class MatchChain
             data.MatchChainId,
             new[] { LocalizationField.Name}
         );
+        nodesComponent = new MatchChainComponentNodes(data, this, saveData);
+        persistenceComponent = new MatchChainComponentPersistence(data, this, saveData);
     }
 
     #endregion
@@ -33,6 +37,16 @@ public class MatchChain
 
     // localizationComponent
     public string MatchChainName => localizationStringComponent.GetString(LocalizationField.Name);
+
+    //nodesComponent
+    public List<MatchChainNode> Nodes => nodesComponent.Nodes;
+    public void SortNodexByIndex() => nodesComponent.SortNodexByIndex();
+
+    //persistenceComponent
+    public void Import(MatchChainSaveData saveData) => persistenceComponent.Import(saveData);
+    public MatchChainSaveData Export() => persistenceComponent.Export();
+    public int SelectedIndex => persistenceComponent.SelectedIndex;
+    public void SetSelectedIndex(int intValue) => persistenceComponent.SetSelectedIndex(intValue);
 
     #endregion
 }

@@ -8,15 +8,18 @@ public class MatchChainNodeMatch : MatchChainNode
     #region Components
 
     private MatchChainNodeComponentMatch matchComponent;
+    private MatchChainNodeComponentDrops dropsComponent;
 
     #endregion
 
     #region Initialize
 
-    public MatchChainNodeMatch(MatchChainData data) : base(data)
+    public MatchChainNodeMatch(MatchChainNodeDataMatch data, MatchChainNodeSaveData savedata = null) : base(data, savedata)
     {
         matchComponent = new MatchChainNodeComponentMatch(data, this);
-        SetIconAddress();
+        dropsComponent = new MatchChainNodeComponentDrops(data);
+
+        //SetIconAddress(); use a helper in manager to get the team emblem form match (instanciate match data from database)
     }
 
     #endregion
@@ -24,7 +27,17 @@ public class MatchChainNodeMatch : MatchChainNode
     #region API
 
     // matchComponent
-    // public EquipmentType EquipmentType => matchComponent.EquipmentType;
+    public string MatchId => matchComponent.MatchId;
+    public MatchRank MatchRank => matchComponent.MatchRank;
+    public void SetMatchRank(MatchRank rank) => matchComponent.SetMatchRank(rank);
+    public void SetMatchRankBest(MatchRank rank) => matchComponent.SetMatchRankBest(rank);
+
+    //dropsComponent
+    public string DropIdB => dropsComponent.DropIdB;
+    public string DropIdA => dropsComponent.DropIdA;
+    public string DropIdS => dropsComponent.DropIdS;
+
+    public List<ItemReward> GetRewardsByRank(MatchRank rank) => dropsComponent.GetRewardsByRank(rank);
 
     #endregion
 }

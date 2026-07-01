@@ -41,7 +41,7 @@ public static class ItemFactory
     public static Item CreateById(string itemId) 
     {
         auxItemData = DatabaseManager.Instance.GetItemData(itemId);
-        return Create(auxItemData);
+        return CreateByIdAndCategory(auxItemData.ItemId, auxItemData.Category);
     }
 
     public static Item CreateByIdAndCategory(string itemId, ItemCategory category) 

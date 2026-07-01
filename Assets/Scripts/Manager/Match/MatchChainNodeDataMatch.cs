@@ -5,4 +5,7 @@ using Aremoreno.Enums.Match;
 public class MatchChainNodeDataMatch : MatchChainNodeData 
 {
     public string MatchId;
+    public string DropIdB;
+    public string DropIdA;
+    public string DropIdS;
 }

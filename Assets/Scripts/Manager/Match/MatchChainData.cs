@@ -6,4 +6,5 @@ using Aremoreno.Enums.Match;
 public class MatchChainData : ScriptableObject
 {
     public string MatchChainId;
+    public List<MatchChainNodeData> NodeDataList;
 }
