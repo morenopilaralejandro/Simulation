@@ -35,7 +35,6 @@ public class DatabaseRegistry
     public Database<MatchChainData> MatchChainData;
     public Database<MatchData> MatchData;
 
-
     public DatabaseRegistry()
     {
         // Formation & Field

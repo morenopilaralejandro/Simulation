@@ -205,6 +205,14 @@ public class InkStoryManager : MonoBehaviour
             line.ResolvedText = _locBridge.ResolveDialogText(line);
             ProcessCommands(line);
 
+            /*
+            if (string.IsNullOrEmpty(text.Trim()))
+            {
+                ContinueDialog();
+                return;
+            }
+            */
+
             if (shouldPause)
             {
                 // Don't show this line in dialog box
@@ -266,6 +274,13 @@ public class InkStoryManager : MonoBehaviour
         if (_currentStory == null) return;
 
         _currentStory.ChooseChoiceIndex(choiceIndex);
+
+        // Skip the duplicated choice text.
+        if (_currentStory.canContinue)
+        {
+            _currentStory.Continue();
+        }
+
         ContinueDialog();
     }
 

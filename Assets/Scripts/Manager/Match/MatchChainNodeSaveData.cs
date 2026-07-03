@@ -12,6 +12,7 @@ public class MatchChainNodeSaveData
 
     //persistance
     public bool IsNodeUnlocked;
+    public bool IsNodeCompleted;
 
     //match
     public MatchRank MatchRank;

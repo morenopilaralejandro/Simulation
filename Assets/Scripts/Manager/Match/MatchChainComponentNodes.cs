@@ -25,6 +25,7 @@ public class MatchChainComponentNodes
 
         SortNodexByIndex();
         Nodes[0]?.SetIsNodeUnlocked(true);
+        Nodes[Nodes.Count - 1]?.SetIsLastNode(true);
     }
 
     public void SortNodexByIndex() 

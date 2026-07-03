@@ -30,7 +30,9 @@ public class MatchChainComponentPersistence
 
     public void Import(MatchChainSaveData saveData)
     {
-        matchChain = MatchChainFactory.Create(saveData);    
+        matchChain.Initialize(
+            DatabaseManager.Instance.GetMatchChainData(saveData.MatchChainId),
+            saveData);
     }
 
     #endregion

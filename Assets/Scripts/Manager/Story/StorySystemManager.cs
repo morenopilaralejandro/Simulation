@@ -91,7 +91,11 @@ public class StorySystemManager : MonoBehaviour
     public void ImportMatchChainSystem(StorySystemSaveData saveData) => matchChainSystem.Import(saveData);
     public MatchChainSystemSaveData ExportMatchChainSystem() => matchChainSystem.Export();
     public string GetTeamEmblemAddressByMatchId(string matchId) => matchChainSystem.GetTeamEmblemAddressByMatchId(matchId);
+    public MatchChainNode TryGetNextNode(string sourceNodeId) => matchChainSystem.TryGetNextNode(sourceNodeId);
     public void TryUnlockNextNode(string sourceNodeId) => matchChainSystem.TryUnlockNextNode(sourceNodeId);
+    public void InitializeMatchChainSystem() => matchChainSystem.InitializeFromDatabase();
+    public MatchChain GetMatchChain(string matchChainId) => matchChainSystem.GetMatchChain(matchChainId);
+    public void TrySetSelectedIndex(MatchChainNode node) => matchChainSystem.TrySetSelectedIndex(node);
 
     // persistanceSystem
     public void Import(StorySystemSaveData data) => persistanceSystem.Import(data);

@@ -290,6 +290,12 @@ public class DialogManager : MonoBehaviour
         // 3. Open the menu
         switch (menuType)
         {
+            case "match_chain":
+                UIEvents.RaiseMatchChainNodeSelectorOpenRequested(
+                    source: new SelectorMatchChainNodeSource(contextId),
+                    action: new SelectorMatchChainNodeAction(),
+                    filter: null);
+                break;
             case "shop":
                 //ShopManager.Instance.OpenShop(contextId);
                 break;

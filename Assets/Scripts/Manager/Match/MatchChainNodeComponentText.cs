@@ -20,5 +20,5 @@ public class MatchChainNodeComponentText
     }
 
     // localizationComponent
-    public string MatchChainText => localizationStringComponent.GetString(LocalizationField.Text);
+    public string MatchChainNodeDisplayText => localizationStringComponent.GetString(LocalizationField.Text);
 }

@@ -25,7 +25,7 @@ public class MatchChainNodeText : MatchChainNode
     #region API
 
     //textComponent
-    public string MatchChainText => textComponent.MatchChainText;
+    public string MatchChainNodeDisplayText => textComponent.MatchChainNodeDisplayText;
 
     #endregion
 }

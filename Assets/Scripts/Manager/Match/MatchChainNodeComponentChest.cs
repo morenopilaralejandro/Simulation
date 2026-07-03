@@ -17,9 +17,12 @@ public class MatchChainNodeComponentChest
         ItemId = data.ItemId;
         IsChestOpen = false;
 
-        if (saveData == null) return;
-        IsChestOpen = saveData.IsChestOpen;
-        ItemManager.Instance.AddItem(ItemFactory.CreateById(ItemId));
+        if (saveData != null) 
+        {
+            IsChestOpen = saveData.IsChestOpen;
+            ItemManager.Instance.AddItem(ItemFactory.CreateById(ItemId));
+        }
+
         UpdateAppearence();
     }
 
@@ -28,6 +31,8 @@ public class MatchChainNodeComponentChest
         if (IsChestOpen) return;
         IsChestOpen = true;
         UpdateAppearence();
+        //Give item
+        UIEvents.RaiseMatchChainNodeUpdated(matchChainNodeChest);
     }
 
     private void UpdateAppearence() 

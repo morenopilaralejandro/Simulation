@@ -9,16 +9,12 @@ public class StorySystemMatchChain
     private MatchData auxMatchData;
     private TeamData auxTeamData;
     private MatchChainNodeData auxNodeData;
-    private MatchChain auxMatchChain;
 
     private Dictionary<string, MatchChain> dict = new Dictionary<string, MatchChain>();
 
-    public StorySystemMatchChain()
-    {
-        InitializeFromDatabase();
-    }
+    public StorySystemMatchChain() { }
 
-    private void InitializeFromDatabase()
+    public void InitializeFromDatabase()
     {
         foreach (MatchChainData data in DatabaseManager.Instance.DatabaseRegistry.MatchChainData.Data.Values)
         {
@@ -53,11 +49,27 @@ public class StorySystemMatchChain
         return AddressableLoader.GetTeamEmblemAddress(auxTeamData.EmblemId);
     }
 
-    public void TryUnlockNextNode(string sourceNodeId) 
+    public MatchChainNode TryGetNextNode(string sourceNodeId)
     {
         auxNodeData = DatabaseManager.Instance.GetMatchChainNodeData(sourceNodeId);
-        auxMatchChain = dict[auxNodeData.MatchChainId];
-        auxMatchChain.GetNodeByIndex(auxNodeData.NodeIndex++)?.SetIsNodeUnlocked(true);
+
+        if (auxNodeData == null) return null;
+
+        return dict[auxNodeData.MatchChainId].GetNodeByIndex(auxNodeData.NodeIndex + 1);
     }
 
+    public void TryUnlockNextNode(string sourceNodeId)
+    {
+        TryGetNextNode(sourceNodeId)?.Unlock();
+    }
+
+    public MatchChain GetMatchChain(string matchChainId)
+    {
+        return dict.TryGetValue(matchChainId, out var chain) ? chain : null;
+    }
+
+    public void TrySetSelectedIndex(MatchChainNode node) 
+    {
+        dict[node.MatchChainId].SetSelectedIndex(node.NodeIndex);
+    }
 }

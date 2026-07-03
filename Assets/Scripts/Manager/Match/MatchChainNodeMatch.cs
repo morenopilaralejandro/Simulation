@@ -19,7 +19,7 @@ public class MatchChainNodeMatch : MatchChainNode
         matchComponent = new MatchChainNodeComponentMatch(data, this);
         dropsComponent = new MatchChainNodeComponentDrops(data);
 
-        //SetIconAddress(); use a helper in manager to get the team emblem form match (instanciate match data from database)
+        SetIconAddress(StorySystemManager.Instance.GetTeamEmblemAddressByMatchId(MatchId));
     }
 
     #endregion

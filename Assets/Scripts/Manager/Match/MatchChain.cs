@@ -18,6 +18,11 @@ public class MatchChain
 
     public MatchChain(MatchChainData data, MatchChainSaveData saveData = null) 
     {
+        Initialize(data, saveData);
+    }
+
+    public void Initialize(MatchChainData data, MatchChainSaveData saveData = null) 
+    {
         attributesComponent = new MatchChainComponentAttributes(data);
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Match_Chain,
