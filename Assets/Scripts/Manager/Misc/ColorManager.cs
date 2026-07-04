@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Color;
 using Aremoreno.Enums.Field;
 using Aremoreno.Enums.Item;
 using Aremoreno.Enums.Move;
@@ -533,4 +534,56 @@ public static class ColorManager
     };
 
     */
+
+
+    private static readonly Dictionary<ColorGeneric, Color> genericColors =
+        new Dictionary<ColorGeneric, Color>()
+    {
+        { ColorGeneric.White,      new Color(1.000f, 1.000f, 1.000f, 1f) },
+        { ColorGeneric.Black,      new Color(0.192f, 0.192f, 0.243f, 1f) },
+        { ColorGeneric.Gray,       new Color(0.667f, 0.667f, 0.667f, 1f) },
+        { ColorGeneric.Silver,     new Color(0.839f, 0.882f, 0.827f, 1f) },
+
+        { ColorGeneric.Red,        new Color(0.886f, 0.078f, 0.078f, 1f) },
+        { ColorGeneric.Orange,     new Color(0.898f, 0.337f, 0.000f, 1f) },
+        { ColorGeneric.Yellow,     new Color(0.988f, 0.812f, 0.337f, 1f) },
+        { ColorGeneric.Gold,       new Color(1.000f, 0.894f, 0.325f, 1f) },
+        { ColorGeneric.Amber,      new Color(0.992f, 0.816f, 0.510f, 1f) },
+
+        { ColorGeneric.Brown,      new Color(0.612f, 0.400f, 0.243f, 1f) },
+        { ColorGeneric.Beige,      new Color(0.961f, 0.902f, 0.800f, 1f) },
+        { ColorGeneric.Tan,        new Color(0.812f, 0.773f, 0.529f, 1f) },
+
+        { ColorGeneric.Green,      new Color(0.224f, 0.667f, 0.306f, 1f) },
+        { ColorGeneric.Olive,      new Color(0.827f, 0.545f, 0.349f, 1f) },
+        { ColorGeneric.Lime,       new Color(0.671f, 0.918f, 0.663f, 1f) },
+
+        { ColorGeneric.Cyan,       new Color(0.145f, 0.827f, 0.953f, 1f) },
+        { ColorGeneric.Teal,       new Color(0.176f, 0.675f, 0.851f, 1f) },
+        { ColorGeneric.Blue,       new Color(0.118f, 0.522f, 0.937f, 1f) },
+        { ColorGeneric.Navy,       new Color(0.235f, 0.286f, 0.678f, 1f) },
+
+        { ColorGeneric.Purple,     new Color(0.663f, 0.400f, 0.867f, 1f) },
+        { ColorGeneric.Violet,     new Color(0.337f, 0.384f, 0.953f, 1f) },
+        { ColorGeneric.Lavender,   new Color(0.984f, 0.925f, 0.902f, 1f) },
+        { ColorGeneric.Pink,       new Color(0.914f, 0.463f, 0.769f, 1f) },
+
+        { ColorGeneric.Maroon,     new Color(0.682f, 0.259f, 0.290f, 1f) },
+
+        { ColorGeneric.Copper,     new Color(0.925f, 0.522f, 0.361f, 1f) },
+        { ColorGeneric.Bronze,     new Color(0.682f, 0.420f, 0.247f, 1f) },
+        { ColorGeneric.Brass,      new Color(0.992f, 0.816f, 0.510f, 1f) },
+
+        { ColorGeneric.Charcoal,   new Color(0.431f, 0.463f, 0.459f, 1f) },
+
+        { ColorGeneric.Default,    Color.white }
+    };
+
+    public static Color GetGenericColor(ColorGeneric colorGeneric)
+    {
+        return genericColors.TryGetValue(colorGeneric, out var color)
+            ? color
+            : Color.white;
+    }
+
 }
