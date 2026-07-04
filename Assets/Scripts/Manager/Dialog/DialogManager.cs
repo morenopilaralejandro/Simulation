@@ -43,6 +43,7 @@ public class DialogManager : MonoBehaviour
         }
         Instance = this;
 
+        _gameDataProvider = new DialogGameDataProvider();
         _storyManager.Initialize(_locBridge, _gameDataProvider);
     }
 
@@ -50,7 +51,6 @@ public class DialogManager : MonoBehaviour
     {
         _audioManager = AudioManager.Instance;
         _inputManager = InputManager.Instance;
-        _gameDataProvider = new DialogGameDataProvider();
     }
 
     private void OnEnable()
@@ -127,6 +127,8 @@ public class DialogManager : MonoBehaviour
     /// </summary>
     public void ForceEndDialog()
     {
+        _storyManager.CancelDialog();
+
         _state = DialogState.Inactive;
         _uiController.Hide();
 

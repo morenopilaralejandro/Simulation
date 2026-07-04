@@ -101,7 +101,7 @@ public class WorldManagerEncounter
 
             // Fade out so the player doesn't see scenes disappearing
 
-                await worldManager.FadeOut();
+            await worldManager.FadeOut();
 
             // Stop chunk streaming first (prevents new chunks from loading
             // while we're tearing things down)

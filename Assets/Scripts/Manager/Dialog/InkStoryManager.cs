@@ -463,4 +463,11 @@ public class InkStoryManager : MonoBehaviour
         _isPaused = false;
         ContinueDialog();
     }
+
+    public void CancelDialog()
+    {
+        _isPaused = false;
+        IsActive = false;
+        _currentStory = null;
+    }
 }

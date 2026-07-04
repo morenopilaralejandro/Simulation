@@ -47,6 +47,13 @@ public class StorySystemManager : MonoBehaviour
         chapterSystem = new StorySystemChapters();
         persistanceSystem = new StorySystemPersistance();
         matchChainSystem = new StorySystemMatchChain();
+
+        matchChainSystem.Subscribe();
+    }
+
+    private void OnDestroy() 
+    {
+        matchChainSystem.Unsubscribe();
     }
 
     #endregion
@@ -96,6 +103,8 @@ public class StorySystemManager : MonoBehaviour
     public void InitializeMatchChainSystem() => matchChainSystem.InitializeFromDatabase();
     public MatchChain GetMatchChain(string matchChainId) => matchChainSystem.GetMatchChain(matchChainId);
     public void TrySetSelectedIndex(MatchChainNode node) => matchChainSystem.TrySetSelectedIndex(node);
+    public MatchChainNode GetMatchChainNode(string sourceNodeId) => matchChainSystem.GetMatchChainNode(sourceNodeId);
+    public T GetMatchChainNode<T>(string id) where T : MatchChainNodeData => matchChainSystem.GetMatchChainNode<T>(id);
 
     // persistanceSystem
     public void Import(StorySystemSaveData data) => persistanceSystem.Import(data);

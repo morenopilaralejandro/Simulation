@@ -8,7 +8,7 @@ public class SelectorMatchChainNodeAction : ISelectorClickAction<MatchChainNode>
         switch (n)
         {
             case MatchChainNodeMatch nodeMatch:
-                nodeMatch.Complete();
+                UIEvents.RaiseMatchDetailOpened(nodeMatch.MatchId, nodeMatch);
                 break;
 
             default:

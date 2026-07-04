@@ -505,4 +505,10 @@ public static class UIEvents
     {
         OnMatchChainNodeDetailOpened?.Invoke(node);
     }
+
+    public static event Action<string, MatchChainNodeMatch> OnMatchDetailOpened;
+    public static void RaiseMatchDetailOpened(string matchId, MatchChainNodeMatch node = null)
+    {
+        OnMatchDetailOpened?.Invoke(matchId, node);
+    }
 }

@@ -58,6 +58,19 @@ public class StorySystemMatchChain
         return dict[auxNodeData.MatchChainId].GetNodeByIndex(auxNodeData.NodeIndex + 1);
     }
 
+    public MatchChainNode GetMatchChainNode(string sourceNodeId)
+    {
+        auxNodeData = DatabaseManager.Instance.GetMatchChainNodeData(sourceNodeId);
+        return dict[auxNodeData.MatchChainId].GetNodeById(sourceNodeId);
+    }
+
+    public T GetMatchChainNode<T>(string id) where T : MatchChainNodeData
+    {
+        auxNodeData = DatabaseManager.Instance.GetMatchChainNodeData(id);
+        if (dict[auxNodeData.MatchChainId].GetNodeById(id) is T typed) return typed;
+        return null;
+    }
+
     public void TryUnlockNextNode(string sourceNodeId)
     {
         TryGetNextNode(sourceNodeId)?.Unlock();
@@ -72,4 +85,25 @@ public class StorySystemMatchChain
     {
         dict[node.MatchChainId].SetSelectedIndex(node.NodeIndex);
     }
+
+
+    #region Events
+
+    public void Subscribe() 
+    {
+        MatchEvents.OnMatchChainNodeMatchCompleted += HandleMatchChainNodeMatchCompleted;
+    }
+
+    public void Unsubscribe() 
+    {
+        MatchEvents.OnMatchChainNodeMatchCompleted -= HandleMatchChainNodeMatchCompleted;
+    }
+
+    private void HandleMatchChainNodeMatchCompleted(MatchChainNodeMatch node, MatchRank matchRank)
+    {
+        node.SetMatchRankBest(matchRank);
+        node.Complete();
+    }
+
+    #endregion
 }
