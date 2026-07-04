@@ -15,5 +15,7 @@ public class StorySystemSaveData
     public List<string> TriggeredList;
 
     public int ChapterNumber;
+
+    public MatchChainSystemSaveData MatchChainSystemSaveData;
 }
 

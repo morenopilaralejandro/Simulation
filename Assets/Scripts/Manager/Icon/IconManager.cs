@@ -10,6 +10,7 @@ public class IconManager : MonoBehaviour
     public TraitIconLibrary Trait;
     public ElementIconLibrary Element;
     public GenderIconLibrary Gender;
+    public IconLibraryMatchRank MatchRank;
 
     private void Awake()
     {

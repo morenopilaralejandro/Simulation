@@ -481,4 +481,34 @@ public static class UIEvents
     {
         OnButtonDimensionActionPressed?.Invoke(dimensionActionId);
     }
+
+    // Match
+    public static event System.Action<
+        ISelectorSource<MatchChainNode>,
+        ISelectorClickAction<MatchChainNode>,
+        ISelectorFilter<MatchChainNode>
+    > OnMatchChainNodeSelectorOpenRequested;
+    public static void RaiseMatchChainNodeSelectorOpenRequested(
+        ISelectorSource<MatchChainNode>      source,
+        ISelectorClickAction<MatchChainNode> action,
+        ISelectorFilter<MatchChainNode>      filter = null)
+    => OnMatchChainNodeSelectorOpenRequested?.Invoke(source, action, filter);
+
+    public static event Action<MatchChainNode> OnMatchChainNodeUpdated;
+    public static void RaiseMatchChainNodeUpdated(MatchChainNode node)
+    {
+        OnMatchChainNodeUpdated?.Invoke(node);
+    }
+
+    public static event Action<MatchChainNode> OnMatchChainNodeDetailOpened;
+    public static void RaiseMatchChainNodeDetailOpened(MatchChainNode node)
+    {
+        OnMatchChainNodeDetailOpened?.Invoke(node);
+    }
+
+    public static event Action<string, MatchChainNodeMatch> OnMatchDetailOpened;
+    public static void RaiseMatchDetailOpened(string matchId, MatchChainNodeMatch node = null)
+    {
+        OnMatchDetailOpened?.Invoke(matchId, node);
+    }
 }

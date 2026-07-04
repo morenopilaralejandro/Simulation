@@ -147,6 +147,18 @@ public abstract class Selector<T, TItem> : Menu, IClosableMenu
         if (closeOnSelect) RequestClose();
     }
 
+    public void FocusItem(int index)
+    {
+        if (active.Count == 0)
+        {
+            if (closeButton != null) SetDefaultSelectable(closeButton);
+            return;
+        }
+
+        index = Mathf.Clamp(index, 0, active.Count - 1);
+        SetDefaultSelectable(active[index].Button);
+    }
+
     #endregion
 
     #region Pool

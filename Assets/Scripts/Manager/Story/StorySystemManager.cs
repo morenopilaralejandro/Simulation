@@ -20,6 +20,7 @@ public class StorySystemManager : MonoBehaviour
     private StorySystemEvents eventSystem;
     private StorySystemTriggers triggerSystem;
     private StorySystemChapters chapterSystem;
+    private StorySystemMatchChain matchChainSystem;
     private StorySystemPersistance persistanceSystem;
 
     #endregion
@@ -45,6 +46,14 @@ public class StorySystemManager : MonoBehaviour
         triggerSystem = new StorySystemTriggers();
         chapterSystem = new StorySystemChapters();
         persistanceSystem = new StorySystemPersistance();
+        matchChainSystem = new StorySystemMatchChain();
+
+        matchChainSystem.Subscribe();
+    }
+
+    private void OnDestroy() 
+    {
+        matchChainSystem.Unsubscribe();
     }
 
     #endregion
@@ -84,6 +93,18 @@ public class StorySystemManager : MonoBehaviour
     public void AdvanceChapter() => chapterSystem.AdvanceChapter();
     public void SetChapter(int intValue) => chapterSystem.SetChapter(intValue);
     public void ImportChapterSystem(StorySystemSaveData saveData) => chapterSystem.Import(saveData);
+
+    //matchChainSystem
+    public void ImportMatchChainSystem(StorySystemSaveData saveData) => matchChainSystem.Import(saveData);
+    public MatchChainSystemSaveData ExportMatchChainSystem() => matchChainSystem.Export();
+    public string GetTeamEmblemAddressByMatchId(string matchId) => matchChainSystem.GetTeamEmblemAddressByMatchId(matchId);
+    public MatchChainNode TryGetNextNode(string sourceNodeId) => matchChainSystem.TryGetNextNode(sourceNodeId);
+    public void TryUnlockNextNode(string sourceNodeId) => matchChainSystem.TryUnlockNextNode(sourceNodeId);
+    public void InitializeMatchChainSystem() => matchChainSystem.InitializeFromDatabase();
+    public MatchChain GetMatchChain(string matchChainId) => matchChainSystem.GetMatchChain(matchChainId);
+    public void TrySetSelectedIndex(MatchChainNode node) => matchChainSystem.TrySetSelectedIndex(node);
+    public MatchChainNode GetMatchChainNode(string sourceNodeId) => matchChainSystem.GetMatchChainNode(sourceNodeId);
+    public T GetMatchChainNode<T>(string id) where T : MatchChainNodeData => matchChainSystem.GetMatchChainNode<T>(id);
 
     // persistanceSystem
     public void Import(StorySystemSaveData data) => persistanceSystem.Import(data);

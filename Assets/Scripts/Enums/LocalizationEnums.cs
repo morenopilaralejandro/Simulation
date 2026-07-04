@@ -16,7 +16,8 @@ namespace Aremoreno.Enums.Localization
         Quest_Objective,
         Story_Chapter,
         Story_Event,
-        Wing
+        Wing,
+        Match_Chain
     }
 
     public enum LocalizationField

@@ -256,7 +256,20 @@ public class BattleManager : MonoBehaviour
         else 
         {
             scoringCharacter = PossessionManager.Instance.CurrentCharacter;
-            scoringCharacter.TryDeactivateWings(); //prevent goal by dash
+            if (scoringCharacter.TeamSide != goal.TeamSide) 
+            {
+                scoringCharacter.TryDeactivateWings(); //punish goal by dash
+                scoreDict[scoringTeam.TeamSide]--;
+                scoreDict[goal.TeamSide]++;
+
+                BattleUIManager.Instance.UpdateScoreDisplay(
+                    scoringTeam, 
+                    scoreDict[scoringTeam.TeamSide]);
+
+                BattleUIManager.Instance.UpdateScoreDisplay(
+                    Teams[goal.TeamSide], 
+                    scoreDict[goal.TeamSide]);
+            }
         }
 
         BattleEvents.RaiseGoalScored(scoringCharacter);

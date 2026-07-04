@@ -26,6 +26,8 @@ public class PersistenceManagerLoad
     {
         SaveData saveData = persistenceManager.GetLastSaveData();
 
+        StorySystemManager.Instance.InitializeMatchChainSystem();
+
         persistenceManager.SetTimestampCreation(saveData.TimestampCreation);
         CharacterManager.Instance.Import(saveData.CharacterSystemSaveData);
         ItemManager.Instance.Import(saveData.SaveDataItemSystem);

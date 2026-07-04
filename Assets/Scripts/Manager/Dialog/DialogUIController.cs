@@ -4,6 +4,7 @@ using TMPro;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Controls the dialog box UI. Handles:
@@ -222,6 +223,15 @@ public class DialogUIController : MonoBehaviour
             ShowYesNoChoices(choices);
         else
             ShowMultipleChoices(choices);
+
+        if (_spawnedChoiceButtons.Count > 0)
+        {
+            if (InputManager.Instance.IsAndroid && !InputManager.Instance.IsUsingController) return;
+
+            var firstButton = _spawnedChoiceButtons[0].GetComponent<Button>();
+            EventSystem.current.SetSelectedGameObject(null); // Clear previous selection
+            EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
+        }
     }
 
     private void ShowYesNoChoices(List<DialogChoice> choices)
@@ -281,6 +291,8 @@ public class DialogUIController : MonoBehaviour
 
     private void ClearChoiceButtons()
     {
+        EventSystem.current.SetSelectedGameObject(null);
+
         foreach (var btn in _spawnedChoiceButtons)
         {
             if (btn != null)
