@@ -5,6 +5,7 @@ using Aremoreno.Enums.Item;
 public class SelectorItemStorageSlotSourceFromStorageByCategory : ISelectorSource<ItemStorageSlot>
 {
     private ItemCategory category;
+    public ItemCategory Category => category;
 
     public SelectorItemStorageSlotSourceFromStorageByCategory() {}
     public SelectorItemStorageSlotSourceFromStorageByCategory(ItemCategory category) 

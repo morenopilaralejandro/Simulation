@@ -55,6 +55,8 @@ public abstract class Selector<T, TItem> : Menu, IClosableMenu
         MenuManager.Instance.OpenMenu(this);
     }
 
+    public void SetSource(ISelectorSource<T> src) => source = src;
+
     /// <summary>Re-applies the filter on the existing source. Useful when the user changes filter UI.</summary>
     public void ApplyFilter(ISelectorFilter<T> flt)
     {

@@ -45,4 +45,10 @@ namespace Aremoreno.Enums.UI
         SwappingMove 
     }
 
+    public enum MenuBagMode
+    {
+        Default,
+        Sell
+    }
+
 }

@@ -9,7 +9,11 @@ namespace Aremoreno.Enums.Item
         Material,
         Misc,
         Move,
-        Recovery
+        Recovery,
+        Recipe,
+        Emblem,
+        Character,
+        Wing
     }
 
     public enum ItemSpriteType 
@@ -55,7 +59,6 @@ namespace Aremoreno.Enums.Item
         Spike,
         Bracelet,
         Cross,
-        Gloves,
         Misc
     }
 

@@ -9,7 +9,7 @@ public static class AddressableConfig
     public const string CharacterHairFrontPath = "library-hair";
     public const string CharacterHairBackPath = "library-hair";
     public const string CharacterHairWorldPath = "character-world-hair";
-    public const string ItemIconPath = "item-icon";
+    public const string ItemIconPath = "icon-item";
 
     [Header("Kit Paths")]
     public const string KitBodyPath = "library";

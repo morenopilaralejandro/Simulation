@@ -1402,6 +1402,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Navigation_ShortcutBagCategoryNext",
+                    "type": "Button",
+                    "id": "4a9b05b2-5332-45ba-8ced-f797d5fbcf23",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Navigation_ShortcutBagCategoryPrevious",
+                    "type": "Button",
+                    "id": "3b4045e3-081c-409e-a286-f9d1aa2ad1ac",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1589,6 +1607,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Navigation_ShortcutCharacterFilter",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f3975de-422c-4b27-b93b-20fc880f9381",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Navigation_ShortcutBagCategoryNext",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "66689db9-83da-4b3e-9821-51c5210c9e5f",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Navigation_ShortcutBagCategoryNext",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0173bec5-f94a-4942-bffb-d92aa2d70bfd",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Navigation_ShortcutBagCategoryPrevious",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cc7577a7-b1c9-4d14-99d4-1c3fc03e60f5",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Navigation_ShortcutBagCategoryPrevious",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

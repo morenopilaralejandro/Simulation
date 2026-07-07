@@ -21,6 +21,10 @@ public class ItemManagerStorage
     private List<ItemStorageSlot> listMisc = new List<ItemStorageSlot>();
     private List<ItemStorageSlot> listMove = new List<ItemStorageSlot>();
     private List<ItemStorageSlot> listRecovery = new List<ItemStorageSlot>();
+    private List<ItemStorageSlot> listRecipe = new List<ItemStorageSlot>();
+    private List<ItemStorageSlot> listEmblem = new List<ItemStorageSlot>();
+    private List<ItemStorageSlot> listCharacter = new List<ItemStorageSlot>();
+    private List<ItemStorageSlot> listWing = new List<ItemStorageSlot>();
 
     private Dictionary<ItemCategory, List<ItemStorageSlot>> categoryMap;
     private ItemStorageSlot cachedSlot;
@@ -43,7 +47,11 @@ public class ItemManagerStorage
             { ItemCategory.Material, listMaterial },
             { ItemCategory.Misc, listMisc },
             { ItemCategory.Move, listMove },
-            { ItemCategory.Recovery, listRecovery }
+            { ItemCategory.Recovery, listRecovery },
+            { ItemCategory.Recipe, listRecipe },
+            { ItemCategory.Emblem, listEmblem },
+            { ItemCategory.Character, listCharacter },
+            { ItemCategory.Wing, listWing }
         };
      }
 
@@ -53,11 +61,22 @@ public class ItemManagerStorage
 
     public void FirstTimeInitialize()
     {
+        AddAllFromDatabase();
+        /*
         AddItem(ItemFactory.CreateById("spike_cool"), 10);
         AddItem(ItemFactory.CreateById("formation_faith"), 1);
         AddItem(ItemFactory.CreateById("formation_crimson"), 1);
         AddItem(ItemFactory.CreateById("kit_faith"), 1);
         AddItem(ItemFactory.CreateById("kit_crimson"), 1);
+        */
+    }
+
+    public void AddAllFromDatabase()
+    {
+        foreach (ItemData itemData in DatabaseManager.Instance.DatabaseRegistry.ItemData.Data.Values)
+        {
+            AddItem(ItemFactory.Create(itemData), itemData.MaxStack);
+        }
     }
 
     #endregion
@@ -65,12 +84,14 @@ public class ItemManagerStorage
     #region Add / Remove
     public void AddItem(Item item, int count = 1)
     {
+        if(TryAddToSystem(item)) return;
+
         SetSlot(item);
 
         if (cachedSlot != null)
             cachedSlot.AddCount(count);
         else
-            categoryMap[item.Category].Add(new ItemStorageSlot(item, count));
+            InsertSorted(new ItemStorageSlot(item, count), item.Category);
 
         ItemEvents.RaiseStorageUpdated();
     }
@@ -87,6 +108,53 @@ public class ItemManagerStorage
 
         ItemEvents.RaiseStorageUpdated();
         return success;
+    }
+
+    private bool TryAddToSystem(Item item)
+    {
+        switch (item)
+        {
+            case ItemCharacter itemCharacter:
+                CharacterManager.Instance.AddCharacterFromScout(
+                    DatabaseManager.Instance.GetCharacterData(itemCharacter.CharacterId),
+                    1);
+                return true;
+
+            case ItemWing itemWing:
+                WingManager.Instance.AddWing(
+                    DatabaseManager.Instance.GetWingData(itemWing.WingId));
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    private void InsertSorted(ItemStorageSlot slot, ItemCategory category)
+    {
+        List<ItemStorageSlot> list = categoryMap[category];
+
+        int low = 0;
+        int high = list.Count;
+
+        while (low < high)
+        {
+            int mid = (low + high) >> 1;
+
+            if (string.Compare(
+                    list[mid].Item.ItemId,
+                    slot.Item.ItemId,
+                    StringComparison.Ordinal) < 0)
+            {
+                low = mid + 1;
+            }
+            else
+            {
+                high = mid;
+            }
+        }
+
+        list.Insert(low, slot);
     }
 
     /*
@@ -147,6 +215,8 @@ public class ItemManagerStorage
 
         return cachedFormation.BattleType == battleType;
     }
+
+    public IReadOnlyDictionary<ItemCategory, List<ItemStorageSlot>> CategoryMap => categoryMap;
 
     #endregion
 

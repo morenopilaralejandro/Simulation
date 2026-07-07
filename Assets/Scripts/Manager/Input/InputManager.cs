@@ -108,6 +108,8 @@ public class InputManager : MonoBehaviour
         BindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterReplace, CustomAction.Navigation_ShortcutTeamCharacterReplace);
         BindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterNext, CustomAction.Navigation_ShortcutTeamCharacterNext);
         BindButton(input.NavigationActions.Navigation_ShortcutCharacterFilter, CustomAction.Navigation_ShortcutCharacterFilter);
+        BindButton(input.NavigationActions.Navigation_ShortcutBagCategoryNext, CustomAction.Navigation_ShortcutBagCategoryNext);
+        BindButton(input.NavigationActions.Navigation_ShortcutBagCategoryPrevious, CustomAction.Navigation_ShortcutBagCategoryPrevious);
 
         // Enable once here
         input.BattleActions.Enable();
@@ -191,6 +193,8 @@ public class InputManager : MonoBehaviour
             UnbindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterReplace);
             UnbindButton(input.NavigationActions.Navigation_ShortcutTeamCharacterNext);
             UnbindButton(input.NavigationActions.Navigation_ShortcutCharacterFilter);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutBagCategoryNext);
+            UnbindButton(input.NavigationActions.Navigation_ShortcutBagCategoryPrevious);
 
             input.BattleActions.Disable();
             input.BattleUIActions.Disable();

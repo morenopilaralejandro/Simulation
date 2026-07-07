@@ -1,4 +1,5 @@
 using UnityEngine;
+using Aremoreno.Enums.Color;
 using Aremoreno.Enums.Item;
 
 [CreateAssetMenu(fileName = "ItemData", menuName = "ScriptableObject/Item/ItemData")]
@@ -7,7 +8,7 @@ public class ItemData : ScriptableObject
     public string ItemId;
     public ItemCategory Category;
     public ItemSpriteType SpriteType;
-    public ItemSpriteColor SpriteColor;
+    public ColorGeneric SpriteColor;
     public ItemUsageContext UsageContext;
 
     public bool IsSellable;

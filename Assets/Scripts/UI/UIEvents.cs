@@ -444,6 +444,31 @@ public static class UIEvents
         OnSelectableSelected?.Invoke(go);
     }
 
+    public static event System.Action<
+        ISelectorSource<ItemStorageSlot>,
+        ISelectorClickAction<ItemStorageSlot>,
+        ISelectorFilter<ItemStorageSlot>,
+        MenuBagMode
+    > OnItemStorageSlotBagSelectorOpenRequested;
+    public static void RaiseItemStorageSlotBagSelectorOpenRequested(
+        ISelectorSource<ItemStorageSlot> source,
+        ISelectorClickAction<ItemStorageSlot> action,
+        ISelectorFilter<ItemStorageSlot> filter = null,
+        MenuBagMode mode = MenuBagMode.Default)
+    => OnItemStorageSlotBagSelectorOpenRequested?.Invoke(source, action, filter, mode);
+
+    public static event Action<ItemCategory> OnBagCategoryChanged;
+    public static void RaiseBagCategoryChanged(ItemCategory itemCategory)
+    {
+        OnBagCategoryChanged?.Invoke(itemCategory);
+    }
+
+    public static event Action<Item> OnBagDescriptionUpdated;
+    public static void RaiseBagDescriptionUpdated(Item item)
+    {
+        OnBagDescriptionUpdated?.Invoke(item);
+    }
+
     // Selector
     public static event Action<Character> OnSelectorCharacterActionClicked;
     public static void RaiseSelectorCharacterActionClicked(Character character)
