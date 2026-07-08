@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Aremoreno.Enums.Dialog;
 using Aremoreno.Enums.Input;
 using Aremoreno.Enums.World;
+using Aremoreno.Enums.UI;
 
 /// <summary>
 /// Main entry point for the dialog system.
@@ -300,6 +301,14 @@ public class DialogManager : MonoBehaviour
                 break;
             case "shop":
                 //ShopManager.Instance.OpenShop(contextId);
+                break;
+            case "sell":
+                UIEvents.RaiseItemStorageSlotBagSelectorOpenRequested(
+                    null,
+                    new SelectorItemStorageSlotBagActionSell(),
+                    new ItemStorageSlotFilterAdapterSellable(),
+                    MenuBagMode.Sell
+                );
                 break;
             case "inventory":
                 //InventoryUI.Instance.Open();

@@ -469,6 +469,18 @@ public static class UIEvents
         OnBagDescriptionUpdated?.Invoke(item);
     }
 
+    public static event Action OnBagUpdated;
+    public static void RaiseBagUpdated()
+    {
+        OnBagUpdated?.Invoke();
+    }
+
+    public static event Action<PickerAmountMode, Item, int, int, CurrencyType> OnPickerAmountOpened;
+    public static void RaisePickerAmountOpened(PickerAmountMode mode, Item item, int min, int max, CurrencyType currencyType)
+    {
+        OnPickerAmountOpened?.Invoke(mode, item, min, max, currencyType);
+    }
+
     // Selector
     public static event Action<Character> OnSelectorCharacterActionClicked;
     public static void RaiseSelectorCharacterActionClicked(Character character)

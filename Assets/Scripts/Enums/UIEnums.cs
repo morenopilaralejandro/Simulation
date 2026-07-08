@@ -51,4 +51,10 @@ namespace Aremoreno.Enums.UI
         Sell
     }
 
+    public enum PickerAmountMode
+    {
+        Buy,
+        Sell
+    }
+
 }

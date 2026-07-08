@@ -157,6 +157,38 @@ public class ItemManagerStorage
         list.Insert(low, slot);
     }
 
+    public bool Buy(Item item, int amount, CurrencyType currencyType)
+    {
+        if (item == null || amount <= 0) return false;
+
+        int totalCost = item.GetPriceBuy(currencyType) * amount;
+
+        // Spend returns false if there isn't enough currency.
+        if (!ItemManager.Instance.Spend(currencyType, totalCost)) return false;
+
+        for (int i = 0; i < amount; i++)
+            AddItem(item);
+
+        return true;
+    }
+
+    public bool Sell(Item item, int amount, CurrencyType currencyType)
+    {
+        if (item == null || amount <= 0) return false;
+
+        // Make sure we own enough of the item.
+        if (GetItemCount(item) < amount) return false;
+
+        int totalValue = item.GetPriceSell() * amount;
+
+        for (int i = 0; i < amount; i++)
+            RemoveItem(item);
+
+        ItemManager.Instance.Add(currencyType, totalValue);
+
+        return true;
+    }
+
     /*
     public bool UseItem(Item item, Character target)
     {

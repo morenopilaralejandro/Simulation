@@ -14,18 +14,24 @@ public class PanelBagDescription : MonoBehaviour
     [SerializeField] private CanvasGroup canvasName;
     [SerializeField] private CanvasGroup canvasMove;
     [SerializeField] private MoveUI moveUI;
+    [SerializeField] private CanvasGroup canvasGroup;
 
     private Move auxMove;
     private MoveData auxMoveData;
     private readonly AddressableBinding<Sprite> _bindingIcon = new();
 
+    private int _setVersion;
+
     private void SetData(Item item)
     {
+        int version = ++_setVersion;
+
         textName.text = item.ItemName;
         //textDescription.text = item.ItemDescription;
         textDescription.text = "";
+
         imageIcon.color = item.IconColor;
-        _ = SetIconAsync(item.IconSpriteAddress);
+        _ = SetIconAsync(item.IconSpriteAddress, version);
 
         if (item is ItemMove itemMove)
         {
@@ -52,10 +58,14 @@ public class PanelBagDescription : MonoBehaviour
 
     private void Clear()
     {
+        _setVersion++;
+
         textName.text = "";
         textDescription.text = "";
+
         _bindingIcon.Release();
         _bindingIcon.Cancel();
+
         imageIcon.enabled = false;
         imageIcon.sprite = null;
 
@@ -63,11 +73,15 @@ public class PanelBagDescription : MonoBehaviour
         SetCanvasVisible(canvasName, true);
     }
 
-    public async Task SetIconAsync(string address)
+    private async Task SetIconAsync(string address, int version)
     {
         imageIcon.enabled = false;
-        var asset = await _bindingIcon.LoadAsync(address);
-        imageIcon.sprite = asset;
+
+        var sprite = await _bindingIcon.LoadAsync(address);
+
+        if (version != _setVersion) return;
+
+        imageIcon.sprite = sprite;
         imageIcon.enabled = true;
     }
 
@@ -92,6 +106,7 @@ public class PanelBagDescription : MonoBehaviour
 
     private void HandleBagDescriptionUpdated(Item item)
     {
+        if(!canvasGroup.interactable) return;
         SetData(item);
     }
 

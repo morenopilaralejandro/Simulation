@@ -93,6 +93,7 @@ public class SelectorItemStorageSlotBag : Selector<ItemStorageSlot, SelectorItem
     private void HandleBack()
     {
         RequestClose();
+        if(mode == MenuBagMode.Sell) DialogEvents.RaiseDialogMenuClosed();
     }
 
     /*
@@ -154,6 +155,7 @@ public class SelectorItemStorageSlotBag : Selector<ItemStorageSlot, SelectorItem
         //UIEvents.OnCharacterFilterUpdated         += HandleFilterUpdated;
         UIEvents.OnBagCategoryChanged += HandleBagCategoryChanged;
         ItemEvents.OnCurrencyUpdated += HandleCurrencyUpdated;
+        UIEvents.OnBagUpdated += HandleBagUpdated;
     }
 
     protected override void OnDisable()
@@ -163,6 +165,7 @@ public class SelectorItemStorageSlotBag : Selector<ItemStorageSlot, SelectorItem
         //UIEvents.OnCharacterFilterUpdated         -= HandleFilterUpdated;
         UIEvents.OnBagCategoryChanged -= HandleBagCategoryChanged;
         ItemEvents.OnCurrencyUpdated -= HandleCurrencyUpdated;
+        UIEvents.OnBagUpdated -= HandleBagUpdated;
     }
 
     private void HandleOpenRequested(
@@ -201,6 +204,11 @@ public class SelectorItemStorageSlotBag : Selector<ItemStorageSlot, SelectorItem
     {
         if(currencyType != CurrencyType.Gold) return;
         textGold.text = ItemManager.Instance.GetGold().ToString();
+    }
+
+    private void HandleBagUpdated()
+    {
+        Refresh();
     }
 
     #endregion
