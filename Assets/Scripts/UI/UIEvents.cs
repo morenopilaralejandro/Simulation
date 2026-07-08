@@ -481,6 +481,23 @@ public static class UIEvents
         OnPickerAmountOpened?.Invoke(mode, item, min, max, currencyType);
     }
 
+    public static event Action<Item> OnItemBuyRequested;
+    public static void RaiseItemBuyRequested(Item item)
+    {
+        OnItemBuyRequested?.Invoke(item);
+    }
+
+    public static event System.Action<
+        ISelectorSource<Item>,
+        ISelectorClickAction<Item>,
+        ISelectorFilter<Item>
+    > OnItemShopSelectorOpenRequested;
+    public static void RaiseItemShopSelectorOpenRequested(
+        ISelectorSource<Item> source,
+        ISelectorClickAction<Item> action,
+        ISelectorFilter<Item> filter = null)
+    => OnItemShopSelectorOpenRequested?.Invoke(source, action, filter);
+
     // Selector
     public static event Action<Character> OnSelectorCharacterActionClicked;
     public static void RaiseSelectorCharacterActionClicked(Character character)

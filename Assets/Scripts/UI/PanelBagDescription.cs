@@ -22,6 +22,11 @@ public class PanelBagDescription : MonoBehaviour
 
     private int _setVersion;
 
+    private void Start() 
+    {
+        Clear();
+    }
+
     private void SetData(Item item)
     {
         int version = ++_setVersion;

@@ -6,7 +6,7 @@ using Aremoreno.Enums.Item;
 
 public class CSVImporterItem
 {
-    [MenuItem("Tools/Import CSV/Item")]
+    [MenuItem("Tools/Import CSV/Item/Item")]
     public static void ImportItemsFromCSV()
     {
         string assetFolder = "Assets/Addressables/AddressItemData";

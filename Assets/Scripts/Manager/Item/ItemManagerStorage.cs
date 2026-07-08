@@ -88,7 +88,7 @@ public class ItemManagerStorage
 
         SetSlot(item);
 
-        if (cachedSlot != null)
+        if (cachedSlot != null && cachedSlot.Count < cachedSlot.Item.MaxStack)
             cachedSlot.AddCount(count);
         else
             InsertSorted(new ItemStorageSlot(item, count), item.Category);

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
 using Aremoreno.Enums.Item;
 using Aremoreno.Enums.UI;
 using Aremoreno.Enums.Input;
@@ -14,8 +15,10 @@ public class SelectorItemStorageSlotBag : Selector<ItemStorageSlot, SelectorItem
     [SerializeField] private TMP_Text textGold;
     private SelectorItemStorageSlotSourceFromStorageByCategory src;
     private MenuBagMode mode;
+    private int selectedIndex;
 
     private int currentCategoryIndex = 0;
+    private readonly Dictionary<ItemCategory, int> selectedIndices = new();
     private readonly ItemCategory[] categoryOrder =
     {
         ItemCategory.Recovery,
@@ -33,6 +36,10 @@ public class SelectorItemStorageSlotBag : Selector<ItemStorageSlot, SelectorItem
     protected override void Start()
     {
         src = new SelectorItemStorageSlotSourceFromStorageByCategory(ItemCategory.Recovery);
+
+        foreach (var category in categoryOrder)
+            selectedIndices[category] = 0;
+
         base.Start();
     }
 
@@ -93,6 +100,7 @@ public class SelectorItemStorageSlotBag : Selector<ItemStorageSlot, SelectorItem
     private void HandleBack()
     {
         RequestClose();
+        selectedIndex = GetSelectedIndex();
         if(mode == MenuBagMode.Sell) DialogEvents.RaiseDialogMenuClosed();
     }
 
@@ -192,12 +200,21 @@ public class SelectorItemStorageSlotBag : Selector<ItemStorageSlot, SelectorItem
     }
     */
 
-    private void HandleBagCategoryChanged(ItemCategory category)
+    private void HandleBagCategoryChanged(ItemCategory newCategory)
     {
-        currentCategoryIndex = System.Array.IndexOf(categoryOrder, category);
-        src.SetCategory(category);
+        // Save the selection of the category we're leaving.
+        var oldCategory = categoryOrder[currentCategoryIndex];
+        selectedIndices[oldCategory] = Mathf.Max(0, GetSelectedIndex());
+
+        // Switch category.
+        currentCategoryIndex = System.Array.IndexOf(categoryOrder, newCategory);
+        src.SetCategory(newCategory);
         SetSource(src);
+
         Refresh();
+
+        // Restore the selection for the category we're entering.
+        FocusItem(selectedIndices[newCategory]);
     }
 
     private void HandleCurrencyUpdated(CurrencyType currencyType, int intValue)
@@ -208,7 +225,14 @@ public class SelectorItemStorageSlotBag : Selector<ItemStorageSlot, SelectorItem
 
     private void HandleBagUpdated()
     {
+        if (!MenuManager.Instance.IsMenuOpen(this)) return;
+
+        var category = categoryOrder[currentCategoryIndex];
+
+        selectedIndices[category] = Mathf.Max(0, GetSelectedIndex());
+
         Refresh();
+        FocusItem(selectedIndices[category]);
     }
 
     #endregion

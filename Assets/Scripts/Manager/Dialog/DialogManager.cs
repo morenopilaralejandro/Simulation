@@ -300,7 +300,11 @@ public class DialogManager : MonoBehaviour
                     filter: null);
                 break;
             case "shop":
-                //ShopManager.Instance.OpenShop(contextId);
+                UIEvents.RaiseItemShopSelectorOpenRequested(
+                    new SelectorItemShopSource(contextId),
+                    new SelectorItemShopAction(),
+                    null
+                );
                 break;
             case "sell":
                 UIEvents.RaiseItemStorageSlotBagSelectorOpenRequested(

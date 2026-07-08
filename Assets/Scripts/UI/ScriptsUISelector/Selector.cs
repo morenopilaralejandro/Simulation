@@ -161,6 +161,17 @@ public abstract class Selector<T, TItem> : Menu, IClosableMenu
         SetDefaultSelectable(active[index].Button);
     }
 
+    public int GetSelectedIndex()
+    {
+        var current = EventSystem.current.currentSelectedGameObject;
+        if (current == null) return -1;
+
+        var item = current.GetComponent<TItem>();
+        if (item == null) return -1;
+
+        return active.IndexOf(item);
+    }
+
     #endregion
 
     #region Pool

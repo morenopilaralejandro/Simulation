@@ -19,6 +19,7 @@ public class DatabaseRegistry
     public Database<SceneGroup> SceneGroup;
     public Database<NpcData> NpcData;
     public Database<ItemData> ItemData;
+    public Database<ShopData> ShopData;
     public Database<OverworldDefinition> OverworldDefinition;
 
     public Database<FormationData> FormationData;
@@ -61,6 +62,7 @@ public class DatabaseRegistry
         SceneGroup = new Database<SceneGroup>("SceneGroup-Data", s => s.groupName);
         NpcData = new Database<NpcData>("Npcs-Data", n => n.NpcId);
         ItemData = new Database<ItemData>("Items-Data", i => i.ItemId);
+        ShopData = new Database<ShopData>("Shop-Data", s => s.ShopId);
         OverworldDefinition = new Database<OverworldDefinition>("OverworldDefinition-Data", o => o.Realm.ToString());
 
         // Teams & Formations

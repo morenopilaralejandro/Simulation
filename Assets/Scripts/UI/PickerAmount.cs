@@ -13,6 +13,7 @@ public class PickerAmount : Menu
     [Header("UI References")]
     [SerializeField] private TMP_Text textAmount;
     [SerializeField] private TMP_Text textName;
+    [SerializeField] private TMP_Text textPrice;
 
     private PickerAmountMode mode;
     private Item item;
@@ -88,6 +89,17 @@ public class PickerAmount : Menu
         amountCurrent = min;
 
         textName.text = item.ItemName;
+
+        switch (mode) 
+        {
+            case PickerAmountMode.Buy:
+                textPrice.text = item.GetPriceBuy(currencyType).ToString();
+                break;
+            case PickerAmountMode.Sell:
+                textPrice.text = item.GetPriceSell().ToString();
+                break;
+        }
+
         RefreshUI();
         MenuManager.Instance.OpenMenu(this);
     }
