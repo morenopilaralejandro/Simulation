@@ -1,3 +1,5 @@
+using UnityEngine;
+
 [System.Serializable]
 public class ItemStorageSlot
 {
@@ -12,7 +14,7 @@ public class ItemStorageSlot
 
     public void AddCount(int amount)
     {
-        Count += amount;
+        Count = Mathf.Min(Count + amount, Item.MaxStack);
     }
 
     public bool RemoveCount(int amount = 1)

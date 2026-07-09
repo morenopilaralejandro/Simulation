@@ -57,4 +57,11 @@ namespace Aremoreno.Enums.UI
         Sell
     }
 
+    public enum MenuItemUseState
+    { 
+        Idle,
+        WaitingToUseRecovery, 
+        WaitingToUseMove
+    }
+
 }

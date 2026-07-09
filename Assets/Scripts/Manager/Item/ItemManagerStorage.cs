@@ -88,7 +88,7 @@ public class ItemManagerStorage
 
         SetSlot(item);
 
-        if (cachedSlot != null && cachedSlot.Count < cachedSlot.Item.MaxStack)
+        if (cachedSlot != null)
             cachedSlot.AddCount(count);
         else
             InsertSorted(new ItemStorageSlot(item, count), item.Category);
@@ -189,19 +189,30 @@ public class ItemManagerStorage
         return true;
     }
 
-    /*
-    public bool UseItem(Item item, Character target)
+    public bool UseItemOnCharacter(Item item, Character target)
     {
-        bool success = item.Use(target);
-        
-        if (success && item.isConsumable)
+        bool success = false;
+
+        switch (item)
         {
-            RemoveItem(item);
+            case ItemRecovery itemRecovery:
+                target.ModifyBattleStat(Stat.Hp, itemRecovery.RecoveryAmountHp);
+                target.ModifyBattleStat(Stat.Sp, itemRecovery.RecoveryAmountSp);
+                success = true;
+                break;
+
+            case ItemMove itemMove:
+                if (!target.CanLearnMove(itemMove.MoveId)) return false;
+                target.LearnMove(itemMove.MoveId);
+                success = true;
+                break;
         }
+
+        if (success)
+            RemoveItem(item);
 
         return success;
     }
-    */
 
     #endregion
 

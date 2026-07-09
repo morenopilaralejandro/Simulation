@@ -60,6 +60,7 @@ public class ItemManager : MonoBehaviour
     public bool RemoveItem(Item item, int count = 1) => storageSystem.RemoveItem(item, count);
     public bool Buy(Item item, int amount, CurrencyType currencyType) => storageSystem.Buy(item, amount, currencyType);
     public bool Sell(Item item, int amount, CurrencyType currencyType) => storageSystem.Sell(item, amount, currencyType);
+    public bool UseItemOnCharacter(Item item, Character target) => storageSystem.UseItemOnCharacter(item, target);
     public bool HasItem(Item item) => storageSystem.HasItem(item);
     public int GetItemCount(Item item) => storageSystem.GetItemCount(item);
     public List<ItemStorageSlot> GetItemsByCategory(ItemCategory category) => storageSystem.GetItemsByCategory(category);

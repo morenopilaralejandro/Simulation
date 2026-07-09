@@ -498,6 +498,12 @@ public static class UIEvents
         ISelectorFilter<Item> filter = null)
     => OnItemShopSelectorOpenRequested?.Invoke(source, action, filter);
 
+    public static event Action<Item> OnMenuItemUseOpenRequested;
+    public static void RaiseMenuItemUseOpenRequested(Item item)
+    {
+        OnMenuItemUseOpenRequested?.Invoke(item);
+    }
+
     // Selector
     public static event Action<Character> OnSelectorCharacterActionClicked;
     public static void RaiseSelectorCharacterActionClicked(Character character)

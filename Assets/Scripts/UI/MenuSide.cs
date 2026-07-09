@@ -92,7 +92,7 @@ public class MenuSide : Menu
         //menuManager.OpenMenu(menuCharacter);
         UIEvents.RaiseItemStorageSlotBagSelectorOpenRequested(
             null,
-            new SelectorItemStorageSlotBagAction(),
+            new SelectorItemStorageSlotBagActionUse(),
             null,
             MenuBagMode.Default
         );
