@@ -94,24 +94,33 @@ public class PanelBagDescription : MonoBehaviour
 
     private void OnEnable()
     {
-        UIEvents.OnBagCategoryChanged += HandleBagCategoryChanged;
+        //UIEvents.OnBagCategoryChanged += HandleBagCategoryChanged;
         UIEvents.OnBagDescriptionUpdated += HandleBagDescriptionUpdated;
     }
 
     private void OnDisable()
     {
-        UIEvents.OnBagCategoryChanged -= HandleBagCategoryChanged;
+        //UIEvents.OnBagCategoryChanged -= HandleBagCategoryChanged;
         UIEvents.OnBagDescriptionUpdated -= HandleBagDescriptionUpdated;
     }
 
+    /*
     private void HandleBagCategoryChanged(ItemCategory itemCategory)
     {
         Clear();
     }
+    */
 
     private void HandleBagDescriptionUpdated(Item item)
     {
         if(!canvasGroup.interactable) return;
+
+        if (item == null) 
+        {
+            Clear();
+            return;
+        }
+
         SetData(item);
     }
 

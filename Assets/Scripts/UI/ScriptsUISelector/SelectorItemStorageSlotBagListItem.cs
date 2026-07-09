@@ -38,6 +38,13 @@ public class SelectorItemStorageSlotBagListItem : SelectorListItem<ItemStorageSl
 
     public void HandleItemSelected(SelectorListItem<ItemStorageSlot> listItem)
     {
+        if (listItem?.Data?.Item == null)
+        {
+            LogManager.Trace($"[HandleItemSelected] Item selected but data is null");
+            return;
+        }
+        
+        LogManager.Trace($"[HandleItemSelected] Item selected: {listItem.Data.Item.ItemName}, Count: {listItem.Data.Count}");
         UIEvents.RaiseBagDescriptionUpdated(listItem.Data.Item);
     }
 
