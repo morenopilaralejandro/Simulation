@@ -32,7 +32,20 @@ public class CharacterComponentEquipment
             equipmentStats[stat] = 0;
         }
 
+        equippedItems[0] = null;
+        equippedItems[1] = null;
+        equippedItems[2] = null;
+        equippedItems[3] = null;
+
         if (characterSaveData == null) return;
+        if (!string.IsNullOrEmpty(characterSaveData.EquipmentId0))
+            EquipEquipment(ItemFactory.CreateById(characterSaveData.EquipmentId0) as ItemEquipment);
+        if (!string.IsNullOrEmpty(characterSaveData.EquipmentId1))
+            EquipEquipment(ItemFactory.CreateById(characterSaveData.EquipmentId1) as ItemEquipment);
+        if (!string.IsNullOrEmpty(characterSaveData.EquipmentId2))
+            EquipEquipment(ItemFactory.CreateById(characterSaveData.EquipmentId2) as ItemEquipment);
+        if (!string.IsNullOrEmpty(characterSaveData.EquipmentId3))
+            EquipEquipment(ItemFactory.CreateById(characterSaveData.EquipmentId3) as ItemEquipment);
     }
 
     #endregion

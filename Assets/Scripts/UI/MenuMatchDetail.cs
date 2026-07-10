@@ -149,8 +149,10 @@ public class MenuMatchDetail : Menu
         var dataList = team.GetCharacterDataList(currentType);
         var characters = team.GetCharacters(currentType);
 
-        foreach (var data in dataList)
+        for (int i = 0; i < dataList.Count; i++)
         {
+            var data = dataList[i];
+
             var character = new Character(data);
             character.SetLevel(character.MaxLevel);
             character.TryEquipWingDefault();

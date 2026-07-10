@@ -61,6 +61,8 @@ public class EquipmentSlotUI : MonoBehaviour
         }
 
         this.itemEquipment = itemEquipment;
+        textName.text = itemEquipment.ItemName;
+        imageIcon.color = itemEquipment.IconColor;
         _ = SetIconAsync(itemEquipment.IconSpriteAddress);
         imageBlock.enabled = false;
         imageIconDefault.enabled = false;
@@ -71,6 +73,7 @@ public class EquipmentSlotUI : MonoBehaviour
         itemEquipment = null;
         //character = null;
 
+        textName.text = "";
         imageBlock.enabled = true;
         imageIconDefault.enabled = true;
 

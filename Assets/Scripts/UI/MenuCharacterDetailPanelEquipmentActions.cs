@@ -89,7 +89,14 @@ public class MenuCharacterDetailPanelEquipmentActions : Menu
     private void HandleEquipmentEquipRequested(ItemEquipment itemEquipment, Character character)
     {
         AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
+
+        if (character.GetEquipment((int)itemEquipment.EquipmentType) != null) 
+        {
+            ItemManager.Instance.AddItem(character.GetEquipment((int)itemEquipment.EquipmentType));
+        }
+
         character.EquipEquipment(itemEquipment);
+        ItemManager.Instance.RemoveItem(itemEquipment);
         isEquipping = false;
         UIEvents.RaiseCharacterDetailRefreshRequested();
         RequestClose();
@@ -99,6 +106,7 @@ public class MenuCharacterDetailPanelEquipmentActions : Menu
     private void HandleEquipmentUnequipRequested(ItemEquipment itemEquipment, Character character)
     {
         character.UnequipEquipment(itemEquipment);
+        ItemManager.Instance.AddItem(itemEquipment);
         UIEvents.RaiseCharacterDetailRefreshRequested();
         RequestClose();
         UIEvents.RaiseEquipmentActionsCloseRequested(equipmentSlotUI);
