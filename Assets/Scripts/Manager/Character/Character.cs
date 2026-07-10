@@ -22,6 +22,7 @@ public class Character
     private CharacterComponentAppearance appearanceComponent;
     private CharacterComponentWing wingComponent;
     private CharacterComponentAIDifficulty aiDifficultyComponent;
+    private CharacterComponentEquipment equipmentComponent;
 
     #endregion
 
@@ -49,6 +50,7 @@ public class Character
         appearanceComponent = new CharacterComponentAppearance(characterData, this, characterSaveData);
         wingComponent = new CharacterComponentWing(characterData, this, characterSaveData);
         aiDifficultyComponent = new CharacterComponentAIDifficulty(characterData, this, characterSaveData);
+        equipmentComponent = new CharacterComponentEquipment(characterData, this, characterSaveData);
     }
 
     #endregion
@@ -191,6 +193,13 @@ public class Character
     //aiDifficultyComponent
     public AIDifficulty AIDifficulty => aiDifficultyComponent.AIDifficulty;
     public void ScaleDifficultySystem()  => aiDifficultyComponent.ScaleDifficultySystem();
+
+    //equipmentComponent
+    public void Initialize(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null) => equipmentComponent.Initialize(characterData, character, characterSaveData);
+    public void EquipEquipment(ItemEquipment itemEquipment) => equipmentComponent.EquipEquipment(itemEquipment);
+    public void UnequipEquipment(ItemEquipment itemEquipment) => equipmentComponent.UnequipEquipment(itemEquipment);
+    public ItemEquipment GetEquipment(int slot) => equipmentComponent.GetEquipment(slot);
+    public int GetEquipmentStat(Stat stat) => equipmentComponent.GetEquipmentStat(stat);
 
     #endregion
 }

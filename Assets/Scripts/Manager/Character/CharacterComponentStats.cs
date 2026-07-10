@@ -77,7 +77,7 @@ public class CharacterComponentStats
 
         if (character.HasWingActivated) total += character.Wing.GetTrueStat(stat);
 
-        //equipment
+        total += character.GetEquipmentStat(stat);
 
         return total;
     }

@@ -26,6 +26,9 @@ public class MenuCharacterDetail : Menu
     [Header("Stats")]
     [SerializeField] private StatLayoutUI statLayoutUI;
 
+    [Header("Equipment")]
+    [SerializeField] private EquipmentLayoutUI equipmentLayoutUI;
+
     [Header("Other")]
     [SerializeField] private Button firstSelected;
 
@@ -105,6 +108,7 @@ public class MenuCharacterDetail : Menu
         if (character == null) return;
         moveLayoutUI.Initialize(character);
         statLayoutUI.Initialize(character);
+        equipmentLayoutUI.Initialize(character);
     }
 
     private void PopulateUI()
@@ -119,6 +123,7 @@ public class MenuCharacterDetail : Menu
 
         moveLayoutUI.Populate();
         statLayoutUI.Populate();
+        equipmentLayoutUI.Populate();
     }
 
     private void ClearUI()
@@ -133,6 +138,7 @@ public class MenuCharacterDetail : Menu
 
         moveLayoutUI.Clear();
         statLayoutUI.Clear();
+        equipmentLayoutUI.Clear();
     }
 
     private IEnumerator RestoreFocusNextFrame(GameObject go)
@@ -189,6 +195,7 @@ public class MenuCharacterDetail : Menu
         UIEvents.OnCharacterDetailOpenRequested    += HandleCharacterDetailOpenRequested;
         UIEvents.OnCharacterDetailRefreshRequested += HandleCharacterDetailRefreshRequested;
         UIEvents.OnMoveSlotUIClicked               += HandleMoveSlotUIClicked;
+        UIEvents.OnEquipmentSlotUIClicked          += HandleEquipmentSlotUIClicked;
         UIEvents.OnMoveSlotUIMoveRequested         += HandleMoveSlotUIMoveRequested;
         UIEvents.OnMoveSlotUIMoveCanceled          += HandleMoveSlotUIMoveCanceled;
         UIEvents.OnMoveActionsCloseRequested       += HandleMoveActionsCloseRequested;
@@ -200,6 +207,7 @@ public class MenuCharacterDetail : Menu
         UIEvents.OnCharacterDetailOpenRequested    -= HandleCharacterDetailOpenRequested;
         UIEvents.OnCharacterDetailRefreshRequested -= HandleCharacterDetailRefreshRequested;
         UIEvents.OnMoveSlotUIClicked               -= HandleMoveSlotUIClicked;
+        UIEvents.OnEquipmentSlotUIClicked          -= HandleEquipmentSlotUIClicked;
         UIEvents.OnMoveSlotUIMoveRequested         -= HandleMoveSlotUIMoveRequested;
         UIEvents.OnMoveSlotUIMoveCanceled          -= HandleMoveSlotUIMoveCanceled;
         UIEvents.OnMoveActionsCloseRequested       -= HandleMoveActionsCloseRequested;
@@ -251,12 +259,26 @@ public class MenuCharacterDetail : Menu
         UIEvents.RaiseMoveActionsOpenRequested(slot);
     }
 
+    private void HandleEquipmentSlotUIClicked(EquipmentSlotUI slot)
+    {
+        if (!IsInteractable() || slot == null) return;
+        UIEvents.RaiseEquipmentActionsOpenRequested(slot);
+    }
+
     private void HandleMoveActionsCloseRequested(MoveSlotUI moveSlotUI) 
     {
         if (restoreFocusCoroutine != null)
             StopCoroutine(restoreFocusCoroutine);
 
         restoreFocusCoroutine = StartCoroutine(RestoreFocusNextFrame(pickedMoveSlot.gameObject));
+    }
+
+    private void HandleEquipmentActionsCloseRequested(EquipmentSlotUI moveSlotUI) 
+    {
+        if (restoreFocusCoroutine != null)
+            StopCoroutine(restoreFocusCoroutine);
+
+        restoreFocusCoroutine = StartCoroutine(RestoreFocusNextFrame(moveSlotUI.gameObject));
     }
 
     #endregion

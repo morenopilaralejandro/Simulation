@@ -571,4 +571,59 @@ public static class UIEvents
     {
         OnMatchDetailOpened?.Invoke(matchId, node);
     }
+
+    //Equipment
+    public static event Action<ItemEquipment> OnEquipmentStatLayoutUpdateRequested;
+    public static void RaiseEquipmentStatLayoutUpdateRequested(ItemEquipment equipment)
+    {
+        OnEquipmentStatLayoutUpdateRequested?.Invoke(equipment);
+    }
+
+    public static event Action<ItemEquipment> OnSelectorEquipmentActionClicked;
+    public static void RaiseSelectorEquipmentActionClicked(ItemEquipment itemEquipment)
+    {
+        OnSelectorEquipmentActionClicked?.Invoke(itemEquipment);
+    }
+
+    public static event System.Action<
+        ISelectorSource<ItemEquipment>,
+        ISelectorClickAction<ItemEquipment>,
+        ISelectorFilter<ItemEquipment>
+    > OnEquipmentSelectorOpenRequested;
+    public static void RaiseEquipmentSelectorOpenRequested(
+        ISelectorSource<ItemEquipment>      source,
+        ISelectorClickAction<ItemEquipment> action,
+        ISelectorFilter<ItemEquipment>      filter = null)
+    => OnEquipmentSelectorOpenRequested?.Invoke(source, action, filter);
+
+    public static event Action<EquipmentSlotUI> OnEquipmentSlotUIClicked;
+    public static void RaiseEquipmentSlotUIClicked(EquipmentSlotUI equipmentSlotUI)
+    {
+        OnEquipmentSlotUIClicked?.Invoke(equipmentSlotUI);
+    }
+
+    public static event Action<EquipmentSlotUI> OnEquipmentActionsOpenRequested;
+    public static void RaiseEquipmentActionsOpenRequested(EquipmentSlotUI equipmentSlotUI)
+    {
+        OnEquipmentActionsOpenRequested?.Invoke(equipmentSlotUI);
+    }
+
+    public static event Action<EquipmentSlotUI> OnEquipmentActionsCloseRequested;
+    public static void RaiseEquipmentActionsCloseRequested(EquipmentSlotUI equipmentSlotUI)
+    {
+        OnEquipmentActionsCloseRequested?.Invoke(equipmentSlotUI);
+    }
+
+    public static event Action<ItemEquipment, Character> OnEquipmentEquipRequested;
+    public static void RaiseEquipmentEquipRequested(ItemEquipment itemEquipment, Character character)
+    {
+        OnEquipmentEquipRequested?.Invoke(itemEquipment, character);
+    }
+
+    public static event Action<ItemEquipment, Character> OnEquipmentUnequipRequested;
+    public static void RaiseEquipmentUnequipRequested(ItemEquipment itemEquipment, Character character)
+    {
+        OnEquipmentUnequipRequested?.Invoke(itemEquipment, character);
+    }
+
 }
