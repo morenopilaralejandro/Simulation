@@ -60,7 +60,8 @@ public class PersistenceManagerSave
             StorySystemSaveData = StorySystemManager.Instance.Export(),
             ChestStateSaveData = ChestStateManager.Instance.Export(),
             SaveDataWorldSystem = WorldManager.Instance.Export(),
-            SaveDataTeamSystem = TeamManager.Instance.Export()
+            SaveDataTeamSystem = TeamManager.Instance.Export(),
+            WingSystemSaveData = WingManager.Instance.Export()
         };
     }
 

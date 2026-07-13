@@ -129,6 +129,39 @@ public class StatLayoutUI : MonoBehaviour
         textValueTrainedFreedom.text = "";
     }
 
+    public void Populate(Wing wing)
+    {
+        if (wing == null) return;
+
+        // Kick
+        textValueBattleKick.text    = wing.GetTrueStat(Stat.Kick).ToString();
+        textValueTrainedKick.text = $"({wing.GetIndividualStat(Stat.Kick)})";
+
+        // Body
+        textValueBattleBody.text    = wing.GetTrueStat(Stat.Body).ToString();
+        textValueTrainedBody.text = $"({wing.GetIndividualStat(Stat.Body)})";
+
+        // Control
+        textValueBattleControl.text    = wing.GetTrueStat(Stat.Control).ToString();
+        textValueTrainedControl.text = $"({wing.GetIndividualStat(Stat.Control)})";
+
+        // Guard
+        textValueBattleGuard.text    = wing.GetTrueStat(Stat.Guard).ToString();
+        textValueTrainedGuard.text = $"({wing.GetIndividualStat(Stat.Guard)})";
+
+        // Speed
+        textValueBattleSpeed.text    = wing.GetTrueStat(Stat.Speed).ToString();
+        textValueTrainedSpeed.text = $"({wing.GetIndividualStat(Stat.Speed)})";
+
+        // Stamina
+        textValueBattleStamina.text    = wing.GetTrueStat(Stat.Stamina).ToString();
+        textValueTrainedStamina.text = $"({wing.GetIndividualStat(Stat.Stamina)})";
+
+        // Courage
+        textValueBattleCourage.text    = wing.GetTrueStat(Stat.Courage).ToString();
+        textValueTrainedCourage.text = $"({wing.GetIndividualStat(Stat.Courage)})";
+    }
+
     #endregion
 
     #region Events

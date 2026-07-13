@@ -98,6 +98,15 @@ public class MenuSide : Menu
         );
     }
 
+    public void OnButtonWingTapped()
+    {
+        UIEvents.RaiseWingSelectorOpenRequested(
+            new SelectorWingSourceFromStorage(),
+            new SelectorWingAction(),
+            null
+        );
+    }
+
     public void OnButtonQuitTapped()
     {
         menuManager.OpenMenu(menuQuit);

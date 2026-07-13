@@ -29,6 +29,9 @@ public class MenuCharacterDetail : Menu
     [Header("Equipment")]
     [SerializeField] private EquipmentLayoutUI equipmentLayoutUI;
 
+    [Header("Wing")]
+    [SerializeField] private WingLayoutUI wingLayoutUI;
+
     [Header("Other")]
     [SerializeField] private Button firstSelected;
 
@@ -109,6 +112,7 @@ public class MenuCharacterDetail : Menu
         moveLayoutUI.Initialize(character);
         statLayoutUI.Initialize(character);
         equipmentLayoutUI.Initialize(character);
+        wingLayoutUI.Initialize(character);
     }
 
     private void PopulateUI()
@@ -124,6 +128,7 @@ public class MenuCharacterDetail : Menu
         moveLayoutUI.Populate();
         statLayoutUI.Populate();
         equipmentLayoutUI.Populate();
+        wingLayoutUI.Populate();
     }
 
     private void ClearUI()
@@ -139,6 +144,7 @@ public class MenuCharacterDetail : Menu
         moveLayoutUI.Clear();
         statLayoutUI.Clear();
         equipmentLayoutUI.Clear();
+        wingLayoutUI.Clear();
     }
 
     private IEnumerator RestoreFocusNextFrame(GameObject go)
@@ -196,9 +202,11 @@ public class MenuCharacterDetail : Menu
         UIEvents.OnCharacterDetailRefreshRequested += HandleCharacterDetailRefreshRequested;
         UIEvents.OnMoveSlotUIClicked               += HandleMoveSlotUIClicked;
         UIEvents.OnEquipmentSlotUIClicked          += HandleEquipmentSlotUIClicked;
+        UIEvents.OnWingSlotUIClicked               += HandleWingSlotUIClicked;
         UIEvents.OnMoveSlotUIMoveRequested         += HandleMoveSlotUIMoveRequested;
         UIEvents.OnMoveSlotUIMoveCanceled          += HandleMoveSlotUIMoveCanceled;
         UIEvents.OnMoveActionsCloseRequested       += HandleMoveActionsCloseRequested;
+        UIEvents.OnWingActionsCloseRequested       += HandleWingActionsCloseRequested;
     }
 
     protected override void OnDisable()
@@ -208,9 +216,11 @@ public class MenuCharacterDetail : Menu
         UIEvents.OnCharacterDetailRefreshRequested -= HandleCharacterDetailRefreshRequested;
         UIEvents.OnMoveSlotUIClicked               -= HandleMoveSlotUIClicked;
         UIEvents.OnEquipmentSlotUIClicked          -= HandleEquipmentSlotUIClicked;
+        UIEvents.OnWingSlotUIClicked               -= HandleWingSlotUIClicked;
         UIEvents.OnMoveSlotUIMoveRequested         -= HandleMoveSlotUIMoveRequested;
         UIEvents.OnMoveSlotUIMoveCanceled          -= HandleMoveSlotUIMoveCanceled;
         UIEvents.OnMoveActionsCloseRequested       -= HandleMoveActionsCloseRequested;
+        UIEvents.OnWingActionsCloseRequested       -= HandleWingActionsCloseRequested;
     }
 
     private void HandleCharacterDetailOpenRequested(Character character)
@@ -265,7 +275,13 @@ public class MenuCharacterDetail : Menu
         UIEvents.RaiseEquipmentActionsOpenRequested(slot);
     }
 
-    private void HandleMoveActionsCloseRequested(MoveSlotUI moveSlotUI) 
+    private void HandleWingSlotUIClicked(WingSlotUI slot)
+    {
+        if (!IsInteractable() || slot == null) return;
+        UIEvents.RaiseWingActionsOpenRequested(slot);
+    }
+
+    private void HandleMoveActionsCloseRequested(MoveSlotUI moveSlotUI)
     {
         if (restoreFocusCoroutine != null)
             StopCoroutine(restoreFocusCoroutine);
@@ -279,6 +295,14 @@ public class MenuCharacterDetail : Menu
             StopCoroutine(restoreFocusCoroutine);
 
         restoreFocusCoroutine = StartCoroutine(RestoreFocusNextFrame(moveSlotUI.gameObject));
+    }
+
+    private void HandleWingActionsCloseRequested(WingSlotUI wingSlotUI)
+    {
+        if (restoreFocusCoroutine != null)
+            StopCoroutine(restoreFocusCoroutine);
+
+        restoreFocusCoroutine = StartCoroutine(RestoreFocusNextFrame(wingSlotUI.gameObject));
     }
 
     #endregion

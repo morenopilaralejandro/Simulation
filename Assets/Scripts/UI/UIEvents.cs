@@ -626,4 +626,40 @@ public static class UIEvents
         OnEquipmentUnequipRequested?.Invoke(itemEquipment, character);
     }
 
+    //Wing
+    public static event System.Action<
+        ISelectorSource<Wing>,
+        ISelectorClickAction<Wing>,
+        ISelectorFilter<Wing>
+    > OnWingSelectorOpenRequested;
+    public static void RaiseWingSelectorOpenRequested(
+        ISelectorSource<Wing>      source,
+        ISelectorClickAction<Wing> action,
+        ISelectorFilter<Wing>      filter = null)
+    => OnWingSelectorOpenRequested?.Invoke(source, action, filter);
+
+    public static event Action<Wing> OnWingDescriptionUpdateRequested;
+    public static void RaiseWingDescriptionUpdateRequested(Wing wing)
+    {
+        OnWingDescriptionUpdateRequested?.Invoke(wing);
+    }
+
+    public static event Action<WingSlotUI> OnWingSlotUIClicked;
+    public static void RaiseWingSlotUIClicked(WingSlotUI wingSlotUI)
+    {
+        OnWingSlotUIClicked?.Invoke(wingSlotUI);
+    }
+
+    public static event Action<WingSlotUI> OnWingActionsCloseRequested;
+    public static void RaiseWingActionsCloseRequested(WingSlotUI wingSlotUI)
+    {
+        OnWingActionsCloseRequested?.Invoke(wingSlotUI);
+    }
+
+    public static event Action<WingSlotUI> OnWingActionsOpenRequested;
+    public static void RaiseWingActionsOpenRequested(WingSlotUI wingSlotUI)
+    {
+        OnWingActionsOpenRequested?.Invoke(wingSlotUI);
+    }
+
 }
