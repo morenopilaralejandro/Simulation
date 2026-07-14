@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Wing;
@@ -10,6 +11,8 @@ public class WingLayoutUI : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private WingSlotUI wingSlot;
+    [SerializeField] private TMP_Text textName;
+    [SerializeField] private LocalizedString defaultWingName;
 
     private Character character;
 
@@ -30,6 +33,7 @@ public class WingLayoutUI : MonoBehaviour
     public void Clear()
     {
         wingSlot.Clear();
+        textName.text = defaultWingName.GetLocalizedString();
     }
 
     #endregion
@@ -40,6 +44,13 @@ public class WingLayoutUI : MonoBehaviour
     {
         wingSlot.Initialize(character);
         wingSlot.SetWing(character.Wing);
+        if (character.HasWingEquipped) 
+        {
+            textName.text = character.Wing.WingName;
+        } else 
+        {
+            textName.text = defaultWingName.GetLocalizedString();
+        }
     }
 
     #endregion

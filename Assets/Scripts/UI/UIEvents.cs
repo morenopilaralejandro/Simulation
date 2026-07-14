@@ -630,13 +630,15 @@ public static class UIEvents
     public static event System.Action<
         ISelectorSource<Wing>,
         ISelectorClickAction<Wing>,
-        ISelectorFilter<Wing>
+        ISelectorFilter<Wing>,
+        bool
     > OnWingSelectorOpenRequested;
     public static void RaiseWingSelectorOpenRequested(
         ISelectorSource<Wing>      source,
         ISelectorClickAction<Wing> action,
-        ISelectorFilter<Wing>      filter = null)
-    => OnWingSelectorOpenRequested?.Invoke(source, action, filter);
+        ISelectorFilter<Wing>      filter = null,
+        bool    closeOnSelect  = true)
+    => OnWingSelectorOpenRequested?.Invoke(source, action, filter, closeOnSelect);
 
     public static event Action<Wing> OnWingDescriptionUpdateRequested;
     public static void RaiseWingDescriptionUpdateRequested(Wing wing)
@@ -662,4 +664,21 @@ public static class UIEvents
         OnWingActionsOpenRequested?.Invoke(wingSlotUI);
     }
 
+    public static event Action<Wing, Character> OnWingEquipRequested;
+    public static void RaiseWingEquipRequested(Wing wing, Character character)
+    {
+        OnWingEquipRequested?.Invoke(wing, character);
+    }
+
+    public static event Action<Wing, Character> OnWingUnequipRequested;
+    public static void RaiseWingUnequipRequested(Wing wing, Character character)
+    {
+        OnWingUnequipRequested?.Invoke(wing, character);
+    }
+
+    public static event Action<Wing> OnSelectorWingActionClicked;
+    public static void RaiseSelectorWingActionClicked(Wing wing)
+    {
+        OnSelectorWingActionClicked?.Invoke(wing);
+    }
 }

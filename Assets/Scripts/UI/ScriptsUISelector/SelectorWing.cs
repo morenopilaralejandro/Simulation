@@ -127,9 +127,11 @@ public class SelectorWing : Selector<Wing, SelectorWingListItem>
     private void HandleOpenRequested(
         ISelectorSource<Wing>      source,
         ISelectorClickAction<Wing> action,
-        ISelectorFilter<Wing>      filter)
+        ISelectorFilter<Wing>      filter,
+        bool closeAfterPick)
     {
         if (MenuManager.Instance.IsMenuOpen(this)) return;
+        closeOnSelect = closeAfterPick;
         Open(source, action, filter);
     }
 
