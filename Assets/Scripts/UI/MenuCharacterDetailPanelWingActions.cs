@@ -11,6 +11,7 @@ public class MenuCharacterDetailPanelWingActions : Menu
     [Header("UI References")]
     [SerializeField] private Button buttonEquip;
     [SerializeField] private Button buttonUnequip;
+    [SerializeField] private Button buttonDetails;
 
     private WingSlotUI wingSlotUI;
     private bool isEquipping = false;
@@ -21,6 +22,7 @@ public class MenuCharacterDetailPanelWingActions : Menu
 
         buttonEquip.gameObject.SetActive(true);
         buttonUnequip.gameObject.SetActive(!isNull);
+        buttonDetails.gameObject.SetActive(!isNull);
     }
 
     protected override void OnGainedInput()
@@ -48,6 +50,12 @@ public class MenuCharacterDetailPanelWingActions : Menu
         UIEvents.RaiseWingUnequipRequested(wingSlotUI.Wing, wingSlotUI.Character);
     }
 
+    public void OnButtonDetailClicked()
+    {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
+        UIEvents.RaiseWingDetailOpenRequested(wingSlotUI.Wing);
+    }
+
     public void OnButtonBackClicked()
     {
         AudioManager.Instance.PlaySfxUI("sfx-menu_back");
@@ -62,6 +70,7 @@ public class MenuCharacterDetailPanelWingActions : Menu
         UIEvents.OnSelectorWingActionClicked += HandleSelectorWingActionClicked;
         UIEvents.OnWingEquipRequested += HandleWingEquipRequested;
         UIEvents.OnWingUnequipRequested += HandleWingUnequipRequested;
+        UIEvents.OnBackFromWingDetailRequested += HandleBackFromWingDetailRequested;
     }
 
     protected override void OnDisable()
@@ -71,6 +80,7 @@ public class MenuCharacterDetailPanelWingActions : Menu
         UIEvents.OnSelectorWingActionClicked -= HandleSelectorWingActionClicked;
         UIEvents.OnWingEquipRequested -= HandleWingEquipRequested;
         UIEvents.OnWingUnequipRequested -= HandleWingUnequipRequested;
+        UIEvents.OnBackFromWingDetailRequested -= HandleBackFromWingDetailRequested;
     }
 
     private void HandleOpenRequested(WingSlotUI wingSlotUI)
@@ -112,4 +122,9 @@ public class MenuCharacterDetailPanelWingActions : Menu
         UIEvents.RaiseWingActionsCloseRequested(wingSlotUI);
     }
 
+    private void HandleBackFromWingDetailRequested() 
+    {
+        RequestClose();
+        UIEvents.RaiseWingActionsCloseRequested(wingSlotUI);
+    }
 }

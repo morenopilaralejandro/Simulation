@@ -681,4 +681,22 @@ public static class UIEvents
     {
         OnSelectorWingActionClicked?.Invoke(wing);
     }
+
+    public static event Action<Wing> OnWingDetailOpenRequested;
+    public static void RaiseWingDetailOpenRequested(Wing wing)
+    {
+        OnWingDetailOpenRequested?.Invoke(wing);
+    }
+
+    public static event Action OnWingDetailRefreshRequested;
+    public static void RaiseWingDetailRefreshRequested()
+    {
+        OnWingDetailRefreshRequested?.Invoke();
+    }
+
+    public static event Action OnBackFromWingDetailRequested;
+    public static void RaiseBackFromWingDetailRequested()
+    {
+        OnBackFromWingDetailRequested?.Invoke();
+    }
 }

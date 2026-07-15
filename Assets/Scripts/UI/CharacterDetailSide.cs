@@ -25,14 +25,21 @@ public class CharacterDetailSide : MonoBehaviour
     [Header("Equipment")]
     [SerializeField] private EquipmentLayoutUI equipmentLayoutUI;
 
+    [Header("Wing")]
+    [SerializeField] private CanvasGroup canvasWing;
+    [SerializeField] private Image wingIcon;
+    [SerializeField] private TMP_Text wingTextName;
+    [SerializeField] private StatLayoutUI statLayoutUIWing;
+
     [Header("Pages")]
     [SerializeField] private CanvasGroup pageOneCanvas;
     [SerializeField] private CanvasGroup pageTwoCanvas;
     [SerializeField] private CanvasGroup pageThreeCanvas;
+    [SerializeField] private CanvasGroup pageFourCanvas;
 
     private Character character;
     private int page = 0;
-    private int pageMax = 2;
+    private int pageMax = 3;
 
     #endregion
 
@@ -43,6 +50,9 @@ public class CharacterDetailSide : MonoBehaviour
         SetVisible(pageOneCanvas, true);
         SetVisible(pageTwoCanvas, false);
         SetVisible(pageThreeCanvas, false);
+        SetVisible(pageFourCanvas, false);
+
+        SetVisible(canvasWing, false);
     }
 
     #endregion
@@ -69,6 +79,19 @@ public class CharacterDetailSide : MonoBehaviour
 
         equipmentLayoutUI.Initialize(character);
         equipmentLayoutUI.Populate();
+
+        if (character.HasWingEquipped)
+        {
+            statLayoutUIWing.Populate(character.Wing);
+
+            wingTextName.text = character.Wing.WingName;
+            wingIcon.color = ColorManager.GetWingColor(character.Wing.WingColorType);
+        } else 
+        {
+            statLayoutUIWing.Clear();
+            wingTextName.text = "";
+            wingIcon.color = Color.white;
+        }
     }
 
     public void Clear()
@@ -84,6 +107,10 @@ public class CharacterDetailSide : MonoBehaviour
         moveLayoutUI.Clear();
         statLayoutUI.Clear();
         equipmentLayoutUI.Clear();
+
+        statLayoutUIWing.Clear();
+        wingTextName.text = "";
+        wingIcon.color = Color.white;
     }
 
     #endregion
@@ -122,6 +149,9 @@ public class CharacterDetailSide : MonoBehaviour
         SetVisible(pageOneCanvas, page == 0);
         SetVisible(pageTwoCanvas, page == 1);
         SetVisible(pageThreeCanvas, page == 2);
+        SetVisible(pageFourCanvas, page == 3);
+
+        SetVisible(canvasWing, page == 3);
     }
 
     #endregion

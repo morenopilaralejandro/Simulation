@@ -102,7 +102,7 @@ public class MenuSide : Menu
     {
         UIEvents.RaiseWingSelectorOpenRequested(
             new SelectorWingSourceFromStorage(),
-            new SelectorWingAction(),
+            new SelectorWingActionOpenDetail(),
             null,
             false
         );

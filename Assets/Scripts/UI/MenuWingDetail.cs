@@ -4,27 +4,31 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.UI;
 using Aremoreno.Enums.Input;
+using Aremoreno.Enums.Wing;
 
-public class MenuCharacterDetail : Menu
+public class MenuWingDetail : Menu
 {
     #region Fields
 
     [Header("Basic")]
-    [SerializeField] private CharacterCard characterCard;
     [SerializeField] private Image imageIcon;
     [SerializeField] private TMP_Text textName;
 
     [Header("Stats")]
     [SerializeField] private StatLayoutUI statLayoutUI;
 
+    [Header("Character")]
+    [SerializeField] private CharacterCard characterCard;
+    [SerializeField] private CanvasGroup characterCardCanvas;
+
     [Header("Other")]
     [SerializeField] private Button firstSelected;
 
-    private Character    character;
+    private Wing wing;
 
     //private MenuStateMachine<CharacterDetailState> stateMachine;
     //private Coroutine restoreFocusCoroutine;
@@ -102,43 +106,42 @@ public class MenuCharacterDetail : Menu
 
     private void InitializeUI()
     {
-        if (character == null) return;
-        moveLayoutUI.Initialize(character);
-        statLayoutUI.Initialize(character);
-        equipmentLayoutUI.Initialize(character);
-        wingLayoutUI.Initialize(character);
+        if (wing == null) return;
+        //statLayoutUI.Initialize(character);
     }
 
     private void PopulateUI()
     {
-        if (character == null) return;
+        if (wing == null) return;
 
-        characterCard.SetCharacter(character, Position.FW);
-        barHp.SetCharacter(character, Stat.Hp);
-        barSp.SetCharacter(character, Stat.Sp);
-        barXp.SetCharacter(character);
-        textLevel.text = $"{character.Level}";
+        textName.text = wing.WingName;
+        imageIcon.color = ColorManager.GetWingColor(wing.WingColorType);
 
-        moveLayoutUI.Populate();
-        statLayoutUI.Populate();
-        equipmentLayoutUI.Populate();
-        wingLayoutUI.Populate();
+        statLayoutUI.Populate(wing);
+        if(wing.IsEquipped()) 
+        {
+            wing.EquippedCharacter.SetKit(
+                TeamManager.Instance.ActiveLoadout.Kit, 
+                TeamManager.Instance.ActiveLoadout.Variant, 
+                Role.Field);
+            characterCard.SetCharacter(wing.EquippedCharacter, wing.EquippedCharacter.Position);
+            SetVisible(characterCardCanvas, true);
+        } else 
+        {
+            SetVisible(characterCardCanvas, false);
+        }
     }
 
     private void ClearUI()
     {
-        character = null;
+        wing = null;
 
-        characterCard.Clear();
-        barHp.Clear();
-        barSp.Clear();
-        barXp.Clear();
-        textLevel.text = "";
+        textName.text = "";
+        imageIcon.color = Color.white;
 
-        moveLayoutUI.Clear();
         statLayoutUI.Clear();
-        equipmentLayoutUI.Clear();
-        wingLayoutUI.Clear();
+        characterCard.Clear();
+        SetVisible(characterCardCanvas, false);
     }
 
     private IEnumerator RestoreFocusNextFrame(GameObject go)
@@ -165,7 +168,12 @@ public class MenuCharacterDetail : Menu
             EventSystem.current.SetSelectedGameObject(target);
         }
 
-        restoreFocusCoroutine = null;
+        //restoreFocusCoroutine = null;
+    }
+
+    private void SetVisible(CanvasGroup canvasGroup, bool isVisible)
+    {
+        canvasGroup.alpha = isVisible ? 1f : 0f;
     }
 
     #endregion
@@ -181,9 +189,8 @@ public class MenuCharacterDetail : Menu
             return;
         }
         */
-
-
         RequestClose();
+        UIEvents.RaiseBackFromWingDetailRequested();
     }
 
     #endregion
@@ -193,42 +200,29 @@ public class MenuCharacterDetail : Menu
     protected override void OnEnable()
     {
         base.OnEnable();
-        UIEvents.OnCharacterDetailOpenRequested    += HandleCharacterDetailOpenRequested;
-        UIEvents.OnCharacterDetailRefreshRequested += HandleCharacterDetailRefreshRequested;
-        UIEvents.OnMoveSlotUIClicked               += HandleMoveSlotUIClicked;
-        UIEvents.OnEquipmentSlotUIClicked          += HandleEquipmentSlotUIClicked;
-        UIEvents.OnWingSlotUIClicked               += HandleWingSlotUIClicked;
-        UIEvents.OnMoveSlotUIMoveRequested         += HandleMoveSlotUIMoveRequested;
-        UIEvents.OnMoveSlotUIMoveCanceled          += HandleMoveSlotUIMoveCanceled;
-        UIEvents.OnMoveActionsCloseRequested       += HandleMoveActionsCloseRequested;
-        UIEvents.OnWingActionsCloseRequested       += HandleWingActionsCloseRequested;
+        UIEvents.OnWingDetailOpenRequested    += HandleWingDetailOpenRequested;
+        UIEvents.OnWingDetailRefreshRequested += HandleWingDetailRefreshRequested;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        UIEvents.OnCharacterDetailOpenRequested    -= HandleCharacterDetailOpenRequested;
-        UIEvents.OnCharacterDetailRefreshRequested -= HandleCharacterDetailRefreshRequested;
-        UIEvents.OnMoveSlotUIClicked               -= HandleMoveSlotUIClicked;
-        UIEvents.OnEquipmentSlotUIClicked          -= HandleEquipmentSlotUIClicked;
-        UIEvents.OnWingSlotUIClicked               -= HandleWingSlotUIClicked;
-        UIEvents.OnMoveSlotUIMoveRequested         -= HandleMoveSlotUIMoveRequested;
-        UIEvents.OnMoveSlotUIMoveCanceled          -= HandleMoveSlotUIMoveCanceled;
-        UIEvents.OnMoveActionsCloseRequested       -= HandleMoveActionsCloseRequested;
-        UIEvents.OnWingActionsCloseRequested       -= HandleWingActionsCloseRequested;
+        UIEvents.OnWingDetailOpenRequested    -= HandleWingDetailOpenRequested;
+        UIEvents.OnWingDetailRefreshRequested -= HandleWingDetailRefreshRequested;
     }
 
-    private void HandleCharacterDetailOpenRequested(Character character)
+    private void HandleWingDetailOpenRequested(Wing wing)
     {
         if (MenuManager.Instance.IsMenuOpen(this)) return;
-        this.character = character;
+        this.wing = wing;
         MenuManager.Instance.OpenMenu(this);
         SetDefaultSelectable(firstSelected);
     }
 
-    private void HandleWingEquippedCharacter() 
+    private void HandleWingDetailRefreshRequested()
     {
-
+        if (!MenuManager.Instance.IsMenuOpen(this)) return;
+        Refresh();
     }
     
     #endregion
