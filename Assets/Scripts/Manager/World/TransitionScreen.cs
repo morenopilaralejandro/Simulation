@@ -21,9 +21,10 @@ public class TransitionScreen : MonoBehaviour
         WorldUIManager.Instance?.RegisterTransitionScreen(this);
     }
 
-    private void Destroy() 
+    private void OnDestroy() 
     {
-        WorldUIManager.Instance.UnregisterTransitionScreen();
+        if (WorldUIManager.Instance != null)
+            WorldUIManager.Instance.UnregisterTransitionScreen();
     }
 
     public async Task FadeOut()
@@ -47,10 +48,17 @@ public class TransitionScreen : MonoBehaviour
 
         while (elapsed < fadeDuration)
         {
+            if (this == null || canvasGroup == null)
+                return;
+
             elapsed += Time.deltaTime;
             canvasGroup.alpha = 1f - Mathf.Clamp01(elapsed / fadeDuration);
+
             await Task.Yield();
         }
+
+        if (canvasGroup == null)
+            return;
 
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
