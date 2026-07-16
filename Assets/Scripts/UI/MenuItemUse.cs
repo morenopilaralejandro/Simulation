@@ -34,6 +34,7 @@ public class MenuItemUse : Menu
 
     public void OnButtonUseClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         switch (item)
         {
             case ItemRecovery itemRecovery:
@@ -49,6 +50,7 @@ public class MenuItemUse : Menu
 
     public void OnButtonCancelClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_back");
         RequestClose();
     }
 
@@ -79,6 +81,7 @@ public class MenuItemUse : Menu
     private void HandleSelectorCharacterActionClicked(Character character)
     {
         if (stateMachine.Is(MenuItemUseState.Idle)) return;
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         ItemManager.Instance.UseItemOnCharacter(item, character);
         stateMachine.Set(MenuItemUseState.Idle);
         UIEvents.RaiseBagUpdated();

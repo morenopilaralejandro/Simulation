@@ -92,6 +92,7 @@ public class MenuSideLayout : MonoBehaviour
         }
 
         var character = CharacterManager.Instance.GetCharacter(guids[index]);
+        position = TeamManager.Instance.ActiveLoadout.GetFormation(BattleType.Mini).FormationCoords[index].Position;
 
         character.SetKit(
             currentKit, 

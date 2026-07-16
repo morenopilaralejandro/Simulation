@@ -38,6 +38,7 @@ public class PickerAmount : Menu
 
     public void OnButtonConfirmClicked()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         switch (mode) 
         {
             case PickerAmountMode.Buy:

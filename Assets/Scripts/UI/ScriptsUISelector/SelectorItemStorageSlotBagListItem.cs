@@ -23,6 +23,9 @@ public class SelectorItemStorageSlotBagListItem : SelectorListItem<ItemStorageSl
         textAmount.text = obj.Count.ToString();
         imageIcon.color = obj.Item.IconColor;
         _ = SetIconAsync(obj.Item.IconSpriteAddress);
+
+        if (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject == Button.gameObject)
+            HandleItemSelected(this);
     }
 
     protected override void OnUnbind()
