@@ -55,6 +55,8 @@ public abstract class Selector<T, TItem> : Menu, IClosableMenu
         MenuManager.Instance.OpenMenu(this);
     }
 
+    public void SetSource(ISelectorSource<T> src) => source = src;
+
     /// <summary>Re-applies the filter on the existing source. Useful when the user changes filter UI.</summary>
     public void ApplyFilter(ISelectorFilter<T> flt)
     {
@@ -157,6 +159,17 @@ public abstract class Selector<T, TItem> : Menu, IClosableMenu
 
         index = Mathf.Clamp(index, 0, active.Count - 1);
         SetDefaultSelectable(active[index].Button);
+    }
+
+    public int GetSelectedIndex()
+    {
+        var current = EventSystem.current.currentSelectedGameObject;
+        if (current == null) return -1;
+
+        var item = current.GetComponent<TItem>();
+        if (item == null) return -1;
+
+        return active.IndexOf(item);
     }
 
     #endregion

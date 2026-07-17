@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Color;
 using Aremoreno.Enums.Item;
 using Aremoreno.Enums.Move;
 using Aremoreno.Enums.Localization;
@@ -51,8 +52,8 @@ public class Item
 
     // appearanceComponent
     public ItemSpriteType SpriteType => appearanceComponent.SpriteType;
-    public ItemSpriteColor SpriteColor => appearanceComponent.SpriteColor;
-    public Sprite IconSprite => appearanceComponent.IconSprite;
+    public ColorGeneric SpriteColor => appearanceComponent.SpriteColor;
+    public string IconSpriteAddress => appearanceComponent.IconSpriteAddress;
     public Color IconColor => appearanceComponent.IconColor;
 
     // inventoryComponent

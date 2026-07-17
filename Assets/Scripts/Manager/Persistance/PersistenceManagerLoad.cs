@@ -36,6 +36,7 @@ public class PersistenceManagerLoad
         ChestStateManager.Instance.Import(saveData.ChestStateSaveData);
         //WorldManager.Instance.Import(saveData.SaveDataWorldSystem);
         TeamManager.Instance.Import(saveData.SaveDataTeamSystem);
+        WingManager.Instance.Import(saveData.WingSystemSaveData);
 
         WorldArgs.Set(
             zoneId : saveData.SaveDataWorldSystem.ZoneId,

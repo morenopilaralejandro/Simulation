@@ -52,17 +52,17 @@ public class ItemManagerCurrency
         if (amount <= 0) return;
 
         int max = maxCapDict.GetValueOrDefault(type, int.MaxValue);
-        currencyDict[type] = Mathf.Min(currencyDict[type] + amount, max);
-        ItemEvents.RaiseCurrencyUpdated(type, currencyDict[type]);
+        currencyDict[type] = Mathf.Min(GetAmount(type) + amount, max);
+        ItemEvents.RaiseCurrencyUpdated(type, GetAmount(type));
     }
 
     public bool Spend(CurrencyType type, int amount)
     {
         if (amount <= 0) return false;
-        if (currencyDict[type] < amount) return false;
+        if (GetAmount(type) < amount) return false;
 
         currencyDict[type] -= amount;
-        ItemEvents.RaiseCurrencyUpdated(type, currencyDict[type]);
+        ItemEvents.RaiseCurrencyUpdated(type, GetAmount(type));
         return true;
     }
 
@@ -70,7 +70,7 @@ public class ItemManagerCurrency
     {
         int max = maxCapDict.GetValueOrDefault(type, int.MaxValue);
         currencyDict[type] = Mathf.Clamp(amount, 0, max);
-        ItemEvents.RaiseCurrencyUpdated(type, currencyDict[type]);
+        ItemEvents.RaiseCurrencyUpdated(type, GetAmount(type));
     }
 
     public bool CanAfford(CurrencyType type, int amount)

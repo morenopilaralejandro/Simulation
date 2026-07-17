@@ -11,4 +11,5 @@ public class SaveData
     public ChestStateSaveData ChestStateSaveData;
     public SaveDataWorldSystem SaveDataWorldSystem;
     public SaveDataTeamSystem SaveDataTeamSystem;
+    public WingSystemSaveData WingSystemSaveData;
 }

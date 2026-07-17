@@ -31,6 +31,18 @@ public static class ItemDataFactory
             case ItemCategory.Recovery:
                 return ScriptableObject.CreateInstance<ItemDataRecovery>();
 
+            case ItemCategory.Recipe:
+                return ScriptableObject.CreateInstance<ItemDataRecipe>();
+
+            case ItemCategory.Emblem:
+                return ScriptableObject.CreateInstance<ItemDataEmblem>();
+
+            case ItemCategory.Character:
+                return ScriptableObject.CreateInstance<ItemDataCharacter>();
+
+            case ItemCategory.Wing:
+                return ScriptableObject.CreateInstance<ItemDataWing>();
+
             default:
                 LogManager.Error($"[ItemDataFactory] No data class for {category.ToString()}.");
                 return null;

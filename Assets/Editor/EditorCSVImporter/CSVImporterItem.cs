@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using Aremoreno.Enums.Color;
 using Aremoreno.Enums.Item;
 
 public class CSVImporterItem
 {
-    [MenuItem("Tools/Import CSV/Item")]
+    [MenuItem("Tools/Import CSV/Item/Item")]
     public static void ImportItemsFromCSV()
     {
         string assetFolder = "Assets/Addressables/AddressItemData";
@@ -79,6 +80,18 @@ public class CSVImporterItem
         int recoveryAmountHpIndex = System.Array.IndexOf(headers, "RecoveryAmountHp");
         int recoveryAmountSpIndex = System.Array.IndexOf(headers, "RecoveryAmountSp");
 
+        // Recipe
+        int recipeIdIndex = System.Array.IndexOf(headers, "RecipeId");
+
+        // Emblem
+        int emblemIdIndex = System.Array.IndexOf(headers, "EmblemId");
+
+        // Character
+        int characterIdIndex = System.Array.IndexOf(headers, "CharacterId");
+
+        // Wing
+        int wingIdIndex = System.Array.IndexOf(headers, "WingId");
+
         for (int i = 1; i < lines.Length; i++)
         {
             if (string.IsNullOrWhiteSpace(lines[i])) continue;
@@ -93,7 +106,7 @@ public class CSVImporterItem
             itemData.ItemId         = values[itemIdIndex].Trim();
             itemData.Category       = category;
             itemData.SpriteType     = EnumManager.StringToEnum<ItemSpriteType>(values[spriteTypeIndex].Trim());
-            itemData.SpriteColor    = EnumManager.StringToEnum<ItemSpriteColor>(values[spriteColorIndex].Trim());
+            itemData.SpriteColor    = EnumManager.StringToEnum<ColorGeneric>(values[spriteColorIndex].Trim());
             itemData.UsageContext   = EnumManager.StringToEnum<ItemUsageContext>(values[usageContextIndex].Trim());
             itemData.IsSellable     = CSVImporterParser.ParseBool(values[isSellableIndex].Trim());
             itemData.PriceBuyGold   = int.Parse(values[priceBuyGoldIndex].Trim());
@@ -147,9 +160,25 @@ public class CSVImporterItem
                     itemDataRecovery.RecoveryAmountHp = int.Parse(values[recoveryAmountHpIndex].Trim());
                     itemDataRecovery.RecoveryAmountSp = int.Parse(values[recoveryAmountSpIndex].Trim());
                     break;
+
+                case ItemDataRecipe itemDataRecipe:
+                    itemDataRecipe.RecipeId = values[recipeIdIndex].Trim();
+                    break;
+
+                case ItemDataEmblem itemDataEmblem:
+                    itemDataEmblem.EmblemId = values[emblemIdIndex].Trim();
+                    break;
+
+                case ItemDataCharacter itemDataCharacter:
+                    itemDataCharacter.CharacterId = values[characterIdIndex].Trim();
+                    break;
+
+                case ItemDataWing itemDataWing:
+                    itemDataWing.WingId = values[wingIdIndex].Trim();
+                    break;
             }
 
-            string safeName = "item" + "-" + category.ToString().ToLower() + "-" + itemId.Replace(" ", "_").Replace("/", "_");
+            string safeName = itemId.Replace(" ", "_").Replace("/", "_");
             string assetPath = $"{assetFolder}/{safeName}.asset";
             AssetDatabase.CreateAsset(itemData, assetPath);
         }

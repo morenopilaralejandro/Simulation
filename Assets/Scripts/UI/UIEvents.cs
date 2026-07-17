@@ -444,6 +444,66 @@ public static class UIEvents
         OnSelectableSelected?.Invoke(go);
     }
 
+    public static event System.Action<
+        ISelectorSource<ItemStorageSlot>,
+        ISelectorClickAction<ItemStorageSlot>,
+        ISelectorFilter<ItemStorageSlot>,
+        MenuBagMode
+    > OnItemStorageSlotBagSelectorOpenRequested;
+    public static void RaiseItemStorageSlotBagSelectorOpenRequested(
+        ISelectorSource<ItemStorageSlot> source,
+        ISelectorClickAction<ItemStorageSlot> action,
+        ISelectorFilter<ItemStorageSlot> filter = null,
+        MenuBagMode mode = MenuBagMode.Default)
+    => OnItemStorageSlotBagSelectorOpenRequested?.Invoke(source, action, filter, mode);
+
+    public static event Action<ItemCategory> OnBagCategoryChanged;
+    public static void RaiseBagCategoryChanged(ItemCategory itemCategory)
+    {
+        OnBagCategoryChanged?.Invoke(itemCategory);
+    }
+
+    public static event Action<Item> OnBagDescriptionUpdated;
+    public static void RaiseBagDescriptionUpdated(Item item)
+    {
+        OnBagDescriptionUpdated?.Invoke(item);
+    }
+
+    public static event Action OnBagUpdated;
+    public static void RaiseBagUpdated()
+    {
+        OnBagUpdated?.Invoke();
+    }
+
+    public static event Action<PickerAmountMode, Item, int, int, CurrencyType> OnPickerAmountOpened;
+    public static void RaisePickerAmountOpened(PickerAmountMode mode, Item item, int min, int max, CurrencyType currencyType)
+    {
+        OnPickerAmountOpened?.Invoke(mode, item, min, max, currencyType);
+    }
+
+    public static event Action<Item> OnItemBuyRequested;
+    public static void RaiseItemBuyRequested(Item item)
+    {
+        OnItemBuyRequested?.Invoke(item);
+    }
+
+    public static event System.Action<
+        ISelectorSource<Item>,
+        ISelectorClickAction<Item>,
+        ISelectorFilter<Item>
+    > OnItemShopSelectorOpenRequested;
+    public static void RaiseItemShopSelectorOpenRequested(
+        ISelectorSource<Item> source,
+        ISelectorClickAction<Item> action,
+        ISelectorFilter<Item> filter = null)
+    => OnItemShopSelectorOpenRequested?.Invoke(source, action, filter);
+
+    public static event Action<Item> OnMenuItemUseOpenRequested;
+    public static void RaiseMenuItemUseOpenRequested(Item item)
+    {
+        OnMenuItemUseOpenRequested?.Invoke(item);
+    }
+
     // Selector
     public static event Action<Character> OnSelectorCharacterActionClicked;
     public static void RaiseSelectorCharacterActionClicked(Character character)
@@ -510,5 +570,133 @@ public static class UIEvents
     public static void RaiseMatchDetailOpened(string matchId, MatchChainNodeMatch node = null)
     {
         OnMatchDetailOpened?.Invoke(matchId, node);
+    }
+
+    //Equipment
+    public static event Action<ItemEquipment> OnEquipmentStatLayoutUpdateRequested;
+    public static void RaiseEquipmentStatLayoutUpdateRequested(ItemEquipment equipment)
+    {
+        OnEquipmentStatLayoutUpdateRequested?.Invoke(equipment);
+    }
+
+    public static event Action<ItemEquipment> OnSelectorEquipmentActionClicked;
+    public static void RaiseSelectorEquipmentActionClicked(ItemEquipment itemEquipment)
+    {
+        OnSelectorEquipmentActionClicked?.Invoke(itemEquipment);
+    }
+
+    public static event System.Action<
+        ISelectorSource<ItemEquipment>,
+        ISelectorClickAction<ItemEquipment>,
+        ISelectorFilter<ItemEquipment>
+    > OnEquipmentSelectorOpenRequested;
+    public static void RaiseEquipmentSelectorOpenRequested(
+        ISelectorSource<ItemEquipment>      source,
+        ISelectorClickAction<ItemEquipment> action,
+        ISelectorFilter<ItemEquipment>      filter = null)
+    => OnEquipmentSelectorOpenRequested?.Invoke(source, action, filter);
+
+    public static event Action<EquipmentSlotUI> OnEquipmentSlotUIClicked;
+    public static void RaiseEquipmentSlotUIClicked(EquipmentSlotUI equipmentSlotUI)
+    {
+        OnEquipmentSlotUIClicked?.Invoke(equipmentSlotUI);
+    }
+
+    public static event Action<EquipmentSlotUI> OnEquipmentActionsOpenRequested;
+    public static void RaiseEquipmentActionsOpenRequested(EquipmentSlotUI equipmentSlotUI)
+    {
+        OnEquipmentActionsOpenRequested?.Invoke(equipmentSlotUI);
+    }
+
+    public static event Action<EquipmentSlotUI> OnEquipmentActionsCloseRequested;
+    public static void RaiseEquipmentActionsCloseRequested(EquipmentSlotUI equipmentSlotUI)
+    {
+        OnEquipmentActionsCloseRequested?.Invoke(equipmentSlotUI);
+    }
+
+    public static event Action<ItemEquipment, Character> OnEquipmentEquipRequested;
+    public static void RaiseEquipmentEquipRequested(ItemEquipment itemEquipment, Character character)
+    {
+        OnEquipmentEquipRequested?.Invoke(itemEquipment, character);
+    }
+
+    public static event Action<ItemEquipment, Character> OnEquipmentUnequipRequested;
+    public static void RaiseEquipmentUnequipRequested(ItemEquipment itemEquipment, Character character)
+    {
+        OnEquipmentUnequipRequested?.Invoke(itemEquipment, character);
+    }
+
+    //Wing
+    public static event System.Action<
+        ISelectorSource<Wing>,
+        ISelectorClickAction<Wing>,
+        ISelectorFilter<Wing>,
+        bool
+    > OnWingSelectorOpenRequested;
+    public static void RaiseWingSelectorOpenRequested(
+        ISelectorSource<Wing>      source,
+        ISelectorClickAction<Wing> action,
+        ISelectorFilter<Wing>      filter = null,
+        bool    closeOnSelect  = true)
+    => OnWingSelectorOpenRequested?.Invoke(source, action, filter, closeOnSelect);
+
+    public static event Action<Wing> OnWingDescriptionUpdateRequested;
+    public static void RaiseWingDescriptionUpdateRequested(Wing wing)
+    {
+        OnWingDescriptionUpdateRequested?.Invoke(wing);
+    }
+
+    public static event Action<WingSlotUI> OnWingSlotUIClicked;
+    public static void RaiseWingSlotUIClicked(WingSlotUI wingSlotUI)
+    {
+        OnWingSlotUIClicked?.Invoke(wingSlotUI);
+    }
+
+    public static event Action<WingSlotUI> OnWingActionsCloseRequested;
+    public static void RaiseWingActionsCloseRequested(WingSlotUI wingSlotUI)
+    {
+        OnWingActionsCloseRequested?.Invoke(wingSlotUI);
+    }
+
+    public static event Action<WingSlotUI> OnWingActionsOpenRequested;
+    public static void RaiseWingActionsOpenRequested(WingSlotUI wingSlotUI)
+    {
+        OnWingActionsOpenRequested?.Invoke(wingSlotUI);
+    }
+
+    public static event Action<Wing, Character> OnWingEquipRequested;
+    public static void RaiseWingEquipRequested(Wing wing, Character character)
+    {
+        OnWingEquipRequested?.Invoke(wing, character);
+    }
+
+    public static event Action<Wing, Character> OnWingUnequipRequested;
+    public static void RaiseWingUnequipRequested(Wing wing, Character character)
+    {
+        OnWingUnequipRequested?.Invoke(wing, character);
+    }
+
+    public static event Action<Wing> OnSelectorWingActionClicked;
+    public static void RaiseSelectorWingActionClicked(Wing wing)
+    {
+        OnSelectorWingActionClicked?.Invoke(wing);
+    }
+
+    public static event Action<Wing> OnWingDetailOpenRequested;
+    public static void RaiseWingDetailOpenRequested(Wing wing)
+    {
+        OnWingDetailOpenRequested?.Invoke(wing);
+    }
+
+    public static event Action OnWingDetailRefreshRequested;
+    public static void RaiseWingDetailRefreshRequested()
+    {
+        OnWingDetailRefreshRequested?.Invoke();
+    }
+
+    public static event Action OnBackFromWingDetailRequested;
+    public static void RaiseBackFromWingDetailRequested()
+    {
+        OnBackFromWingDetailRequested?.Invoke();
     }
 }

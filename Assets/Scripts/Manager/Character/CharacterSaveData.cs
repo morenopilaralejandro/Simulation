@@ -46,4 +46,10 @@ public class CharacterSaveData
 
     //wing
     public string EquippedWingGuid;
+
+    //equipment
+    public string EquipmentId0;
+    public string EquipmentId1;
+    public string EquipmentId2;
+    public string EquipmentId3;
 }

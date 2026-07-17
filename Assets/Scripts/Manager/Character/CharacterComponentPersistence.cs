@@ -82,7 +82,13 @@ public class CharacterComponentPersistence
             CustomPortraitSize = character.CustomPortraitSize,
 
             //Wing
-            EquippedWingGuid = character.Wing?.WingGuid
+            EquippedWingGuid = character.Wing?.WingGuid,
+
+            //Equipment
+            EquipmentId0 = character.GetEquipment(0)?.ItemId,
+            EquipmentId1 = character.GetEquipment(1)?.ItemId,
+            EquipmentId2 = character.GetEquipment(2)?.ItemId,
+            EquipmentId3 = character.GetEquipment(3)?.ItemId
         };
     }
 

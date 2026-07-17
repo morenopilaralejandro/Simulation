@@ -15,26 +15,44 @@ public class CharacterDetailSide : MonoBehaviour
     [SerializeField] private BarHPSP barSp;
     [SerializeField] private BarXP barXp;
     [SerializeField] private TMP_Text textLevel;
+
     [Header("Moves")]
     [SerializeField] private MoveLayoutUI moveLayoutUI;
+
     [Header("Stats")]
     [SerializeField] private StatLayoutUI statLayoutUI;
+
+    [Header("Equipment")]
+    [SerializeField] private EquipmentLayoutUI equipmentLayoutUI;
+
+    [Header("Wing")]
+    [SerializeField] private CanvasGroup canvasWing;
+    [SerializeField] private Image wingIcon;
+    [SerializeField] private TMP_Text wingTextName;
+    [SerializeField] private StatLayoutUI statLayoutUIWing;
+
     [Header("Pages")]
     [SerializeField] private CanvasGroup pageOneCanvas;
     [SerializeField] private CanvasGroup pageTwoCanvas;
+    [SerializeField] private CanvasGroup pageThreeCanvas;
+    [SerializeField] private CanvasGroup pageFourCanvas;
 
     private Character character;
     private int page = 0;
-    private int pageMax = 1;
+    private int pageMax = 3;
 
     #endregion
 
     #region
 
-    private void Awake() 
+    private void Awake()
     {
         SetVisible(pageOneCanvas, true);
         SetVisible(pageTwoCanvas, false);
+        SetVisible(pageThreeCanvas, false);
+        SetVisible(pageFourCanvas, false);
+
+        SetVisible(canvasWing, false);
     }
 
     #endregion
@@ -45,7 +63,7 @@ public class CharacterDetailSide : MonoBehaviour
     {
         this.character = character;
 
-        if(character == null) return;
+        if (character == null) return;
 
         characterCard.SetCharacter(character, position);
         barHp.SetCharacter(character, Stat.Hp);
@@ -55,8 +73,25 @@ public class CharacterDetailSide : MonoBehaviour
 
         moveLayoutUI.Initialize(character);
         moveLayoutUI.Populate();
+
         statLayoutUI.Initialize(character);
         statLayoutUI.Populate();
+
+        equipmentLayoutUI.Initialize(character);
+        equipmentLayoutUI.Populate();
+
+        if (character.HasWingEquipped)
+        {
+            statLayoutUIWing.Populate(character.Wing);
+
+            wingTextName.text = character.Wing.WingName;
+            wingIcon.color = ColorManager.GetWingColor(character.Wing.WingColorType);
+        } else 
+        {
+            statLayoutUIWing.Clear();
+            wingTextName.text = "";
+            wingIcon.color = Color.white;
+        }
     }
 
     public void Clear()
@@ -71,18 +106,23 @@ public class CharacterDetailSide : MonoBehaviour
 
         moveLayoutUI.Clear();
         statLayoutUI.Clear();
+        equipmentLayoutUI.Clear();
+
+        statLayoutUIWing.Clear();
+        wingTextName.text = "";
+        wingIcon.color = Color.white;
     }
 
     #endregion
 
     #region Button
 
-    public void OnButtonNextClicked() 
+    public void OnButtonNextClicked()
     {
         UIEvents.RaiseCharacterDetailSideNextPageRequested();
     }
 
-    public void OnButtonDetailClicked() 
+    public void OnButtonDetailClicked()
     {
         if (character == null) return;
         UIEvents.RaiseCharacterDetailOpenRequested(character);
@@ -94,13 +134,10 @@ public class CharacterDetailSide : MonoBehaviour
 
     private void SetVisible(CanvasGroup canvasGroup, bool isVisible)
     {
-        if (isVisible)
-            canvasGroup.alpha = 1f;
-        else
-            canvasGroup.alpha = 0f;
+        canvasGroup.alpha = isVisible ? 1f : 0f;
     }
 
-    private void ChangePage() 
+    private void ChangePage()
     {
         AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
 
@@ -109,17 +146,12 @@ public class CharacterDetailSide : MonoBehaviour
         if (page > pageMax)
             page = 0;
 
-        switch(page) 
-        {
-            case 0:
-                SetVisible(pageTwoCanvas, false);
-                SetVisible(pageOneCanvas, true);
-                break;
-            case 1:
-                SetVisible(pageOneCanvas, false);
-                SetVisible(pageTwoCanvas, true);
-                break;
-        }
+        SetVisible(pageOneCanvas, page == 0);
+        SetVisible(pageTwoCanvas, page == 1);
+        SetVisible(pageThreeCanvas, page == 2);
+        SetVisible(pageFourCanvas, page == 3);
+
+        SetVisible(canvasWing, page == 3);
     }
 
     #endregion
@@ -140,21 +172,20 @@ public class CharacterDetailSide : MonoBehaviour
         UIEvents.OnFormationCharacterSlotUISelected -= HandleFormationCharacterSlotUISelected;
     }
 
-    private void HandleCharacterDetailSideUpdateRequested(Character character, Position position) 
+    private void HandleCharacterDetailSideUpdateRequested(Character character, Position position)
     {
         PopulateUI(character, position);
     }
 
-    private void HandleCharacterDetailSideNextPageRequested() 
+    private void HandleCharacterDetailSideNextPageRequested()
     {
         ChangePage();
     }
 
-    private void HandleFormationCharacterSlotUISelected(FormationCharacterSlotUI slot) 
+    private void HandleFormationCharacterSlotUISelected(FormationCharacterSlotUI slot)
     {
         UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
     }
 
     #endregion
-
 }

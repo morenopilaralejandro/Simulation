@@ -87,6 +87,27 @@ public class MenuSide : Menu
         menuManager.OpenMenu(menuCharacter);
     }
 
+    public void OnButtonBagTapped()
+    {
+        //menuManager.OpenMenu(menuCharacter);
+        UIEvents.RaiseItemStorageSlotBagSelectorOpenRequested(
+            null,
+            new SelectorItemStorageSlotBagActionUse(),
+            null,
+            MenuBagMode.Default
+        );
+    }
+
+    public void OnButtonWingTapped()
+    {
+        UIEvents.RaiseWingSelectorOpenRequested(
+            new SelectorWingSourceFromStorage(),
+            new SelectorWingActionOpenDetail(),
+            null,
+            false
+        );
+    }
+
     public void OnButtonQuitTapped()
     {
         menuManager.OpenMenu(menuQuit);

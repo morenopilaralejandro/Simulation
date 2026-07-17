@@ -1136,17 +1136,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""6decff4c-a79d-4787-8eb4-8a364edaae8d"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""World_OpenSideMenu"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""627e3175-ae63-4c1f-a4fd-e743d4f463f2"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
@@ -1488,6 +1477,24 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutBagCategoryNext"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a9b05b2-5332-45ba-8ced-f797d5fbcf23"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Navigation_ShortcutBagCategoryPrevious"",
+                    ""type"": ""Button"",
+                    ""id"": ""3b4045e3-081c-409e-a286-f9d1aa2ad1ac"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1677,6 +1684,50 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Navigation_ShortcutCharacterFilter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f3975de-422c-4b27-b93b-20fc880f9381"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutBagCategoryNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""66689db9-83da-4b3e-9821-51c5210c9e5f"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutBagCategoryNext"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0173bec5-f94a-4942-bffb-d92aa2d70bfd"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutBagCategoryPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cc7577a7-b1c9-4d14-99d4-1c3fc03e60f5"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Navigation_ShortcutBagCategoryPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1736,6 +1787,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_NavigationActions_Navigation_ShortcutTeamCharacterReplace = m_NavigationActions.FindAction("Navigation_ShortcutTeamCharacterReplace", throwIfNotFound: true);
         m_NavigationActions_Navigation_ShortcutTeamCharacterNext = m_NavigationActions.FindAction("Navigation_ShortcutTeamCharacterNext", throwIfNotFound: true);
         m_NavigationActions_Navigation_ShortcutCharacterFilter = m_NavigationActions.FindAction("Navigation_ShortcutCharacterFilter", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutBagCategoryNext = m_NavigationActions.FindAction("Navigation_ShortcutBagCategoryNext", throwIfNotFound: true);
+        m_NavigationActions_Navigation_ShortcutBagCategoryPrevious = m_NavigationActions.FindAction("Navigation_ShortcutBagCategoryPrevious", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -2543,6 +2596,8 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamCharacterReplace;
     private readonly InputAction m_NavigationActions_Navigation_ShortcutTeamCharacterNext;
     private readonly InputAction m_NavigationActions_Navigation_ShortcutCharacterFilter;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutBagCategoryNext;
+    private readonly InputAction m_NavigationActions_Navigation_ShortcutBagCategoryPrevious;
     /// <summary>
     /// Provides access to input actions defined in input action map "NavigationActions".
     /// </summary>
@@ -2590,6 +2645,14 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutCharacterFilter".
         /// </summary>
         public InputAction @Navigation_ShortcutCharacterFilter => m_Wrapper.m_NavigationActions_Navigation_ShortcutCharacterFilter;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutBagCategoryNext".
+        /// </summary>
+        public InputAction @Navigation_ShortcutBagCategoryNext => m_Wrapper.m_NavigationActions_Navigation_ShortcutBagCategoryNext;
+        /// <summary>
+        /// Provides access to the underlying input action "NavigationActions/Navigation_ShortcutBagCategoryPrevious".
+        /// </summary>
+        public InputAction @Navigation_ShortcutBagCategoryPrevious => m_Wrapper.m_NavigationActions_Navigation_ShortcutBagCategoryPrevious;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2643,6 +2706,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Navigation_ShortcutCharacterFilter.started += instance.OnNavigation_ShortcutCharacterFilter;
             @Navigation_ShortcutCharacterFilter.performed += instance.OnNavigation_ShortcutCharacterFilter;
             @Navigation_ShortcutCharacterFilter.canceled += instance.OnNavigation_ShortcutCharacterFilter;
+            @Navigation_ShortcutBagCategoryNext.started += instance.OnNavigation_ShortcutBagCategoryNext;
+            @Navigation_ShortcutBagCategoryNext.performed += instance.OnNavigation_ShortcutBagCategoryNext;
+            @Navigation_ShortcutBagCategoryNext.canceled += instance.OnNavigation_ShortcutBagCategoryNext;
+            @Navigation_ShortcutBagCategoryPrevious.started += instance.OnNavigation_ShortcutBagCategoryPrevious;
+            @Navigation_ShortcutBagCategoryPrevious.performed += instance.OnNavigation_ShortcutBagCategoryPrevious;
+            @Navigation_ShortcutBagCategoryPrevious.canceled += instance.OnNavigation_ShortcutBagCategoryPrevious;
         }
 
         /// <summary>
@@ -2681,6 +2750,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Navigation_ShortcutCharacterFilter.started -= instance.OnNavigation_ShortcutCharacterFilter;
             @Navigation_ShortcutCharacterFilter.performed -= instance.OnNavigation_ShortcutCharacterFilter;
             @Navigation_ShortcutCharacterFilter.canceled -= instance.OnNavigation_ShortcutCharacterFilter;
+            @Navigation_ShortcutBagCategoryNext.started -= instance.OnNavigation_ShortcutBagCategoryNext;
+            @Navigation_ShortcutBagCategoryNext.performed -= instance.OnNavigation_ShortcutBagCategoryNext;
+            @Navigation_ShortcutBagCategoryNext.canceled -= instance.OnNavigation_ShortcutBagCategoryNext;
+            @Navigation_ShortcutBagCategoryPrevious.started -= instance.OnNavigation_ShortcutBagCategoryPrevious;
+            @Navigation_ShortcutBagCategoryPrevious.performed -= instance.OnNavigation_ShortcutBagCategoryPrevious;
+            @Navigation_ShortcutBagCategoryPrevious.canceled -= instance.OnNavigation_ShortcutBagCategoryPrevious;
         }
 
         /// <summary>
@@ -3054,5 +3129,19 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnNavigation_ShortcutCharacterFilter(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutBagCategoryNext" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutBagCategoryNext(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Navigation_ShortcutBagCategoryPrevious" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNavigation_ShortcutBagCategoryPrevious(InputAction.CallbackContext context);
     }
 }

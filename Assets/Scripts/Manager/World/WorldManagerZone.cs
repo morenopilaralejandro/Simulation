@@ -14,8 +14,6 @@ public class WorldManagerZone
     public void SetState(WorldState state) => _currentState = state;
 
     private TransitionScreen transitionScreen => WorldUIManager.Instance.TransitionScreen;
-    public Task FadeInAsync() => transitionScreen.FadeIn();
-    public Task FadeOutAsync() => transitionScreen.FadeOut();
     private PlayerWorldEntity player;
     private bool _isTransitioning = false;
     public bool IsTransitioning => _isTransitioning;
@@ -465,7 +463,32 @@ public class WorldManagerZone
         }
     }
 
+    #region Transition
+
+    public Task FadeInAsync()
+    {
+        if (transitionScreen == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        return transitionScreen.FadeIn();
+    }
+
+    public Task FadeOutAsync()
+    {
+        if (transitionScreen == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        return transitionScreen.FadeOut();
+    }
+
+    #endregion
+
     #region Helpers
 
     #endregion
+
 }

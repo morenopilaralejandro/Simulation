@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Aremoreno.Enums.Dialog;
 using Aremoreno.Enums.Input;
 using Aremoreno.Enums.World;
+using Aremoreno.Enums.UI;
 
 /// <summary>
 /// Main entry point for the dialog system.
@@ -166,6 +167,27 @@ public class DialogManager : MonoBehaviour
         }
     }
 
+    public void CancelPressed()
+    {
+        if (!CanAcceptInput)
+            return;
+
+        switch (_state)
+        {
+            case DialogState.ShowingText:
+                _uiController.HandleAdvanceInput();
+                break;
+
+            case DialogState.WaitingForInput:
+                _uiController.HandleAdvanceInput();
+                break;
+
+            case DialogState.WaitingForChoice:
+                _uiController.HandleCancelInput();
+                break;
+        }
+    }
+
     // ============ STORY CALLBACKS ============
 
     private void HandleLineReady(DialogLine line)
@@ -299,7 +321,19 @@ public class DialogManager : MonoBehaviour
                     filter: null);
                 break;
             case "shop":
-                //ShopManager.Instance.OpenShop(contextId);
+                UIEvents.RaiseItemShopSelectorOpenRequested(
+                    new SelectorItemShopSource(contextId),
+                    new SelectorItemShopAction(),
+                    null
+                );
+                break;
+            case "sell":
+                UIEvents.RaiseItemStorageSlotBagSelectorOpenRequested(
+                    null,
+                    new SelectorItemStorageSlotBagActionSell(),
+                    new ItemStorageSlotFilterAdapterSellable(),
+                    MenuBagMode.Sell
+                );
                 break;
             case "inventory":
                 //InventoryUI.Instance.Open();

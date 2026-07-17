@@ -53,7 +53,7 @@ public class StorySystemManager : MonoBehaviour
 
     private void OnDestroy() 
     {
-        matchChainSystem.Unsubscribe();
+        matchChainSystem?.Unsubscribe();
     }
 
     #endregion

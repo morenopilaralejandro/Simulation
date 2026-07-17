@@ -42,7 +42,11 @@ public class DialogUIController : MonoBehaviour
     [SerializeField] private float _fastTypewriterSpeed = 0.005f;
     [SerializeField] private float _fadeSpeed = 0.3f;
     [SerializeField] private AudioClip _typewriterSFX;
-    [SerializeField] private int _typewriterSFXInterval = 2;
+    private int _typewriterSFXInterval = 2;
+
+    [Header("Selector — Scroll")]
+    [SerializeField] protected ScrollViewAutoScroll autoScroll;
+    [SerializeField] protected ScrollRect           scrollRect;
 
     // State
     private bool _isTyping;
@@ -52,7 +56,7 @@ public class DialogUIController : MonoBehaviour
     private Coroutine _typewriterCoroutine;
     private Coroutine _fadeCoroutine;
 
-    private readonly List<GameObject> _spawnedChoiceButtons = new();
+    private readonly List<ButtonDialogChoiceMulti> _spawnedChoiceButtons = new();
 
     private DialogLocalizationBridge _locBridge;
     private AudioManager _audioManager;
@@ -228,7 +232,7 @@ public class DialogUIController : MonoBehaviour
         {
             if (InputManager.Instance.IsAndroid && !InputManager.Instance.IsUsingController) return;
 
-            var firstButton = _spawnedChoiceButtons[0].GetComponent<Button>();
+            var firstButton = _spawnedChoiceButtons[0].Button;
             EventSystem.current.SetSelectedGameObject(null); // Clear previous selection
             EventSystem.current.SetSelectedGameObject(firstButton.gameObject);
         }
@@ -252,10 +256,15 @@ public class DialogUIController : MonoBehaviour
                 _noChoiceIndex = choice.Index;
             }
         }
+
+        EventSystem.current.SetSelectedGameObject(_yesButton.gameObject);
     }
 
     private void ShowMultipleChoices(List<DialogChoice> choices)
     {
+        autoScroll.Activate();
+        autoScroll.ResetToTop();
+
         SetCanvasGroupVisible(_yesNoPanel, false);
         SetCanvasGroupVisible(_choiceListPanel, true);
 
@@ -263,20 +272,14 @@ public class DialogUIController : MonoBehaviour
 
         foreach (var choice in choices)
         {
-            var buttonObj = Instantiate(_choiceButtonPrefab, _choiceListContainer);
-
-            var buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
-
-            if (buttonText != null)
-                buttonText.text = choice.ResolvedText;
-
-            var button = buttonObj.GetComponent<Button>();
-
             int capturedIndex = choice.Index;
+            var buttonGo = Instantiate(_choiceButtonPrefab, _choiceListContainer);
 
-            button.onClick.AddListener(() =>
-                DialogEvents.RaiseChoiceSelected(capturedIndex));
+            var buttonObj = buttonGo.GetComponent<ButtonDialogChoiceMulti>();
+            buttonObj.SetText(choice.ResolvedText);
+            buttonObj.SetScrollRect(scrollRect);
 
+            buttonObj.Button.onClick.AddListener(() => DialogEvents.RaiseChoiceSelected(capturedIndex));
             _spawnedChoiceButtons.Add(buttonObj);
         }
     }
@@ -285,6 +288,8 @@ public class DialogUIController : MonoBehaviour
     {
         SetCanvasGroupVisible(_yesNoPanel, false);
         SetCanvasGroupVisible(_choiceListPanel, false);
+
+        autoScroll.Deactivate();
 
         ClearChoiceButtons();
     }
@@ -296,7 +301,7 @@ public class DialogUIController : MonoBehaviour
         foreach (var btn in _spawnedChoiceButtons)
         {
             if (btn != null)
-                Destroy(btn);
+                Destroy(btn.gameObject);
         }
 
         _spawnedChoiceButtons.Clear();
@@ -315,6 +320,22 @@ public class DialogUIController : MonoBehaviour
             _skipRequested = true;
         else
             DialogEvents.RaiseContinueRequested();
+    }
+
+    public void HandleCancelInput()
+    {
+        if (_yesNoPanel.interactable)
+        {
+            // No button
+            DialogEvents.RaiseChoiceSelected(_noChoiceIndex);
+            return;
+        }
+
+        if (_spawnedChoiceButtons.Count > 0)
+        {
+            int lastChoiceIndex = _spawnedChoiceButtons.Count - 1;
+            DialogEvents.RaiseChoiceSelected(lastChoiceIndex);
+        }
     }
 
     private IEnumerator TypewriterEffect(string fullText)

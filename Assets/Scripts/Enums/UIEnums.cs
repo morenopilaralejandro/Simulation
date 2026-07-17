@@ -45,4 +45,23 @@ namespace Aremoreno.Enums.UI
         SwappingMove 
     }
 
+    public enum MenuBagMode
+    {
+        Default,
+        Sell
+    }
+
+    public enum PickerAmountMode
+    {
+        Buy,
+        Sell
+    }
+
+    public enum MenuItemUseState
+    { 
+        Idle,
+        WaitingToUseRecovery, 
+        WaitingToUseMove
+    }
+
 }

@@ -63,6 +63,8 @@ public class DatabaseManager : MonoBehaviour
         return null;
     }
 
+    public ShopData GetShopData(string id) => DatabaseRegistry.ShopData.Get(id);
+
     public EmblemData GetEmblemData(string id) => DatabaseRegistry.EmblemData.Get(id);
     public Emblem GetEmblem(string id) 
     {
