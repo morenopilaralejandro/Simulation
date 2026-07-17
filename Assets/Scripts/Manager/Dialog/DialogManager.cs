@@ -167,6 +167,27 @@ public class DialogManager : MonoBehaviour
         }
     }
 
+    public void CancelPressed()
+    {
+        if (!CanAcceptInput)
+            return;
+
+        switch (_state)
+        {
+            case DialogState.ShowingText:
+                _uiController.HandleAdvanceInput();
+                break;
+
+            case DialogState.WaitingForInput:
+                _uiController.HandleAdvanceInput();
+                break;
+
+            case DialogState.WaitingForChoice:
+                _uiController.HandleCancelInput();
+                break;
+        }
+    }
+
     // ============ STORY CALLBACKS ============
 
     private void HandleLineReady(DialogLine line)

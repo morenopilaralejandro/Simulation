@@ -22,5 +22,7 @@ public class PlayerWorldComponentDialog : MonoBehaviour
         if (!dialogManager.CanAcceptInput) return;
         if (inputManager.GetDown(CustomAction.Dialog_Submit))
             dialogManager.InputPressed();
+        if (inputManager.GetDown(CustomAction.Dialog_Cancel))
+            dialogManager.CancelPressed();
     }
 }
