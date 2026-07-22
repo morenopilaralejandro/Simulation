@@ -5,6 +5,7 @@ using Aremoreno.Enums.World;
 [System.Serializable]
 public class EncounterData
 {
+    public string EncounterId;
     public string TeamId;
     public int Level;
     public string BgmId;

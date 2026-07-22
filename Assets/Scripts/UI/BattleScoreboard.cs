@@ -71,6 +71,16 @@ public class BattleScoreboard : MonoBehaviour
         teamNameDict[side].text = team.TeamName;
     }
 
+    public async Task SetTeamAsync(Team team, TeamSide side)
+    {
+        Sprite emblemSprite =
+            await _crestBindings[side]
+                .LoadAsync(team.Emblem.EmblemAddress);
+
+        teamCrestDict[side].sprite = emblemSprite;
+        teamNameDict[side].text = team.TeamName;
+    }
+
     public void UpdateScoreDisplay(Team team, int scoreValue)
     {
         scoreTextDict[team.TeamSide].text = scoreValue.ToString();

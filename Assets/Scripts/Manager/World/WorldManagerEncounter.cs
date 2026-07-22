@@ -260,7 +260,7 @@ public class WorldManagerEncounter
         BattleArgs.SetMini(
             homeTeamGuid : TeamManager.Instance.ActiveLoadoutGuid, 
             awayTeamId : encounter.TeamId,
-            battleResultsType : BattleResultsType.Drop,
+            battleResultsType : BattleResultsType.Encounter,
             timeOfDay : worldManager.CurrentTimeOfDay, //if currentZone.zoneType == ZoneType.Interior use day
             ballId : encounter.BallId,
             bgmId : encounter.BgmId,

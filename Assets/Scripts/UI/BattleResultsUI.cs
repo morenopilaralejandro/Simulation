@@ -34,7 +34,7 @@ public class BattleResultsUI : MonoBehaviour
         audioManager.PlayBgm("bgm-fanfare");    
         switch (BattleArgs.BattleResultsType) 
         {
-            case BattleResultsType.Drop:
+            case BattleResultsType.Encounter:
                 panelDrop.SetActive(true);
                 EventSystem.current.SetSelectedGameObject(defaultSelectedDrop);
                 break;

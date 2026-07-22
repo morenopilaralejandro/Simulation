@@ -35,6 +35,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private SceneGroup sceneMainMenu;
     [SerializeField] private SceneGroup sceneGameOver;
     [SerializeField] private SceneGroup sceneBattleResults;
+    [SerializeField] private SceneGroup sceneWorld;
+    [SerializeField] private SceneGroup sceneDebugMainMenu;
     private SceneLoader sceneLoader;
 
     public BattlePhase CurrentPhase => currentPhase;
@@ -58,6 +60,7 @@ public class BattleManager : MonoBehaviour
     private BattleManagerField fieldSystem;
     private BattleManagerTeam teamSystem;
     private BattleManagerWing wingSystem;
+    private BattleManagerResults resultsSystem;
 
     #region Lifecycle
     private void Awake()
@@ -84,9 +87,11 @@ public class BattleManager : MonoBehaviour
         fieldSystem = new BattleManagerField();
         teamSystem = new BattleManagerTeam();
         wingSystem = new BattleManagerWing();
+        resultsSystem = new BattleManagerResults(sceneWorld, sceneDebugMainMenu);
 
         teamSystem.Subscribe();
         wingSystem.Subscribe();
+        resultsSystem.Subscribe();
 
         Freeze();
         SetTeamSize();
@@ -108,7 +113,8 @@ public class BattleManager : MonoBehaviour
         BattleEvents.OnAllCharactersReady -= HandleAllCharactersReady;
 
         if (teamSystem != null) teamSystem.Unsubscribe();
-        if (teamSystem != null) wingSystem.Unsubscribe();
+        if (wingSystem != null) wingSystem.Unsubscribe();
+        if (resultsSystem != null) resultsSystem.Unsubscribe();
     }
     #endregion
 
@@ -688,6 +694,8 @@ public class BattleManager : MonoBehaviour
     //wingSystem
     public void InitializeForBattleWingSystem() => wingSystem.InitializeForBattle();
     public bool CanActivateWings(TeamSide teamside) => wingSystem.CanActivateWings(teamside);
+
+    //resultsSystem
 
     //misc
     public GameObject InstantiateBall(GameObject prefabGo, Vector3 spawnPosition, Quaternion spawnRotation, Transform spawnPoint)
