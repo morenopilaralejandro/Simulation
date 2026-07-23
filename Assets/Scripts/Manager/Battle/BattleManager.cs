@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.DeadBall;
+using Aremoreno.Enums.Match;
 using Aremoreno.Enums.Kit;
 
 public class BattleManager : MonoBehaviour
@@ -316,29 +317,13 @@ public class BattleManager : MonoBehaviour
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnd();
 
-        var nextScene = sceneGameOver;
-        switch (result)
-        {
-            case WinConditionResult.HomeWin:
-                if (userSide == TeamSide.Home)
-                    nextScene = sceneBattleResults;
-                else
-                    nextScene = sceneGameOver;
-                break;
-            case WinConditionResult.AwayWin:
-                if (userSide == TeamSide.Away)
-                    nextScene = sceneBattleResults;
-                else
-                    nextScene = sceneGameOver;
-                break;
-            case WinConditionResult.Draw:
-            default:
-                // Handle draw — you may want a different scene or fallback
-                nextScene = sceneGameOver;
-                break;
-        }
+        resultsSystem.CreateBattleResultData(
+            scoreDict,
+            Teams, 
+            GetUserSide(),
+            false);
 
-        sceneLoader.LoadGroup(nextScene);
+        sceneLoader.LoadGroup(sceneBattleResults);
     }
 
     private void ForceEndGame(TeamSide winnerSide)
@@ -348,15 +333,13 @@ public class BattleManager : MonoBehaviour
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnd();
 
-        var nextScene = sceneGameOver;
+        resultsSystem.CreateBattleResultData(
+            scoreDict, 
+            Teams, 
+            GetUserSide(),
+            true);
 
-        TeamSide userSide = GetUserSide();
-        if (winnerSide == userSide)
-            nextScene = sceneBattleResults;
-        else
-            nextScene = sceneGameOver;
-
-        sceneLoader.LoadGroup(nextScene);
+        sceneLoader.LoadGroup(sceneBattleResults);
     }
 
     public void ForfeitBattle()
@@ -696,6 +679,10 @@ public class BattleManager : MonoBehaviour
     public bool CanActivateWings(TeamSide teamside) => wingSystem.CanActivateWings(teamside);
 
     //resultsSystem
+    public BattleResultData BattleResultData => resultsSystem.BattleResultData;
+    public void CreateBattleResultData(Dictionary<TeamSide, int> scores, Dictionary<TeamSide, Team> teams, TeamSide userSide, bool isForfeit) => resultsSystem.CreateBattleResultData(scores, teams, userSide, isForfeit);
+    public void Clear() => resultsSystem.Clear();
+    public MatchRank CalculateMatchRank(BattleResultData battleResultData) => resultsSystem.CalculateMatchRank(battleResultData);
 
     //misc
     public GameObject InstantiateBall(GameObject prefabGo, Vector3 spawnPosition, Quaternion spawnRotation, Transform spawnPoint)

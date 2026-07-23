@@ -7,28 +7,51 @@ using Aremoreno.Enums.Match;
 [System.Serializable]
 public class BattleResultData
 {
-    public BattleResultsType BattleResultsType { get; set; }
-    public TeamSide WinningSide { get; set; }
-    public Dictionary<TeamSide, int> FinalScore { get; set; }
-    public int HomeScore { get; set; }
-    public int AwayScore { get; set; }
-    public int EnemyLv { get; set; }
-    
-    // Basic-rewards
-    public int ExpReward { get; set; }
-    public int GoldReward { get; set; }
-    
-    // Encounter-specific
-    public List<ItemReward> ItemRewards { get; set; } //generate encounter from drops or match drops
+    public BattleResultsType BattleResultsType;
 
-    // Match-specific
-    public MatchRank MatchRank { get; set; }
-    
-    public BattleResultData()
+    public TeamSide WinningSide;
+    public TeamSide UserSide;
+
+    public Dictionary<TeamSide, int> Scores = new();
+    public Dictionary<TeamSide, Team> Teams = new();
+
+    public int ExpReward;
+    public int GoldReward;
+
+    public List<ItemReward> ItemRewards = new();
+
+    public MatchRank MatchRank;
+
+    public bool IsUserWin => !IsDraw && WinningSide == UserSide;
+    public bool IsHomeWin => WinningSide == TeamSide.Home;
+    public bool IsAwayWin => WinningSide == TeamSide.Away;
+    public bool IsDraw => Scores[TeamSide.Home] == Scores[TeamSide.Away];
+
+    /*
+    public TeamSide LosingSide =>
+        IsDraw
+            ? TeamSide.None
+            : (WinningSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home);
+    */
+
+    public TeamSide LosingSide => WinningSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
+    public TeamSide EnemySide => UserSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
+
+    public int GoalDifference => Mathf.Abs(Scores[TeamSide.Home] - Scores[TeamSide.Away]);
+
+    public void Clear()
     {
-        FinalScore = new Dictionary<TeamSide, int>();
-        ItemRewards = new List<ItemReward>();
-    }
+        Scores.Clear();
+        Teams.Clear();
 
-    public void Clear() {}
+        ItemRewards.Clear();
+
+        ExpReward = 0;
+        GoldReward = 0;
+
+        MatchRank = default;
+        BattleResultsType = default;
+        WinningSide = default;
+        UserSide = default;
+    }
 }

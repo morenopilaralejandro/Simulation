@@ -192,7 +192,7 @@ public class MenuMatchDetail : Menu
         BattleArgs.SetFull(
             homeTeamGuid: TeamManager.Instance.ActiveLoadoutGuid,
             awayTeamId: match.TeamId,
-            battleResultsType: BattleResultsType.Match,
+            battleResultsType: BattleResultsType.MatchNode,
             timeOfDay: worldManager.CurrentTimeOfDay,
             ballId: match.BallId,
             bgmId: match.BgmId,

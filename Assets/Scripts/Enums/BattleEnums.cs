@@ -20,7 +20,8 @@ namespace Aremoreno.Enums.Battle
     {
         Debug,
         Encounter,
-        Match,
+        MatchNode,
+        MatchStory,
         Arcade
     }
 

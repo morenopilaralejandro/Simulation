@@ -41,7 +41,7 @@ public static class BattleArgs
         AwayTeamCanUseWing = true;
         TimeOfDay = TimeOfDay.Day;
         BattleType = BattleType.Mini;
-        BattleResultsType = BattleResultsType.Match;
+        BattleResultsType = BattleResultsType.Debug;
         WinConditionType = WinConditionType.ScoreGoals;
         WinConditionParams = null;
     }

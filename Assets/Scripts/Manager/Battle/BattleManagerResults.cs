@@ -31,6 +31,7 @@ public class BattleManagerResults
 
     public BattleManagerResults(SceneGroup sceneWorld, SceneGroup sceneDebugMainMenu)
     {
+        this.battleResultData = new BattleResultData();
         this.sceneWorld = sceneWorld;
         this.sceneDebugMainMenu = sceneDebugMainMenu;
     }
@@ -40,46 +41,64 @@ public class BattleManagerResults
     #region Logic
 
     public void CreateBattleResultData(
-        int homeScore, 
-        int awayScore, 
-        int enemyLv,
-        TeamSide userSide)
+        Dictionary<TeamSide, int> scores,
+        Dictionary<TeamSide, Team> teams,
+        TeamSide userSide,
+        bool isForfeit)
     {
         battleResultData.Clear();
 
         battleResultData.BattleResultsType = BattleArgs.BattleResultsType;
-        battleResultData.EnemyLv = enemyLv;
-        battleResultData.WinningSide = homeScore > awayScore ? TeamSide.Home : TeamSide.Away;
-        battleResultData.HomeScore = homeScore;
-        battleResultData.AwayScore = awayScore;
-        battleResultData.FinalScore = new Dictionary<TeamSide, int>
-        {
-            { TeamSide.Home, homeScore },
-            { TeamSide.Away, awayScore }
-        };
+        battleResultData.UserSide = userSide;
 
-        // Calculate and apply rewards
+        /*
+        battleResultData.WinningSide = scores[TeamSide.Home] == scores[TeamSide.Away]
+            ? TeamSide.None
+            : scores[TeamSide.Home] > scores[TeamSide.Away]
+                ? TeamSide.Home
+                : TeamSide.Away;
+        */
+
+        if (isForfeit)
+            battleResultData.WinningSide = battleResultData.EnemySide;
+        else
+            battleResultData.WinningSide = scores[TeamSide.Home] > scores[TeamSide.Away] ? TeamSide.Home : TeamSide.Away;
+
+        battleResultData.Scores = new Dictionary<TeamSide, int>(scores);
+        battleResultData.Teams = new Dictionary<TeamSide, Team>(teams);
+
+        battleResultData.MatchRank = CalculateMatchRank(battleResultData);
+
+        if (scores[TeamSide.Home] > scores[TeamSide.Away])
+            battleResultData.WinningSide = TeamSide.Home;
+        else if (scores[TeamSide.Away] > scores[TeamSide.Home])
+            battleResultData.WinningSide = TeamSide.Away;
+
         ApplyBattleRewards(userSide);
+    }
+
+    public void Clear() 
+    {
+        battleResultData.Clear();
     }
 
     private void ApplyBattleRewards(TeamSide userSide)
     {
-        bool playerWon = battleResultData.WinningSide == userSide;
-        
-        if (!playerWon) return;
+        if(!battleResultData.IsUserWin) return;
 
-        if (battleResultData.BattleResultsType == BattleResultsType.Match)
+        switch (battleResultData.BattleResultsType)
         {
-            battleResultData.ExpReward = (int) (xpBaseFull + (expLvFactorFull * battleResultData.EnemyLv));
-            battleResultData.GoldReward = (int) (goldBaseFull + (goldLvFactorFull * battleResultData.EnemyLv));
-            battleResultData.ItemRewards = GetMatchRewards(playerWon);
-            battleResultData.MatchRank = CalculateMatchRank(battleResultData);
-        }
-        else if (battleResultData.BattleResultsType == BattleResultsType.Encounter)
-        {
-            battleResultData.ExpReward = (int) (xpBaseMini + (expLvFactorMini * battleResultData.EnemyLv));
-            battleResultData.GoldReward = (int) (goldBaseMini + (goldLvFactorMini * battleResultData.EnemyLv));
-            battleResultData.ItemRewards = GetEncounterDrops(playerWon);
+            case BattleResultsType.MatchNode:
+                battleResultData.ExpReward = (int)(xpBaseFull + (expLvFactorFull * battleResultData.Teams[battleResultData.EnemySide].Level));
+                battleResultData.GoldReward = (int)(goldBaseFull + (goldLvFactorFull * battleResultData.Teams[battleResultData.EnemySide].Level));
+                battleResultData.ItemRewards = GetMatchRewards();
+                break;
+
+            case BattleResultsType.Encounter:
+                battleResultData.ExpReward = (int)(xpBaseMini + (expLvFactorMini * battleResultData.Teams[battleResultData.EnemySide].Level));
+                battleResultData.GoldReward = (int)(goldBaseMini + (goldLvFactorMini * battleResultData.Teams[battleResultData.EnemySide].Level));
+                battleResultData.ItemRewards = GetEncounterDrops();
+                break;
         }
     }
 
@@ -97,7 +116,7 @@ public class BattleManagerResults
 
     #region Helpers
 
-    private List<ItemReward> GetEncounterDrops(bool won)
+    private List<ItemReward> GetEncounterDrops()
     {
         var rewards = new List<ItemReward>();
 
@@ -117,16 +136,19 @@ public class BattleManagerResults
         return rewards;
     }
 
-    private List<ItemReward> GetMatchRewards(bool won)
+    private List<ItemReward> GetMatchRewards()
     {
         return StorySystemManager.Instance.GetMatchChainNode<MatchChainNodeMatch>(BattleArgs.MatchChainNodeId).GetRewardsByRank(battleResultData.MatchRank);
         //return new List<ItemReward>();
     }
 
-    private MatchRank CalculateMatchRank(BattleResultData data)
+    public MatchRank CalculateMatchRank(BattleResultData data)
     {
         // Calculate rank based on score difference, performance, etc
-        int scoreDifference = Mathf.Abs(data.HomeScore - data.AwayScore);
+
+        if(!data.IsUserWin) return MatchRank.None;
+
+        int scoreDifference = battleResultData.GoalDifference;
         
         if (scoreDifference >= 5) return MatchRank.S;
         if (scoreDifference >= 3) return MatchRank.A;

@@ -699,4 +699,11 @@ public static class UIEvents
     {
         OnBackFromWingDetailRequested?.Invoke();
     }
+
+    // Battle Result
+    public static event Action<BattleResultData> OnResultsArcadeOpenRequested;
+    public static void RaiseResultsArcadeOpenRequested(BattleResultData battleResultData)
+    {
+        OnResultsArcadeOpenRequested?.Invoke(battleResultData);
+    }
 }

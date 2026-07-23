@@ -86,6 +86,11 @@ public class BattleScoreboard : MonoBehaviour
         scoreTextDict[team.TeamSide].text = scoreValue.ToString();
     }
 
+    public void UpdateScoreDisplay(TeamSide side, int scoreValue)
+    {
+        scoreTextDict[side].text = scoreValue.ToString();
+    }
+
     public void Reset()
     {
         scoreTextDict[TeamSide.Home].text = "0";
