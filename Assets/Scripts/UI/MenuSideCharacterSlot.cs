@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -34,5 +36,19 @@ public class MenuSideCharacterSlot : MonoBehaviour
         barSp.Clear();
         barXp.Clear();
         textLv.text = "";
+    }
+
+    public IEnumerator AnimateXp(BattleResultDataXp result)
+    {
+        textLv.text = result.StartLevel.ToString();
+        barXp.SetData(result.StartXp, result.StartXpToNextLevel);
+
+        yield return new WaitForSeconds(0.3f);
+
+        textLv.text = result.EndLevel.ToString();
+        barXp.SetData(result.EndXp, result.EndXpToNextLevel);
+
+        if(result.EndLevel > result.StartLevel)
+            AudioManager.Instance.PlaySfxUI("sfx-level_up");        
     }
 }

@@ -1,14 +1,14 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
-public class MenuResultsPanelWinner : MonoBehaviour
+public class MenuBattleResultsPanelItemRewards : MonoBehaviour
 {
     #region Fields
 
     [Header("UI References")]
-    [SerializeField] private CanvasGroup canvasWin;
-    [SerializeField] private CanvasGroup canvasLose;
+    [SerializeField] private ScrollViewAutoScrollPoolItemDrop scrollViewPool;
 
     #endregion
 
@@ -18,30 +18,26 @@ public class MenuResultsPanelWinner : MonoBehaviour
 
     #region Logic
 
-    public void SetData(BattleResultData data) 
+    public void SetData(List<ItemReward> rewards)
     {
-        SetCanvasGroupVisibility(canvasWin, data.IsUserWin);
-        SetCanvasGroupVisibility(canvasLose, !data.IsUserWin);
+        scrollViewPool.Populate(rewards, (ui, reward) =>
+        {
+            Item item = ItemFactory.CreateById(reward.ItemId);
+            ui.SetData(item, reward.Quantity);
+        });
+
+        scrollViewPool.ActivateScroll();
     }
 
     public void Clear() 
     {
-        SetCanvasGroupVisibility(canvasWin, false);
-        SetCanvasGroupVisibility(canvasLose, false);
+        scrollViewPool.Clear();
     }
 
     #endregion
 
     #region Helper
 
-    public static void SetCanvasGroupVisibility(CanvasGroup canvasGroup, bool visible)
-    {
-        if (canvasGroup == null) return;
-
-        canvasGroup.alpha = visible ? 1f : 0f;
-        canvasGroup.interactable = visible;
-        canvasGroup.blocksRaycasts = visible;
-    }
 
     #endregion
 

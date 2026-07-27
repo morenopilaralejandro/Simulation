@@ -78,4 +78,34 @@ public class MenuSideCharacterGroupLayout : MonoBehaviour
 
         slot.SetCharacter(character, position);
     }
+
+
+    /*
+
+    public void Populate(List<BattleResultDataXp> xpResult)
+    {
+        if (TeamManager.Instance == null ||
+            TeamManager.Instance.ActiveLoadout == null ||
+            TeamManager.Instance.ActiveLoadout.MiniBattleCharacterGuids == null ||
+            CharacterManager.Instance == null)
+        {
+            Clear();
+            return;
+        }
+
+        var loadout = TeamManager.Instance.ActiveLoadout;
+        var guids = loadout.MiniBattleCharacterGuids;
+
+        for (int i = 0; i < _slots.Length; i++)
+            SetSlot(_slots[i], guids, i, loadout.Kit);
+    }
+
+    */
+
+    public void AnimateXp(List<BattleResultDataXp> xpResult)
+    {
+        for (int i = 0; i < _slots.Length; i++)
+            StartCoroutine(_slots[i].AnimateXp(xpResult[i]));
+    }
+    
 }

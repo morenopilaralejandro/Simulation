@@ -88,6 +88,9 @@ public class ScrollViewAutoScrollPool<TItem> : MonoBehaviour where TItem : Compo
 
         unbind?.Invoke(item);
 
+        if (item is IScrollViewPoolItem poolItem)
+            poolItem.Clear();
+
         item.gameObject.SetActive(false);
         pool.Enqueue(item);
     }
@@ -112,8 +115,14 @@ public class ScrollViewAutoScrollPool<TItem> : MonoBehaviour where TItem : Compo
 
         var item = go.GetComponent<TItem>();
 
+        if (item == null)
+        {
+            Debug.LogError($"{itemPrefab.name} is missing component {typeof(TItem).Name}");
+            return null;
+        }
 
-        //if (item is SelectorListItem selectorItem) selectorItem.SetScrollRect(scrollRect);
+        if (item is IScrollViewPoolItem poolItem)
+            poolItem.SetScrollRect(scrollRect);
 
         return item;
     }

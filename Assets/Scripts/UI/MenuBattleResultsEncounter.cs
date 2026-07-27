@@ -1,20 +1,24 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Input;
 
-public class MenuResultsArcade : Menu
+public class MenuBattleResultsEncounter : Menu
 {
     #region Fields
 
     [Header("UI References")]
-    [SerializeField] private Image imageMatchRankBest;
-    [SerializeField] private MenuResultsPanelWinner panelWinner;
-    [SerializeField] private BattleScoreboard panelScoreboard;
+    [SerializeField] private MenuBattleResultsPanelWinner panelWinner;
+    [SerializeField] private MenuBattleResultsPanelGoldXp panelGoldXp;
+    [SerializeField] private MenuBattleResultsPanelItemRewards panelItemRewards;
+    [SerializeField] private MenuSideCharacterGroupLayout panelParty;
 
     private BattleResultData data;
+    private Coroutine populatePartyCoroutine;
+    private float coroutineDuration = 0.3f;
 
     #endregion
 
@@ -22,7 +26,13 @@ public class MenuResultsArcade : Menu
 
     public override void Show()
     {
+        if(data.IsUserWin) 
+            AudioManager.Instance.PlayBgm("bgm-fanfare");
+        else
+            AudioManager.Instance.PlayBgm("bgm-gameover");
+
         Populate();
+
         base.Show();
         /*
         if (autoScroll != null)
@@ -35,6 +45,7 @@ public class MenuResultsArcade : Menu
 
     public override void Hide()
     {
+        AudioManager.Instance.StopBgm();
         Clear();
         //ReturnAllToPool();
         //if (autoScroll != null) autoScroll.Deactivate();
@@ -80,8 +91,9 @@ public class MenuResultsArcade : Menu
     }
     */
 
-    public async void OnButtonContinueClicked()
+    public void OnButtonContinueClicked()
     {
+        CancelPopulatePartyCoroutine();
         BattleEvents.RaiseResultsContinueRequested();
     }
 
@@ -92,18 +104,40 @@ public class MenuResultsArcade : Menu
     private void Populate() 
     {
         panelWinner.SetData(data);
-        panelScoreboard.SetTeamAsync(data.Teams[TeamSide.Home], TeamSide.Home);
-        panelScoreboard.SetTeamAsync(data.Teams[TeamSide.Away], TeamSide.Away);
 
-        panelScoreboard.UpdateScoreDisplay(TeamSide.Home, data.Scores[TeamSide.Home]);
-        panelScoreboard.UpdateScoreDisplay(TeamSide.Away, data.Scores[TeamSide.Away]);
+        panelGoldXp.SetData(data.GoldReward, data.XpReward);
 
-        imageMatchRankBest.sprite = IconManager.Instance.MatchRank.GetIcon(data.MatchRank);
+        panelItemRewards.SetData(data.ItemRewards);
+
+        CancelPopulatePartyCoroutine();
+        panelParty.Populate();
+        panelParty.AnimateXp(data.XpResult);
     }
 
     private void Clear() 
     {
+        CancelPopulatePartyCoroutine();
+    }
 
+    #endregion
+
+    #region Coroutine
+
+    private IEnumerator PopulatePartyDelayed()
+    {
+        yield return new WaitForSeconds(coroutineDuration);
+
+        panelParty.Populate();
+        populatePartyCoroutine = null;
+    }
+
+    private void CancelPopulatePartyCoroutine()
+    {
+        if (populatePartyCoroutine != null)
+        {
+            StopCoroutine(populatePartyCoroutine);
+            populatePartyCoroutine = null;
+        }
     }
 
     #endregion
@@ -113,16 +147,16 @@ public class MenuResultsArcade : Menu
     protected override void OnEnable()
     {
         base.OnEnable();
-        UIEvents.OnResultsArcadeOpenRequested += HandleResultsArcadeOpenRequested;
+        UIEvents.OnResultsEncounterOpenRequested += HandleResultsEncounterOpenRequested;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        UIEvents.OnResultsArcadeOpenRequested -= HandleResultsArcadeOpenRequested;
+        UIEvents.OnResultsEncounterOpenRequested -= HandleResultsEncounterOpenRequested;
     }
 
-    private void HandleResultsArcadeOpenRequested(BattleResultData data)
+    private void HandleResultsEncounterOpenRequested(BattleResultData data)
     {
         this.data = data;
         MenuManager.Instance.OpenMenu(this);

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Threading.Tasks;
 using TMPro;
 
-public class ItemDropUI : MonoBehaviour
+public class ItemDropUI : MonoBehaviour, IScrollViewPoolItem
 {
     [Header("UI")]
     [SerializeField] private ItemUI itemUI;

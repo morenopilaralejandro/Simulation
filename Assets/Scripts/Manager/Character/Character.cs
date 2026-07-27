@@ -86,10 +86,11 @@ public class Character
 
     // levelsComponent
     public int Level => levelsComponent.Level;
-    public int CurrentExp => levelsComponent.CurrentExp;
-    public int ExpToNextLevel => levelsComponent.ExpToNextLevel;
+    public int CurrentXp => levelsComponent.CurrentXp;
+    public int XpToNextLevel => levelsComponent.XpToNextLevel;
     public int MaxLevel => CharacterComponentLevels.MAX_LEVEL;
     public void SetLevel(int level) => levelsComponent.SetLevel(level);
+    public void AddXp(int amount) => levelsComponent.AddXp(amount);
 
     // statsComponent
     public int GetTrainedStat(Stat stat) => statsComponent.GetTrainedStat(stat);

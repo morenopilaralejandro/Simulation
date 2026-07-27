@@ -90,6 +90,14 @@ public class WorldManagerEncounter
 
         try
         {
+
+            LogManager.Trace(
+                $"Saving WorldArgs Zone={worldManager.CurrentZone?.zoneId} " +
+                $"Realm={worldManager.CurrentRealm} " +
+                $"Pos={player.CurrentTilePosition3d()}"
+            );
+
+
             WorldArgs.Set(
                 zoneId : worldManager.CurrentZone != null ? worldManager.CurrentZone.zoneId : null,
                 realm : worldManager.CurrentRealm,
@@ -135,7 +143,7 @@ public class WorldManagerEncounter
             // Attempt recovery so the game isn't permanently stuck
             worldManager.SetState(WorldState.None);
 
-                await worldManager.FadeIn();
+            await worldManager.FadeIn();
     
             player.SetControlEnabled(true);
         }
@@ -264,7 +272,9 @@ public class WorldManagerEncounter
             timeOfDay : worldManager.CurrentTimeOfDay, //if currentZone.zoneType == ZoneType.Interior use day
             ballId : encounter.BallId,
             bgmId : encounter.BgmId,
-            fieldId : worldManager.CurrentZone.fieldId
+            fieldId : worldManager.CurrentZone.fieldId,
+            encounterData : encounter,
+            awayTeamLevel : encounter.Level
         );
         sceneLoader.LoadGroup(sceneBattle);
     }

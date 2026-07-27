@@ -51,8 +51,8 @@ public class CharacterComponentPersistence
 
             // level
             Level = character.Level,
-            CurrentExp = character.CurrentExp,
-            ExpToNextLevel = character.ExpToNextLevel,
+            CurrentXp = character.CurrentXp,
+            XpToNextLevel = character.XpToNextLevel,
 
             // stats
             CurrentHp = character.GetBattleStat(Stat.Hp),

@@ -4,6 +4,7 @@ using UnityEngine;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Match;
+using Aremoreno.Enums.Item;
 
 public class BattleManagerResults
 {
@@ -50,6 +51,7 @@ public class BattleManagerResults
 
         battleResultData.BattleResultsType = BattleArgs.BattleResultsType;
         battleResultData.UserSide = userSide;
+        battleResultData.EnemyLevel = BattleArgs.AwayTeamLevel;
 
         /*
         battleResultData.WinningSide = scores[TeamSide.Home] == scores[TeamSide.Away]
@@ -75,6 +77,8 @@ public class BattleManagerResults
             battleResultData.WinningSide = TeamSide.Away;
 
         ApplyBattleRewards(userSide);
+        GiveBattleRewards();
+        //TryProgresStory();
     }
 
     public void Clear() 
@@ -84,37 +88,96 @@ public class BattleManagerResults
 
     private void ApplyBattleRewards(TeamSide userSide)
     {
-        if(!battleResultData.IsUserWin) return;
+        if(!IsElegibleForRewards()) return;
 
         switch (battleResultData.BattleResultsType)
         {
+
+            /*
             case BattleResultsType.MatchNode:
-                battleResultData.ExpReward = (int)(xpBaseFull + (expLvFactorFull * battleResultData.Teams[battleResultData.EnemySide].Level));
+                battleResultData.XpReward = (int)(xpBaseFull + (expLvFactorFull * battleResultData.Teams[battleResultData.EnemySide].Level));
                 battleResultData.GoldReward = (int)(goldBaseFull + (goldLvFactorFull * battleResultData.Teams[battleResultData.EnemySide].Level));
-                battleResultData.ItemRewards = GetMatchRewards();
+                battleResultData.ItemRewards = GetMatchNodeRewards();
                 break;
 
             case BattleResultsType.Encounter:
-                battleResultData.ExpReward = (int)(xpBaseMini + (expLvFactorMini * battleResultData.Teams[battleResultData.EnemySide].Level));
+                battleResultData.XpReward = (int)(xpBaseMini + (expLvFactorMini * battleResultData.Teams[battleResultData.EnemySide].Level));
                 battleResultData.GoldReward = (int)(goldBaseMini + (goldLvFactorMini * battleResultData.Teams[battleResultData.EnemySide].Level));
+                battleResultData.ItemRewards = GetEncounterDrops();
+                break;
+            */
+
+            case BattleResultsType.MatchNode:
+                battleResultData.XpReward = (int)(xpBaseFull + (expLvFactorFull * battleResultData.EnemyLevel));
+                battleResultData.GoldReward = (int)(goldBaseFull + (goldLvFactorFull * battleResultData.EnemyLevel));
+                battleResultData.ItemRewards = GetMatchNodeRewards();
+                break;
+
+            case BattleResultsType.Encounter:
+                battleResultData.XpReward = (int)(xpBaseMini + (expLvFactorMini * battleResultData.EnemyLevel));
+                battleResultData.GoldReward = (int)(goldBaseMini + (goldLvFactorMini * battleResultData.EnemyLevel));
                 battleResultData.ItemRewards = GetEncounterDrops();
                 break;
         }
     }
 
-    private void GiveBattleRewards()
+    public void GiveBattleRewards()
     {
+        if(!IsElegibleForRewards()) return;
 
-            if(!string.IsNullOrEmpty(BattleArgs.MatchChainNodeId)) 
-                MatchEvents.RaiseMatchChainNodeMatchCompleted(
-                    StorySystemManager.Instance.GetMatchChainNode<MatchChainNodeMatch>(BattleArgs.MatchChainNodeId), 
-                    battleResultData.MatchRank);
+        if(!string.IsNullOrEmpty(BattleArgs.MatchChainNodeId)) 
+            MatchEvents.RaiseMatchChainNodeMatchCompleted(
+                StorySystemManager.Instance.GetMatchChainNode<MatchChainNodeMatch>(BattleArgs.MatchChainNodeId), 
+                battleResultData.MatchRank);
 
+        foreach (var itemReward in battleResultData.ItemRewards) 
+        {
+            ItemManager.Instance.AddItem(
+                ItemFactory.CreateById(
+                    itemReward.ItemId), 
+                    itemReward.Quantity);
+        }
+
+        ItemManager.Instance.Add(CurrencyType.Gold, battleResultData.GoldReward);
+
+        GiveXP();
+    }
+
+    public void TryProgresStory()
+    {
+        if(!battleResultData.IsUserWin) return;
+        if(battleResultData.BattleResultsType != BattleResultsType.MatchStory) return;
+        if(BattleArgs.MatchId == null) return;
+
+        /*
+        if (battleResultData.MatchId == "") 
+        {
+            set flag
+        }
+        */
     }
 
     #endregion
 
     #region Helpers
+
+    private bool IsElegibleForRewards() 
+    {
+        if(!battleResultData.IsUserWin) return false;
+
+        switch (BattleArgs.BattleResultsType) 
+        {
+            case BattleResultsType.MatchStory:
+            case BattleResultsType.MatchNode:
+            case BattleResultsType.Encounter:
+                return true;
+                break;
+            case BattleResultsType.Arcade:
+            default:
+                return false;
+                break;
+        }
+    }
 
     private List<ItemReward> GetEncounterDrops()
     {
@@ -136,7 +199,7 @@ public class BattleManagerResults
         return rewards;
     }
 
-    private List<ItemReward> GetMatchRewards()
+    private List<ItemReward> GetMatchNodeRewards()
     {
         return StorySystemManager.Instance.GetMatchChainNode<MatchChainNodeMatch>(BattleArgs.MatchChainNodeId).GetRewardsByRank(battleResultData.MatchRank);
         //return new List<ItemReward>();
@@ -154,6 +217,33 @@ public class BattleManagerResults
         if (scoreDifference >= 3) return MatchRank.A;
         if (scoreDifference >= 1) return MatchRank.B;
         return MatchRank.None;
+    }
+
+    private void GiveXP()
+    {
+        if (TeamManager.Instance?.ActiveLoadout == null) return;
+
+        foreach (string guid in TeamManager.Instance.ActiveLoadout.MiniBattleCharacterGuids)
+        {
+            BattleResultDataXp result = new();
+
+            var character = CharacterManager.Instance.GetCharacter(guid);
+
+            result.Character = character;
+
+            result.StartLevel = character.Level;
+            result.StartXp = character.CurrentXp;
+            result.StartXpToNextLevel = character.XpToNextLevel;
+
+            character.AddXp(battleResultData.XpReward);
+
+            result.EndLevel = character.Level;
+            result.EndXp = character.CurrentXp;
+            result.XPGained = battleResultData.XpReward;
+            result.EndXpToNextLevel = character.XpToNextLevel;
+
+            battleResultData.XpResult.Add(result);
+        }
     }
 
     #endregion
@@ -181,12 +271,9 @@ public class BattleManagerResults
                 LogManager.Trace("continue arcade");
                 break;
             default:
-                GiveBattleRewards();
                 SceneLoader.Instance.LoadGroup(sceneWorld);
                 break;
         }
-
-        //check args match id for story completion
     }
 
     #endregion

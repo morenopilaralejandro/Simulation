@@ -15,10 +15,12 @@ public class BattleResultData
     public Dictionary<TeamSide, int> Scores = new();
     public Dictionary<TeamSide, Team> Teams = new();
 
-    public int ExpReward;
+    public int XpReward;
     public int GoldReward;
+    public int EnemyLevel;
 
     public List<ItemReward> ItemRewards = new();
+    public List<BattleResultDataXp> XpResult = new();
 
     public MatchRank MatchRank;
 
@@ -45,9 +47,11 @@ public class BattleResultData
         Teams.Clear();
 
         ItemRewards.Clear();
+        XpResult.Clear();
 
-        ExpReward = 0;
+        XpReward = 0;
         GoldReward = 0;
+        EnemyLevel = 0;
 
         MatchRank = default;
         BattleResultsType = default;

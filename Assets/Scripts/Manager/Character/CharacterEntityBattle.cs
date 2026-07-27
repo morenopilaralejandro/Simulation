@@ -107,14 +107,15 @@ public class CharacterEntityBattle : MonoBehaviour
 
     // levelsComponent
     public int Level => character.Level;
-    public int CurrentExp => character.CurrentExp;
-    public int ExpToNextLevel => character.ExpToNextLevel;
+    public int CurrentXp => character.CurrentXp;
+    public int XpToNextLevel => character.XpToNextLevel;
     public int MaxLevel => character.MaxLevel;
     public void SetLevel(int level) 
     {
         character.SetLevel(level);
         CalculateSpeed();
     }
+    public void AddXp(int amount) => character.AddXp(amount);
 
     // statsComponent
     public int GetTrainedStat(Stat stat) => character.GetTrainedStat(stat);

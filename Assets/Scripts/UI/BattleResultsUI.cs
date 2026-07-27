@@ -10,11 +10,19 @@ public class BattleResultsUI : MonoBehaviour
     {
         switch (BattleArgs.BattleResultsType) 
         {
+            case BattleResultsType.MatchStory:
+                UIEvents.RaiseResultsMatchStoryOpenRequested(BattleManager.Instance.BattleResultData);
+                break;
+            case BattleResultsType.MatchNode:
+                UIEvents.RaiseResultsMatchNodeOpenRequested(BattleManager.Instance.BattleResultData);
+                break;
+            case BattleResultsType.Encounter:
+                UIEvents.RaiseResultsEncounterOpenRequested(BattleManager.Instance.BattleResultData);
+                break;
             case BattleResultsType.Arcade:
             default:
                 UIEvents.RaiseResultsArcadeOpenRequested(BattleManager.Instance.BattleResultData);
                 break;
         }
-
     }
 }

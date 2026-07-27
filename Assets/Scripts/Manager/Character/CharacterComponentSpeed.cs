@@ -5,8 +5,8 @@ public class CharacterComponentSpeed : MonoBehaviour
 {
     private CharacterEntityBattle characterEntityBattle;
 
-    private float defaultSpeedMultiplier = 0.025f;
-    private float minSpeed = 1f;
+    private float defaultSpeedMultiplier = 0.02f;
+    private float minSpeed = 2.0f;
     private float maxSpeed = 100f;
     private float cachedMovementSpeed;
 
@@ -19,6 +19,11 @@ public class CharacterComponentSpeed : MonoBehaviour
 
     public void CalculateSpeed()
     {
+        /*
+        2.0f average
+        2.5f fast
+        */
+
         float baseSpeed = 
             characterEntityBattle.GetBattleStat(Stat.Speed) * 
             defaultSpeedMultiplier;

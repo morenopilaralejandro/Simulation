@@ -8,12 +8,12 @@ public class CharacterComponentLevels
     public const int MIN_LEVEL = 1;
 
     private int level = MIN_LEVEL;
-    private int currentExp = 0;
-    private int expToNextLevel = 100;
+    private int currentXp = 0;
+    private int xpToNextLevel = 100;
 
     public int Level => level;
-    public int CurrentExp => currentExp;
-    public int ExpToNextLevel => expToNextLevel;
+    public int CurrentXp => currentXp;
+    public int XpToNextLevel => xpToNextLevel;
 
     public CharacterComponentLevels(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null) 
     {
@@ -27,27 +27,27 @@ public class CharacterComponentLevels
         if (characterSaveData != null)
         {
             level = characterSaveData.Level;
-            currentExp = characterSaveData.CurrentExp;
-            expToNextLevel = characterSaveData.ExpToNextLevel;
+            currentXp = characterSaveData.CurrentXp;
+            xpToNextLevel = characterSaveData.XpToNextLevel;
         } else 
         {
             level = MIN_LEVEL;
-            currentExp = 0;
-            expToNextLevel = CalculateExpForNextLevel();
+            currentXp = 0;
+            xpToNextLevel = CalculateXpForNextLevel();
         }
 
     }
 
-    public void AddExp(int amount)
+    public void AddXp(int amount)
     {
         if (level >= MAX_LEVEL)
             return;
 
-        currentExp += amount;
+        currentXp += amount;
 
-        while (currentExp >= expToNextLevel && level < MAX_LEVEL)
+        while (currentXp >= xpToNextLevel && level < MAX_LEVEL)
         {
-            currentExp -= expToNextLevel;
+            currentXp -= xpToNextLevel;
             LevelUp();
         }
     }
@@ -55,12 +55,12 @@ public class CharacterComponentLevels
     private void LevelUp()
     {
         level++;
-        expToNextLevel = CalculateExpForNextLevel();
+        xpToNextLevel = CalculateXpForNextLevel();
         character.UpdateStats();
         character.CheckLearnMoveOnLevelUp();
     }
 
-    private int CalculateExpForNextLevel()
+    private int CalculateXpForNextLevel()
     {
         // Example scaling formula (tweak as needed)
         return 100 + (level * 25);
@@ -71,8 +71,8 @@ public class CharacterComponentLevels
         targetLevel = Mathf.Clamp(targetLevel, MIN_LEVEL, MAX_LEVEL);
         level = targetLevel;
 
-        currentExp = 0;
-        expToNextLevel = CalculateExpForNextLevel();
+        currentXp = 0;
+        xpToNextLevel = CalculateXpForNextLevel();
 
         character.UpdateStats();
         character.CheckLearnMoveOnLevelUp();

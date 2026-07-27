@@ -583,7 +583,12 @@ public class BattleManager : MonoBehaviour
         if (index >= dataList.Count) return false;
 
         character.Initialize(dataList[index]);
-        character.SetLevel(character.MaxLevel);
+
+        int level = team.TeamSide == TeamSide.Home
+            ? BattleArgs.HomeTeamLevel
+            : BattleArgs.AwayTeamLevel;
+
+        character.SetLevel(level);
         character.TryEquipWingDefault();
         character.ScaleDifficultySystem();
         return true;

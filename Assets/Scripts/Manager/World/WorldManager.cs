@@ -75,6 +75,7 @@ public class WorldManager : MonoBehaviour
         {
             await LoadZone(overworldDefinition.startingZone, overworldDefinition.startingSpawnId);
             PlayerWorldEntity.SetControlEnabled(true);
+            PersistenceManager.Instance.SetNewGame(false);
         }
         else
         {
