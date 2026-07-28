@@ -17,18 +17,28 @@ MonoBehaviour:
   zoneType: 0
   interiorSceneAddress: 
   backgroundMusic: {fileID: 8300000, guid: 38d24e005d5aed9b685085695e76cae0, type: 3}
-  fieldId: field-00003-park
+  fieldId: field-00003-ground_park
   encounters:
-  - TeamId: team-00000-a-test_a
-    Level: 50
+  - EncounterId: 
+    TeamId: team-00000-a-test_a
+    Level: 5
     BgmId: bgm-battle
     BallId: ball-00001-default
     EncounterRate: 0.5
     HasTimeOfDayRestriction: 0
     TimeOfDay: 0
-    Drops: []
-  - TeamId: team-00000-b-test_b
-    Level: 50
+    Drops:
+    - ItemId: item-material-00068-iberian_ham
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.5
+    - ItemId: item-material-00050-olives
+      QuantityMin: 1
+      QuantityMax: 9
+      DropChance: 0.5
+  - EncounterId: 
+    TeamId: team-00000-b-test_b
+    Level: 5
     BgmId: bgm-training
     BallId: ball-00002-crimson
     EncounterRate: 0.5

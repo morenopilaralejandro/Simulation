@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.DeadBall;
+using Aremoreno.Enums.Match;
 using Aremoreno.Enums.Kit;
 
 public class BattleManager : MonoBehaviour
@@ -35,6 +36,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private SceneGroup sceneMainMenu;
     [SerializeField] private SceneGroup sceneGameOver;
     [SerializeField] private SceneGroup sceneBattleResults;
+    [SerializeField] private SceneGroup sceneWorld;
+    [SerializeField] private SceneGroup sceneDebugMainMenu;
     private SceneLoader sceneLoader;
 
     public BattlePhase CurrentPhase => currentPhase;
@@ -58,6 +61,7 @@ public class BattleManager : MonoBehaviour
     private BattleManagerField fieldSystem;
     private BattleManagerTeam teamSystem;
     private BattleManagerWing wingSystem;
+    private BattleManagerResults resultsSystem;
 
     #region Lifecycle
     private void Awake()
@@ -84,9 +88,11 @@ public class BattleManager : MonoBehaviour
         fieldSystem = new BattleManagerField();
         teamSystem = new BattleManagerTeam();
         wingSystem = new BattleManagerWing();
+        resultsSystem = new BattleManagerResults(sceneWorld, sceneDebugMainMenu);
 
         teamSystem.Subscribe();
         wingSystem.Subscribe();
+        resultsSystem.Subscribe();
 
         Freeze();
         SetTeamSize();
@@ -108,7 +114,8 @@ public class BattleManager : MonoBehaviour
         BattleEvents.OnAllCharactersReady -= HandleAllCharactersReady;
 
         if (teamSystem != null) teamSystem.Unsubscribe();
-        if (teamSystem != null) wingSystem.Unsubscribe();
+        if (wingSystem != null) wingSystem.Unsubscribe();
+        if (resultsSystem != null) resultsSystem.Unsubscribe();
     }
     #endregion
 
@@ -310,29 +317,14 @@ public class BattleManager : MonoBehaviour
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnd();
 
-        var nextScene = sceneGameOver;
-        switch (result)
-        {
-            case WinConditionResult.HomeWin:
-                if (userSide == TeamSide.Home)
-                    nextScene = sceneBattleResults;
-                else
-                    nextScene = sceneGameOver;
-                break;
-            case WinConditionResult.AwayWin:
-                if (userSide == TeamSide.Away)
-                    nextScene = sceneBattleResults;
-                else
-                    nextScene = sceneGameOver;
-                break;
-            case WinConditionResult.Draw:
-            default:
-                // Handle draw — you may want a different scene or fallback
-                nextScene = sceneGameOver;
-                break;
-        }
+        resultsSystem.CreateBattleResultData(
+            scoreDict,
+            Teams, 
+            GetUserSide(),
+            currentType,
+            false);
 
-        sceneLoader.LoadGroup(nextScene);
+        sceneLoader.LoadGroup(sceneBattleResults);
     }
 
     private void ForceEndGame(TeamSide winnerSide)
@@ -342,15 +334,14 @@ public class BattleManager : MonoBehaviour
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnd();
 
-        var nextScene = sceneGameOver;
+        resultsSystem.CreateBattleResultData(
+            scoreDict, 
+            Teams, 
+            GetUserSide(),
+            currentType,
+            true);
 
-        TeamSide userSide = GetUserSide();
-        if (winnerSide == userSide)
-            nextScene = sceneBattleResults;
-        else
-            nextScene = sceneGameOver;
-
-        sceneLoader.LoadGroup(nextScene);
+        sceneLoader.LoadGroup(sceneBattleResults);
     }
 
     public void ForfeitBattle()
@@ -594,7 +585,12 @@ public class BattleManager : MonoBehaviour
         if (index >= dataList.Count) return false;
 
         character.Initialize(dataList[index]);
-        character.SetLevel(character.MaxLevel);
+
+        int level = team.TeamSide == TeamSide.Home
+            ? BattleArgs.HomeTeamLevel
+            : BattleArgs.AwayTeamLevel;
+
+        character.SetLevel(level);
         character.TryEquipWingDefault();
         character.ScaleDifficultySystem();
         return true;
@@ -688,6 +684,12 @@ public class BattleManager : MonoBehaviour
     //wingSystem
     public void InitializeForBattleWingSystem() => wingSystem.InitializeForBattle();
     public bool CanActivateWings(TeamSide teamside) => wingSystem.CanActivateWings(teamside);
+
+    //resultsSystem
+    public BattleResultData BattleResultData => resultsSystem.BattleResultData;
+    public void CreateBattleResultData(Dictionary<TeamSide, int> scores, Dictionary<TeamSide, Team> teams, TeamSide userSide, BattleType battleType, bool isForfeit) => resultsSystem.CreateBattleResultData(scores, teams, userSide, battleType, isForfeit);
+    public void Clear() => resultsSystem.Clear();
+    public MatchRank CalculateMatchRank(BattleResultData battleResultData) => resultsSystem.CalculateMatchRank(battleResultData);
 
     //misc
     public GameObject InstantiateBall(GameObject prefabGo, Vector3 spawnPosition, Quaternion spawnRotation, Transform spawnPoint)

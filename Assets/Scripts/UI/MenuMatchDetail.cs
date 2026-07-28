@@ -114,7 +114,7 @@ public class MenuMatchDetail : Menu
 
         //EventSystem.current.SetSelectedGameObject(slot.gameObject);
         //UIEvents.RaiseFormationCharacterSlotUISelected(slot);
-        EventSystem.current.SetSelectedGameObject(defaultSelectableAfterSlot.gameObject);
+        //EventSystem.current.SetSelectedGameObject(defaultSelectableAfterSlot.gameObject);
     }
 
     #endregion
@@ -125,7 +125,7 @@ public class MenuMatchDetail : Menu
     {
         if (currentMatch == null) return;
 
-        StartMatchBattle(currentMatch);
+        StartMatchBattle(currentMatch, currentNode);
     }
 
     public void OnButtonBackClicked()
@@ -154,7 +154,7 @@ public class MenuMatchDetail : Menu
             var data = dataList[i];
 
             var character = new Character(data);
-            character.SetLevel(character.MaxLevel);
+            character.SetLevel(currentMatch.Level);
             character.TryEquipWingDefault();
             character.ScaleDifficultySystem();
 
@@ -162,7 +162,7 @@ public class MenuMatchDetail : Menu
         }
     }
 
-    private async void StartMatchBattle(Match match)
+    private async void StartMatchBattle(Match match, MatchChainNodeMatch matchChainNodeMatch)
     {
         var worldManager = WorldManager.Instance;
         var player = WorldManager.Instance.PlayerWorldEntity;
@@ -192,11 +192,13 @@ public class MenuMatchDetail : Menu
         BattleArgs.SetFull(
             homeTeamGuid: TeamManager.Instance.ActiveLoadoutGuid,
             awayTeamId: match.TeamId,
-            battleResultsType: BattleResultsType.Drop,
+            battleResultsType: matchChainNodeMatch != null ? BattleResultsType.MatchNode : BattleResultsType.MatchStory,
             timeOfDay: worldManager.CurrentTimeOfDay,
             ballId: match.BallId,
             bgmId: match.BgmId,
-            fieldId: match.FieldId
+            fieldId: match.FieldId,
+            matchChainNodeId: matchChainNodeMatch != null ? matchChainNodeMatch.MatchChainNodeId : null,
+            awayTeamLevel : match.Level
         );
 
         SceneLoader.Instance.LoadGroup(sceneBattle);

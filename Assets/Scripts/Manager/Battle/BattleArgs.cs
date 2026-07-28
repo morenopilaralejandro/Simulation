@@ -10,6 +10,9 @@ public static class BattleArgs
     public static string BallId;
     public static string FieldId;
     public static string BgmId;
+    public static string MatchId; //for story
+    public static string MatchChainNodeId; //for complete node
+    public static EncounterData EncounterData;
     public static int HomeTeamLevel;
     public static int AwayTeamLevel;
     public static bool HomeTeamCanUseWing = true;
@@ -24,7 +27,23 @@ public static class BattleArgs
     {
         HomeTeamId = null;
         AwayTeamId = null;
+        HomeTeamGuid = null;
+        AwayTeamGuid = null;
         BallId = null;
+        FieldId = null;
+        BgmId = null;
+        MatchId = null;
+        MatchChainNodeId = null;
+        EncounterData = null;
+        HomeTeamLevel = 0;
+        AwayTeamLevel = 0;
+        HomeTeamCanUseWing = true;
+        AwayTeamCanUseWing = true;
+        TimeOfDay = TimeOfDay.Day;
+        BattleType = BattleType.Mini;
+        BattleResultsType = BattleResultsType.Debug;
+        WinConditionType = WinConditionType.ScoreGoals;
+        WinConditionParams = null;
     }
 
     public static void Set(
@@ -35,9 +54,16 @@ public static class BattleArgs
         string ballId = "ball-00001-default",
         string fieldId = "field-00001-stadium_main",
         string bgmId = "bgm-battle",
+        string matchId = null,
+        string matchChainNodeId = null,
+        EncounterData encounterData = null,
+        int homeTeamLevel = 99,
+        int awayTeamLevel = 99,
+        bool homeTeamCanUseWing = true,
+        bool awayTeamCanUseWing = true,
         TimeOfDay timeOfDay = TimeOfDay.Day,
         BattleType battleType = BattleType.Mini,
-        BattleResultsType battleResultsType = BattleResultsType.Summary,
+        BattleResultsType battleResultsType = BattleResultsType.Debug,
         WinConditionType winConditionType = WinConditionType.ScoreGoals,
         WinConditionParams winConditionParams = null)
     {
@@ -48,6 +74,13 @@ public static class BattleArgs
         BallId = ballId;
         FieldId = fieldId;
         BgmId = bgmId;
+        MatchId = matchId;
+        MatchChainNodeId = matchChainNodeId;
+        EncounterData = encounterData;
+        HomeTeamLevel = homeTeamLevel;
+        AwayTeamLevel = awayTeamLevel;
+        HomeTeamCanUseWing = homeTeamCanUseWing;
+        AwayTeamCanUseWing = awayTeamCanUseWing;
         TimeOfDay = timeOfDay;
         BattleType = battleType;
         BattleResultsType = battleResultsType;
@@ -63,9 +96,16 @@ public static class BattleArgs
         string ballId = "ball-00001-default",
         string fieldId = "field-00001-stadium_main",
         string bgmId = "bgm-battle",
+        string matchId = null,
+        string matchChainNodeId = null,
+        EncounterData encounterData = null,
+        int homeTeamLevel = 99,
+        int awayTeamLevel = 99,
+        bool homeTeamCanUseWing = true,
+        bool awayTeamCanUseWing = true,
         TimeOfDay timeOfDay = TimeOfDay.Day,
         BattleType battleType = BattleType.Mini,
-        BattleResultsType battleResultsType = BattleResultsType.Summary,
+        BattleResultsType battleResultsType = BattleResultsType.Debug,
         WinConditionType winConditionType = WinConditionType.ScoreGoals,
         WinConditionParams winConditionParams = null)
     {
@@ -76,6 +116,13 @@ public static class BattleArgs
         BallId = ballId;
         FieldId = fieldId;
         BgmId = bgmId;
+        MatchId = matchId;
+        MatchChainNodeId = matchChainNodeId;
+        EncounterData = encounterData;
+        HomeTeamLevel = homeTeamLevel;
+        AwayTeamLevel = awayTeamLevel;
+        HomeTeamCanUseWing = homeTeamCanUseWing;
+        AwayTeamCanUseWing = awayTeamCanUseWing;
         TimeOfDay = timeOfDay;
         BattleType = battleType;
         BattleResultsType = battleResultsType;
@@ -91,9 +138,16 @@ public static class BattleArgs
         string ballId = "ball-00001-default",
         string fieldId = "field-00001-stadium_main",
         string bgmId = "bgm-battle",
+        string matchId = null,
+        string matchChainNodeId = null,
+        EncounterData encounterData = null,
+        int homeTeamLevel = 99,
+        int awayTeamLevel = 99,
+        bool homeTeamCanUseWing = true,
+        bool awayTeamCanUseWing = true,
         TimeOfDay timeOfDay = TimeOfDay.Day,
         BattleType battleType = BattleType.Full,
-        BattleResultsType battleResultsType = BattleResultsType.Summary,
+        BattleResultsType battleResultsType = BattleResultsType.Debug,
         WinConditionType winConditionType = WinConditionType.WinMatch,
         WinConditionParams winConditionParams = null)
     {
@@ -104,6 +158,13 @@ public static class BattleArgs
         BallId = ballId;
         FieldId = fieldId;
         BgmId = bgmId;
+        MatchId = matchId;
+        MatchChainNodeId = matchChainNodeId;
+        EncounterData = encounterData;
+        HomeTeamLevel = homeTeamLevel;
+        AwayTeamLevel = awayTeamLevel;
+        HomeTeamCanUseWing = homeTeamCanUseWing;
+        AwayTeamCanUseWing = awayTeamCanUseWing;
         TimeOfDay = timeOfDay;
         BattleType = battleType;
         BattleResultsType = battleResultsType;

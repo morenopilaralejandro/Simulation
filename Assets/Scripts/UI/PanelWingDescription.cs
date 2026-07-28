@@ -8,8 +8,7 @@ using Aremoreno.Enums.Item;
 public class PanelWingDescription : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private TMP_Text textName;
-    [SerializeField] private Image imageIcon;
+    [SerializeField] private WingUI wingUI;
     [SerializeField] private StatLayoutUI statLayoutUI;
     [SerializeField] private CanvasGroup canvasGroup;
 
@@ -23,50 +22,17 @@ public class PanelWingDescription : MonoBehaviour
 
     private void SetData(Wing wing)
     {
-        //int version = ++_setVersion;
-
-        textName.text = wing.WingName;
-        imageIcon.color = ColorManager.GetWingColor(wing.WingColorType);
+        wingUI.SetData(wing);
         statLayoutUI.Populate(wing);
-
-        //_ = SetIconAsync(item.IconSpriteAddress, version);
     }
 
     private void Clear()
     {
-        textName.text = "";
-        imageIcon.color = Color.white;        
+        wingUI.Clear();
         statLayoutUI.Clear();
-
-        /*
-        _setVersion++;
-
-        textName.text = "";
-        textDescription.text = "";
-
-        _bindingIcon.Release();
-        _bindingIcon.Cancel();
-
-        imageIcon.enabled = false;
-        imageIcon.sprite = null;
-        */
     }
 
-    /*
 
-    private async Task SetIconAsync(string address, int version)
-    {
-        imageIcon.enabled = false;
-
-        var sprite = await _bindingIcon.LoadAsync(address);
-
-        if (version != _setVersion) return;
-
-        imageIcon.sprite = sprite;
-        imageIcon.enabled = true;
-    }
-
-    */
 
     #region Events
 

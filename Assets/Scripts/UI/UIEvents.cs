@@ -699,4 +699,29 @@ public static class UIEvents
     {
         OnBackFromWingDetailRequested?.Invoke();
     }
+
+    // Battle Result
+    public static event Action<BattleResultData> OnResultsArcadeOpenRequested;
+    public static void RaiseResultsArcadeOpenRequested(BattleResultData battleResultData)
+    {
+        OnResultsArcadeOpenRequested?.Invoke(battleResultData);
+    }
+
+    public static event Action<BattleResultData> OnResultsMatchStoryOpenRequested;
+    public static void RaiseResultsMatchStoryOpenRequested(BattleResultData battleResultData)
+    {
+        OnResultsMatchStoryOpenRequested?.Invoke(battleResultData);
+    }
+
+    public static event Action<BattleResultData> OnResultsMatchNodeOpenRequested;
+    public static void RaiseResultsMatchNodeOpenRequested(BattleResultData battleResultData)
+    {
+        OnResultsMatchNodeOpenRequested?.Invoke(battleResultData);
+    }
+
+    public static event Action<BattleResultData> OnResultsEncounterOpenRequested;
+    public static void RaiseResultsEncounterOpenRequested(BattleResultData battleResultData)
+    {
+        OnResultsEncounterOpenRequested?.Invoke(battleResultData);
+    }
 }

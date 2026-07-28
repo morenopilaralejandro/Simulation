@@ -432,6 +432,12 @@ public class WorldManagerZone
 
     public async void LoadZoneFromUnloaded()
     {
+        LogManager.Trace(
+            $"LOAD WorldArgs " +
+            $"Zone={WorldArgs.ZoneId} " +
+            $"Pos={WorldArgs.PlayerPosition} " +
+            $"Facing={WorldArgs.FacingDirection}");
+
         worldManager.SetIsTransitioning(true);
 
         try

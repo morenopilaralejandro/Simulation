@@ -12,8 +12,8 @@ public class CharacterSaveData
 
     //level
     public int Level;
-    public int CurrentExp;
-    public int ExpToNextLevel;
+    public int CurrentXp;
+    public int XpToNextLevel;
 
     //stats
     public int CurrentHp; //GetBattleStat

@@ -12,9 +12,14 @@ public class BarXP : MonoBehaviour
     public void SetCharacter(Character character)
     {
         if (character != null)
-            textNumber.text = $"{character.CurrentExp}/{character.ExpToNextLevel}";
+            textNumber.text = $"{character.CurrentXp}/{character.XpToNextLevel}";
         else
             textNumber.text = "";
+    }
+
+    public void SetData(int currentXp, int xpToNextLevel)
+    {
+        textNumber.text = $"{currentXp}/{xpToNextLevel}";
     }
 
     public void Clear() 

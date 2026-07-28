@@ -14,7 +14,8 @@ public class PossessionManager : MonoBehaviour
     private float cooldown = 0.2f;
     private float cooldownSfxOnDuel = 0.5f;
     private float controlFeedbackKickTime = 0.2f;
-    private float controlGoalDistance = 3.5f;
+    private float controlGoalDistanceFull = 3.5f;
+    private float controlGoalDistanceMini = 2.5f;
     private float lastKickTime = -999f;
     private float lastDuelTime = -999f;
     private OffsideManager offsideManager;
@@ -149,9 +150,17 @@ public class PossessionManager : MonoBehaviour
     private bool IsInControlFeedbackDistance(CharacterEntityBattle character) 
     {
         float z = character.transform.position.z;
-        return character.TeamSide == TeamSide.Home
-            ? z > controlGoalDistance
-            : z < controlGoalDistance;
+        if (BattleManager.Instance.CurrentType == BattleType.Full) 
+        {
+            return character.TeamSide == TeamSide.Home
+                ? z > controlGoalDistanceFull
+                : z < controlGoalDistanceFull;
+        } else 
+        {
+            return character.TeamSide == TeamSide.Home
+                ? z > controlGoalDistanceMini
+                : z < controlGoalDistanceMini;
+        }
     }
     private bool ShowControlFeedback(CharacterEntityBattle character, float now) => 
         (now - lastKickTime) > controlFeedbackKickTime && 

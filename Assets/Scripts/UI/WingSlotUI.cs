@@ -10,8 +10,8 @@ public class WingSlotUI : MonoBehaviour
     #region Field
 
     [Header("UI Elements")]
-    [SerializeField] private Image imageIcon;
     [SerializeField] private Image imageBlock;
+    [SerializeField] private WingUI wingUI;
 
     private Character character;
     public Character Character => character;
@@ -41,16 +41,14 @@ public class WingSlotUI : MonoBehaviour
         this.wing = wing;
         if (wing == null) return;
 
-        imageIcon.color = ColorManager.GetWingColor(wing.WingColorType);
-        imageIcon.enabled = true;
+        wingUI.SetData(wing);
         imageBlock.enabled = false;
     }
 
     public void Clear()
     {   
         wing = null;
-        imageIcon.enabled = false;
-        imageIcon.color = Color.white;
+        wingUI.Clear();
         imageBlock.enabled = true;
     }
 

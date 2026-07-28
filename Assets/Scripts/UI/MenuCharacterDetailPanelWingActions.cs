@@ -124,6 +124,7 @@ public class MenuCharacterDetailPanelWingActions : Menu
 
     private void HandleBackFromWingDetailRequested() 
     {
+        if(!MenuManager.Instance.IsMenuOpen(this)) return;
         RequestClose();
         UIEvents.RaiseWingActionsCloseRequested(wingSlotUI);
     }

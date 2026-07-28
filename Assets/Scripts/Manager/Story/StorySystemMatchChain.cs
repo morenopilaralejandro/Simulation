@@ -64,7 +64,7 @@ public class StorySystemMatchChain
         return dict[auxNodeData.MatchChainId].GetNodeById(sourceNodeId);
     }
 
-    public T GetMatchChainNode<T>(string id) where T : MatchChainNodeData
+    public T GetMatchChainNode<T>(string id) where T : MatchChainNode
     {
         auxNodeData = DatabaseManager.Instance.GetMatchChainNodeData(id);
         if (dict[auxNodeData.MatchChainId].GetNodeById(id) is T typed) return typed;

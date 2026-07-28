@@ -77,7 +77,7 @@ public class CharacterManagerStorage
     public Character AddCharacterFromScout(CharacterData characterData, int level)
     {
         Character character = new Character(characterData);
-        character.SetLevel(99);
+        character.SetLevel(level);
         return AddCharacter(character);
     }
 

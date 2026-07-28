@@ -34,8 +34,8 @@ public class PersistenceManagerSave
 
     public void SaveGame()
     {
-        if (IsNewGame())
-            SetNewGame(false);
+        if (IsNewGame()) SetNewGame(false);
+
         SaveData data = CreateSaveData();
         persistenceManager.Save(data);
     }

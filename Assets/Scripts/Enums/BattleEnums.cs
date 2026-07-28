@@ -18,8 +18,11 @@ namespace Aremoreno.Enums.Battle
 
     public enum BattleResultsType
     {
-        Drop,
-        Summary
+        Debug,
+        Encounter,
+        MatchNode,
+        MatchStory,
+        Arcade
     }
 
     public enum BoundPlacement

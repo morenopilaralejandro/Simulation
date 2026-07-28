@@ -87,4 +87,10 @@ public static class BattleEvents
         OnShootStopped?.Invoke(character);
     }
 
+    public static event Action OnResultsContinueRequested;
+    public static void RaiseResultsContinueRequested()
+    {
+        OnResultsContinueRequested?.Invoke();
+    }
+
 }
