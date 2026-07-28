@@ -321,6 +321,7 @@ public class BattleManager : MonoBehaviour
             scoreDict,
             Teams, 
             GetUserSide(),
+            currentType,
             false);
 
         sceneLoader.LoadGroup(sceneBattleResults);
@@ -337,6 +338,7 @@ public class BattleManager : MonoBehaviour
             scoreDict, 
             Teams, 
             GetUserSide(),
+            currentType,
             true);
 
         sceneLoader.LoadGroup(sceneBattleResults);
@@ -685,7 +687,7 @@ public class BattleManager : MonoBehaviour
 
     //resultsSystem
     public BattleResultData BattleResultData => resultsSystem.BattleResultData;
-    public void CreateBattleResultData(Dictionary<TeamSide, int> scores, Dictionary<TeamSide, Team> teams, TeamSide userSide, bool isForfeit) => resultsSystem.CreateBattleResultData(scores, teams, userSide, isForfeit);
+    public void CreateBattleResultData(Dictionary<TeamSide, int> scores, Dictionary<TeamSide, Team> teams, TeamSide userSide, BattleType battleType, bool isForfeit) => resultsSystem.CreateBattleResultData(scores, teams, userSide, battleType, isForfeit);
     public void Clear() => resultsSystem.Clear();
     public MatchRank CalculateMatchRank(BattleResultData battleResultData) => resultsSystem.CalculateMatchRank(battleResultData);
 

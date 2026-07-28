@@ -274,7 +274,8 @@ public class WorldManagerEncounter
             bgmId : encounter.BgmId,
             fieldId : worldManager.CurrentZone.fieldId,
             encounterData : encounter,
-            awayTeamLevel : encounter.Level
+            awayTeamLevel : encounter.Level,
+            awayTeamCanUseWing : false
         );
         sceneLoader.LoadGroup(sceneBattle);
     }

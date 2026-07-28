@@ -15,8 +15,7 @@ public class MenuWingDetail : Menu
     #region Fields
 
     [Header("Basic")]
-    [SerializeField] private Image imageIcon;
-    [SerializeField] private TMP_Text textName;
+    [SerializeField] private WingUI wingUI;
 
     [Header("Stats")]
     [SerializeField] private StatLayoutUI statLayoutUI;
@@ -114,8 +113,7 @@ public class MenuWingDetail : Menu
     {
         if (wing == null) return;
 
-        textName.text = wing.WingName;
-        imageIcon.color = ColorManager.GetWingColor(wing.WingColorType);
+        wingUI.SetData(wing);
 
         statLayoutUI.Populate(wing);
         if(wing.IsEquipped()) 
@@ -136,8 +134,7 @@ public class MenuWingDetail : Menu
     {
         wing = null;
 
-        textName.text = "";
-        imageIcon.color = Color.white;
+        wingUI.Clear();
 
         statLayoutUI.Clear();
         characterCard.Clear();

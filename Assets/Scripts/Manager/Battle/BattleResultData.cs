@@ -8,6 +8,7 @@ using Aremoreno.Enums.Match;
 public class BattleResultData
 {
     public BattleResultsType BattleResultsType;
+    public BattleType BattleType;
 
     public TeamSide WinningSide;
     public TeamSide UserSide;
@@ -55,6 +56,7 @@ public class BattleResultData
 
         MatchRank = default;
         BattleResultsType = default;
+        BattleType = default;
         WinningSide = default;
         UserSide = default;
     }

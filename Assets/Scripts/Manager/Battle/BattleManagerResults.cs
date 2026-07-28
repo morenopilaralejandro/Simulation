@@ -45,11 +45,13 @@ public class BattleManagerResults
         Dictionary<TeamSide, int> scores,
         Dictionary<TeamSide, Team> teams,
         TeamSide userSide,
+        BattleType battleType,
         bool isForfeit)
     {
         battleResultData.Clear();
 
         battleResultData.BattleResultsType = BattleArgs.BattleResultsType;
+        battleResultData.BattleType = battleType;
         battleResultData.UserSide = userSide;
         battleResultData.EnemyLevel = BattleArgs.AwayTeamLevel;
 
@@ -150,10 +152,8 @@ public class BattleManagerResults
         if(BattleArgs.MatchId == null) return;
 
         /*
-        if (battleResultData.MatchId == "") 
-        {
-            set flag
-        }
+        set flag battleResultData.MatchId
+
         */
     }
 
@@ -171,11 +171,9 @@ public class BattleManagerResults
             case BattleResultsType.MatchNode:
             case BattleResultsType.Encounter:
                 return true;
-                break;
             case BattleResultsType.Arcade:
             default:
                 return false;
-                break;
         }
     }
 
@@ -223,7 +221,7 @@ public class BattleManagerResults
     {
         if (TeamManager.Instance?.ActiveLoadout == null) return;
 
-        foreach (string guid in TeamManager.Instance.ActiveLoadout.MiniBattleCharacterGuids)
+        foreach (string guid in battleResultData.Teams[battleResultData.UserSide].GetCharacterGuids(battleResultData.BattleType))
         {
             BattleResultDataXp result = new();
 
