@@ -116,7 +116,7 @@ public class ItemManagerStorage
         {
             case ItemCharacter itemCharacter:
                 CharacterManager.Instance.AddCharacterFromScout(
-                    DatabaseManager.Instance.GetCharacterData(itemCharacter.CharacterId),
+                    itemCharacter.CharacterId,
                     1);
                 return true;
 

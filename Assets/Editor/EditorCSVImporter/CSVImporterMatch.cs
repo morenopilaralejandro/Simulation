@@ -39,6 +39,8 @@ public class CSVImporterMatch
         int bgmIdIndex = System.Array.IndexOf(headers, "BgmId");
         int ballIdIndex = System.Array.IndexOf(headers, "BallId");
         int fieldIdIndex = System.Array.IndexOf(headers, "FieldId");
+        int hasTimeOfDayRestrictionIndex  = System.Array.IndexOf(headers, "HasTimeOfDayRestriction");
+        int timeOfDayIndex      = System.Array.IndexOf(headers, "TimeOfDay");
 
         for (int i = 1; i < lines.Length; i++)
         {
@@ -55,6 +57,8 @@ public class CSVImporterMatch
             matchData.BgmId = values[bgmIdIndex].Trim();
             matchData.BallId = values[ballIdIndex].Trim();
             matchData.FieldId = values[fieldIdIndex].Trim();
+            matchData.HasTimeOfDayRestriction = CSVImporterParser.ParseBool(values[hasTimeOfDayRestrictionIndex].Trim());
+            matchData.TimeOfDay = EnumManager.StringToEnum<TimeOfDay>(values[timeOfDayIndex].Trim());
 
             string safeName = matchData.MatchId.Replace(" ", "_").Replace("/", "_");
             string assetPath = $"{assetFolder}/{safeName}.asset";

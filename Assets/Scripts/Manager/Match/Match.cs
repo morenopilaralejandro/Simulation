@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Match;
+using Aremoreno.Enums.World;
 
 public class Match
 {
@@ -30,6 +31,9 @@ public class Match
     public string BgmId => attributesComponent.BgmId;
     public string BallId => attributesComponent.BallId;
     public string FieldId => attributesComponent.FieldId;
+
+    public bool HasTimeOfDayRestriction => attributesComponent.HasTimeOfDayRestriction;
+    public TimeOfDay TimeOfDay => attributesComponent.TimeOfDay;
 
     #endregion
 }

@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Match;
+using Aremoreno.Enums.World;
 
 public class MatchComponentAttributes
 {
     public string MatchId { get; private set; }
-    public string TeamId  { get; private set; }
+    public string TeamId { get; private set; }
     public int Level { get; private set; }
-    public BattleType BattleType  { get; private set; }
-    public string BgmId  { get; private set; }
-    public string BallId  { get; private set; }
-    public string FieldId  { get; private set; }
+    public BattleType BattleType { get; private set; }
+    public string BgmId { get; private set; }
+    public string BallId { get; private set; }
+    public string FieldId { get; private set; }
+    public bool HasTimeOfDayRestriction { get; private set; }
+    public TimeOfDay TimeOfDay { get; private set; }
 
     public MatchComponentAttributes(MatchData data)
     {
@@ -23,5 +26,8 @@ public class MatchComponentAttributes
         BgmId = data.BgmId;
         BallId = data.BallId;
         FieldId = data.FieldId;
+
+        HasTimeOfDayRestriction = data.HasTimeOfDayRestriction;
+        TimeOfDay = data.TimeOfDay;
     }
 }

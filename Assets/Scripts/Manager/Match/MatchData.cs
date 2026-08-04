@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Match;
+using Aremoreno.Enums.World;
 
 [CreateAssetMenu(fileName = "MatchData", menuName = "ScriptableObject/Match/MatchData")]
 public class MatchData : ScriptableObject
@@ -13,4 +14,6 @@ public class MatchData : ScriptableObject
     public string BgmId;
     public string BallId;
     public string FieldId;
+    public bool HasTimeOfDayRestriction;
+    public TimeOfDay TimeOfDay;
 }

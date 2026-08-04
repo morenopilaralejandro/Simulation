@@ -23,9 +23,6 @@ public class MenuMatchDetail : Menu
     [Header("Options")]
     [SerializeField] private Toggle toggleAutoBattle;
 
-    [Header("Scenes")]
-    [SerializeField] private SceneGroup sceneBattle;
-
     private Match currentMatch;
     private MatchChainNodeMatch currentNode;
 
@@ -66,7 +63,7 @@ public class MenuMatchDetail : Menu
     private void PopulateUI()
     {
         var team = DatabaseManager.Instance.GetTeam(currentMatch.TeamId);
-        PopulateTeamWithCharacters(team, currentMatch.BattleType);
+        StorySystemManager.Instance.PopulateTeamWithCharacters(team, currentMatch.BattleType, currentMatch.Level);
         formationLayoutUI.Initialize(team, currentMatch.BattleType, MenuTeamMode.Battle);
 
         toggleAutoBattle.SetIsOnWithoutNotify(AutoBattleManager.Instance.IsAutoBattleEnabled);
@@ -125,7 +122,7 @@ public class MenuMatchDetail : Menu
     {
         if (currentMatch == null) return;
 
-        StartMatchBattle(currentMatch, currentNode);
+        StorySystemManager.Instance.StartMatchBattle(currentMatch, currentNode);
     }
 
     public void OnButtonBackClicked()
@@ -140,69 +137,4 @@ public class MenuMatchDetail : Menu
 
     #endregion
 
-    #region Battle
-
-    private void PopulateTeamWithCharacters(Team team, BattleType currentType)
-    {
-        team.ClearCharacters(currentType);
-
-        var dataList = team.GetCharacterDataList(currentType);
-        var characters = team.GetCharacters(currentType);
-
-        for (int i = 0; i < dataList.Count; i++)
-        {
-            var data = dataList[i];
-
-            var character = new Character(data);
-            character.SetLevel(currentMatch.Level);
-            character.TryEquipWingDefault();
-            character.ScaleDifficultySystem();
-
-            characters.Add(character);
-        }
-    }
-
-    private async void StartMatchBattle(Match match, MatchChainNodeMatch matchChainNodeMatch)
-    {
-        var worldManager = WorldManager.Instance;
-        var player = WorldManager.Instance.PlayerWorldEntity;
-
-        worldManager.SetIsTransitioning(true);
-        player.SetControlEnabled(false);
-
-        DialogManager.Instance.ForceEndDialog();
-
-        WorldArgs.Set(
-            zoneId: worldManager.CurrentZone != null ? worldManager.CurrentZone.zoneId : null,
-            realm: worldManager.CurrentRealm,
-            playerPosition: player.CurrentTilePosition3d(),
-            facingDirection: player.FacingToVector(player.FacingDirection),
-            worldState: WorldState.InEncounter,
-            hour: worldManager.CurrentHour
-        );
-
-        await worldManager.FadeOut();
-
-        if (worldManager.CurrentZone != null && worldManager.CurrentZone.zoneType == ZoneType.Overworld)
-            await ChunkStreamingManager.Instance.StopStreaming();
-
-        bool unloadSuccess = await worldManager.UnloadCurrentZone();
-        worldManager.SetState(WorldState.InEncounter);
-
-        BattleArgs.SetFull(
-            homeTeamGuid: TeamManager.Instance.ActiveLoadoutGuid,
-            awayTeamId: match.TeamId,
-            battleResultsType: matchChainNodeMatch != null ? BattleResultsType.MatchNode : BattleResultsType.MatchStory,
-            timeOfDay: worldManager.CurrentTimeOfDay,
-            ballId: match.BallId,
-            bgmId: match.BgmId,
-            fieldId: match.FieldId,
-            matchChainNodeId: matchChainNodeMatch != null ? matchChainNodeMatch.MatchChainNodeId : null,
-            awayTeamLevel : match.Level
-        );
-
-        SceneLoader.Instance.LoadGroup(sceneBattle);
-    }
-
-    #endregion
 }
