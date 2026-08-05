@@ -1,18 +1,32 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Match;
+using Aremoreno.Enums.World;
 
 public class StorySystemMatchChain
 {
+    #region Fields
+
+    [Header("Scenes")]
+    [SerializeField] private SceneGroup sceneBattle;
+
     private MatchData auxMatchData;
     private TeamData auxTeamData;
     private MatchChainNodeData auxNodeData;
 
     private Dictionary<string, MatchChain> dict = new Dictionary<string, MatchChain>();
 
-    public StorySystemMatchChain() { }
+    #endregion
+
+    #region Constructor
+
+    public StorySystemMatchChain(SceneGroup sceneBattle) 
+    {
+        this.sceneBattle = sceneBattle;
+    }
 
     public void InitializeFromDatabase()
     {
@@ -21,7 +35,11 @@ public class StorySystemMatchChain
             dict[data.MatchChainId] = MatchChainFactory.Create(data);
         }
     }
+
+    #endregion
    
+    #region Peristance
+
     public void Import(StorySystemSaveData saveData)
     {
         foreach(var chainSaveData in saveData.MatchChainSystemSaveData.MatchChains) 
@@ -41,6 +59,10 @@ public class StorySystemMatchChain
         saveData.MatchChains = list;
         return saveData;
     }
+
+    #endregion
+
+    #region MatchChainNode
 
     public string GetTeamEmblemAddressByMatchId(string matchId) 
     {
@@ -85,6 +107,74 @@ public class StorySystemMatchChain
     {
         dict[node.MatchChainId].SetSelectedIndex(node.NodeIndex);
     }
+
+    #endregion
+
+    #region Battle
+
+    public void PopulateTeamWithCharacters(Team team, BattleType currentType, int level)
+    {
+        team.ClearCharacters(currentType);
+
+        var dataList = team.GetCharacterDataList(currentType);
+        var characters = team.GetCharacters(currentType);
+
+        for (int i = 0; i < dataList.Count; i++)
+        {
+            var data = dataList[i];
+
+            var character = new Character(data);
+            character.SetLevel(level);
+            character.TryEquipWingDefault();
+            character.ScaleDifficultySystem();
+
+            characters.Add(character);
+        }
+    }
+
+    public async Task StartMatchBattle(Match match, MatchChainNodeMatch matchChainNodeMatch)
+    {
+        var worldManager = WorldManager.Instance;
+        var player = WorldManager.Instance.PlayerWorldEntity;
+
+        worldManager.SetIsTransitioning(true);
+        player.SetControlEnabled(false);
+
+        DialogManager.Instance.ForceEndDialog();
+
+        WorldArgs.Set(
+            zoneId: worldManager.CurrentZone != null ? worldManager.CurrentZone.zoneId : null,
+            realm: worldManager.CurrentRealm,
+            playerPosition: player.CurrentTilePosition3d(),
+            facingDirection: player.FacingToVector(player.FacingDirection),
+            worldState: WorldState.InEncounter,
+            hour: worldManager.CurrentHour
+        );
+
+        await worldManager.FadeOut();
+
+        if (worldManager.CurrentZone != null && worldManager.CurrentZone.zoneType == ZoneType.Overworld)
+            await ChunkStreamingManager.Instance.StopStreaming();
+
+        bool unloadSuccess = await worldManager.UnloadCurrentZone();
+        worldManager.SetState(WorldState.InEncounter);
+
+        BattleArgs.SetFull(
+            homeTeamGuid: TeamManager.Instance.ActiveLoadoutGuid,
+            awayTeamId: match.TeamId,
+            battleResultsType: matchChainNodeMatch != null ? BattleResultsType.MatchNode : BattleResultsType.MatchStory,
+            timeOfDay : match.HasTimeOfDayRestriction ? match.TimeOfDay : worldManager.CurrentTimeOfDay,
+            ballId: match.BallId,
+            bgmId: match.BgmId,
+            fieldId: match.FieldId,
+            matchChainNodeId: matchChainNodeMatch != null ? matchChainNodeMatch.MatchChainNodeId : null,
+            awayTeamLevel : match.Level
+        );
+
+        SceneLoader.Instance.LoadGroup(sceneBattle);
+    }
+
+    #endregion
 
 
     #region Events

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Quest;
 using Aremoreno.Enums.Story;
 
@@ -14,6 +16,9 @@ public class StorySystemManager : MonoBehaviour
     #region Fields
 
     public static StorySystemManager Instance { get; private set; }
+
+    [Header("Scenes")]
+    [SerializeField] private SceneGroup sceneBattle;
 
     private StorySystemFlags flagSystem;
     private StorySystemVariables variableSystem;
@@ -46,7 +51,7 @@ public class StorySystemManager : MonoBehaviour
         triggerSystem = new StorySystemTriggers();
         chapterSystem = new StorySystemChapters();
         persistanceSystem = new StorySystemPersistance();
-        matchChainSystem = new StorySystemMatchChain();
+        matchChainSystem = new StorySystemMatchChain(sceneBattle);
 
         matchChainSystem.Subscribe();
     }
@@ -105,6 +110,8 @@ public class StorySystemManager : MonoBehaviour
     public void TrySetSelectedIndex(MatchChainNode node) => matchChainSystem.TrySetSelectedIndex(node);
     public MatchChainNode GetMatchChainNode(string sourceNodeId) => matchChainSystem.GetMatchChainNode(sourceNodeId);
     public T GetMatchChainNode<T>(string id) where T : MatchChainNode => matchChainSystem.GetMatchChainNode<T>(id);
+    public void PopulateTeamWithCharacters(Team team, BattleType currentType, int level) => matchChainSystem.PopulateTeamWithCharacters(team, currentType, level);
+    public Task StartMatchBattle(Match match, MatchChainNodeMatch matchChainNodeMatch) => matchChainSystem.StartMatchBattle(match, matchChainNodeMatch);
 
     // persistanceSystem
     public void Import(StorySystemSaveData data) => persistanceSystem.Import(data);

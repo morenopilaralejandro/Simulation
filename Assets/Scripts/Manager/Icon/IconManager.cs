@@ -11,6 +11,7 @@ public class IconManager : MonoBehaviour
     public ElementIconLibrary Element;
     public GenderIconLibrary Gender;
     public IconLibraryMatchRank MatchRank;
+    //public IconLibraryStat Stat;
 
     private void Awake()
     {

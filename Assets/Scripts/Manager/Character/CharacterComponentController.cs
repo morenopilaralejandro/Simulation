@@ -85,7 +85,7 @@ public class CharacterComponentController : MonoBehaviour
 
         BufferShootInput();
 
-        if (!characterEntityBattle.CanMove() || BattleUIManager.Instance.IsBattleMenuOpen) return;
+        if (characterEntityBattle.IsStunned() || BattleUIManager.Instance.IsBattleMenuOpen) return;
 
         HandlePassInput();
         HandleShootInput();

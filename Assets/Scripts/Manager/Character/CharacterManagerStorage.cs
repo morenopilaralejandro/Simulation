@@ -24,32 +24,36 @@ public class CharacterManagerStorage
 
     public void FirstTimeInitialize()
     {
-        var characterDatabase = DatabaseManager.Instance;
+        AddCharacterFromScout("chara-00070-teruel", 5);
 
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00027-almu"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00088-sofireca"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00067-satu"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00001-are"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00013-fran"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00103-rocinante"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00017-ainara"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00070-teruel"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00075-alexander"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00019-wang"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00095-navarro"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00002-mohamed"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00119-meiga"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00117-ruperta"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00040-malaki"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00023-ayud"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00140-isa"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00048-nina"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00042-gambino"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00124-inquina"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00030-apa"), 50);
-        AddCharacterFromScout(characterDatabase.GetCharacterData("chara-00010-ali"), 50);
+        AddCharacterFromScout("chara-00019-wang", 5);
+        AddCharacterFromScout("chara-00075-alexander", 5);
+        AddCharacterFromScout("chara-00017-ainara", 5);
+        AddCharacterFromScout("chara-00074-paula", 5);
+
+        AddCharacterFromScout("chara-00067-satu", 5);
+        AddCharacterFromScout("chara-00047-carlos", 5);
+        AddCharacterFromScout("chara-00107-diego", 5);
+        AddCharacterFromScout("chara-00013-fran", 5);
+
+        AddCharacterFromScout("chara-00154-simon", 5);
+        AddCharacterFromScout("chara-00088-sofireca", 5);
+
+        AddCharacterFromScout("chara-00089-roble", 5);
+        AddCharacterFromScout("chara-00041-kike", 5);
+        AddCharacterFromScout("chara-00112-fernando", 5);
+        AddCharacterFromScout("chara-00039-arga", 5);
+        AddCharacterFromScout("chara-00143-esteban", 5);
 
         TeamManager.Instance.InitializeFirstLoadout();
+    }
+
+    public void AddAllFromDatabase()
+    {
+        foreach (CharacterData characterData in DatabaseManager.Instance.DatabaseRegistry.CharacterData.Data.Values)
+        {
+            AddCharacterFromScout(characterData.CharacterId, 99);
+        }
     }
 
     #endregion
@@ -74,9 +78,9 @@ public class CharacterManagerStorage
     /// Entry point for the scout system or any other acquisition method.
     /// Creates a Character from data and optional save data, stores it, and returns it.
     /// </summary>
-    public Character AddCharacterFromScout(CharacterData characterData, int level)
+    public Character AddCharacterFromScout(string characterId, int level)
     {
-        Character character = new Character(characterData);
+        Character character = new Character(DatabaseManager.Instance.GetCharacterData(characterId));
         character.SetLevel(level);
         return AddCharacter(character);
     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using Aremoreno.Enums.Item;
 
 public class SelectorTeamEmblemSource : ISelectorSource<Emblem>
@@ -8,26 +9,9 @@ public class SelectorTeamEmblemSource : ISelectorSource<Emblem>
     {
         var slots = ItemManager.Instance.GetItemsByCategory(ItemCategory.Emblem);
 
-        foreach (var slot in slots)
-        {
-            var itemEmblem = (ItemEmblem)slot.Item;
-            yield return new Emblem(DatabaseManager.Instance.GetEmblemData(itemEmblem.EmblemId));
-        }
+        return slots
+            .Select(slot => (ItemEmblem)slot.Item)
+            .Select(item => new Emblem(DatabaseManager.Instance.GetEmblemData(item.EmblemId)))
+            .OrderBy(emblem => emblem.EmblemId);
     }
-
-    /*
-    public IEnumerable<Emblem> Enumerate() 
-    {
-        List<Emblem> list = new ();
-
-        var dict = DatabaseManager.Instance.DatabaseRegistry.EmblemData.Data;
-
-        foreach (var kvp in dict) 
-        {
-            list.Add(new Emblem(kvp.Value));
-        }
-        
-        return list;
-    }
-    */
 }

@@ -269,7 +269,7 @@ public class WorldManagerEncounter
             homeTeamGuid : TeamManager.Instance.ActiveLoadoutGuid, 
             awayTeamId : encounter.TeamId,
             battleResultsType : BattleResultsType.Encounter,
-            timeOfDay : worldManager.CurrentTimeOfDay, //if currentZone.zoneType == ZoneType.Interior use day
+            timeOfDay : encounter.HasTimeOfDayRestriction ? encounter.TimeOfDay : worldManager.CurrentTimeOfDay,
             ballId : encounter.BallId,
             bgmId : encounter.BgmId,
             fieldId : worldManager.CurrentZone.fieldId,

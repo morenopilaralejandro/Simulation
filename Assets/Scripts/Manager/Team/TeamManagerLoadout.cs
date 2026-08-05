@@ -288,10 +288,16 @@ public class TeamManagerLoadout
 
         // Populate Mini Battle slots
         int miniCount = Mathf.Min(sizeMini, allCharacters.Count);
+        /*
         for (int i = 0; i < miniCount; i++)
         {
             SetCharacterInLoadout(loadout, BattleType.Mini, i, allCharacters[i].CharacterGuid);
         }
+        */
+        SetCharacterInLoadout(loadout, BattleType.Mini, 0, allCharacters[0].CharacterGuid);
+        SetCharacterInLoadout(loadout, BattleType.Mini, 1, allCharacters[1].CharacterGuid);
+        SetCharacterInLoadout(loadout, BattleType.Mini, 2, allCharacters[8].CharacterGuid);
+        SetCharacterInLoadout(loadout, BattleType.Mini, 3, allCharacters[9].CharacterGuid);
 
         LogManager.Info($"[TeamLoadoutManager] Loadout initialized: " +
                         $"{battleCount} full-battle and {miniCount} mini-battle characters assigned.");
