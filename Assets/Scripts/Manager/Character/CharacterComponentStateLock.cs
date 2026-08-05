@@ -11,7 +11,7 @@ public class CharacterComponentStateLock : MonoBehaviour
     private float controlMultiplier = 0.005f;
     private float minLockDuration = 0.1f;
     private float baseDurationKick = 0.4f;
-    private float baseDurationControl = 0.4f;
+    private float baseDurationControl = 0.25f;
     private float baseDurationDefault = 0.4f;
     private Coroutine stateLockCoroutine;
 

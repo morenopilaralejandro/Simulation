@@ -27,8 +27,7 @@ public class CharacterDetailSide : MonoBehaviour
 
     [Header("Wing")]
     [SerializeField] private CanvasGroup canvasWing;
-    [SerializeField] private Image wingIcon;
-    [SerializeField] private TMP_Text wingTextName;
+    [SerializeField] private WingUI wingUI;
     [SerializeField] private StatLayoutUI statLayoutUIWing;
 
     [Header("Pages")]
@@ -83,14 +82,10 @@ public class CharacterDetailSide : MonoBehaviour
         if (character.HasWingEquipped)
         {
             statLayoutUIWing.Populate(character.Wing);
-
-            wingTextName.text = character.Wing.WingName;
-            wingIcon.color = ColorManager.GetWingColor(character.Wing.WingColorType);
+            wingUI.SetData(character.Wing);
         } else 
         {
             statLayoutUIWing.Clear();
-            wingTextName.text = "";
-            wingIcon.color = Color.white;
         }
     }
 
@@ -108,9 +103,8 @@ public class CharacterDetailSide : MonoBehaviour
         statLayoutUI.Clear();
         equipmentLayoutUI.Clear();
 
+        wingUI.Clear();
         statLayoutUIWing.Clear();
-        wingTextName.text = "";
-        wingIcon.color = Color.white;
     }
 
     #endregion

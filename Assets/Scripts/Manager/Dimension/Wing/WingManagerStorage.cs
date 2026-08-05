@@ -18,10 +18,12 @@ public class WingManagerStorage
 
     public void FirstTimeInitialize()
     {
+        /*
         var wingDatabase = DatabaseManager.Instance;
 
         AddWing(wingDatabase.GetWingData("wing-00001-angel"));
         AddWing(wingDatabase.GetWingData("wing-00002-devil"));
+        */
     }
 
     #endregion

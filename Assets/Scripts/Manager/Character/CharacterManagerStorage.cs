@@ -39,6 +39,12 @@ public class CharacterManagerStorage
         AddCharacterFromScout("chara-00154-simon", 5);
         AddCharacterFromScout("chara-00088-sofireca", 5);
 
+        AddCharacterFromScout("chara-00089-roble", 5);
+        AddCharacterFromScout("chara-00041-kike", 5);
+        AddCharacterFromScout("chara-00112-fernando", 5);
+        AddCharacterFromScout("chara-00039-arga", 5);
+        AddCharacterFromScout("chara-00143-esteban", 5);
+
         TeamManager.Instance.InitializeFirstLoadout();
     }
 
