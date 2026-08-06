@@ -108,6 +108,15 @@ public class MenuSide : Menu
         );
     }
 
+    public void OnButtonScoutTapped()
+    {
+        UIEvents.RaiseScoutTierSelectorOpenRequested(
+            new SelectorScoutTierSourceUnlocked(),
+            new SelectorScoutTierAction(),
+            null
+        );
+    }
+
     public void OnButtonQuitTapped()
     {
         menuManager.OpenMenu(menuQuit);

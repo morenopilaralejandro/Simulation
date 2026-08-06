@@ -36,6 +36,8 @@ public class DatabaseRegistry
     public Database<MatchChainData> MatchChainData;
     public Database<MatchData> MatchData;
 
+    public Database<ScoutTierData> ScoutTierData;
+
     public DatabaseRegistry()
     {
         // Formation & Field
@@ -82,5 +84,8 @@ public class DatabaseRegistry
         MatchChainNodeData = new Database<MatchChainNodeData>("Match-Chain-Node-Data", m => m.MatchChainNodeId);
         MatchChainData = new Database<MatchChainData>("Match-Chain-Data", m => m.MatchChainId);
         MatchData = new Database<MatchData>("Match-Data", m => m.MatchId);
+
+        //Scout
+        ScoutTierData = new Database<ScoutTierData>("Scout-Tier-Data", s => s.ScoutTierId);
     }
 }

@@ -61,6 +61,7 @@ public class CharacterManager : MonoBehaviour
     public Character GetCharacter(string characterGuid) => storageSystem.GetCharacter(characterGuid);
     public List<Character> GetAllCharacters() => storageSystem.GetAllCharacters();
     public bool HasCharacter(string characterGuid) => storageSystem.HasCharacter(characterGuid);
+    public bool HasCharacterById(string characterId) => storageSystem.HasCharacterById(characterId);
     public bool RemoveCharacter(string characterGuid) => storageSystem.RemoveCharacter(characterGuid);
     public void FirstTimeInitialize() => storageSystem.FirstTimeInitialize();
     public CharacterStorageSaveData ExportStorageSystem() => storageSystem.Export();

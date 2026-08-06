@@ -18,7 +18,8 @@ namespace Aremoreno.Enums.Localization
         Story_Event,
         Wing,
         Match_Chain,
-        Shop
+        Shop,
+        Scout_Tier
     }
 
     public enum LocalizationField

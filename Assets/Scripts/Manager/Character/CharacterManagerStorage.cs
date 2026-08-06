@@ -114,6 +114,11 @@ public class CharacterManagerStorage
         return characters.ContainsKey(characterGuid);
     }
 
+    public bool HasCharacterById(string characterId)
+    {
+        return characters.Values.Any(c => c.CharacterId == characterId);
+    }
+
     public List<Character> GetAllCharacters()
     {
         return characters.Values.ToList();
