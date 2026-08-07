@@ -16,6 +16,11 @@ public class StorySystemFlags
         storySystemManager = StorySystemManager.Instance;
     }
 
+    public void FirstTimeInitialize()
+    {
+        SetFlag("unlocked_scout_tier_1", true);
+    }
+
     public void SetFlag(string flagId, bool boolValue)
     {
         flagsDict[flagId] = boolValue;

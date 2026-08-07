@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Aremoreno.Enums.Item;
 using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.Scout;
 
@@ -11,6 +12,7 @@ public class ScoutEntryComponentCharacter
     public int Level { get; private set; }
     public Character Character { get; private set; }
     public bool IsOwned { get; private set; }
+    public bool IsAffordable { get; private set; }
 
     public ScoutEntryComponentCharacter(ScoutEntryData data)
     {
@@ -26,5 +28,6 @@ public class ScoutEntryComponentCharacter
             Character.GetKitRole(Character.Position));
 
         IsOwned = CharacterManager.Instance.HasCharacterById(CharacterId);
+        IsAffordable = ItemManager.Instance.CanAfford(CurrencyType.Gold, Cost);
     }
 }

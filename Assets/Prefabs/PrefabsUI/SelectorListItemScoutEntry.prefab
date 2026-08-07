@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 7112171442191191154}
   - component: {fileID: 8005082173841855072}
   - component: {fileID: 8609478514264263129}
+  - component: {fileID: 6436390715885448389}
   m_Layer: 5
   m_Name: PanelOwned
   m_TagString: Untagged
@@ -166,6 +167,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &6436390715885448389
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065815491095696027}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3495670547557065449
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,6 +707,28 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2961933348200397441}
   m_SourcePrefab: {fileID: 100100000, guid: 0c60ebd251bff8fbc9cf01e278becbcb, type: 3}
+--- !u!114 &2921075093169520100 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4002327128740893398, guid: 0c60ebd251bff8fbc9cf01e278becbcb, type: 3}
+  m_PrefabInstance: {fileID: 2234525401082670898}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 417286e7fd7b598189c923e30b3f1c5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4137477361507909518 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2767994951965380796, guid: 0c60ebd251bff8fbc9cf01e278becbcb, type: 3}
+  m_PrefabInstance: {fileID: 2234525401082670898}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4441399491085957633 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2495456320750736691, guid: 0c60ebd251bff8fbc9cf01e278becbcb, type: 3}
@@ -729,11 +764,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 4441399491085957633}
   scrollForwarder: {fileID: 8231312372490908013}
-  characterCard: {fileID: 0}
-  textCost: {fileID: 0}
-  textLv: {fileID: 0}
-  canvasGroupCost: {fileID: 0}
-  canvasGroupOwned: {fileID: 0}
+  characterCard: {fileID: 2921075093169520100}
+  textCost: {fileID: 6468772378265518096}
+  textLv: {fileID: 4137477361507909518}
+  canvasGroupCost: {fileID: 6789541021522692555}
+  canvasGroupOwned: {fileID: 6436390715885448389}
 --- !u!114 &2961933348200397441
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -760,4 +760,10 @@ public static class UIEvents
         OnMenuScoutConfirmOpenRequested?.Invoke(scoutEntry);
     }
 
+    public static event Action OnScoutEntrySelectorRefreshRequested;
+    public static void RaiseScoutEntrySelectorRefreshRequested()
+    {
+        OnScoutEntrySelectorRefreshRequested?.Invoke();
+    }
+
 }

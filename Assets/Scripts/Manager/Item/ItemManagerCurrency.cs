@@ -27,7 +27,7 @@ public class ItemManagerCurrency
 
     }
 
-    private void InitializeDefault() 
+    public void InitializeDefault() 
     {
         foreach (CurrencyType type in System.Enum.GetValues(typeof(CurrencyType)))
             currencyDict[type] = 0;

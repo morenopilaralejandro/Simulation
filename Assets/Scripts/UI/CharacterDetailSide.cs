@@ -145,7 +145,7 @@ public class CharacterDetailSide : MonoBehaviour
         SetVisible(pageThreeCanvas, page == 2);
         SetVisible(pageFourCanvas, page == 3);
 
-        SetVisible(canvasWing, page == 3);
+        SetVisible(canvasWing, page == 3 && this.character.HasWingEquipped);
     }
 
     #endregion

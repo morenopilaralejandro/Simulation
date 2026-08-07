@@ -76,6 +76,7 @@ public class ItemManager : MonoBehaviour
     public bool Spend(CurrencyType type, int amount) => currencySystem.Spend(type, amount);
     public bool CanAfford(CurrencyType type, int amount) => currencySystem.CanAfford(type, amount);
     public SaveDataCurrencySystem ExportCurrencySystem() => currencySystem.Export();
+    public void InitializeCurrencySystem() => currencySystem.InitializeDefault();
     public void ImportCurrencySystem(SaveDataCurrencySystem saveData) => currencySystem.Import(saveData);
 
     // persistanceSystem

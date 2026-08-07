@@ -10,6 +10,7 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
 
     [Header("References")]
     [SerializeField] private TMP_Text textHeader;
+    private int selectedIndex;
 
     //private CharacterFilterData activeFilterData;
 
@@ -23,11 +24,19 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
         base.Show();
     }
 
+    public override void SetInteractable(bool interactable)
+    {
+        FocusItem(selectedIndex);   
+        base.SetInteractable(interactable);
+    }
+
     public override void Hide()
     {
         // Reset filter UI when closing.
         // UIEvents.RaiseCharacterFilterResetRequested();
         // activeFilterData = null;
+
+        selectedIndex = -1;
 
         base.Hide();
     }
@@ -35,14 +44,16 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
     protected override void OnGainedInput()
     {
         var im = InputManager.Instance;
-        im.SubscribeDown(CustomAction.Navigation_Back,                            HandleBack);
-        //im.SubscribeDown(CustomAction.Navigation_ShortcutCharacterFilter,         HandleFilterShortcut);
+        im.SubscribeDown(CustomAction.Navigation_Back, HandleBack);
+        im.SubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterNext, HandleShortcutTeamCharacterNext);
+        //im.SubscribeDown(CustomAction.Navigation_ShortcutCharacterFilter, HandleFilterShortcut);
     }
 
     protected override void OnLostInput()
     {
         var im = InputManager.Instance;
-        im.UnsubscribeDown(CustomAction.Navigation_Back,                          HandleBack);
+        im.UnsubscribeDown(CustomAction.Navigation_Back, HandleBack);
+        im.UnsubscribeDown(CustomAction.Navigation_ShortcutTeamCharacterNext, HandleShortcutTeamCharacterNext);
         //im.UnsubscribeDown(CustomAction.Navigation_ShortcutCharacterFilter,       HandleFilterShortcut);
     }
 
@@ -69,6 +80,11 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
         RequestClose();
     }
 
+    private void HandleShortcutTeamCharacterNext()
+    {
+        UIEvents.RaiseCharacterDetailSideNextPageRequested();
+    }
+
     /*
 
     private void HandleFilterShortcut()
@@ -93,6 +109,9 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
     {
         base.OnEnable();
         UIEvents.OnScoutEntrySelectorOpenRequested += HandleOpenRequested;
+        UIEvents.OnScoutEntrySelectorRefreshRequested += HandleRefreshRequested;
+        UIEvents.OnSelectorScoutEntryActionClicked += HandleSelectorScoutEntryActionClicked;
+
         //UIEvents.OnCharacterFilterUpdated += HandleFilterUpdated;
     }
 
@@ -100,6 +119,8 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
     {
         base.OnDisable();
         UIEvents.OnScoutEntrySelectorOpenRequested -= HandleOpenRequested;
+        UIEvents.OnScoutEntrySelectorRefreshRequested -= HandleRefreshRequested;
+        UIEvents.OnSelectorScoutEntryActionClicked -= HandleSelectorScoutEntryActionClicked;
         //UIEvents.OnCharacterFilterUpdated -= HandleFilterUpdated;
     }
 
@@ -116,6 +137,23 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
         }
 
         Open(source, action, filter);
+    }
+
+    private void HandleRefreshRequested()
+    {
+        Refresh();
+    }
+
+    private void HandleSelectorScoutEntryActionClicked(ScoutEntry scoutEntry)
+    {
+        if (scoutEntry.IsOwned || !scoutEntry.IsAffordable)
+        {
+            AudioManager.Instance.PlaySfx("sfx-menu_forbidden");
+            return;
+        }
+        
+        selectedIndex = GetSelectedIndex();
+        UIEvents.RaiseMenuScoutConfirmOpenRequested(scoutEntry);
     }
 
     /*

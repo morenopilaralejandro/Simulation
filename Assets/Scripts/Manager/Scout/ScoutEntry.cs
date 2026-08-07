@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Aremoreno.Enums.Item;
 using Aremoreno.Enums.Scout;
 
 public class ScoutEntry
@@ -27,6 +28,7 @@ public class ScoutEntry
     public int Level => characterComponent.Level;
     public Character Character => characterComponent.Character;
     public bool IsOwned => characterComponent.IsOwned;
+    public bool IsAffordable => characterComponent.IsAffordable;
 
     #endregion
 }

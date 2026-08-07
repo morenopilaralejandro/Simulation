@@ -20,6 +20,8 @@ public class SelectorScoutEntryListItem : SelectorListItem<ScoutEntry>
         textCost.text = obj.Cost.ToString();
         textLv.text = obj.Level.ToString();
 
+        textCost.color = obj.IsAffordable ? Color.white : Color.red;
+
         SetCanvasGroup(canvasGroupOwned, obj.IsOwned);
         SetCanvasGroup(canvasGroupCost, !obj.IsOwned);
     }

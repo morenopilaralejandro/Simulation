@@ -33,6 +33,8 @@ public class MenuScoutConfirm : Menu
     public void OnButtonConfirmClicked()
     {
         //manager scout character
+        StorySystemManager.Instance.BuyCharacter(scoutEntry.Character, scoutEntry.Cost);
+        UIEvents.RaiseScoutEntrySelectorRefreshRequested();
         OnButtonCancelClicked();
     }
 

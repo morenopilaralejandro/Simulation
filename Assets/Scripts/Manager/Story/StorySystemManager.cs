@@ -26,6 +26,7 @@ public class StorySystemManager : MonoBehaviour
     private StorySystemTriggers triggerSystem;
     private StorySystemChapters chapterSystem;
     private StorySystemMatchChain matchChainSystem;
+    private StorySystemScout scoutSystem;
     private StorySystemPersistance persistanceSystem;
 
     #endregion
@@ -52,6 +53,7 @@ public class StorySystemManager : MonoBehaviour
         chapterSystem = new StorySystemChapters();
         persistanceSystem = new StorySystemPersistance();
         matchChainSystem = new StorySystemMatchChain(sceneBattle);
+        scoutSystem = new StorySystemScout();
 
         matchChainSystem.Subscribe();
     }
@@ -70,6 +72,7 @@ public class StorySystemManager : MonoBehaviour
     public void SetFlag(string flagId, bool boolValue) => flagSystem.SetFlag(flagId, boolValue);
     public bool GetFlag(string flagId) => flagSystem.GetFlag(flagId);
     public bool HasFlag(string flagId) => flagSystem.HasFlag(flagId);
+    public void InitializeFlagSystem() => flagSystem.FirstTimeInitialize();
     public void ImportFlagSystem(StorySystemSaveData saveData) => flagSystem.Import(saveData);
 
     // variableSystem
@@ -112,6 +115,9 @@ public class StorySystemManager : MonoBehaviour
     public T GetMatchChainNode<T>(string id) where T : MatchChainNode => matchChainSystem.GetMatchChainNode<T>(id);
     public void PopulateTeamWithCharacters(Team team, BattleType currentType, int level) => matchChainSystem.PopulateTeamWithCharacters(team, currentType, level);
     public Task StartMatchBattle(Match match, MatchChainNodeMatch matchChainNodeMatch) => matchChainSystem.StartMatchBattle(match, matchChainNodeMatch);
+
+    //scoutSystem
+    public void BuyCharacter(Character character, int price) => scoutSystem.BuyCharacter(character, price);
 
     // persistanceSystem
     public void Import(StorySystemSaveData data) => persistanceSystem.Import(data);
