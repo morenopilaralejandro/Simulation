@@ -7,4 +7,5 @@ using Aremoreno.Enums.Item;
 public class SaveDataItemSystem
 {
     public SaveDataItemStorage SaveDataItemStorage;
+    public SaveDataCurrencySystem SaveDataCurrencySystem;
 }

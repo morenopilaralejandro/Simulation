@@ -724,4 +724,46 @@ public static class UIEvents
     {
         OnResultsEncounterOpenRequested?.Invoke(battleResultData);
     }
+
+    //Scout
+    public static event System.Action<
+        ISelectorSource<ScoutTier>,
+        ISelectorClickAction<ScoutTier>,
+        ISelectorFilter<ScoutTier>
+    > OnScoutTierSelectorOpenRequested;
+    public static void RaiseScoutTierSelectorOpenRequested(
+        ISelectorSource<ScoutTier>      source,
+        ISelectorClickAction<ScoutTier> action,
+        ISelectorFilter<ScoutTier>      filter = null)
+    => OnScoutTierSelectorOpenRequested?.Invoke(source, action, filter);
+
+    public static event System.Action<
+        ISelectorSource<ScoutEntry>,
+        ISelectorClickAction<ScoutEntry>,
+        ISelectorFilter<ScoutEntry>
+    > OnScoutEntrySelectorOpenRequested;
+    public static void RaiseScoutEntrySelectorOpenRequested(
+        ISelectorSource<ScoutEntry>      source,
+        ISelectorClickAction<ScoutEntry> action,
+        ISelectorFilter<ScoutEntry>      filter = null)
+    => OnScoutEntrySelectorOpenRequested?.Invoke(source, action, filter);
+
+    public static event Action<ScoutEntry> OnSelectorScoutEntryActionClicked;
+    public static void RaiseSelectorScoutEntryActionClicked(ScoutEntry scoutEntry)
+    {
+        OnSelectorScoutEntryActionClicked?.Invoke(scoutEntry);
+    }
+
+    public static event Action<ScoutEntry> OnMenuScoutConfirmOpenRequested;
+    public static void RaiseMenuScoutConfirmOpenRequested(ScoutEntry scoutEntry)
+    {
+        OnMenuScoutConfirmOpenRequested?.Invoke(scoutEntry);
+    }
+
+    public static event Action OnScoutEntrySelectorRefreshRequested;
+    public static void RaiseScoutEntrySelectorRefreshRequested()
+    {
+        OnScoutEntrySelectorRefreshRequested?.Invoke();
+    }
+
 }
