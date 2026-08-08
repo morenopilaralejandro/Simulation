@@ -86,14 +86,16 @@ public class ItemManagerCurrency
     {
         SaveDataCurrencySystem saveData = new SaveDataCurrencySystem();
 
-        saveData.CurrencyDict = currencyDict;
+        saveData.CurrencyList = PersistenceManager.Instance.ParseDict<CurrencyType, int>(currencyDict);
 
         return saveData;
     }
 
     public void Import(SaveDataCurrencySystem saveData)
     {
-        currencyDict = saveData.CurrencyDict;
+        InitializeDefault();
+        foreach (var keyValue in saveData.CurrencyList)
+            currencyDict[keyValue.Key] = keyValue.Value;
     }
 
     #endregion

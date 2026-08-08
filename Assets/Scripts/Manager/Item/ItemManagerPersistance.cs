@@ -29,6 +29,7 @@ public class ItemManagerPersistance
         SaveDataItemSystem saveData = new SaveDataItemSystem();
 
         saveData.SaveDataItemStorage = itemManager.ExportStorageSystem();
+        saveData.SaveDataCurrencySystem = itemManager.ExportCurrencySystem();
 
         return saveData;
     }
@@ -36,6 +37,7 @@ public class ItemManagerPersistance
     public void Import(SaveDataItemSystem saveData)
     {
         itemManager.ImportStorageSystem(saveData.SaveDataItemStorage);
+        itemManager.ImportCurrencySystem(saveData.SaveDataCurrencySystem);
     }
 
     #endregion

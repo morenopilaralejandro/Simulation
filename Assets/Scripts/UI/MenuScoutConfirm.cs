@@ -33,6 +33,7 @@ public class MenuScoutConfirm : Menu
     public void OnButtonConfirmClicked()
     {
         //manager scout character
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         StorySystemManager.Instance.BuyCharacter(scoutEntry.Character, scoutEntry.Cost);
         UIEvents.RaiseScoutEntrySelectorRefreshRequested();
         OnButtonCancelClicked();

@@ -10,6 +10,7 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
 
     [Header("References")]
     [SerializeField] private TMP_Text textHeader;
+    [SerializeField] private TMP_Text textGold;
     private int selectedIndex;
 
     //private CharacterFilterData activeFilterData;
@@ -77,6 +78,7 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
 
     private void HandleBack()
     {
+        AudioManager.Instance.PlaySfxUI("sfx-menu_back");
         RequestClose();
     }
 
@@ -136,22 +138,26 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
             textHeader.text = tierSource.ScoutTier.ScoutTierName;
         }
 
+        textGold.text = ItemManager.Instance.GetGold().ToString();
+
         Open(source, action, filter);
     }
 
     private void HandleRefreshRequested()
     {
         Refresh();
+        textGold.text = ItemManager.Instance.GetGold().ToString();
     }
 
     private void HandleSelectorScoutEntryActionClicked(ScoutEntry scoutEntry)
     {
         if (scoutEntry.IsOwned || !scoutEntry.IsAffordable)
         {
-            AudioManager.Instance.PlaySfx("sfx-menu_forbidden");
+            AudioManager.Instance.PlaySfxUI("sfx-menu_forbidden");
             return;
         }
         
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         selectedIndex = GetSelectedIndex();
         UIEvents.RaiseMenuScoutConfirmOpenRequested(scoutEntry);
     }
