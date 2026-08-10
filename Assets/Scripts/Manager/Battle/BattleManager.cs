@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.DeadBall;
+using Aremoreno.Enums.Duel;
 using Aremoreno.Enums.Match;
 using Aremoreno.Enums.Kit;
 
@@ -30,6 +31,7 @@ public class BattleManager : MonoBehaviour
     [Header("Battle Subsystem")]
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private GameObject characterEntityBattlePrefab;
+    [SerializeField] private GameObject characterEntityLeftovers;
 
     [Header("Scenes")]
     [SerializeField] private SceneGroup sceneBattle;
@@ -62,6 +64,7 @@ public class BattleManager : MonoBehaviour
     private BattleManagerTeam teamSystem;
     private BattleManagerWing wingSystem;
     private BattleManagerResults resultsSystem;
+    private BattleManagerEssence essenceSystem;
 
     #region Lifecycle
     private void Awake()
@@ -89,10 +92,13 @@ public class BattleManager : MonoBehaviour
         teamSystem = new BattleManagerTeam();
         wingSystem = new BattleManagerWing();
         resultsSystem = new BattleManagerResults(sceneWorld, sceneDebugMainMenu);
+        essenceSystem = new BattleManagerEssence();
 
+        effectSystem.Subscribe();
         teamSystem.Subscribe();
         wingSystem.Subscribe();
         resultsSystem.Subscribe();
+        essenceSystem.Subscribe();
 
         Freeze();
         SetTeamSize();
@@ -113,9 +119,11 @@ public class BattleManager : MonoBehaviour
     {
         BattleEvents.OnAllCharactersReady -= HandleAllCharactersReady;
 
+        if (effectSystem != null) effectSystem.Unsubscribe();
         if (teamSystem != null) teamSystem.Unsubscribe();
         if (wingSystem != null) wingSystem.Unsubscribe();
         if (resultsSystem != null) resultsSystem.Unsubscribe();
+        if (essenceSystem != null) essenceSystem.Unsubscribe();
     }
     #endregion
 
@@ -544,6 +552,7 @@ public class BattleManager : MonoBehaviour
                 if (characterEntity == null) return;
 
                 characterEntity.Initialize(null, characterObject);
+                characterEntity.gameObject.SetActive(!characterEntity.IsFainted);
                 characterEntity.CalculateSpeed();
                 characterSystem.AssignCharacterToTeamBattle(characterEntity, team, characterIndex);
                 characterEntity.gameObject.name = characterEntity.CharacterId;
@@ -691,6 +700,9 @@ public class BattleManager : MonoBehaviour
     public void Clear() => resultsSystem.Clear();
     public MatchRank CalculateMatchRank(BattleResultData battleResultData) => resultsSystem.CalculateMatchRank(battleResultData);
 
+    //essenceSystem
+    public void ApplyEssenceDamage(DuelParticipant winner, DuelParticipant loser, DuelMode duelMode, float offensePressure, bool isPunching) => essenceSystem.ApplyEssenceDamage(winner, loser, duelMode, offensePressure, isPunching);
+
     //misc
     public GameObject InstantiateBall(GameObject prefabGo, Vector3 spawnPosition, Quaternion spawnRotation, Transform spawnPoint)
     {
@@ -699,6 +711,10 @@ public class BattleManager : MonoBehaviour
     public GameObject InstantiateCharacter(GameObject prefabGo, Transform spawnPoint) 
     {
         return Instantiate(prefabGo, spawnPoint);
+    }
+    public GameObject InstantiateCharacterLeftover(Transform spawnPoint) 
+    {
+        return Instantiate(characterEntityLeftovers, spawnPoint.position, spawnPoint.rotation);
     }
     public void DestroyGameObject(GameObject go)
     {

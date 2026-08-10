@@ -49,7 +49,7 @@ public class BattleManagerEffect
         spawnPoint.DuelStartEffect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 
-    //duel wing
+    //duel win
     public void PlayDuelWinEffect(Transform originTransform)
     {
         var psTransform = spawnPoint.DuelWinEffect.transform;
@@ -70,6 +70,17 @@ public class BattleManagerEffect
     public async Task PlayWingParticle(Wing wing, Vector3 position) => await wingParticlePlayer.Play(wing, position);
     public bool IsPlayingWing => wingParticlePlayer.IsPlaying;
 
+    //essence
+    private void PlayEssenceEffect(Transform originTransform)
+    {
+        var psTransform = spawnPoint.EssenceEffect.transform;
+
+        psTransform.position = originTransform.position;
+        psTransform.rotation = originTransform.rotation;
+
+        spawnPoint.EssenceEffect.Play(true);
+    }
+
     #endregion
 
     #region Helpers
@@ -78,8 +89,21 @@ public class BattleManagerEffect
 
     #region Events
 
-    //public void Subscribe() { }
-    //public void Unsubscribe() { }
+    public void Subscribe() 
+    { 
+        EssenceEvents.OnPlayEssenceVfxRequested += HandlePlayEssenceVfxRequested;
+    }
+
+    public void Unsubscribe() 
+    { 
+        EssenceEvents.OnPlayEssenceVfxRequested -= HandlePlayEssenceVfxRequested;
+    }
+
+    private void HandlePlayEssenceVfxRequested(Transform characterTransform) 
+    {
+        PlayEssenceEffect(characterTransform);
+        BattleManager.Instance.InstantiateCharacterLeftover(characterTransform);
+    }
 
     #endregion
 

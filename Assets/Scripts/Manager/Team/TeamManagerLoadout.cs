@@ -469,6 +469,7 @@ public class TeamManagerLoadout
             entity.Initialize(null, character);
             LoadEntityAppearanceAsync(entity);
 
+            entity.gameObject.SetActive(!entity.IsFainted);
             entity.CalculateSpeed();
             entity.gameObject.name = entity.CharacterId;
             loadout.SetCharacterEntity(battleType, slotIndex, entity);

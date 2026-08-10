@@ -52,4 +52,7 @@ public class CharacterSaveData
     public string EquipmentId1;
     public string EquipmentId2;
     public string EquipmentId3;
+
+    //statusEffectsPermanent
+    public StatusEffectPermanent StatusEffectPermanent;
 }

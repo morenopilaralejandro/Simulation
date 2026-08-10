@@ -18,9 +18,6 @@ public class DuelManager : MonoBehaviour
     private int maxSupporters = 2;
     private float supporterRadius = 1f;
 
-    private int hpWinner = -20;
-    private int hpLoser = -5;
-
     private bool isShootReversalAllowed = true;
 
     private void Awake()
@@ -349,9 +346,6 @@ public class DuelManager : MonoBehaviour
             $"Action {winner.Action}, " +
             $"Category {winner.Category}", this);
         DuelEvents.RaiseDuelEnd(duel.DuelMode, winner, loser, isWinnerUser);
-
-        winner.CharacterEntityBattle.ModifyBattleStat(Stat.Hp, hpWinner);
-        loser.CharacterEntityBattle.ModifyBattleStat(Stat.Hp, hpLoser);
 
         if (isWinnerUser)
             AudioManager.Instance.PlaySfx("sfx-duel_win");

@@ -114,6 +114,7 @@ public class DuelHandlerShoot : IDuelHandler
 
         BattleEvents.RaiseShootStopped(defense.CharacterEntityBattle);
         offense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
+        BattleManager.Instance.ApplyEssenceDamage(defense, offense, duel.DuelMode, duel.OffensePressure, false);
 
         await DuelManager.Instance.TryPlayWingCutscene(defense.CharacterEntityBattle);
 
@@ -160,6 +161,7 @@ public class DuelHandlerShoot : IDuelHandler
     {
         LogManager.Info($"[ShootDuelHandler] Partial block.");
         bool isShootReversal = defense.Move?.Category == Category.Shoot && DuelManager.Instance.IsShootReversalAllowed;
+        bool isPunching = IsPunching(defense);
 
         await DuelManager.Instance.TryPlayWingCutscene(defense.CharacterEntityBattle);
 
@@ -177,6 +179,7 @@ public class DuelHandlerShoot : IDuelHandler
         }
 
         defense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
+        BattleManager.Instance.ApplyEssenceDamage(offense, defense, duel.DuelMode, duel.OffensePressure, isPunching);
 
         BattleManager.Instance.Ball.ResumeTravel();
 

@@ -88,7 +88,10 @@ public class CharacterComponentPersistence
             EquipmentId0 = character.GetEquipment(0)?.ItemId,
             EquipmentId1 = character.GetEquipment(1)?.ItemId,
             EquipmentId2 = character.GetEquipment(2)?.ItemId,
-            EquipmentId3 = character.GetEquipment(3)?.ItemId
+            EquipmentId3 = character.GetEquipment(3)?.ItemId,
+
+            //statusEffectsPermanent
+            StatusEffectPermanent = character.ActiveStatusEffectPermanent
         };
     }
 

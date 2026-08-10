@@ -114,6 +114,8 @@ public class DuelHandlerField : IDuelHandler
         duel.LastOffense.CharacterEntityBattle.TryDeactivateWings();
         duel.LastDefense.CharacterEntityBattle.TryDeactivateWings();
 
+        BattleManager.Instance.ApplyEssenceDamage(winner, loser, duel.DuelMode, 0f, false);
+
         if (winner.CharacterEntityBattle.IsOnUsersTeam())
             BattleManager.Instance.PlayDuelWinEffect(winner.CharacterEntityBattle.transform); 
         
