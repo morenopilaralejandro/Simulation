@@ -4,11 +4,47 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Duel;
+using Aremoreno.Enums.Move;
 using Aremoreno.Enums.Item;
 using Aremoreno.Enums.UI;
 
 public static class UIEvents
 {
+    // UI Battle
+    // DuelParticipants
+    public static event Action OnDuelParticipantShowRequested;
+    public static void RaiseDuelParticipantShowRequested()
+    {
+        OnDuelParticipantShowRequested?.Invoke();
+    }
+
+
+    public static event Action OnDuelParticipantHideRequested;
+    public static void RaiseDuelParticipantHideRequested()
+    {
+        OnDuelParticipantHideRequested?.Invoke();
+    }
+
+    public static event Action<CharacterEntityBattle, List<CharacterEntityBattle>> OnDuelParticipantSetSideRequested;
+    public static void RaiseDuelParticipantSetSideRequested(CharacterEntityBattle character, List<CharacterEntityBattle> supports)
+    {
+        OnDuelParticipantSetSideRequested?.Invoke(character, supports);
+    }
+
+    public static event Action<Category> OnDuelParticipantSetCategoryRequested;
+    public static void RaiseDuelParticipantSetCategoryRequested(Category category)
+    {
+        OnDuelParticipantSetCategoryRequested?.Invoke(category);
+    }
+
+
+    public static event Action<float> OnDuelParticipantSetComboDamageRequested;
+    public static void RaiseDuelParticipantSetComboDamageRequested(float damage)
+    {
+        OnDuelParticipantSetComboDamageRequested?.Invoke(damage);
+    }
+
     // Menu Common
     public static event Action<Menu> OnMenuOpened;
     public static void RaiseMenuOpened(Menu menu)

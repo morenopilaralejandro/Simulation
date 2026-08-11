@@ -40,7 +40,7 @@ public class DuelSide : MonoBehaviour
         for (int i = 0; i < supports.Count; i++) 
         {
             CharacterEntityBattle character = supports[i];
-            characterCardMiniList[i].SetCanvasState(true);
+            characterCardMiniList[i].SetVisible(true);
             characterCardMiniList[i].SetCharacter(character.Character, character.FormationCoord.Position);
         }
     }
@@ -48,7 +48,7 @@ public class DuelSide : MonoBehaviour
     private void HideMiniCards() 
     {
         foreach (var card in characterCardMiniList)
-            card.SetCanvasState(false);
+            card.SetVisible(false);
     }
 
     public void SetPossession(CharacterEntityBattle character)

@@ -4,6 +4,12 @@ using Aremoreno.Enums.Character;
 
 public static class EssenceEvents
 {
+    public static event Action<CharacterEntityBattle> OnCharacterEssenceOverflowRequested;
+    public static void RaiseCharacterEssenceOverflowRequested(CharacterEntityBattle characterEntityBattle)
+    {
+        OnCharacterEssenceOverflowRequested?.Invoke(characterEntityBattle);
+    }
+
     public static event Action<CharacterEntityBattle> OnCharacterUnderwentEssenceOverflow;
     public static void RaiseCharacterUnderwentEssenceOverflow(CharacterEntityBattle characterEntityBattle)
     {

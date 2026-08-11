@@ -159,9 +159,9 @@ public class DuelManager : MonoBehaviour
         duel.DefenseSupports.AddRange(defenseSupports);
 
         //UI
-        BattleUIManager.Instance.SetDuelParticipant(offense, offenseSupports);
-        BattleUIManager.Instance.SetDuelParticipant(defense, defenseSupports);
-        BattleUIManager.Instance.ShowDuelParticipantsPanel();
+        UIEvents.RaiseDuelParticipantSetSideRequested(offense, offenseSupports);
+        UIEvents.RaiseDuelParticipantSetSideRequested(defense, defenseSupports);
+        UIEvents.RaiseDuelParticipantShowRequested();
 
         //RegisterTrigger
         DuelManager.Instance.RegisterTrigger(
@@ -202,9 +202,9 @@ public class DuelManager : MonoBehaviour
         BattleEvents.RaiseShootPerformed(character, isDirect);
 
         //UI
-        BattleUIManager.Instance.SetDuelParticipant(character, null);
-        BattleUIManager.Instance.SetDuelParticipant(GoalManager.Instance.GetOpponentKeeper(character), null);
-        BattleUIManager.Instance.ShowDuelParticipantsPanel();
+        UIEvents.RaiseDuelParticipantSetSideRequested(character, null);
+        UIEvents.RaiseDuelParticipantSetSideRequested(GoalManager.Instance.GetOpponentKeeper(character), null);
+        UIEvents.RaiseDuelParticipantShowRequested();
 
         //RegisterTrigger
         DuelManager.Instance.RegisterTrigger(character, isDirect);
@@ -234,7 +234,7 @@ public class DuelManager : MonoBehaviour
         BattleManager.Instance.Ball.PauseTravel();
 
         //UI
-        BattleUIManager.Instance.SetDuelParticipant(character, null);
+        UIEvents.RaiseDuelParticipantSetSideRequested(character, null);
         //AudioManager.Instance.PlaySfx("SfxDuelShoot");
 
         switch (category)
@@ -278,9 +278,9 @@ public class DuelManager : MonoBehaviour
         duel.OffensePressure = participant.Damage;
 
         //UI
-        BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
-        BattleUIManager.Instance.SetDuelParticipant(participant.CharacterEntityBattle, null);
-        BattleUIManager.Instance.SetDuelParticipant(GoalManager.Instance.GetOpponentKeeper(participant.CharacterEntityBattle), null);
+        UIEvents.RaiseDuelParticipantSetComboDamageRequested(duel.OffensePressure);
+        UIEvents.RaiseDuelParticipantSetSideRequested(participant.CharacterEntityBattle, null);
+        UIEvents.RaiseDuelParticipantSetSideRequested(GoalManager.Instance.GetOpponentKeeper(participant.CharacterEntityBattle), null);
 
         //handle ball
         OffsideManager.Instance.TakeSnapshot(participant.CharacterEntityBattle);
@@ -331,7 +331,7 @@ public class DuelManager : MonoBehaviour
         LogManager.Info("[DuelManager] Duel cancelled", this);
         DuelEvents.RaiseDuelCancel(duel.DuelMode);
         duel.IsResolved = true;
-        BattleUIManager.Instance.HideDuelParticipantsPanel();
+        UIEvents.RaiseDuelParticipantHideRequested();
         BattleUIManager.Instance.HideDuelMenu();
         if(duelHandler != null) duelHandler.CancelDuel();
     }
@@ -354,7 +354,7 @@ public class DuelManager : MonoBehaviour
 
         BattleManager.Instance.StopDuelStartEffect();
 
-        BattleUIManager.Instance.HideDuelParticipantsPanel();
+        UIEvents.RaiseDuelParticipantHideRequested();
         duel.IsResolved = true;
     }
     #endregion

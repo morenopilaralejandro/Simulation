@@ -96,25 +96,31 @@ public class DuelHandlerField : IDuelHandler
             if (winner.Action == DuelAction.Offense) 
             {
                 winner.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Slash);
-                BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.OffenseSupports);
             }
             else 
             {
                 winner.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Halfslash1H);
-                BattleUIManager.Instance.SetDuelParticipant(winner.CharacterEntityBattle, duel.DefenseSupports);
             }
+
+            UIEvents.RaiseDuelParticipantSetSideRequested(winner.CharacterEntityBattle, duel.OffenseSupports);
+            UIEvents.RaiseDuelParticipantSetSideRequested(winner.CharacterEntityBattle, duel.DefenseSupports);
+
+            MoveEvents.RaiseMoveUsed(winner.Move, winner.CharacterEntityBattle);
+            BattleManager.Instance.ApplyEssenceDamage(winner, loser, duel.DuelMode, 0f, false);
+
+            UIEvents.RaiseDuelParticipantSetSideRequested(duel.LastOffense.CharacterEntityBattle, duel.OffenseSupports);
+            UIEvents.RaiseDuelParticipantSetSideRequested(duel.LastDefense.CharacterEntityBattle, duel.DefenseSupports);
 
             await BattleManager.Instance.PlayMoveParticle(
                 winner.Move,
                 winner.CharacterEntityBattle.transform.position);
-
-            MoveEvents.RaiseMoveUsed(winner.Move, winner.CharacterEntityBattle);
+        } else 
+        {
+            BattleManager.Instance.ApplyEssenceDamage(winner, loser, duel.DuelMode, 0f, false);
         }
 
         duel.LastOffense.CharacterEntityBattle.TryDeactivateWings();
         duel.LastDefense.CharacterEntityBattle.TryDeactivateWings();
-
-        BattleManager.Instance.ApplyEssenceDamage(winner, loser, duel.DuelMode, 0f, false);
 
         if (winner.CharacterEntityBattle.IsOnUsersTeam())
             BattleManager.Instance.PlayDuelWinEffect(winner.CharacterEntityBattle.transform); 

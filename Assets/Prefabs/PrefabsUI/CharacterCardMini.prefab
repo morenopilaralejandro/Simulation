@@ -166,9 +166,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 960060584240239772, guid: 62a63eeb9045e22478333ae68f0d2d2b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3387933683431220063}
-    - targetCorrespondingSourceObject: {fileID: 960060584240239772, guid: 62a63eeb9045e22478333ae68f0d2d2b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4153199705140151632}
   m_SourcePrefab: {fileID: 100100000, guid: 62a63eeb9045e22478333ae68f0d2d2b, type: 3}
 --- !u!114 &1682191360590007208 stripped
 MonoBehaviour:
@@ -192,6 +189,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aabb4824305b0d8782f2319f310032c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!225 &2582268850578288183 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 6385624367930694008, guid: 62a63eeb9045e22478333ae68f0d2d2b, type: 3}
+  m_PrefabInstance: {fileID: 8883425380322522959}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5812083711443805744 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3161789750275281279, guid: 62a63eeb9045e22478333ae68f0d2d2b, type: 3}
@@ -222,17 +224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPortrait: {fileID: 1830733715536583330}
   imageElement: {fileID: 5812083711443805744}
+  imageGender: {fileID: 0}
   imagePosition: {fileID: 1682191360590007208}
-  canvasGroup: {fileID: 4153199705140151632}
---- !u!225 &4153199705140151632
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8510279728570983379}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  textName: {fileID: 0}
+  canvasGroup: {fileID: 2582268850578288183}

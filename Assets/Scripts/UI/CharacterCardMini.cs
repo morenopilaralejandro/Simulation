@@ -5,25 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Aremoreno.Enums.Character;
 
-public class CharacterCardMini : MonoBehaviour
+public class CharacterCardMini : CharacterCard
 {
-    [SerializeField] private CharacterPortraitBattle characterPortrait;
-    [SerializeField] private Image imageElement;
-    [SerializeField] private Image imagePosition;
-    [SerializeField] private CanvasGroup canvasGroup;
-
-    public void SetCharacter(Character character, Position position)
-    {
-        _ = characterPortrait.SetCharacterAsync(character);
-        imageElement.sprite = IconManager.Instance.Element.GetIcon(character.Element);
-        imagePosition.color = ColorManager.GetPositionColor(position);
-    }
-
-    public void SetCanvasState(bool isVisible)
-    {
-        canvasGroup.alpha = isVisible ? 1f : 0f;
-        canvasGroup.interactable = isVisible;
-        canvasGroup.blocksRaycasts = isVisible;
-    }
-
+ 
 }

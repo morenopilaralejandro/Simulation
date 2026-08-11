@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 6454419047418248997}
   - component: {fileID: 7786755023536585959}
   - component: {fileID: 6289351085922876601}
+  - component: {fileID: 6385624367930694008}
   m_Layer: 5
   m_Name: CharacterCard
   m_TagString: Untagged
@@ -172,6 +173,19 @@ MonoBehaviour:
   imageGender: {fileID: 7612226930799387591}
   imagePosition: {fileID: 7786755023536585959}
   textName: {fileID: 4574683244673583567}
+  canvasGroup: {fileID: 6385624367930694008}
+--- !u!225 &6385624367930694008
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 960060584240239772}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2712447332769476329
 GameObject:
   m_ObjectHideFlags: 0

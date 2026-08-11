@@ -118,7 +118,7 @@ public class DuelMenu : MonoBehaviour
 
         toggleWing.isOn = false;
 
-        BattleUIManager.Instance.SetDuelCategory(category);
+        UIEvents.RaiseDuelParticipantSetCategoryRequested(category);
     }
 
     public void Show()

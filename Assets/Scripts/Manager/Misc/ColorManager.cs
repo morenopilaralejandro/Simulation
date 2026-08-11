@@ -145,6 +145,9 @@ public static class ColorManager
         return Color.white;
     }
 
+    
+    public static Color FaintedColor = new Color(0.239f, 0.239f, 0.239f, 1f);
+
     private static readonly Dictionary<MessageType, Color> battleMessageColors =
         new Dictionary<MessageType, Color>()
     {

@@ -71,15 +71,14 @@ public class BattleManagerEssence
             isPunching);
 
         loser.CharacterEntityBattle.ModifyBattleStat(Stat.Hp, -damage);
-        LogManager.Trace($"[BattleManagerEssence] {loser.CharacterEntityBattle.CharacterId} lost {damage} HP");
+        LogManager.Error($"[BattleManagerEssence] {loser.CharacterEntityBattle.CharacterId} lost {damage} HP");
 
         bool fainted = loser.CharacterEntityBattle.GetBattleStat(Stat.Hp) <= 0;
-        if (fainted) HandleFaint(loser);
+        if (fainted) HandleFaint(loser.CharacterEntityBattle);
     }
 
-    private void HandleFaint(DuelParticipant participant)
+    private void HandleFaint(CharacterEntityBattle characterEntityBattle)
     {
-        CharacterEntityBattle characterEntityBattle = participant.CharacterEntityBattle;
         characterEntityBattle.SetStatusPermanent(StatusEffectPermanent.Fainted);
         characterEntityBattle.gameObject.SetActive(false);
         TeamSide teamSide = characterEntityBattle.TeamSide;
@@ -186,16 +185,23 @@ public class BattleManagerEssence
     public void Subscribe() 
     {
         BattleEvents.OnBattleStart += HandleBattleStart;
+        EssenceEvents.OnCharacterEssenceOverflowRequested += HandleCharacterEssenceOverflowRequested;
     }
 
     public void Unsubscribe() 
     { 
         BattleEvents.OnBattleStart -= HandleBattleStart;
+        EssenceEvents.OnCharacterEssenceOverflowRequested -= HandleCharacterEssenceOverflowRequested;
     }
 
     private void HandleBattleStart(BattleType battleType) 
     {
         Initialize(battleType);
+    }
+
+    private void HandleCharacterEssenceOverflowRequested(CharacterEntityBattle entity) 
+    {
+        HandleFaint(entity);
     }
 
     #endregion
