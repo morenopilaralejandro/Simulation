@@ -64,8 +64,8 @@ public class DeadBallManager : MonoBehaviour
         defaultPositionKickoffKicker = new Vector3(0, 0.34f, 0);
         defaultPositionKickoffReceiver = new Dictionary<TeamSide, Vector3>
         {
-            { TeamSide.Home, new Vector3(-1f, 0.34f, -0.1f) },
-            { TeamSide.Away, new Vector3(1f, 0.34f, 0.1f) }
+            { TeamSide.Home, new Vector3(1f, 0.34f, -0.1f) },
+            { TeamSide.Away, new Vector3(-1f, 0.34f, 0.1f) }
         };
 
     }
@@ -280,7 +280,7 @@ public class DeadBallManager : MonoBehaviour
         DeadBallEvents.OnDeadBallStartRequested += HandleDeadBallStartRequested;
         UIEvents.OnBackFromTeamRequested += HandleBackFromTeamRequested;
         TeamEvents.OnSubstitutionResetPositions += HandleSubstitutionResetPositions;
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
     }
 
     private void OnDisable() 
@@ -288,7 +288,7 @@ public class DeadBallManager : MonoBehaviour
         DeadBallEvents.OnDeadBallStartRequested -= HandleDeadBallStartRequested;
         UIEvents.OnBackFromTeamRequested -= HandleBackFromTeamRequested;
         TeamEvents.OnSubstitutionResetPositions -= HandleSubstitutionResetPositions;
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
     }
 
     private void HandleDeadBallStartRequested(DeadBallType type, TeamSide teamSide) 
@@ -318,7 +318,7 @@ public class DeadBallManager : MonoBehaviour
         currentHandler.ResetPositions();
     }
 
-    private void HandleBattleEnd()
+    private void HandleBattleEnded()
     {
         CancelDeadBall();
     }

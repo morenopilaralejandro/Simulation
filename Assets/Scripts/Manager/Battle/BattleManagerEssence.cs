@@ -71,7 +71,7 @@ public class BattleManagerEssence
             isPunching);
 
         loser.CharacterEntityBattle.ModifyBattleStat(Stat.Hp, -damage);
-        LogManager.Error($"[BattleManagerEssence] {loser.CharacterEntityBattle.CharacterId} lost {damage} HP");
+        LogManager.Trace($"[BattleManagerEssence] {loser.CharacterEntityBattle.CharacterId} lost {damage} HP");
 
         bool fainted = loser.CharacterEntityBattle.GetBattleStat(Stat.Hp) <= 0;
         if (fainted) HandleFaint(loser.CharacterEntityBattle);
@@ -184,17 +184,17 @@ public class BattleManagerEssence
 
     public void Subscribe() 
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
         EssenceEvents.OnCharacterEssenceOverflowRequested += HandleCharacterEssenceOverflowRequested;
     }
 
     public void Unsubscribe() 
     { 
-        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
         EssenceEvents.OnCharacterEssenceOverflowRequested -= HandleCharacterEssenceOverflowRequested;
     }
 
-    private void HandleBattleStart(BattleType battleType) 
+    private void HandleBattleStarted(BattleType battleType) 
     {
         Initialize(battleType);
     }

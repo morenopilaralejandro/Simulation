@@ -54,15 +54,15 @@ public class PossessionManager : MonoBehaviour
 
     private void OnEnable()
     {
-        DuelEvents.OnDuelEnd += HandleDuelEnd;
+        DuelEvents.OnDuelEnded += HandleDuelEnded;
     }
 
     private void OnDisable()
     {
-        DuelEvents.OnDuelEnd -= HandleDuelEnd;
+        DuelEvents.OnDuelEnded -= HandleDuelEnded;
     }
 
-    private void HandleDuelEnd(
+    private void HandleDuelEnded(
         DuelMode duelMode,
         DuelParticipant winner,
         DuelParticipant loser,

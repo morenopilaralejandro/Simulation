@@ -123,13 +123,13 @@ public class WorldManagerTimeOfDay
     public void Subscribe()
     {
         WorldEvents.OnZoneChanged += HandleZoneChanged;
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
     }
 
     public void Unsubscribe()
     {
         WorldEvents.OnZoneChanged -= HandleZoneChanged;
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
     }
 
     private void HandleZoneChanged(ZoneDefinition zoneCurrent, ZoneDefinition zonePrevious, string zoneName)
@@ -137,7 +137,7 @@ public class WorldManagerTimeOfDay
         AdvanceHour();
     }
 
-    private void HandleBattleEnd()
+    private void HandleBattleEnded()
     {
         AdvanceHour();
     }

@@ -185,17 +185,17 @@ public class SubstitutionManager : MonoBehaviour
 
     private void OnEnable()
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
         TeamEvents.OnCharacterSubstituted += HandleCharacterSubstituted;
     }
 
     private void OnDisable()
     {
-        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
         TeamEvents.OnCharacterSubstituted -= HandleCharacterSubstituted;
     }
 
-    private void HandleBattleStart(BattleType battleType) 
+    private void HandleBattleStarted(BattleType battleType) 
     {
         InitializeForBattle(battleType);
     }

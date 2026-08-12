@@ -219,9 +219,9 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     public async Task LoadWingAsync()
     {
+        SetWingColor();
         await LoadWingFrontAsync();
         await LoadWingBackAsync();
-        SetWingColor();
     }
 
     public void UnloadWing()

@@ -52,7 +52,7 @@ public class PauseManager : MonoBehaviour
 
         BattleManager.Instance.Freeze();
         ResetReady();
-        BattleEvents.RaiseBattlePause(teamSide);
+        BattleEvents.RaiseBattlePaused(teamSide);
         SubscribeInput();
         //BattleManager.Instance.SetBattlePhase(BattlePhase.Deadball);
         //AudioManager.Instance.PlaySfx("sfx-whistle_single");
@@ -101,7 +101,7 @@ public class PauseManager : MonoBehaviour
     {
         AudioManager.Instance.PlaySfx("sfx-menu_tap");
         //BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
-        BattleEvents.RaiseBattleResume();
+        BattleEvents.RaiseBattleResumed();
         BattleManager.Instance.Unfreeze();
         isPaused = false;
         UnsubscribeInput();
@@ -121,12 +121,12 @@ public class PauseManager : MonoBehaviour
 
     private void OnEnable() 
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
     }
 
     private void OnDisable() 
     {
-        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
     }
 
     private void SubscribeInput()
@@ -139,7 +139,7 @@ public class PauseManager : MonoBehaviour
         InputManager.Instance.UnsubscribeDown(CustomAction.BattleUI_TeamPreviewConfirm, HandleConfirmPressed);
     }
 
-    private void HandleBattleStart(BattleType battleType) 
+    private void HandleBattleStarted(BattleType battleType) 
     {
         UnsubscribeInput();
         isPaused = false;

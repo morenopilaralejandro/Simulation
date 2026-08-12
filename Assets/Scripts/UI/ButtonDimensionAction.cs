@@ -21,14 +21,14 @@ public class ButtonDimensionAction : MonoBehaviour
 
     private void OnEnable()
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
 
         button.onClick.AddListener(OnButtonPressed);
     }
 
     private void OnDisable()
     {
-        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
 
         button.onClick.RemoveListener(OnButtonPressed);
 
@@ -39,7 +39,7 @@ public class ButtonDimensionAction : MonoBehaviour
         }
     }
 
-    private void HandleBattleStart(BattleType battleType)
+    private void HandleBattleStarted(BattleType battleType)
     {
         cooldownRemaining = 0f;
 

@@ -4,10 +4,10 @@ using Aremoreno.Enums.Duel;
 
 public static class DuelEvents
 {
-    public static event Action<DuelMode> OnDuelStart;
-    public static void RaiseDuelStart(DuelMode duelMode)
+    public static event Action<DuelMode> OnDuelStarted;
+    public static void RaiseDuelStarted(DuelMode duelMode)
     {
-        OnDuelStart?.Invoke(duelMode);
+        OnDuelStarted?.Invoke(duelMode);
     }
 
     public static event Action
@@ -16,20 +16,20 @@ public static class DuelEvents
         DuelParticipant, 
         DuelParticipant, 
         bool
-    > OnDuelEnd;
-    public static void RaiseDuelEnd(
+    > OnDuelEnded;
+    public static void RaiseDuelEnded(
         DuelMode duelMode,
         DuelParticipant winner, 
         DuelParticipant loser,
         bool isWinnerUser)
     {
-        OnDuelEnd?.Invoke(duelMode, winner, loser, isWinnerUser);
+        OnDuelEnded?.Invoke(duelMode, winner, loser, isWinnerUser);
     }
 
-    public static event Action<DuelMode> OnDuelCancel;
-    public static void RaiseDuelCancel(DuelMode duelMode)
+    public static event Action<DuelMode> OnDuelCanceled;
+    public static void RaiseDuelCanceled(DuelMode duelMode)
     {
-        OnDuelCancel?.Invoke(duelMode);
+        OnDuelCanceled?.Invoke(duelMode);
     }
 
 }

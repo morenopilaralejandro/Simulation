@@ -23,15 +23,15 @@ public class CharacterEntityLeftovers : MonoBehaviour
 
     private void OnEnable()
     {
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
     }
 
     private void OnDisable()
     {
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
     }
 
-    private void HandleBattleEnd()
+    private void HandleBattleEnded()
     {
         Destroy(gameObject);
     }

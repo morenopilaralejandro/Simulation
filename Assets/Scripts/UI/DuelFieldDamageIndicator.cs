@@ -25,15 +25,15 @@ public class DuelFieldDamageIndicator : MonoBehaviour
 
     private void OnEnable()
     {
-        DuelEvents.OnDuelEnd += HandleDuelEnd;
+        DuelEvents.OnDuelEnded += HandleDuelEnded;
     }
 
     private void OnDisable()
     {
-        DuelEvents.OnDuelEnd -= HandleDuelEnd;
+        DuelEvents.OnDuelEnded -= HandleDuelEnded;
     }
 
-    private void HandleDuelEnd(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser) 
+    private void HandleDuelEnded(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser) 
     {
         if (duelMode == DuelMode.Field)
             SetCanvasState(false);

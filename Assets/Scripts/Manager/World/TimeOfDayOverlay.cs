@@ -118,14 +118,14 @@ public class TimeOfDayOverlay : MonoBehaviour
     {
         WorldEvents.OnTimeOfDayChanged += HandleTimeOfDayChanged;
         WorldEvents.OnZoneChanged += HandleZoneChanged;
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
     }
 
     public void OnDisable()
     {
         WorldEvents.OnTimeOfDayChanged -= HandleTimeOfDayChanged;
         WorldEvents.OnZoneChanged -= HandleZoneChanged;
-        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
     }
 
     private void HandleTimeOfDayChanged(TimeOfDay timeOfDay)
@@ -154,7 +154,7 @@ public class TimeOfDayOverlay : MonoBehaviour
         }
     }
 
-    private void HandleBattleStart(BattleType battleType)
+    private void HandleBattleStarted(BattleType battleType)
     {
         SetColor(GetColorForTime(BattleArgs.TimeOfDay));
     }

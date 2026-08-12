@@ -42,15 +42,15 @@ public class GoalManager : MonoBehaviour
 
     private void OnEnable()
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
     }
 
     private void OnDisable()
     {
-        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
     }
 
-    private void HandleBattleStart(BattleType battleType)
+    private void HandleBattleStarted(BattleType battleType)
     {
         if (battleType == BattleType.Mini)
             shootDistance = shootDistanceMini;

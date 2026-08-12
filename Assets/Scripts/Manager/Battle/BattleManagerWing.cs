@@ -52,17 +52,17 @@ public class BattleManagerWing
 
     public void Subscribe()
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
         WingEvents.OnWingActivated += HandleWingActivated;
     }
 
     public void Unsubscribe()
     {
-        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
         WingEvents.OnWingActivated -= HandleWingActivated;
     }
 
-    private void HandleBattleStart(BattleType battleType) 
+    private void HandleBattleStarted(BattleType battleType) 
     {
         InitializeForBattle();
     }

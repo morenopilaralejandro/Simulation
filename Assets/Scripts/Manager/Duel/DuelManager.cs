@@ -31,15 +31,15 @@ public class DuelManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         duel = new Duel();
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
     }
 
     private void OnDestroy()
     {
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
     }
 
-    private void HandleBattleEnd() 
+    private void HandleBattleEnded() 
     {
         if(!duel.IsResolved)
             CancelDuel();
@@ -305,7 +305,7 @@ public class DuelManager : MonoBehaviour
     {
         Reset();
         duel.DuelMode = duelMode;
-        DuelEvents.RaiseDuelStart(duelMode);
+        DuelEvents.RaiseDuelStarted(duelMode);
         BattleManager.Instance.PlayDuelStartEffect(BattleManager.Instance.Ball.transform);
         switch (DuelMode)
         {
@@ -329,7 +329,7 @@ public class DuelManager : MonoBehaviour
     {
         if(duel.IsResolved) return;
         LogManager.Info("[DuelManager] Duel cancelled", this);
-        DuelEvents.RaiseDuelCancel(duel.DuelMode);
+        DuelEvents.RaiseDuelCanceled(duel.DuelMode);
         duel.IsResolved = true;
         UIEvents.RaiseDuelParticipantHideRequested();
         BattleUIManager.Instance.HideDuelMenu();
@@ -345,7 +345,7 @@ public class DuelManager : MonoBehaviour
             $"TeamSide {winner.CharacterEntityBattle?.TeamSide}, " +
             $"Action {winner.Action}, " +
             $"Category {winner.Category}", this);
-        DuelEvents.RaiseDuelEnd(duel.DuelMode, winner, loser, isWinnerUser);
+        DuelEvents.RaiseDuelEnded(duel.DuelMode, winner, loser, isWinnerUser);
 
         if (isWinnerUser)
             AudioManager.Instance.PlaySfx("sfx-duel_win");

@@ -65,8 +65,8 @@ public class PlayerWorldEntity : MonoBehaviour
         rigidbodyComponent.Initialize(this);
         stateMachineComponent.Initialize(this, config);
 
-        BattleEvents.OnBattleStart += HandleBattleStart;
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
 
         DialogEvents.OnDialogStarted += HandleDialogStarted;
         DialogEvents.OnDialogEnded += HandleDialogEnded;
@@ -74,8 +74,8 @@ public class PlayerWorldEntity : MonoBehaviour
 
     private void OnDestroy()
     {
-        BattleEvents.OnBattleStart -= HandleBattleStart;
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
 
         DialogEvents.OnDialogStarted -= HandleDialogStarted;
         DialogEvents.OnDialogEnded -= HandleDialogEnded;
@@ -171,8 +171,8 @@ public class PlayerWorldEntity : MonoBehaviour
         interactionComponent.enabled = enable;
     }
 
-    private void HandleBattleStart(BattleType battleType) => SetEnable(false);
-    private void HandleBattleEnd() => SetEnable(true);
+    private void HandleBattleStarted(BattleType battleType) => SetEnable(false);
+    private void HandleBattleEnded() => SetEnable(true);
 
     private void HandleDialogStarted() => SetDialogEnabled(true);
     private void HandleDialogEnded() => SetDialogEnabled(false);

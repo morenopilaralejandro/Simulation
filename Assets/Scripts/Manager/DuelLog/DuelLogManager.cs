@@ -46,19 +46,19 @@ public class DuelLogManager : MonoBehaviour
 
     void OnEnable()
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
-        BattleEvents.OnBattlePause += HandleBattlePause;
-        BattleEvents.OnBattleResume += HandleBattleResume;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
+        BattleEvents.OnBattlePaused += HandleBattlePaused;
+        BattleEvents.OnBattleResumed += HandleBattleResumed;
 
         BattleEvents.OnPassPerformed += HandlePassPerformed;
         BattleEvents.OnShootPerformed += HandleShootPerformed;
         BattleEvents.OnGoalScored += HandleGoalScored;
         BattleEvents.OnShootStopped += HandleShootStopped;
 
-        DuelEvents.OnDuelStart += HandleDuelStart;
-        DuelEvents.OnDuelEnd += HandleDuelEnd;
-        DuelEvents.OnDuelCancel += HandleDuelCancel;
+        DuelEvents.OnDuelStarted += HandleDuelStarted;
+        DuelEvents.OnDuelEnded += HandleDuelEnded;
+        DuelEvents.OnDuelCanceled += HandleDuelCanceled;
         BallEvents.OnGained += HandleGained;
 
         EssenceEvents.OnCharacterUnderwentEssenceOverflow += HandleEssenceOverflow;
@@ -66,32 +66,32 @@ public class DuelLogManager : MonoBehaviour
 
     void OnDisable()
     { 
-        BattleEvents.OnBattleStart -= HandleBattleStart;
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
-        BattleEvents.OnBattlePause -= HandleBattlePause;
-        BattleEvents.OnBattleResume -= HandleBattleResume;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
+        BattleEvents.OnBattlePaused -= HandleBattlePaused;
+        BattleEvents.OnBattleResumed -= HandleBattleResumed;
 
         BattleEvents.OnPassPerformed -= HandlePassPerformed;
         BattleEvents.OnShootPerformed -= HandleShootPerformed;
         BattleEvents.OnGoalScored -= HandleGoalScored;
         BattleEvents.OnShootStopped -= HandleShootStopped;
 
-        DuelEvents.OnDuelStart -= HandleDuelStart;
-        DuelEvents.OnDuelEnd -= HandleDuelEnd;
-        DuelEvents.OnDuelCancel -= HandleDuelCancel;
+        DuelEvents.OnDuelStarted -= HandleDuelStarted;
+        DuelEvents.OnDuelEnded -= HandleDuelEnded;
+        DuelEvents.OnDuelCanceled -= HandleDuelCanceled;
         BallEvents.OnGained -= HandleGained;
 
         EssenceEvents.OnCharacterUnderwentEssenceOverflow -= HandleEssenceOverflow;
     }
 
-    private void HandleBattleStart(BattleType battleType) 
+    private void HandleBattleStarted(BattleType battleType) 
     { 
         Clear();
         DuelLogManager.Instance.AddMatchStart();
     }
-    private void HandleBattleEnd() => AddMatchEnd();
-    private void HandleBattlePause(TeamSide teamSide) => AddMatchPause(GoalManager.Instance.Keepers[teamSide]);
-    private void HandleBattleResume() => AddMatchResume();
+    private void HandleBattleEnded() => AddMatchEnd();
+    private void HandleBattlePaused(TeamSide teamSide) => AddMatchPause(GoalManager.Instance.Keepers[teamSide]);
+    private void HandleBattleResumed() => AddMatchResume();
 
     private void HandlePassPerformed(CharacterEntityBattle character) => AddActionPass(character.Character, character.TeamSide);
     private void HandleShootPerformed(CharacterEntityBattle character, bool isDirect) 
@@ -102,15 +102,15 @@ public class DuelLogManager : MonoBehaviour
     private void HandleGoalScored(CharacterEntityBattle scorringCharacter) => AddActionScore(scorringCharacter.Character, scorringCharacter.TeamSide);
     private void HandleShootStopped(CharacterEntityBattle character) => AddActionStop(character.Character, character.TeamSide);
 
-    private void HandleDuelStart(DuelMode duelMode) => AddDuelStart();
-    private void HandleDuelEnd(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser)
+    private void HandleDuelStarted(DuelMode duelMode) => AddDuelStarted();
+    private void HandleDuelEnded(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser)
     {
         if (isWinnerUser)
             AddDuelWin(winner.CharacterEntityBattle.Character, winner.CharacterEntityBattle.TeamSide);
         else
             AddDuelLose(winner.CharacterEntityBattle.Character, winner.CharacterEntityBattle.TeamSide);
     }
-    private void HandleDuelCancel(DuelMode duelMode) => AddDuelCancel();
+    private void HandleDuelCanceled(DuelMode duelMode) => AddDuelCanceled();
     private void HandleGained(CharacterEntityBattle character) => AddPossessionGained(character.Character, character.TeamSide);
         
     private void HandleEssenceOverflow(CharacterEntityBattle character) => AddActionEssence(character.Character, character.TeamSide);
@@ -556,7 +556,7 @@ public class DuelLogManager : MonoBehaviour
         });
     }
 
-    public void AddDuelStart() => AddEntry(Trace("duel_start"));
+    public void AddDuelStarted() => AddEntry(Trace("duel_start"));
 
     public void AddDuelWin(Character character, TeamSide teamSide)
     {
@@ -580,7 +580,7 @@ public class DuelLogManager : MonoBehaviour
         });
     }
 
-    public void AddDuelCancel() => AddEntry(Trace("duel_cancel"));
+    public void AddDuelCanceled() => AddEntry(Trace("duel_cancel"));
 
     public void AddGoal() => AddEntry(Trace("goal"));
 

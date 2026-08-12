@@ -125,7 +125,7 @@ public class InputManager : MonoBehaviour
             playerInput.onControlsChanged += OnControlsChanged;
         }
 
-        DuelEvents.OnDuelStart += HandleDuelStart;
+        DuelEvents.OnDuelStarted += HandleDuelStarted;
     }
 
     private void Start() 
@@ -136,7 +136,7 @@ public class InputManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        DuelEvents.OnDuelStart -= HandleDuelStart;
+        DuelEvents.OnDuelStarted -= HandleDuelStarted;
 
         if (input != null)
         {
@@ -322,7 +322,7 @@ public class InputManager : MonoBehaviour
     #endregion
 
     #region Event Handler
-    private void HandleDuelStart(DuelMode duelMode) => InvalidateAllBuffers();
+    private void HandleDuelStarted(DuelMode duelMode) => InvalidateAllBuffers();
     private void InvalidateAllBuffers()
     {
         for (int i = 0; i < buttons.Length; i++)

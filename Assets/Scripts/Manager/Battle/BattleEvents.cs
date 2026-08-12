@@ -11,6 +11,12 @@ public static class BattleEvents
         OnAllCharactersReady?.Invoke();
     }
 
+    public static event Action<BattlePhase, BattlePhase> OnBattlePhaseChangeRequested;
+    public static void RaiseBattlePhaseChangeRequested(BattlePhase newPhase, BattlePhase oldPhase)
+    {
+        OnBattlePhaseChangeRequested?.Invoke(newPhase, oldPhase);
+    }
+
     public static event Action<BattlePhase, BattlePhase> OnBattlePhaseChanged;
     public static void RaiseBattlePhaseChanged(BattlePhase newPhase, BattlePhase oldPhase)
     {
@@ -23,44 +29,68 @@ public static class BattleEvents
         OnBattleTypeChanged?.Invoke(newType, oldType);
     }
 
-    public static event Action<BattleType> OnBattleStart;
-    public static void RaiseBattleStart(BattleType battleType)
+    public static event Action OnBattleStartRequested;
+    public static void RaiseBattleStartRequested()
     {
-        OnBattleStart?.Invoke(battleType);
+        OnBattleStartRequested?.Invoke();
+    }
+
+    public static event Action<BattleType> OnBattleStarted;
+    public static void RaiseBattleStarted(BattleType battleType)
+    {
+        OnBattleStarted?.Invoke(battleType);
         InputEvents.RaiseScreenControlsShowRequested();
         InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
     }
 
-    public static event Action OnBattleEnd;
-    public static void RaiseBattleEnd()
+    public static event Action OnBattleEnded;
+    public static void RaiseBattleEnded()
     {
-        OnBattleEnd?.Invoke();
+        OnBattleEnded?.Invoke();
         InputEvents.RaiseScreenControlsHideRequested();
         InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Dpad);
     }
 
-    public static event Action OnFreeze;
-    public static void RaiseFreeze()
+    public static event Action OnBattleFreezeRequested;
+    public static void RaiseBattleFreezeRequested()
     {
-        OnFreeze?.Invoke();
+        OnBattleFreezeRequested?.Invoke();
     }
 
-    public static event Action OnUnfreeze;
-    public static void RaiseUnfreeze()
+    public static event Action OnBattleFroze;
+    public static void RaiseBattleFroze()
     {
-        OnUnfreeze?.Invoke();
+        OnBattleFroze?.Invoke();
     }
 
-    public static event Action<TeamSide> OnBattlePause;
-    public static void RaiseBattlePause(TeamSide teamSide)
+    public static event Action OnBattleUnfreezeRequested;
+    public static void RaiseBattleUnfreezeRequested()
     {
-        OnBattlePause?.Invoke(teamSide);
+        OnBattleUnfreezeRequested?.Invoke();
     }
 
-    public static event Action OnBattleResume;
-    public static void RaiseBattleResume()
+    public static event Action OnBattleUnfroze;
+    public static void RaiseBattleUnfroze()
     {
-        OnBattleResume?.Invoke();
+        OnBattleUnfroze?.Invoke();
+    }
+
+    public static event Action<TeamSide> OnBattlePauseRequested;
+    public static void RaiseBattlePauseRequested(TeamSide teamSide)
+    {
+        OnBattlePauseRequested?.Invoke(teamSide);
+    }
+
+    public static event Action<TeamSide> OnBattlePaused;
+    public static void RaiseBattlePaused(TeamSide teamSide)
+    {
+        OnBattlePaused?.Invoke(teamSide);
+    }
+
+    public static event Action OnBattleResumed;
+    public static void RaiseBattleResumed()
+    {
+        OnBattleResumed?.Invoke();
     }
 
     public static event Action<CharacterEntityBattle> OnGoalScored;

@@ -311,7 +311,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnSubstitutionChangesUpdated                += HandleSubstitutionChangesUpdated;
         UIEvents.OnBackFromCharacterSelectorRequested        += HandleBackFromCharacterSelectorRequested;
         TeamEvents.OnLoadoutDeleted                          += HandleLoadoutDeleted;
-        BattleEvents.OnBattleStart                           += HandleBattleStart;
+        BattleEvents.OnBattleStarted                           += HandleBattleStarted;
         UIEvents.OnFormationCharacterSlotUIReplaceRequested  += HandleFormationCharacterSlotUIReplaceRequested;
     }
 
@@ -341,7 +341,7 @@ public class MenuTeamPanelTeam : Menu
         UIEvents.OnSubstitutionChangesUpdated                -= HandleSubstitutionChangesUpdated;
         UIEvents.OnBackFromCharacterSelectorRequested        -= HandleBackFromCharacterSelectorRequested;
         TeamEvents.OnLoadoutDeleted                          -= HandleLoadoutDeleted;
-        BattleEvents.OnBattleStart                           -= HandleBattleStart;
+        BattleEvents.OnBattleStarted                           -= HandleBattleStarted;
         UIEvents.OnFormationCharacterSlotUIReplaceRequested  -= HandleFormationCharacterSlotUIReplaceRequested;
     }
 
@@ -624,7 +624,7 @@ public class MenuTeamPanelTeam : Menu
     private void HandleSubstitutionChangesUpdated(int currentValue, int maxValue)
         => UpdateChangesText(currentValue, maxValue);
 
-    private void HandleBattleStart(BattleType battleType)
+    private void HandleBattleStarted(BattleType battleType)
         => currentBattleType = battleType;
 
     #endregion

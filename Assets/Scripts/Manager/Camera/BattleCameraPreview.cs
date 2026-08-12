@@ -21,14 +21,14 @@ public class BattleCameraPreview : MonoBehaviour
 
     private void OnEnable()
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
         TeamEvents.OnTeamPreviewStarted += HandlePreviewStarted;
         TeamEvents.OnTeamPreviewEnded += HandlePreviewEnded;
     }
 
     private void OnDisable()
     {
-        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
         TeamEvents.OnTeamPreviewStarted -= HandlePreviewStarted;
         TeamEvents.OnTeamPreviewEnded -= HandlePreviewEnded;
     }
@@ -52,7 +52,7 @@ public class BattleCameraPreview : MonoBehaviour
         }
     }
 
-    private void HandleBattleStart(BattleType battleType) 
+    private void HandleBattleStarted(BattleType battleType) 
     {
         if (battleType == BattleType.Mini)
             this.gameObject.SetActive(false);
