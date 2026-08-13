@@ -79,6 +79,7 @@ public class BattleManagerEffect
         psTransform.rotation = originTransform.rotation;
 
         spawnPoint.EssenceEffect.Play(true);
+        AudioManager.Instance.PlaySfx("sfx-essence");
     }
 
     #endregion

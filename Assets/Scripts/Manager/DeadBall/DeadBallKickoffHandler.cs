@@ -14,7 +14,8 @@ public class DeadBallKickoffHandler : IDeadBallHandler
     private DeadBallManager deadBallManager;
     private CharacterEntityBattle characterKicker;
     private CharacterEntityBattle characterReceiver;
-    private int receiverIndex;
+    private CharacterEntityBattle characterPassTargetAi;
+
 
     private bool isKickExecuted;
     private bool isBallReady;
@@ -52,9 +53,8 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         BallEvents.OnGained -= OnBallGained;
         deadBallManager.StopRoutine(ballReadyRoutine);
 
-        characterKicker = team.GetCharacterEntities(BattleManager.Instance.CurrentType)[team.GetFormation(BattleManager.Instance.CurrentType).Kickoff0];
-        characterReceiver = team.GetCharacterEntities(BattleManager.Instance.CurrentType)[team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1];
-        receiverIndex = deadBallManager.CharacterSelector.GetKickoffReceiverIndex(team.GetFormation(BattleManager.Instance.CurrentType).Kickoff0, team.GetFormation(BattleManager.Instance.CurrentType).Kickoff1);
+        characterKicker = deadBallManager.CharacterSelector.GetKickoffKicker(team);
+        characterReceiver = deadBallManager.CharacterSelector.GetKickoffReceiver(team, characterKicker);
 
         if (team.TeamSide == BattleManager.Instance.GetUserSide())
             CharacterChangeControlManager.Instance.SetControlledCharacter(characterKicker, team.TeamSide);
@@ -62,6 +62,8 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         LogManager.Trace($"[DeadBallKickoffHandler] Kickoff - Kicker: {characterKicker.name}, Receiver: {characterReceiver.name}, Same: {characterKicker == characterReceiver}");
 
         SetPositions();
+
+        characterPassTargetAi = deadBallManager.CharacterSelector.GetPassTargetAi(team, characterKicker);
 
         BallEvents.OnGained += OnBallGained;
     }
@@ -120,7 +122,7 @@ public class DeadBallKickoffHandler : IDeadBallHandler
         if (!target || target == characterKicker || characterKicker.IsEnemyAI || isAutoBattleEnabled) 
         {
             if (characterKicker.IsEnemyAI)
-                target = team.GetCharacterEntities(BattleManager.Instance.CurrentType)[receiverIndex];
+                target = characterPassTargetAi;
             else
                 target = characterReceiver;
 
@@ -201,8 +203,8 @@ public class DeadBallKickoffHandler : IDeadBallHandler
 
     private void SetPositions()
     {
-        characterKicker.Teleport(deadBallManager.GetDefaultPositionKickoffKicker());
-        characterReceiver.Teleport(deadBallManager.GetDefaultPositionKickoffReceive(team.TeamSide));
+        characterKicker.Teleport(deadBallManager.PositionConfig.KickoffKicker);
+        characterReceiver.Teleport(deadBallManager.PositionConfig.KickoffReceiver[team.TeamSide]);
         PossessionManager.Instance.Release();
 
         if (deadBallManager.IsFirstKickoff) 

@@ -470,7 +470,7 @@ public class TeamManagerLoadout
             LoadEntityAppearanceAsync(entity);
 
             entity.gameObject.SetActive(!entity.IsFainted);
-            entity.CalculateSpeed();
+            entity.UpdateFatigue();
             entity.gameObject.name = entity.CharacterId;
             loadout.SetCharacterEntity(battleType, slotIndex, entity);
             TeamEvents.RaiseAssignCharacterToTeamBattle(entity, loadout, coord);

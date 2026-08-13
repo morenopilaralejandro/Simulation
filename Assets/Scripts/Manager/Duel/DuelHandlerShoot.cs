@@ -192,7 +192,8 @@ public class DuelHandlerShoot : IDuelHandler
             UIEvents.RaiseDuelParticipantSetSideRequested(defense.CharacterEntityBattle, null);
         }
 
-        defense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
+        if (!defense.CharacterEntityBattle.IsFainted)
+            defense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
 
         BattleManager.Instance.Ball.ResumeTravel();
 

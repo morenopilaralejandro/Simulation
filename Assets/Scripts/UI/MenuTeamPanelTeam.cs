@@ -89,7 +89,7 @@ public class MenuTeamPanelTeam : Menu
             .OnEnter(MenuTeamState.Replacing, () =>
             {
                 UIEvents.RaiseCharacterSelectorOpenRequested(
-                    source:        new SelectorCharacterSourceFromStorage(),
+                    source:        new SelectorCharacterSourceFromStorageExcludeFainted(),
                     action:        new SelectorCharacterAction(),
                     filter:        null,           // or new ExcludeGuidsFilter(currentTeam.GetCharacterGuids(currentBattleType))
                     closeOnSelect: true);

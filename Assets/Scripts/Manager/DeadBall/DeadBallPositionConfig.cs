@@ -8,6 +8,9 @@ using Aremoreno.Enums.Input;
 
 public class DeadBallPositionConfig
 {
+    private Vector3 kickoffKicker;
+    private Dictionary<TeamSide, Vector3> kickoffReceiver;
+    private Dictionary<TeamSide, Vector3> goalKickKicker;
     private Vector3[] throwInCornerOffense;
     private Vector3[] throwInCornerDefense;
     private Vector3[] throwInDefaultOffense;
@@ -17,6 +20,9 @@ public class DeadBallPositionConfig
     private Vector3 throwIncornerKicker;
     private Vector3 cornerKicker;
 
+    public Vector3 KickoffKicker => kickoffKicker;
+    public Dictionary<TeamSide, Vector3> KickoffReceiver => kickoffReceiver;
+    public Dictionary<TeamSide, Vector3> GoalKickKicker => goalKickKicker;
     public Vector3[] ThrowInCornerOffense => throwInCornerOffense;
     public Vector3[] ThrowInCornerDefense => throwInCornerDefense;
     public Vector3[] ThrowInDefaultOffense => throwInDefaultOffense;
@@ -28,6 +34,19 @@ public class DeadBallPositionConfig
 
     public DeadBallPositionConfig()
     {
+        kickoffKicker = new Vector3(0, 0.34f, 0);
+        kickoffReceiver = new Dictionary<TeamSide, Vector3>
+        {
+            { TeamSide.Home, new Vector3(1f, 0.34f, -0.1f) },
+            { TeamSide.Away, new Vector3(-1f, 0.34f, 0.1f) }
+        };
+
+        goalKickKicker = new Dictionary<TeamSide, Vector3>
+        {
+            { TeamSide.Home, new Vector3(0f, 0.34f, -7.5f) },
+            { TeamSide.Away, new Vector3(0f, 0.34f, 7.5f) }
+        };
+
         //based on top left
         throwInCornerOffense = new[]
         {
@@ -75,6 +94,5 @@ public class DeadBallPositionConfig
 
         throwIncornerKicker = new Vector3(-6.5f, 0.35f, 0f);        
         cornerKicker = new Vector3(-6.55f, 0.35f, 8.05f);
-
     }
 }

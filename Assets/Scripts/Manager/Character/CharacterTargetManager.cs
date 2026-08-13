@@ -32,16 +32,24 @@ public class CharacterTargetManager : MonoBehaviour
     private void OnEnable()
     {
         CharacterEvents.OnTargetChange += HandleOnTargetChange;
+        EssenceEvents.OnCharacterUnderwentEssenceOverflow += HandleCharacterUnderwentEssenceOverflow;
     }
 
     private void OnDisable()
     {
         CharacterEvents.OnTargetChange -= HandleOnTargetChange;
+        EssenceEvents.OnCharacterUnderwentEssenceOverflow -= HandleCharacterUnderwentEssenceOverflow;
     }
 
     private void HandleOnTargetChange(CharacterEntityBattle character, TeamSide teamSide)
     {
         this.targetedCharacter[teamSide] = character;
+        //LogManager.Trace($"[CharacterTargetManager] {teamSide.ToString()} target assigned to {character?.CharacterId}", this);
+    }
+
+    private void HandleCharacterUnderwentEssenceOverflow(CharacterEntityBattle character)
+    {
+        this.targetedCharacter[character.TeamSide] = null;
         //LogManager.Trace($"[CharacterTargetManager] {teamSide.ToString()} target assigned to {character?.CharacterId}", this);
     }
 

@@ -400,4 +400,14 @@ public class CharacterChangeControlManager : MonoBehaviour
         return bestDefender;
     }
 
+    public void TryChangeOnEssence(CharacterEntityBattle current)
+    {
+        if(current.IsEnemyAI) return;
+
+        CharacterEntityBattle target = GetTeammateForDefense(current);
+
+        if (target == null) return;
+        SetControlledCharacter(target, target.TeamSide);
+        //audioManager.PlaySfx("sfx-ball_change_character");
+    }
 }

@@ -18,8 +18,8 @@ public class BattleManagerEssence
 
     private readonly Dictionary<TeamSide, int> essenceOverflowUnderwent = new Dictionary<TeamSide, int>();
     private int essenceOverflowLimit = 99;
-    private int essenceOverflowLimitFull = 9;
-    private int essenceOverflowLimitMini = 2;
+    private int essenceOverflowLimitFull = 5;
+    private int essenceOverflowLimitMini = 3;
 
     #endregion
 
@@ -80,6 +80,7 @@ public class BattleManagerEssence
     private void HandleFaint(CharacterEntityBattle characterEntityBattle)
     {
         characterEntityBattle.SetStatusPermanent(StatusEffectPermanent.Fainted);
+        CharacterChangeControlManager.Instance.TryChangeOnEssence(characterEntityBattle);
         characterEntityBattle.gameObject.SetActive(false);
         TeamSide teamSide = characterEntityBattle.TeamSide;
 
@@ -87,6 +88,7 @@ public class BattleManagerEssence
 
         EssenceEvents.RaiseCharacterUnderwentEssenceOverflow(characterEntityBattle);
         EssenceEvents.RaisePlayEssenceVfxRequested(characterEntityBattle.transform);
+
 
         if (HasBattleEnded(teamSide))
             EssenceEvents.RaiseEssenceBattleLimitReached(teamSide, essenceOverflowUnderwent[teamSide]);

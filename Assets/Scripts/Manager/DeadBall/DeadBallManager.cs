@@ -23,8 +23,6 @@ public class DeadBallManager : MonoBehaviour
     private TeamSide offenseSide;
     private TeamSide defenseSide;
     private Vector3 cachedBallPosition;
-    private Vector3 defaultPositionKickoffKicker;
-    private Dictionary<TeamSide, Vector3> defaultPositionKickoffReceiver;
     private Dictionary<TeamSide, bool> teamMenuOpen = new();
     private Dictionary<TeamSide, bool> teamMenuOpened = new();
     private bool isOneTimeMenu = false;
@@ -60,14 +58,6 @@ public class DeadBallManager : MonoBehaviour
         characterSelector = new DeadBallCharacterSelector(this);
         positionUtils = new DeadBallPositionUtils(this);
         teamReadiness = new TeamReadiness();
-
-        defaultPositionKickoffKicker = new Vector3(0, 0.34f, 0);
-        defaultPositionKickoffReceiver = new Dictionary<TeamSide, Vector3>
-        {
-            { TeamSide.Home, new Vector3(1f, 0.34f, -0.1f) },
-            { TeamSide.Away, new Vector3(-1f, 0.34f, 0.1f) }
-        };
-
     }
 
     private void Start() 
@@ -204,8 +194,6 @@ public class DeadBallManager : MonoBehaviour
 
     public bool IsDeadBallInProgress => currentHandler != null && BattleManager.Instance.CurrentPhase == BattlePhase.DeadBall;
     public bool MarkFirstKickoffComplete() => isFirstKickoff = false;
-    public Vector3 GetDefaultPositionKickoffKicker() => defaultPositionKickoffKicker;
-    public Vector3 GetDefaultPositionKickoffReceive(TeamSide teamSide) => defaultPositionKickoffReceiver[teamSide];
     public void SetBallPosition(Vector3 ballPosition) => cachedBallPosition = ballPosition;
     public void SetState(DeadBallState state) => DeadBallState = state;
     public Coroutine StartRoutine(IEnumerator routine) => StartCoroutine(routine);
