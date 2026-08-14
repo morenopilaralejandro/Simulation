@@ -23,6 +23,7 @@ public class BattleMessage : MonoBehaviour
     [SerializeField] private LocalizedString timeUpMessage;
     [SerializeField] private LocalizedString foulMessage;
     [SerializeField] private LocalizedString offsideMessage;
+    [SerializeField] private LocalizedString essenceFinishMessage;
 
     private void Awake()
     {
@@ -64,6 +65,10 @@ public class BattleMessage : MonoBehaviour
 
             case MessageType.Offside:
                 localizeStringEvent.StringReference = offsideMessage;
+                break;
+
+            case MessageType.EssenceFinish:
+                localizeStringEvent.StringReference = essenceFinishMessage;
                 break;
 
             default:

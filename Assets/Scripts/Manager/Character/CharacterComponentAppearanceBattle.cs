@@ -69,6 +69,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     public async Task AppearanceBattleLoadAsync(bool hasWingActivated = false)
     {
+        Clear();
         SetBodyColor();
         SetHairColor();
 

@@ -15,112 +15,172 @@ MonoBehaviour:
   m_TableCollectionName: UI-Battle-Romanized
   m_TableCollectionNameGuidString: 6139951b1e8226c3aa1e9e8fa7f6db60
   m_Entries:
-  - m_Id: 14463803392
-    m_Key: text_duel
+  - m_Id: 102517228999286784
+    m_Key: title
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997696
-    m_Key: button_command_move
+  - m_Id: 102517229003481088
+    m_Key: match_start
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997697
-    m_Key: button_command_melee
+  - m_Id: 102517229003481089
+    m_Key: match_half
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997698
-    m_Key: button_command_ranged
+  - m_Id: 102517229003481090
+    m_Key: match_end
     m_Metadata:
       m_Items: []
-  - m_Id: 78610356072357888
-    m_Key: button_command_wing
+  - m_Id: 102517229003481091
+    m_Key: match_pause
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412449783808
-    m_Key: button_auto
+  - m_Id: 102517229003481092
+    m_Key: match_resume
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412453978112
-    m_Key: button_manual
+  - m_Id: 102517229003481093
+    m_Key: match_essence
     m_Metadata:
       m_Items: []
-  - m_Id: 78610356072357889
-    m_Key: button_auto_toggle
+  - m_Id: 102517229003481094
+    m_Key: deadball_kickoff
     m_Metadata:
       m_Items: []
-  - m_Id: 6569877814648832
-    m_Key: button_forfeit
+  - m_Id: 102517229003481095
+    m_Key: deadball_throw_in
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412453978114
-    m_Key: button_pause
+  - m_Id: 102517229003481096
+    m_Key: deadball_corner_kick
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412453978115
-    m_Key: button_resume
+  - m_Id: 102517229003481097
+    m_Key: deadball_goal_kick
     m_Metadata:
       m_Items: []
-  - m_Id: 9045905770291200
-    m_Key: condition_score_singular
+  - m_Id: 102517229003481098
+    m_Key: deadball_free_kick_direct
     m_Metadata:
       m_Items: []
-  - m_Id: 9045905770291201
-    m_Key: condition_score_plural
+  - m_Id: 102517229003481099
+    m_Key: deadball_free_kick_indirect
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997702
-    m_Key: text_exit
+  - m_Id: 102517229003481100
+    m_Key: deadball_offside
     m_Metadata:
       m_Items: []
-  - m_Id: 9045905770291202
-    m_Key: text_ap
+  - m_Id: 102517229003481101
+    m_Key: deadball_out
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997703
-    m_Key: text_win
+  - m_Id: 102517229003481102
+    m_Key: deadball_foul
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997704
-    m_Key: text_lose
+  - m_Id: 102517229003481103
+    m_Key: deadball_card_yellow
     m_Metadata:
       m_Items: []
-  - m_Id: 3220200436277248
-    m_Key: text_foul
+  - m_Id: 102517229003481104
+    m_Key: deadball_card_red
     m_Metadata:
       m_Items: []
-  - m_Id: 3219103076327425
-    m_Key: text_offside
+  - m_Id: 102517229003481105
+    m_Key: action_pass
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997705
-    m_Key: text_goal
+  - m_Id: 102517229003481106
+    m_Key: action_shoot
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997706
-    m_Key: text_time_up
+  - m_Id: 102517229003481107
+    m_Key: action_direct
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997707
-    m_Key: text_time_half
+  - m_Id: 102517229003481108
+    m_Key: action_command
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997708
-    m_Key: text_time_full
+  - m_Id: 102517229003481109
+    m_Key: action_command_short
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997709
-    m_Key: text_time_first
+  - m_Id: 102517229003481110
+    m_Key: action_damage
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997710
-    m_Key: text_time_second
+  - m_Id: 102517229003481111
+    m_Key: action_score
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412453978116
-    m_Key: text_battle_menu
+  - m_Id: 102517229003481112
+    m_Key: action_stop
     m_Metadata:
       m_Items: []
-  - m_Id: 78610356072357890
-    m_Key: text_deadball_standing
+  - m_Id: 102517229003481113
+    m_Key: action_substitution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481114
+    m_Key: action_wing_activate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481115
+    m_Key: action_wing_activate_short
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481116
+    m_Key: action_wing_deactivate
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481117
+    m_Key: action_essence
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481118
+    m_Key: element_offense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481119
+    m_Key: element_defense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481120
+    m_Key: duel_start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481121
+    m_Key: duel_win
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481122
+    m_Key: duel_lose
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481123
+    m_Key: duel_cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481124
+    m_Key: goal
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481125
+    m_Key: possession_gained
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481126
+    m_Key: condition
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481127
+    m_Key: notify_move_evolved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481128
+    m_Key: notify_wing_evolved
     m_Metadata:
       m_Items: []
   m_Metadata:

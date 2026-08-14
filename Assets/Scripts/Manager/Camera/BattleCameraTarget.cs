@@ -61,7 +61,7 @@ public class BattleCameraTarget : MonoBehaviour
         if (followHome)
         {
             _offset = homeOffset;
-            followTarget = _battleMgr.ControlledCharacter[_battleMgr.GetUserSide()].transform;
+            followTarget = _battleMgr.ControlledCharacter[_battleMgr.GetUserSide()]?.transform;
         }
         else
         {
@@ -72,6 +72,9 @@ public class BattleCameraTarget : MonoBehaviour
         }
 
         // ── Compute desired position ──
+        
+        if (followTarget == null) return;
+    
         Vector3 desired;
         desired.x = followTarget.position.x + _offset.x;
         desired.y = followTarget.position.y + _offset.y;

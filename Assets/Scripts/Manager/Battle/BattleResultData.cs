@@ -28,7 +28,8 @@ public class BattleResultData
     public bool IsUserWin => !IsDraw && WinningSide == UserSide;
     public bool IsHomeWin => WinningSide == TeamSide.Home;
     public bool IsAwayWin => WinningSide == TeamSide.Away;
-    public bool IsDraw => Scores[TeamSide.Home] == Scores[TeamSide.Away];
+    public bool IsDraw => Scores[TeamSide.Home] == Scores[TeamSide.Away] && !IsForcedWinner;
+    public bool IsForcedWinner;
 
     /*
     public TeamSide LosingSide =>
@@ -59,5 +60,7 @@ public class BattleResultData
         BattleType = default;
         WinningSide = default;
         UserSide = default;
+
+        IsForcedWinner = false;
     }
 }

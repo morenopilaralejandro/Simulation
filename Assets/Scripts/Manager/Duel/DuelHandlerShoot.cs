@@ -139,6 +139,7 @@ public class DuelHandlerShoot : IDuelHandler
         }
 
         defense.CharacterEntityBattle.TryDeactivateWings();
+        CharacterChangeControlManager.Instance.TryChangeOnEssence(offense.CharacterEntityBattle);
 
         // if is reversal start else end
         if (isShootReversal) 
@@ -198,6 +199,7 @@ public class DuelHandlerShoot : IDuelHandler
         BattleManager.Instance.Ball.ResumeTravel();
 
         defense.CharacterEntityBattle.TryDeactivateWings();
+        CharacterChangeControlManager.Instance.TryChangeOnEssence(defense.CharacterEntityBattle);
 
         if (isCategoryCatch)
         {

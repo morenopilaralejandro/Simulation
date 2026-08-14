@@ -83,6 +83,8 @@ public class DeadBallManager : MonoBehaviour
         ResolveOffenseDefense(teamSide);
 
         DeadBallEvents.RaiseDeadBallStarted(type, offenseSide, defenseSide);
+        SubstitutionManager.Instance.TryEnemyAiSubstitution();
+        SubstitutionManager.Instance.ShowSubstitutions();
         currentHandler.Setup(teamSide);
 
         SubscribeInputMenu();
@@ -102,6 +104,7 @@ public class DeadBallManager : MonoBehaviour
 
     private void Execute()
     {
+        SubstitutionManager.Instance.TryEnemyAiSubstitution();
         SubstitutionManager.Instance.ShowSubstitutions();
 
         audioManager.PlaySfx("sfx-whistle_single");

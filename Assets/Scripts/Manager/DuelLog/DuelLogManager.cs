@@ -62,6 +62,7 @@ public class DuelLogManager : MonoBehaviour
         BallEvents.OnGained += HandleGained;
 
         EssenceEvents.OnCharacterUnderwentEssenceOverflow += HandleEssenceOverflow;
+        EssenceEvents.OnEssenceBattleLimitReached += HandleEssenceBattleLimitReached;
     }
 
     void OnDisable()
@@ -82,6 +83,7 @@ public class DuelLogManager : MonoBehaviour
         BallEvents.OnGained -= HandleGained;
 
         EssenceEvents.OnCharacterUnderwentEssenceOverflow -= HandleEssenceOverflow;
+        EssenceEvents.OnEssenceBattleLimitReached -= HandleEssenceBattleLimitReached;
     }
 
     private void HandleBattleStarted(BattleType battleType) 
@@ -114,7 +116,7 @@ public class DuelLogManager : MonoBehaviour
     private void HandleGained(CharacterEntityBattle character) => AddPossessionGained(character.Character, character.TeamSide);
         
     private void HandleEssenceOverflow(CharacterEntityBattle character) => AddActionEssence(character.Character, character.TeamSide);
-
+    private void HandleEssenceBattleLimitReached(TeamSide teamSide, int essenceOverflowUnderwent) => AddMatchEssence();
 
     #endregion
 
@@ -150,6 +152,8 @@ public class DuelLogManager : MonoBehaviour
     }
 
     public void AddMatchResume() => AddEntry(Trace("match_resume"));
+
+    public void AddMatchEssence() => AddEntry(Trace("match_essence"));
 
     public void AddDeadBallKickoff(Character character, TeamSide teamSide)
     {

@@ -19,12 +19,16 @@ public struct FormationCoord
     [SerializeField] private Position position;
     public Position Position => position;
 
+    [SerializeField] private bool isFlipped;
+    public bool IsFlipped => isFlipped;
+
     public FormationCoord(string formationCoordId, Vector3 defaultPosition, Position position)
     {
         this.formationCoordId = formationCoordId;
         this.defaultPosition = defaultPosition;
         this.position = position;
         this.defaultRotation = DefaultRot;
+        this.isFlipped = false;
     }
 
     public FormationCoord(FormationCoord other)
@@ -33,12 +37,15 @@ public struct FormationCoord
         defaultPosition = other.defaultPosition;
         defaultRotation = other.defaultRotation;
         position = other.position;
+        isFlipped = other.IsFlipped;
     }
 
-    public void FlipDefaultPosition()
+    public void TryFlipDefaultPosition()
     {
+        if (isFlipped) return;
         defaultPosition.x = -defaultPosition.x;
         defaultPosition.z = -defaultPosition.z;
         defaultRotation = FlippedRotation;
+        isFlipped = true;
     }
 }

@@ -334,12 +334,12 @@ public class BattleManager : MonoBehaviour
             Teams, 
             GetUserSide(),
             currentType,
-            false);
+            forcedWinner: null);
 
         sceneLoader.LoadGroup(sceneBattleResults);
     }
 
-    private void ForceEndGame(TeamSide winnerSide)
+    private void EndGameByForfeit(TeamSide winnerSide)
     {
         if (currentPhase == BattlePhase.End) return;        
 
@@ -351,7 +351,26 @@ public class BattleManager : MonoBehaviour
             Teams, 
             GetUserSide(),
             currentType,
-            true);
+            forcedWinner: winnerSide);
+
+        sceneLoader.LoadGroup(sceneBattleResults);
+    }
+
+    private void EndGameByEssence(TeamSide loserSide)
+    {   
+        if (currentPhase == BattlePhase.End) return;        
+
+        SetBattlePhase(BattlePhase.End);
+        BattleEvents.RaiseBattleEnded();
+
+        TeamSide winnerSide = loserSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
+
+        resultsSystem.CreateBattleResultData(
+            scoreDict,
+            Teams, 
+            GetUserSide(),
+            currentType,
+            forcedWinner: winnerSide);
 
         sceneLoader.LoadGroup(sceneBattleResults);
     }
@@ -373,8 +392,8 @@ public class BattleManager : MonoBehaviour
         LogManager.Info("[BattleManager] EndBattleByEssence.", this);
         
         Freeze();
-        
-        StartCoroutine(ForfeitSequence(loserSide));
+
+        StartCoroutine(EssenceFinishSequence(loserSide));
     }
 
     #endregion
@@ -468,7 +487,16 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ForfeitSequence(TeamSide winnerSide)
     {
         yield return new WaitForSeconds(0.5f);
-        ForceEndGame(winnerSide);
+        EndGameByForfeit(winnerSide);
+    }
+
+    private IEnumerator EssenceFinishSequence(TeamSide loserSide)
+    {
+        BattleUIManager.Instance.SetMessageActive(MessageType.EssenceFinish, true);
+        AudioManager.Instance.PlaySfx("sfx-whistle_triple");
+        yield return new WaitForSeconds(2f);
+        BattleUIManager.Instance.SetMessageActive(MessageType.EssenceFinish, false);
+        EndGameByEssence(loserSide);
     }
 
     public void StartThrowIn(TeamSide side) 
@@ -710,7 +738,7 @@ public class BattleManager : MonoBehaviour
 
     //resultsSystem
     public BattleResultData BattleResultData => resultsSystem.BattleResultData;
-    public void CreateBattleResultData(Dictionary<TeamSide, int> scores, Dictionary<TeamSide, Team> teams, TeamSide userSide, BattleType battleType, bool isForfeit) => resultsSystem.CreateBattleResultData(scores, teams, userSide, battleType, isForfeit);
+    public void CreateBattleResultData(Dictionary<TeamSide, int> scores, Dictionary<TeamSide, Team> teams, TeamSide userSide, BattleType battleType, TeamSide? forcedWinner) => resultsSystem.CreateBattleResultData(scores, teams, userSide, battleType, forcedWinner);
     public void Clear() => resultsSystem.Clear();
     public MatchRank CalculateMatchRank(BattleResultData battleResultData) => resultsSystem.CalculateMatchRank(battleResultData);
 

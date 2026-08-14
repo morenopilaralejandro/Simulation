@@ -41,7 +41,7 @@ public class CharacterComponentTeamMember : MonoBehaviour
 
         if (!characterEntityBattle.IsOnUsersTeam()) 
         {
-            this.formationCoord.FlipDefaultPosition();    
+            this.formationCoord.TryFlipDefaultPosition();    
             characterEntityBattle.SetFormationDirection(Vector2.down);
         } else 
         {

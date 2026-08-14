@@ -80,7 +80,7 @@ public class BattleManagerEssence
     private void HandleFaint(CharacterEntityBattle characterEntityBattle)
     {
         characterEntityBattle.SetStatusPermanent(StatusEffectPermanent.Fainted);
-        CharacterChangeControlManager.Instance.TryChangeOnEssence(characterEntityBattle);
+        //CharacterChangeControlManager.Instance.TryChangeOnEssence(characterEntityBattle);
         characterEntityBattle.gameObject.SetActive(false);
         TeamSide teamSide = characterEntityBattle.TeamSide;
 

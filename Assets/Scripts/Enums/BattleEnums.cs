@@ -64,7 +64,8 @@ namespace Aremoreno.Enums.Battle
         FullTime,
         TimeUp,
         Foul,
-        Offside
+        Offside,
+        EssenceFinish
     }
 
     public enum WinConditionType

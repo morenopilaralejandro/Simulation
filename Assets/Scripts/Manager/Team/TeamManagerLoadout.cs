@@ -497,6 +497,8 @@ public class TeamManagerLoadout
             Debug.LogError($"[TeamManagerLoadout] Failed to load appearance for {entity.CharacterId}: {e}");
         }
     }
+
+
     #endregion
 }
 

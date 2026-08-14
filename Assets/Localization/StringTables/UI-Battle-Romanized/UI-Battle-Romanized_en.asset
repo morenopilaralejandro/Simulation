@@ -16,126 +16,176 @@ MonoBehaviour:
     m_Code: en
   m_SharedData: {fileID: 11400000, guid: 6139951b1e8226c3aa1e9e8fa7f6db60, type: 2}
   m_Metadata:
-    m_Items:
-    - rid: 2307362107809071107
+    m_Items: []
   m_TableData:
-  - m_Id: 14463803392
-    m_Localized: DUEL
+  - m_Id: 102517228999286784
+    m_Localized: Duel Log
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997696
-    m_Localized: SECRET
+  - m_Id: 102517229003481088
+    m_Localized: The match is starting!
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997697
-    m_Localized: Phys.
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997698
-    m_Localized: Skill
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997702
-    m_Localized: Exit the battle?
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997703
-    m_Localized: You win!
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997704
-    m_Localized: You lose!
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997705
-    m_Localized: "OL\xC9!"
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997706
-    m_Localized: Time's Up
-    m_Metadata:
-      m_Items: []
-  - m_Id: 14467997707
+  - m_Id: 102517229003481089
     m_Localized: Half Time
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997708
-    m_Localized: Full Time
+  - m_Id: 102517229003481090
+    m_Localized: The match is over!
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997709
-    m_Localized: 1st
+  - m_Id: 102517229003481091
+    m_Localized: '{teamName} requests a Secret Stop.'
     m_Metadata:
       m_Items: []
-  - m_Id: 14467997710
-    m_Localized: 2nd
+  - m_Id: 102517229003481092
+    m_Localized: The match resumed.
     m_Metadata:
       m_Items: []
-  - m_Id: 3219103076327425
-    m_Localized: Offside
+  - m_Id: 102517229003481093
+    m_Localized: Essence Finish
     m_Metadata:
       m_Items: []
-  - m_Id: 3220200436277248
-    m_Localized: Foul
+  - m_Id: 102517229003481094
+    m_Localized: Kickoff!
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412449783808
-    m_Localized: Auto
+  - m_Id: 102517229003481095
+    m_Localized: Throw-in!
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412453978112
-    m_Localized: Manual
+  - m_Id: 102517229003481096
+    m_Localized: Corner!
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412453978114
-    m_Localized: Secret Stop
+  - m_Id: 102517229003481097
+    m_Localized: Goal kick!
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412453978115
-    m_Localized: Resume
+  - m_Id: 102517229003481098
+    m_Localized: Direct free kick!
     m_Metadata:
       m_Items: []
-  - m_Id: 6558412453978116
-    m_Localized: Battle Menu
+  - m_Id: 102517229003481099
+    m_Localized: Indirect free kick!
     m_Metadata:
       m_Items: []
-  - m_Id: 6569877814648832
-    m_Localized: Forfeit
+  - m_Id: 102517229003481100
+    m_Localized: Offside!
     m_Metadata:
       m_Items: []
-  - m_Id: 9045905770291200
-    m_Localized: Score {goalAmount} goal!
-    m_Metadata:
-      m_Items:
-      - rid: 2307362107809071107
-  - m_Id: 9045905770291201
-    m_Localized: Score {goalAmount} goals!
-    m_Metadata:
-      m_Items:
-      - rid: 2307362107809071107
-  - m_Id: 9045905770291202
-    m_Localized: AP
+  - m_Id: 102517229003481101
+    m_Localized: Out!
     m_Metadata:
       m_Items: []
-  - m_Id: 78610356072357888
-    m_Localized: Wings
+  - m_Id: 102517229003481102
+    m_Localized: Foul!
     m_Metadata:
       m_Items: []
-  - m_Id: 78610356072357889
-    m_Localized: Auto ON / OFF
+  - m_Id: 102517229003481103
+    m_Localized: Yellow card!
     m_Metadata:
       m_Items: []
-  - m_Id: 78610356072357890
-    m_Localized: STANDING BY...
+  - m_Id: 102517229003481104
+    m_Localized: Red card!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481105
+    m_Localized: '{characterName} passes the ball.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481106
+    m_Localized: '{characterName} shoots!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481107
+    m_Localized: Direct!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481108
+    m_Localized: '{characterName} uses {commandName}!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481109
+    m_Localized: '{commandName}!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481110
+    m_Localized: '{actionSymbol}{damageNumber} AP'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481111
+    m_Localized: '{characterName} scores a goal!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481112
+    m_Localized: '{characterName} stops it!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481113
+    m_Localized: '{characterName} IN!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481114
+    m_Localized: '{wingName} activated!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481115
+    m_Localized: '{wingName}!'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481116
+    m_Localized: Degradation...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481117
+    m_Localized: Essence overflow!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481118
+    m_Localized: Offense effective!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481119
+    m_Localized: Defense effective!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481120
+    m_Localized: Duel!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481121
+    m_Localized: You win!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481122
+    m_Localized: You lose!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481123
+    m_Localized: The duel ended.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481124
+    m_Localized: Goal!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481125
+    m_Localized: '{characterName} takes control of the ball.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481126
+    m_Localized: 'Condition: {condition}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481127
+    m_Localized: Move evolved!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 102517229003481128
+    m_Localized: Wings evolved!
     m_Metadata:
       m_Items: []
   references:
     version: 2
-    RefIds:
-    - rid: 2307362107809071107
-      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
-      data:
-        m_Entries: 
-        m_SharedEntries:
-        - id: 9045905770291200
-        - id: 9045905770291201
+    RefIds: []

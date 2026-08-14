@@ -12,8 +12,12 @@ public class WingUI : MonoBehaviour
     [SerializeField] private Image imageIcon;
     [SerializeField] private Image[] imageElements;
     [SerializeField] private Image imageEquipped;
+    [SerializeField] private Image imageEvolution;
     [SerializeField] private TMP_Text textName;
     [SerializeField] private TMP_Text textDescription;
+
+    private int _setVersion;
+    private readonly AddressableBinding<Sprite> _bindingEvolution = new();
 
     #endregion
 
@@ -61,6 +65,18 @@ public class WingUI : MonoBehaviour
         if (imageEquipped != null)
             imageEquipped.enabled = wing.IsEquipped();
 
+        // Evolution
+        if (imageEvolution != null) 
+        {
+            if (wing.CurrentEvolution != WingEvolution.None) 
+            {
+                _ = SetEvolutionAsync(wing.WingEvolutionAddress);
+            } else 
+            {
+                imageEvolution.enabled = false;
+            }
+        }
+
         // Name
         if (textName != null)
             textName.text = wing.WingName;
@@ -87,11 +103,36 @@ public class WingUI : MonoBehaviour
         if (imageEquipped != null)
             imageEquipped.enabled = false;
 
+        if (imageEvolution != null)
+            imageEvolution.enabled = false;
+
         if (textName != null)
             textName.text = string.Empty;
 
         if (textDescription != null)
             textDescription.text = string.Empty;
+
+        _bindingEvolution.Release();
+        _bindingEvolution.Cancel();
+        _setVersion++;
+    }
+
+    #endregion
+
+    #region Addressable
+
+    private async System.Threading.Tasks.Task SetEvolutionAsync(string address)
+    {
+        int version = ++_setVersion;
+        imageEvolution.enabled = false;
+        var task = _bindingEvolution.LoadAsync(address);
+
+        var asset = await task;
+
+        if (version != _setVersion) return;
+
+        imageEvolution.sprite = asset;
+        imageEvolution.enabled = true;
     }
 
     #endregion
