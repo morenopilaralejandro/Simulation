@@ -27,16 +27,24 @@ public class CharacterComponentSpeechBubble : MonoBehaviour
     private void OnEnable()
     {
         BattleEvents.OnShootPerformed += HandleShootPerformed;
+        EssenceEvents.OnCharacterUnderwentEssenceOverflow += HandleCharacterUnderwentEssenceOverflow;
     }
 
     private void OnDisable()
     {
         BattleEvents.OnShootPerformed -= HandleShootPerformed;
+        EssenceEvents.OnCharacterUnderwentEssenceOverflow -= HandleCharacterUnderwentEssenceOverflow;
     }
 
     private void HandleShootPerformed(CharacterEntityBattle characterEntityBattle, bool isDirect)
     {
         if (this.character == characterEntityBattle.Character && isDirect)
             ShowSpeechBubble(SpeechMessage.Direct);
+    }
+
+    private void HandleCharacterUnderwentEssenceOverflow(CharacterEntityBattle characterEntityBattle)
+    {
+        if (this.character == characterEntityBattle.Character)
+            HideSpeechBubble();
     }
 }

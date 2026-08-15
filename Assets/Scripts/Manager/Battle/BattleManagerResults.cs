@@ -46,7 +46,7 @@ public class BattleManagerResults
         Dictionary<TeamSide, Team> teams,
         TeamSide userSide,
         BattleType battleType,
-        bool isForfeit)
+        TeamSide? forcedWinner = null)
     {
         battleResultData.Clear();
 
@@ -55,16 +55,10 @@ public class BattleManagerResults
         battleResultData.UserSide = userSide;
         battleResultData.EnemyLevel = BattleArgs.AwayTeamLevel;
 
-        /*
-        battleResultData.WinningSide = scores[TeamSide.Home] == scores[TeamSide.Away]
-            ? TeamSide.None
-            : scores[TeamSide.Home] > scores[TeamSide.Away]
-                ? TeamSide.Home
-                : TeamSide.Away;
-        */
+        battleResultData.IsForcedWinner = forcedWinner.HasValue;
 
-        if (isForfeit)
-            battleResultData.WinningSide = battleResultData.EnemySide;
+        if (battleResultData.IsForcedWinner)
+            battleResultData.WinningSide = forcedWinner.Value;
         else
             battleResultData.WinningSide = scores[TeamSide.Home] > scores[TeamSide.Away] ? TeamSide.Home : TeamSide.Away;
 
@@ -72,11 +66,6 @@ public class BattleManagerResults
         battleResultData.Teams = new Dictionary<TeamSide, Team>(teams);
 
         battleResultData.MatchRank = CalculateMatchRank(battleResultData);
-
-        if (scores[TeamSide.Home] > scores[TeamSide.Away])
-            battleResultData.WinningSide = TeamSide.Home;
-        else if (scores[TeamSide.Away] > scores[TeamSide.Home])
-            battleResultData.WinningSide = TeamSide.Away;
 
         ApplyBattleRewards(userSide);
         GiveBattleRewards();

@@ -145,6 +145,9 @@ public static class ColorManager
         return Color.white;
     }
 
+    
+    public static Color FaintedColor = new Color(0.239f, 0.239f, 0.239f, 1f);
+
     private static readonly Dictionary<MessageType, Color> battleMessageColors =
         new Dictionary<MessageType, Color>()
     {
@@ -152,8 +155,9 @@ public static class ColorManager
         { MessageType.HalfTime,     new Color(1f, 1f, 1f, 1f) },
         { MessageType.FullTime,     new Color(1f, 1f, 1f, 1f) },
         { MessageType.TimeUp,       new Color(1f, 1f, 1f, 1f) },
-        { MessageType.Foul,       new Color(1f, 1f, 1f, 1f) },
-        { MessageType.Offside,    new Color(1f, 1f, 1f, 1f) }
+        { MessageType.Foul,         new Color(1f, 1f, 1f, 1f) },
+        { MessageType.Offside,      new Color(1f, 1f, 1f, 1f) },
+        { MessageType.EssenceFinish,new Color(1f, 1f, 1f, 1f) }
     };
 
     public static Color GetBattleMessageColor(MessageType messageType)

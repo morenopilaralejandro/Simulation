@@ -115,6 +115,7 @@ public class DuelHandlerShoot : IDuelHandler
         BattleEvents.RaiseShootStopped(defense.CharacterEntityBattle);
         offense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
 
+
         await DuelManager.Instance.TryPlayWingCutscene(defense.CharacterEntityBattle);
 
         if(defense.Move != null) 
@@ -126,11 +127,19 @@ public class DuelHandlerShoot : IDuelHandler
             else
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Halfslash1H);
 
-            await BattleManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
+            BattleManager.Instance.ApplyEssenceDamage(defense, offense, duel.DuelMode, duel.OffensePressure, false);
+            UIEvents.RaiseDuelParticipantSetSideRequested(offense.CharacterEntityBattle, null);
+
+            await BattleManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
+        } else 
+        {
+            BattleManager.Instance.ApplyEssenceDamage(defense, offense, duel.DuelMode, duel.OffensePressure, false);
+            UIEvents.RaiseDuelParticipantSetSideRequested(offense.CharacterEntityBattle, null);
         }
 
         defense.CharacterEntityBattle.TryDeactivateWings();
+        CharacterChangeControlManager.Instance.TryChangeOnEssence(offense.CharacterEntityBattle);
 
         // if is reversal start else end
         if (isShootReversal) 
@@ -160,6 +169,7 @@ public class DuelHandlerShoot : IDuelHandler
     {
         LogManager.Info($"[ShootDuelHandler] Partial block.");
         bool isShootReversal = defense.Move?.Category == Category.Shoot && DuelManager.Instance.IsShootReversalAllowed;
+        bool isPunching = IsPunching(defense);
 
         await DuelManager.Instance.TryPlayWingCutscene(defense.CharacterEntityBattle);
 
@@ -172,15 +182,24 @@ public class DuelHandlerShoot : IDuelHandler
             else 
                 defense.CharacterEntityBattle.RequestAction(Aremoreno.Enums.Animation.CharacterAnimationState.Halfslash1H);
             
-            await BattleManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
+
             MoveEvents.RaiseMoveUsed(defense.Move, defense.CharacterEntityBattle);
+            BattleManager.Instance.ApplyEssenceDamage(offense, defense, duel.DuelMode, duel.OffensePressure, isPunching);
+            UIEvents.RaiseDuelParticipantSetSideRequested(defense.CharacterEntityBattle, null);
+            await BattleManager.Instance.PlayMoveParticle(defense.Move, defense.CharacterEntityBattle.transform.position);
+        } else 
+        {
+            BattleManager.Instance.ApplyEssenceDamage(offense, defense, duel.DuelMode, duel.OffensePressure, isPunching);
+            UIEvents.RaiseDuelParticipantSetSideRequested(defense.CharacterEntityBattle, null);
         }
 
-        defense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
+        if (!defense.CharacterEntityBattle.IsFainted)
+            defense.CharacterEntityBattle.ApplyStatus(StatusEffect.Stunned);
 
         BattleManager.Instance.Ball.ResumeTravel();
 
         defense.CharacterEntityBattle.TryDeactivateWings();
+        CharacterChangeControlManager.Instance.TryChangeOnEssence(defense.CharacterEntityBattle);
 
         if (isCategoryCatch)
         {
@@ -204,7 +223,7 @@ public class DuelHandlerShoot : IDuelHandler
         if (participant.Move == null) return;
 
         participant.CharacterEntityBattle.ModifyBattleStat(Stat.Sp, -participant.Move.Cost);
-        BattleUIManager.Instance.SetDuelParticipant(participant.CharacterEntityBattle, null);
+        UIEvents.RaiseDuelParticipantSetSideRequested(participant.CharacterEntityBattle, null);
     }
 
     private void HandleShootSfx(DuelParticipant participant) 
@@ -221,7 +240,7 @@ public class DuelHandlerShoot : IDuelHandler
 
         DuelLogManager.Instance.AddActionCommand(participant.CharacterEntityBattle.Character, participant.CharacterEntityBattle.TeamSide, participant.Command, participant.Move);
         DuelLogManager.Instance.AddActionDamage(participant.CharacterEntityBattle.Character, participant.CharacterEntityBattle.TeamSide, participant.Action, Mathf.Abs(participant.Damage));
-        BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
+        UIEvents.RaiseDuelParticipantSetComboDamageRequested(duel.OffensePressure);
 
         if(isActionOffense)
             LogManager.Info($"[ShootDuelHandler] Offense action increases attack pressure +{participant.Damage}");

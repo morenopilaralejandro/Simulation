@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.DeadBall;
+using Aremoreno.Enums.Duel;
 using Aremoreno.Enums.Match;
 using Aremoreno.Enums.Kit;
 
@@ -30,6 +31,7 @@ public class BattleManager : MonoBehaviour
     [Header("Battle Subsystem")]
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private GameObject characterEntityBattlePrefab;
+    [SerializeField] private GameObject characterEntityLeftovers;
 
     [Header("Scenes")]
     [SerializeField] private SceneGroup sceneBattle;
@@ -62,6 +64,8 @@ public class BattleManager : MonoBehaviour
     private BattleManagerTeam teamSystem;
     private BattleManagerWing wingSystem;
     private BattleManagerResults resultsSystem;
+    private BattleManagerEssence essenceSystem;
+    private BattleComponentEndGame endGameComponent;
 
     #region Lifecycle
     private void Awake()
@@ -89,10 +93,15 @@ public class BattleManager : MonoBehaviour
         teamSystem = new BattleManagerTeam();
         wingSystem = new BattleManagerWing();
         resultsSystem = new BattleManagerResults(sceneWorld, sceneDebugMainMenu);
+        essenceSystem = new BattleManagerEssence();
+        endGameComponent = new BattleComponentEndGame();
 
+        effectSystem.Subscribe();
         teamSystem.Subscribe();
         wingSystem.Subscribe();
         resultsSystem.Subscribe();
+        essenceSystem.Subscribe();
+        endGameComponent.Subscribe();
 
         Freeze();
         SetTeamSize();
@@ -113,9 +122,12 @@ public class BattleManager : MonoBehaviour
     {
         BattleEvents.OnAllCharactersReady -= HandleAllCharactersReady;
 
+        if (effectSystem != null) effectSystem.Unsubscribe();
         if (teamSystem != null) teamSystem.Unsubscribe();
         if (wingSystem != null) wingSystem.Unsubscribe();
         if (resultsSystem != null) resultsSystem.Unsubscribe();
+        if (essenceSystem != null) essenceSystem.Unsubscribe();
+        if (endGameComponent != null) endGameComponent.Unsubscribe();
     }
     #endregion
 
@@ -315,31 +327,50 @@ public class BattleManager : MonoBehaviour
             $"User side: {userSide}, Result: {result}, WinCondition: {winCondition.Type}", this);
 
         SetBattlePhase(BattlePhase.End);
-        BattleEvents.RaiseBattleEnd();
+        BattleEvents.RaiseBattleEnded();
 
         resultsSystem.CreateBattleResultData(
             scoreDict,
             Teams, 
             GetUserSide(),
             currentType,
-            false);
+            forcedWinner: null);
 
         sceneLoader.LoadGroup(sceneBattleResults);
     }
 
-    private void ForceEndGame(TeamSide winnerSide)
+    private void EndGameByForfeit(TeamSide winnerSide)
     {
         if (currentPhase == BattlePhase.End) return;        
 
         SetBattlePhase(BattlePhase.End);
-        BattleEvents.RaiseBattleEnd();
+        BattleEvents.RaiseBattleEnded();
 
         resultsSystem.CreateBattleResultData(
             scoreDict, 
             Teams, 
             GetUserSide(),
             currentType,
-            true);
+            forcedWinner: winnerSide);
+
+        sceneLoader.LoadGroup(sceneBattleResults);
+    }
+
+    private void EndGameByEssence(TeamSide loserSide)
+    {   
+        if (currentPhase == BattlePhase.End) return;        
+
+        SetBattlePhase(BattlePhase.End);
+        BattleEvents.RaiseBattleEnded();
+
+        TeamSide winnerSide = loserSide == TeamSide.Home ? TeamSide.Away : TeamSide.Home;
+
+        resultsSystem.CreateBattleResultData(
+            scoreDict,
+            Teams, 
+            GetUserSide(),
+            currentType,
+            forcedWinner: winnerSide);
 
         sceneLoader.LoadGroup(sceneBattleResults);
     }
@@ -354,6 +385,15 @@ public class BattleManager : MonoBehaviour
         TeamSide opponentSide = (userSide == TeamSide.Home) ? TeamSide.Away : TeamSide.Home;
 
         StartCoroutine(ForfeitSequence(opponentSide));
+    }
+
+    public void EndBattleByEssence(TeamSide loserSide)
+    {
+        LogManager.Info("[BattleManager] EndBattleByEssence.", this);
+        
+        Freeze();
+
+        StartCoroutine(EssenceFinishSequence(loserSide));
     }
 
     #endregion
@@ -447,7 +487,16 @@ public class BattleManager : MonoBehaviour
     private IEnumerator ForfeitSequence(TeamSide winnerSide)
     {
         yield return new WaitForSeconds(0.5f);
-        ForceEndGame(winnerSide);
+        EndGameByForfeit(winnerSide);
+    }
+
+    private IEnumerator EssenceFinishSequence(TeamSide loserSide)
+    {
+        BattleUIManager.Instance.SetMessageActive(MessageType.EssenceFinish, true);
+        AudioManager.Instance.PlaySfx("sfx-whistle_triple");
+        yield return new WaitForSeconds(2f);
+        BattleUIManager.Instance.SetMessageActive(MessageType.EssenceFinish, false);
+        EndGameByEssence(loserSide);
     }
 
     public void StartThrowIn(TeamSide side) 
@@ -506,11 +555,10 @@ public class BattleManager : MonoBehaviour
     private void HandleAllCharactersReady()
     {
         ResetDefaultPositions();
-        BattleEvents.RaiseBattleStart(currentType);
+        BattleEvents.RaiseBattleStarted(currentType);
 
         if (currentType == BattleType.Mini)
         {
-
             DeadBallManager.Instance.StartDeadBall(DeadBallType.Kickoff, TeamSide.Home);
         } else 
         {
@@ -544,6 +592,7 @@ public class BattleManager : MonoBehaviour
                 if (characterEntity == null) return;
 
                 characterEntity.Initialize(null, characterObject);
+                characterEntity.gameObject.SetActive(!characterEntity.IsFainted);
                 characterEntity.CalculateSpeed();
                 characterSystem.AssignCharacterToTeamBattle(characterEntity, team, characterIndex);
                 characterEntity.gameObject.name = characterEntity.CharacterId;
@@ -575,6 +624,8 @@ public class BattleManager : MonoBehaviour
             characterObject = new Character(dataList[index]);
             TryInitializeFromData(characterObject, team, index);
         }
+        characterObject.SetWingActive(false);
+        characterObject.ResetWingTimesUsed();
         team.GetCharacters(currentType).Add(characterObject);
         return characterObject;
     }
@@ -687,9 +738,14 @@ public class BattleManager : MonoBehaviour
 
     //resultsSystem
     public BattleResultData BattleResultData => resultsSystem.BattleResultData;
-    public void CreateBattleResultData(Dictionary<TeamSide, int> scores, Dictionary<TeamSide, Team> teams, TeamSide userSide, BattleType battleType, bool isForfeit) => resultsSystem.CreateBattleResultData(scores, teams, userSide, battleType, isForfeit);
+    public void CreateBattleResultData(Dictionary<TeamSide, int> scores, Dictionary<TeamSide, Team> teams, TeamSide userSide, BattleType battleType, TeamSide? forcedWinner) => resultsSystem.CreateBattleResultData(scores, teams, userSide, battleType, forcedWinner);
     public void Clear() => resultsSystem.Clear();
     public MatchRank CalculateMatchRank(BattleResultData battleResultData) => resultsSystem.CalculateMatchRank(battleResultData);
+
+    //essenceSystem
+    public void ApplyEssenceDamage(DuelParticipant winner, DuelParticipant loser, DuelMode duelMode, float offensePressure, bool isPunching) => essenceSystem.ApplyEssenceDamage(winner, loser, duelMode, offensePressure, isPunching);
+
+    //endGameComponent
 
     //misc
     public GameObject InstantiateBall(GameObject prefabGo, Vector3 spawnPosition, Quaternion spawnRotation, Transform spawnPoint)
@@ -699,6 +755,10 @@ public class BattleManager : MonoBehaviour
     public GameObject InstantiateCharacter(GameObject prefabGo, Transform spawnPoint) 
     {
         return Instantiate(prefabGo, spawnPoint);
+    }
+    public GameObject InstantiateCharacterLeftover(Transform spawnPoint) 
+    {
+        return Instantiate(characterEntityLeftovers, spawnPoint.position, spawnPoint.rotation);
     }
     public void DestroyGameObject(GameObject go)
     {

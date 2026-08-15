@@ -29,8 +29,8 @@ public class MenuBattleDimensionAction : Menu
         input.SubscribeDown(CustomAction.BattleUI_DimensionShortcutPause, HandlePauseShortcut);
 
         BattleEvents.OnBattlePhaseChanged += HandleBattlePhaseChanged;
-        BattleEvents.OnBattlePause += HandleBattlePause;
-        BattleEvents.OnBattleResume += HandleBattleResumed;
+        BattleEvents.OnBattlePaused += HandleBattlePaused;
+        BattleEvents.OnBattleResumed += HandleBattleResumedd;
         UIEvents.OnButtonDimensionActionPressed += HandleButtonDimensionActionPressed;
     }
 
@@ -46,8 +46,8 @@ public class MenuBattleDimensionAction : Menu
         input.UnsubscribeDown(CustomAction.BattleUI_DimensionShortcutPause, HandlePauseShortcut);
 
         BattleEvents.OnBattlePhaseChanged -= HandleBattlePhaseChanged;
-        BattleEvents.OnBattlePause -= HandleBattlePause;
-        BattleEvents.OnBattleResume -= HandleBattleResumed;
+        BattleEvents.OnBattlePaused -= HandleBattlePaused;
+        BattleEvents.OnBattleResumed -= HandleBattleResumedd;
         UIEvents.OnButtonDimensionActionPressed -= HandleButtonDimensionActionPressed;
     }
 
@@ -128,12 +128,12 @@ public class MenuBattleDimensionAction : Menu
         }
     }
 
-    private void HandleBattlePause(TeamSide teamside) 
+    private void HandleBattlePaused(TeamSide teamside) 
     {
         //buttonPause.SetTimeFrozen(true);
     }
 
-    private void HandleBattleResumed() 
+    private void HandleBattleResumedd() 
     {
         buttonPause.StartCooldown();
     }

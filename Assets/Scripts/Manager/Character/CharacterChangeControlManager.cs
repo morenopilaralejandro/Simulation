@@ -46,12 +46,14 @@ public class CharacterChangeControlManager : MonoBehaviour
 
     private void OnEnable()
     {
-        BallEvents.OnGained += HandleOnGained;    
+        BallEvents.OnGained += HandleOnGained;
+        EssenceEvents.OnCharacterUnderwentEssenceOverflow += HandleCharacterUnderwentEssenceOverflow;
     }
 
     private void OnDisable()
     {
         BallEvents.OnGained -= HandleOnGained;
+        EssenceEvents.OnCharacterUnderwentEssenceOverflow -= HandleCharacterUnderwentEssenceOverflow;
     }
 
     void Update() 
@@ -121,6 +123,12 @@ public class CharacterChangeControlManager : MonoBehaviour
     private void HandleOnGained(CharacterEntityBattle character) 
     {
         SetControlledCharacter(character, character.TeamSide);
+    }
+
+    private void HandleCharacterUnderwentEssenceOverflow(CharacterEntityBattle character) 
+    {
+        if (GetUserControlledCharacter() == character)
+            this.controlledCharacter[character.TeamSide] = null;
     }
 
     public CharacterEntityBattle GetUserControlledCharacter() => controlledCharacter[battleManager.GetUserSide()];
@@ -400,4 +408,16 @@ public class CharacterChangeControlManager : MonoBehaviour
         return bestDefender;
     }
 
+    public void TryChangeOnEssence(CharacterEntityBattle faintedCharacter)
+    {
+        if(GetUserControlledCharacter() != null) return;
+        if(!faintedCharacter.IsFainted) return;
+        if(faintedCharacter.IsEnemyAI) return;
+       
+        CharacterEntityBattle target = faintedCharacter.IsKeeper ? GetClosestTeammateToBall(faintedCharacter, false) : GetTeammateForDefense(faintedCharacter);
+
+        if (target == null) return;
+        SetControlledCharacter(target, target.TeamSide);
+        //audioManager.PlaySfx("sfx-ball_change_character");
+    }
 }

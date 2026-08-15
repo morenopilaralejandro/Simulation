@@ -18,15 +18,15 @@ public class DuelShootComboDamageIndicator : MonoBehaviour
     private void OnEnable()
     {
         //DuelEvents.OnDuelStart += HandleDuelStart;
-        DuelEvents.OnDuelEnd += HandleDuelEnd;
-        DuelEvents.OnDuelCancel += HandleDuelCancel;
+        DuelEvents.OnDuelEnded += HandleDuelEnded;
+        DuelEvents.OnDuelCanceled += HandleDuelCanceled;
     }
 
     private void OnDisable()
     {
         //DuelEvents.OnDuelStart -= HandleDuelStart;
-        DuelEvents.OnDuelEnd -= HandleDuelEnd;
-        DuelEvents.OnDuelCancel -= HandleDuelCancel;
+        DuelEvents.OnDuelEnded -= HandleDuelEnded;
+        DuelEvents.OnDuelCanceled -= HandleDuelCanceled;
     }
 
     private void HandleDuelStart(DuelMode duelMode) 
@@ -34,13 +34,13 @@ public class DuelShootComboDamageIndicator : MonoBehaviour
         //if (duelMode == DuelMode.Shoot)
     }
 
-    private void HandleDuelEnd(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser) 
+    private void HandleDuelEnded(DuelMode duelMode, DuelParticipant winner, DuelParticipant loser, bool isWinnerUser) 
     {
         if (duelMode == DuelMode.Shoot)
             SetCanvasState(false);
     }
 
-    private void HandleDuelCancel(DuelMode duelMode) 
+    private void HandleDuelCanceled(DuelMode duelMode) 
     {
         if (duelMode == DuelMode.Shoot)
             SetCanvasState(false);

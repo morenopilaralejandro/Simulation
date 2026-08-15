@@ -14,19 +14,19 @@ public class PausePanel : MonoBehaviour
     {
         SetActive(false);
         BattleUIManager.Instance.RegisterPausePanel(this);
-        BattleEvents.OnBattlePause += HandleBattlePause;
-        BattleEvents.OnBattleResume += HandleBattleResume;
+        BattleEvents.OnBattlePaused += HandleBattlePaused;
+        BattleEvents.OnBattleResumed += HandleBattleResumed;
     }
 
     private void OnDestroy()
     {
         BattleUIManager.Instance.UnregisterPausePanel(this);
-        BattleEvents.OnBattlePause -= HandleBattlePause;
-        BattleEvents.OnBattleResume -= HandleBattleResume;
+        BattleEvents.OnBattlePaused -= HandleBattlePaused;
+        BattleEvents.OnBattleResumed -= HandleBattleResumed;
     }
 
-    private void HandleBattlePause(TeamSide teamSide) => Toggle();
-    private void HandleBattleResume() => Toggle();
+    private void HandleBattlePaused(TeamSide teamSide) => Toggle();
+    private void HandleBattleResumed() => Toggle();
 
     public void Toggle()
     {

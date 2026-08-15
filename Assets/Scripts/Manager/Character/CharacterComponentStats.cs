@@ -93,8 +93,6 @@ public class CharacterComponentStats
 
     public void ModifyBattleStat(Stat stat, int amount)
     {
-        if (stat == Stat.Hp && amount < 0) 
-            amount = GetReducedHpAmount(amount);
         if (stat == Stat.Hp || stat == Stat.Sp)
             battleStats[stat] = Mathf.Clamp(battleStats[stat] + amount, 0, trueStats[stat]);
         else
@@ -149,6 +147,7 @@ public class CharacterComponentStats
         }
     }
 
+    /*
     private int GetReducedHpAmount(int amount)
     {
         //amount is negative
@@ -172,5 +171,6 @@ public class CharacterComponentStats
 
         return (int)damageTaken;
     }
+    */
 
 }

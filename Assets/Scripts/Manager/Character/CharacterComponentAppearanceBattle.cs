@@ -74,7 +74,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
         await LoadHairFrontAsync();
         await LoadHairBackAsync();
-        await LoadKitAsync();
+        //await LoadKitAsync();
 
         if (hasWingActivated)
             await LoadWingAsync();
@@ -97,10 +97,9 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     public async Task LoadKitAsync()
     {
-        kitSpriteLibrary.spriteLibraryAsset = null;
+        UnloadKit();
 
-        SpriteLibraryAsset asset =
-            await _kitBinding.LoadAsync(appearanceComponent.KitAddress);
+        SpriteLibraryAsset asset = await _kitBinding.LoadAsync(appearanceComponent.KitAddress);
 
         if (asset == null)
         {
@@ -111,6 +110,13 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         kitSpriteLibrary.spriteLibraryAsset = asset;
 
         animationControllerComponent.RefreshAnimation();
+    }
+
+    public void UnloadKit()
+    {
+        kitSpriteLibrary.spriteLibraryAsset = null;
+        _kitBinding.Release();
+        _kitBinding.Cancel();
     }
 
     #endregion
@@ -219,9 +225,9 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     public async Task LoadWingAsync()
     {
+        SetWingColor();
         await LoadWingFrontAsync();
         await LoadWingBackAsync();
-        SetWingColor();
     }
 
     public void UnloadWing()
@@ -232,11 +238,11 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         wingFrontLibrary.spriteLibraryAsset = null;
         wingBackLibrary.spriteLibraryAsset = null;
 
-        _hairFrontBinding.Release();
-        _hairBackBinding.Release();
+        _wingFrontBinding.Release();
+        _wingBackBinding.Release();
 
-        _hairFrontBinding.Cancel();
-        _hairBackBinding.Cancel();
+        _wingFrontBinding.Cancel();
+        _wingBackBinding.Cancel();
     }
 
     #endregion

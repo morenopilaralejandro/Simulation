@@ -56,7 +56,7 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
         BallEvents.OnGained -= OnBallGained;
         deadBallManager.StopRoutine(ballReadyRoutine);
 
-        characterKicker = GoalManager.Instance.Keepers[team.TeamSide];
+        characterKicker = deadBallManager.CharacterSelector.GetGoalKickKicker(team);
         /*
         characterSupportOffense = deadBallManager.CharacterSelector.GetClosestSupporters(
             deadBallManager.OffenseTeam,
@@ -229,6 +229,7 @@ public class DeadBallGoalKickHandler : IDeadBallHandler
     private void SetKickerPosition()
     {
         PossessionManager.Instance.Release();
+        characterKicker.Teleport(deadBallManager.PositionConfig.GoalKickKicker[characterKicker.TeamSide]);
         PossessionManager.Instance.GiveBallToCharacter(characterKicker);
         PossessionManager.Instance.SetCooldown(characterKicker);
     }

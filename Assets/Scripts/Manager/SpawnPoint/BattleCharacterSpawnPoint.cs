@@ -22,6 +22,7 @@ public class BattleCharacterSpawnPoint : MonoBehaviour
 
     private void Start() 
     {
+        //BattleEvents.RaiseBattleStartRequested();
         BattleManager.Instance.StartBattle();
     }
 }

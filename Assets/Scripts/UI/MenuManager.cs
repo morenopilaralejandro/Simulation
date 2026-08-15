@@ -17,12 +17,12 @@ public class MenuManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        BattleEvents.OnBattleEnd += CloseAllMenus;
+        BattleEvents.OnBattleEnded += CloseAllMenus;
     }
 
     private void OnDestroy()
     {
-        BattleEvents.OnBattleEnd -= CloseAllMenus;
+        BattleEvents.OnBattleEnded -= CloseAllMenus;
         if (Instance == this) Instance = null;
     }
 

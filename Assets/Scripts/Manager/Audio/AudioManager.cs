@@ -198,17 +198,17 @@ public class AudioManager : MonoBehaviour
     {
         SettingsEvents.OnBgmVolumeChanged += SetBgmVolume;
         SettingsEvents.OnSfxVolumeChanged += SetSfxVolume;
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
     }
 
     private void OnDisable()
     {
         SettingsEvents.OnBgmVolumeChanged -= SetBgmVolume;
         SettingsEvents.OnSfxVolumeChanged -= SetSfxVolume;
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
     }
 
-    private void HandleBattleEnd() 
+    private void HandleBattleEnded() 
     {
         StopSfxLoop();
     }

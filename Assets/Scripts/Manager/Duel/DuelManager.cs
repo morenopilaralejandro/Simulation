@@ -18,9 +18,6 @@ public class DuelManager : MonoBehaviour
     private int maxSupporters = 2;
     private float supporterRadius = 1f;
 
-    private int hpWinner = -20;
-    private int hpLoser = -5;
-
     private bool isShootReversalAllowed = true;
 
     private void Awake()
@@ -34,15 +31,15 @@ public class DuelManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         duel = new Duel();
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
     }
 
     private void OnDestroy()
     {
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
     }
 
-    private void HandleBattleEnd() 
+    private void HandleBattleEnded() 
     {
         if(!duel.IsResolved)
             CancelDuel();
@@ -162,9 +159,9 @@ public class DuelManager : MonoBehaviour
         duel.DefenseSupports.AddRange(defenseSupports);
 
         //UI
-        BattleUIManager.Instance.SetDuelParticipant(offense, offenseSupports);
-        BattleUIManager.Instance.SetDuelParticipant(defense, defenseSupports);
-        BattleUIManager.Instance.ShowDuelParticipantsPanel();
+        UIEvents.RaiseDuelParticipantSetSideRequested(offense, offenseSupports);
+        UIEvents.RaiseDuelParticipantSetSideRequested(defense, defenseSupports);
+        UIEvents.RaiseDuelParticipantShowRequested();
 
         //RegisterTrigger
         DuelManager.Instance.RegisterTrigger(
@@ -205,9 +202,9 @@ public class DuelManager : MonoBehaviour
         BattleEvents.RaiseShootPerformed(character, isDirect);
 
         //UI
-        BattleUIManager.Instance.SetDuelParticipant(character, null);
-        BattleUIManager.Instance.SetDuelParticipant(GoalManager.Instance.GetOpponentKeeper(character), null);
-        BattleUIManager.Instance.ShowDuelParticipantsPanel();
+        UIEvents.RaiseDuelParticipantSetSideRequested(character, null);
+        UIEvents.RaiseDuelParticipantSetSideRequested(GoalManager.Instance.GetOpponentKeeper(character), null);
+        UIEvents.RaiseDuelParticipantShowRequested();
 
         //RegisterTrigger
         DuelManager.Instance.RegisterTrigger(character, isDirect);
@@ -237,7 +234,7 @@ public class DuelManager : MonoBehaviour
         BattleManager.Instance.Ball.PauseTravel();
 
         //UI
-        BattleUIManager.Instance.SetDuelParticipant(character, null);
+        UIEvents.RaiseDuelParticipantSetSideRequested(character, null);
         //AudioManager.Instance.PlaySfx("SfxDuelShoot");
 
         switch (category)
@@ -281,9 +278,9 @@ public class DuelManager : MonoBehaviour
         duel.OffensePressure = participant.Damage;
 
         //UI
-        BattleUIManager.Instance.SetComboDamage(duel.OffensePressure);
-        BattleUIManager.Instance.SetDuelParticipant(participant.CharacterEntityBattle, null);
-        BattleUIManager.Instance.SetDuelParticipant(GoalManager.Instance.GetOpponentKeeper(participant.CharacterEntityBattle), null);
+        UIEvents.RaiseDuelParticipantSetComboDamageRequested(duel.OffensePressure);
+        UIEvents.RaiseDuelParticipantSetSideRequested(participant.CharacterEntityBattle, null);
+        UIEvents.RaiseDuelParticipantSetSideRequested(GoalManager.Instance.GetOpponentKeeper(participant.CharacterEntityBattle), null);
 
         //handle ball
         OffsideManager.Instance.TakeSnapshot(participant.CharacterEntityBattle);
@@ -308,7 +305,7 @@ public class DuelManager : MonoBehaviour
     {
         Reset();
         duel.DuelMode = duelMode;
-        DuelEvents.RaiseDuelStart(duelMode);
+        DuelEvents.RaiseDuelStarted(duelMode);
         BattleManager.Instance.PlayDuelStartEffect(BattleManager.Instance.Ball.transform);
         switch (DuelMode)
         {
@@ -332,9 +329,9 @@ public class DuelManager : MonoBehaviour
     {
         if(duel.IsResolved) return;
         LogManager.Info("[DuelManager] Duel cancelled", this);
-        DuelEvents.RaiseDuelCancel(duel.DuelMode);
+        DuelEvents.RaiseDuelCanceled(duel.DuelMode);
         duel.IsResolved = true;
-        BattleUIManager.Instance.HideDuelParticipantsPanel();
+        UIEvents.RaiseDuelParticipantHideRequested();
         BattleUIManager.Instance.HideDuelMenu();
         if(duelHandler != null) duelHandler.CancelDuel();
     }
@@ -348,10 +345,7 @@ public class DuelManager : MonoBehaviour
             $"TeamSide {winner.CharacterEntityBattle?.TeamSide}, " +
             $"Action {winner.Action}, " +
             $"Category {winner.Category}", this);
-        DuelEvents.RaiseDuelEnd(duel.DuelMode, winner, loser, isWinnerUser);
-
-        winner.CharacterEntityBattle.ModifyBattleStat(Stat.Hp, hpWinner);
-        loser.CharacterEntityBattle.ModifyBattleStat(Stat.Hp, hpLoser);
+        DuelEvents.RaiseDuelEnded(duel.DuelMode, winner, loser, isWinnerUser);
 
         if (isWinnerUser)
             AudioManager.Instance.PlaySfx("sfx-duel_win");
@@ -360,7 +354,7 @@ public class DuelManager : MonoBehaviour
 
         BattleManager.Instance.StopDuelStartEffect();
 
-        BattleUIManager.Instance.HideDuelParticipantsPanel();
+        UIEvents.RaiseDuelParticipantHideRequested();
         duel.IsResolved = true;
     }
     #endregion

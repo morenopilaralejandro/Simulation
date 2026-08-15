@@ -13,10 +13,10 @@ public class DeadBallThrowInHandler : IDeadBallHandler
     private Team team;
     private DeadBallManager deadBallManager;
     private CharacterEntityBattle characterKicker;
+    private CharacterEntityBattle characterPassTargetAi;
     private CharacterEntityBattle[] characterSupportOffense;
     private CharacterEntityBattle[] characterSupportDefense;
     private Vector3 ballPosition;
-    private int defaultRecieverIndex;
 
     private bool isKickExecuted;
     private bool isBallReady;
@@ -67,15 +67,14 @@ public class DeadBallThrowInHandler : IDeadBallHandler
             deadBallManager.DefenseTeam,
             characterKicker);
 
-        defaultRecieverIndex = deadBallManager.CharacterSelector.GetDefaultReceiverIndex(
-            characterSupportOffense, characterKicker);
-
         if (IsThrowInCorner())
             SetPositionsCorner();
         else
             SetPositionsDefault();
 
         SetKickerPosition();
+
+        characterPassTargetAi = deadBallManager.CharacterSelector.GetPassTargetAi(team, characterKicker);
 
         BallEvents.OnGained += OnBallGained;
     }
@@ -132,7 +131,7 @@ public class DeadBallThrowInHandler : IDeadBallHandler
 
         if (!target || characterKicker.IsEnemyAI)
         {
-            target = characterSupportOffense[defaultRecieverIndex];
+            target = characterPassTargetAi;
             characterKicker.KickBallTo(target.transform.position);
             if (!characterKicker.IsEnemyAI)
                 CharacterChangeControlManager.Instance.SetControlledCharacter(target, target.TeamSide);

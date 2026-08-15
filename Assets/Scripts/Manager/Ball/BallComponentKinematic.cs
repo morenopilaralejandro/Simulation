@@ -45,18 +45,18 @@ public class BallComponentKinematic : MonoBehaviour
 
     void OnEnable()
     {
-        BattleEvents.OnBattlePause += HandleBattlePause;
-        BattleEvents.OnBattleResume += HandleBattleResume;
+        BattleEvents.OnBattlePaused += HandleBattlePaused;
+        BattleEvents.OnBattleResumed += HandleBattleResumed;
     }
 
     void OnDisable()
     {
-        BattleEvents.OnBattlePause -= HandleBattlePause;
-        BattleEvents.OnBattleResume -= HandleBattleResume;
+        BattleEvents.OnBattlePaused -= HandleBattlePaused;
+        BattleEvents.OnBattleResumed -= HandleBattleResumed;
     }
 
-    private void HandleBattlePause(TeamSide teamSide) => PausePhysics();
-    private void HandleBattleResume() => ResumePhysics();
+    private void HandleBattlePaused(TeamSide teamSide) => PausePhysics();
+    private void HandleBattleResumed() => ResumePhysics();
 
     public void SetKinematic()
     {

@@ -100,6 +100,12 @@ namespace Aremoreno.Enums.Character
         Tripping
     }
 
+    public enum StatusEffectPermanent
+    {
+        None,
+        Fainted
+    }
+
     public enum CharacterState 
     { 
         Idle,

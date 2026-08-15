@@ -225,6 +225,12 @@ public class CharacterEntityBattle : MonoBehaviour
     public AIDifficulty AIDifficulty => character.AIDifficulty;
     public void ScaleDifficultySystem()  => character.ScaleDifficultySystem();
 
+    //statusEffectsPermanentComponent
+    public StatusEffectPermanent ActiveStatusEffectPermanent => character.ActiveStatusEffectPermanent;
+    public bool IsFainted => character.IsFainted;
+    public void SetStatusPermanent(StatusEffectPermanent effect) => character.SetStatusPermanent(effect);
+    public void ClearStatusPermanent() => character.ClearStatusPermanent();
+
     #endregion
 
     #region API CharacterEntityBattle
@@ -359,14 +365,14 @@ public class CharacterEntityBattle : MonoBehaviour
         StartKick();
     }
     public bool HasBall() => PossessionManager.Instance.CurrentCharacter == this;
-    public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this, Time.time) && !IsStunned();
+    public bool CanGainBall() => BattleManager.Instance.Ball.IsFree() && !PossessionManager.Instance.IsOnCooldown(this, Time.time) && !IsStunned() && !IsFainted;
     public bool CanShoot() => GoalManager.Instance.IsInShootDistance(this) || HasAffordableMoveWithTrait(Trait.Long);
     public bool IsInOwnPenaltyArea() => GoalManager.Instance.IsInOwnPenaltyArea(this);
     public bool HasBallInHandThrowIn;
 
     //misc
-    public bool CanMove() => !IsStunned() && !IsStateLocked && !IsAnimationLocked;
-    public bool CanDuel() => !IsStunned() && !HasBallInHand;
+    public bool CanMove() => !IsStunned() && !IsStateLocked && !IsAnimationLocked && !IsFainted;
+    public bool CanDuel() => !IsStunned() && !HasBallInHand && !IsFainted;
     
     #endregion
 

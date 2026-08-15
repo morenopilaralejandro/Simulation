@@ -19,7 +19,6 @@ public class BattleUIManager : MonoBehaviour
     private BattleTimer battleTimer;
     private BattleMessage battleMessage;
     private PausePanel pausePanel;
-    private DuelParticantsPanel duelParticantsPanel;
     private DuelMenu duelMenu;
     private DuelLogMenu duelLogMenu;
     private MenuBattleActions battleMenu;
@@ -77,16 +76,6 @@ public class BattleUIManager : MonoBehaviour
     public void UnregisterPausePanel(PausePanel panel)
     {
         pausePanel = null;
-    }
-
-    public void RegisterDuelParticipantsPanel(DuelParticantsPanel panel)
-    {
-        duelParticantsPanel = panel;
-    }
-
-    public void UnregisterDuelParticipantsPanel(DuelParticantsPanel panel)
-    {
-        duelParticantsPanel = null;
     }
 
     public void RegisterDuelMenu(DuelMenu duelMenu)
@@ -189,36 +178,6 @@ public class BattleUIManager : MonoBehaviour
 
     #region Pause
     public void TogglePausePanel() => pausePanel.Toggle();
-    #endregion
-
-    #region Duel Participants
-    public void SetDuelParticipant(CharacterEntityBattle character, List<CharacterEntityBattle> supports)
-    {
-        if (duelParticantsPanel != null) 
-            duelParticantsPanel.SetSide(character, supports);
-    }
-
-    public void SetDuelCategory(Category category)
-    {
-        if (duelParticantsPanel != null) 
-            duelParticantsPanel.SetCategory(category);
-    }
-
-    public void ShowDuelParticipantsPanel()
-    {
-        if (duelParticantsPanel != null) 
-            duelParticantsPanel.Show();
-    }
-
-    public void HideDuelParticipantsPanel()
-    {
-        if (duelParticantsPanel != null) 
-            duelParticantsPanel.Hide();
-    }
-
-    public void SetComboDamage(float damage) => duelParticantsPanel.SetComboDamage(damage);
-    public void SetFieldDamage(CharacterEntityBattle character, float damage, DuelAction action) => duelParticantsPanel.SetFieldDamage(character, damage, action);
-
     #endregion
 
     #region DuelMenu

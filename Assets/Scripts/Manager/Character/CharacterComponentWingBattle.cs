@@ -38,6 +38,7 @@ public class CharacterComponentWingBattle : MonoBehaviour
         character.SetWingActive(true);
         SetPendingWingActivation(false);
         DuelLogManager.Instance.AddActionWingActivate(character.Character, character.TeamSide, character.Wing);
+        character.CalculateSpeed();
         //WingEvents.RaiseWingActivated(character, character.Wing); -> called on DuelManager TryPlayWingCutscene
     }
 
@@ -46,6 +47,7 @@ public class CharacterComponentWingBattle : MonoBehaviour
         if (!character.HasWingActivated) return;
         character.SetWingActive(false);
         DuelLogManager.Instance.AddActionWingDeactivate(character.Character, character.TeamSide, character.Wing);
+        character.CalculateSpeed();
     }
 
     public void TryDeactivateWings()

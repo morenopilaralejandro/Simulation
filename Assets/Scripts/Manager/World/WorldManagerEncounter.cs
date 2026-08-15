@@ -39,17 +39,17 @@ public class WorldManagerEncounter
     {
         WorldEvents.OnEncounterTriggered += HandleEncounterTriggered;
         WorldEvents.OnZoneChanged += HandleZoneChanged;
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
     }
 
     public void Unsubscribe()
     {
         WorldEvents.OnEncounterTriggered -= HandleEncounterTriggered;
         WorldEvents.OnZoneChanged -= HandleZoneChanged;
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
     }
 
-    private void HandleBattleEnd() 
+    private void HandleBattleEnded() 
     {
         //Resume overworld
         //playerWorldEntity.SetState(PlayerWorldState.FreeRoam);

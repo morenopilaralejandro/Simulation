@@ -469,7 +469,9 @@ public class TeamManagerLoadout
             entity.Initialize(null, character);
             LoadEntityAppearanceAsync(entity);
 
-            entity.CalculateSpeed();
+            entity.gameObject.SetActive(!entity.IsFainted);
+            entity.HideSpeechBubble();
+            entity.UpdateFatigue();
             entity.gameObject.name = entity.CharacterId;
             loadout.SetCharacterEntity(battleType, slotIndex, entity);
             TeamEvents.RaiseAssignCharacterToTeamBattle(entity, loadout, coord);
@@ -496,6 +498,8 @@ public class TeamManagerLoadout
             Debug.LogError($"[TeamManagerLoadout] Failed to load appearance for {entity.CharacterId}: {e}");
         }
     }
+
+
     #endregion
 }
 

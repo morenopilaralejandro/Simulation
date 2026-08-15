@@ -46,7 +46,7 @@ public class DebugBattleUI : MonoBehaviour
     private void ExitBattle() 
     {
         BattleManager.Instance.SetBattlePhase(BattlePhase.End);
-        BattleEvents.RaiseBattleEnd();
+        BattleEvents.RaiseBattleEnded();
         SceneLoader.Instance.LoadGroup(debugMainMenu);
     }
 

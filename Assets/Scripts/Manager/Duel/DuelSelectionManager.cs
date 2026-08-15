@@ -90,7 +90,7 @@ public class DuelSelectionManager : MonoBehaviour
         CharacterEntityBattle character = selection.CharacterEntityBattle;
 
         if (duelMode == DuelMode.Shoot)
-            BattleUIManager.Instance.SetDuelCategory(selection.Category);
+            UIEvents.RaiseDuelParticipantSetCategoryRequested(selection.Category);
 
         Trait? requiredTrait = DuelManager.Instance.GetRequiredTraitByCategory(selection.Category);
         DuelCommand command;

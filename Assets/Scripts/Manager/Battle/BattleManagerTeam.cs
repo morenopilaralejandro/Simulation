@@ -99,15 +99,15 @@ public class BattleManagerTeam
 
     public void Subscribe() 
     { 
-        BattleEvents.OnBattleEnd += HandleBattleEnd;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
     }
 
     public void Unsubscribe() 
     { 
-        BattleEvents.OnBattleEnd -= HandleBattleEnd;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
     }
 
-    private void HandleBattleEnd()
+    private void HandleBattleEnded()
     {
         teams[TeamSide.Home].ResetSideAndVariant();
         teams[TeamSide.Away].ResetSideAndVariant();

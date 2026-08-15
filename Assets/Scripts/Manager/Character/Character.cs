@@ -23,6 +23,7 @@ public class Character
     private CharacterComponentWing wingComponent;
     private CharacterComponentAIDifficulty aiDifficultyComponent;
     private CharacterComponentEquipment equipmentComponent;
+    private CharacterComponentStatusEffectsPermanent statusEffectsPermanentComponent;
 
     #endregion
 
@@ -51,6 +52,7 @@ public class Character
         wingComponent = new CharacterComponentWing(characterData, this, characterSaveData);
         aiDifficultyComponent = new CharacterComponentAIDifficulty(characterData, this, characterSaveData);
         equipmentComponent = new CharacterComponentEquipment(characterData, this, characterSaveData);
+        statusEffectsPermanentComponent = new CharacterComponentStatusEffectsPermanent(characterData, this, characterSaveData);
     }
 
     #endregion
@@ -201,6 +203,12 @@ public class Character
     public void UnequipEquipment(ItemEquipment itemEquipment) => equipmentComponent.UnequipEquipment(itemEquipment);
     public ItemEquipment GetEquipment(int slot) => equipmentComponent.GetEquipment(slot);
     public int GetEquipmentStat(Stat stat) => equipmentComponent.GetEquipmentStat(stat);
+
+    //statusEffectsPermanentComponent
+    public StatusEffectPermanent ActiveStatusEffectPermanent => statusEffectsPermanentComponent.ActiveStatusEffectPermanent;
+    public bool IsFainted => statusEffectsPermanentComponent.IsFainted;
+    public void SetStatusPermanent(StatusEffectPermanent effect) => statusEffectsPermanentComponent.SetStatusPermanent(effect);
+    public void ClearStatusPermanent() => statusEffectsPermanentComponent.ClearStatusPermanent();
 
     #endregion
 }

@@ -181,21 +181,175 @@ public class SubstitutionManager : MonoBehaviour
 
     #endregion
 
+    #region EnemyAiSubstitution
+
+    public void TryEnemyAiSubstitution()
+    {
+        // Mini battles do not support substitutions.
+        if (battleType == BattleType.Mini)
+            return;
+
+        const TeamSide enemySide = TeamSide.Away;
+
+        // No substitutions remaining.
+        if (!CanSubstitute(enemySide))
+            return;
+
+        Team enemyTeam = BattleManager.Instance.Teams[enemySide];
+
+        if (enemyTeam == null)
+            return;
+
+        List<CharacterEntityBattle> entities =
+            enemyTeam.GetCharacterEntities(battleType);
+
+        List<Character> characters =
+            enemyTeam.GetCharacters(battleType);
+
+        if (entities == null || characters == null)
+            return;
+
+        if (entities.Count == 0 || characters.Count <= 11)
+            return;
+
+        // =========================================================
+        // ACTIVE PLAYERS
+        // =========================================================
+        //
+        // CharacterEntityBattle only contains the active players:
+        // slots 0-10.
+        //
+        // Slot 0 is the goalkeeper, but there is no special logic
+        // required. A goalkeeper is simply another fainted player
+        // whose Position is GK.
+        //
+        for (int fieldIndex = 0;
+             fieldIndex <= 10 && fieldIndex < entities.Count;
+             fieldIndex++)
+        {
+            if (!CanSubstitute(enemySide))
+                break;
+
+            CharacterEntityBattle fieldEntity = entities[fieldIndex];
+
+            if (fieldEntity == null || fieldEntity.Character == null)
+                continue;
+
+            // Only replace fainted characters.
+            if (!fieldEntity.IsFainted)
+                continue;
+
+            Position requiredPosition = fieldEntity.Position;
+
+            Character replacement = null;
+            int replacementIndex = -1;
+
+
+            // =====================================================
+            // FIND REPLACEMENT ON BENCH
+            // =====================================================
+            //
+            // The full character list contains slots 0-15.
+            // Bench slots are 11-15.
+            //
+            for (int benchIndex = 11;
+                 benchIndex <= 15 && benchIndex < characters.Count;
+                 benchIndex++)
+            {
+                Character candidate = characters[benchIndex];
+
+                // Bench slot is empty.
+                if (candidate == null)
+                    continue;
+
+                // Candidate must not be fainted.
+                if (candidate.IsFainted)
+                    continue;
+
+                // Candidate must have the same position.
+                if (candidate.Position != requiredPosition)
+                    continue;
+
+                replacement = candidate;
+                replacementIndex = benchIndex;
+
+                break;
+            }
+
+
+            // No suitable replacement.
+            if (replacement == null)
+                continue;
+
+
+            // =====================================================
+            // PERFORM SUBSTITUTION
+            // =====================================================
+
+            SwapEnemyCharacters(
+                enemyTeam,
+                fieldIndex,
+                fieldEntity,
+                replacementIndex,
+                replacement);
+        }
+    }
+
+
+    private void SwapEnemyCharacters(
+        Team enemyTeam,
+        int fieldIndex,
+        CharacterEntityBattle fieldEntity,
+        int benchIndex,
+        Character benchCharacter)
+    {
+        if (!CanSubstitute(enemyTeam.TeamSide))
+            return;
+
+        if (fieldEntity == null || benchCharacter == null)
+            return;
+
+        if (fieldEntity.Character == null)
+            return;
+
+        string guidA = fieldEntity.CharacterGuid;
+        string guidB = benchCharacter.CharacterGuid;
+
+        TeamManager.Instance.SwapCharactersInBattle(
+            enemyTeam,
+            battleType,
+            fieldIndex,
+            fieldEntity.FormationCoord,
+            guidA,
+            benchIndex,
+            fieldEntity.FormationCoord, //not used when A is field and b is bench
+            guidB);
+
+        TryUseSubstitution(enemyTeam.TeamSide);
+
+        LogManager.Trace(
+            $"[SubstitutionManager] Enemy substitution: " +
+            $"{fieldEntity.CharacterId} -> " +
+            $"{benchCharacter.CharacterId}");
+    }
+
+    #endregion
+
     #region Events
 
     private void OnEnable()
     {
-        BattleEvents.OnBattleStart += HandleBattleStart;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
         TeamEvents.OnCharacterSubstituted += HandleCharacterSubstituted;
     }
 
     private void OnDisable()
     {
-        BattleEvents.OnBattleStart -= HandleBattleStart;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
         TeamEvents.OnCharacterSubstituted -= HandleCharacterSubstituted;
     }
 
-    private void HandleBattleStart(BattleType battleType) 
+    private void HandleBattleStarted(BattleType battleType) 
     {
         InitializeForBattle(battleType);
     }
