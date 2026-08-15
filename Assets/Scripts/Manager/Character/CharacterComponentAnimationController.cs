@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using Aremoreno.Enums.Animation;
+using Aremoreno.Enums.Battle;
 
 [RequireComponent(typeof(Animator))]
 public class CharacterComponentAnimationController : MonoBehaviour
@@ -49,12 +51,16 @@ public class CharacterComponentAnimationController : MonoBehaviour
     [SerializeField] private SpriteResolverFrameDriver wingsFrontDriver;
     [SerializeField] private SpriteResolverFrameDriver wingsBackDriver;
 
+    private bool isSelectionPhase;
+
     #endregion
 
     #region Runtime
 
     private CharacterAnimationState currentState = CharacterAnimationState.Idle;
     private CharacterDirection currentDirection = CharacterDirection.Down;
+
+    private Coroutine selectionPhaseCoroutine;
 
     #endregion
 
@@ -72,8 +78,10 @@ public class CharacterComponentAnimationController : MonoBehaviour
         wingsBackDriver = transform.Find("WingsBack")?.GetComponent<SpriteResolverFrameDriver>();
     }
 
-    public void OnLateUpdate() 
+    public void OnLateUpdate()
     {
+        if (isSelectionPhase) return;
+
         bodyDriver.OnLateUpdate();
         kitDriver.OnLateUpdate();
         hairFrontDriver.OnLateUpdate();
@@ -101,7 +109,7 @@ public class CharacterComponentAnimationController : MonoBehaviour
         animator.SetInteger(DirectionHash, (int)direction);
     }
 
-    public void RefreshAnimation() 
+    public void RefreshAnimation()
     {
         ConfigureResolvers(currentState, currentDirection);
 
@@ -126,6 +134,58 @@ public class CharacterComponentAnimationController : MonoBehaviour
         hairBackDriver.Configure(animName, dirName);
         wingsFrontDriver.Configure(animName, dirName);
         wingsBackDriver.Configure(animName, dirName);
+    }
+
+    #endregion
+
+    #region Events
+
+    private void OnEnable()
+    {
+        BattleEvents.OnBattlePhaseChanged += HandleBattlePhaseChanged;
+    }
+
+    private void OnDisable()
+    {
+        BattleEvents.OnBattlePhaseChanged -= HandleBattlePhaseChanged;
+
+        CancelSelectionPhaseCoroutine();
+    }
+
+    private void HandleBattlePhaseChanged(
+        BattlePhase newPhase,
+        BattlePhase oldPhase)
+    {
+        CancelSelectionPhaseCoroutine();
+
+        if (newPhase != BattlePhase.Selection)
+        {
+            isSelectionPhase = false;
+            return;
+        }
+
+        selectionPhaseCoroutine = StartCoroutine(
+            SetSelectionPhaseAfterDelay());
+    }
+
+    #endregion
+
+    #region Selection Phase
+
+    private IEnumerator SetSelectionPhaseAfterDelay()
+    {
+        yield return new WaitForSeconds(0.45f);
+
+        isSelectionPhase = true;
+        selectionPhaseCoroutine = null;
+    }
+
+    private void CancelSelectionPhaseCoroutine()
+    {
+        if (selectionPhaseCoroutine == null) return;
+
+        StopCoroutine(selectionPhaseCoroutine);
+        selectionPhaseCoroutine = null;
     }
 
     #endregion

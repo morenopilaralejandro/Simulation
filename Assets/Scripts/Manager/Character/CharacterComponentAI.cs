@@ -690,11 +690,20 @@ public class CharacterComponentAI : MonoBehaviour
 
     private void StopAndResetRotation()
     {
+        Stop();
+        ResetRotation();
+    }
+
+    private void Stop()
+    {
         Vector3 v = rb.velocity;
         v.x = 0f;
         v.z = 0f;
         rb.velocity = v;
+    }
 
+    private void ResetRotation()
+    {
         Quaternion defaultRot = character.FormationCoord.DefaultRotation;
         modelTf.rotation = Quaternion.Slerp(
             modelTf.rotation,
@@ -929,8 +938,15 @@ public class CharacterComponentAI : MonoBehaviour
 
         if (dir.sqrMagnitude < MIN_TARGET_DIST_SQR)
         {
-            StopAndResetRotation();
-            character.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
+            bool isPrimaryDefender = CharacterChangeControlManager.Instance.GetPrimaryDefenderAI(character) == character;
+            if (isPrimaryDefender) {
+                Stop();
+                character.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
+            } else 
+            {
+                StopAndResetRotation();
+                character.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
+            }
             return;
         } else 
         {
