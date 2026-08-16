@@ -470,6 +470,9 @@ public class TeamManagerLoadout
             LoadEntityAppearanceAsync(entity);
 
             entity.gameObject.SetActive(!entity.IsFainted);
+
+            entity.RefreshAnimation();
+
             entity.HideSpeechBubble();
             entity.UpdateFatigue();
             entity.gameObject.name = entity.CharacterId;
