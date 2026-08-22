@@ -122,7 +122,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &25131558
+--- !u!1 &51388056
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,43 +130,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 25131559}
-  - component: {fileID: 25131560}
+  - component: {fileID: 51388057}
+  - component: {fileID: 51388058}
   m_Layer: 0
-  m_Name: SpawnHospitalStart
+  m_Name: SpawnCheckpointPray
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &25131559
+--- !u!4 &51388057
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 25131558}
+  m_GameObject: {fileID: 51388056}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.5, y: 20.5, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 21.5, y: 23.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 979115469}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &25131560
+--- !u!114 &51388058
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 25131558}
+  m_GameObject: {fileID: 51388056}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 706323a7aa440d4188643a6b1dbca04e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnId: spawn_hospital_checkpoint
+  spawnId: spawn_saint_justice_checkpoint_pray
   spawnType: 5
   facingDirection: 0
   connectedZone: {fileID: 0}
@@ -222,7 +222,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoneId: zone_interior_saint_justice_church
-  _spawnPoints: []
+  _spawnPoints:
+  - {fileID: 51388058}
+  - {fileID: 1284585367}
+  - {fileID: 2130265896}
   gizmoColor: {r: 0, g: 1, b: 0, a: 0.5}
   showGizmo: 1
 --- !u!1 &343052783
@@ -254,7 +257,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 496984875}
+  - {fileID: 1497760873}
+  - {fileID: 438156001}
   m_Father: {fileID: 151386082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &349556043
@@ -288,7 +292,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 151386082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &401685959
+--- !u!1 &438156000
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -296,103 +300,53 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 401685960}
-  - component: {fileID: 401685961}
+  - component: {fileID: 438156001}
+  - component: {fileID: 438156003}
+  - component: {fileID: 438156002}
   m_Layer: 0
-  m_Name: SwawnHospitalEntry
+  m_Name: TransitionsExit2Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &401685960
+--- !u!4 &438156001
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401685959}
+  m_GameObject: {fileID: 438156000}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.5, y: 13.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 979115469}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &401685961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401685959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 706323a7aa440d4188643a6b1dbca04e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnId: spawn_hospital_entry
-  spawnType: 1
-  facingDirection: 1
-  connectedZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
-  connectedSpawnId: spawn_park_hospital_entry
-  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
---- !u!1 &496984874
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 496984875}
-  - component: {fileID: 496984877}
-  - component: {fileID: 496984876}
-  m_Layer: 0
-  m_Name: TransitionHospitalExit
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &496984875
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 496984874}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25, y: 12.5, z: 0}
+  m_LocalPosition: {x: 26.5, y: 11.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 343052784}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &496984876
+--- !u!114 &438156002
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 496984874}
+  m_GameObject: {fileID: 438156000}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fb23d605e8abd93a93641d447479478, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
-  targetSpawnId: spawn_hospital_exit
+  targetZone: {fileID: 11400000, guid: 414f8d6ab03738a4fa11f9597be9ba38, type: 2}
+  targetSpawnId: spawn_saint_justice_exit_2_down
   requireInteraction: 0
---- !u!61 &496984877
+--- !u!61 &438156003
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 496984874}
+  m_GameObject: {fileID: 438156000}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -429,7 +383,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 1}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!1 &838009655
 GameObject:
@@ -459,9 +413,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1488103938}
-  - {fileID: 1022461378}
+  m_Children: []
   m_Father: {fileID: 151386082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &979115468
@@ -493,155 +445,209 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 25131559}
-  - {fileID: 401685960}
+  - {fileID: 51388057}
+  - {fileID: 1284585366}
+  - {fileID: 2130265897}
   m_Father: {fileID: 151386082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1022461377
-PrefabInstance:
+--- !u!1 &1284585365
+GameObject:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 838009656}
-    m_Modifications:
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 20.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 26.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2884173563104067641, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_Name
-      value: InteractablePropSkeleton
-      objectReference: {fileID: 0}
-    - target: {fileID: 5548074243454334386, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: _dialogKnotName
-      value: inknpc_test
-      objectReference: {fileID: 0}
-    - target: {fileID: 6241988800544518128, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: _dialogKnotName
-      value: inknpc_test
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
---- !u!4 &1022461378 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-  m_PrefabInstance: {fileID: 1022461377}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1284585366}
+  - component: {fileID: 1284585367}
+  m_Layer: 0
+  m_Name: SpawnEntry2Up
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1284585366
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284585365}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 25.5, y: 12.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 979115469}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1284585367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284585365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706323a7aa440d4188643a6b1dbca04e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnId: spawn_saint_justice_entry_2_up
+  spawnType: 1
+  facingDirection: 2
+  connectedZone: {fileID: 11400000, guid: 414f8d6ab03738a4fa11f9597be9ba38, type: 2}
+  connectedSpawnId: spawn_saint_justice_exit_2_up
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!4 &1393028676 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3909359343925121948, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
   m_PrefabInstance: {fileID: 6657688061102099301}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1488103937
-PrefabInstance:
+--- !u!1 &1497760872
+GameObject:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 838009656}
-    m_Modifications:
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 19.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 24.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2884173563104067641, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: m_Name
-      value: InteractablePropNode
-      objectReference: {fileID: 0}
-    - target: {fileID: 5548074243454334386, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: _dialogKnotName
-      value: inknpc_test
-      objectReference: {fileID: 0}
-    - target: {fileID: 6241988800544518128, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-      propertyPath: _dialogKnotName
-      value: inknpc_test
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
---- !u!4 &1488103938 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 477339710962885567, guid: 2a9d9b2bdd502d4aa92b3f271c912147, type: 3}
-  m_PrefabInstance: {fileID: 1488103937}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1497760873}
+  - component: {fileID: 1497760875}
+  - component: {fileID: 1497760874}
+  m_Layer: 0
+  m_Name: TransitionsExit2Up
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1497760873
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497760872}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 26.5, y: 12.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 343052784}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1497760874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497760872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fb23d605e8abd93a93641d447479478, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetZone: {fileID: 11400000, guid: 414f8d6ab03738a4fa11f9597be9ba38, type: 2}
+  targetSpawnId: spawn_saint_justice_exit_2_up
+  requireInteraction: 0
+--- !u!61 &1497760875
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497760872}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
+--- !u!1 &2130265895
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2130265897}
+  - component: {fileID: 2130265896}
+  m_Layer: 0
+  m_Name: SpawnEntry2Down
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2130265896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130265895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 706323a7aa440d4188643a6b1dbca04e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnId: spawn_saint_justice_entry_2_down
+  spawnType: 1
+  facingDirection: 2
+  connectedZone: {fileID: 11400000, guid: 414f8d6ab03738a4fa11f9597be9ba38, type: 2}
+  connectedSpawnId: spawn_saint_justice_exit_2_down
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
+--- !u!4 &2130265897
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130265895}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 25.5, y: 11.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 979115469}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6657688061102099301
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -40,7 +40,11 @@ MonoBehaviour:
     parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
     chunkCoord: {x: 0, y: 1}
     sceneAddress: zone_overworld_street_brown_chunk_0_1
-    containedSpawnIds: []
+    containedSpawnIds:
+    - spawn_saint_justice_entry_0_left
+    - spawn_saint_justice_entry_0_right
+    - spawn_saint_justice_entry_1_left
+    - spawn_saint_justice_entry_1_right
   - chunkId: zone_overworld_street_brown_chunk_1_-1
     parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
     chunkCoord: {x: 1, y: -1}
@@ -60,7 +64,9 @@ MonoBehaviour:
     parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
     chunkCoord: {x: -1, y: 2}
     sceneAddress: zone_overworld_street_brown_chunk_-1_2
-    containedSpawnIds: []
+    containedSpawnIds:
+    - spawn_final_0_l_b
+    - spawn_final_0_r_b
   - chunkId: zone_overworld_street_brown_chunk_-2_0
     parentZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
     chunkCoord: {x: -2, y: 0}
@@ -75,7 +81,8 @@ MonoBehaviour:
     parentZone: {fileID: 11400000, guid: 9ab28db5360670a65b27185ad4ef259d, type: 2}
     chunkCoord: {x: -3, y: 1}
     sceneAddress: zone_overworld_park_chunk_-3_1
-    containedSpawnIds: []
+    containedSpawnIds:
+    - spawn_club_ufo_entry
   - chunkId: zone_overworld_park_chunk_-3_-1
     parentZone: {fileID: 11400000, guid: 9ab28db5360670a65b27185ad4ef259d, type: 2}
     chunkCoord: {x: -3, y: -1}
@@ -216,7 +223,8 @@ MonoBehaviour:
     parentZone: {fileID: 11400000, guid: 3e7f25f42df90d95da9722f59df5f469, type: 2}
     chunkCoord: {x: 4, y: 7}
     sceneAddress: zone_overworld_island_chunk_4_7
-    containedSpawnIds: []
+    containedSpawnIds:
+    - spawn_island_house_a_entry
   - chunkId: zone_overworld_island_chunk_4_8
     parentZone: {fileID: 11400000, guid: 3e7f25f42df90d95da9722f59df5f469, type: 2}
     chunkCoord: {x: 4, y: 8}
@@ -247,7 +255,8 @@ MonoBehaviour:
     parentZone: {fileID: 11400000, guid: 3e7f25f42df90d95da9722f59df5f469, type: 2}
     chunkCoord: {x: 5, y: 8}
     sceneAddress: zone_overworld_island_chunk_5_8
-    containedSpawnIds: []
+    containedSpawnIds:
+    - spawn_island_house_b_entry
   - chunkId: zone_overworld_park_chunk_-2_-1
     parentZone: {fileID: 11400000, guid: 9ab28db5360670a65b27185ad4ef259d, type: 2}
     chunkCoord: {x: -2, y: -1}
