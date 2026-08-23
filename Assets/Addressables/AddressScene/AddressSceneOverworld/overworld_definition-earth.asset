@@ -143,7 +143,10 @@ MonoBehaviour:
     parentZone: {fileID: 11400000, guid: bd0b19cef0397a8fe9157efdc8cc83e4, type: 2}
     chunkCoord: {x: -7, y: 2}
     sceneAddress: zone_overworld_sidewalk_chunk_-7_2
-    containedSpawnIds: []
+    containedSpawnIds:
+    - spawn_train_0_l_b
+    - spawn_train_0_n_b
+    - spawn_train_0_r_b
   - chunkId: zone_overworld_street_liner_chunk_1_1
     parentZone: {fileID: 11400000, guid: e5076e5c5a77b74abb1b8c736b7c82a4, type: 2}
     chunkCoord: {x: 1, y: 1}
@@ -178,7 +181,10 @@ MonoBehaviour:
     parentZone: {fileID: 11400000, guid: e5076e5c5a77b74abb1b8c736b7c82a4, type: 2}
     chunkCoord: {x: 4, y: 1}
     sceneAddress: zone_overworld_street_liner_chunk_4_1
-    containedSpawnIds: []
+    containedSpawnIds:
+    - spawn_power_plant_0_l_b
+    - spawn_power_plant_0_n_b
+    - spawn_power_plant_0_r_b
   - chunkId: zone_overworld_dream_space_chunk_2_3
     parentZone: {fileID: 11400000, guid: 7d8210080aea884fda4ca766939f797a, type: 2}
     chunkCoord: {x: 2, y: 3}
@@ -411,7 +417,9 @@ MonoBehaviour:
     parentZone: {fileID: 11400000, guid: e5076e5c5a77b74abb1b8c736b7c82a4, type: 2}
     chunkCoord: {x: 5, y: 0}
     sceneAddress: zone_overworld_street_liner_chunk_5_0
-    containedSpawnIds: []
+    containedSpawnIds:
+    - spawn_mercapingo_b_0_l_b
+    - spawn_mercapingo_b_0_r_b
   - chunkId: zone_overworld_street_liner_chunk_3_1
     parentZone: {fileID: 11400000, guid: e5076e5c5a77b74abb1b8c736b7c82a4, type: 2}
     chunkCoord: {x: 3, y: 1}
@@ -645,6 +653,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bd0b19cef0397a8fe9157efdc8cc83e4, type: 2}
   - {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
   - {fileID: 11400000, guid: e5076e5c5a77b74abb1b8c736b7c82a4, type: 2}
+  - {fileID: 11400000, guid: 30df141016ce1d3cca0191c9a3d5bb27, type: 2}
   startingZone: {fileID: 11400000, guid: d294154c7772a28708224aa34c9533b9, type: 2}
   startingSpawnId: spawn_hospital_checkpoint
   chunkLoadRadius: 1
