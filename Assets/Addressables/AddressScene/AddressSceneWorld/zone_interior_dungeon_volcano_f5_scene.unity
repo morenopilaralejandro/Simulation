@@ -505,7 +505,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1839985282}
+  - {fileID: 1024209763}
+  - {fileID: 1323232887}
   m_Father: {fileID: 151386082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &979115468
@@ -541,10 +544,220 @@ Transform:
   - {fileID: 1943757697}
   m_Father: {fileID: 151386082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1024209762
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 838009656}
+    m_Modifications:
+    - target: {fileID: 2992403538696008100, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: chestId
+      value: chest_volcano_f5_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992403538696008100, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 2e6192dfb05b53681b500875bd51a130, type: 2}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 43.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 43.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3511325258102028708, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_Name
+      value: ChestEntity (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+--- !u!4 &1024209763 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+  m_PrefabInstance: {fileID: 1024209762}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1323232886
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 838009656}
+    m_Modifications:
+    - target: {fileID: 2992403538696008100, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: chestId
+      value: chest_volcano_f5_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992403538696008100, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: c6c26d653a39b22a6acaa8a8aac7fefb, type: 2}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 43.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3511325258102028708, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_Name
+      value: ChestEntity (2)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+--- !u!4 &1323232887 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+  m_PrefabInstance: {fileID: 1323232886}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1393028676 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3909359343925121948, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
   m_PrefabInstance: {fileID: 6657688061102099301}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1839985281
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 838009656}
+    m_Modifications:
+    - target: {fileID: 2992403538696008100, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: chestId
+      value: chest_volcano_f5_0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2992403538696008100, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e61d346a8a03da418b701efcc2e2582, type: 2}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 25.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 17.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3511325258102028708, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+      propertyPath: m_Name
+      value: ChestEntity
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+--- !u!4 &1839985282 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3085562737896802829, guid: 19f6b952654f69c0fbc9b17d0b8cee18, type: 3}
+  m_PrefabInstance: {fileID: 1839985281}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1943757696
 GameObject:

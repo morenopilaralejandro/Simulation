@@ -102,6 +102,7 @@ public class ChestEntity : MonoBehaviour
     {
         if (IsPersistent) OpenPersistent();
         SetState(ChestState.Opened);
+        ItemManager.Instance.AddItem(ItemFactory.Create(ItemData));
     }
 
     #endregion
