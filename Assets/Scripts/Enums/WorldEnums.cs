@@ -52,6 +52,13 @@ namespace Aremoreno.Enums.World
         Opened
     }
 
+    public enum DoorState
+    {
+        Closed,
+        Locked,
+        Opened
+    }
+
     public enum NpcType
     {
         Character,

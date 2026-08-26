@@ -75,7 +75,12 @@ public class PersistenceManagerSave
         WingManager.Instance.FirstTimeInitialize();
         StorySystemManager.Instance.SetChapter(0);
         StorySystemManager.Instance.InitializeMatchChainSystem();
-        StorySystemManager.Instance.InitializeFlagSystem();
+        StorySystemManager.Instance.InitializeFlagSystem(); 
+        //variables
+        //event
+        //trigger
+        //matchChain
+        // put all of this in StorySystemManager
         WorldArgs.Hour = 12;
     }
 
