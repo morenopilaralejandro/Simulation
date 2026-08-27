@@ -12,6 +12,7 @@ public class NpcEntityCharacter : NpcEntity
     [SerializeField] private KitData kitData;
     [SerializeField] private Variant variant;
     [SerializeField] private Role role;
+    [SerializeField] private CharacterDirection defaultFacingDirection = CharacterDirection.Down;
 
     private CharacterComponentAppearance appearanceComponent;
 
@@ -43,6 +44,8 @@ public class NpcEntityCharacter : NpcEntity
         _ = appearanceComponentBattle.LoadKitAsync();
 
         interactableDialogComponent?.Initialize(this);
+
+        Play(CharacterAnimationState.Idle, defaultFacingDirection);
     }
 
     #endregion

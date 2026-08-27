@@ -29,3 +29,15 @@ INCLUDE inknpcs/inknpc_test_choice_yesno.ink
 INCLUDE inkchests/chest_open.ink
 INCLUDE inkchests/chest_empty.ink
 INCLUDE inkchests/chest_locked.ink
+
+INCLUDE inknpcs/inknpc_shop_elena.ink
+INCLUDE inknpcs/inknpc_shop_alejandra.ink
+INCLUDE inknpcs/inknpc_shop_quevedo.ink
+INCLUDE inknpcs/inknpc_shop_pichi.ink
+INCLUDE inknpcs/inknpc_shop_lidia.ink
+INCLUDE inknpcs/inknpc_shop_bea.ink
+INCLUDE inknpcs/inknpc_shop_pio.ink
+INCLUDE inknpcs/inknpc_shop_alma.ink
+INCLUDE inknpcs/inknpc_shop_macarena.ink
+INCLUDE inknpcs/inknpc_shop_tieman.ink
+INCLUDE inknpcs/inknpc_walkway_girl.ink

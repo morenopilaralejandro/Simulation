@@ -360,6 +360,8 @@ public class BattleManager : MonoBehaviour
     {   
         if (currentPhase == BattlePhase.End) return;        
 
+        DuelManager.Instance.CancelDuel();
+
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnded();
 
