@@ -149,6 +149,28 @@ public class CharacterManagerStorage
 
     #endregion
 
+    #region Full Heal
+
+    public void FullHealAll(IEnumerable<Character> characters)
+    {
+        foreach (Character character in characters)
+        {
+            character.ClearStatusPermanent();
+            character.RestoreHpSp();
+        }
+    }
+
+    public void FullHealAll() 
+    {
+        foreach (Character character in characters.Values)
+        {
+            character.ClearStatusPermanent();
+            character.RestoreHpSp();
+        }
+    }
+
+    #endregion
+
     #region Persistence
     
     public CharacterStorageSaveData Export()

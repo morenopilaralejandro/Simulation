@@ -322,6 +322,16 @@ public class DialogUIController : MonoBehaviour
             DialogEvents.RaiseContinueRequested();
     }
 
+    public void HandleChoiceInput()
+    {
+        GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
+        if (selectedObject == null) return;
+
+        Button selectedButton = selectedObject.GetComponent<Button>();
+        if (selectedButton != null && selectedButton.interactable)
+            selectedButton.onClick.Invoke();
+    }
+
     public void HandleCancelInput()
     {
         if (_yesNoPanel.interactable)

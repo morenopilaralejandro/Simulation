@@ -19,6 +19,7 @@ public class StorySystemFlags
     public void FirstTimeInitialize()
     {
         SetFlag("unlocked_scout_tier_1", true);
+        //SetFlag("clear_game", true);
     }
 
     public void SetFlag(string flagId, bool boolValue)

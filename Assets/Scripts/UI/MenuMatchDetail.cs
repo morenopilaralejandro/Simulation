@@ -128,6 +128,8 @@ public class MenuMatchDetail : Menu
     public void OnButtonBackClicked()
     {
         RequestClose();
+        if (currentNode == null)
+            DialogEvents.RaiseDialogMenuClosed();
     }
 
     public void OnToggleAutoBattle(bool boolValue)

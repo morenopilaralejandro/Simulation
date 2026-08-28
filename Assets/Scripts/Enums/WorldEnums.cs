@@ -74,4 +74,10 @@ namespace Aremoreno.Enums.World
         Night
     }
 
+    public enum ConditionalMode
+    {
+        Any,
+        All
+    }
+
 }

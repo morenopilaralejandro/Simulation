@@ -163,6 +163,7 @@ public class DialogManager : MonoBehaviour
 
             case DialogState.WaitingForChoice:
                 // Choices handle their own input via buttons
+                _uiController.HandleChoiceInput();
                 break;
         }
     }
@@ -192,6 +193,11 @@ public class DialogManager : MonoBehaviour
 
     private void HandleLineReady(DialogLine line)
     {
+        if (string.IsNullOrEmpty(line.ResolvedText)) 
+        {
+            HandleContinueRequested();
+            return;
+        }
         _state = DialogState.ShowingText;
         _uiController.ShowLine(line);
     }
@@ -230,6 +236,8 @@ public class DialogManager : MonoBehaviour
 
     private void HandleContinueRequested()
     {
+        if(_storyManager.IsPaused) return;
+
         if (_storyManager.CanContinue)
         {
             _state = DialogState.Processing;
@@ -291,6 +299,15 @@ public class DialogManager : MonoBehaviour
                 _speakerCache.ClearCache();
                 break;
 
+            case "full_heal_all":
+                CharacterManager.Instance.FullHealAll();
+                break;
+
+            case "transition":
+                // zone id, spawn id
+                WorldManager.Instance.TransitionToZone(command.Parameters[0], command.Parameters[1]);
+                break;
+
             default:
                 LogManager.Trace($"[DialogManager] Unhandled command: {command.CommandName}");
                 break;
@@ -311,6 +328,8 @@ public class DialogManager : MonoBehaviour
         // 2. Optionally hide the dialog box
         _uiController.Hide();
 
+        _inputManager.DisableDialogActions();
+
         // 3. Open the menu
         switch (menuType)
         {
@@ -319,6 +338,9 @@ public class DialogManager : MonoBehaviour
                     source: new SelectorMatchChainNodeSource(contextId),
                     action: new SelectorMatchChainNodeAction(),
                     filter: null);
+                break;
+            case "match":
+                UIEvents.RaiseMatchDetailOpened(contextId, null);
                 break;
             case "shop":
                 UIEvents.RaiseItemShopSelectorOpenRequested(
@@ -351,5 +373,9 @@ public class DialogManager : MonoBehaviour
 
         // 2. Resume dialog
         _storyManager.Resume();
+
+        _inputManager.EnableDialogActions();
+
+        //HandleContinueRequested();         
     }
 }

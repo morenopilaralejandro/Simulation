@@ -196,29 +196,9 @@ public class InkStoryManager : MonoBehaviour
             var tags = _currentStory.currentTags;
             DialogLine line = InkTagParser.ParseLine(text.Trim(), tags);
 
-            // Check if this line has an open_menu command
-            bool shouldPause = line.Commands.Exists(
-                c => c.CommandName == "open_menu"
-            );
-
             SyncLocalizationVariables();
             line.ResolvedText = _locBridge.ResolveDialogText(line);
             ProcessCommands(line);
-
-            /*
-            if (string.IsNullOrEmpty(text.Trim()))
-            {
-                ContinueDialog();
-                return;
-            }
-            */
-
-            if (shouldPause)
-            {
-                // Don't show this line in dialog box
-                // The menu handles everything
-                return;
-            }
 
             DialogEvents.RaiseLineReady(line);
         }

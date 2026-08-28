@@ -40,4 +40,10 @@ INCLUDE inknpcs/inknpc_shop_pio.ink
 INCLUDE inknpcs/inknpc_shop_alma.ink
 INCLUDE inknpcs/inknpc_shop_macarena.ink
 INCLUDE inknpcs/inknpc_shop_tieman.ink
+
+INCLUDE inknpcs/inknpc_priest.ink
+
 INCLUDE inknpcs/inknpc_walkway_girl.ink
+
+INCLUDE inknpcs/inknpc_boss_dam_0.ink
+INCLUDE inknpcs/inknpc_boss_dam_1.ink

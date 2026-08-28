@@ -66,6 +66,8 @@ public class CharacterManager : MonoBehaviour
     public void FirstTimeInitialize() => storageSystem.FirstTimeInitialize();
     public CharacterStorageSaveData ExportStorageSystem() => storageSystem.Export();
     public void ImportStorageSystem(CharacterStorageSaveData saveData) => storageSystem.Import(saveData);
+    public void FullHealAll(IEnumerable<Character> characters) => storageSystem.FullHealAll(characters);
+    public void FullHealAll() => storageSystem.FullHealAll();
 
     // persistanceSystem
     public CharacterSystemSaveData Export() => persistanceSystem.Export();

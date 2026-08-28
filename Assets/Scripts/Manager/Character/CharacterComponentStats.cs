@@ -91,6 +91,12 @@ public class CharacterComponentStats
         }
     }
 
+    public void RestoreHpSp()
+    {
+        battleStats[Stat.Hp] = trueStats[Stat.Hp];
+        battleStats[Stat.Sp] = trueStats[Stat.Sp];
+    }
+
     public void ModifyBattleStat(Stat stat, int amount)
     {
         if (stat == Stat.Hp || stat == Stat.Sp)
