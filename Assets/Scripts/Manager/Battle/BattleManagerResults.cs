@@ -69,7 +69,7 @@ public class BattleManagerResults
 
         ApplyBattleRewards(userSide);
         GiveBattleRewards();
-        //TryProgresStory();
+        TryProgresStory();
     }
 
     public void Clear() 
@@ -140,10 +140,37 @@ public class BattleManagerResults
         if(battleResultData.BattleResultsType != BattleResultsType.MatchStory) return;
         if(BattleArgs.MatchId == null) return;
 
-        /*
-        set flag battleResultData.MatchId
+        StorySystemManager.Instance.SetFlag(BattleArgs.MatchId, true);
 
-        */
+        switch (BattleArgs.MatchId) 
+        {
+            case "match-00021-boss_0":
+            case "match-00022-boss_1":
+            case "match-00023-boss_2":
+            case "match-00024-boss_3":
+                StorySystemManager.Instance.SetFlag("pending_boss_train", false);
+                StorySystemManager.Instance.SetFlag("pending_boss_power_plant", false);
+                StorySystemManager.Instance.SetFlag("pending_boss_dam", false);
+                StorySystemManager.Instance.SetFlag("pending_boss_volcano", false);
+                StorySystemManager.Instance.SetFlag("pending_teleporter", true);
+                break;
+
+            /*
+            case "match-00025-boss_4":
+                clear game
+
+                if has all items, 
+                    set flag pending_true_ending
+                    go to world   (copy new game logic)
+                    add a transtion scipt that goes to credit scene
+   
+                else 
+                    go to credit
+
+                break;
+
+            */
+        }
     }
 
     #endregion

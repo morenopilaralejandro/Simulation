@@ -157,7 +157,7 @@ public class PlayerWorldEntity : MonoBehaviour
     #endregion
 
     #region API Misc
-    public bool CanInteract => PlayerWorldState == PlayerWorldState.FreeRoam && !IsMoving && IsControlEnabled;
+    public bool CanInteract => PlayerWorldState == PlayerWorldState.FreeRoam && !IsMoving && IsControlEnabled && !WorldManager.Instance.IsTransitioning;
     public bool CanOpenMenu => PlayerWorldState == PlayerWorldState.FreeRoam && !IsMoving && IsControlEnabled;
     #endregion
 

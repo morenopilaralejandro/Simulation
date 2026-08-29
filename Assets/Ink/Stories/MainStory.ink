@@ -47,3 +47,18 @@ INCLUDE inknpcs/inknpc_walkway_girl.ink
 
 INCLUDE inknpcs/inknpc_boss_dam_0.ink
 INCLUDE inknpcs/inknpc_boss_dam_1.ink
+INCLUDE inknpcs/inknpc_boss_train_0.ink
+INCLUDE inknpcs/inknpc_boss_train_1.ink
+INCLUDE inknpcs/inknpc_boss_power_plant_0.ink
+INCLUDE inknpcs/inknpc_boss_power_plant_1.ink
+INCLUDE inknpcs/inknpc_boss_volcano_0.ink
+INCLUDE inknpcs/inknpc_boss_volcano_1.ink
+
+INCLUDE inknpcs/inknpc_porti_0.ink
+INCLUDE inknpcs/inknpc_porti_1.ink
+INCLUDE inknpcs/inknpc_pani_0.ink
+INCLUDE inknpcs/inknpc_pani_1.ink
+INCLUDE inknpcs/inknpc_apa_0.ink
+INCLUDE inknpcs/inknpc_apa_1.ink
+INCLUDE inknpcs/inknpc_hierro_0.ink
+INCLUDE inknpcs/inknpc_hierro_1.ink
