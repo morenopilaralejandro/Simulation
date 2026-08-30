@@ -80,6 +80,7 @@ INCLUDE inknpcs/inknpc_hierro_0.ink
 INCLUDE inknpcs/inknpc_hierro_1.ink
 
 INCLUDE inkprop/inkprop_test.ink
+INCLUDE inkprop/inkprop_skeleton.ink
 INCLUDE inkprop/inkprop_simulation_node_0.ink
 INCLUDE inkprop/inkprop_simulation_node_1.ink
 INCLUDE inkprop/inkprop_dam_panel.ink
