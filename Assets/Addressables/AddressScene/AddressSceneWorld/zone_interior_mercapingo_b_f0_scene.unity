@@ -471,8 +471,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5544f826c0fe719a93e8d36ded9d62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conditionMode: 1
   conditions:
-  - flagName: clear_game
+  - flagName: match-00024-boss_3
     flagValue: 0
 --- !u!1 &343052783
 GameObject:
@@ -651,6 +652,38 @@ PrefabInstance:
       propertyPath: characterData
       value: 
       objectReference: {fileID: 11400000, guid: e2288619cb919e6578691b9ca70349b6, type: 2}
+    - target: {fileID: 3782482231940640186, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3782482231940640186, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3782482231940640186, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -5347733091965231759, guid: 8e009c4512e5f838fb8949332999dae1, type: 3}
+    - target: {fileID: 3782482231940640186, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8280288355503698997, guid: bec6936c92a2066d9907c32011fc9a14, type: 3}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3998943450379138611, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_Name
       value: NpcEntityCharacterLidia
@@ -694,6 +727,38 @@ PrefabInstance:
     - target: {fileID: 6299672838573757641, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7819314374851592970, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7819314374851592970, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7819314374851592970, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8886372697594394437, guid: cd62af06dbc079aec9ec4a0656e6e913, type: 3}
+    - target: {fileID: 7819314374851592970, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8182961703541370733, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8182961703541370733, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8182961703541370733, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -4903520900848775686, guid: c977abf11b4172fe3916aadd40530c31, type: 3}
+    - target: {fileID: 8182961703541370733, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: _dialogKnotName
@@ -1045,6 +1110,38 @@ PrefabInstance:
       propertyPath: characterData
       value: 
       objectReference: {fileID: 11400000, guid: fdea608efce3810058fe7e588d22d91f, type: 2}
+    - target: {fileID: 3782482231940640186, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3782482231940640186, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3782482231940640186, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -5347733091965231759, guid: 8e009c4512e5f838fb8949332999dae1, type: 3}
+    - target: {fileID: 3782482231940640186, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8280288355503698997, guid: bec6936c92a2066d9907c32011fc9a14, type: 3}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3998943450379138611, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_Name
       value: NpcEntityCharacterPichi
@@ -1088,6 +1185,38 @@ PrefabInstance:
     - target: {fileID: 6299672838573757641, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7819314374851592970, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7819314374851592970, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7819314374851592970, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8886372697594394437, guid: cd62af06dbc079aec9ec4a0656e6e913, type: 3}
+    - target: {fileID: 7819314374851592970, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8182961703541370733, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8182961703541370733, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8182961703541370733, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -4903520900848775686, guid: c977abf11b4172fe3916aadd40530c31, type: 3}
+    - target: {fileID: 8182961703541370733, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: _dialogKnotName
@@ -1527,8 +1656,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5544f826c0fe719a93e8d36ded9d62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conditionMode: 1
   conditions:
-  - flagName: clear_game
+  - flagName: match-00024-boss_3
     flagValue: 0
 --- !u!1 &1707810656
 GameObject:
