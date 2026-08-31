@@ -1,5 +1,8 @@
 === inknpc_shop_elena ===
 Hello #loc:greeting_how #speaker:chara-00090-elena #kit:kit-00005-hope:home:field #mood:happy
++ Play match chain #loc:choice_road
+    #cmd:open_menu:match_chain:match_chain-00001-justice
+    -> DONE
 + Buy #loc:choice_buy
     #cmd:open_menu:shop:shop-00005-equiment_a
     -> DONE

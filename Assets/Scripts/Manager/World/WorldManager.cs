@@ -18,6 +18,10 @@ public class WorldManager : MonoBehaviour
 
     [Header("Encounter System")]
     [SerializeField] private SceneGroup sceneBattle;
+    [SerializeField] private SceneGroup sceneCredits;
+
+    [Header("Ending System")]
+    [SerializeField] private ZoneDefinition trueEndingZone;
 
     private WorldManagerRealm realmSystem;
     private WorldManagerPlayer playerSystem;
@@ -71,11 +75,19 @@ public class WorldManager : MonoBehaviour
     {
         InputEvents.RaiseScreenControlsShowRequested();
 
-        if (PersistenceManager.Instance.IsNewGame())
+        if (PersistenceManager.Instance.IsNewGame() || StorySystemManager.Instance.GetFlag("pending_starting_spawn"))
         {
             await LoadZone(overworldDefinition.startingZone, overworldDefinition.startingSpawnId);
             PlayerWorldEntity.SetControlEnabled(true);
             PersistenceManager.Instance.SetNewGame(false);
+            StorySystemManager.Instance.SetFlag("pending_starting_spawn", false);
+        } else if (StorySystemManager.Instance.GetFlag("pending_ending"))
+        {
+            StorySystemManager.Instance.SetFlag("pending_ending", false);
+            StorySystemManager.Instance.SetFlag("pending_starting_spawn", true);
+            StorySystemManager.Instance.SetFlag("allow_quick_travel", false);
+            await LoadZone(trueEndingZone, "spawn_hospital_real_default");
+            PlayerWorldEntity.SetControlEnabled(true);
         }
         else
         {

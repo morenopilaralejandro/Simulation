@@ -13,6 +13,7 @@ public class BattleManagerResults
     private BattleResultData battleResultData;
     private SceneGroup sceneWorld;
     private SceneGroup sceneDebugMainMenu;
+    private SceneGroup sceneCredits;
 
     private int xpBaseFull = 900;
     private float expLvFactorFull = 100;
@@ -30,11 +31,12 @@ public class BattleManagerResults
 
     #region Constructor
 
-    public BattleManagerResults(SceneGroup sceneWorld, SceneGroup sceneDebugMainMenu)
+    public BattleManagerResults(SceneGroup sceneWorld, SceneGroup sceneDebugMainMenu, SceneGroup sceneCredits)
     {
         this.battleResultData = new BattleResultData();
         this.sceneWorld = sceneWorld;
         this.sceneDebugMainMenu = sceneDebugMainMenu;
+        this.sceneCredits = sceneCredits;
     }
 
     #endregion
@@ -144,32 +146,29 @@ public class BattleManagerResults
 
         switch (BattleArgs.MatchId) 
         {
+            /*
             case "match-00021-boss_0":
             case "match-00022-boss_1":
             case "match-00023-boss_2":
             case "match-00024-boss_3":
-                StorySystemManager.Instance.SetFlag("pending_boss_train", false);
-                StorySystemManager.Instance.SetFlag("pending_boss_power_plant", false);
-                StorySystemManager.Instance.SetFlag("pending_boss_dam", false);
-                StorySystemManager.Instance.SetFlag("pending_boss_volcano", false);
-                StorySystemManager.Instance.SetFlag("pending_teleporter", true);
                 break;
-
-            /*
-            case "match-00025-boss_4":
-                clear game
-
-                if has all items, 
-                    set flag pending_true_ending
-                    go to world   (copy new game logic)
-                    add a transtion scipt that goes to credit scene
-   
-                else 
-                    go to credit
-
-                break;
-
             */
+
+            case "match-00025-boss_4":
+                StorySystemManager.Instance.SetFlag("clear_game", true);
+                StorySystemManager.Instance.SetFlag("pending_ending", true);
+
+                if (ItemManager.Instance.HasItem(ItemFactory.CreateById("item-important-00005-shard_joy")) && 
+                    ItemManager.Instance.HasItem(ItemFactory.CreateById("item-important-00006-shard_love")))
+                {
+                    StorySystemManager.Instance.SetFlag("ending_good", true);
+                } else 
+                {
+                    StorySystemManager.Instance.SetFlag("ending_good", false);
+                }
+
+                break;
+
         }
     }
 
@@ -276,6 +275,17 @@ public class BattleManagerResults
 
     private void HandleResultsContinueRequested()
     {
+
+        if (StorySystemManager.Instance.GetFlag("pending_ending") && 
+            !StorySystemManager.Instance.GetFlag("ending_good")) 
+        {
+            StorySystemManager.Instance.SetFlag("pending_ending", false);
+            StorySystemManager.Instance.SetFlag("pending_starting_spawn", true);
+            StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
+            SceneLoader.Instance.LoadGroup(sceneCredits);
+            return;
+        }
+
         switch(battleResultData.BattleResultsType) 
         {
             case BattleResultsType.Debug:

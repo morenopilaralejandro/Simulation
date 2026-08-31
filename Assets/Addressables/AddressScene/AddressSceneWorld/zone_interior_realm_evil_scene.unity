@@ -425,6 +425,14 @@ PrefabInstance:
       propertyPath: characterData
       value: 
       objectReference: {fileID: 11400000, guid: 39c17b2f62a9b4bc1a1d686eb7fb69d3, type: 2}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8280288355503698997, guid: bec6936c92a2066d9907c32011fc9a14, type: 3}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3998943450379138611, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_Name
       value: NpcEntityCharacterBossPowerPlant
@@ -471,7 +479,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: _dialogKnotName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].flagName
+      value: match-00023-boss_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].knotName
       value: inknpc_boss_power_plant_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].flagName
+      value: get_shard_power_plant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].knotName
+      value: inknpc_boss_power_plant_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].flagName
+      value: get_shard_power_plant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].knotName
+      value: inknpc_boss_power_plant_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].flagValue
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -618,6 +658,14 @@ PrefabInstance:
       propertyPath: characterData
       value: 
       objectReference: {fileID: 11400000, guid: b3e7083eaa82e1e6fb6b9aaeee45aa6c, type: 2}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8280288355503698997, guid: bec6936c92a2066d9907c32011fc9a14, type: 3}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3998943450379138611, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_Name
       value: NpcEntityCharacterBossDam
@@ -664,7 +712,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: _dialogKnotName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].flagName
+      value: match-00021-boss_0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].knotName
       value: inknpc_boss_dam_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].flagName
+      value: get_shard_dam
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].knotName
+      value: inknpc_boss_dam_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].flagName
+      value: get_shard_dam
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].knotName
+      value: inknpc_boss_dam_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].flagValue
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -748,6 +828,14 @@ PrefabInstance:
       propertyPath: characterData
       value: 
       objectReference: {fileID: 11400000, guid: f2a1737c5fdd2c36897785934c5b2101, type: 2}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8280288355503698997, guid: bec6936c92a2066d9907c32011fc9a14, type: 3}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3998943450379138611, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_Name
       value: NpcEntityCharacterBossTrain
@@ -794,7 +882,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: _dialogKnotName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].flagName
+      value: match-00022-boss_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].knotName
       value: inknpc_boss_train_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].flagName
+      value: get_shard_train
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].knotName
+      value: inknpc_boss_train_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].flagName
+      value: get_shard_train
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].knotName
+      value: inknpc_boss_train_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].flagValue
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1026,6 +1146,14 @@ PrefabInstance:
       propertyPath: characterData
       value: 
       objectReference: {fileID: 11400000, guid: 7f5dfc8c70aa79bddb9ef3a1d74429cc, type: 2}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8280288355503698997, guid: bec6936c92a2066d9907c32011fc9a14, type: 3}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3998943450379138611, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_Name
       value: NpcEntityCharacterBossVolcano
@@ -1072,7 +1200,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: _dialogKnotName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].flagName
+      value: match-00024-boss_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].knotName
       value: inknpc_boss_volcano_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].flagName
+      value: get_shard_volcano
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].knotName
+      value: inknpc_boss_volcano_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].flagName
+      value: get_shard_volcano
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].knotName
+      value: inknpc_boss_volcano_3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8643974183754120135, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[2].flagValue
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

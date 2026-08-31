@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 25131559}
   - component: {fileID: 25131560}
   m_Layer: 0
-  m_Name: SpawnHospitalStart
+  m_Name: SpawnHospitalRealDefault
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,8 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 706323a7aa440d4188643a6b1dbca04e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnId: spawn_hospital_checkpoint
-  spawnType: 5
+  spawnId: spawn_hospital_real_default
+  spawnType: 0
   facingDirection: 0
   connectedZone: {fileID: 0}
   connectedSpawnId: 
@@ -221,8 +221,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d6f0ff4a11248f49a99a167de80cb2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneId: zone_interior_real_hospital
-  _spawnPoints: []
+  zoneId: zone_interior_hospital_real
+  _spawnPoints:
+  - {fileID: 25131560}
   gizmoColor: {r: 0, g: 1, b: 0, a: 0.5}
   showGizmo: 1
 --- !u!1001 &243022971
@@ -358,56 +359,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 151386082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &401685959
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 401685960}
-  - component: {fileID: 401685961}
-  m_Layer: 0
-  m_Name: SwawnHospitalEntry
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &401685960
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401685959}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25.5, y: 13.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 979115469}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &401685961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401685959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 706323a7aa440d4188643a6b1dbca04e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnId: spawn_hospital_entry
-  spawnType: 1
-  facingDirection: 1
-  connectedZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
-  connectedSpawnId: spawn_park_hospital_entry
-  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &496984874
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,9 +369,9 @@ GameObject:
   m_Component:
   - component: {fileID: 496984875}
   - component: {fileID: 496984877}
-  - component: {fileID: 496984876}
+  - component: {fileID: 496984878}
   m_Layer: 0
-  m_Name: TransitionHospitalExit
+  m_Name: TransitionExit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -441,21 +392,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 343052784}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &496984876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 496984874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fb23d605e8abd93a93641d447479478, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetZone: {fileID: 11400000, guid: 629f394184b46d605b9616bdfcc217e9, type: 2}
-  targetSpawnId: spawn_hospital_exit
-  requireInteraction: 0
 --- !u!61 &496984877
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -501,6 +437,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &496984878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496984874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10cac3fe1a8b06f5bb147451ee1c554a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneCredits: {fileID: 11400000, guid: 22f7b6a225fbbeaf99f737851d82ba72, type: 2}
 --- !u!1001 &541149573
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -636,7 +585,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 25131559}
-  - {fileID: 401685960}
   m_Father: {fileID: 151386082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1327597817
@@ -2455,11 +2403,11 @@ PrefabInstance:
     - target: {fileID: 4617163875585885758, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
       propertyPath: m_TileSpriteArray.Array.data[14].m_Data
       value: 
-      objectReference: {fileID: -1496234675, guid: b9efb2bd0654893e5ac5516e4bfb484e, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4617163875585885758, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
       propertyPath: m_TileSpriteArray.Array.data[15].m_Data
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: -1496234675, guid: b9efb2bd0654893e5ac5516e4bfb484e, type: 3}
     - target: {fileID: 4617163875585885758, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
       propertyPath: m_TileSpriteArray.Array.data[16].m_Data
       value: 
@@ -3170,11 +3118,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4617163875585885758, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
       propertyPath: m_TileSpriteArray.Array.data[14].m_RefCount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4617163875585885758, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
       propertyPath: m_TileSpriteArray.Array.data[15].m_RefCount
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4617163875585885758, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
       propertyPath: m_TileSpriteArray.Array.data[16].m_RefCount
@@ -4062,7 +4010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4617163875585885758, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
       propertyPath: m_Tiles.Array.data[94].second.m_TileSpriteIndex
-      value: 14
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4617163875585885758, guid: cda45d354f0ab2eeba0d04df5e053b08, type: 3}
       propertyPath: m_Tiles.Array.data[95].second.m_TileSpriteIndex

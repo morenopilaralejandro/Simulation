@@ -6,13 +6,20 @@ using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.UI;
 using Aremoreno.Enums.Input;
 
-public class MenuMainPanelCredits : Menu
+public class MenuCredits : Menu
 {
     [Header("UI References")]
+    [SerializeField] private SceneGroup sceneMainMenu;
     [SerializeField] private float scrollSpeed = 30f;
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Vector2 startPosition;
     private float endY = 5964f;
+
+    private void Start() 
+    {
+        MenuManager.Instance.OpenMenu(this);
+    }
+
 
     public override void Show() 
     {
@@ -38,8 +45,8 @@ public class MenuMainPanelCredits : Menu
 
     public void OnButtonBackClicked()
     {
-        AudioManager.Instance.PlayBgm("bgm-simulation");
         RequestClose();
+        SceneLoader.Instance.LoadGroup(sceneMainMenu);
     }
 
     /*

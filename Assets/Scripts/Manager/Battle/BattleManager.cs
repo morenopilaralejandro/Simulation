@@ -40,6 +40,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private SceneGroup sceneBattleResults;
     [SerializeField] private SceneGroup sceneWorld;
     [SerializeField] private SceneGroup sceneDebugMainMenu;
+    [SerializeField] private SceneGroup sceneCredits;
     private SceneLoader sceneLoader;
 
     public BattlePhase CurrentPhase => currentPhase;
@@ -92,7 +93,7 @@ public class BattleManager : MonoBehaviour
         fieldSystem = new BattleManagerField();
         teamSystem = new BattleManagerTeam();
         wingSystem = new BattleManagerWing();
-        resultsSystem = new BattleManagerResults(sceneWorld, sceneDebugMainMenu);
+        resultsSystem = new BattleManagerResults(sceneWorld, sceneDebugMainMenu, sceneCredits);
         essenceSystem = new BattleManagerEssence();
         endGameComponent = new BattleComponentEndGame();
 

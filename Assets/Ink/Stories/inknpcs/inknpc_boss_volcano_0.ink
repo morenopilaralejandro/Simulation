@@ -5,11 +5,9 @@ Text #loc:npc_male_villain_volcano_0 #speaker:chara-00030-nervor #kit:kit-00002-
     -> inknpc_boss_volcano_0
 + Unforgivable #loc:choice_unforgivable
     Text #loc:npc_unforgivable_0 #speaker:chara-00030-nervor #kit:kit-00002-crimson:home:field #mood:happy
-    ~ SetGameFlag("pending_boss_dam", false)
-    ~ SetGameFlag("pending_boss_train", false)
-    ~ SetGameFlag("pending_boss_power_plant", false)
     ~ SetGameFlag("pending_boss_volcano", true)
     ~ SetGameFlag("pending_teleporter", false)
+    ~ SetGameFlag("allow_quick_travel", false)
     #cmd:transition:zone_interior_realm_evil:spawn_realm_evil_0_default
     -> DONE
 + Goodbye #loc:choice_goodbye

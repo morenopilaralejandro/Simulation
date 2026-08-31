@@ -57,15 +57,24 @@ INCLUDE inknpcs/inknpc_island_1.ink
 
 INCLUDE inknpcs/inknpc_boss_dam_0.ink
 INCLUDE inknpcs/inknpc_boss_dam_1.ink
+INCLUDE inknpcs/inknpc_boss_dam_2.ink
+INCLUDE inknpcs/inknpc_boss_dam_3.ink
 INCLUDE inknpcs/inknpc_boss_train_0.ink
 INCLUDE inknpcs/inknpc_boss_train_1.ink
+INCLUDE inknpcs/inknpc_boss_train_2.ink
+INCLUDE inknpcs/inknpc_boss_train_3.ink
 INCLUDE inknpcs/inknpc_boss_power_plant_0.ink
 INCLUDE inknpcs/inknpc_boss_power_plant_1.ink
+INCLUDE inknpcs/inknpc_boss_power_plant_2.ink
+INCLUDE inknpcs/inknpc_boss_power_plant_3.ink
 INCLUDE inknpcs/inknpc_boss_volcano_0.ink
 INCLUDE inknpcs/inknpc_boss_volcano_1.ink
+INCLUDE inknpcs/inknpc_boss_volcano_2.ink
+INCLUDE inknpcs/inknpc_boss_volcano_3.ink
 INCLUDE inknpcs/inknpc_boss_final_0.ink
 
-INCLUDE inknpcs/inknpc_boru.ink
+INCLUDE inknpcs/inknpc_boru_0.ink
+INCLUDE inknpcs/inknpc_boru_1.ink
 INCLUDE inknpcs/inknpc_are_0.ink
 INCLUDE inknpcs/inknpc_are_1.ink
 INCLUDE inknpcs/inknpc_satu_0.ink

@@ -6,11 +6,11 @@ public class MenuMain : Menu
 {
     [Header("UI References")]
     [SerializeField] private Menu menuSettings;
-    [SerializeField] private Menu menuCredits;
     [SerializeField] private Menu menuStory;
 
     [Header("Scenes")]
     [SerializeField] private SceneGroup sceneBattle;
+    [SerializeField] private SceneGroup sceneCredits;
 
     public void Start() 
     {
@@ -34,7 +34,7 @@ public class MenuMain : Menu
 
     public void OnButtonCreditsTapped() 
     {
-        MenuManager.Instance.OpenMenu(menuCredits);
+        SceneLoader.Instance.LoadGroup(sceneCredits);
     }
 
     public void OnButtonQuitTapped() 

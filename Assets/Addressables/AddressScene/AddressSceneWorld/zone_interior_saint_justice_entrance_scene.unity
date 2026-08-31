@@ -881,7 +881,35 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 618527736331725775, guid: a320d96934224b2589e27f2368b58798, type: 3}
       propertyPath: _dialogKnotName
-      value: inknpc_boru
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 618527736331725775, guid: a320d96934224b2589e27f2368b58798, type: 3}
+      propertyPath: _conditionalDialogs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 618527736331725775, guid: a320d96934224b2589e27f2368b58798, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].flagName
+      value: clear_game
+      objectReference: {fileID: 0}
+    - target: {fileID: 618527736331725775, guid: a320d96934224b2589e27f2368b58798, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].knotName
+      value: inknpc_boru_0
+      objectReference: {fileID: 0}
+    - target: {fileID: 618527736331725775, guid: a320d96934224b2589e27f2368b58798, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].flagName
+      value: clear_game
+      objectReference: {fileID: 0}
+    - target: {fileID: 618527736331725775, guid: a320d96934224b2589e27f2368b58798, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].knotName
+      value: inknpc_boru_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 618527736331725775, guid: a320d96934224b2589e27f2368b58798, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[0].flagValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 618527736331725775, guid: a320d96934224b2589e27f2368b58798, type: 3}
+      propertyPath: _conditionalDialogs.Array.data[1].flagValue
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2840520230975870027, guid: a320d96934224b2589e27f2368b58798, type: 3}
       propertyPath: m_Sprite
