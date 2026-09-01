@@ -61,6 +61,12 @@ public class EquipmentStatLayout : MonoBehaviour
 
     public void Populate(ItemEquipment equipment)
     {
+        if (equipment == null) 
+        {
+            Clear();
+            return;
+        }
+
         textValueTrueKick.text      = equipment.EquipmentStats[Stat.Kick].ToString();
         textValueTrueBody.text      = equipment.EquipmentStats[Stat.Body].ToString();
         textValueTrueControl.text   = equipment.EquipmentStats[Stat.Control].ToString();

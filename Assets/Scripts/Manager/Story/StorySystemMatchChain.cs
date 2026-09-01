@@ -42,6 +42,7 @@ public class StorySystemMatchChain
 
     public void Import(StorySystemSaveData saveData)
     {
+        InitializeFromDatabase();
         foreach(var chainSaveData in saveData.MatchChainSystemSaveData.MatchChains) 
         {
             dict[chainSaveData.MatchChainId].Import(chainSaveData);

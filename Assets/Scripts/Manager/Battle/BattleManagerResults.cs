@@ -48,7 +48,8 @@ public class BattleManagerResults
         Dictionary<TeamSide, Team> teams,
         TeamSide userSide,
         BattleType battleType,
-        TeamSide? forcedWinner = null)
+        TeamSide? forcedWinner = null,
+        bool isEssenceFinish = false)
     {
         battleResultData.Clear();
 
@@ -58,6 +59,7 @@ public class BattleManagerResults
         battleResultData.EnemyLevel = BattleArgs.AwayTeamLevel;
 
         battleResultData.IsForcedWinner = forcedWinner.HasValue;
+        battleResultData.IsEssenceFinish = isEssenceFinish;
 
         if (battleResultData.IsForcedWinner)
             battleResultData.WinningSide = forcedWinner.Value;
@@ -284,6 +286,13 @@ public class BattleManagerResults
             StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
             SceneLoader.Instance.LoadGroup(sceneCredits);
             return;
+        }
+
+        if (battleResultData.IsEssenceFinish && !battleResultData.IsUserWin) 
+        {
+            StorySystemManager.Instance.SetFlag("pending_starting_spawn", true);
+            StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
+            CharacterManager.Instance.FullHealAll();
         }
 
         switch(battleResultData.BattleResultsType) 

@@ -128,11 +128,6 @@ public class WorldManagerZone
         {
             await LoadInteriorZone(zone, spawnId);
         }
-
-        if (zone.backgroundMusic != null)
-        {
-            AudioManager.Instance.PlayBgmClip(zone.backgroundMusic);
-        }
     }
 
     private async Task LoadOverworldZone(ZoneDefinition zone, string spawnId)
@@ -368,9 +363,6 @@ public class WorldManagerZone
         {
             await LoadInteriorZoneAtPosition(zone, position, facing);
         }
-
-        if (zone.backgroundMusic != null)
-            AudioManager.Instance.PlayBgmClip(zone.backgroundMusic);
     }
 
     private async Task LoadOverworldZoneAtPosition(ZoneDefinition zone, Vector3 position, Vector2 facing)

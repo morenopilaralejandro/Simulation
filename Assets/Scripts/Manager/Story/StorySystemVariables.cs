@@ -16,6 +16,11 @@ public class StorySystemVariables
         storySystemManager = StorySystemManager.Instance;
     }
 
+    public void FirstTimeInitialize()
+    {
+        Clear();
+    }
+
     public void SetVariable(string variableId, int intValue)
     {
         variablesDict[variableId] = intValue;
@@ -38,7 +43,13 @@ public class StorySystemVariables
 
     public void Import(StorySystemSaveData saveData) 
     {
+        Clear();
         foreach (var serializableKeyValue in saveData.VariablesList) 
             variablesDict[serializableKeyValue.Key] = serializableKeyValue.Value;
+    }
+
+    public void Clear() 
+    {
+        variablesDict.Clear();
     }
 }

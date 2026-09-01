@@ -122,6 +122,7 @@ public class MenuMatchDetail : Menu
     {
         if (currentMatch == null) return;
 
+        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         StorySystemManager.Instance.StartMatchBattle(currentMatch, currentNode);
     }
 

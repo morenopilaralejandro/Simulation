@@ -27,7 +27,7 @@ public class MenuCredits : Menu
 
         base.Show();
 
-        AudioManager.Instance.PlayBgm("bgm-boru_arrival");    
+        AudioManager.Instance.PlayBgm("bgm-ending_0_shining_in_the_dark");    
     }
 
     void Update()

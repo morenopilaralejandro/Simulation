@@ -802,4 +802,16 @@ public static class UIEvents
         OnScoutEntrySelectorRefreshRequested?.Invoke();
     }
 
+    //FastTravel
+    public static event System.Action<
+        ISelectorSource<FastTravelPoint>,
+        ISelectorClickAction<FastTravelPoint>,
+        ISelectorFilter<FastTravelPoint>
+    > OnFastTravelPointSelectorOpenRequested;
+    public static void RaiseScoutTierSelectorOpenRequested(
+        ISelectorSource<FastTravelPoint>      source,
+        ISelectorClickAction<FastTravelPoint> action,
+        ISelectorFilter<FastTravelPoint>      filter = null)
+    => OnFastTravelPointSelectorOpenRequested?.Invoke(source, action, filter);
+
 }

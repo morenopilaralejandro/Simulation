@@ -95,6 +95,8 @@ public class WorldManagerZoneTracker
         PreviousZone = CurrentZone;
         CurrentZone = newZone;
         UpdateLocalization();
+        UpdateBgm();
+        StorySystemManager.Instance.SetFlag(newZone.zoneId, true);
         WorldEvents.RaiseZoneChanged(PreviousZone, newZone, ZoneName);
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -126,6 +128,7 @@ public class WorldManagerZoneTracker
     #endregion
 
     #region Localization
+
     private void UpdateLocalization() 
     {
         localizationStringComponent = new LocalizationComponentString(
@@ -134,6 +137,23 @@ public class WorldManagerZoneTracker
             new [] { LocalizationField.Name }
         );
     }
+
+    #endregion
+
+    #region Bgm 
+
+    private void UpdateBgm()
+    {
+        if (CurrentZone == null || CurrentZone.backgroundMusic == null) return;
+
+        AudioClip previousBgm = PreviousZone != null ? PreviousZone.backgroundMusic : null;
+
+        // Don't restart the BGM if the clip is the same
+        if (previousBgm == CurrentZone.backgroundMusic) return;
+
+        AudioManager.Instance.PlayBgmClip(CurrentZone.backgroundMusic);
+    }
+
     #endregion
 
 }

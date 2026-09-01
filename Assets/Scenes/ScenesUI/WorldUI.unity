@@ -9252,7 +9252,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6803860380740811282, guid: ba401d0128612ba0582d42dccd9cc466, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1783775477}
   m_SourcePrefab: {fileID: 100100000, guid: ba401d0128612ba0582d42dccd9cc466, type: 3}
 --- !u!224 &212741347 stripped
 RectTransform:
@@ -9264,7 +9267,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1593735606274009181, guid: ba401d0128612ba0582d42dccd9cc466, type: 3}
   m_PrefabInstance: {fileID: 212741346}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1783775474}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca093611bdc96c285af1f098c5eaae38, type: 3}
@@ -16443,6 +16446,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1331552836646618182, guid: a2f6d2dfe617944ecb67c4b2310a339e, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1497523146895764573, guid: a2f6d2dfe617944ecb67c4b2310a339e, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1549178315448986095, guid: a2f6d2dfe617944ecb67c4b2310a339e, type: 3}
@@ -58790,6 +58797,7 @@ MonoBehaviour:
   wingUI: {fileID: 212741348}
   statLayoutUI: {fileID: 2129958288}
   canvasGroup: {fileID: 1348775088}
+  canvasGroupWing: {fileID: 1783775477}
 --- !u!1 &1353028388
 GameObject:
   m_ObjectHideFlags: 0
@@ -77182,6 +77190,23 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 543060917297679636, guid: 676f2ce4a4f2b7608a1c29740d956f43, type: 3}
   m_PrefabInstance: {fileID: 1781158977}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1783775474 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6803860380740811282, guid: ba401d0128612ba0582d42dccd9cc466, type: 3}
+  m_PrefabInstance: {fileID: 212741346}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &1783775477
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783775474}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1784533948
 GameObject:
   m_ObjectHideFlags: 0

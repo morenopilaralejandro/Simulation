@@ -30,6 +30,7 @@ public class BattleResultData
     public bool IsAwayWin => WinningSide == TeamSide.Away;
     public bool IsDraw => Scores[TeamSide.Home] == Scores[TeamSide.Away] && !IsForcedWinner;
     public bool IsForcedWinner;
+    public bool IsEssenceFinish;
 
     /*
     public TeamSide LosingSide =>

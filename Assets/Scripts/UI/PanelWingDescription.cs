@@ -11,6 +11,7 @@ public class PanelWingDescription : MonoBehaviour
     [SerializeField] private WingUI wingUI;
     [SerializeField] private StatLayoutUI statLayoutUI;
     [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private CanvasGroup canvasGroupWing;
 
     //private readonly AddressableBinding<Sprite> _bindingIcon = new();
     //private int _setVersion;
@@ -22,17 +23,23 @@ public class PanelWingDescription : MonoBehaviour
 
     private void SetData(Wing wing)
     {
+        if(wing == null) 
+        {
+            Clear();
+            return;
+        }
+
         wingUI.SetData(wing);
         statLayoutUI.Populate(wing);
+        SetWingCanvasVisible(true);
     }
 
     private void Clear()
     {
+        SetWingCanvasVisible(false);
         wingUI.Clear();
         statLayoutUI.Clear();
     }
-
-
 
     #region Events
 
@@ -57,6 +64,13 @@ public class PanelWingDescription : MonoBehaviour
         }
 
         SetData(wing);
+    }
+
+    public void SetWingCanvasVisible(bool visible)
+    {
+        canvasGroupWing.alpha = visible ? 1f : 0f;
+        canvasGroupWing.interactable = visible;
+        canvasGroupWing.blocksRaycasts = visible;
     }
 
     #endregion

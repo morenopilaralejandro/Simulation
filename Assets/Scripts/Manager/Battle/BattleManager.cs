@@ -362,6 +362,7 @@ public class BattleManager : MonoBehaviour
         if (currentPhase == BattlePhase.End) return;        
 
         DuelManager.Instance.CancelDuel();
+        Freeze();
 
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnded();
@@ -373,7 +374,8 @@ public class BattleManager : MonoBehaviour
             Teams, 
             GetUserSide(),
             currentType,
-            forcedWinner: winnerSide);
+            forcedWinner: winnerSide,
+            true);
 
         sceneLoader.LoadGroup(sceneBattleResults);
     }

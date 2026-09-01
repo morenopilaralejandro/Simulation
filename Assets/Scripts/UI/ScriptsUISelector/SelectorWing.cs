@@ -15,17 +15,11 @@ public class SelectorWing : Selector<Wing, SelectorWingListItem>
 
     #region Menu Overrides
 
-    /*
     public override void Show()
     {
-        // Default kit/variant if none was injected by the open request.
-        if (kit == null)
-            kit = TeamManager.Instance.ActiveLoadout?.Kit;
-
+        UIEvents.RaiseWingDescriptionUpdateRequested(null);
         base.Show();
     }
-
-    */
 
     /*
     public override void Hide()

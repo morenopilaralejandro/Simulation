@@ -15,7 +15,7 @@ public class MenuMain : Menu
     public void Start() 
     {
         MenuManager.Instance.OpenMenu(this);
-        AudioManager.Instance.PlayBgm("bgm-opening");    
+        AudioManager.Instance.PlayBgm("bgm-opening_0_alas_activadas");    
     }
 
     public void OnButtonDreamMatchTapped() 

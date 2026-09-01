@@ -12,9 +12,14 @@ public class StorySystemChapters
     public StoryChapter CurrentChapter => currentChapter;
 
 
-    public StorySystemChapters() 
+    public StorySystemChapters()
     {
         db = DatabaseManager.Instance;
+    }
+
+    public void FirstTimeInitialize()
+    {
+        SetChapter(0);
     }
 
     public void AdvanceChapter()
@@ -32,7 +37,7 @@ public class StorySystemChapters
         StoryEvents.RaiseChapterChanged(currentChapter);
     }
 
-    public void Import(StorySystemSaveData saveData) 
+    public void Import(StorySystemSaveData saveData)
     {
         currentChapter = db.GetStoryChapter(saveData.ChapterNumber.ToString());
     }

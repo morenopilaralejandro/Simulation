@@ -18,6 +18,7 @@ public class StorySystemFlags
 
     public void FirstTimeInitialize()
     {
+        Clear();
         SetFlag("unlocked_scout_tier_1", true);
         //SetFlag("clear_game", true);
     }
@@ -42,7 +43,13 @@ public class StorySystemFlags
 
     public void Import(StorySystemSaveData saveData) 
     {
+        Clear();
         foreach (var serializableKeyValue in saveData.FlagsList) 
             flagsDict[serializableKeyValue.Key] = serializableKeyValue.Value;
+    }
+
+    public void Clear() 
+    {
+        flagsDict.Clear();
     }
 }

@@ -16,6 +16,61 @@ MonoBehaviour:
   zoneName: zone_overworld_street_liner
   zoneType: 0
   interiorSceneAddress: 
-  backgroundMusic: {fileID: 0}
-  fieldId: 
-  encounters: []
+  backgroundMusic: {fileID: 8300000, guid: dd164f0467a9a802aa64b20d874cd253, type: 3}
+  fieldId: field-00002-misc_street
+  encounters:
+  - EncounterId: 
+    TeamId: team-00023-m-gambling_addicts
+    Level: 31
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00004-croquettes
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.4
+    - ItemId: item-material-00007-tough_stone
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.35
+  - EncounterId: 
+    TeamId: team-00024-m-multisports
+    Level: 32
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00011-galician_octopus
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.25
+    - ItemId: item-material-00007-tough_stone
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.4
+  - EncounterId: 
+    TeamId: team-00025-m-alley_kickers
+    Level: 34
+    BgmId: bgm-battle_rare
+    BallId: ball-00001-default
+    EncounterRate: 0.2
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00004-croquettes
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.45
+    - ItemId: item-recovery-00011-galician_octopus
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.35
+    - ItemId: item-material-00007-tough_stone
+      QuantityMin: 1
+      QuantityMax: 3
+      DropChance: 0.6

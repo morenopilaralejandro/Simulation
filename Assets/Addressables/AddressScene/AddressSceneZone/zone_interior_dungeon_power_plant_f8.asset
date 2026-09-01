@@ -16,6 +16,57 @@ MonoBehaviour:
   zoneName: zone_interior_dungeon_power_plant_f8
   zoneType: 1
   interiorSceneAddress: zone_interior_dungeon_power_plant_f8_scene
-  backgroundMusic: {fileID: 0}
-  fieldId: 
-  encounters: []
+  backgroundMusic: {fileID: 8300000, guid: e9fb2407b5545974b928036a33bf130c, type: 3}
+  fieldId: field-00009-dungeon_power_plant
+  encounters:
+  - EncounterId: 
+    TeamId: team-00026-m-company_defenders
+    Level: 36
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 1
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-material-00012-weighted_clothing
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.5
+    - ItemId: item-material-00008-electric_wire
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.35
+  - EncounterId: 
+    TeamId: team-00027-m-voltage_unit
+    Level: 38
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 1
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-material-00012-weighted_clothing
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.5
+    - ItemId: item-material-00008-electric_wire
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.4
+  - EncounterId: 
+    TeamId: team-00028-m-circuit_breakers
+    Level: 40
+    BgmId: bgm-battle_rare
+    BallId: ball-00001-default
+    EncounterRate: 0.2
+    HasTimeOfDayRestriction: 1
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-material-00012-weighted_clothing
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.7
+    - ItemId: item-material-00008-electric_wire
+      QuantityMin: 1
+      QuantityMax: 3
+      DropChance: 0.6

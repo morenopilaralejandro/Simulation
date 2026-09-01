@@ -61,7 +61,9 @@ public class ItemManagerStorage
 
     public void FirstTimeInitialize()
     {
-        AddAllFromDatabase();
+        Clear();
+
+        //AddAllFromDatabase();
 
         /*
         AddItem(ItemFactory.CreateById("item-important-00001-shard_sorrow"), 1);
@@ -70,7 +72,7 @@ public class ItemManagerStorage
         AddItem(ItemFactory.CreateById("item-important-00004-shard_anger"), 1);
         */
 
-        /*
+        
         AddItem(ItemFactory.CreateById("item-emblem-00000-a-generic_common"), 1);
         AddItem(ItemFactory.CreateById("item-emblem-00000-b-generic_rare"), 1);
         AddItem(ItemFactory.CreateById("item-emblem-00001-s-faith_selection"), 1);
@@ -111,7 +113,7 @@ public class ItemManagerStorage
         AddItem(ItemFactory.CreateById("item-kit-00003-balance"), 1);
         AddItem(ItemFactory.CreateById("item-kit-00004-enigma"), 1);
         AddItem(ItemFactory.CreateById("item-kit-00005-hope"), 1);
-        */
+        
     }
 
     public void AddAllFromDatabase()
@@ -151,6 +153,14 @@ public class ItemManagerStorage
 
         ItemEvents.RaiseStorageUpdated();
         return success;
+    }
+
+    public void Clear()
+    {
+        foreach (List<ItemStorageSlot> list in categoryMap.Values)
+        {
+            list.Clear();
+        }
     }
 
     private bool TryAddToSystem(Item item)
@@ -331,7 +341,7 @@ public class ItemManagerStorage
 
     public void Import(SaveDataItemStorage saveData)
     {
-        //clear
+        Clear();
 
         if (saveData?.SaveDataItemStorageSlotList == null) return;
 

@@ -4,7 +4,7 @@ Text #loc:npc_male_villain_derail_0 #speaker:chara-00040-malaki #kit:kit-00002-c
     Text #loc:npc_male_villain_derail_1 #speaker:chara-00040-malaki #kit:kit-00002-crimson:home:field #mood:happy
     -> inknpc_boss_train_0
 + Unforgivable #loc:choice_unforgivable
-    Text #loc:npc_unforgivable_0 #speaker:chara-00040-malaki #kit:kit-00002-crimson:home:field #mood:happy
+    Text #loc:npc_unforgivable_0 #speaker:chara-00040-malaki #kit:kit-00002-crimson:home:field #mood:happy #sfx:sfx-secret_evil
     ~ SetGameFlag("pending_boss_train", true)
     ~ SetGameFlag("pending_teleporter", false)
     ~ SetGameFlag("allow_quick_travel", false)

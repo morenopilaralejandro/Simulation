@@ -80,12 +80,14 @@ public class StorySystemManager : MonoBehaviour
     public void SetVariable(string variableId, int intValue) => variableSystem.SetVariable(variableId, intValue);
     public void IncrementVariable(string variableId, int amount = 1) => variableSystem.IncrementVariable(variableId, amount);
     public int GetVariable(string variableId) => variableSystem.GetVariable(variableId);
+    public void InitializeVariableSystem() => variableSystem.FirstTimeInitialize();
     public void ImportVariableSystem(StorySystemSaveData saveData) => variableSystem.Import(saveData);
 
     // eventSystem
     public IReadOnlyCollection<string> CompletedEventsCollection => eventSystem.CompletedEventsCollection;
     public void TriggerStoryEvent(string storyEventId) => eventSystem.TriggerStoryEvent(storyEventId);
     public bool IsEventCompleted(string storyEventId) => eventSystem.IsEventCompleted(storyEventId);
+    public void InitializeEventSystem() => eventSystem.FirstTimeInitialize();
     public void ImportEventSystem(StorySystemSaveData saveData) => eventSystem.Import(saveData);
 
     // triggerSystem
@@ -93,6 +95,7 @@ public class StorySystemManager : MonoBehaviour
     public void TriggerAutoTrigger(string storyAutoTriggerId) => triggerSystem.TriggerAutoTrigger(storyAutoTriggerId);
     public bool HasAutoTriggerTriggered(string storyAutoTriggerId) => triggerSystem.HasAutoTriggerTriggered(storyAutoTriggerId);
     public void EvaluateTriggers() => triggerSystem.EvaluateTriggers();
+    public void InitializeTriggerSystem() => triggerSystem.FirstTimeInitialize();
     public void ImportTriggerSystem(StorySystemSaveData saveData) => triggerSystem.Import(saveData);
     public StoryAutoTrigger GetStoryAutoTrigger(string storyAutoTriggerId) => triggerSystem.GetStoryAutoTrigger(storyAutoTriggerId);
 
@@ -100,6 +103,7 @@ public class StorySystemManager : MonoBehaviour
     public StoryChapter CurrentChapter => chapterSystem.CurrentChapter;
     public void AdvanceChapter() => chapterSystem.AdvanceChapter();
     public void SetChapter(int intValue) => chapterSystem.SetChapter(intValue);
+    public void InitializeChapterSystem() => chapterSystem.FirstTimeInitialize();
     public void ImportChapterSystem(StorySystemSaveData saveData) => chapterSystem.Import(saveData);
 
     //matchChainSystem
@@ -122,6 +126,15 @@ public class StorySystemManager : MonoBehaviour
     // persistanceSystem
     public void Import(StorySystemSaveData data) => persistanceSystem.Import(data);
     public StorySystemSaveData Export() => persistanceSystem.Export();
+    public void FirstTimeInitialize() 
+    {
+        InitializeFlagSystem();
+        InitializeVariableSystem();
+        InitializeEventSystem();
+        InitializeTriggerSystem();
+        InitializeChapterSystem();
+        InitializeMatchChainSystem();
+    }
 
     #endregion
    

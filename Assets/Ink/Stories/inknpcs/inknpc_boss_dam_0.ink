@@ -5,7 +5,7 @@ Text #loc:npc_boss_dam_greeting_0 #speaker:chara-00010-ali #kit:kit-00002-crimso
     Text #loc:npc_boss_dam_you_1 #speaker:chara-00010-ali #kit:kit-00002-crimson:home:keeper #mood:happy
     -> inknpc_boss_dam_0
 + Unforgivable #loc:choice_unforgivable
-    Text #loc:npc_unforgivable_0 #speaker:chara-00010-ali #kit:kit-00002-crimson:home:keeper #mood:happy
+    Text #loc:npc_unforgivable_0 #speaker:chara-00010-ali #kit:kit-00002-crimson:home:keeper #mood:happy #sfx:sfx-secret_evil
     ~ SetGameFlag("pending_boss_dam", true)
     ~ SetGameFlag("pending_teleporter", false)
     ~ SetGameFlag("allow_quick_travel", false)

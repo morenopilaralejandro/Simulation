@@ -16,6 +16,61 @@ MonoBehaviour:
   zoneName: zone_overworld_sidewalk
   zoneType: 0
   interiorSceneAddress: 
-  backgroundMusic: {fileID: 0}
-  fieldId: 
-  encounters: []
+  backgroundMusic: {fileID: 8300000, guid: d346bfce328c87cdb91fb3307e49abce, type: 3}
+  fieldId: field-00002-misc_street
+  encounters:
+  - EncounterId: 
+    TeamId: team-00017-m-balloon_delivery
+    Level: 21
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00003-brave_potatoes
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.4
+    - ItemId: item-material-00002-ice_cube
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.35
+  - EncounterId: 
+    TeamId: team-00018-m-crossing_guards
+    Level: 22
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00010-pil_pil_cod
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.25
+    - ItemId: item-material-00002-ice_cube
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.4
+  - EncounterId: 
+    TeamId: team-00019-m-skate_queens
+    Level: 24
+    BgmId: bgm-battle_rare
+    BallId: ball-00001-default
+    EncounterRate: 0.2
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00003-brave_potatoes
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.45
+    - ItemId: item-recovery-00010-pil_pil_cod
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.35
+    - ItemId: item-material-00002-ice_cube
+      QuantityMin: 1
+      QuantityMax: 3
+      DropChance: 0.6

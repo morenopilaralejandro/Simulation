@@ -37,6 +37,7 @@ public class DatabaseRegistry
     public Database<MatchData> MatchData;
 
     public Database<ScoutTierData> ScoutTierData;
+    public Database<FastTravelPointData> FastTravelPointData;
 
     public DatabaseRegistry()
     {
@@ -87,5 +88,8 @@ public class DatabaseRegistry
 
         //Scout
         ScoutTierData = new Database<ScoutTierData>("Scout-Tier-Data", s => s.ScoutTierId);
+
+        //FastTravel
+        FastTravelPointData = new Database<FastTravelPointData>("FastTravel-Point-Data", f => f.FastTravelPointId);
     }
 }

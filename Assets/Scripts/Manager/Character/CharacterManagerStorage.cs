@@ -24,7 +24,9 @@ public class CharacterManagerStorage
 
     public void FirstTimeInitialize()
     {
-        int startLv = 99; //default is 5
+        Clear();
+
+        int startLv = 5; //default is 5
 
         AddCharacterFromScout("chara-00070-teruel", startLv);
 
@@ -188,7 +190,7 @@ public class CharacterManagerStorage
 
     public void Import(CharacterStorageSaveData saveData)
     {
-        characters.Clear();
+        Clear();
 
         if (saveData?.CharacterSaveDataList == null) return;
 

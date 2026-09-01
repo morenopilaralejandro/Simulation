@@ -10,6 +10,12 @@ public class SelectorEquipment : Selector<ItemEquipment, SelectorEquipmentListIt
 
     #region Menu Overrides
 
+    public override void Show()
+    {
+        UIEvents.RaiseEquipmentStatLayoutUpdateRequested(null);
+        base.Show();
+    }
+
     protected override void OnGainedInput()
     {
         InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, HandleBack);

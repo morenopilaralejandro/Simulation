@@ -19,6 +19,11 @@ public class StorySystemEvents
         questSystemManager = QuestSystemManager.Instance;
     }
 
+    public void FirstTimeInitialize()
+    {
+        Clear();
+    }
+
     public void TriggerStoryEvent(string storyEventId)
     {
         if (completedEventsHashSet.Contains(storyEventId))
@@ -76,6 +81,12 @@ public class StorySystemEvents
 
     public void Import(StorySystemSaveData saveData) 
     {
+        Clear();
         completedEventsHashSet = new HashSet<string>(saveData.CompletedEventsList);
+    }
+
+    public void Clear()
+    {
+        completedEventsHashSet.Clear();
     }
 }

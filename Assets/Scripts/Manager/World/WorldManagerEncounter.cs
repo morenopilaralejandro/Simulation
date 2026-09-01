@@ -14,6 +14,8 @@ public class WorldManagerEncounter
     private PlayerWorldConfig config;
     private SceneLoader sceneLoader;
     private ChunkStreamingManager chunkStreamingManager;
+    
+    private bool isEncounterAllow = true;
 
     #endregion
 
@@ -209,6 +211,7 @@ public class WorldManagerEncounter
 
     private void TryTriggerEncounter()
     {
+        if(!isEncounterAllow) return;
         EncounterData encounter = GetRandomEncounter();
         if (encounter == null) return;
         TriggerEncounter(encounter);
@@ -227,11 +230,11 @@ public class WorldManagerEncounter
         // Single pass: calculate weight and select encounter simultaneously
         foreach (var encounter in encounters)
         {
-            if (!encounter.HasTimeOfDayRestriction || encounter.TimeOfDay == currentTimeOfDay)
-            {
+            //if (!encounter.HasTimeOfDayRestriction || encounter.TimeOfDay == currentTimeOfDay)
+            //{
                 totalWeight += encounter.EncounterRate;
                 selectedEncounter = encounter; // Always keep the last valid one as fallback
-            }
+            //}
         }
 
         if (totalWeight <= 0f) return null;
@@ -242,12 +245,12 @@ public class WorldManagerEncounter
         // Second pass: weighted selection
         foreach (var encounter in encounters)
         {
-            if (!encounter.HasTimeOfDayRestriction || encounter.TimeOfDay == currentTimeOfDay)
-            {
+            //if (!encounter.HasTimeOfDayRestriction || encounter.TimeOfDay == currentTimeOfDay)
+            //{
                 running += encounter.EncounterRate;
                 if (roll <= running)
                     return encounter;
-            }
+            //}
         }
 
         return selectedEncounter;

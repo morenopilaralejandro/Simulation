@@ -67,21 +67,15 @@ public class PersistenceManagerSave
 
     public void StartNewGame() 
     {
-        SetNewGame(true);
         SetTimestampCreation(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         CharacterManager.Instance.FirstTimeInitialize();
+        WingManager.Instance.FirstTimeInitialize();
         ItemManager.Instance.FirstTimeInitialize();
         ItemManager.Instance.InitializeCurrencySystem();
-        WingManager.Instance.FirstTimeInitialize();
-        StorySystemManager.Instance.SetChapter(0);
-        StorySystemManager.Instance.InitializeMatchChainSystem();
-        StorySystemManager.Instance.InitializeFlagSystem(); 
-        //variables
-        //event
-        //trigger
-        //matchChain
-        // put all of this in StorySystemManager
+        StorySystemManager.Instance.FirstTimeInitialize();
         WorldArgs.Hour = 12;
+
+        SetNewGame(true);
     }
 
     #endregion

@@ -16,6 +16,42 @@ MonoBehaviour:
   zoneName: zone_interior_dungeon_final_f1
   zoneType: 1
   interiorSceneAddress: zone_interior_dungeon_final_f1_scene
-  backgroundMusic: {fileID: 0}
-  fieldId: 
-  encounters: []
+  backgroundMusic: {fileID: 8300000, guid: 023e4dcff6d0b14cdb193570ae323663, type: 3}
+  fieldId: field-00014-dream_space
+  encounters:
+  - EncounterId: 
+    TeamId: team-00038-m-drowned_in_mud
+    Level: 70
+    BgmId: bgm-battle
+    BallId: ball-00002-crimson
+    EncounterRate: 0.25
+    HasTimeOfDayRestriction: 1
+    TimeOfDay: 1
+    Drops: []
+  - EncounterId: 
+    TeamId: team-00039-m-derailplosion
+    Level: 70
+    BgmId: bgm-battle
+    BallId: ball-00002-crimson
+    EncounterRate: 0.25
+    HasTimeOfDayRestriction: 1
+    TimeOfDay: 1
+    Drops: []
+  - EncounterId: 
+    TeamId: team-00040-m-black_outsiders
+    Level: 70
+    BgmId: bgm-battle
+    BallId: ball-00002-crimson
+    EncounterRate: 0.25
+    HasTimeOfDayRestriction: 1
+    TimeOfDay: 1
+    Drops: []
+  - EncounterId: 
+    TeamId: team-00041-m-burned_alive
+    Level: 70
+    BgmId: bgm-battle
+    BallId: ball-00002-crimson
+    EncounterRate: 0.25
+    HasTimeOfDayRestriction: 1
+    TimeOfDay: 1
+    Drops: []

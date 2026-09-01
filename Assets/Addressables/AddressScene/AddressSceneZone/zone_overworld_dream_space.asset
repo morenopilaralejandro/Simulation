@@ -16,6 +16,33 @@ MonoBehaviour:
   zoneName: zone_overworld_dream_space
   zoneType: 0
   interiorSceneAddress: 
-  backgroundMusic: {fileID: 0}
-  fieldId: 
-  encounters: []
+  backgroundMusic: {fileID: 8300000, guid: 31568ab41f60e3cc8b830ab39572bb53, type: 3}
+  fieldId: field-00014-dream_space
+  encounters:
+  - EncounterId: 
+    TeamId: team-00029-m-sleepwalkers
+    Level: 41
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops: []
+  - EncounterId: 
+    TeamId: team-00030-m-medusa
+    Level: 42
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops: []
+  - EncounterId: 
+    TeamId: team-00031-m-spooky
+    Level: 44
+    BgmId: bgm-battle_rare
+    BallId: ball-00001-default
+    EncounterRate: 0.2
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops: []

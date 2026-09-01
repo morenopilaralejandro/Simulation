@@ -16,6 +16,61 @@ MonoBehaviour:
   zoneName: park
   zoneType: 0
   interiorSceneAddress: 
-  backgroundMusic: {fileID: 8300000, guid: 38d24e005d5aed9b685085695e76cae0, type: 3}
+  backgroundMusic: {fileID: 8300000, guid: 56070a2a3541c0c91acc2204a58cd8bf, type: 3}
   fieldId: field-00003-ground_park
-  encounters: []
+  encounters:
+  - EncounterId: 
+    TeamId: team-00008-m-dog_walkers
+    Level: 4
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00001-churros
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.35
+    - ItemId: item-material-00006-oak_wood
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.35
+  - EncounterId: 
+    TeamId: team-00009-m-hat_trick
+    Level: 5
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00008-la_mancha_ratatouille
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.2
+    - ItemId: item-material-00006-oak_wood
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.4
+  - EncounterId: 
+    TeamId: team-00010-m-ufo_sightings
+    Level: 7
+    BgmId: bgm-battle_rare
+    BallId: ball-00001-default
+    EncounterRate: 0.2
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00001-churros
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.4
+    - ItemId: item-recovery-00008-la_mancha_ratatouille
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.3
+    - ItemId: item-material-00006-oak_wood
+      QuantityMin: 1
+      QuantityMax: 3
+      DropChance: 0.6
