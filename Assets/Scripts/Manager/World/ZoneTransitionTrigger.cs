@@ -42,6 +42,7 @@ public class ZoneTransitionTrigger : MonoBehaviour
 
     private void InitiateTransition()
     {
+        AudioManager.Instance.PlaySfx("sfx_transition_default");
         WorldManager.Instance.PlayerWorldEntity.StopMovement();
         //_playerInTrigger = false;
         WorldManager.Instance.TransitionToZone(targetZone.zoneId, targetSpawnId);

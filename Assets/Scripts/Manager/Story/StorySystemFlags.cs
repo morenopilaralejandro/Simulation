@@ -19,6 +19,7 @@ public class StorySystemFlags
     public void FirstTimeInitialize()
     {
         Clear();
+        SetFlag("allow_quick_travel", true);
         SetFlag("unlocked_scout_tier_1", true);
         //SetFlag("clear_game", true);
     }

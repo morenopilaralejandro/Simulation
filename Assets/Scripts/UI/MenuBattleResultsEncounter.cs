@@ -111,7 +111,10 @@ public class MenuBattleResultsEncounter : Menu
 
         CancelPopulatePartyCoroutine();
         panelParty.Populate();
-        panelParty.AnimateXp(data.XpResult);
+
+        if (data.IsUserWin && data.XpResult != null)
+            panelParty.AnimateXp(data.XpResult);
+    
     }
 
     private void Clear() 

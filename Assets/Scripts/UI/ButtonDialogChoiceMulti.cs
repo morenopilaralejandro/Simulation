@@ -10,6 +10,7 @@ public class ButtonDialogChoiceMulti : MonoBehaviour
     [SerializeField] private ScrollRectForwarder scrollForwarder;
     [SerializeField] private TMP_Text textDialog;
 
+    private int capturedIndex;
     private ScrollRect parentScrollRect;
     public ScrollRect ParentScrollRect => parentScrollRect;
     public Button Button => button;
@@ -25,9 +26,20 @@ public class ButtonDialogChoiceMulti : MonoBehaviour
         textDialog.text = text;
     }
 
+    public void SetIndex(int capturedIndex)
+    {
+        this.capturedIndex = capturedIndex;
+    }
+
     private void Clear()
     {
+        capturedIndex = -1;
         scrollForwarder = null;
         textDialog.text = "";
+    }
+
+    public void OnButtonClicked()
+    {
+        DialogEvents.RaiseChoiceSelected(capturedIndex);
     }
 }

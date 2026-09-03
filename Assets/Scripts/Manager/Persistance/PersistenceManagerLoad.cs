@@ -29,6 +29,8 @@ public class PersistenceManagerLoad
         StorySystemManager.Instance.InitializeMatchChainSystem();
 
         persistenceManager.SetTimestampCreation(saveData.TimestampCreation);
+        persistenceManager.SetPlayTimeSeconds(saveData.PlayTimeSeconds);
+        persistenceManager.StartSession();
         CharacterManager.Instance.Import(saveData.CharacterSystemSaveData);
         ItemManager.Instance.Import(saveData.SaveDataItemSystem);
         QuestSystemManager.Instance.Import(saveData.QuestSystemSaveData);

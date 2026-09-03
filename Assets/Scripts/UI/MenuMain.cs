@@ -14,6 +14,7 @@ public class MenuMain : Menu
 
     public void Start() 
     {
+        InputEvents.RaiseScreenControlsHideRequested();
         MenuManager.Instance.OpenMenu(this);
         AudioManager.Instance.PlayBgm("bgm-opening_0_alas_activadas");    
     }

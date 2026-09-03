@@ -39,16 +39,12 @@ public static class BattleEvents
     public static void RaiseBattleStarted(BattleType battleType)
     {
         OnBattleStarted?.Invoke(battleType);
-        InputEvents.RaiseScreenControlsShowRequested();
-        InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
     }
 
     public static event Action OnBattleEnded;
     public static void RaiseBattleEnded()
     {
         OnBattleEnded?.Invoke();
-        InputEvents.RaiseScreenControlsHideRequested();
-        InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Dpad);
     }
 
     public static event Action OnBattleFreezeRequested;

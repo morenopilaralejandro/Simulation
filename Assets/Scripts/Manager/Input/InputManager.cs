@@ -22,7 +22,6 @@ public class InputManager : MonoBehaviour
     private readonly Dictionary<InputAction, CustomAction> actionLookup = new();
     private readonly Dictionary<CustomAction, Action> _perActionDown = new();
     private readonly Dictionary<CustomAction, Action> _perActionUp   = new();
-    private GameObject onScreenControlsRoot;
     private Camera mainCamera;
     private float bufferDurationShoot = 1f;
     private bool isAndroid;
@@ -212,18 +211,6 @@ public class InputManager : MonoBehaviour
         if (Instance == this) Instance = null;
     }
 
-    public void RegisterScreenControls(GameObject screenControls) 
-    {
-        onScreenControlsRoot = screenControls;
-        HandleScreenControlsHideRequested();
-        // UpdateOnScreenVisibility();
-    }
-
-    public void UnregisterScreenControls()
-    {
-        onScreenControlsRoot = null;
-    }
-
     private void Update()
     {
         // Accumulate hold time for held buttons
@@ -399,17 +386,6 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    public void UpdateOnScreenVisibility()
-    {
-        /*
-        isAndroid = Application.platform == RuntimePlatform.Android;
-        if (onScreenControlsRoot && onScreenControlsRoot.activeSelf != isAndroid)
-            onScreenControlsRoot.SetActive(isAndroid);
-        */
-
-        //if (onScreenControlsRoot)
-            //onScreenControlsRoot.SetActive(true);
-    }
     #endregion
 
     #region Lock
@@ -553,30 +529,19 @@ public class InputManager : MonoBehaviour
 
     #region Event
 
+    /*
+
     private void OnEnable()
     {
-        InputEvents.OnScreenControlsShowRequested += HandleScreenControlsShowRequested;
-        InputEvents.OnScreenControlsHideRequested += HandleScreenControlsHideRequested;
+
     }
 
     private void OnDisable()
     {
-        InputEvents.OnScreenControlsShowRequested -= HandleScreenControlsShowRequested;
-        InputEvents.OnScreenControlsHideRequested -= HandleScreenControlsHideRequested;
+
     }
 
-    private void HandleScreenControlsHideRequested() 
-    {
-        if (onScreenControlsRoot.activeSelf != false)
-            onScreenControlsRoot.SetActive(false);
-    }
-
-    private void HandleScreenControlsShowRequested() 
-    {
-        //if (onScreenControlsRoot.activeSelf != true && isAndroid && !IsUsingController)
-        if (onScreenControlsRoot.activeSelf != true && isAndroid)
-            onScreenControlsRoot.SetActive(true);
-    }
+    */
 
     #endregion
 }

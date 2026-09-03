@@ -16,7 +16,7 @@ public class MatchChainNodeMatch : MatchChainNode
 
     public MatchChainNodeMatch(MatchChainNodeDataMatch data, MatchChainNodeSaveData savedata = null) : base(data, savedata)
     {
-        matchComponent = new MatchChainNodeComponentMatch(data, this);
+        matchComponent = new MatchChainNodeComponentMatch(data, this, savedata);
         dropsComponent = new MatchChainNodeComponentDrops(data);
 
         SetIconAddress(StorySystemManager.Instance.GetTeamEmblemAddressByMatchId(MatchId));

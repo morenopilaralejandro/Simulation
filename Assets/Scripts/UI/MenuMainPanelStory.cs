@@ -50,6 +50,7 @@ public class MenuMainPanelStory : Menu
     {
         if (!hasSaveData) 
         {
+            AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
             StartNewGame();
             return;
         }

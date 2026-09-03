@@ -8,14 +8,12 @@ public static class DialogEvents
     public static event Action OnDialogStarted;
     public static void RaiseDialogStarted()
     {
-        InputEvents.RaiseScreenControlsHideRequested();
         OnDialogStarted?.Invoke();
     }
 
     public static event Action OnDialogEnded;
     public static void RaiseDialogEnded()
     {
-        InputEvents.RaiseScreenControlsShowRequested();
         OnDialogEnded?.Invoke();
     }
 

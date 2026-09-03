@@ -20,6 +20,7 @@ public class MenuSide : Menu
     [SerializeField] protected ScrollViewAutoScroll autoScroll;
     //[SerializeField] protected ScrollRect           scrollRect;
     [SerializeField] protected MenuSideLayout layout;
+    [SerializeField] private Button buttonFastTravel;
 
     private MenuManager menuManager;
     private WorldManager worldManager;
@@ -54,6 +55,8 @@ public class MenuSide : Menu
             if (interactable) autoScroll.Activate();
             else              autoScroll.Deactivate();
         }
+
+        buttonFastTravel.interactable = StorySystemManager.Instance.GetFlag("allow_quick_travel");
 
         if (interactable) layout.Populate();
     }
@@ -117,6 +120,15 @@ public class MenuSide : Menu
         );
     }
 
+    public void OnButtonFastTravelTapped()
+    {
+        UIEvents.RaiseFastTravelPointSelectorOpenRequested(
+            new SelectorFastTravelPointSourceUnlocked(),
+            new SelectorFastTravelPointAction(),
+            null
+        );
+    }
+
     public void OnButtonQuitTapped()
     {
         menuManager.OpenMenu(menuQuit);
@@ -154,13 +166,21 @@ public class MenuSide : Menu
 
     private void HandleMenuSideOpenRequested()
     {
-        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.InMenu);
-        MenuManager.Instance.OpenMenu(this);
+        Open();
     }
 
     private void HandleOpenInput()
     {
-        if (!WorldManager.Instance.PlayerWorldEntity.CanOpenMenu) return;
+        UIEvents.RaiseMenuSideOpenRequested();
+    }
+
+    private void Open()
+    {
+        if (!WorldManager.Instance.PlayerWorldEntity.CanOpenMenu) 
+        {
+            UIEvents.RaiseMenuSideCloseRequested();
+            return;
+        }
 
         openedFrame = Time.frameCount;
 

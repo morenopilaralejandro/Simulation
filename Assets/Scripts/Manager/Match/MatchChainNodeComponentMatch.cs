@@ -11,8 +11,13 @@ public class MatchChainNodeComponentMatch
 
     public MatchChainNodeComponentMatch(MatchChainNodeDataMatch data, MatchChainNodeMatch obj, MatchChainNodeSaveData saveData = null)
     {
+        //LogManager.Error($"[MatchChainNodeComponentMatch] Constructor for {obj.MatchChainNodeId}");
+        //LogManager.Error($"[MatchChainNodeComponentMatch] Has SaveData {saveData != null}");
         this.matchChainNodeMatch = obj;
         MatchId = data.MatchId;
+        if(saveData == null) return;
+        MatchRank = saveData.MatchRank;
+        //LogManager.Error($"[MatchChainNodeComponentMatch] MatchRank {saveData.MatchRank}");
     }
 
     public void SetMatchRank(MatchRank rank) => MatchRank = rank;

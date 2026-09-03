@@ -808,7 +808,7 @@ public static class UIEvents
         ISelectorClickAction<FastTravelPoint>,
         ISelectorFilter<FastTravelPoint>
     > OnFastTravelPointSelectorOpenRequested;
-    public static void RaiseScoutTierSelectorOpenRequested(
+    public static void RaiseFastTravelPointSelectorOpenRequested(
         ISelectorSource<FastTravelPoint>      source,
         ISelectorClickAction<FastTravelPoint> action,
         ISelectorFilter<FastTravelPoint>      filter = null)

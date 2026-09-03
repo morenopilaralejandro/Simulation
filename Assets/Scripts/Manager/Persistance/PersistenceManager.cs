@@ -66,6 +66,11 @@ public class PersistenceManager : MonoBehaviour
     public void SetTimestampCreation(long longValue) => saveSystem.SetTimestampCreation(longValue);
     public void SaveGame() => saveSystem.SaveGame();
     public void StartNewGame() => saveSystem.StartNewGame();
+    public void StartSession() => saveSystem.StartSession();
+    public long PlayTimeSeconds => saveSystem.PlayTimeSeconds;
+    public long TimestampSessionStart => saveSystem.TimestampSessionStart;
+    public void SetPlayTimeSeconds(long longValue) => saveSystem.SetPlayTimeSeconds(longValue);
+    public long GetCurrentPlayTimeSeconds() => saveSystem.GetCurrentPlayTimeSeconds();
 
     // loadSystem
     public void LoadGame() => loadSystem.LoadGame();

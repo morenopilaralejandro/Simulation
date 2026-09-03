@@ -101,7 +101,10 @@ public class BattleManagerResults
                 battleResultData.ItemRewards = GetEncounterDrops();
                 break;
             */
-
+            case BattleResultsType.MatchStory:
+                battleResultData.XpReward = (int)(xpBaseFull + (expLvFactorFull * battleResultData.EnemyLevel));
+                battleResultData.GoldReward = (int)(goldBaseFull + (goldLvFactorFull * battleResultData.EnemyLevel));
+                break;
             case BattleResultsType.MatchNode:
                 battleResultData.XpReward = (int)(xpBaseFull + (expLvFactorFull * battleResultData.EnemyLevel));
                 battleResultData.GoldReward = (int)(goldBaseFull + (goldLvFactorFull * battleResultData.EnemyLevel));

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Aremoreno.Enums.Input;
 using Aremoreno.Enums.World;
 
 /// <summary>
@@ -74,6 +75,7 @@ public class WorldManager : MonoBehaviour
     private async void InitializeAsync(OverworldDefinition overworldDefinition)
     {
         InputEvents.RaiseScreenControlsShowRequested();
+        InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Dpad);
 
         if (PersistenceManager.Instance.IsNewGame() || StorySystemManager.Instance.GetFlag("pending_starting_spawn"))
         {

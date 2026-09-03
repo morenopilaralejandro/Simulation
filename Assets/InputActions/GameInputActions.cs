@@ -1360,17 +1360,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""dbcd2275-05f7-47c8-b09a-aa63f0dd6629"",
-                    ""path"": ""<Pointer>/press"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dialog_Submit"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""40dae726-f467-469e-9aac-ee7bcab6329d"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",

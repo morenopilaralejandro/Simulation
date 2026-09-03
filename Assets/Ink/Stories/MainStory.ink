@@ -30,6 +30,8 @@ INCLUDE inkchests/chest_open.ink
 INCLUDE inkchests/chest_empty.ink
 INCLUDE inkchests/chest_locked.ink
 
+INCLUDE inkdoor/door_locked.ink
+
 INCLUDE inknpcs/inknpc_shop_elena.ink
 INCLUDE inknpcs/inknpc_shop_alejandra.ink
 INCLUDE inknpcs/inknpc_shop_quevedo.ink

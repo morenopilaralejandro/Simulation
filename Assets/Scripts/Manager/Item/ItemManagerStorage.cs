@@ -139,6 +139,7 @@ public class ItemManagerStorage
             InsertSorted(new ItemStorageSlot(item, count), item.Category);
 
         ItemEvents.RaiseStorageUpdated();
+        LogManager.Trace($"[ItemManagerStorage] Added item {item.ItemId} {count}");
     }
 
     public bool RemoveItem(Item item, int count = 1)

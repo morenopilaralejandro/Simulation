@@ -211,7 +211,7 @@ public class DuelSelectionManager : MonoBehaviour
             }
         }
         
-        if (!BattleManager.Instance.IsPlayingMove && !BattleManager.Instance.IsPlayingWing)
+        if (!BattleManager.Instance.IsPlayingMove && !BattleManager.Instance.IsPlayingWing && !BattleManager.Instance.PendingEndByEssence)
             BattleManager.Instance.Unfreeze();
         BattleManager.Instance.SetBattlePhase(BattlePhase.Battle);
         OnSelectionsComplete?.Invoke();

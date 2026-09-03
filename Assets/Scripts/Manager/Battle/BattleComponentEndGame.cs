@@ -13,6 +13,8 @@ public class BattleComponentEndGame
     private bool pendingEndByEssence;
     private TeamSide pendingTeamSide;
 
+    public bool PendingEndByEssence => pendingEndByEssence;
+
     #endregion
 
     #region Constructor

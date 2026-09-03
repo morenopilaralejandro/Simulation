@@ -1337,7 +1337,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5311844386779540751, guid: 82e44876f400c2483a4c1c634de9aed0, type: 3}
       propertyPath: m_SortingOrder
-      value: 5
+      value: 32767
       objectReference: {fileID: 0}
     - target: {fileID: 5311844386779540751, guid: 82e44876f400c2483a4c1c634de9aed0, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
@@ -1461,6 +1461,7 @@ MonoBehaviour:
   panelMaximized: {fileID: 8958692531003072754}
   panelMinimized: {fileID: 2763155514498353254}
   debugMainMenu: {fileID: 11400000, guid: 1f97d28b51fa14d24a52206c7db97258, type: 2}
+  isEnemyAiEnabled: 0
 --- !u!224 &6920404562601884414 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5521708924501442333, guid: 82e44876f400c2483a4c1c634de9aed0, type: 3}

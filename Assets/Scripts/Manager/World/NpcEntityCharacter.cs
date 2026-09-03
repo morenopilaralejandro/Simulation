@@ -75,6 +75,7 @@ public class NpcEntityCharacter : NpcEntity, IAsyncSceneLoader
         CharacterDirection direction = WorldManager.Instance.PlayerWorldEntity.GetOppositeFacingDirection();
         SetFacing(direction);
         Play(CharacterAnimationState.Idle, direction);
+        animationControllerComponent.RefreshAnimation();
     }
 
     #endregion

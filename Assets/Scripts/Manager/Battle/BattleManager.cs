@@ -499,7 +499,11 @@ public class BattleManager : MonoBehaviour
     {
         BattleUIManager.Instance.SetMessageActive(MessageType.EssenceFinish, true);
         AudioManager.Instance.PlaySfx("sfx-whistle_triple");
+        DuelManager.Instance.CancelDuel();
+        Freeze();
         yield return new WaitForSeconds(2f);
+        DuelManager.Instance.CancelDuel();
+        Freeze();
         BattleUIManager.Instance.SetMessageActive(MessageType.EssenceFinish, false);
         EndGameByEssence(loserSide);
     }
@@ -751,6 +755,7 @@ public class BattleManager : MonoBehaviour
     public void ApplyEssenceDamage(DuelParticipant winner, DuelParticipant loser, DuelMode duelMode, float offensePressure, bool isPunching) => essenceSystem.ApplyEssenceDamage(winner, loser, duelMode, offensePressure, isPunching);
 
     //endGameComponent
+    public bool PendingEndByEssence => endGameComponent.PendingEndByEssence;
 
     //misc
     public GameObject InstantiateBall(GameObject prefabGo, Vector3 spawnPosition, Quaternion spawnRotation, Transform spawnPoint)
