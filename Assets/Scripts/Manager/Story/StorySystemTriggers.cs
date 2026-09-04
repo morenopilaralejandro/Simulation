@@ -21,6 +21,11 @@ public class StorySystemTriggers
         InitializeStoryAutoTriggers();
     }
 
+    public void FirstTimeInitialize()
+    {
+        Clear();
+    }
+
     private void InitializeStoryAutoTriggers()
     {
         storyAutoTriggerDictionary = new Dictionary<string, StoryAutoTrigger>();
@@ -60,6 +65,12 @@ public class StorySystemTriggers
 
     public void Import(StorySystemSaveData saveData) 
     {
+        Clear();
         triggeredHashSet = new HashSet<string>(saveData.TriggeredList);
+    }
+
+    public void Clear()
+    {
+        triggeredHashSet.Clear();
     }
 }

@@ -24,26 +24,30 @@ public class CharacterManagerStorage
 
     public void FirstTimeInitialize()
     {
-        AddCharacterFromScout("chara-00070-teruel", 5);
+        Clear();
 
-        AddCharacterFromScout("chara-00019-wang", 5);
-        AddCharacterFromScout("chara-00075-alexander", 5);
-        AddCharacterFromScout("chara-00017-ainara", 5);
-        AddCharacterFromScout("chara-00074-paula", 5);
+        int startLv = 5; //default is 5
 
-        AddCharacterFromScout("chara-00067-satu", 5);
-        AddCharacterFromScout("chara-00047-carlos", 5);
-        AddCharacterFromScout("chara-00107-diego", 5);
-        AddCharacterFromScout("chara-00013-fran", 5);
+        AddCharacterFromScout("chara-00070-teruel", startLv);
 
-        AddCharacterFromScout("chara-00154-simon", 5);
-        AddCharacterFromScout("chara-00088-sofireca", 5);
+        AddCharacterFromScout("chara-00019-wang", startLv);
+        AddCharacterFromScout("chara-00075-alexander", startLv);
+        AddCharacterFromScout("chara-00017-ainara", startLv);
+        AddCharacterFromScout("chara-00074-paula", startLv);
 
-        AddCharacterFromScout("chara-00089-roble", 5);
-        AddCharacterFromScout("chara-00041-kike", 5);
-        AddCharacterFromScout("chara-00112-fernando", 5);
-        AddCharacterFromScout("chara-00039-arga", 5);
-        AddCharacterFromScout("chara-00143-esteban", 5);
+        AddCharacterFromScout("chara-00067-satu", startLv);
+        AddCharacterFromScout("chara-00047-carlos", startLv);
+        AddCharacterFromScout("chara-00107-diego", startLv);
+        AddCharacterFromScout("chara-00013-fran", startLv);
+
+        AddCharacterFromScout("chara-00154-simon", startLv);
+        AddCharacterFromScout("chara-00088-sofireca", startLv);
+
+        AddCharacterFromScout("chara-00089-roble", startLv);
+        AddCharacterFromScout("chara-00041-kike", startLv);
+        AddCharacterFromScout("chara-00112-fernando", startLv);
+        AddCharacterFromScout("chara-00039-arga", startLv);
+        AddCharacterFromScout("chara-00143-esteban", startLv);
 
         TeamManager.Instance.InitializeFirstLoadout();
     }
@@ -149,6 +153,28 @@ public class CharacterManagerStorage
 
     #endregion
 
+    #region Full Heal
+
+    public void FullHealAll(IEnumerable<Character> characters)
+    {
+        foreach (Character character in characters)
+        {
+            character.ClearStatusPermanent();
+            character.RestoreHpSp();
+        }
+    }
+
+    public void FullHealAll() 
+    {
+        foreach (Character character in characters.Values)
+        {
+            character.ClearStatusPermanent();
+            character.RestoreHpSp();
+        }
+    }
+
+    #endregion
+
     #region Persistence
     
     public CharacterStorageSaveData Export()
@@ -164,7 +190,7 @@ public class CharacterManagerStorage
 
     public void Import(CharacterStorageSaveData saveData)
     {
-        characters.Clear();
+        Clear();
 
         if (saveData?.CharacterSaveDataList == null) return;
 

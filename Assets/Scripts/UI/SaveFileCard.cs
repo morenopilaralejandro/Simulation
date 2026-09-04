@@ -44,23 +44,25 @@ public class SaveFileCard : MonoBehaviour
 
     #region SetData
 
-    public void SetFromRuntime() 
+    public void SetFromRuntime()
     {
-        if (persistenceManager == null) persistenceManager = PersistenceManager.Instance;
-        if (worldManager == null) worldManager = WorldManager.Instance;
+        if (persistenceManager == null)
+            persistenceManager = PersistenceManager.Instance;
+
+        if (worldManager == null)
+            worldManager = WorldManager.Instance;
 
         SetData(
             worldManager.ZoneName,
             GetTimeFormated(
-                persistenceManager.TimestampCreation,
-                DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                persistenceManager.GetCurrentPlayTimeSeconds()
             )
         );
     }
 
     public void SetFromSaveData(SaveData saveData)
     {
-        if (saveData == null) 
+        if (saveData == null)
         {
             SetVisible(false);
             return;
@@ -69,15 +71,12 @@ public class SaveFileCard : MonoBehaviour
         localizationStringComponent = new LocalizationComponentString(
             LocalizationEntity.Zone,
             saveData.SaveDataWorldSystem.ZoneId,
-            new [] { LocalizationField.Name }
+            new[] { LocalizationField.Name }
         );
 
         SetData(
             localizationStringComponent.GetString(LocalizationField.Name),
-            GetTimeFormated(
-                saveData.TimestampCreation, 
-                saveData.TimestampSave
-            )
+            GetTimeFormated(saveData.PlayTimeSeconds)
         );
     }
 
@@ -95,24 +94,17 @@ public class SaveFileCard : MonoBehaviour
 
     #region Helpers
 
-    private string GetTimeFormated(
-        long timestampCreation,
-        long timestampSave
-    ) 
+    private string GetTimeFormated(long playTimeSeconds)
     {
-        long elapsedSeconds = timestampSave - timestampCreation;
+        int totalMinutes = (int)(playTimeSeconds / 60);
 
-        if (elapsedSeconds < 0)
-            elapsedSeconds = 0;
-
-        int totalMinutes = (int)(elapsedSeconds / 60);
         int hours = totalMinutes / 60;
         int minutes = totalMinutes % 60;
 
-        // Clamp hours to 999 max
-        if (hours > maxHours) hours = maxHours;
+        if (hours > maxHours)
+            hours = maxHours;
 
-        return string.Format("{0}:{1:D2}", hours, minutes);
+        return $"{hours}:{minutes:D2}";
     }
 
     #endregion

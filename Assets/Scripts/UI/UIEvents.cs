@@ -77,6 +77,18 @@ public static class UIEvents
         OnMenuSideCloseRequested?.Invoke();
     }
 
+    public static event Action OnMenuSideOpened;
+    public static void RaiseMenuSideOpened()
+    {
+        OnMenuSideOpened?.Invoke();
+    }
+
+    public static event Action OnMenuSideClosed;
+    public static void RaiseMenuSideClosed()
+    {
+        OnMenuSideClosed?.Invoke();
+    }
+
     // Menu Team
     public static event Action OnTeamMenuClosed;
     public static void RaiseTeamMenuClosed()
@@ -801,5 +813,17 @@ public static class UIEvents
     {
         OnScoutEntrySelectorRefreshRequested?.Invoke();
     }
+
+    //FastTravel
+    public static event System.Action<
+        ISelectorSource<FastTravelPoint>,
+        ISelectorClickAction<FastTravelPoint>,
+        ISelectorFilter<FastTravelPoint>
+    > OnFastTravelPointSelectorOpenRequested;
+    public static void RaiseFastTravelPointSelectorOpenRequested(
+        ISelectorSource<FastTravelPoint>      source,
+        ISelectorClickAction<FastTravelPoint> action,
+        ISelectorFilter<FastTravelPoint>      filter = null)
+    => OnFastTravelPointSelectorOpenRequested?.Invoke(source, action, filter);
 
 }

@@ -26,7 +26,7 @@ public class ChestEntity : MonoBehaviour
         Initialize(chestId, itemData);
         // Check if already opened
         if (IsOpenedPersistent) 
-            Open();
+            SetState(ChestState.Opened);
         else 
             SetState(state);
     }
@@ -102,6 +102,7 @@ public class ChestEntity : MonoBehaviour
     {
         if (IsPersistent) OpenPersistent();
         SetState(ChestState.Opened);
+        ItemManager.Instance.AddItem(ItemFactory.Create(ItemData));
     }
 
     #endregion

@@ -15,28 +15,584 @@ MonoBehaviour:
   m_TableCollectionName: Gameplay-Dialog-Text-Localized
   m_TableCollectionNameGuidString: b7e5c2e54d59cef52b56c6b356f3e737
   m_Entries:
-  - m_Id: 4266911120236544
+  - m_Id: 63058197209686016
+    m_Key: choice_yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686017
+    m_Key: choice_no
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686018
+    m_Key: choice_buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686019
+    m_Key: choice_sell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686020
+    m_Key: choice_leave
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686021
+    m_Key: choice_cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686022
+    m_Key: choice_back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686023
+    m_Key: choice_goodbye
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686024
+    m_Key: choice_pray
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686025
+    m_Key: choice_confess
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686026
+    m_Key: choice_unforgivable
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686027
+    m_Key: choice_match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686028
+    m_Key: choice_road
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686029
+    m_Key: choice_about_match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686030
+    m_Key: choice_about_you
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686031
+    m_Key: choice_about_place
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058197209686032
+    m_Key: choice_about_team
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585536
+    m_Key: npc_elena_you_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585537
+    m_Key: npc_elena_place_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585538
+    m_Key: npc_elena_place_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585539
+    m_Key: npc_alejandra_you_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585540
+    m_Key: npc_alejandra_place_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585541
+    m_Key: npc_ufoclub_about_you_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585542
+    m_Key: npc_ufoclub_about_place_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585543
+    m_Key: npc_ufoclub_about_place_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585544
+    m_Key: npc_pichi_you_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585545
+    m_Key: npc_pichi_you_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585546
+    m_Key: npc_pichi_place_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585547
+    m_Key: npc_lidia_place_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585548
+    m_Key: npc_bea_you_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585549
+    m_Key: npc_bea_you_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585550
+    m_Key: npc_walkway_girl_you_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585551
+    m_Key: npc_walkway_girl_you_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585552
+    m_Key: npc_walkway_girl_place_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585553
+    m_Key: npc_walkway_girl_place_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585554
+    m_Key: npc_tieman_you_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585555
+    m_Key: npc_priest_confess_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585556
+    m_Key: npc_priest_confess_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585557
+    m_Key: npc_unforgivable_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585558
+    m_Key: npc_cube
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585559
+    m_Key: npc_place_cube_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585560
+    m_Key: npc_place_cube_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585561
+    m_Key: npc_boss_dam_you_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585562
+    m_Key: npc_boss_dam_you_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585563
+    m_Key: npc_boss_dam_greeting_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585564
+    m_Key: npc_male_villain_derail_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585565
+    m_Key: npc_male_villain_derail_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213483585566
+    m_Key: npc_female_villain_blackout_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779840
+    m_Key: npc_female_villain_blackout_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779841
+    m_Key: npc_female_villain_blackout_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779842
+    m_Key: npc_female_villain_ritual_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779843
+    m_Key: npc_male_villain_volcano_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779844
+    m_Key: npc_male_villain_volcano_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779845
+    m_Key: npc_kid_help_help_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779846
+    m_Key: npc_kid_help_help_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779847
+    m_Key: npc_teen_girl_train_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779848
+    m_Key: npc_teen_girl_train_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779849
+    m_Key: npc_teen_girl_train_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779850
+    m_Key: npc_teen_girl_train_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779851
+    m_Key: npc_teen_girl_train_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779852
+    m_Key: npc_teen_girl_train_5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779853
+    m_Key: npc_teen_girl_power_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779854
+    m_Key: npc_teen_girl_power_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779855
+    m_Key: npc_teen_girl_power_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779856
+    m_Key: npc_teen_girl_power_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779857
+    m_Key: npc_teen_girl_power_4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779858
+    m_Key: npc_teen_boy_volcano_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779859
+    m_Key: npc_teen_boy_volcano_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779860
+    m_Key: npc_teen_boy_volcano_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779861
+    m_Key: npc_teen_boy_volcano_3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779862
+    m_Key: npc_padial_match_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779863
+    m_Key: npc_padial_match_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779864
+    m_Key: npc_padial_place_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779865
+    m_Key: npc_weird_boy_team_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779866
+    m_Key: npc_weird_boy_team_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779867
+    m_Key: npc_weird_boy_team_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779868
+    m_Key: npc_weird_boy_help_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779869
+    m_Key: npc_happy_girl_match_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779870
+    m_Key: npc_happy_girl_team_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779871
+    m_Key: npc_happy_girl_intro_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779872
+    m_Key: npc_happy_girl_help_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779873
+    m_Key: npc_flores_flood_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779874
+    m_Key: npc_flores_about_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779875
+    m_Key: npc_tolosa_train_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779876
+    m_Key: npc_tolosa_about_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779877
+    m_Key: npc_roberto_blackout_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779878
+    m_Key: npc_roberto_power_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779879
+    m_Key: npc_roberto_place_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779880
+    m_Key: npc_elder_volcano_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779881
+    m_Key: npc_elder_history_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779882
+    m_Key: npc_elder_islands_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779883
+    m_Key: npc_elder_thanks_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779884
+    m_Key: npc_crimson_trap_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779885
+    m_Key: npc_crimson_node_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779886
+    m_Key: npc_crimson_intro_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779887
+    m_Key: npc_crimson_goal_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779888
+    m_Key: npc_crimson_node_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779889
+    m_Key: npc_crimson_attack_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779890
+    m_Key: env_skeleton_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779891
+    m_Key: env_bed_machine_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779892
+    m_Key: env_machine_broken_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779893
+    m_Key: env_dam_panel_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779894
+    m_Key: env_screen_man_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779895
+    m_Key: env_screen_man_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779896
+    m_Key: env_screen_man_2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779897
+    m_Key: npc_angel_help_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779898
+    m_Key: npc_angel_simulation_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779899
+    m_Key: npc_angel_debug_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779900
+    m_Key: npc_angel_quest_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058213487779901
+    m_Key: npc_angel_quest_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505018892288
+    m_Key: npc_villain_flood_shard_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086592
+    m_Key: npc_villain_train_shard_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086593
+    m_Key: npc_villain_blackout_shard_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086594
+    m_Key: npc_villain_volcano_shard_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086595
+    m_Key: npc_villain_flood_shard_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086596
+    m_Key: npc_villain_train_shard_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086597
+    m_Key: npc_villain_blackout_shard_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086598
+    m_Key: npc_villain_volcano_shard_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086599
+    m_Key: item_shard_sorrow_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086600
+    m_Key: item_shard_fear_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086601
+    m_Key: item_shard_hatred_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318505023086602
+    m_Key: item_shard_anger_0
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058268881952768
+    m_Key: greeting_greetings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058268881952769
+    m_Key: greeting_hello
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058268881952770
+    m_Key: greeting_hi
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058268881952771
+    m_Key: greeting_what
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058268881952772
+    m_Key: greeting_how
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058268881952773
+    m_Key: greeting_suspense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058268881952774
+    m_Key: greeting_welcome
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058268881952775
+    m_Key: greeting_holy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058268881952776
+    m_Key: greeting_prepare
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058248380194816
+    m_Key: farewell_farewell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058248380194817
+    m_Key: farewell_goodbye
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058248380194818
+    m_Key: farewell_bye
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058248380194819
+    m_Key: farewell_care
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058248380194820
+    m_Key: farewell_out
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058248380194821
+    m_Key: farewell_come
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058248380194822
+    m_Key: farewell_suspense
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058248380194823
+    m_Key: farewell_holy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058248380194824
+    m_Key: farewell_later
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058233347809280
+    m_Key: door_locked_1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058161876869120
     m_Key: chest_open_1
     m_Metadata:
       m_Items: []
-  - m_Id: 4266911141208064
+  - m_Id: 63058161876869121
     m_Key: chest_found_1
     m_Metadata:
       m_Items: []
-  - m_Id: 4266911141208065
+  - m_Id: 63058161876869122
     m_Key: chest_empty_1
     m_Metadata:
       m_Items: []
-  - m_Id: 4266911141208066
+  - m_Id: 63058161876869123
     m_Key: chest_locked_1
-    m_Metadata:
-      m_Items: []
-  - m_Id: 303648523165696
-    m_Key: test1
-    m_Metadata:
-      m_Items: []
-  - m_Id: 303746611159040
-    m_Key: test2
     m_Metadata:
       m_Items: []
   m_Metadata:

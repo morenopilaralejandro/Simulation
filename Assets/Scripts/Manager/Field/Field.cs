@@ -26,7 +26,7 @@ public class Field : MonoBehaviour
         BattleManager.Instance.RegisterField(this);
     }
 
-    void Destroy() 
+    void OnDestroy() 
     {
         BattleManager.Instance.UnregisterField();
 

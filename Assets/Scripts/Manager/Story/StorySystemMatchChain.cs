@@ -42,6 +42,7 @@ public class StorySystemMatchChain
 
     public void Import(StorySystemSaveData saveData)
     {
+        InitializeFromDatabase();
         foreach(var chainSaveData in saveData.MatchChainSystemSaveData.MatchChains) 
         {
             dict[chainSaveData.MatchChainId].Import(chainSaveData);
@@ -168,6 +169,7 @@ public class StorySystemMatchChain
             bgmId: match.BgmId,
             fieldId: match.FieldId,
             matchChainNodeId: matchChainNodeMatch != null ? matchChainNodeMatch.MatchChainNodeId : null,
+            matchId: matchChainNodeMatch != null ? null : match.MatchId,
             awayTeamLevel : match.Level
         );
 

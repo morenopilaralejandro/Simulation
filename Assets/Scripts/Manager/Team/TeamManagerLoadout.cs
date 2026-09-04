@@ -249,6 +249,8 @@ public class TeamManagerLoadout
     /// </summary>
     public Team InitializeFirstLoadout()
     {
+        loadouts.Clear();
+
         if (loadouts.Count > 0)
         {
             LogManager.Warning("[TeamLoadoutManager] Loadouts already exist. Skipping first-time initialization.");
@@ -470,6 +472,9 @@ public class TeamManagerLoadout
             LoadEntityAppearanceAsync(entity);
 
             entity.gameObject.SetActive(!entity.IsFainted);
+
+            entity.RefreshAnimation();
+
             entity.HideSpeechBubble();
             entity.UpdateFatigue();
             entity.gameObject.name = entity.CharacterId;

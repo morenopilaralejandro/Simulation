@@ -131,6 +131,7 @@ public class CharacterEntityBattle : MonoBehaviour
     }
     public void ModifyTrainedStat(Stat stat, int amount) => character.ModifyTrainedStat(stat, amount);
     public void UpdateStats() => character.UpdateStats();
+    public void RestoreHpSp() => character.RestoreHpSp();
 
     // trainingComponent
     public int MaxTrainingPerStat => character.MaxTrainingPerStat;

@@ -13,6 +13,7 @@ public class BattleManagerResults
     private BattleResultData battleResultData;
     private SceneGroup sceneWorld;
     private SceneGroup sceneDebugMainMenu;
+    private SceneGroup sceneCredits;
 
     private int xpBaseFull = 900;
     private float expLvFactorFull = 100;
@@ -30,11 +31,12 @@ public class BattleManagerResults
 
     #region Constructor
 
-    public BattleManagerResults(SceneGroup sceneWorld, SceneGroup sceneDebugMainMenu)
+    public BattleManagerResults(SceneGroup sceneWorld, SceneGroup sceneDebugMainMenu, SceneGroup sceneCredits)
     {
         this.battleResultData = new BattleResultData();
         this.sceneWorld = sceneWorld;
         this.sceneDebugMainMenu = sceneDebugMainMenu;
+        this.sceneCredits = sceneCredits;
     }
 
     #endregion
@@ -46,7 +48,8 @@ public class BattleManagerResults
         Dictionary<TeamSide, Team> teams,
         TeamSide userSide,
         BattleType battleType,
-        TeamSide? forcedWinner = null)
+        TeamSide? forcedWinner = null,
+        bool isEssenceFinish = false)
     {
         battleResultData.Clear();
 
@@ -56,6 +59,7 @@ public class BattleManagerResults
         battleResultData.EnemyLevel = BattleArgs.AwayTeamLevel;
 
         battleResultData.IsForcedWinner = forcedWinner.HasValue;
+        battleResultData.IsEssenceFinish = isEssenceFinish;
 
         if (battleResultData.IsForcedWinner)
             battleResultData.WinningSide = forcedWinner.Value;
@@ -69,7 +73,7 @@ public class BattleManagerResults
 
         ApplyBattleRewards(userSide);
         GiveBattleRewards();
-        //TryProgresStory();
+        TryProgresStory();
     }
 
     public void Clear() 
@@ -97,7 +101,10 @@ public class BattleManagerResults
                 battleResultData.ItemRewards = GetEncounterDrops();
                 break;
             */
-
+            case BattleResultsType.MatchStory:
+                battleResultData.XpReward = (int)(xpBaseFull + (expLvFactorFull * battleResultData.EnemyLevel));
+                battleResultData.GoldReward = (int)(goldBaseFull + (goldLvFactorFull * battleResultData.EnemyLevel));
+                break;
             case BattleResultsType.MatchNode:
                 battleResultData.XpReward = (int)(xpBaseFull + (expLvFactorFull * battleResultData.EnemyLevel));
                 battleResultData.GoldReward = (int)(goldBaseFull + (goldLvFactorFull * battleResultData.EnemyLevel));
@@ -140,10 +147,34 @@ public class BattleManagerResults
         if(battleResultData.BattleResultsType != BattleResultsType.MatchStory) return;
         if(BattleArgs.MatchId == null) return;
 
-        /*
-        set flag battleResultData.MatchId
+        StorySystemManager.Instance.SetFlag(BattleArgs.MatchId, true);
 
-        */
+        switch (BattleArgs.MatchId) 
+        {
+            /*
+            case "match-00021-boss_0":
+            case "match-00022-boss_1":
+            case "match-00023-boss_2":
+            case "match-00024-boss_3":
+                break;
+            */
+
+            case "match-00025-boss_4":
+                StorySystemManager.Instance.SetFlag("clear_game", true);
+                StorySystemManager.Instance.SetFlag("pending_ending", true);
+
+                if (ItemManager.Instance.HasItem(ItemFactory.CreateById("item-important-00005-shard_joy")) && 
+                    ItemManager.Instance.HasItem(ItemFactory.CreateById("item-important-00006-shard_love")))
+                {
+                    StorySystemManager.Instance.SetFlag("ending_good", true);
+                } else 
+                {
+                    StorySystemManager.Instance.SetFlag("ending_good", false);
+                }
+
+                break;
+
+        }
     }
 
     #endregion
@@ -249,6 +280,24 @@ public class BattleManagerResults
 
     private void HandleResultsContinueRequested()
     {
+
+        if (StorySystemManager.Instance.GetFlag("pending_ending") && 
+            !StorySystemManager.Instance.GetFlag("ending_good")) 
+        {
+            StorySystemManager.Instance.SetFlag("pending_ending", false);
+            StorySystemManager.Instance.SetFlag("pending_starting_spawn", true);
+            StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
+            SceneLoader.Instance.LoadGroup(sceneCredits);
+            return;
+        }
+
+        if (battleResultData.IsEssenceFinish && !battleResultData.IsUserWin) 
+        {
+            StorySystemManager.Instance.SetFlag("pending_starting_spawn", true);
+            StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
+            //CharacterManager.Instance.FullHealAll();
+        }
+
         switch(battleResultData.BattleResultsType) 
         {
             case BattleResultsType.Debug:

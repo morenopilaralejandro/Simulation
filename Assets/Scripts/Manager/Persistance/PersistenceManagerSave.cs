@@ -8,6 +8,8 @@ public class PersistenceManagerSave
 
     private const string FLAG_NEW_GAME = "NEW_GAME";
     private long timestampCreation;
+    private long timestampSessionStart;
+    private long playTimeSeconds;
 
     private PersistenceManager persistenceManager;
     private StorySystemManager storyManager;
@@ -29,12 +31,18 @@ public class PersistenceManagerSave
     public bool IsNewGame() => storyManager.GetFlag(FLAG_NEW_GAME);
     public void SetNewGame(bool boolValue) => storyManager.SetFlag(FLAG_NEW_GAME, boolValue);
 
+    public long PlayTimeSeconds => playTimeSeconds;
+    public long TimestampSessionStart => timestampSessionStart;
     public long TimestampCreation => timestampCreation;
     public void SetTimestampCreation(long longValue) => timestampCreation = longValue;
+    public void SetPlayTimeSeconds(long longValue) => playTimeSeconds = longValue;
 
     public void SaveGame()
     {
         if (IsNewGame()) SetNewGame(false);
+
+        playTimeSeconds = GetCurrentPlayTimeSeconds();
+        StartSession();
 
         SaveData data = CreateSaveData();
         persistenceManager.Save(data);
@@ -54,6 +62,7 @@ public class PersistenceManagerSave
 
             TimestampSave = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
             TimestampCreation = timestampCreation,
+            PlayTimeSeconds = playTimeSeconds,
             CharacterSystemSaveData = CharacterManager.Instance.Export(),
             SaveDataItemSystem = ItemManager.Instance.Export(),
             QuestSystemSaveData = QuestSystemManager.Instance.Export(),
@@ -67,21 +76,38 @@ public class PersistenceManagerSave
 
     public void StartNewGame() 
     {
-        SetNewGame(true);
+        StartSession();
         SetTimestampCreation(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         CharacterManager.Instance.FirstTimeInitialize();
+        WingManager.Instance.FirstTimeInitialize();
         ItemManager.Instance.FirstTimeInitialize();
         ItemManager.Instance.InitializeCurrencySystem();
-        WingManager.Instance.FirstTimeInitialize();
-        StorySystemManager.Instance.SetChapter(0);
-        StorySystemManager.Instance.InitializeMatchChainSystem();
-        StorySystemManager.Instance.InitializeFlagSystem();
+        StorySystemManager.Instance.FirstTimeInitialize();
         WorldArgs.Hour = 12;
+
+        SetNewGame(true);
+    }
+
+    public void StartSession()
+    {
+        timestampSessionStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
     }
 
     #endregion
 
     #region Helpers
+
+    public long GetCurrentPlayTimeSeconds()
+    {
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+        long sessionSeconds = now - timestampSessionStart;
+
+        if (sessionSeconds < 0)
+            sessionSeconds = 0;
+
+        return playTimeSeconds + sessionSeconds;
+    }
 
     #endregion
 

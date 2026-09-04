@@ -27,6 +27,7 @@ public class PlayerWorldComponentModel : MonoBehaviour
     public void SetFacing(CharacterDirection dir)
     {
         facingDirection = dir;
+        playerWorldEntity.RefreshAnimation();
         //UpdateAnimation();
     }
 

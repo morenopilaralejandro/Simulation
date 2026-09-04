@@ -12,6 +12,38 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterAppearanceBattle
       objectReference: {fileID: 0}
+    - target: {fileID: 2658883503152208289, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2658883503152208289, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2658883503152208289, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -5347733091965231759, guid: 8e009c4512e5f838fb8949332999dae1, type: 3}
+    - target: {fileID: 2658883503152208289, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848161408656511802, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848161408656511802, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848161408656511802, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2848161408656511802, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3913424799742821647, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -63,6 +95,38 @@ PrefabInstance:
     - target: {fileID: 3943641887977168860, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996319660223339382, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996319660223339382, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6996319660223339382, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -4903520900848775686, guid: c977abf11b4172fe3916aadd40530c31, type: 3}
+    - target: {fileID: 6996319660223339382, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8942911939586455313, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8942911939586455313, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8942911939586455313, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8886372697594394437, guid: cd62af06dbc079aec9ec4a0656e6e913, type: 3}
+    - target: {fileID: 8942911939586455313, guid: be84ee8b089aecbb098c4ac80b6acff2, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -204,6 +268,7 @@ MonoBehaviour:
   kitData: {fileID: 0}
   variant: 0
   role: 0
+  defaultFacingDirection: 0
   appearanceComponentBattle: {fileID: 5212279579775719735}
   animationControllerComponent: {fileID: 5566322616660772371}
   ySortComponent: {fileID: 8434606471807757168}

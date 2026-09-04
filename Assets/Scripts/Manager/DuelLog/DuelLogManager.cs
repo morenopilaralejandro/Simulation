@@ -63,6 +63,8 @@ public class DuelLogManager : MonoBehaviour
 
         EssenceEvents.OnCharacterUnderwentEssenceOverflow += HandleEssenceOverflow;
         EssenceEvents.OnEssenceBattleLimitReached += HandleEssenceBattleLimitReached;
+
+        MoveEvents.OnMoveEvolved += HandleMoveEvolved;
     }
 
     void OnDisable()
@@ -84,6 +86,8 @@ public class DuelLogManager : MonoBehaviour
 
         EssenceEvents.OnCharacterUnderwentEssenceOverflow -= HandleEssenceOverflow;
         EssenceEvents.OnEssenceBattleLimitReached -= HandleEssenceBattleLimitReached;
+
+        MoveEvents.OnMoveEvolved -= HandleMoveEvolved;
     }
 
     private void HandleBattleStarted(BattleType battleType) 
@@ -117,6 +121,8 @@ public class DuelLogManager : MonoBehaviour
         
     private void HandleEssenceOverflow(CharacterEntityBattle character) => AddActionEssence(character.Character, character.TeamSide);
     private void HandleEssenceBattleLimitReached(TeamSide teamSide, int essenceOverflowUnderwent) => AddMatchEssence();
+
+    private void HandleMoveEvolved(Move move, CharacterEntityBattle character) => AddNotifyMoveEvolved(character.Character, character.TeamSide, move);
 
     #endregion
 
@@ -620,7 +626,6 @@ public class DuelLogManager : MonoBehaviour
 
     public void AddNotifyMoveEvolved(Character character, TeamSide teamSide, Move move)
     {   
-        /*
         string characterName = character.CharacterNick;
         string moveName = move.MoveName;
 
@@ -635,7 +640,7 @@ public class DuelLogManager : MonoBehaviour
             LogLevel = LogLevel.Trace,
             Character = character,
             TeamSide = teamSide,
-            Move move = move,
+            Move = move,
             Args = args
         });
 
@@ -645,14 +650,9 @@ public class DuelLogManager : MonoBehaviour
             LogLevel = LogLevel.Info,
             Character = character,
             TeamSide = teamSide,
-            Move move = move,
+            Move = move,
             Args = args
         });
-        */
-
-        AddEntry(Trace("notify_move_evolved"));
-        AddEntry(Info("notify_move_evolved"));
-
     }
 
     public void AddNotifyWingEvolved(Character character, TeamSide teamSide, Wing wing)

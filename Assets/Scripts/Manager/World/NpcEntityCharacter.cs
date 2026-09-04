@@ -1,10 +1,11 @@
 using UnityEngine;
+using System.Threading.Tasks;
 using Aremoreno.Enums.Animation;
 using Aremoreno.Enums.Character;
 using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.World;
 
-public class NpcEntityCharacter : NpcEntity
+public class NpcEntityCharacter : NpcEntity, IAsyncSceneLoader
 {
     #region Fields
     [SerializeField] private NpcType npcType = NpcType.Character;
@@ -12,6 +13,7 @@ public class NpcEntityCharacter : NpcEntity
     [SerializeField] private KitData kitData;
     [SerializeField] private Variant variant;
     [SerializeField] private Role role;
+    [SerializeField] private CharacterDirection defaultFacingDirection = CharacterDirection.Down;
 
     private CharacterComponentAppearance appearanceComponent;
 
@@ -28,9 +30,16 @@ public class NpcEntityCharacter : NpcEntity
 
     #region Initialize
 
-    public void Start() 
+    public void Awake() 
+    {
+        animationControllerComponent.RefreshAnimation();
+        Play(CharacterAnimationState.Idle, defaultFacingDirection);
+    }
+
+    public async Task LoadAsync()
     {
         Initialize(characterData);
+        await appearanceComponentBattle.LoadKitAsync();
     }
 
     public void Initialize(CharacterData characterData)
@@ -40,9 +49,11 @@ public class NpcEntityCharacter : NpcEntity
         appearanceComponent = new CharacterComponentAppearance(characterData, null, null);
         appearanceComponentBattle.Initialize(appearanceComponent);
         appearanceComponent.SetKit(DatabaseManager.Instance.GetKit(kitData.KitId), variant, role);
-        _ = appearanceComponentBattle.LoadKitAsync();
 
         interactableDialogComponent?.Initialize(this);
+
+        animationControllerComponent.RefreshAnimation();
+        Play(CharacterAnimationState.Idle, defaultFacingDirection);
     }
 
     #endregion
@@ -64,6 +75,7 @@ public class NpcEntityCharacter : NpcEntity
         CharacterDirection direction = WorldManager.Instance.PlayerWorldEntity.GetOppositeFacingDirection();
         SetFacing(direction);
         Play(CharacterAnimationState.Idle, direction);
+        animationControllerComponent.RefreshAnimation();
     }
 
     #endregion

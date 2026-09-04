@@ -19,6 +19,12 @@ public class SelectorItemShop : Selector<Item, SelectorItemShopListItem>
 
     #region Menu Overrides
 
+    public override void Show()
+    {
+        UIEvents.RaiseBagDescriptionUpdated(null);
+        base.Show();
+    }
+
     protected override void OnGainedInput()
     {
         var im = InputManager.Instance;

@@ -9,6 +9,9 @@ public class SelectorItemStorageSlotSourceFromStorageByCategoryDiffereciateForma
     private ItemCategory category;
     private BattleType battleType;
 
+    public ItemCategory Category => category;
+    public BattleType BattleType => battleType;
+
     public SelectorItemStorageSlotSourceFromStorageByCategoryDiffereciateFormation() {}
     public SelectorItemStorageSlotSourceFromStorageByCategoryDiffereciateFormation(
         ItemCategory category,

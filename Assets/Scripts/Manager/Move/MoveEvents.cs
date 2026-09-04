@@ -21,4 +21,10 @@ public static class MoveEvents
     {
         OnMoveUsed?.Invoke(move, character);
     }
+
+    public static event Action<Move, CharacterEntityBattle> OnMoveEvolved;
+    public static void RaiseMoveEvolved(Move move, CharacterEntityBattle character)
+    {
+        OnMoveEvolved?.Invoke(move, character);
+    }
 }

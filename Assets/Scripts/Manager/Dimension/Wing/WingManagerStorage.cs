@@ -18,6 +18,7 @@ public class WingManagerStorage
 
     public void FirstTimeInitialize()
     {
+        Clear();
         /*
         var wingDatabase = DatabaseManager.Instance;
 
@@ -130,7 +131,7 @@ public class WingManagerStorage
 
     public void Import(WingStorageSaveData saveData)
     {
-        wings.Clear();
+        Clear();
 
         if (saveData?.WingSaveDataList == null) return;
 

@@ -19,12 +19,12 @@ MonoBehaviour:
     m_Items:
     - rid: 6474107469045432322
   m_TableData:
-  - m_Id: 303530935853056
-    m_Localized: a
+  - m_Id: 63058212963491840
+    m_Localized: No
     m_Metadata:
       m_Items: []
-  - m_Id: 303558614065152
-    m_Localized: b
+  - m_Id: 63058212959297536
+    m_Localized: Yes
     m_Metadata:
       m_Items: []
   - m_Id: 4266809588719616
@@ -32,7 +32,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 4266809592913920
-    m_Localized: You found {0[chest_item_name]}!
+    m_Localized: You found {chest_item_name}!
     m_Metadata:
       m_Items:
       - rid: 6474107469045432322
@@ -42,6 +42,571 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 4266809592913922
     m_Localized: The chest is locked. You need a key.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491841
+    m_Localized: Buy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491842
+    m_Localized: Sell
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491843
+    m_Localized: Leave
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491844
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491845
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491846
+    m_Localized: Goodbye
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491847
+    m_Localized: Pray
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491848
+    m_Localized: Confess
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491849
+    m_Localized: You won't get away with this!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491850
+    m_Localized: Play match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491851
+    m_Localized: Play road
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491852
+    m_Localized: About the match
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491853
+    m_Localized: About you
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491854
+    m_Localized: About this place
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058212963491855
+    m_Localized: About your team
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911552
+    m_Localized: "I\u2019m the captain of the Saint Justice team."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911553
+    m_Localized: This school is very prestigious.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911554
+    m_Localized: "It\u2019s well known throughout the city."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911555
+    m_Localized: I like drawing.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911556
+    m_Localized: The school has its own church.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911557
+    m_Localized: I study UFO sightings in the park.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911558
+    m_Localized: This is the UFO Club.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911559
+    m_Localized: We study paranormal activities here.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911560
+    m_Localized: I'm the coolest guy in town.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911561
+    m_Localized: I punish bad girls.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911562
+    m_Localized: Mercapingo sells everything, from food to accessories.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911563
+    m_Localized: Mercapingo is the most popular supermarket around.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911564
+    m_Localized: I come here to eat delicious food...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911565
+    m_Localized: Don't tell anyone about this, okay...?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911566
+    m_Localized: I usually walk along this walkway.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911567
+    m_Localized: I hope nothing bad happens in the future.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911568
+    m_Localized: The train station is northwest of here.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911569
+    m_Localized: Be careful. The road is in bad shape, and the area is dirty.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911570
+    m_Localized: The fact that you can see me means you are truly strong.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911571
+    m_Localized: Confess your sins.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911572
+    m_Localized: HP and SP restored.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911573
+    m_Localized: Crimson Cube activated!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911574
+    m_Localized: The Crimson Cube teleports us to a replica of the Corrupted Soccer
+      Realm in the simulation.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911575
+    m_Localized: The Crimson Cube teleports us to a replica of the Corrupted Soccer
+      Realm.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911576
+    m_Localized: This replica exists within the simulation.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911577
+    m_Localized: I have kidnapped the dam chief's son to keep the dam open and flood
+      the city.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911578
+    m_Localized: I'm also guarding the dam's manual control mechanism.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911579
+    m_Localized: Soon, this entire city will be beneath the floodwaters.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911580
+    m_Localized: I'll derail the train.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911581
+    m_Localized: I'll derail the hijacked train with a powerful shot.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911582
+    m_Localized: An endless blackout...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911583
+    m_Localized: I'm showing her disgusting images to break her spirit.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911584
+    m_Localized: That way, she can't generate electricity.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911585
+    m_Localized: The White Room is where Black Cube Co. performs its rituals.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911586
+    m_Localized: The village will burn down.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911587
+    m_Localized: I'll use my strength to cause a volcanic eruption.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911588
+    m_Localized: Help me!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911589
+    m_Localized: Thank you for saving me.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911590
+    m_Localized: Please help me!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911591
+    m_Localized: My family is on the train.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911592
+    m_Localized: I work making sandwiches at the train station.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911593
+    m_Localized: This train station used to be luxurious.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911594
+    m_Localized: But now, the place is almost abandoned.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911595
+    m_Localized: Thank you for saving my family.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911596
+    m_Localized: Help me!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911597
+    m_Localized: I'm very sad.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911598
+    m_Localized: Thank you for saving me.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911599
+    m_Localized: I have the power to generate electricity.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911600
+    m_Localized: I work at the power plant.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911601
+    m_Localized: The sea looks so peaceful, yet I can't shake this fear.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911602
+    m_Localized: What good is peace when the volcano could destroy our village?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911603
+    m_Localized: I can only watch and wonder if there's anything I can do.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911604
+    m_Localized: Thank you for saving our village.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911605
+    m_Localized: An exhibition match is coming up at Saint Justice, northeast of
+      here.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911606
+    m_Localized: Giant Turtle will face Secret Girls.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911607
+    m_Localized: The park is west of here.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911608
+    m_Localized: I don't feel good about facing this opponent. You can take my place.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911609
+    m_Localized: We're just a small neighborhood team, not Saint Justice's team.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911610
+    m_Localized: That's it. I'm quitting the team.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911611
+    m_Localized: Actually... I've changed my mind. I'll help you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911612
+    m_Localized: Witness the power of idols. This exhibition will show our true strength.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911613
+    m_Localized: Every player is a girl, and we even have our own girl group.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911614
+    m_Localized: I'm the captain of the team and the group's main singer.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911615
+    m_Localized: Count on us. We'll help you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911616
+    m_Localized: Oh no! The dam is open, and a flood is coming. The whole city may
+      flood.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911617
+    m_Localized: I love the smell of flowers.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911618
+    m_Localized: This is terrible. A train was hijacked, and it could derail.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911619
+    m_Localized: I love playing soccer in the park.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911620
+    m_Localized: There have been so many blackouts lately. I wonder what's happening
+      at Black Cube Co.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911621
+    m_Localized: The power supply has been restored.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911622
+    m_Localized: Black Cube Co. is northeast of here. Mercapingo is to the east.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911623
+    m_Localized: There have been many earthquakes lately. I'm afraid the volcano
+      may erupt.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911624
+    m_Localized: Five hundred years ago, an eruption destroyed this village.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911625
+    m_Localized: These islands were formed as lava and ash from eruptions built up
+      over time.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911626
+    m_Localized: Thank you for saving the village.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911627
+    m_Localized: You've fallen into our trap.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911628
+    m_Localized: Now the Simulation Node will steal Satu's evil power and grow stronger.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911629
+    m_Localized: I'm the captain of the Great Crimson.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911630
+    m_Localized: We rule the world and maintain order.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911631
+    m_Localized: Impressive. You reached the Simulation Node, but you're too late.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911632
+    m_Localized: We'll blow you to smithereens.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911633
+    m_Localized: It's a spooky skeleton.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911634
+    m_Localized: A strange machine is connected to the bed.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911635
+    m_Localized: The machine is broken.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911636
+    m_Localized: It's the dam's manual control panel.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911637
+    m_Localized: The screen shows a man in a white room.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911638
+    m_Localized: His arm is gone, and blood pours from the mangled wound.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911639
+    m_Localized: Eventually, everything on the screen is covered in blood.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911640
+    m_Localized: I have come here to help you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911641
+    m_Localized: This is not the real world. It is a simulation.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241077911642
+    m_Localized: I'm afraid the simulation is in debug mode and trying to kill us
+      both.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241082105856
+    m_Localized: Create your dream team and
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058241082105857
+    m_Localized: find the shards of the Spirit of Soccer to awaken.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058255103664128
+    m_Localized: The door is locked.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058271008464896
+    m_Localized: Farewell!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058271008464897
+    m_Localized: Goodbye!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058271008464898
+    m_Localized: Bye!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058271008464899
+    m_Localized: Take care!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058271008464900
+    m_Localized: Get out of my sight!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058271008464901
+    m_Localized: Come back soon!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058271008464902
+    m_Localized: ...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058271008464903
+    m_Localized: Go in peace.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058271008464904
+    m_Localized: See you later!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058284962914304
+    m_Localized: Greetings!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058284962914305
+    m_Localized: Hello!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058284962914306
+    m_Localized: Hi!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058284962914307
+    m_Localized: What do you want?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058284962914308
+    m_Localized: How can I help you?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058284962914309
+    m_Localized: ...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058284962914310
+    m_Localized: Welcome!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058284962914311
+    m_Localized: Peace be with you.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63058284962914312
+    m_Localized: Prepare yourself!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305105780736
+    m_Localized: You got lucky... Take this.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335168
+    m_Localized: You got me... Take this.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335169
+    m_Localized: You beat me... Take this.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335170
+    m_Localized: You got me... Take this.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335171
+    m_Localized: Next time, you'll drown!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335172
+    m_Localized: Next time, I'll crush you!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335173
+    m_Localized: Next time, darkness will consume you!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335174
+    m_Localized: Next time, I'll burn you alive!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335175
+    m_Localized: You found a Shard of Sorrow!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335176
+    m_Localized: You found a Shard of Fear!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335177
+    m_Localized: You found a Shard of Hatred!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63318305139335178
+    m_Localized: You found a Shard of Anger!
     m_Metadata:
       m_Items: []
   references:

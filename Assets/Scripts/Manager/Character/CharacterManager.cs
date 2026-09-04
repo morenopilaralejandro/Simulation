@@ -66,6 +66,8 @@ public class CharacterManager : MonoBehaviour
     public void FirstTimeInitialize() => storageSystem.FirstTimeInitialize();
     public CharacterStorageSaveData ExportStorageSystem() => storageSystem.Export();
     public void ImportStorageSystem(CharacterStorageSaveData saveData) => storageSystem.Import(saveData);
+    public void FullHealAll(IEnumerable<Character> characters) => storageSystem.FullHealAll(characters);
+    public void FullHealAll() => storageSystem.FullHealAll();
 
     // persistanceSystem
     public CharacterSystemSaveData Export() => persistanceSystem.Export();
@@ -89,10 +91,14 @@ public class CharacterManager : MonoBehaviour
 
     private void HandleMoveUsed(Move move, CharacterEntityBattle character)
     {
+        LogManager.Trace($"[CharacterStorage] HandleMoveUsed {character.Character.CharacterGuid}");
         if(!HasCharacter(character.Character.CharacterGuid)) return;
 
-        move.ProgressEvolution();
         LogManager.Trace($"[CharacterStorage] {character.Character.CharacterName} used {move.MoveName}");
+
+        bool hasEvolved = move.ProgressEvolution();
+        if (hasEvolved)
+            MoveEvents.RaiseMoveEvolved(move, character);
     }
 
     #endregion

@@ -16,6 +16,49 @@ MonoBehaviour:
   zoneName: brown street
   zoneType: 0
   interiorSceneAddress: 
-  backgroundMusic: {fileID: 8300000, guid: 38d24e005d5aed9b685085695e76cae0, type: 3}
-  fieldId: field-00002-street
-  encounters: []
+  backgroundMusic: {fileID: 8300000, guid: 1cfd75bd85d2471c489ad1d1c6b18352, type: 3}
+  fieldId: field-00002-misc_street
+  encounters:
+  - EncounterId: 
+    TeamId: team-00005-m-school_bullies
+    Level: 2
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00001-churros
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.45
+  - EncounterId: 
+    TeamId: team-00006-m-pretty_soccer
+    Level: 3
+    BgmId: bgm-battle
+    BallId: ball-00001-default
+    EncounterRate: 0.4
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00008-la_mancha_ratatouille
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.25
+  - EncounterId: 
+    TeamId: team-00007-m-asphalt_kings
+    Level: 5
+    BgmId: bgm-battle_rare
+    BallId: ball-00001-default
+    EncounterRate: 0.2
+    HasTimeOfDayRestriction: 0
+    TimeOfDay: 1
+    Drops:
+    - ItemId: item-recovery-00001-churros
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.55
+    - ItemId: item-recovery-00008-la_mancha_ratatouille
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.35

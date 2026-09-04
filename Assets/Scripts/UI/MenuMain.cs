@@ -6,16 +6,17 @@ public class MenuMain : Menu
 {
     [Header("UI References")]
     [SerializeField] private Menu menuSettings;
-    [SerializeField] private Menu menuCredits;
     [SerializeField] private Menu menuStory;
 
     [Header("Scenes")]
     [SerializeField] private SceneGroup sceneBattle;
+    [SerializeField] private SceneGroup sceneCredits;
 
     public void Start() 
     {
+        InputEvents.RaiseScreenControlsHideRequested();
         MenuManager.Instance.OpenMenu(this);
-        AudioManager.Instance.PlayBgm("bgm-opening");    
+        AudioManager.Instance.PlayBgm("bgm-opening_0_alas_activadas");    
     }
 
     public void OnButtonDreamMatchTapped() 
@@ -34,7 +35,7 @@ public class MenuMain : Menu
 
     public void OnButtonCreditsTapped() 
     {
-        MenuManager.Instance.OpenMenu(menuCredits);
+        SceneLoader.Instance.LoadGroup(sceneCredits);
     }
 
     public void OnButtonQuitTapped() 

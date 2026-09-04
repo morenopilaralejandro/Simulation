@@ -111,6 +111,8 @@ public class CharacterComponentAnimationController : MonoBehaviour
 
     public void RefreshAnimation()
     {
+        isSelectionPhase = false;
+
         ConfigureResolvers(currentState, currentDirection);
 
         animator.SetInteger(StateHash, (int)currentState);

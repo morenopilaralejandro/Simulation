@@ -98,4 +98,17 @@ public class DPadController : OnScreenControl,
         if (img != null)
             img.color = pressed ? pressedTint : normalTint;
     }
+
+    //reset state
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+
+        pointerToButton.Clear();
+
+        SetTint(imgUp, false);
+        SetTint(imgDown, false);
+        SetTint(imgLeft, false);
+        SetTint(imgRight, false);
+    }
 }

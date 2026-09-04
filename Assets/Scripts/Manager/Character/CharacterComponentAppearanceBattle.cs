@@ -35,8 +35,7 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
 
     public bool IsLoaded =>
         kitSpriteLibrary.spriteLibraryAsset != null &&
-        hairFrontLibrary.spriteLibraryAsset != null &&
-        hairBackLibrary.spriteLibraryAsset != null;
+        hairFrontLibrary.spriteLibraryAsset != null;
 
     #endregion
 
@@ -63,8 +62,10 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         SetBodyColor();
         SetHairColor();
 
-        await LoadHairFrontAsync();
-        await LoadHairBackAsync();
+        await Task.WhenAll(
+            LoadHairFrontAsync(),
+            LoadHairBackAsync()
+        );
     }
 
     public async Task AppearanceBattleLoadAsync(bool hasWingActivated = false)
@@ -72,14 +73,26 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
         SetBodyColor();
         SetHairColor();
 
-        await LoadHairFrontAsync();
-        await LoadHairBackAsync();
-        //await LoadKitAsync();
-
         if (hasWingActivated)
-            await LoadWingAsync();
+        {
+            SetWingColor();
+
+            await Task.WhenAll(
+                LoadHairFrontAsync(),
+                LoadHairBackAsync(),
+                LoadWingFrontAsync(),
+                LoadWingBackAsync()
+            );
+        }
         else
+        {
             UnloadWing();
+
+            await Task.WhenAll(
+                LoadHairFrontAsync(),
+                LoadHairBackAsync()
+            );
+        }
     }
 
     #endregion
@@ -226,8 +239,10 @@ public class CharacterComponentAppearanceBattle : MonoBehaviour, IAsyncSceneLoad
     public async Task LoadWingAsync()
     {
         SetWingColor();
-        await LoadWingFrontAsync();
-        await LoadWingBackAsync();
+        await Task.WhenAll(
+            LoadWingFrontAsync(),
+            LoadWingBackAsync()
+        );
     }
 
     public void UnloadWing()

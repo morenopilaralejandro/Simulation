@@ -18,7 +18,10 @@ public class StorySystemFlags
 
     public void FirstTimeInitialize()
     {
+        Clear();
+        SetFlag("allow_quick_travel", true);
         SetFlag("unlocked_scout_tier_1", true);
+        //SetFlag("clear_game", true);
     }
 
     public void SetFlag(string flagId, bool boolValue)
@@ -41,7 +44,13 @@ public class StorySystemFlags
 
     public void Import(StorySystemSaveData saveData) 
     {
+        Clear();
         foreach (var serializableKeyValue in saveData.FlagsList) 
             flagsDict[serializableKeyValue.Key] = serializableKeyValue.Value;
+    }
+
+    public void Clear() 
+    {
+        flagsDict.Clear();
     }
 }

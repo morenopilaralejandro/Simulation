@@ -52,6 +52,13 @@ namespace Aremoreno.Enums.World
         Opened
     }
 
+    public enum DoorState
+    {
+        Closed,
+        Locked,
+        Opened
+    }
+
     public enum NpcType
     {
         Character,
@@ -65,6 +72,12 @@ namespace Aremoreno.Enums.World
         Day,
         Evening,
         Night
+    }
+
+    public enum ConditionalMode
+    {
+        Any,
+        All
     }
 
 }

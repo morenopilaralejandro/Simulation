@@ -29,8 +29,8 @@ public class MenuSideButtonOpen : MonoBehaviour
         DialogEvents.OnDialogStarted += HandleDialogStarted;
         DialogEvents.OnDialogEnded += HandleDialogEnded;
 
-        UIEvents.OnMenuSideOpenRequested += HandleMenuSideOpenRequested;
-        UIEvents.OnMenuSideCloseRequested += HandleMenuSideCloseRequested;
+        UIEvents.OnMenuSideOpened += HandleMenuSideOpened;
+        UIEvents.OnMenuSideClosed += HandleMenuSideClosed;
     }
 
     private void OnDisable()
@@ -38,8 +38,8 @@ public class MenuSideButtonOpen : MonoBehaviour
         DialogEvents.OnDialogStarted -= HandleDialogStarted;
         DialogEvents.OnDialogEnded -= HandleDialogEnded;
 
-        UIEvents.OnMenuSideOpenRequested -= HandleMenuSideOpenRequested;
-        UIEvents.OnMenuSideCloseRequested -= HandleMenuSideCloseRequested;
+        UIEvents.OnMenuSideOpened -= HandleMenuSideOpened;
+        UIEvents.OnMenuSideClosed -= HandleMenuSideClosed;
     }
 
     private void HandleDialogStarted()
@@ -52,12 +52,12 @@ public class MenuSideButtonOpen : MonoBehaviour
         SetVisible(true);
     }
 
-    private void HandleMenuSideOpenRequested()
+    private void HandleMenuSideOpened()
     {
         SetVisible(false);
     }
 
-    private void HandleMenuSideCloseRequested()
+    private void HandleMenuSideClosed()
     {
         SetVisible(true);
     }

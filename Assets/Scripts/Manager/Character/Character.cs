@@ -103,6 +103,7 @@ public class Character
     public void ModifyBattleStat(Stat stat, int amount) => statsComponent.ModifyBattleStat(stat, amount);
     public void ModifyTrainedStat(Stat stat, int amount) => statsComponent.ModifyTrainedStat(stat, amount);
     public void UpdateStats() => statsComponent.UpdateStats();
+    public void RestoreHpSp() => statsComponent.RestoreHpSp();
 
     // trainingComponent
     public int MaxTrainingPerStat => CharacterComponentTraining.MAX_TRAINING_PER_STAT;

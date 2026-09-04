@@ -1,4 +1,5 @@
 using UnityEngine;
+using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Input;
 
 public class OnScreenControlsManager : MonoBehaviour
@@ -7,6 +8,7 @@ public class OnScreenControlsManager : MonoBehaviour
 
     [Header("Root")]
     [SerializeField] private GameObject onScreenControlsRoot;
+    [SerializeField] private CanvasGroup canvasGroup;
 
     [Header("Directional Input GameObjects (for show/hide)")]
     [SerializeField] private GameObject joystickObject;
@@ -25,6 +27,9 @@ public class OnScreenControlsManager : MonoBehaviour
     // Collect all groups for bulk operations
     private OnScreenControlGroup[] allGroups;
 
+    private bool isVisibleContextual = false;
+    private bool isBattleContextual = false;
+
     #endregion
 
     #region Lifecycle
@@ -40,23 +45,48 @@ public class OnScreenControlsManager : MonoBehaviour
             miscGroup
         };
 
-        InputManager.Instance.RegisterScreenControls(onScreenControlsRoot);
-        ShowDpadOnly();
+        SetControlsVisible(false);
     }
 
     private void OnDestroy()
     {
-        InputManager.Instance?.UnregisterScreenControls();
+
     }
 
     private void OnEnable()
     {
         InputEvents.OnDirectionalInputModeChanged += HandleDirectionalInputModeChanged;
+        InputEvents.OnScreenControlsShowRequested += HandleScreenControlsShowRequested;
+        InputEvents.OnScreenControlsHideRequested += HandleScreenControlsHideRequested;
+        InputEvents.OnDeviceTypeChanged += HandleDeviceTypeChanged;
+
+        UIEvents.OnMenuTeamBattleRequested += HandleMenuTeamBattleRequested;
+        UIEvents.OnBackFromTeamRequested += HandleBackFromTeamRequested;
+        BattleEvents.OnBattleStarted += HandleBattleStarted;
+        BattleEvents.OnBattleEnded += HandleBattleEnded;
+        TeamEvents.OnTeamPreviewEnded += HandleTeamPreviewEnded;
+        UIEvents.OnMenuSideClosed += HandleMenuSideClosed;
+        UIEvents.OnMenuSideOpened += HandleMenuSideOpened;
+        DialogEvents.OnDialogStarted += HandleDialogStarted;
+        DialogEvents.OnDialogEnded += HandleDialogEnded;
     }
 
     private void OnDisable()
     {
         InputEvents.OnDirectionalInputModeChanged -= HandleDirectionalInputModeChanged;
+        InputEvents.OnScreenControlsShowRequested -= HandleScreenControlsShowRequested;
+        InputEvents.OnScreenControlsHideRequested -= HandleScreenControlsHideRequested;
+        InputEvents.OnDeviceTypeChanged -= HandleDeviceTypeChanged;
+
+        UIEvents.OnMenuTeamBattleRequested -= HandleMenuTeamBattleRequested;
+        UIEvents.OnBackFromTeamRequested -= HandleBackFromTeamRequested;
+        BattleEvents.OnBattleStarted -= HandleBattleStarted;
+        BattleEvents.OnBattleEnded -= HandleBattleEnded;
+        TeamEvents.OnTeamPreviewEnded -= HandleTeamPreviewEnded;
+        UIEvents.OnMenuSideClosed -= HandleMenuSideClosed;
+        UIEvents.OnMenuSideOpened -= HandleMenuSideOpened;
+        DialogEvents.OnDialogStarted -= HandleDialogStarted;
+        DialogEvents.OnDialogEnded -= HandleDialogEnded;
     }
 
     #endregion
@@ -146,6 +176,107 @@ public class OnScreenControlsManager : MonoBehaviour
     private void HandleDirectionalInputModeChanged(DirectionalInputMode mode)
     {
         SetInputMode(mode);
+    }
+
+    #endregion
+
+    #region Visibility 
+
+    private bool shouldShow => isVisibleContextual && InputManager.Instance.IsAndroid;
+
+    private void HandleScreenControlsHideRequested() 
+    {
+        isVisibleContextual = false;
+        //SetCanvasGroupVisible(false);
+        SetControlsVisible(false);
+    }
+
+    private void HandleScreenControlsShowRequested() 
+    {
+        //if (onScreenControlsRoot.activeSelf != true && isAndroid && !IsUsingController)
+        isVisibleContextual = true;
+        UpdateVisibility();
+    }
+
+    private void SetCanvasGroupVisible(bool visible)
+    {
+        canvasGroup.alpha = visible ? 1f : 0f;
+        canvasGroup.interactable = visible;
+        canvasGroup.blocksRaycasts = visible;
+    }
+
+    private void SetControlsVisible(bool visible)
+    {
+        onScreenControlsRoot.SetActive(visible);
+    }
+
+    private void HandleDeviceTypeChanged(InputDeviceType inputDeviceType) 
+    {
+        UpdateVisibility();
+    }
+
+    private void UpdateVisibility()
+    {
+        SetControlsVisible(shouldShow);
+        //SetCanvasGroupVisible(shouldShow);
+    }
+
+    private void HandleMenuTeamBattleRequested(Team team) 
+    {
+        InputEvents.RaiseScreenControlsHideRequested();
+    }
+
+    private void HandleBackFromTeamRequested(Team currentTeam, bool hasSwapped) 
+    {
+        if (!isBattleContextual) return;
+        InputEvents.RaiseScreenControlsShowRequested();
+    }
+
+    private void HandleBattleStarted(BattleType battleType) 
+    {
+        isBattleContextual = true;
+        if (battleType == BattleType.Mini)
+        {
+            InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
+            InputEvents.RaiseScreenControlsShowRequested();
+        } else 
+        {
+            InputEvents.RaiseScreenControlsHideRequested();
+        }
+    }
+
+    private void HandleBattleEnded() 
+    {
+        isBattleContextual = false;
+        InputEvents.RaiseScreenControlsHideRequested();
+    }
+
+    private void HandleTeamPreviewEnded() 
+    {
+        InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
+        InputEvents.RaiseScreenControlsShowRequested();
+    }
+
+    //shown on worldManager
+
+    private void HandleMenuSideOpened() 
+    {
+        InputEvents.RaiseScreenControlsHideRequested();
+    }
+
+    private void HandleMenuSideClosed() 
+    {
+        InputEvents.RaiseScreenControlsShowRequested();
+    }
+
+    private void HandleDialogStarted()
+    {
+        InputEvents.RaiseScreenControlsHideRequested();
+    }
+
+    private void HandleDialogEnded()
+    {
+        InputEvents.RaiseScreenControlsShowRequested();
     }
 
     #endregion

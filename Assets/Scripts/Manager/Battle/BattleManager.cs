@@ -40,6 +40,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private SceneGroup sceneBattleResults;
     [SerializeField] private SceneGroup sceneWorld;
     [SerializeField] private SceneGroup sceneDebugMainMenu;
+    [SerializeField] private SceneGroup sceneCredits;
     private SceneLoader sceneLoader;
 
     public BattlePhase CurrentPhase => currentPhase;
@@ -92,7 +93,7 @@ public class BattleManager : MonoBehaviour
         fieldSystem = new BattleManagerField();
         teamSystem = new BattleManagerTeam();
         wingSystem = new BattleManagerWing();
-        resultsSystem = new BattleManagerResults(sceneWorld, sceneDebugMainMenu);
+        resultsSystem = new BattleManagerResults(sceneWorld, sceneDebugMainMenu, sceneCredits);
         essenceSystem = new BattleManagerEssence();
         endGameComponent = new BattleComponentEndGame();
 
@@ -360,6 +361,9 @@ public class BattleManager : MonoBehaviour
     {   
         if (currentPhase == BattlePhase.End) return;        
 
+        DuelManager.Instance.CancelDuel();
+        Freeze();
+
         SetBattlePhase(BattlePhase.End);
         BattleEvents.RaiseBattleEnded();
 
@@ -370,7 +374,8 @@ public class BattleManager : MonoBehaviour
             Teams, 
             GetUserSide(),
             currentType,
-            forcedWinner: winnerSide);
+            forcedWinner: winnerSide,
+            true);
 
         sceneLoader.LoadGroup(sceneBattleResults);
     }
@@ -494,7 +499,11 @@ public class BattleManager : MonoBehaviour
     {
         BattleUIManager.Instance.SetMessageActive(MessageType.EssenceFinish, true);
         AudioManager.Instance.PlaySfx("sfx-whistle_triple");
+        DuelManager.Instance.CancelDuel();
+        Freeze();
         yield return new WaitForSeconds(2f);
+        DuelManager.Instance.CancelDuel();
+        Freeze();
         BattleUIManager.Instance.SetMessageActive(MessageType.EssenceFinish, false);
         EndGameByEssence(loserSide);
     }
@@ -746,6 +755,7 @@ public class BattleManager : MonoBehaviour
     public void ApplyEssenceDamage(DuelParticipant winner, DuelParticipant loser, DuelMode duelMode, float offensePressure, bool isPunching) => essenceSystem.ApplyEssenceDamage(winner, loser, duelMode, offensePressure, isPunching);
 
     //endGameComponent
+    public bool PendingEndByEssence => endGameComponent.PendingEndByEssence;
 
     //misc
     public GameObject InstantiateBall(GameObject prefabGo, Vector3 spawnPosition, Quaternion spawnRotation, Transform spawnPoint)

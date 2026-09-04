@@ -10,6 +10,8 @@ using Aremoreno.Enums.World;
 
 public class MenuSide : Menu
 {
+    #region Fields
+
     [Header("UI References - Sub menues")]
     [SerializeField] private MenuTeam menuTeam;
     [SerializeField] private MenuSave menuSave;
@@ -20,11 +22,16 @@ public class MenuSide : Menu
     [SerializeField] protected ScrollViewAutoScroll autoScroll;
     //[SerializeField] protected ScrollRect           scrollRect;
     [SerializeField] protected MenuSideLayout layout;
+    [SerializeField] private Button buttonFastTravel;
 
     private MenuManager menuManager;
     private WorldManager worldManager;
 
     private int openedFrame;
+
+    #endregion
+
+    #region Lifecycle
 
     private void Start() 
     {
@@ -32,7 +39,9 @@ public class MenuSide : Menu
         worldManager = WorldManager.Instance;
     }
 
-    //show hide populate and clear layout
+    #endregion
+
+    #region Override
 
     public override void Show() 
     {
@@ -55,7 +64,21 @@ public class MenuSide : Menu
             else              autoScroll.Deactivate();
         }
 
+        buttonFastTravel.interactable = StorySystemManager.Instance.GetFlag("allow_quick_travel");
+
         if (interactable) layout.Populate();
+    }
+
+    public override void OnOpened()
+    {
+        base.OnOpened();
+        UIEvents.RaiseMenuSideOpened();
+    }
+
+    public override void OnClosed()
+    {
+        base.OnClosed();
+        UIEvents.RaiseMenuSideClosed();
     }
 
     protected override void OnGainedInput()
@@ -71,6 +94,10 @@ public class MenuSide : Menu
         input.UnsubscribeDown(CustomAction.World_CloseSideMenu, OnButtonBackClicked);
         input.SubscribeDown(CustomAction.World_OpenSideMenu, HandleOpenInput);
     }
+
+    #endregion
+
+    #region Button
 
     public void OnButtonTeamTapped()
     {
@@ -117,6 +144,15 @@ public class MenuSide : Menu
         );
     }
 
+    public void OnButtonFastTravelTapped()
+    {
+        UIEvents.RaiseFastTravelPointSelectorOpenRequested(
+            new SelectorFastTravelPointSourceUnlocked(),
+            new SelectorFastTravelPointAction(),
+            null
+        );
+    }
+
     public void OnButtonQuitTapped()
     {
         menuManager.OpenMenu(menuQuit);
@@ -132,6 +168,10 @@ public class MenuSide : Menu
         UIEvents.RaiseMenuSideCloseRequested();
         RequestClose();
     }
+
+    #endregion
+
+    #region Event
 
     protected override void OnEnable()
     {
@@ -154,17 +194,30 @@ public class MenuSide : Menu
 
     private void HandleMenuSideOpenRequested()
     {
-        worldManager.PlayerWorldEntity.SetState(PlayerWorldState.InMenu);
-        MenuManager.Instance.OpenMenu(this);
+        TryOpen();
     }
 
     private void HandleOpenInput()
     {
-        if (!WorldManager.Instance.PlayerWorldEntity.CanOpenMenu) return;
+        UIEvents.RaiseMenuSideOpenRequested();
+    }
+
+    #endregion
+
+    #region Logic
+
+    private void TryOpen()
+    {
+        if (!WorldManager.Instance.PlayerWorldEntity.CanOpenMenu) 
+        {
+            return;
+        }
 
         openedFrame = Time.frameCount;
 
         worldManager.PlayerWorldEntity.SetState(PlayerWorldState.InMenu);
         MenuManager.Instance.OpenMenu(this);
     }
+
+    #endregion
 }

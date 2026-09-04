@@ -27,8 +27,8 @@ public class DialogUIController : MonoBehaviour
 
     [Header("Yes/No Panel")]
     [SerializeField] private CanvasGroup _yesNoPanel;
-    [SerializeField] private Button _yesButton;
-    [SerializeField] private Button _noButton;
+    [SerializeField] private ButtonDialogChoiceMulti _yesButton;
+    [SerializeField] private ButtonDialogChoiceMulti _noButton;
     [SerializeField] private TextMeshProUGUI _yesButtonText;
     [SerializeField] private TextMeshProUGUI _noButtonText;
 
@@ -45,8 +45,8 @@ public class DialogUIController : MonoBehaviour
     private int _typewriterSFXInterval = 2;
 
     [Header("Selector — Scroll")]
-    [SerializeField] protected ScrollViewAutoScroll autoScroll;
-    [SerializeField] protected ScrollRect           scrollRect;
+    [SerializeField] private ScrollViewAutoScroll autoScroll;
+    [SerializeField] private ScrollRect scrollRect;
 
     // State
     private bool _isTyping;
@@ -84,11 +84,8 @@ public class DialogUIController : MonoBehaviour
     {
         _locBridge = locBridge;
 
-        _yesButton.onClick.AddListener(() =>
-            DialogEvents.RaiseChoiceSelected(_yesChoiceIndex));
-
-        _noButton.onClick.AddListener(() =>
-            DialogEvents.RaiseChoiceSelected(_noChoiceIndex));
+        _yesButton.SetIndex(_yesChoiceIndex);
+        _noButton.SetIndex(_noChoiceIndex);
 
         _audioManager = AudioManager.Instance;
 
@@ -249,11 +246,17 @@ public class DialogUIController : MonoBehaviour
             {
                 _yesButtonText.text = choice.ResolvedText;
                 _yesChoiceIndex = choice.Index;
+
+                _yesButton.SetText(choice.ResolvedText);
+                _yesButton.SetIndex(choice.Index);
             }
             else if (choice.IsNo)
             {
                 _noButtonText.text = choice.ResolvedText;
                 _noChoiceIndex = choice.Index;
+
+                _noButton.SetText(choice.ResolvedText);
+                _noButton.SetIndex(choice.Index);
             }
         }
 
@@ -278,8 +281,7 @@ public class DialogUIController : MonoBehaviour
             var buttonObj = buttonGo.GetComponent<ButtonDialogChoiceMulti>();
             buttonObj.SetText(choice.ResolvedText);
             buttonObj.SetScrollRect(scrollRect);
-
-            buttonObj.Button.onClick.AddListener(() => DialogEvents.RaiseChoiceSelected(capturedIndex));
+            buttonObj.SetIndex(capturedIndex);
             _spawnedChoiceButtons.Add(buttonObj);
         }
     }
@@ -322,6 +324,16 @@ public class DialogUIController : MonoBehaviour
             DialogEvents.RaiseContinueRequested();
     }
 
+    public void HandleChoiceInput()
+    {
+        GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
+        if (selectedObject == null) return;
+
+        ButtonDialogChoiceMulti selectedButton = selectedObject.GetComponent<ButtonDialogChoiceMulti>();
+        if (selectedButton != null && selectedButton.Button.interactable)
+            selectedButton.OnButtonClicked(); 
+    }
+
     public void HandleCancelInput()
     {
         if (_yesNoPanel.interactable)
@@ -336,6 +348,14 @@ public class DialogUIController : MonoBehaviour
             int lastChoiceIndex = _spawnedChoiceButtons.Count - 1;
             DialogEvents.RaiseChoiceSelected(lastChoiceIndex);
         }
+    }
+
+    public void OnButtonContinueClicked()
+    {
+        if (_yesNoPanel.interactable) return;
+        if (_spawnedChoiceButtons.Count > 0) return;
+
+        HandleAdvanceInput();   
     }
 
     private IEnumerator TypewriterEffect(string fullText)

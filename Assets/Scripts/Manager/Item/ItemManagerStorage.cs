@@ -61,14 +61,59 @@ public class ItemManagerStorage
 
     public void FirstTimeInitialize()
     {
-        AddAllFromDatabase();
+        Clear();
+
+        //AddAllFromDatabase();
+
         /*
-        AddItem(ItemFactory.CreateById("spike_cool"), 10);
-        AddItem(ItemFactory.CreateById("formation_faith"), 1);
-        AddItem(ItemFactory.CreateById("formation_crimson"), 1);
-        AddItem(ItemFactory.CreateById("kit_faith"), 1);
-        AddItem(ItemFactory.CreateById("kit_crimson"), 1);
+        AddItem(ItemFactory.CreateById("item-important-00001-shard_sorrow"), 1);
+        AddItem(ItemFactory.CreateById("item-important-00002-shard_fear"), 1);
+        AddItem(ItemFactory.CreateById("item-important-00003-shard_hatred"), 1);
+        AddItem(ItemFactory.CreateById("item-important-00004-shard_anger"), 1);
         */
+
+        
+        AddItem(ItemFactory.CreateById("item-emblem-00000-a-generic_common"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00000-b-generic_rare"), 1);
+        //AddItem(ItemFactory.CreateById("item-emblem-00001-s-faith_selection"), 1);
+        //AddItem(ItemFactory.CreateById("item-emblem-00002-s-crimson_selection"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00001-faith"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00002-crimson_great"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00003-giant_turtle"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00004-secret_girls"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00005-saint_justice"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00006-marceduke"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00007-great_capitain"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00008-flying_cierva"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00009-atena"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00010-port_virgin"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00011-garden_rangers"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00012-almudena_prayers"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00013-evangegoal"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00014-football_fantasista"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00015-fc_wings"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00001-m-crimson_flood"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00002-m-crimson_crash"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00003-m-crimson_out"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00004-m-crimson_fire"), 1);
+        AddItem(ItemFactory.CreateById("item-emblem-00001-e-real_spain_2026"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00001-full_faith"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00002-full_crimson"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00003-full_glide"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00004-full_surge"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00005-full_starlight"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00006-full_barrier"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00007-full_pulse"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00008-full_swift"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00009-full_blaze"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00001-mini_offense"), 1);
+        AddItem(ItemFactory.CreateById("item-formation-00002-mini_defense"), 1);
+        AddItem(ItemFactory.CreateById("item-kit-00001-faith"), 1);
+        AddItem(ItemFactory.CreateById("item-kit-00002-crimson"), 1);
+        AddItem(ItemFactory.CreateById("item-kit-00003-balance"), 1);
+        AddItem(ItemFactory.CreateById("item-kit-00004-enigma"), 1);
+        AddItem(ItemFactory.CreateById("item-kit-00005-hope"), 1);
+        
     }
 
     public void AddAllFromDatabase()
@@ -94,6 +139,7 @@ public class ItemManagerStorage
             InsertSorted(new ItemStorageSlot(item, count), item.Category);
 
         ItemEvents.RaiseStorageUpdated();
+        LogManager.Trace($"[ItemManagerStorage] Added item {item.ItemId} {count}");
     }
 
     public bool RemoveItem(Item item, int count = 1)
@@ -108,6 +154,14 @@ public class ItemManagerStorage
 
         ItemEvents.RaiseStorageUpdated();
         return success;
+    }
+
+    public void Clear()
+    {
+        foreach (List<ItemStorageSlot> list in categoryMap.Values)
+        {
+            list.Clear();
+        }
     }
 
     private bool TryAddToSystem(Item item)
@@ -288,7 +342,7 @@ public class ItemManagerStorage
 
     public void Import(SaveDataItemStorage saveData)
     {
-        //clear
+        Clear();
 
         if (saveData?.SaveDataItemStorageSlotList == null) return;
 

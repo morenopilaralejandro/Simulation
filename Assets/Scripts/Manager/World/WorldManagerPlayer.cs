@@ -20,7 +20,7 @@ public class WorldManagerPlayer
         PlayerWorldEntity = PlayerWorldEntity.Instance;
         PlayerWorldConfig = playerWorldConfig;
 
-        CharacterData characterData = DatabaseManager.Instance.GetCharacterData("chara-00001-are");
+        CharacterData characterData = DatabaseManager.Instance.GetCharacterData("chara-00154-simon");
         Kit kit = DatabaseManager.Instance.GetKit("kit-00001-faith");
         PlayerWorldEntity.Initialize(characterData, kit, PlayerWorldConfig);
     }
