@@ -366,7 +366,6 @@ public class MenuTeamPanelTeam : Menu
     {
         if (!MenuManager.Instance.IsMenuOpen(this) || slot == null) return;
 
-        UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
         SetDefaultSelectable(slot.Button);
         selectedSlot = slot;
         UIEvents.RaiseFormationCharacterSlotUISelected(slot);

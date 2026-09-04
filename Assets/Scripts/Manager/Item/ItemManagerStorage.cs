@@ -75,8 +75,8 @@ public class ItemManagerStorage
         
         AddItem(ItemFactory.CreateById("item-emblem-00000-a-generic_common"), 1);
         AddItem(ItemFactory.CreateById("item-emblem-00000-b-generic_rare"), 1);
-        AddItem(ItemFactory.CreateById("item-emblem-00001-s-faith_selection"), 1);
-        AddItem(ItemFactory.CreateById("item-emblem-00002-s-crimson_selection"), 1);
+        //AddItem(ItemFactory.CreateById("item-emblem-00001-s-faith_selection"), 1);
+        //AddItem(ItemFactory.CreateById("item-emblem-00002-s-crimson_selection"), 1);
         AddItem(ItemFactory.CreateById("item-emblem-00001-faith"), 1);
         AddItem(ItemFactory.CreateById("item-emblem-00002-crimson_great"), 1);
         AddItem(ItemFactory.CreateById("item-emblem-00003-giant_turtle"), 1);

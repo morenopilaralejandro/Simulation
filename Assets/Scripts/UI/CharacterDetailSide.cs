@@ -178,7 +178,13 @@ public class CharacterDetailSide : MonoBehaviour
 
     private void HandleFormationCharacterSlotUISelected(FormationCharacterSlotUI slot)
     {
-        UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
+        if (slot.IsBench) 
+        {
+            UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.GetCharacter().Position);
+        } else 
+        {
+            UIEvents.RaiseCharacterDetailSideUpdateRequested(slot.GetCharacter(), slot.FormationCoord.Position);
+        }
     }
 
     #endregion

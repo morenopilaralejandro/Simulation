@@ -77,6 +77,18 @@ public static class UIEvents
         OnMenuSideCloseRequested?.Invoke();
     }
 
+    public static event Action OnMenuSideOpened;
+    public static void RaiseMenuSideOpened()
+    {
+        OnMenuSideOpened?.Invoke();
+    }
+
+    public static event Action OnMenuSideClosed;
+    public static void RaiseMenuSideClosed()
+    {
+        OnMenuSideClosed?.Invoke();
+    }
+
     // Menu Team
     public static event Action OnTeamMenuClosed;
     public static void RaiseTeamMenuClosed()

@@ -10,6 +10,8 @@ using Aremoreno.Enums.World;
 
 public class MenuSide : Menu
 {
+    #region Fields
+
     [Header("UI References - Sub menues")]
     [SerializeField] private MenuTeam menuTeam;
     [SerializeField] private MenuSave menuSave;
@@ -27,13 +29,19 @@ public class MenuSide : Menu
 
     private int openedFrame;
 
+    #endregion
+
+    #region Lifecycle
+
     private void Start() 
     {
         menuManager = MenuManager.Instance;
         worldManager = WorldManager.Instance;
     }
 
-    //show hide populate and clear layout
+    #endregion
+
+    #region Override
 
     public override void Show() 
     {
@@ -61,6 +69,18 @@ public class MenuSide : Menu
         if (interactable) layout.Populate();
     }
 
+    public override void OnOpened()
+    {
+        base.OnOpened();
+        UIEvents.RaiseMenuSideOpened();
+    }
+
+    public override void OnClosed()
+    {
+        base.OnClosed();
+        UIEvents.RaiseMenuSideClosed();
+    }
+
     protected override void OnGainedInput()
     {
         var input = InputManager.Instance;
@@ -74,6 +94,10 @@ public class MenuSide : Menu
         input.UnsubscribeDown(CustomAction.World_CloseSideMenu, OnButtonBackClicked);
         input.SubscribeDown(CustomAction.World_OpenSideMenu, HandleOpenInput);
     }
+
+    #endregion
+
+    #region Button
 
     public void OnButtonTeamTapped()
     {
@@ -145,6 +169,10 @@ public class MenuSide : Menu
         RequestClose();
     }
 
+    #endregion
+
+    #region Event
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -166,7 +194,7 @@ public class MenuSide : Menu
 
     private void HandleMenuSideOpenRequested()
     {
-        Open();
+        TryOpen();
     }
 
     private void HandleOpenInput()
@@ -174,11 +202,14 @@ public class MenuSide : Menu
         UIEvents.RaiseMenuSideOpenRequested();
     }
 
-    private void Open()
+    #endregion
+
+    #region Logic
+
+    private void TryOpen()
     {
         if (!WorldManager.Instance.PlayerWorldEntity.CanOpenMenu) 
         {
-            UIEvents.RaiseMenuSideCloseRequested();
             return;
         }
 
@@ -187,4 +218,6 @@ public class MenuSide : Menu
         worldManager.PlayerWorldEntity.SetState(PlayerWorldState.InMenu);
         MenuManager.Instance.OpenMenu(this);
     }
+
+    #endregion
 }

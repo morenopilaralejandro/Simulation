@@ -2,10 +2,13 @@ using UnityEngine;
 using Aremoreno.Enums.Battle;
 using Aremoreno.Enums.Kit;
 using Aremoreno.Enums.Input;
+using Aremoreno.Enums.Item;
 
 public class SelectorItemStorageSlotSide : Selector<ItemStorageSlot, SelectorItemStorageSlotSideListItem>
 {
     #region Fields
+
+    private ItemCategory category;
 
     #endregion
 
@@ -54,12 +57,7 @@ public class SelectorItemStorageSlotSide : Selector<ItemStorageSlot, SelectorIte
 
     private void HandleBack()
     {
-        var view = GetLastSelectedItem();
-        if (view == null)
-            UIEvents.RaiseBackFromSelectorItemStorageSlotSideRequested(default);
-        else
-            UIEvents.RaiseBackFromSelectorItemStorageSlotSideRequested(view.Data.Item.Category);
-
+        UIEvents.RaiseBackFromSelectorItemStorageSlotSideRequested(category);
         RequestClose();
     }
 
@@ -97,6 +95,11 @@ public class SelectorItemStorageSlotSide : Selector<ItemStorageSlot, SelectorIte
         ISelectorFilter<ItemStorageSlot>      filter)
     {
         if (MenuManager.Instance.IsMenuOpen(this)) return;
+
+        if (source is SelectorItemStorageSlotSourceFromStorageByCategoryDiffereciateFormation s) 
+        {
+            category = s.Category;
+        }
 
         Open(source, action, filter);
     }

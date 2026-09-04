@@ -65,8 +65,8 @@ public class OnScreenControlsManager : MonoBehaviour
         BattleEvents.OnBattleStarted += HandleBattleStarted;
         BattleEvents.OnBattleEnded += HandleBattleEnded;
         TeamEvents.OnTeamPreviewEnded += HandleTeamPreviewEnded;
-        UIEvents.OnMenuSideCloseRequested += HandleMenuSideCloseRequested;
-        UIEvents.OnMenuSideOpenRequested += HandleMenuSideOpenRequested;
+        UIEvents.OnMenuSideClosed += HandleMenuSideClosed;
+        UIEvents.OnMenuSideOpened += HandleMenuSideOpened;
         DialogEvents.OnDialogStarted += HandleDialogStarted;
         DialogEvents.OnDialogEnded += HandleDialogEnded;
     }
@@ -83,8 +83,8 @@ public class OnScreenControlsManager : MonoBehaviour
         BattleEvents.OnBattleStarted -= HandleBattleStarted;
         BattleEvents.OnBattleEnded -= HandleBattleEnded;
         TeamEvents.OnTeamPreviewEnded -= HandleTeamPreviewEnded;
-        UIEvents.OnMenuSideCloseRequested -= HandleMenuSideCloseRequested;
-        UIEvents.OnMenuSideOpenRequested -= HandleMenuSideOpenRequested;
+        UIEvents.OnMenuSideClosed -= HandleMenuSideClosed;
+        UIEvents.OnMenuSideOpened -= HandleMenuSideOpened;
         DialogEvents.OnDialogStarted -= HandleDialogStarted;
         DialogEvents.OnDialogEnded -= HandleDialogEnded;
     }
@@ -259,12 +259,12 @@ public class OnScreenControlsManager : MonoBehaviour
 
     //shown on worldManager
 
-    private void HandleMenuSideOpenRequested() 
+    private void HandleMenuSideOpened() 
     {
         InputEvents.RaiseScreenControlsHideRequested();
     }
 
-    private void HandleMenuSideCloseRequested() 
+    private void HandleMenuSideClosed() 
     {
         InputEvents.RaiseScreenControlsShowRequested();
     }
