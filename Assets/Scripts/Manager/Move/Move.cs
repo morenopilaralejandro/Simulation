@@ -82,7 +82,7 @@ public class Move
     public int TimesUsedCurrentEvolution => evolutionComponent.TimesUsedCurrentEvolution;
     public bool IsBefore => evolutionComponent.IsBefore;
     public bool IsAtFinalEvolution => evolutionComponent.IsAtFinalEvolution;
-    public void ProgressEvolution() => evolutionComponent.ProgressEvolution();
+    public bool ProgressEvolution() => evolutionComponent.ProgressEvolution();
     public bool TryEvolve() => evolutionComponent.TryEvolve();
     public bool LimitBreak() => evolutionComponent.LimitBreak();
     public void ForceMaxEvolution() => evolutionComponent.ForceMaxEvolution();

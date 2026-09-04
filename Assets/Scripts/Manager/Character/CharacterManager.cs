@@ -91,10 +91,14 @@ public class CharacterManager : MonoBehaviour
 
     private void HandleMoveUsed(Move move, CharacterEntityBattle character)
     {
+        LogManager.Trace($"[CharacterStorage] HandleMoveUsed {character.Character.CharacterGuid}");
         if(!HasCharacter(character.Character.CharacterGuid)) return;
 
-        move.ProgressEvolution();
         LogManager.Trace($"[CharacterStorage] {character.Character.CharacterName} used {move.MoveName}");
+
+        bool hasEvolved = move.ProgressEvolution();
+        if (hasEvolved)
+            MoveEvents.RaiseMoveEvolved(move, character);
     }
 
     #endregion

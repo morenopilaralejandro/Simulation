@@ -43,8 +43,8 @@ public class CharacterComponentStats
 
             UpdateStats();
 
-            ModifyBattleStat(Stat.Hp, characterSaveData.CurrentHp);
-            ModifyBattleStat(Stat.Sp, characterSaveData.CurrentSp);
+            SetBattleStat(Stat.Hp, characterSaveData.CurrentHp);
+            SetBattleStat(Stat.Sp, characterSaveData.CurrentSp);
         } else {
             UpdateStats();
         }
@@ -82,6 +82,7 @@ public class CharacterComponentStats
         return total;
     }
 
+
     public void ResetBattleStats()
     {
         foreach (Stat stat in Enum.GetValues(typeof(Stat)))
@@ -103,6 +104,18 @@ public class CharacterComponentStats
             battleStats[stat] = Mathf.Clamp(battleStats[stat] + amount, 0, trueStats[stat]);
         else
             battleStats[stat] = Mathf.Max(battleStats[stat] + amount, 0);
+    }
+
+    public void SetBattleStat(Stat stat, int amount)
+    {
+        if (stat == Stat.Hp || stat == Stat.Sp)
+        {
+            battleStats[stat] = Mathf.Clamp(amount, 0, trueStats[stat]);
+        }
+        else
+        {
+            battleStats[stat] = Mathf.Max(amount, 0);
+        }
     }
 
     public void ModifyTrainedStat(Stat stat, int amount)

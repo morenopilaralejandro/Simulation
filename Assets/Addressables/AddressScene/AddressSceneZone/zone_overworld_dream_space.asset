@@ -27,7 +27,15 @@ MonoBehaviour:
     EncounterRate: 0.4
     HasTimeOfDayRestriction: 0
     TimeOfDay: 1
-    Drops: []
+    Drops:
+    - ItemId: item-material-00014-impact_perfume
+      QuantityMin: 1
+      QuantityMax: 5
+      DropChance: 0.7
+    - ItemId: item-material-00017-white_carnation
+      QuantityMin: 1
+      QuantityMax: 5
+      DropChance: 0.6
   - EncounterId: 
     TeamId: team-00030-m-medusa
     Level: 42
@@ -36,7 +44,15 @@ MonoBehaviour:
     EncounterRate: 0.4
     HasTimeOfDayRestriction: 0
     TimeOfDay: 1
-    Drops: []
+    Drops:
+    - ItemId: item-material-00015-floral_perfume
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.7
+    - ItemId: item-material-00016-red_carnation
+      QuantityMin: 1
+      QuantityMax: 2
+      DropChance: 0.6
   - EncounterId: 
     TeamId: team-00031-m-spooky
     Level: 44
@@ -45,4 +61,12 @@ MonoBehaviour:
     EncounterRate: 0.2
     HasTimeOfDayRestriction: 0
     TimeOfDay: 1
-    Drops: []
+    Drops:
+    - ItemId: item-material-00106-limitbreak_essence
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.7
+    - ItemId: item-material-00105-awaken_essence
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 0.6

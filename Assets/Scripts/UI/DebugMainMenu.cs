@@ -40,7 +40,7 @@ public class DebugMainMenu : MonoBehaviour
         BattleArgs.SetFull(
             homeTeamId : "team-00000-a-test_a", 
             awayTeamId : "team-00000-b-test_b",
-            fieldId : "field-00015-dungeon_final"
+            fieldId : "field-00009-dungeon_power_plant"
         );
         sceneLoader.LoadGroup(sceneBattle);
     }

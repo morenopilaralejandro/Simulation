@@ -52,6 +52,14 @@ public class PanelBagDescription : MonoBehaviour
             SetCanvasVisible(canvasMove, false);
             SetCanvasVisible(canvasName, true);
         }
+
+        if (item is ItemRecovery itemRecovery)
+        { 
+            textDescription.text = itemRecovery.ItemDescription;    
+        } else 
+        {
+            textDescription.text = "";
+        }
     }
 
     private static void SetCanvasVisible(CanvasGroup canvas, bool visible)

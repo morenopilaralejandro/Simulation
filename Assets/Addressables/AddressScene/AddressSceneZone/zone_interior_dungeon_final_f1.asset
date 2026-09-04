@@ -27,7 +27,15 @@ MonoBehaviour:
     EncounterRate: 0.25
     HasTimeOfDayRestriction: 1
     TimeOfDay: 1
-    Drops: []
+    Drops:
+    - ItemId: item-material-00106-limitbreak_essence
+      QuantityMin: 1
+      QuantityMax: 4
+      DropChance: 1
+    - ItemId: item-material-00105-awaken_essence
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 1
   - EncounterId: 
     TeamId: team-00039-m-derailplosion
     Level: 70
@@ -36,7 +44,15 @@ MonoBehaviour:
     EncounterRate: 0.25
     HasTimeOfDayRestriction: 1
     TimeOfDay: 1
-    Drops: []
+    Drops:
+    - ItemId: item-material-00106-limitbreak_essence
+      QuantityMin: 1
+      QuantityMax: 4
+      DropChance: 1
+    - ItemId: item-material-00105-awaken_essence
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 1
   - EncounterId: 
     TeamId: team-00040-m-black_outsiders
     Level: 70
@@ -45,7 +61,15 @@ MonoBehaviour:
     EncounterRate: 0.25
     HasTimeOfDayRestriction: 1
     TimeOfDay: 1
-    Drops: []
+    Drops:
+    - ItemId: item-material-00106-limitbreak_essence
+      QuantityMin: 1
+      QuantityMax: 4
+      DropChance: 1
+    - ItemId: item-material-00105-awaken_essence
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 1
   - EncounterId: 
     TeamId: team-00041-m-burned_alive
     Level: 70
@@ -54,4 +78,12 @@ MonoBehaviour:
     EncounterRate: 0.25
     HasTimeOfDayRestriction: 1
     TimeOfDay: 1
-    Drops: []
+    Drops:
+    - ItemId: item-material-00106-limitbreak_essence
+      QuantityMin: 1
+      QuantityMax: 4
+      DropChance: 1
+    - ItemId: item-material-00105-awaken_essence
+      QuantityMin: 1
+      QuantityMax: 1
+      DropChance: 1

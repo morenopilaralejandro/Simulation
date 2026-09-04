@@ -295,7 +295,7 @@ public class BattleManagerResults
         {
             StorySystemManager.Instance.SetFlag("pending_starting_spawn", true);
             StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
-            CharacterManager.Instance.FullHealAll();
+            //CharacterManager.Instance.FullHealAll();
         }
 
         switch(battleResultData.BattleResultsType) 

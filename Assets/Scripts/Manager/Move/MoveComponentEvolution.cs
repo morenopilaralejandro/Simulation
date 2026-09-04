@@ -48,24 +48,28 @@ public class MoveComponentEvolution
             this.TimesUsedCurrentEvolution = 0;
         }
 
+        UpdateLocalization();
     }
 
     public bool IsAtFinalEvolution => !path.TryGetNextEvolution(this.CurrentEvolution, out _);
 
-    public void ProgressEvolution()
+    public bool ProgressEvolution()
     {
-        this.TimesUsedTotal++;
-        this.TimesUsedCurrentEvolution++;
+        TimesUsedTotal++;
+        TimesUsedCurrentEvolution++;
 
-        // Stop at last evolution stage
-        if (IsAtFinalEvolution) return;
+        if (IsAtFinalEvolution) return false;
 
         int threshold = growthProfile.GetThreshold(CurrentEvolution);
 
-        if (this.TimesUsedCurrentEvolution >= threshold)
-        {
-            if (TryEvolve()) this.TimesUsedCurrentEvolution = 0;
-        }
+        if (TimesUsedCurrentEvolution < threshold) return false;
+
+        bool evolved = TryEvolve();
+
+        if (evolved)
+            TimesUsedCurrentEvolution = 0;
+
+        return evolved;
     }
 
     public bool TryEvolve()

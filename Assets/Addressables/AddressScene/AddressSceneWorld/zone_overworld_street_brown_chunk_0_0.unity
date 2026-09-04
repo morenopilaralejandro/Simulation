@@ -15048,13 +15048,21 @@ PrefabInstance:
       propertyPath: characterData
       value: 
       objectReference: {fileID: 11400000, guid: 49c238d56c324c4078a2de8df6d139dd, type: 2}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8280288355503698997, guid: bec6936c92a2066d9907c32011fc9a14, type: 3}
+    - target: {fileID: 3971858555009918753, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3998943450379138611, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_Name
       value: NpcEntityCharacterAreChoiceMulti
       objectReference: {fileID: 0}
     - target: {fileID: 3998943450379138611, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6299672838573757641, guid: 1eddb48808b9b6864b3454d16101b5de, type: 3}
       propertyPath: m_LocalPosition.x

@@ -45,7 +45,7 @@ public class OnScreenControlsManager : MonoBehaviour
             miscGroup
         };
 
-        //ShowDpadOnly();
+        SetControlsVisible(false);
     }
 
     private void OnDestroy()
