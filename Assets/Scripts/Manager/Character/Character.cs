@@ -24,6 +24,7 @@ public class Character
     private CharacterComponentAIDifficulty aiDifficultyComponent;
     private CharacterComponentEquipment equipmentComponent;
     private CharacterComponentStatusEffectsPermanent statusEffectsPermanentComponent;
+    private CharacterComponentAwaken awakenComponent;
 
     #endregion
 
@@ -44,6 +45,7 @@ public class Character
             new[] { LocalizationField.Name, LocalizationField.Nick, LocalizationField.Description }
         );
         levelsComponent = new CharacterComponentLevels(characterData, this, characterSaveData);
+        awakenComponent = new CharacterComponentAwaken(characterData, this, characterSaveData);
         statsComponent = new CharacterComponentStats(characterData, this, characterSaveData);
         trainingComponent = new CharacterComponentTraining(characterData, this, characterSaveData);
         movesComponent = new CharacterComponentMoves(characterData, this, characterSaveData);
@@ -213,6 +215,11 @@ public class Character
     public bool IsFainted => statusEffectsPermanentComponent.IsFainted;
     public void SetStatusPermanent(StatusEffectPermanent effect) => statusEffectsPermanentComponent.SetStatusPermanent(effect);
     public void ClearStatusPermanent() => statusEffectsPermanentComponent.ClearStatusPermanent();
+
+    //awakenComponent
+    public bool HasAwaken => awakenComponent.HasAwaken;
+    public bool CanAwaken => awakenComponent.CanAwaken;
+    public void Awaken() => awakenComponent.Awaken();
 
     #endregion
 }

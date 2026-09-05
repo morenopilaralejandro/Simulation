@@ -26,7 +26,7 @@ public class CharacterManagerStorage
     {
         Clear();
 
-        int startLv = 5; //default is 5
+        int startLv = 50; //default is 5
 
         AddCharacterFromScout("chara-00070-teruel", startLv);
 

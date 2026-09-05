@@ -26,6 +26,7 @@ public class MenuWingDetail : Menu
 
     [Header("Other")]
     [SerializeField] private Button firstSelected;
+    [SerializeField] private Button buttonLimitBreak;
 
     private Wing wing;
 
@@ -64,11 +65,14 @@ public class MenuWingDetail : Menu
 
     #region Menu Overrides
 
-    public override void Show()
+    public override void SetInteractable(bool boolValue)
     {
-        base.Show();
-        InitializeUI();
-        PopulateUI();
+        if (boolValue)
+        {
+            InitializeUI();
+            PopulateUI();
+        }
+        base.SetInteractable(boolValue);
     }
 
     public override void Hide()
@@ -112,6 +116,8 @@ public class MenuWingDetail : Menu
     private void PopulateUI()
     {
         if (wing == null) return;
+
+        buttonLimitBreak.interactable = wing.CanLimitBreak();
 
         wingUI.SetData(wing);
 
@@ -190,6 +196,11 @@ public class MenuWingDetail : Menu
         UIEvents.RaiseBackFromWingDetailRequested();
     }
 
+    public void OnButtonLimitBreakClicked()
+    {
+        UIEvents.RaiseWingLimitBreakPanelOpenRequested(wing);
+    }
+
     #endregion
 
     #region Events
@@ -199,6 +210,7 @@ public class MenuWingDetail : Menu
         base.OnEnable();
         UIEvents.OnWingDetailOpenRequested    += HandleWingDetailOpenRequested;
         UIEvents.OnWingDetailRefreshRequested += HandleWingDetailRefreshRequested;
+        LimitBreakEvents.OnWingLimitBreakPerformed += HandleWingLimitBreakPerformed;
     }
 
     protected override void OnDisable()
@@ -206,6 +218,7 @@ public class MenuWingDetail : Menu
         base.OnDisable();
         UIEvents.OnWingDetailOpenRequested    -= HandleWingDetailOpenRequested;
         UIEvents.OnWingDetailRefreshRequested -= HandleWingDetailRefreshRequested;
+        LimitBreakEvents.OnWingLimitBreakPerformed -= HandleWingLimitBreakPerformed;
     }
 
     private void HandleWingDetailOpenRequested(Wing wing)
@@ -220,6 +233,12 @@ public class MenuWingDetail : Menu
     {
         if (!MenuManager.Instance.IsMenuOpen(this)) return;
         Refresh();
+    }
+
+    private void HandleWingLimitBreakPerformed(Wing wing) 
+    {
+        Refresh();
+        SetDefaultSelectable(firstSelected);
     }
     
     #endregion

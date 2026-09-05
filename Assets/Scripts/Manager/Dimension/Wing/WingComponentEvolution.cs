@@ -106,6 +106,7 @@ public class WingComponentEvolution
 
         UpdateLocalization();
         wing.UpdateStats();
+        LimitBreakEvents.RaiseWingLimitBreakPerformed(wing);
         LogManager.Trace($"[WingComponentEvolution] [{wing.WingId}] performed LIMIT BREAK -> {this.CurrentEvolution}");
         return true;
     }

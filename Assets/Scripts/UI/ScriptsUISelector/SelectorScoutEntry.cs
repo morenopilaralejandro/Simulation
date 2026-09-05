@@ -23,6 +23,12 @@ public class SelectorScoutEntry : Selector<ScoutEntry, SelectorScoutEntryListIte
     {
         // Other code here
         base.Show();
+        if (active.Count > 0) 
+        {
+            UIEvents.RaiseCharacterDetailSideUpdateRequested(
+                active[0].Character,
+                active[0].Character.Position);
+        } 
     }
 
     public override void SetInteractable(bool interactable)

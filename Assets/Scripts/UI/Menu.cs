@@ -188,7 +188,11 @@ public abstract class Menu : MonoBehaviour, IClosableMenu
     {
         isRestoringFocus = true;
 
-        if (InputManager.Instance.IsAndroid && !InputManager.Instance.IsUsingController) return;
+        if (InputManager.Instance.IsAndroid && !InputManager.Instance.IsUsingController) 
+        {
+            isRestoringFocus = false;
+            return;
+        }
 
         if (hasMemory && lastSelected != null)
         {
@@ -206,6 +210,13 @@ public abstract class Menu : MonoBehaviour, IClosableMenu
 
     private void HandleSelectableSelected(GameObject go)
     {
+        /*
+        LogManager.Trace(
+            $"[Menu] UIEvents.OnSelectableSelected -> " +
+            $"{go?.name} | Frame={Time.frameCount}"
+        );
+        */
+    
         if (this == null) return;
         if (!IsInteractable()) return;
         if (go == null) return;

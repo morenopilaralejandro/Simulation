@@ -71,7 +71,6 @@ public class ItemManagerStorage
         AddItem(ItemFactory.CreateById("item-important-00003-shard_hatred"), 1);
         AddItem(ItemFactory.CreateById("item-important-00004-shard_anger"), 1);
         */
-
         /*
         AddItem(ItemFactory.CreateById("item-emblem-00000-a-generic_common"), 1);
         AddItem(ItemFactory.CreateById("item-emblem-00000-b-generic_rare"), 1);

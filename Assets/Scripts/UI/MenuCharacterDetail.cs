@@ -34,6 +34,7 @@ public class MenuCharacterDetail : Menu
 
     [Header("Other")]
     [SerializeField] private Button firstSelected;
+    [SerializeField] private Button buttonAwaken;
 
     private Character    character;
     private MoveSlotUI   pickedMoveSlot;
@@ -86,6 +87,12 @@ public class MenuCharacterDetail : Menu
         base.Hide();
     }
 
+    public override void SetInteractable(bool boolValue)
+    {
+        if(boolValue) buttonAwaken.interactable = character.CanAwaken;
+        base.SetInteractable(boolValue);
+    }
+
     protected override void OnGainedInput()
     {
         InputManager.Instance.SubscribeDown(CustomAction.Navigation_Back, OnButtonBackClicked);
@@ -119,7 +126,7 @@ public class MenuCharacterDetail : Menu
     {
         if (character == null) return;
 
-        characterCard.SetCharacter(character, Position.FW);
+        characterCard.SetCharacter(character, character.Position);
         barHp.SetCharacter(character, Stat.Hp);
         barSp.SetCharacter(character, Stat.Sp);
         barXp.SetCharacter(character);
@@ -189,6 +196,32 @@ public class MenuCharacterDetail : Menu
         pickedMoveSlot = null;
 
         RequestClose();
+    }
+
+    public void OnButtonTrainingClicked()
+    {
+        if (stateMachine.Is(CharacterDetailState.SwappingMove))
+        {
+            stateMachine.Set(CharacterDetailState.Idle);
+            return;
+        }
+
+        pickedMoveSlot = null;
+
+        UIEvents.RaiseMenuTrainingOpenRequested(character);
+    }
+
+    public void OnButtonAwakenClicked()
+    {
+        if (stateMachine.Is(CharacterDetailState.SwappingMove))
+        {
+            stateMachine.Set(CharacterDetailState.Idle);
+            return;
+        }
+
+        pickedMoveSlot = null;
+
+        UIEvents.RaiseMenuCharacterAwakenOpenRequested(character);
     }
 
     #endregion
