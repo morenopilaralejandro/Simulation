@@ -65,6 +65,7 @@ public class DuelLogManager : MonoBehaviour
         EssenceEvents.OnEssenceBattleLimitReached += HandleEssenceBattleLimitReached;
 
         MoveEvents.OnMoveEvolved += HandleMoveEvolved;
+        WingEvents.OnWingEvolved += HandleWingEvolved;
     }
 
     void OnDisable()
@@ -88,6 +89,7 @@ public class DuelLogManager : MonoBehaviour
         EssenceEvents.OnEssenceBattleLimitReached -= HandleEssenceBattleLimitReached;
 
         MoveEvents.OnMoveEvolved -= HandleMoveEvolved;
+        WingEvents.OnWingEvolved -= HandleWingEvolved;
     }
 
     private void HandleBattleStarted(BattleType battleType) 
@@ -123,6 +125,7 @@ public class DuelLogManager : MonoBehaviour
     private void HandleEssenceBattleLimitReached(TeamSide teamSide, int essenceOverflowUnderwent) => AddMatchEssence();
 
     private void HandleMoveEvolved(Move move, CharacterEntityBattle character) => AddNotifyMoveEvolved(character.Character, character.TeamSide, move);
+    private void HandleWingEvolved(CharacterEntityBattle character, Wing wing) => AddNotifyWingEvolved(character.Character, character.TeamSide, wing);
 
     #endregion
 
@@ -626,13 +629,14 @@ public class DuelLogManager : MonoBehaviour
 
     public void AddNotifyMoveEvolved(Character character, TeamSide teamSide, Move move)
     {   
+        /*
         string characterName = character.CharacterNick;
         string moveName = move.MoveName;
-
         var args = new {
             characterName = characterName,
             moveName = moveName
         };
+        */
 
         AddEntry(new DuelLogEntryData
         {
@@ -640,8 +644,7 @@ public class DuelLogManager : MonoBehaviour
             LogLevel = LogLevel.Trace,
             Character = character,
             TeamSide = teamSide,
-            Move = move,
-            Args = args
+            Move = move
         });
 
         AddEntry(new DuelLogEntryData
@@ -650,15 +653,29 @@ public class DuelLogManager : MonoBehaviour
             LogLevel = LogLevel.Info,
             Character = character,
             TeamSide = teamSide,
-            Move = move,
-            Args = args
+            Move = move
         });
     }
 
     public void AddNotifyWingEvolved(Character character, TeamSide teamSide, Wing wing)
     {
-        AddEntry(Trace("notify_wing_evolved"));
-        AddEntry(Info("notify_wing_evolved"));
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "notify_wing_evolved",
+            LogLevel = LogLevel.Trace,
+            Character = character,
+            TeamSide = teamSide,
+            Wing = wing
+        });
+
+        AddEntry(new DuelLogEntryData
+        {
+            EntryId = "notify_wing_evolved",
+            LogLevel = LogLevel.Info,
+            Character = character,
+            TeamSide = teamSide,
+            Wing = wing
+        });
     }
 
     #endregion

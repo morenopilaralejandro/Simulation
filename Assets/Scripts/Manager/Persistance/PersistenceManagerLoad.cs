@@ -31,14 +31,14 @@ public class PersistenceManagerLoad
         persistenceManager.SetTimestampCreation(saveData.TimestampCreation);
         persistenceManager.SetPlayTimeSeconds(saveData.PlayTimeSeconds);
         persistenceManager.StartSession();
-        CharacterManager.Instance.Import(saveData.CharacterSystemSaveData);
+        WingManager.Instance.Import(saveData.WingSystemSaveData);
         ItemManager.Instance.Import(saveData.SaveDataItemSystem);
+        CharacterManager.Instance.Import(saveData.CharacterSystemSaveData);
         QuestSystemManager.Instance.Import(saveData.QuestSystemSaveData);
         StorySystemManager.Instance.Import(saveData.StorySystemSaveData);
         ChestStateManager.Instance.Import(saveData.ChestStateSaveData);
         //WorldManager.Instance.Import(saveData.SaveDataWorldSystem);
         TeamManager.Instance.Import(saveData.SaveDataTeamSystem);
-        WingManager.Instance.Import(saveData.WingSystemSaveData);
 
         WorldArgs.Set(
             zoneId : saveData.SaveDataWorldSystem.ZoneId,

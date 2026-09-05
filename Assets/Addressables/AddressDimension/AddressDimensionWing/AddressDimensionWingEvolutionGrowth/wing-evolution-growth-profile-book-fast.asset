@@ -15,6 +15,8 @@ MonoBehaviour:
   growthType: 0
   growthRate: 0
   listUsageThreshold:
+  - Evolution: 0
+    UsageThreshold: 1
   - Evolution: 1
     UsageThreshold: 2
   - Evolution: 2
@@ -22,11 +24,11 @@ MonoBehaviour:
   - Evolution: 3
     UsageThreshold: 2
   - Evolution: 4
-    UsageThreshold: 2
+    UsageThreshold: 4
   - Evolution: 5
-    UsageThreshold: 2
+    UsageThreshold: 4
   - Evolution: 6
-    UsageThreshold: 2
+    UsageThreshold: 4
   listRefinementThreshold:
   - Rank: 0
     RefinementThreshold: 4
@@ -37,6 +39,4 @@ MonoBehaviour:
   - Rank: 3
     RefinementThreshold: 4
   - Rank: 4
-    RefinementThreshold: 4
-  - Rank: 5
     RefinementThreshold: 4

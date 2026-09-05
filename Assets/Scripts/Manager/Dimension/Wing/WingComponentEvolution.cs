@@ -50,24 +50,28 @@ public class WingComponentEvolution
             this.TimesUsedCurrentEvolution = 0;
         }
 
+        UpdateLocalization();
     }
 
     public bool IsAtFinalEvolution => !path.TryGetNextEvolution(this.CurrentEvolution, out _);
 
-    public void ProgressEvolution()
+    public bool ProgressEvolution()
     {
-        this.TimesUsedTotal++;
-        this.TimesUsedCurrentEvolution++;
+        TimesUsedTotal++;
+        TimesUsedCurrentEvolution++;
 
-        // Stop at last evolution stage
-        if (IsAtFinalEvolution) return;
+        if (IsAtFinalEvolution) return false;
 
         int threshold = growthProfile.GetUsageThreshold(CurrentEvolution);
 
-        if (this.TimesUsedCurrentEvolution >= threshold)
-        {
-            if (TryEvolve()) this.TimesUsedCurrentEvolution = 0;
-        }
+        if (TimesUsedCurrentEvolution < threshold) return false;
+
+        bool evolved = TryEvolve();
+
+        if (evolved)
+            TimesUsedCurrentEvolution = 0;
+
+        return evolved;
     }
 
     public bool TryEvolve()
@@ -84,21 +88,26 @@ public class WingComponentEvolution
         return false;
     }
 
+    public bool CanLimitBreak()
+    {
+        if (!path.TryGetNextEvolution(this.CurrentEvolution, out WingEvolution next)) return false;
+        // Limit Break is only possible when the next evolution is the final one.
+        return !path.TryGetNextEvolution(next, out _);
+    }
+
     public bool LimitBreak()
     {
-        if (path.TryGetNextEvolution(this.CurrentEvolution, out WingEvolution next))
-        {
-            if (path.TryGetNextEvolution(next, out WingEvolution _)) return false; // Not at penultimate stage yet
+        if (!CanLimitBreak()) return false;
 
-            this.CurrentEvolution = next;
-            this.TimesUsedCurrentEvolution = 0;
-            UpdateLocalization();
-            wing.UpdateStats();
-            LogManager.Trace($"[WingComponentEvolution] [{wing.WingId}] performed LIMIT BREAK -> {this.CurrentEvolution}");
-            return true;
-        }
+        path.TryGetNextEvolution(this.CurrentEvolution, out WingEvolution next);
 
-        return false;
+        this.CurrentEvolution = next;
+        this.TimesUsedCurrentEvolution = 0;
+
+        UpdateLocalization();
+        wing.UpdateStats();
+        LogManager.Trace($"[WingComponentEvolution] [{wing.WingId}] performed LIMIT BREAK -> {this.CurrentEvolution}");
+        return true;
     }
 
     public void ForceMaxEvolution()
@@ -106,7 +115,7 @@ public class WingComponentEvolution
         this.CurrentEvolution = path.GetLastEvolution();
         this.TimesUsedCurrentEvolution = 0;
         UpdateLocalization();
-            wing.UpdateStats();
+        wing.UpdateStats();
         LogManager.Trace($"WingComponentEvolution] [{wing.WingId}] was force-evolved to MAX: {this.CurrentEvolution}");
     }
 

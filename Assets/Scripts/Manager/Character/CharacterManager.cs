@@ -77,16 +77,16 @@ public class CharacterManager : MonoBehaviour
 
     #region Event
 
-    //TODO placeholder
-
     private void OnEnable() 
     {
         MoveEvents.OnMoveUsed += HandleMoveUsed;
+        WingEvents.OnWingActivated += HandleWingActivated;
     }
 
     private void OnDisable() 
     {
         MoveEvents.OnMoveUsed -= HandleMoveUsed;
+        WingEvents.OnWingActivated -= HandleWingActivated;
     }
 
     private void HandleMoveUsed(Move move, CharacterEntityBattle character)
@@ -99,6 +99,18 @@ public class CharacterManager : MonoBehaviour
         bool hasEvolved = move.ProgressEvolution();
         if (hasEvolved)
             MoveEvents.RaiseMoveEvolved(move, character);
+    }
+
+    private void HandleWingActivated(CharacterEntityBattle character, Wing wing)
+    {
+        LogManager.Trace($"[CharacterStorage] HandleWingActivated {character.Character.CharacterGuid}");
+        if(!HasCharacter(character.Character.CharacterGuid)) return;
+
+        LogManager.Trace($"[CharacterStorage] {character.Character.CharacterName} activated wing {wing.WingName}");
+
+        bool hasEvolved = wing.ProgressEvolution();
+        if (hasEvolved)
+            WingEvents.RaiseWingEvolved(character, wing);
     }
 
     #endregion

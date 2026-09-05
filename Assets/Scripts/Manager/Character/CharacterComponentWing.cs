@@ -13,6 +13,7 @@ public class CharacterComponentWing
     public bool HasWingActivated { get; private set; }
     public int WingTimesUsed { get; private set; }
     private string wingIdDefault;
+    private string equippedWingGuid;
 
     #endregion
 
@@ -31,8 +32,8 @@ public class CharacterComponentWing
 
         if (characterSaveData != null) 
         {
-            if (!string.IsNullOrEmpty(characterSaveData.EquippedWingGuid))
-                EquipWing(WingManager.Instance.GetWing(characterSaveData.EquippedWingGuid));
+            LogManager.Trace($"[CharacterComponentWing] EquippedWingGuid: {characterSaveData.EquippedWingGuid}");
+            equippedWingGuid = characterSaveData.EquippedWingGuid;
         } else 
         {
             Wing = null;
@@ -57,8 +58,12 @@ public class CharacterComponentWing
 
     public void SetWingEquipped(Wing wing) 
     {
+        LogManager.Trace($"[CharacterComponentWing] [SetWingEquipped] character {character?.CharacterId}, wing {wing?.WingGuid}");
+
+        if (wing == null) return;
+
         Wing = wing;
-        if (wing != null) character.SetWing(wing);
+        character.SetWing(wing);
     }
 
     public void ForceEquipWing(Wing wing)
@@ -72,6 +77,18 @@ public class CharacterComponentWing
         if (!BattleArgs.AwayTeamCanUseWing) return;
 
         ForceEquipWing(WingFactory.CreateFromData(wingIdDefault));
+    }
+
+    public void RestoreEquippedWing()
+    {
+        if (string.IsNullOrEmpty(equippedWingGuid)) return;
+        Wing wing = WingManager.Instance.GetWing(equippedWingGuid);
+        if (wing == null)
+        {
+            LogManager.Trace($"[CharacterComponentWing] Could not find Wing " + $"{equippedWingGuid} for Character {character.CharacterGuid}");
+            return;
+        }
+        EquipWing(wing);
     }
 
     #endregion

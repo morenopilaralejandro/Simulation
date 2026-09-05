@@ -89,6 +89,8 @@ public class Move
     public int GetExtraPower() => evolutionComponent.GetExtraPower();
     public int GetThreshold() => evolutionComponent.GetThreshold();
     public void ResetEvolution() => evolutionComponent.ResetEvolution();
+    public bool CanLimitBreak() => evolutionComponent.CanLimitBreak();
+
     //persistenceComponent
     public void Import(MoveSaveData moveSaveData) => persistenceComponent.Import(moveSaveData);
     public MoveSaveData Export() => persistenceComponent.Export();

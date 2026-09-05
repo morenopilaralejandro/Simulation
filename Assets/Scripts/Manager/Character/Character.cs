@@ -53,6 +53,8 @@ public class Character
         aiDifficultyComponent = new CharacterComponentAIDifficulty(characterData, this, characterSaveData);
         equipmentComponent = new CharacterComponentEquipment(characterData, this, characterSaveData);
         statusEffectsPermanentComponent = new CharacterComponentStatusEffectsPermanent(characterData, this, characterSaveData);
+
+        RestoreEquippedWing();
     }
 
     #endregion
@@ -193,6 +195,7 @@ public class Character
     public void ResetWingTimesUsed() => wingComponent.ResetWingTimesUsed();
     public bool CanApplyWingElementMatchBonus(Element element) => wingComponent.CanApplyWingElementMatchBonus(element);
     public void TryEquipWingDefault() => wingComponent.TryEquipWingDefault();
+    public void RestoreEquippedWing() => wingComponent.RestoreEquippedWing();
 
     //aiDifficultyComponent
     public AIDifficulty AIDifficulty => aiDifficultyComponent.AIDifficulty;

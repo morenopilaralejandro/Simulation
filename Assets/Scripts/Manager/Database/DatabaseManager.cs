@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.LimitBreak;
+using Aremoreno.Enums.Move;
 using Aremoreno.Enums.World;
 
 public class DatabaseManager : MonoBehaviour
@@ -108,6 +111,12 @@ public class DatabaseManager : MonoBehaviour
         LogManager.Error($"[DatabaseManager] MatchChainNodeData '{id}' is {data.GetType().Name}, not {typeof(T).Name}.");
         return null;
     }
+
+    public MaterialByElementData GetMaterialByElementData(Element enumValue) => DatabaseRegistry.MaterialByElementData.Get(enumValue.ToString());
+    public MaterialByPositionData GetMaterialByPositionData(Position enumValue) => DatabaseRegistry.MaterialByPositionData.Get(enumValue.ToString());
+    public MaterialByCategoryMoveData GetMaterialByCategoryMoveData(Category enumValue) => DatabaseRegistry.MaterialByCategoryMoveData.Get(enumValue.ToString());
+    public MaterialByGenderData GetMaterialByGenderData(Gender enumValue) => DatabaseRegistry.MaterialByGenderData.Get(enumValue.ToString());
+    public MaterialByGenderWingData GetMaterialByGenderWingData(Gender enumValue) => DatabaseRegistry.MaterialByGenderWingData.Get(enumValue.ToString());
 
     #endregion
 }

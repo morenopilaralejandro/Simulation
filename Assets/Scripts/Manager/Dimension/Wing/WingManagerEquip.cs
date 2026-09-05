@@ -23,6 +23,7 @@ public class WingManagerEquip
 
     public void EquipWing(Character character, Wing wing)
     {
+        LogManager.Trace($"[WingManagerEquip] [EquipWing] character {character?.CharacterId}, wing {wing?.WingGuid}");
         character.SetWingEquipped(wing);
         wing.SetEquippedCharacter(character);
     }

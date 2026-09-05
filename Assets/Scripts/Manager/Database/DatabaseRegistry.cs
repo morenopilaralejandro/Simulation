@@ -1,3 +1,6 @@
+using Aremoreno.Enums.Character;
+using Aremoreno.Enums.Move;
+
 public class DatabaseRegistry
 {
     public Database<FormationCoordData> FormationCoordData;
@@ -38,6 +41,12 @@ public class DatabaseRegistry
 
     public Database<ScoutTierData> ScoutTierData;
     public Database<FastTravelPointData> FastTravelPointData;
+
+    public Database<MaterialByElementData> MaterialByElementData;
+    public Database<MaterialByPositionData> MaterialByPositionData;
+    public Database<MaterialByCategoryMoveData> MaterialByCategoryMoveData;
+    public Database<MaterialByGenderData> MaterialByGenderData;
+    public Database<MaterialByGenderWingData> MaterialByGenderWingData;
 
     public DatabaseRegistry()
     {
@@ -91,5 +100,12 @@ public class DatabaseRegistry
 
         //FastTravel
         FastTravelPointData = new Database<FastTravelPointData>("FastTravel-Point-Data", f => f.FastTravelPointId);
+
+        //MaterialBy
+        MaterialByElementData = new Database<MaterialByElementData>("Material-By-Element-Data", m => m.Element.ToString());
+        MaterialByPositionData = new Database<MaterialByPositionData>("Material-By-Position-Data", m => m.Position.ToString());
+        MaterialByCategoryMoveData = new Database<MaterialByCategoryMoveData>("Material-By-CategoryMove-Data", m => m.Category.ToString());
+        MaterialByGenderData = new Database<MaterialByGenderData>("Material-By-Gender-Data", m => m.Gender.ToString());
+        MaterialByGenderWingData = new Database<MaterialByGenderWingData>("Material-By-GenderWing-Data", m => m.Gender.ToString());
     }
 }

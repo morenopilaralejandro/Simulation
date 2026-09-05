@@ -79,12 +79,13 @@ public class Wing
     public WingEvolutionGrowthProfile WingEvolutionGrowthProfile => evolutionComponent.WingEvolutionGrowthProfile;
     public WingEvolutionPath WingEvolutionPath => evolutionComponent.WingEvolutionPath;
     public bool IsAtFinalEvolution => evolutionComponent.IsAtFinalEvolution;
-    public void ProgressEvolution() => evolutionComponent.ProgressEvolution();
+    public bool ProgressEvolution() => evolutionComponent.ProgressEvolution();
     public bool TryEvolve() => evolutionComponent.TryEvolve();
     public bool LimitBreak() => evolutionComponent.LimitBreak();
     public void ForceMaxEvolution() => evolutionComponent.ForceMaxEvolution();
     public int GetUsageThreshold() => evolutionComponent.GetUsageThreshold();
     public void ResetEvolution() => evolutionComponent.ResetEvolution();
+    public bool CanLimitBreak() => evolutionComponent.CanLimitBreak();
 
     //statComponent
     public int GetIndividualStat(Stat stat) => statComponent.GetIndividualStat(stat);

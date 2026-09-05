@@ -21,6 +21,12 @@ public static class WingEvents
         OnWingActivated?.Invoke(characterEntityBattle, wing);
     }
 
+    public static event Action<CharacterEntityBattle, Wing> OnWingEvolved;
+    public static void RaiseWingEvolved(CharacterEntityBattle characterEntityBattle, Wing wing)
+    {
+        OnWingEvolved?.Invoke(characterEntityBattle, wing);
+    }
+
     public static event Action<Wing> OnWingAdded;
     public static void RaiseWingAdded(Wing wing)
     {
