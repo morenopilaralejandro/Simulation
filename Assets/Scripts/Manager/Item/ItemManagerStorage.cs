@@ -63,7 +63,7 @@ public class ItemManagerStorage
     {
         Clear();
 
-        AddAllFromDatabase();
+        //AddAllFromDatabase();
 
         /*
         AddItem(ItemFactory.CreateById("item-important-00001-shard_sorrow"), 1);
@@ -71,7 +71,7 @@ public class ItemManagerStorage
         AddItem(ItemFactory.CreateById("item-important-00003-shard_hatred"), 1);
         AddItem(ItemFactory.CreateById("item-important-00004-shard_anger"), 1);
         */
-        /*
+
         AddItem(ItemFactory.CreateById("item-emblem-00000-a-generic_common"), 1);
         AddItem(ItemFactory.CreateById("item-emblem-00000-b-generic_rare"), 1);
         //AddItem(ItemFactory.CreateById("item-emblem-00001-s-faith_selection"), 1);
@@ -112,7 +112,7 @@ public class ItemManagerStorage
         AddItem(ItemFactory.CreateById("item-kit-00003-balance"), 1);
         AddItem(ItemFactory.CreateById("item-kit-00004-enigma"), 1);
         AddItem(ItemFactory.CreateById("item-kit-00005-hope"), 1);
-        */
+
     }
 
     public void AddAllFromDatabase()

@@ -237,8 +237,9 @@ public class OnScreenControlsManager : MonoBehaviour
         isBattleContextual = true;
         if (battleType == BattleType.Mini)
         {
-            InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
+            InputEvents.RaiseScreenControlsHideRequested();
             InputEvents.RaiseScreenControlsShowRequested();
+            InputEvents.RaiseDirectionalInputModeChanged(DirectionalInputMode.Joystick);
         } else 
         {
             InputEvents.RaiseScreenControlsHideRequested();

@@ -111,9 +111,12 @@ public class Character
 
     // trainingComponent
     public int MaxTrainingPerStat => CharacterComponentTraining.MAX_TRAINING_PER_STAT;
+    public int TrainingPointCost => CharacterComponentTraining.TRAINING_POINT_COST;
     public int BaseFreedom => trainingComponent.BaseFreedom;
     public int TrueFreedom => trainingComponent.TrueFreedom;
     public void TrainStat(Stat stat, int amount) => trainingComponent.TrainStat(stat, amount);
+    public void UntrainStat(Stat stat, int amount) => trainingComponent.UntrainStat(stat, amount);
+    public void ApplyTrainingDelta(Stat stat, int delta) => trainingComponent.ApplyTrainingDelta(stat, delta);
     public bool IsCharacterTrainable(Stat stat) => trainingComponent.IsCharacterTrainable(stat);
     public bool IsStatTrainable(Stat stat) => trainingComponent.IsStatTrainable(stat);
     public int GetRemainingTrainingByStat(Stat stat) => trainingComponent.GetRemainingTrainingByStat(stat);
@@ -220,6 +223,7 @@ public class Character
     public bool HasAwaken => awakenComponent.HasAwaken;
     public bool CanAwaken => awakenComponent.CanAwaken;
     public void Awaken() => awakenComponent.Awaken();
+    public void ResetAwaken() => awakenComponent.ResetAwaken();
 
     #endregion
 }

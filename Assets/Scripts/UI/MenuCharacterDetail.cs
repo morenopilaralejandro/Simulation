@@ -240,6 +240,7 @@ public class MenuCharacterDetail : Menu
         UIEvents.OnMoveSlotUIMoveCanceled          += HandleMoveSlotUIMoveCanceled;
         UIEvents.OnMoveActionsCloseRequested       += HandleMoveActionsCloseRequested;
         UIEvents.OnWingActionsCloseRequested       += HandleWingActionsCloseRequested;
+        LimitBreakEvents.OnCharacterAwakenPerformed += HandleCharacterAwakenPerformed;
     }
 
     protected override void OnDisable()
@@ -254,6 +255,7 @@ public class MenuCharacterDetail : Menu
         UIEvents.OnMoveSlotUIMoveCanceled          -= HandleMoveSlotUIMoveCanceled;
         UIEvents.OnMoveActionsCloseRequested       -= HandleMoveActionsCloseRequested;
         UIEvents.OnWingActionsCloseRequested       -= HandleWingActionsCloseRequested;
+        LimitBreakEvents.OnCharacterAwakenPerformed -= HandleCharacterAwakenPerformed;
     }
 
     private void HandleCharacterDetailOpenRequested(Character character)
@@ -336,6 +338,14 @@ public class MenuCharacterDetail : Menu
             StopCoroutine(restoreFocusCoroutine);
 
         restoreFocusCoroutine = StartCoroutine(RestoreFocusNextFrame(wingSlotUI.gameObject));
+    }
+
+    private void HandleCharacterAwakenPerformed(Character character) 
+    {
+        if (restoreFocusCoroutine != null)
+            StopCoroutine(restoreFocusCoroutine);
+
+        restoreFocusCoroutine = StartCoroutine(RestoreFocusNextFrame(firstSelected.gameObject));
     }
 
     #endregion

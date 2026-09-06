@@ -18,6 +18,8 @@ public class CharacterComponentStats
     [Range(0f, 1f)] private float minStatRatioSp = 0.4f; // 40% of base at level 1
     [Range(0f, 1f)] private float minStatRatioOther = 0.1f; // 10% of base at level 1
 
+    private float awakenBonus = 1.15f;
+
     public CharacterComponentStats(CharacterData characterData, Character character, CharacterSaveData characterSaveData = null) 
     {
         Initialize(characterData, character, characterSaveData);
@@ -131,9 +133,14 @@ public class CharacterComponentStats
 
     public void UpdateStats()
     {
-        foreach (Stat stat in Enum.GetValues(typeof(Stat))) 
+        foreach (Stat stat in Enum.GetValues(typeof(Stat)))
         {
-            trueStats[stat] = ScaleStat(baseStats[stat], stat) + trainedStats[stat];
+            int statValue = ScaleStat(baseStats[stat], stat);
+            statValue += trainedStats[stat];
+
+            if (character.HasAwaken) statValue = Mathf.RoundToInt(statValue * awakenBonus);
+
+            trueStats[stat] = statValue;
             battleStats[stat] = trueStats[stat];
         }
     }

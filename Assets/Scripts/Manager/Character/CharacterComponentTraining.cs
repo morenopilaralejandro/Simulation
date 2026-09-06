@@ -7,6 +7,7 @@ public class CharacterComponentTraining
 {
     private Character character;
     public const int MAX_TRAINING_PER_STAT = 50;
+    public const int TRAINING_POINT_COST = 500;
     
     private int baseFreedom;
     private int trueFreedom;
@@ -39,8 +40,33 @@ public class CharacterComponentTraining
 
     public void TrainStat(Stat stat, int amount)
     {
-        this.character.ModifyTrainedStat(stat, amount);
-        trueFreedom--;
+        if (amount <= 0) return;
+        int actualAmount = Mathf.Min(amount, trueFreedom);
+        if (actualAmount <= 0) return;
+        int current = character.GetTrainedStat(stat);
+        int newValue = Mathf.Min(current + actualAmount, MAX_TRAINING_PER_STAT);
+        int appliedAmount = newValue - current;
+        if (appliedAmount <= 0) return;
+        character.ModifyTrainedStat(stat, appliedAmount);
+        trueFreedom -= appliedAmount;
+    }
+
+    public void UntrainStat(Stat stat, int amount)
+    {
+        if (amount <= 0) return;
+        int current = character.GetTrainedStat(stat);
+        int actualAmount = Mathf.Min(amount, current);
+        if (actualAmount <= 0) return;
+        character.ModifyTrainedStat(stat, -actualAmount);
+        trueFreedom += actualAmount;
+    }
+
+    public void ApplyTrainingDelta(Stat stat, int delta)
+    {
+        if (delta > 0)
+            TrainStat(stat, delta);
+        else if (delta < 0)
+            UntrainStat(stat, -delta);
     }
 
     public bool IsCharacterTrainable(Stat stat)

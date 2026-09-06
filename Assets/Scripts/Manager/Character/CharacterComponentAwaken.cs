@@ -34,11 +34,20 @@ public class CharacterComponentAwaken
 
     #region Logic
 
-    public bool CanAwaken => character.Level >= 50;
+    public bool CanAwaken => character.Level >= 50 && !HasAwaken;
     public void Awaken() 
     {
         HasAwaken = true;
+        character.UpdateStats();
+        LimitBreakEvents.RaiseCharacterAwakenPerformed(character);
     }
+
+    public void ResetAwaken() 
+    {
+        HasAwaken = false;
+        character.UpdateStats();
+    }
+
 
     #endregion
 }
