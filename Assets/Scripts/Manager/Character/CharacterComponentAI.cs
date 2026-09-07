@@ -48,6 +48,9 @@ public class CharacterComponentAI : MonoBehaviour
     private const float KEEPER_PREDICT_AHEAD = 0.3f;
     private const float KEEPER_MIN_X = -0.6f;
     private const float KEEPER_MAX_X =  0.6f;
+    private const float KEEPER_MIN_PASS_DISTANCE = 0f;
+    private const float KEEPER_MAX_PASS_DISTANCE = 6f;
+    private const float KEEPER_PASS_DELAY = 0.3f;
 
     // Defensive line limits
     private float HOME_DEFENSIVE_MIN_Z;
@@ -161,6 +164,7 @@ public class CharacterComponentAI : MonoBehaviour
     private List<CharacterEntityBattle> opponents;
     private float closeDistanceBall;
     private CharacterEntityBattle lastPassReceiver;
+    private float keeperPassTime = INIT_LAST_PASS_TIME;
     private float lastPassTime = INIT_LAST_PASS_TIME;
     private float nextDecisionTime = 0f;
     private float minDecisionDelay;
@@ -374,11 +378,24 @@ public class CharacterComponentAI : MonoBehaviour
         if (character.HasBall())
         {
             if (character.CanShoot())
+            {
                 currentState = AIState.Shoot;
-            else if ((Random.value > confidence && HasOpenTeammate()) || character.IsKeeper)
+            }
+            else if (character.IsKeeper)
+            {
+                if (currentState != AIState.Pass) 
+                    keeperPassTime = Time.time + KEEPER_PASS_DELAY;
+
                 currentState = AIState.Pass;
+            }
+            else if (Random.value > confidence && HasOpenTeammate())
+            {
+                currentState = AIState.Pass;
+            }
             else
+            {
                 currentState = AIState.Dribble;
+            }
 
             return;
         }
@@ -557,7 +574,12 @@ public class CharacterComponentAI : MonoBehaviour
         {
             case AIState.Idle: break;
             case AIState.ChaseBall: ActChaseBall(); break;
-            case AIState.Pass: ActPass(); break;
+            case AIState.Pass:
+                if (character.IsKeeper)
+                    ActKeeperPass();
+                else
+                    ActPass();
+                break;
             case AIState.Shoot: ActShoot(); break;
             case AIState.Defend: ActDefend(); break;
             case AIState.Keeper: ActKeeper(); break;
@@ -1040,6 +1062,125 @@ public class CharacterComponentAI : MonoBehaviour
             }
         }
         return best;
+    }
+
+    private void ActKeeperPass()
+    {
+        if (!character.HasBall()) return;
+
+        character.SetLocomotion(Aremoreno.Enums.Animation.CharacterAnimationState.Idle);
+
+        if (Time.time < keeperPassTime) return;
+
+        CharacterEntityBattle teammate = GetBestKeeperPassTeammate();
+
+        // This should only happen if there are literally no valid
+        // outfield teammates available.
+        if (teammate == null) return;
+
+        character.KickBallTo(teammate.transform.position);
+
+        lastPassReceiver = teammate;
+        lastPassTime = Time.time;
+    }
+
+    private CharacterEntityBattle GetBestKeeperPassTeammate()
+    {
+        if (teammates == null || teammates.Count == 0) return null;
+
+        CharacterEntityBattle best = null;
+        float bestScore = float.MinValue;
+
+        Vector3 myPos = _transform.position;
+
+        // First pass: prefer valid, nearby, safe teammates.
+        for (int i = 0; i < teammates.Count; i++)
+        {
+            CharacterEntityBattle mate = teammates[i];
+
+            if (!IsValidKeeperPassTarget(mate)) continue;
+
+            Vector3 toMate = mate.transform.position - myPos;
+            float distance = toMate.magnitude;
+
+            // Normal keeper passing range.
+            if (distance < KEEPER_MIN_PASS_DISTANCE ||
+                distance > KEEPER_MAX_PASS_DISTANCE)
+                continue;
+
+            float score = GetKeeperPassScore(mate, distance);
+
+            if (score > bestScore)
+            {
+                bestScore = score;
+                best = mate;
+            }
+        }
+
+        if (best != null) return best;
+
+        // ---------------------------------------------------------
+        // FALLBACK:
+        // If nobody satisfies the normal criteria, find ANY
+        // valid teammate. This guarantees the keeper can pass.
+        // ---------------------------------------------------------
+
+        float closestDistance = float.MaxValue;
+
+        for (int i = 0; i < teammates.Count; i++)
+        {
+            CharacterEntityBattle mate = teammates[i];
+
+            if (!IsValidKeeperPassTarget(mate))
+                continue;
+
+            float distanceSqr =
+                (mate.transform.position - myPos).sqrMagnitude;
+
+            if (distanceSqr < closestDistance)
+            {
+                closestDistance = distanceSqr;
+                best = mate;
+            }
+        }
+
+        return best;
+    }
+
+    private bool IsValidKeeperPassTarget(CharacterEntityBattle mate)
+    {
+        if (mate == null) return false;
+        if (mate.IsKeeper) return false;
+        if (!mate.CanMove()) return false;
+        return true;
+    }
+
+    private float GetKeeperPassScore(
+        CharacterEntityBattle mate,
+        float distance)
+    {
+        float score = 0f;
+
+        // Prefer closer teammates.
+        score -= distance;
+
+        // Prefer teammates with some space.
+        float opponentDistance = GetNearestOpponentDistanceTo(mate);
+        score += Mathf.Clamp(opponentDistance, 0f, 5f) * 0.5f;
+
+        // Small preference for teammates further forward.
+        float goalDistance = GoalManager.Instance.GetDistanceToOpponentGoalZ(mate);
+
+        score -= goalDistance * 0.25f;
+
+        // Avoid immediately passing back to the same player.
+        if (mate == lastPassReceiver &&
+            Time.time - lastPassTime < PASS_LOOP_COOLDOWN)
+        {
+            score -= 10f;
+        }
+
+        return score;
     }
 
     private void ActShoot()

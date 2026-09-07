@@ -10,10 +10,10 @@ public class MenuCredits : Menu
 {
     [Header("UI References")]
     [SerializeField] private SceneGroup sceneMainMenu;
-    [SerializeField] private float scrollSpeed = 30f;
+    [SerializeField] private float scrollSpeed = 45f;
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private Vector2 startPosition;
-    private float endY = 5964f;
+    private float endY = 8616f;
 
     private void Start() 
     {
