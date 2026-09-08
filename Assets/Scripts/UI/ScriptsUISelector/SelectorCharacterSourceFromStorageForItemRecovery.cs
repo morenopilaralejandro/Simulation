@@ -23,6 +23,7 @@ public class SelectorCharacterSourceFromStorageForItemRecovery : ISelectorSource
 
         foreach (Character character in CharacterManager.Instance.Characters.Values)
         {
+            if(character.IsFainted) continue;
             if ((recoversHp && character.GetBattleStat(Stat.Hp) != character.GetTrueStat(Stat.Hp)) ||
                 (recoversSp && character.GetBattleStat(Stat.Sp) != character.GetTrueStat(Stat.Sp)))
             {

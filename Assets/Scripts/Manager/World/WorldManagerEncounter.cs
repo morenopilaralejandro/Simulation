@@ -86,6 +86,7 @@ public class WorldManagerEncounter
         worldManager.SetIsTransitioning(true);
 
         LogManager.Trace($"[WorldManager] Encounter triggered: {encounterData}. Tearing down world zones.");
+        AudioManager.Instance.PlaySfx("sfx-secret_evil");
 
         // Immediately freeze the player
         player.SetControlEnabled(false);

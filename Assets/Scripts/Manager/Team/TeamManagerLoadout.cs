@@ -29,7 +29,7 @@ public class TeamManagerLoadout
 
     #region Constants
 
-    public string DEFAULT_NAME = "custom team";
+    public string DEFAULT_NAME => defaultName.GetLocalizedString();
     public const int MAX_LOADOUTS = 10;
 
     public const string DEFAULT_EMBLEM_ID = "emblem-00001-s-faith_selection";
@@ -51,8 +51,6 @@ public class TeamManagerLoadout
     {
         characterManager = CharacterManager.Instance;
         this.defaultName = defaultName;
-
-        DEFAULT_NAME = defaultName.GetLocalizedString();
     }
 
     #endregion

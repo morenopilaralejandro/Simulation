@@ -135,14 +135,14 @@ public class BattleManager : MonoBehaviour
     #region Generic
     public void Freeze()
     {
-        //LogManager.Trace("[BattleManager] Freeze");
+        LogManager.Trace("[BattleManager] Freeze");
         isMovementFrozen = true;
         isTimeFrozen = true;
     }
 
     public void Unfreeze()
     {
-        //LogManager.Trace("[BattleManager] Unfreeze");
+        LogManager.Trace("[BattleManager] Unfreeze");
         isMovementFrozen = false;
         isTimeFrozen = false;
     }
@@ -211,6 +211,7 @@ public class BattleManager : MonoBehaviour
     private void ResetBattle()
     {
         teamSystem.Reset();
+        endGameComponent.Reset();
         charactersReady = 0;
         ResetScore();
         ResetTimer();

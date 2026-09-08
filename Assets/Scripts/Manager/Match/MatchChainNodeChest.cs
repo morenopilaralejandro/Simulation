@@ -15,7 +15,7 @@ public class MatchChainNodeChest : MatchChainNode
 
     public MatchChainNodeChest(MatchChainNodeDataChest data, MatchChainNodeSaveData savedata = null) : base(data, savedata)
     {
-        chestComponent = new MatchChainNodeComponentChest(data, this);
+        chestComponent = new MatchChainNodeComponentChest(data, this, savedata);
     }
 
     #endregion

@@ -68,7 +68,6 @@ public class BattleComponentEndGame
         if (!pendingEndByEssence) return;
 
         BattleManager.Instance.EndBattleByEssence(pendingTeamSide);
-        pendingEndByEssence = false;
     }
 
     #endregion

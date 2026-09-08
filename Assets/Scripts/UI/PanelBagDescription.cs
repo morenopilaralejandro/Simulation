@@ -11,10 +11,12 @@ public class PanelBagDescription : MonoBehaviour
     [SerializeField] private TMP_Text textName;
     [SerializeField] private TMP_Text textDescription;
     [SerializeField] private Image imageIcon;
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private CanvasGroup canvasName;
     [SerializeField] private CanvasGroup canvasMove;
+    [SerializeField] private CanvasGroup canvasEquipmentStats;
     [SerializeField] private MoveUI moveUI;
-    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private EquipmentStatLayout equipmentStatLayout;
 
     private Move auxMove;
     private MoveData auxMoveData;
@@ -38,6 +40,10 @@ public class PanelBagDescription : MonoBehaviour
         imageIcon.color = item.IconColor;
         _ = SetIconAsync(item.IconSpriteAddress, version);
 
+        SetCanvasVisible(canvasMove, false); 
+        SetCanvasVisible(canvasEquipmentStats, false); 
+        SetCanvasVisible(canvasName, true);
+
         if (item is ItemMove itemMove)
         {
             auxMoveData = DatabaseManager.Instance.GetMoveData(itemMove.MoveId);
@@ -46,19 +52,15 @@ public class PanelBagDescription : MonoBehaviour
 
             SetCanvasVisible(canvasMove, true);
             SetCanvasVisible(canvasName, false);
-        }
-        else
-        {
-            SetCanvasVisible(canvasMove, false);
-            SetCanvasVisible(canvasName, true);
-        }
-
-        if (item is ItemRecovery itemRecovery)
+        } 
+        else if (item is ItemEquipment itemEquipment) 
         { 
-            textDescription.text = itemRecovery.ItemDescription;    
-        } else 
-        {
-            textDescription.text = "";
+            equipmentStatLayout.Populate(itemEquipment);
+            SetCanvasVisible(canvasEquipmentStats, true); 
+            SetCanvasVisible(canvasName, false); 
+        } else if (item is ItemRecovery itemRecovery) 
+        { 
+            textDescription.text = itemRecovery.ItemDescription; 
         }
     }
 
@@ -83,6 +85,7 @@ public class PanelBagDescription : MonoBehaviour
         imageIcon.sprite = null;
 
         SetCanvasVisible(canvasMove, false);
+        SetCanvasVisible(canvasEquipmentStats, false);
         SetCanvasVisible(canvasName, true);
     }
 

@@ -30,8 +30,6 @@ public class ZoneTransitionTriggerToCredits : MonoBehaviour
         StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
         PersistenceManager.Instance.SaveGame();
 
-
-
         var worldManager = WorldManager.Instance;
         var player = WorldManager.Instance.PlayerWorldEntity;
 

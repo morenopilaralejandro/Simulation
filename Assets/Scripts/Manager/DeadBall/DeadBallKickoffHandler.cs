@@ -110,10 +110,32 @@ public class DeadBallKickoffHandler : IDeadBallHandler
             deadBallManager.TeamReadiness.SetBothReady();
             deadBallManager.NotifyReadinessChanged();
         }
+
+        LogManager.Trace(
+            $"[Kickoff DEBUG] " +
+            $"Kicker={characterKicker?.name} " +
+            $"AI={characterKicker?.IsEnemyAI} " +
+            $"KickerSide={characterKicker?.TeamSide} " +
+            $"OffenseSide={deadBallManager.OffenseSide} " +
+            $"BallReady={isBallReady} " +
+            $"KickExecuted={isKickExecuted} " +
+            $"IsReady={IsReady} " +
+            $"PassTarget={characterPassTargetAi?.name}"
+        );
     }
 
     public void Execute()
     {
+        LogManager.Trace(
+            $"[Kickoff DEBUG] EXECUTE " +
+            $"Kicker={characterKicker?.name} " +
+            $"AI={characterKicker?.IsEnemyAI} " +
+            $"BallReady={isBallReady} " +
+            $"KickExecuted={isKickExecuted} " +
+            $"TargetAI={characterPassTargetAi?.name} " +
+            $"Receiver={characterReceiver?.name}"
+        );
+
         UnsubscribeInputConfirm();
         UnsubscribeInputPass();
 

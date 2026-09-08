@@ -62601,7 +62601,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: name
+  m_text: item name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a9f36e37efa25cc5e86c7820b2e6c9a4, type: 2}
   m_sharedMaterial: {fileID: -5082097396079963576, guid: a9f36e37efa25cc5e86c7820b2e6c9a4, type: 2}
@@ -62635,7 +62635,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -78413,6 +78413,7 @@ MonoBehaviour:
   textDisplayNode: {fileID: 1530696022}
   imageDisplayNode: {fileID: 1268363656}
   buttonOpenChest: {fileID: 1317559509}
+  textItemName: {fileID: 1206386778}
 --- !u!225 &1478332812
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -113145,7 +113146,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5449999654124643508, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
-      value: 24621140343005184
+      value: 91906160077840384
       objectReference: {fileID: 0}
     - target: {fileID: 5449999654124643508, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
@@ -113153,7 +113154,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_text
-      value: Back
+      value: Open
       objectReference: {fileID: 0}
     - target: {fileID: 5581817553071244677, guid: 5989556875caefea8a631afbff38f4bf, type: 3}
       propertyPath: m_fontSize
