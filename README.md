@@ -30,10 +30,24 @@ This project is dual-licensed under **GNU GPL v3** and **CC BY-SA 4.0**. See the
 
 Here are some screenshots to give you a taste of the action:
 
-![Screenshot](Assets/Screenshots/promo-battle.png)
-![Screenshot](Assets/Screenshots/promo-menu_main.png)
-![Screenshot](Assets/Screenshots/promo-menu_team.png)
+![Screenshot](Assets/Screenshots/promo-battle-1.png)
+![Screenshot](Assets/Screenshots/promo-battle-2.png)
+![Screenshot](Assets/Screenshots/promo-battle-3.png)
+![Screenshot](Assets/Screenshots/promo-battle-wing.png)
+![Screenshot](Assets/Screenshots/promo-battle-essence.png)
 ![Screenshot](Assets/Screenshots/promo_team_preview.png)
+![Screenshot](Assets/Screenshots/promo-menu_team.png)
+![Screenshot](Assets/Screenshots/promo-menu_main.png)
+![Screenshot](Assets/Screenshots/promo-overworld.png)
+![Screenshot](Assets/Screenshots/promo-dialog.png)
+![Screenshot](Assets/Screenshots/promo-menu_side.png)
+![Screenshot](Assets/Screenshots/promo-menu_character.png)
+![Screenshot](Assets/Screenshots/promo-menu_character_detail.png)
+![Screenshot](Assets/Screenshots/promo-menu_training.png)
+![Screenshot](Assets/Screenshots/promo-menu_awaken.png)
+![Screenshot](Assets/Screenshots/promo-menu_wing.png)
+![Screenshot](Assets/Screenshots/promo-menu_bag.png)
+![Screenshot](Assets/Screenshots/promo-menu_match_chain.png)
 
 ---
 
