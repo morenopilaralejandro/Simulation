@@ -275,7 +275,7 @@ public class BattleManagerResults
 
     public void Unsubscribe()
     {
-        BattleEvents.OnResultsContinueRequested += HandleResultsContinueRequested;
+        BattleEvents.OnResultsContinueRequested -= HandleResultsContinueRequested;
     }
 
     private void HandleResultsContinueRequested()

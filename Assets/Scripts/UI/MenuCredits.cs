@@ -15,14 +15,17 @@ public class MenuCredits : Menu
     [SerializeField] private Vector2 startPosition;
     private float endY = 8616f;
 
-    private void Start() 
+    public void Start() 
     {
+        LogManager.Trace($"[MenuCredits] [Start]");
+        InputEvents.RaiseScreenControlsHideRequested();
         MenuManager.Instance.OpenMenu(this);
     }
 
-
     public override void Show() 
     {
+        LogManager.Trace($"[MenuCredits] [Show]");
+
         rectTransform.anchoredPosition = startPosition;
 
         base.Show();
@@ -45,7 +48,6 @@ public class MenuCredits : Menu
 
     public void OnButtonBackClicked()
     {
-        RequestClose();
         SceneLoader.Instance.LoadGroup(sceneMainMenu);
     }
 

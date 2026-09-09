@@ -60,9 +60,10 @@ public class CharacterComponentWing
     {
         LogManager.Trace($"[CharacterComponentWing] [SetWingEquipped] character {character?.CharacterId}, wing {wing?.WingGuid}");
 
+        Wing = wing;
+
         if (wing == null) return;
 
-        Wing = wing;
         character.SetWing(wing);
     }
 

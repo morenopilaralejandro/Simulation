@@ -83,6 +83,7 @@ public class WorldManager : MonoBehaviour
             PlayerWorldEntity.SetControlEnabled(true);
             PersistenceManager.Instance.SetNewGame(false);
             StorySystemManager.Instance.SetFlag("pending_starting_spawn", false);
+            StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
         } else if (StorySystemManager.Instance.GetFlag("pending_ending"))
         {
             StorySystemManager.Instance.SetFlag("pending_ending", false);

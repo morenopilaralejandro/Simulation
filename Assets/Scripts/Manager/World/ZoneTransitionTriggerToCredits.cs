@@ -18,9 +18,13 @@ public class ZoneTransitionTriggerToCredits : MonoBehaviour
     private float transitionDelayInternal = 0.4f;
     public float transitionDelay => transitionDelayInternal;
 
+    private bool isTransitioning = false;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if(isTransitioning) return;
         if (!other.CompareTag("Player")) return;
+        isTransitioning = true;
         InitiateTransition();
     }
 
@@ -30,23 +34,7 @@ public class ZoneTransitionTriggerToCredits : MonoBehaviour
         StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
         PersistenceManager.Instance.SaveGame();
 
-        var worldManager = WorldManager.Instance;
-        var player = WorldManager.Instance.PlayerWorldEntity;
-
-        worldManager.SetIsTransitioning(true);
-        player.SetControlEnabled(false);
-
-        await worldManager.FadeOut();
-
-        if (worldManager.CurrentZone != null && worldManager.CurrentZone.zoneType == ZoneType.Overworld)
-            await ChunkStreamingManager.Instance.StopStreaming();
-
-        bool unloadSuccess = await worldManager.UnloadCurrentZone();
-        worldManager.SetState(WorldState.InEncounter);
-
-
-
-
+        bool unloadSuccess = await WorldManager.Instance.UnloadCurrentZone();
         SceneLoader.Instance.LoadGroup(sceneCredits);
 
         /*
