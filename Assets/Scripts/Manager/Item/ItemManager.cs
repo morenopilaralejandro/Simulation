@@ -65,6 +65,7 @@ public class ItemManager : MonoBehaviour
     public int GetItemCount(Item item) => storageSystem.GetItemCount(item);
     public List<ItemStorageSlot> GetItemsByCategory(ItemCategory category) => storageSystem.GetItemsByCategory(category);
     public bool IsFormationOfBattleType(Item item, BattleType battleType) => storageSystem.IsFormationOfBattleType(item, battleType);
+    public void ConsumeMaterialRequirement(List<MaterialRequirement> materialRequirements) => storageSystem.ConsumeMaterialRequirement(materialRequirements);
     public SaveDataItemStorage ExportStorageSystem() => storageSystem.Export();
     public void ImportStorageSystem(SaveDataItemStorage saveData) => storageSystem.Import(saveData);
 

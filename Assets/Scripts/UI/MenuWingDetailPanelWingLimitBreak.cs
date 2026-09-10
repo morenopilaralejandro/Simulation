@@ -40,6 +40,7 @@ public class MenuWingDetailPanelWingLimitBreak : Menu
     {
         AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         wing.LimitBreak();
+        ItemManager.Instance.ConsumeMaterialRequirement(requiredItems);
         RequestClose();
     }
 

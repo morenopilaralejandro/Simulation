@@ -40,6 +40,7 @@ public class MenuCharacterAwaken : Menu
     {
         AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         character.Awaken();
+        ItemManager.Instance.ConsumeMaterialRequirement(requiredItems);
         RequestClose();
         UIEvents.RaiseCharacterDetailRefreshRequested();
     }

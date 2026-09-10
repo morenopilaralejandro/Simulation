@@ -41,6 +41,7 @@ public class MenuCharacterDetailPanelMoveLimitBreak : Menu
     {
         AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
         move.LimitBreak();
+        ItemManager.Instance.ConsumeMaterialRequirement(requiredItems);
         RequestClose();
         UIEvents.RaiseCharacterDetailRefreshRequested();
     }
@@ -82,4 +83,5 @@ public class MenuCharacterDetailPanelMoveLimitBreak : Menu
 
         MenuManager.Instance.OpenMenu(this);
     }
+
 }
