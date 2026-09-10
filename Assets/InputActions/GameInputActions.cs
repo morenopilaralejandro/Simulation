@@ -1136,6 +1136,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""0bd7d0de-bb59-4da0-8080-814eb537eeb6"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""World_OpenSideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""627e3175-ae63-4c1f-a4fd-e743d4f463f2"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",

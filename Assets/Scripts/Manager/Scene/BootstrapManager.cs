@@ -27,10 +27,10 @@ public class BootstrapManager : MonoBehaviour
         AsyncOperationHandle initAddressablesHandle = Addressables.InitializeAsync();
         yield return initAddressablesHandle;
 
+        AudioManager.Instance.PlaySfx("sfx-double_screen");
+
         yield return new WaitUntil(() => DataLoadManager.Instance != null);
         yield return new WaitUntil(() => DataLoadManager.Instance.IsReady);
-
-        AudioManager.Instance.PlaySfx("sfx-double_screen");
 
         SceneManager.UnloadSceneAsync("LoadingScene");
 

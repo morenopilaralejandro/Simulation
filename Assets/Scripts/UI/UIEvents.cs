@@ -456,10 +456,28 @@ public static class UIEvents
         OnMoveLimitBreakPanelOpenRequested?.Invoke(move, character);
     }
 
+    public static event Action<Wing> OnWingLimitBreakPanelOpenRequested;
+    public static void RaiseWingLimitBreakPanelOpenRequested(Wing wing)
+    {
+        OnWingLimitBreakPanelOpenRequested?.Invoke(wing);
+    }
+
     public static event Action<Move, Character> OnMoveLimitBreakRequested;
     public static void RaiseMoveLimitBreakRequested(Move move, Character character)
     {
         OnMoveLimitBreakRequested?.Invoke(move, character);
+    }
+
+    public static event Action<Character> OnMenuTrainingOpenRequested;
+    public static void RaiseMenuTrainingOpenRequested(Character character)
+    {
+        OnMenuTrainingOpenRequested?.Invoke(character);
+    }
+
+    public static event Action<Character> OnMenuCharacterAwakenOpenRequested;
+    public static void RaiseMenuCharacterAwakenOpenRequested(Character character)
+    {
+        OnMenuCharacterAwakenOpenRequested?.Invoke(character);
     }
 
     // Menu Item

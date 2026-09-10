@@ -275,7 +275,7 @@ public class BattleManagerResults
 
     public void Unsubscribe()
     {
-        BattleEvents.OnResultsContinueRequested += HandleResultsContinueRequested;
+        BattleEvents.OnResultsContinueRequested -= HandleResultsContinueRequested;
     }
 
     private void HandleResultsContinueRequested()
@@ -287,6 +287,7 @@ public class BattleManagerResults
             StorySystemManager.Instance.SetFlag("pending_ending", false);
             StorySystemManager.Instance.SetFlag("pending_starting_spawn", true);
             StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
+            PersistenceManager.Instance.SaveGame();
             SceneLoader.Instance.LoadGroup(sceneCredits);
             return;
         }
@@ -295,7 +296,12 @@ public class BattleManagerResults
         {
             StorySystemManager.Instance.SetFlag("pending_starting_spawn", true);
             StorySystemManager.Instance.SetFlag("allow_quick_travel", true);
-            //CharacterManager.Instance.FullHealAll();
+            CharacterManager.Instance.FullHealAll();
+        }
+
+        if (battleResultData.BattleResultsType == BattleResultsType.MatchNode) 
+        {
+            CharacterManager.Instance.FullHealAll();
         }
 
         switch(battleResultData.BattleResultsType) 

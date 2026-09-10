@@ -43,13 +43,14 @@ public class WingLayoutUI : MonoBehaviour
     public void Populate()
     {
         wingSlot.Initialize(character);
-        wingSlot.SetWing(character.Wing);
         if (character.HasWingEquipped) 
         {
             textName.text = character.Wing.WingName;
+            wingSlot.SetWing(character.Wing);
         } else 
-        {
+        {       
             textName.text = defaultWingName.GetLocalizedString();
+            wingSlot.Clear();
         }
     }
 

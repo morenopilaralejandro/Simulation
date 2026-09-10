@@ -12,6 +12,8 @@ public class SelectorScoutEntryListItem : SelectorListItem<ScoutEntry>
     [SerializeField] private CanvasGroup canvasGroupCost;
     [SerializeField] private CanvasGroup canvasGroupOwned;
 
+    public Character Character;
+
     protected override void OnBind(ScoutEntry obj)
     {
         this.Selected += HandleItemSelected;
@@ -21,6 +23,8 @@ public class SelectorScoutEntryListItem : SelectorListItem<ScoutEntry>
         textLv.text = obj.Level.ToString();
 
         textCost.color = obj.IsAffordable ? Color.white : Color.red;
+
+        Character = obj.Character;
 
         SetCanvasGroup(canvasGroupOwned, obj.IsOwned);
         SetCanvasGroup(canvasGroupCost, !obj.IsOwned);
@@ -33,6 +37,8 @@ public class SelectorScoutEntryListItem : SelectorListItem<ScoutEntry>
         characterCard.Clear();
         textCost.text = "";
         textLv.text = "";
+
+        Character = null;
 
         SetCanvasGroup(canvasGroupOwned, false);
         SetCanvasGroup(canvasGroupCost, false);

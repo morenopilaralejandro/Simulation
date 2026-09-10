@@ -83,6 +83,7 @@ public class PersistenceManagerSave
         ItemManager.Instance.FirstTimeInitialize();
         ItemManager.Instance.InitializeCurrencySystem();
         StorySystemManager.Instance.FirstTimeInitialize();
+        ChestStateManager.Instance.FirstTimeInitialize();
         WorldArgs.Hour = 12;
 
         SetNewGame(true);

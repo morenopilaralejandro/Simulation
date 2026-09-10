@@ -201,10 +201,13 @@ public class OffsideManager : MonoBehaviour
     private bool IsDeadBallPlay()
     {
         var db = DeadBallManager.Instance;
+        return db != null && db.IsDeadBallInProgress;
+        /*
         return db != null && db.IsDeadBallInProgress && 
                (db.DeadBallType == DeadBallType.ThrowIn ||
                 db.DeadBallType == DeadBallType.CornerKick ||
                 db.DeadBallType == DeadBallType.GoalKick);
-                //db.DeadBallType == DeadBallType.Kickoff
+                db.DeadBallType == DeadBallType.Kickoff
+        */
     }
 }

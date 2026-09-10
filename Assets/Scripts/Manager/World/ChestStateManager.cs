@@ -24,6 +24,11 @@ public class ChestStateManager : MonoBehaviour
         persistenceManager = PersistenceManager.Instance;
     }
 
+    public void FirstTimeInitialize()
+    {
+        Clear();
+    }
+
     public bool IsOpened(string chestId)
     {
         return openedChests.Contains(chestId);
@@ -46,7 +51,7 @@ public class ChestStateManager : MonoBehaviour
 
     public void Import(ChestStateSaveData saveData)
     {
-        openedChests.Clear();
+        Clear();
 
         if (saveData?.OpenedChestIdList == null) return;
 
@@ -54,6 +59,11 @@ public class ChestStateManager : MonoBehaviour
         {
             openedChests.Add(chestId);
         }
+    }
+
+    public void Clear()
+    {
+        openedChests.Clear();
     }
 
     #endregion

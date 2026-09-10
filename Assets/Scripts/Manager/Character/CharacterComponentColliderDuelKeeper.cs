@@ -29,6 +29,8 @@ public class CharacterComponentColliderDuelKeeper : MonoBehaviour
         TryHandleTrigger(other);
     }
 
+    /*
+
     private void OnEnable()
     {
         TeamEvents.OnAssignCharacterToTeamBattle += HandleAssignCharacterToTeamBattle;    
@@ -44,13 +46,13 @@ public class CharacterComponentColliderDuelKeeper : MonoBehaviour
         Team team, 
         FormationCoord formationCoord)
     {
-        /*
         if (this.characterEntityBattle == characterEntityBattle)
         {
             this.gameObject.SetActive(formationCoord.Position == Position.GK);
         }
-        */
     }
+
+    */
 
     #endregion
 
@@ -78,7 +80,7 @@ public class CharacterComponentColliderDuelKeeper : MonoBehaviour
             return;
 
         // Prevent catching friendly fire
-        if (lastOffense.CharacterEntityBattle   .IsSameTeam(characterEntityBattle))
+        if (lastOffense.CharacterEntityBattle.IsSameTeam(characterEntityBattle))
             return;
 
         DuelManager.Instance.StartShootDuelCombo(characterEntityBattle, Category.Catch);

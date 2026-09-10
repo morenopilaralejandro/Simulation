@@ -15,6 +15,8 @@ public class MenuMatchChainNodeDetail : Menu
     [SerializeField] private Image imageDisplayNode;
     [SerializeField] private Button buttonOpenChest;
 
+    [SerializeField] private TMP_Text textItemName;
+
     private readonly AddressableBinding<Sprite> _bindingImageDisplay = new();
     private Item item;
     private MatchChainNode node;
@@ -66,6 +68,7 @@ public class MenuMatchChainNodeDetail : Menu
                 this.nodeChest = chestNode;
                 item = ItemFactory.CreateById(chestNode.ItemId);
                 buttonOpenChest.interactable = !chestNode.IsChestOpen;
+                textItemName.text = item.ItemName;
                 ShowPanel(panelChest);
                 break;
 
@@ -117,6 +120,7 @@ public class MenuMatchChainNodeDetail : Menu
         var asset = await _bindingImageDisplay.LoadAsync(address);
         imageDisplayNode.sprite = asset;
         imageDisplayNode.enabled = true;
+        textItemName.text = "";
     }
 
     public void OnButtonOpenChestClicked()

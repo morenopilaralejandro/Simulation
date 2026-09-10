@@ -73,6 +73,7 @@ public class WingManagerStorage
     public Wing GetWing(string wingGuid)
     {
         wings.TryGetValue(wingGuid, out Wing wing);
+        LogManager.Trace($"[WingManagerStorage] GetWing: parameter WingGuid -> {wingGuid}, found WingGuid {wing?.WingGuid}");
         return wing;
     }
 
@@ -137,6 +138,7 @@ public class WingManagerStorage
 
         foreach (WingSaveData wingSaveData in saveData.WingSaveDataList)
         {
+            LogManager.Trace($"[WingManagerStorage] Importing from save data {wingSaveData.WingGuid}");
             AddWing(WingFactory.CreateFromSaveData(wingSaveData));
         }
     }

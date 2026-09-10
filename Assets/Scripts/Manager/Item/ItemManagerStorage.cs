@@ -71,7 +71,6 @@ public class ItemManagerStorage
         AddItem(ItemFactory.CreateById("item-important-00003-shard_hatred"), 1);
         AddItem(ItemFactory.CreateById("item-important-00004-shard_anger"), 1);
         */
-
         
         AddItem(ItemFactory.CreateById("item-emblem-00000-a-generic_common"), 1);
         AddItem(ItemFactory.CreateById("item-emblem-00000-b-generic_rare"), 1);
@@ -113,7 +112,7 @@ public class ItemManagerStorage
         AddItem(ItemFactory.CreateById("item-kit-00003-balance"), 1);
         AddItem(ItemFactory.CreateById("item-kit-00004-enigma"), 1);
         AddItem(ItemFactory.CreateById("item-kit-00005-hope"), 1);
-        
+
     }
 
     public void AddAllFromDatabase()
@@ -314,6 +313,19 @@ public class ItemManagerStorage
     }
 
     public IReadOnlyDictionary<ItemCategory, List<ItemStorageSlot>> CategoryMap => categoryMap;
+
+    #endregion
+
+    #region MaterialRequirement
+
+    public void ConsumeMaterialRequirement(List<MaterialRequirement> materialRequirements)
+    {
+        foreach (MaterialRequirement requirement in materialRequirements)
+        {
+            Item item = ItemFactory.CreateById(requirement.ItemId);
+            ItemManager.Instance.RemoveItem(item, requirement.Amount);
+        }
+    }
 
     #endregion
 

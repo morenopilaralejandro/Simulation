@@ -87,18 +87,23 @@ public class MoveComponentEvolution
 
     public bool LimitBreak()
     {
-        if (path.TryGetNextEvolution(this.CurrentEvolution, out MoveEvolution next))
-        {
-            if (path.TryGetNextEvolution(next, out MoveEvolution _)) return false; // Not at penultimate stage yet
+        if (!CanLimitBreak()) return false;
 
-            this.CurrentEvolution = next;
-            this.TimesUsedCurrentEvolution = 0;
-            UpdateLocalization();
-            LogManager.Trace($"[MoveComponentEvolution] [{move.MoveId}] performed LIMIT BREAK -> {this.CurrentEvolution}");
-            return true;
-        }
+        path.TryGetNextEvolution(this.CurrentEvolution, out MoveEvolution next);
 
-        return false;
+        this.CurrentEvolution = next;
+        this.TimesUsedCurrentEvolution = 0;
+
+        UpdateLocalization();
+        LogManager.Trace($"[MoveComponentEvolution] [{move.MoveId}] performed LIMIT BREAK -> {this.CurrentEvolution}");
+        return true;
+    }
+
+    public bool CanLimitBreak()
+    {
+        if (!path.TryGetNextEvolution(this.CurrentEvolution, out MoveEvolution next)) return false;
+        // Limit Break is only possible when the next evolution is the final one.
+        return !path.TryGetNextEvolution(next, out _);
     }
 
     public void ForceMaxEvolution()

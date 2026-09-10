@@ -55,4 +55,8 @@ public class CharacterSaveData
 
     //statusEffectsPermanent
     public StatusEffectPermanent StatusEffectPermanent;
+
+    //awaken
+    public bool HasAwaken;
+
 }

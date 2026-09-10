@@ -27,6 +27,8 @@ public class WorldManagerPersistance
 
     public SaveDataWorldSystem Export()
     {
+        if(worldManager == null) return null;
+
         return new SaveDataWorldSystem
         {
             Realm = worldManager.CurrentRealm,

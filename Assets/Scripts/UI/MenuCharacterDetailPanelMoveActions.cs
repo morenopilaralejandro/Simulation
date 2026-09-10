@@ -25,8 +25,7 @@ public class MenuCharacterDetailPanelMoveActions : Menu
 
         buttonMove.gameObject.SetActive(!isNull);
         buttonUnequip.gameObject.SetActive(!isNull);
-        // buttonLimitBreak.gameObject.SetActive(!isNull);
-        buttonLimitBreak.gameObject.SetActive(false);
+        buttonLimitBreak.gameObject.SetActive(!isNull && moveSlotUI.Move.CanLimitBreak());
         buttonEquip.gameObject.SetActive(isNull);
         buttonBack.gameObject.SetActive(true);
 
@@ -34,6 +33,12 @@ public class MenuCharacterDetailPanelMoveActions : Menu
             base.SetDefaultSelectable(buttonEquip);
         else
             base.SetDefaultSelectable(buttonMove);
+    }
+
+    public override void SetInteractable(bool boolValue) 
+    {
+        if(boolValue) InitializeUI();
+        base.SetInteractable(boolValue);
     }
 
     protected override void OnGainedInput()
@@ -60,9 +65,9 @@ public class MenuCharacterDetailPanelMoveActions : Menu
 
     public void OnButtonLimitBreakClicked()
     {
-        AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
-        RequestClose();
-        UIEvents.RaiseMoveActionsCloseRequested(moveSlotUI);
+        //AudioManager.Instance.PlaySfxUI("sfx-menu_tap");
+        //RequestClose();
+        //UIEvents.RaiseMoveActionsCloseRequested(moveSlotUI);
         UIEvents.RaiseMoveLimitBreakPanelOpenRequested(moveSlotUI.Move, moveSlotUI.Character);
     }
 
@@ -109,7 +114,6 @@ public class MenuCharacterDetailPanelMoveActions : Menu
     private void HandleMoveActionsOpenRequested(MoveSlotUI moveSlotUI)
     {
         this.moveSlotUI = moveSlotUI;
-        InitializeUI();
         MenuManager.Instance.OpenMenu(this);
     }
 

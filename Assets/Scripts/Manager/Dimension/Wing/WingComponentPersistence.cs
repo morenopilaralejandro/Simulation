@@ -46,6 +46,10 @@ public class WingComponentPersistence
             // atributtes
             WingId = wing.WingId,
             WingGuid = wing.WingGuid,
+            
+            CurrentEvolution = wing.CurrentEvolution,
+            TimesUsedTotal = wing.TimesUsedTotal,
+            TimesUsedCurrentEvolution = wing.TimesUsedCurrentEvolution,
 
             IndividualStats = GetIndividualStatsForSave()
         };

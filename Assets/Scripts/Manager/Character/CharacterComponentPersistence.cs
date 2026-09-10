@@ -91,7 +91,10 @@ public class CharacterComponentPersistence
             EquipmentId3 = character.GetEquipment(3)?.ItemId,
 
             //statusEffectsPermanent
-            StatusEffectPermanent = character.ActiveStatusEffectPermanent
+            StatusEffectPermanent = character.ActiveStatusEffectPermanent,
+
+            //awaken
+            HasAwaken = character.HasAwaken
         };
     }
 

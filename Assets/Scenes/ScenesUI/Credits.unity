@@ -1023,7 +1023,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -18}
+  m_AnchoredPosition: {x: 0, y: -16}
   m_SizeDelta: {x: 1472, y: 436}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1351871807
@@ -1086,28 +1086,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<size=64px><b>Soccer Secret</b></size>\n<size=64px><b>Simulation</b></size>\n\n<size=48px><b>AI
-    Generated Code</b></size>\n\nClaude Opus 4.6\nGPT-5.5\nGemini 3.5\n\n\n<size=48px><b>AI
-    Generated Images</b></size>\n\nChatGPT Images 2.0\n\n\n<size=48px><b>AI Generated
-    Music</b></size>\n\nEnzostvs Ai-jukebox\nSuno v4.5-all\n\n\n<size=48px><b>Character
-    Sprites</b></size>\n\nJohannes Sj\xF6lund (wulax)\nMichael Whitlock (bigbeargames)\nMatthew
-    Krohn (makrohn)\nNila122\nDavid Conway Jr. (JaidynReiman)\nCarlo Enrico Victoria
-    (Nemisys)\nThane Brimhall (pennomi)\nlaetissima\nbluecarrot16\nLuke Mehl\nBenjamin
-    K. \nSmith (BenCreating)\nMuffinElZangano\nDurrani\nkheftel\nStephen Challener
-    (Redshrike)\nWilliam.Thompsonj\nMarcel van de Steeg (MadMarcel)\nTheraHedwig\nEvert\nPierre
-    Vigier (pvigier)\nEliza Wyatt (ElizaWy)\nJohannes Sj\xF6lund (wulax)\nSander
-    Frenken (castelonia)\ndalonedrauLanea Zimmerman (Sharm)\nManuel Riecke (MrBeast)\nBarbara
-    Riviera\nJoe White\nMandi Paugh\nShaun Williams\nDaniel Eddeland (daneeklu)\nEmilio
-    J. Sanchez-Sierra\ndrjamgo\ngr3yh47\ntskaufma\nFabzy\nYamilian\nSkorpio\nkheftel\nTuomo
-    Untinen (reemax)\nTracy\nthecilekli\nLordNeo\nStafford McIntyre\nPlatForge project\nDCSS
-    authors,\nDarkwallLKE\nCharles Sanchez (CharlesGabriel)\nRadomir Dopieralski\nmacmanmatty\nCobra
-    Hubbard (BlueVortexGames)\nInboxninja\nkcilds/Rocetti/Eredah\nNapsio (Vitruvian
-    Studio)\nThe Foreman\nAntumDeluge\n\nSprites contributed as part of the \nLiberated
-    Pixel Cup project from OpenGameArt.org: \nhttp://opengameart.org/content/lpc-collection\n\n\n<size=48px><b>SFX</b></size>\n\nBrian
-    MacIntosh\nartisticdude\nIndependent.nu\nqubodup\nKenney (www.kenney.nl)\nspookymodem\nWobbleBoxx
-    Workshop\nViRiX Dreamcore (David McKee)\np0ss\nJuhani Junkala\n\n\n<size=48px><b>License</b></size>\n\nDual-licensed
-    under GNU GPL v3 and CC BY-SA 4.0\n\n\n<size=48px><b>Detailed credits</b></size>\n\nhttps://github.com/morenopilaralejandro/\nSimulation/blob/master/Credits/\n\n\n\n\n<size=64px><b>Thanks
-    for playing</b></size>"
+  m_text: text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a9f36e37efa25cc5e86c7820b2e6c9a4, type: 2}
   m_sharedMaterial: {fileID: -5082097396079963576, guid: a9f36e37efa25cc5e86c7820b2e6c9a4, type: 2}
@@ -1264,5 +1243,5 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 690603579}
   - {fileID: 926724859}
+  - {fileID: 690603579}

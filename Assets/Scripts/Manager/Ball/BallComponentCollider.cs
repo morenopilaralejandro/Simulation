@@ -58,7 +58,8 @@ public class BallComponentCollider : MonoBehaviour
             PossessionManager.Instance.Gain(character);
             if (isCharacterKeeperCollision) 
             {
-                //AudioManager.Instance.PlaySfx("SfxCatch");
+                AudioManager.Instance.PlaySfx("sfx-ball_catch");
+                character.ActivateBallInHand();
             }
                 
         }
